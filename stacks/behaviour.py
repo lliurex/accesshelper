@@ -39,6 +39,7 @@ i18n={
 	"ZOOMGLASS":_("Activate glass effect"),
 	"ZOOMNORMAL":_("Zoom desktop"),
 	"HOTCORNERS":_("Actions on screen corners"),
+	"RESOLUTION":_("Set screen resolution"),
 	"FOCUSPOLICY":_("Set the policy focus of windows and applicattions")
 	}
 
@@ -84,6 +85,24 @@ class behaviour(confStack):
 					widget=QCheckBox(desc)
 					sigmap_run.setMapping(widget,key)
 					widget.stateChanged.connect(sigmap_run.map)
+				elif key=='focusPolicy':
+					self.box.addWidget(QLabel(i18n.get('FOCUSPOLICY')))
+					widget=QComboBox()
+					widget.addItems([])
+					sigmap_run.setMapping(widget,key)
+					widget.currentIndexChanged.connect(sigmap_run.map)
+				elif key=='resolution':
+					self.box.addWidget(QLabel(i18n.get('RESOLUTION')))
+					widget=QComboBox()
+					widget.addItems([])
+					sigmap_run.setMapping(widget,key)
+					widget.currentIndexChanged.connect(sigmap_run.map)
+				elif key=='hotCorners':
+					self.box.addWidget(QLabel(i18n.get('HOTCORNERS')))
+					widget=QComboBox()
+					widget.addItems([])
+					sigmap_run.setMapping(widget,key)
+					widget.currentIndexChanged.connect(sigmap_run.map)
 				else:
 					widget=QLineEdit()
 					sigmap_run.setMapping(widget,key)

@@ -9,14 +9,14 @@
 	},
 	"cursor":
 	{
-		"cursorTheme":"",
+		"cursorSize":"",
 		"animateOnClick":"false",
 		"followCursor":"false"
 	},
 	"aids":
 	{
 		"oneClickOpen":"false",
-		"scrollbarMode":"",
+		"systemBell":"false",
 		"ShowDesktopGrid":"false",
 		"zoomFish":"false",
 		"zoomGlass":"false",
@@ -35,6 +35,8 @@
 	{
 		"nextWindow":"",
 		"prevWindow":"",
+		"closeWindow":"",
+		"launchCommand":"",
 		"showDesktop":""
 	}
 }

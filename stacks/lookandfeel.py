@@ -86,6 +86,24 @@ class lookandfeel(confStack):
 						widget=QCheckBox(desc)
 						sigmap_run.setMapping(widget,key)
 						widget.stateChanged.connect(sigmap_run.map)
+					elif key=='size':
+						self.box.addWidget(QLabel(i18n.get('SIZE')))
+						widget=QComboBox()
+						widget.addItems(["12","13","14","15","16","17","18","19","20"])
+						sigmap_run.setMapping(widget,key)
+						widget.currentIndexChanged.connect(sigmap_run.map)
+					elif key=='family':
+						self.box.addWidget(QLabel(i18n.get('FAMILY')))
+						widget=QComboBox()
+						widget.addItems([])
+						sigmap_run.setMapping(widget,key)
+						widget.currentIndexChanged.connect(sigmap_run.map)
+					elif key=='cursorSize':
+						self.box.addWidget(QLabel(i18n.get('CURSORSIZE')))
+						widget=QComboBox()
+						widget.addItems(["Normal","Large","Extralarge"])
+						sigmap_run.setMapping(widget,key)
+						widget.currentIndexChanged.connect(sigmap_run.map)
 					else:
 						widget=QLineEdit()
 						sigmap_run.setMapping(widget,key)

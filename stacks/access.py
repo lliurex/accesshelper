@@ -83,9 +83,15 @@ class access(confStack):
 					sigmap_run.setMapping(widget,key)
 					widget.stateChanged.connect(sigmap_run.map)
 				else:
-					widget=QLineEdit()
-					sigmap_run.setMapping(widget,key)
-					widget.editingFinished.connect(sigmap_run.map)
+					if key=='scrollbarMode':
+						widget=QComboBox()
+						widget.addItems([])
+						sigmap_run.setMapping(widget,key)
+						widget.currentIndexChanged.connect(sigmap_run.map)
+					else:
+						widget=QLineEdit()
+						sigmap_run.setMapping(widget,key)
+						widget.editingFinished.connect(sigmap_run.map)
 			elif (isinstance(item,list)):
 				print("{} -> List".format(item))
 			elif (isinstance(item,dict)):

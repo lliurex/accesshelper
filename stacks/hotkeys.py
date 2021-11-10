@@ -12,34 +12,17 @@ import dbus,dbus.service,dbus.exceptions
 QString=type("")
 
 i18n={
-	"COLOURS":_("Colours"),
-	"FONTS":_("Fonts"),
-	"CURSOR":_("Cursor"),
-	"AIDS":_("Visual Aids"),
-	"SCREEN":_("Screen Options"),
 	"HOTKEYS":_("Keyboard Shortcuts"),
 	"ACCESSIBILITY":_("hotkeys options"),
 	"CONFIG":_("Configuration"),
 	"DESCRIPTION":_("Hotkeys configuration"),
 	"MENUDESCRIPTION":_("Set hotkeys for launch applications"),
 	"TOOLTIP":_("From here you can set hotkeys for launch apps"),
-	"HIGHCONTRAST":_("Enable high contrast palette"),
-	"INVERTSCREEN":_("Invert screen colours"),
-	"INVERTWINDOW":_("Invert windows colours"),
-	"SIZE":_("Font size"),
-	"FAMILY":_("Font family"),
-	"CURSORTHEME":_("Cursor theme"),
-	"CURSORSIZE":_("Cursor size"),
-	"ANIMATEONCLICK":_("Show animation on button click"),
-	"FOLLOWPOINTER":_("Always follow the pointer"),
-	"ONECLICKOPEN":_("Only one click for open elements"),
-	"SCROLLBARMODE":_("Scrollbar sliding mode"),
-	"GRIDONMOVE":_("Show a grid when moving windows"),
-	"ZOOMFISH":_("Activate glass effect with a eyefish effect"),
-	"ZOOMGLASS":_("Activate glass effect"),
-	"ZOOMNORMAL":_("Zoom desktop"),
-	"HOTCORNERS":_("Actions on screen corners"),
-	"FOCUSPOLICY":_("Set the policy focus of windows and applicattions")
+	"NEXTWINDOW":_("Go to next window"),
+	"PREVWINDOW":_("Go to previous window"),
+	"CLOSEWINDOW":_("Close window"),
+	"LAUNCHCOMMAND":_("Open launch menu"),
+	"SHOWDESKTOP":_("Show desktop")
 	}
 
 class hotkeys(confStack):
@@ -84,6 +67,32 @@ class hotkeys(confStack):
 					widget=QCheckBox(desc)
 					sigmap_run.setMapping(widget,key)
 					widget.stateChanged.connect(sigmap_run.map)
+				elif key=='nextWindow':
+					self.box.addWidget(QLabel(i18n.get('NEXTWINDOW')))
+					widget=QPushButton()
+					sigmap_run.setMapping(widget,key)
+					widget.pressed.connect(sigmap_run.map)
+				elif key=='prevWindow':
+					self.box.addWidget(QLabel(i18n.get('PREVWINDOW')))
+					widget=QPushButton()
+					sigmap_run.setMapping(widget,key)
+					widget.pressed.connect(sigmap_run.map)
+				elif key=='closeWindow':
+					self.box.addWidget(QLabel(i18n.get('CLOSEWINDOW')))
+					widget=QPushButton()
+					sigmap_run.setMapping(widget,key)
+					widget.pressed.connect(sigmap_run.map)
+				elif key=='showDesktop':
+					self.box.addWidget(QLabel(i18n.get('SHOWDESKTOP')))
+					widget=QPushButton()
+					sigmap_run.setMapping(widget,key)
+					widget.pressed.connect(sigmap_run.map)
+				elif key=='launchCommand':
+					self.box.addWidget(QLabel(i18n.get('LAUNCHCOMMAND')))
+					widget=QPushButton()
+					sigmap_run.setMapping(widget,key)
+					widget.pressed.connect(sigmap_run.map)
+
 				else:
 					widget=QLineEdit()
 					sigmap_run.setMapping(widget,key)

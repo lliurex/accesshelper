@@ -158,6 +158,7 @@ class access(confStack):
 							self._debug("Setting {} -> {}".format(name,value))
 							self._setKdeConfigSetting(group=self.kaccessSections.get(name),key=name,value=value)
 						#self._exeKwinMethod(name) 
+		self._reloadConfig()
 		self.optionChanged=[]
 
 	def _getSectionFromKey(self,key):
@@ -248,3 +249,9 @@ class access(confStack):
 			ret=val[0]
 		self._debug("Hotkey value: {}".format(ret))
 		return(ret)
+
+	def _reloadConfig(self):
+		bus=dbus.SessionBus()
+		#return(getDbusObject(,,""))
+		kbus=bus.get_object("org.kde.KWin","/KWin")
+		methodCall=kbus.reconfigure(dbus_interface='org.kde.KWin')

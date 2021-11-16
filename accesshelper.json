@@ -15,18 +15,19 @@
 	},
 	"aids":
 	{
-		"oneClickOpen":"false",
-		"systemBell":"false",
+		"SystemBell":"false",
 		"ShowDesktopGrid":"false",
 		"zoomFish":"false",
 		"zoomGlass":"false",
 		"zoomNormal":"false",
 		"highContrast":"false",
-		"Invert":"false",
+		"invertEnabled":"false",
 		"InvertWindow":"false"
 	},
 	"desktopbehaviour":
 	{
+		"SingleClick":"false",
+		"ScrollbarLeftClickNavigatesByPage":"false",
 		"hotCorners":"",
 		"focusPolicy":"",
 		"resolution":""

@@ -8,37 +8,22 @@ from appconfig.appConfigStack import appConfigStack as confStack
 import gettext
 _ = gettext.gettext
 import json
+import subprocess
 import dbus,dbus.service,dbus.exceptions
 QString=type("")
 
 i18n={
-	"COLOURS":_("Colours"),
-	"FONTS":_("Fonts"),
-	"CURSOR":_("Cursor"),
-	"AIDS":_("Visual Aids"),
-	"SCREEN":_("Screen Options"),
-	"HOTKEYS":_("Keyboard Shortcuts"),
-	"ACCESSIBILITY":_("hotkeys options"),
 	"CONFIG":_("Configuration"),
 	"DESCRIPTION":_("Desktop behaviour"),
 	"MENUDESCRIPTION":_("Configure how desktop works"),
 	"TOOLTIP":_("Set many options related with desktop behaviour"),
-	"HIGHCONTRAST":_("Enable high contrast palette"),
-	"INVERTSCREEN":_("Invert screen colours"),
-	"INVERTWINDOW":_("Invert windows colours"),
-	"SIZE":_("Font size"),
-	"FAMILY":_("Font family"),
-	"CURSORTHEME":_("Cursor theme"),
-	"CURSORSIZE":_("Cursor size"),
-	"ANIMATEONCLICK":_("Show animation on button click"),
-	"FOLLOWPOINTER":_("Always follow the pointer"),
-	"ONECLICKOPEN":_("Only one click for open elements"),
+	"FOCUSCLICK":_("Click to focus"),
+	"FOCUSFOLLOW":_("Focus follows pointer"),
+	"SINGLECLICK":_("Only one click for open elements"),
+	"SCROLLBARLEFTCLICKNAVIGATESBYPAGE":_("Click on scrollbar moves to position"),
 	"SCROLLBARMODE":_("Scrollbar sliding mode"),
 	"GRIDONMOVE":_("Show a grid when moving windows"),
-	"ZOOMFISH":_("Activate glass effect with a eyefish effect"),
-	"ZOOMGLASS":_("Activate glass effect"),
-	"ZOOMNORMAL":_("Zoom desktop"),
-	"HOTCORNERS":_("Actions on screen corners"),
+	"HOTCORNERS":_("Actions on top left screen corner"),
 	"RESOLUTION":_("Set screen resolution"),
 	"FOCUSPOLICY":_("Set the policy focus of windows and applicattions")
 	}
@@ -49,7 +34,7 @@ class behaviour(confStack):
 		self._debug("behaviour load")
 		self.menu_description=i18n.get('MENUDESCRIPTION')
 		self.description=i18n.get('DESCRIPTION')
-		self.icon=('go-home')
+		self.icon=('application-x-desktop')
 		self.tooltip=i18n.get('TOOLTIP')
 		self.index=1
 		self.enabled=True
@@ -58,7 +43,10 @@ class behaviour(confStack):
 		self.level='user'
 		self.bus=None
 		self.config={}
-		self.kwinMethods=self._getKwinMethods()
+		self.kaccessSections={"SingleClick":"KDE","ScrollbarLeftClickNavigatesByPage":"KDE"}
+		self.fileSections={"KDE":"kdeglobals"}
+		#self.kwinMethods=self._getKwinMethods()
+		self.kwinMethods={}
 		self.optionChanged=[]
 	#def __init__
 
@@ -88,7 +76,7 @@ class behaviour(confStack):
 				elif key=='focusPolicy':
 					self.box.addWidget(QLabel(i18n.get('FOCUSPOLICY')))
 					widget=QComboBox()
-					widget.addItems([])
+					widget.addItems([i18n.get("FOCUSCLICK"),i18n.get("FOCUSFOLLOW")])
 					sigmap_run.setMapping(widget,key)
 					widget.currentIndexChanged.connect(sigmap_run.map)
 				elif key=='resolution':
@@ -126,6 +114,9 @@ class behaviour(confStack):
 				for optionName,value in option.items():
 					if optionName in self.kwinMethods:
 						print("Kwin method {}".format(optionName))
+					elif optionName in self.kaccessSections.keys():
+						value=self._getKdeConfigSetting(group=self.kaccessSections.get(optionName),key=optionName)
+						hotkey=self._getHotkey(optionName)
 					else:
 						print("Item not found {}".format(optionName))
 					widget=self._getWidgetFromKey(optionName)
@@ -158,8 +149,10 @@ class behaviour(confStack):
 			if isinstance(option,dict):
 				for name,value in option.items():
 					if name in self.optionChanged:
-						print(name)
-						self._exeKwinMethod(name) 
+						if name in self.kaccessSections:
+							self._debug("Setting {} -> {}".format(name,value))
+							self._setKdeConfigSetting(group=self.kaccessSections.get(name),key=name,value=value)
+						#self._exeKwinMethod(name) 
 		self.optionChanged=[]
 
 	def _getSectionFromKey(self,key):
@@ -207,3 +200,46 @@ class behaviour(confStack):
 
 	def _disableKwinMethod(self,method):
 		pass
+
+	def _getKdeConfigSetting(self,group,key,kfile="kaccessrc"):
+		#kfile=kaccessrc
+		kfile=self.fileSections.get(group,'kaccesrc')
+		self._debug("Reading value {} from {}".format(key,kfile))
+		cmd=["kreadconfig5","--file",os.path.join(os.environ['HOME'],".config",kfile),"--group",group,"--key",key]
+		ret='false'
+		try:
+			ret=subprocess.check_output(cmd,universal_newlines=True).strip()
+		except Exception as e:
+			print(e)
+		self._debug("Read value: {}".format(ret))
+		return(ret)
+
+	def _setKdeConfigSetting(self,group,key,value,kfile="kaccessrc"):
+		#kfile=kaccessrc
+		kfile=self.fileSections.get(group,'kaccesrc')
+		self._debug("Writing value {} from {} -> {}".format(key,kfile,value))
+		cmd=["kwriteconfig5","--file",os.path.join(os.environ['HOME'],".config",kfile),"--group",group,"--key",key,"{}".format(value)]
+		ret='false'
+		try:
+			ret=subprocess.check_output(cmd,universal_newlines=True).strip()
+		except Exception as e:
+			print(e)
+		self._debug("Write value: {}".format(ret))
+		return(ret)
+
+	def _getHotkey(self,key):
+		group="kwin"
+		if key=='invertEnabled':
+			key="Invert"
+		kfile="kglobalshortcutsrc"
+		cmd=["kreadconfig5","--file",os.path.join(os.environ['HOME'],".config",kfile),"--group",group,"--key",key]
+		ret='false'
+		try:
+			ret=subprocess.check_output(cmd,universal_newlines=True).strip()
+		except Exception as e:
+			print(e)
+		if "," in ret:
+			val=ret.split(',')
+			ret=val[0]
+		self._debug("Hotkey value: {}".format(ret))
+		return(ret)

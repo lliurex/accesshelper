@@ -8,6 +8,7 @@ from appconfig.appConfigStack import appConfigStack as confStack
 import gettext
 _ = gettext.gettext
 import json
+import subprocess
 import dbus,dbus.service,dbus.exceptions
 QString=type("")
 
@@ -31,7 +32,7 @@ class hotkeys(confStack):
 		self._debug("hotkeys load")
 		self.menu_description=i18n.get('MENUDESCRIPTION')
 		self.description=i18n.get('DESCRIPTION')
-		self.icon=('go-home')
+		self.icon=('input-keyboard')
 		self.tooltip=i18n.get('TOOLTIP')
 		self.index=1
 		self.enabled=True
@@ -40,7 +41,10 @@ class hotkeys(confStack):
 		self.level='user'
 		self.bus=None
 		self.config={}
-		self.kwinMethods=self._getKwinMethods()
+		self.kaccessSections={"SingleClick":"KDE","ScrollbarLeftClickNavigatesByPage":"KDE"}
+		self.fileSections={"KDE":"kdeglobals"}
+		#self.kwinMethods=self._getKwinMethods()
+		self.kwinMethods={}
 		self.optionChanged=[]
 	#def __init__
 
@@ -69,22 +73,26 @@ class hotkeys(confStack):
 					widget.stateChanged.connect(sigmap_run.map)
 				elif key=='nextWindow':
 					self.box.addWidget(QLabel(i18n.get('NEXTWINDOW')))
-					widget=QPushButton()
+					hotkey=self._getHotkey("Walk Through Windows")
+					widget=QPushButton(hotkey)
 					sigmap_run.setMapping(widget,key)
 					widget.pressed.connect(sigmap_run.map)
 				elif key=='prevWindow':
 					self.box.addWidget(QLabel(i18n.get('PREVWINDOW')))
-					widget=QPushButton()
+					hotkey=self._getHotkey("Walk Through Windows (Reverse)")
+					widget=QPushButton(hotkey)
 					sigmap_run.setMapping(widget,key)
 					widget.pressed.connect(sigmap_run.map)
 				elif key=='closeWindow':
 					self.box.addWidget(QLabel(i18n.get('CLOSEWINDOW')))
-					widget=QPushButton()
+					hotkey=self._getHotkey("Window Close")
+					widget=QPushButton(hotkey)
 					sigmap_run.setMapping(widget,key)
 					widget.pressed.connect(sigmap_run.map)
 				elif key=='showDesktop':
 					self.box.addWidget(QLabel(i18n.get('SHOWDESKTOP')))
-					widget=QPushButton()
+					hotkey=self._getHotkey("Show Desktop")
+					widget=QPushButton(hotkey)
 					sigmap_run.setMapping(widget,key)
 					widget.pressed.connect(sigmap_run.map)
 				elif key=='launchCommand':
@@ -114,10 +122,10 @@ class hotkeys(confStack):
 		for section,option in self.config.get(self.level,{}).items():
 			if (isinstance(option,dict)):
 				for optionName,value in option.items():
-					if optionName in self.kwinMethods:
-						print("Kwin method {}".format(optionName))
-					else:
-						print("Item not found {}".format(optionName))
+####				if optionName in self.kwinMethods:
+####					print("Kwin method {}".format(optionName))
+####				else:
+####					print("Item not found {}".format(optionName))
 					widget=self._getWidgetFromKey(optionName)
 					if isinstance(widget,QCheckBox):
 						state=False
@@ -197,3 +205,46 @@ class hotkeys(confStack):
 
 	def _disableKwinMethod(self,method):
 		pass
+
+	def _getKdeConfigSetting(self,group,key,kfile="kaccessrc"):
+		#kfile=kaccessrc
+		kfile=self.fileSections.get(group,'kaccesrc')
+		self._debug("Reading value {} from {}".format(key,kfile))
+		cmd=["kreadconfig5","--file",os.path.join(os.environ['HOME'],".config",kfile),"--group",group,"--key",key]
+		ret='false'
+		try:
+			ret=subprocess.check_output(cmd,universal_newlines=True).strip()
+		except Exception as e:
+			print(e)
+		self._debug("Read value: {}".format(ret))
+		return(ret)
+
+	def _setKdeConfigSetting(self,group,key,value,kfile="kaccessrc"):
+		#kfile=kaccessrc
+		kfile=self.fileSections.get(group,'kaccesrc')
+		self._debug("Writing value {} from {} -> {}".format(key,kfile,value))
+		cmd=["kwriteconfig5","--file",os.path.join(os.environ['HOME'],".config",kfile),"--group",group,"--key",key,"{}".format(value)]
+		ret='false'
+		try:
+			ret=subprocess.check_output(cmd,universal_newlines=True).strip()
+		except Exception as e:
+			print(e)
+		self._debug("Write value: {}".format(ret))
+		return(ret)
+
+	def _getHotkey(self,key):
+		group="kwin"
+		if key=='invertEnabled':
+			key="Invert"
+		kfile="kglobalshortcutsrc"
+		cmd=["kreadconfig5","--file",os.path.join(os.environ['HOME'],".config",kfile),"--group",group,"--key",key]
+		ret='false'
+		try:
+			ret=subprocess.check_output(cmd,universal_newlines=True).strip()
+		except Exception as e:
+			print(e)
+		if "," in ret:
+			val=ret.split(',')
+			ret=val[0]
+		self._debug("Hotkey value: {}".format(ret))
+		return(ret)

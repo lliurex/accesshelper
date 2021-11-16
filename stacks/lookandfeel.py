@@ -48,7 +48,7 @@ class lookandfeel(confStack):
 		self._debug("hotkeys load")
 		self.menu_description=i18n.get('MENUDESCRIPTION')
 		self.description=i18n.get('DESCRIPTION')
-		self.icon=('go-home')
+		self.icon=('preferences-desktop-theme')
 		self.tooltip=i18n.get('TOOLTIP')
 		self.index=1
 		self.enabled=True
@@ -125,10 +125,10 @@ class lookandfeel(confStack):
 		for section,option in self.config.get(self.level,{}).items():
 			if (isinstance(option,dict)):
 				for optionName,value in option.items():
-					if optionName in self.kwinMethods:
-						print("Kwin method {}".format(optionName))
-					else:
-						print("Item not found {}".format(optionName))
+#					if optionName in self.kwinMethods:
+#						print("Kwin method {}".format(optionName))
+#					else:
+#						print("Item not found {}".format(optionName))
 					widget=self._getWidgetFromKey(optionName)
 					if isinstance(widget,QCheckBox):
 						state=False

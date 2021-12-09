@@ -10,6 +10,7 @@ _ = gettext.gettext
 import json
 import subprocess
 import dbus,dbus.service,dbus.exceptions
+from . import functionHelper
 QString=type("")
 
 i18n={
@@ -76,6 +77,10 @@ class access(confStack):
 		self.refresh=True
 		self.config=self.getConfig(level=self.level)
 		config=self.config.get(self.level,{})
+		systemConfig=functionHelper.getSystemConfig()
+		print("****")
+		print(systemConfig)
+		
 		for key,item in config.get('aids',{}).items():
 			if key.upper() in i18n.keys():
 				desc=i18n.get(key.upper())

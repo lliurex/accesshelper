@@ -119,6 +119,7 @@ class hotkeys(confStack):
 	#def _grab_alt_keys
 
 	def _set_config_key(self,keypress):
+		keypress=keypress.replace("Control","Ctrl")
 		self.btn.setText(keypress)
 		desc=self.widgetsText.get(self.btn)
 		sysConfig=self.sysConfig.copy()
@@ -167,11 +168,7 @@ class hotkeys(confStack):
 		print(name)
 
 	def writeConfig(self):
-		print(self.sysConfig)
-		for kfile,sections in self.sysConfig.items():
-			for section,data in sections.items():
-				(desc,value)=data
-				functionHelper.setKdeConfigSetting(self,section,desc,value,kfile):
+		functionHelper.setSystemConfig(self.sysConfig)
 		return
 		for section,option in self.config.get(self.level,{}).items():
 			if isinstance(option,dict):

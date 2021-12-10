@@ -5,18 +5,16 @@ from PySide2.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QVBoxLa
 from PySide2 import QtGui
 from PySide2.QtCore import Qt,QSignalMapper
 from appconfig.appConfigStack import appConfigStack as confStack
+from . import functionHelper
 import gettext
 _ = gettext.gettext
-import json
-import subprocess
-import dbus,dbus.service,dbus.exceptions
 QString=type("")
 
 i18n={
 	"CONFIG":_("Configuration"),
 	"DESCRIPTION":_("Desktop behaviour"),
 	"MENUDESCRIPTION":_("Configure how desktop works"),
-	"TOOLTIP":_("Set many options related with desktop behaviour"),
+	"TOOLTIP":_("Set many options related with desktop behavior"),
 	"FOCUSCLICK":_("Click to focus"),
 	"FOCUSFOLLOW":_("Focus follows pointer"),
 	"SINGLECLICK":_("Only one click for open elements"),
@@ -28,10 +26,10 @@ i18n={
 	"FOCUSPOLICY":_("Set the policy focus of windows and applicattions")
 	}
 
-class behaviour(confStack):
+class behavior(confStack):
 	def __init_stack__(self):
 		self.dbg=True
-		self._debug("behaviour load")
+		self._debug("behavior load")
 		self.menu_description=i18n.get('MENUDESCRIPTION')
 		self.description=i18n.get('DESCRIPTION')
 		self.icon=('application-x-desktop')
@@ -42,7 +40,11 @@ class behaviour(confStack):
 		self.changed=[]
 		self.level='user'
 		self.bus=None
+		self.sysConfig={}
 		self.config={}
+		self.wrkFiles=["kdeglobals","kwinrc"]
+		self.wantSettings={"kwinrc":["FocusPolicy"]}
+		self.blockSettings={}
 		self.kaccessSections={"SingleClick":"KDE","ScrollbarLeftClickNavigatesByPage":"KDE"}
 		self.fileSections={"KDE":"kdeglobals"}
 		#self.kwinMethods=self._getKwinMethods()
@@ -60,6 +62,34 @@ class behaviour(confStack):
 		self.widgets={}
 		self.level='user'
 		self.refresh=True
+		for wrkFile in self.wrkFiles:
+			systemConfig=functionHelper.getSystemConfig(wrkFile)
+			self.sysConfig.update(systemConfig)
+			for kfile,sections in systemConfig.items():
+				for section,settings in sections.items():
+					for setting in settings:
+						(name,data)=setting
+						want=self.wantSettings.get(kfile,[])
+						block=self.blockSettings.get(kfile,[])
+						if name in block or (len(want)>0 and name not in want):
+							continue
+						desc=i18n.get(name.upper(),name)
+						lbl=QLabel(desc)
+						if name=='FocusPolicy':
+							btn=QComboBox()
+							btn.addItem(i18n.get("FOCUSCLICK"))
+							btn.addItem(i18n.get("FOCUSFOLLOW"))
+						elif (data.lower() in ("true","false")) or (data==''):
+							btn=QCheckBox(desc)
+							state=False
+							if data.lower()=="true":
+								state=True
+							btn.setChecked(state)
+						self.box.addWidget(btn)
+						self.widgets.update({name:btn})
+
+		self.updateScreen()
+		return
 		self.config=self.getConfig(level=self.level)
 		config=self.config.get(self.level,{})
 		for key,item in config.get('desktopbehaviour',{}).items():
@@ -106,27 +136,7 @@ class behaviour(confStack):
 	#def _load_screen
 
 	def updateScreen(self):
-		self.level='user'
-		self.refresh=True
-		self.config=self.getConfig(level=self.level)
-		for section,option in self.config.get(self.level,{}).items():
-			if (isinstance(option,dict)):
-				for optionName,value in option.items():
-					if optionName in self.kwinMethods:
-						print("Kwin method {}".format(optionName))
-					elif optionName in self.kaccessSections.keys():
-						value=self._getKdeConfigSetting(group=self.kaccessSections.get(optionName),key=optionName)
-						hotkey=self._getHotkey(optionName)
-					else:
-						print("Item not found {}".format(optionName))
-					widget=self._getWidgetFromKey(optionName)
-					if isinstance(widget,QCheckBox):
-						state=False
-						if value.lower()=="true":
-							state=True
-						widget.setChecked(state)
-					if isinstance(widget,QLineEdit):
-						widget.setText(value)
+		pass
 	#def _udpate_screen
 
 	def _updateConfig(self,key):
@@ -155,91 +165,3 @@ class behaviour(confStack):
 						#self._exeKwinMethod(name) 
 		self.optionChanged=[]
 
-	def _getSectionFromKey(self,key):
-		sec=''
-		for section,option in self.config.get(self.level,{}).items():
-			if isinstance(option,dict):
-				if key in option.keys():
-					sec=section
-					break
-		return(sec)
-
-	def _getWidgetFromKey(self,key):
-		return(self.widgets.get(key,''))
-
-	
-	def _connect(self):
-		bus=None
-		try:
-			bus=dbus.SessionBus()
-		except Exception as e:
-			bus=None
-			print("Could not get session bus: %s\nAborting"%e)
-		return(bus)
-
-	def _getKwinMethods(self):
-		relevantMethods=[]
-		bus=dbus.SessionBus()
-		#return(getDbusObject(,,""))
-		kbus=bus.get_object("org.kde.kglobalaccel","/component/kwin")
-		interface=dbus.Interface(kbus,"org.kde.kglobalaccel.Component")
-		#method=interface.get_dbus_method("org.kde.kglobalaccel.Component.allShortcutInfos")
-		method=interface.get_dbus_method("allShortcutInfos")
-		result=method()
-		for dbusRes in result:
-			relevantMethods.append(dbusRes[0])
-		return(relevantMethods)
-
-	def _exeKwinMethod(self,method):
-		bus=dbus.SessionBus()
-		kbus=bus.get_object("org.kde.kglobalaccel","/component/kwin")
-		interface=dbus.Interface(kbus,"org.kde.kglobalaccel.Component")
-		methodCall=interface.get_dbus_method("invokeShortcut")
-		self._debug("Calling {}".format(method))
-		methodCall(method)
-
-	def _disableKwinMethod(self,method):
-		pass
-
-	def _getKdeConfigSetting(self,group,key,kfile="kaccessrc"):
-		#kfile=kaccessrc
-		kfile=self.fileSections.get(group,'kaccesrc')
-		self._debug("Reading value {} from {}".format(key,kfile))
-		cmd=["kreadconfig5","--file",os.path.join(os.environ['HOME'],".config",kfile),"--group",group,"--key",key]
-		ret='false'
-		try:
-			ret=subprocess.check_output(cmd,universal_newlines=True).strip()
-		except Exception as e:
-			print(e)
-		self._debug("Read value: {}".format(ret))
-		return(ret)
-
-	def _setKdeConfigSetting(self,group,key,value,kfile="kaccessrc"):
-		#kfile=kaccessrc
-		kfile=self.fileSections.get(group,'kaccesrc')
-		self._debug("Writing value {} from {} -> {}".format(key,kfile,value))
-		cmd=["kwriteconfig5","--file",os.path.join(os.environ['HOME'],".config",kfile),"--group",group,"--key",key,"{}".format(value)]
-		ret='false'
-		try:
-			ret=subprocess.check_output(cmd,universal_newlines=True).strip()
-		except Exception as e:
-			print(e)
-		self._debug("Write value: {}".format(ret))
-		return(ret)
-
-	def _getHotkey(self,key):
-		group="kwin"
-		if key=='invertEnabled':
-			key="Invert"
-		kfile="kglobalshortcutsrc"
-		cmd=["kreadconfig5","--file",os.path.join(os.environ['HOME'],".config",kfile),"--group",group,"--key",key]
-		ret='false'
-		try:
-			ret=subprocess.check_output(cmd,universal_newlines=True).strip()
-		except Exception as e:
-			print(e)
-		if "," in ret:
-			val=ret.split(',')
-			ret=val[0]
-		self._debug("Hotkey value: {}".format(ret))
-		return(ret)

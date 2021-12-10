@@ -2,7 +2,7 @@
 from . import functionHelper
 import sys
 import os
-from PySide2.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QVBoxLayout,QLineEdit,QHBoxLayout,QComboBox,QCheckBox,QTabBar,QTabWidget,QTabBar,QTabWidget,QTableWidget
+from PySide2.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QGridLayout,QVBoxLayout,QLineEdit,QHBoxLayout,QComboBox,QCheckBox,QTabBar,QTabWidget,QTabBar,QTabWidget,QTableWidget
 from PySide2 import QtGui
 from PySide2.QtCore import Qt,Signal,QSignalMapper,QProcess,QEvent,QSize
 from appconfig.appConfigStack import appConfigStack as confStack
@@ -58,48 +58,37 @@ class hotkeys(confStack):
 
 	def _load_screen(self):
 		self.installEventFilter(self)
-		self.box=QVBoxLayout()
-		self.tabBar=QTabWidget()
-		self.box.addWidget(self.tabBar,0)
+		self.box=QGridLayout()
 		self.setLayout(self.box)
 		sigmap_run=QSignalMapper(self)
 		sigmap_run.mapped[QString].connect(self._grab_alt_keys)
 		self.widgets={}
 		self.widgetsText={}
 		self.refresh=True
-		tbl_hotkeys=QTableWidget(0,2)
-		tbl_hotkeys.horizontalHeader().hide()
-		tbl_hotkeys.verticalHeader().hide()
 		for wrkFile in self.wrkFiles:
 			systemConfig=functionHelper.getSystemConfig(wrkFile)
 			self.sysConfig.update(systemConfig)
-			print("***")
-			print(self.sysConfig)
-			print("***")
 			for kfile,sections in systemConfig.items():
 				for section,settings in sections.items():
+					row=0
 					for setting in settings:
 						(name,data)=setting
 						data=data.split(",")
-						tbl_hotkeys.insertRow(tbl_hotkeys.rowCount())
 						desc=""
 						if len(data)>0:
 							desc=data[-1]
 						lbl=QLabel(desc)
-						tbl_hotkeys.setCellWidget(tbl_hotkeys.rowCount()-1,0,lbl)
+						self.box.addWidget(lbl,row,0)
 						btn=QPushButton(data[0])
 						sigmap_run.setMapping(btn,name)
 						btn.clicked.connect(sigmap_run.map)
-						tbl_hotkeys.setCellWidget(tbl_hotkeys.rowCount()-1,1,btn)
+						self.box.addWidget(btn,row,1)
+						row+=1
 						self.widgets.update({name:btn})
 						self.widgetsText.update({btn:name})
 
-		tbl_hotkeys.resizeColumnsToContents()
-		tbl_hotkeys.resizeRowsToContents()
-		self.box.addWidget(tbl_hotkeys)
 		lbl_add=QLabel(_("Add new"))
 		self.box.addWidget(lbl_add)
-		self.show()
 		self.updateScreen()
 	#def _load_screen
 

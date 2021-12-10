@@ -81,6 +81,7 @@ class lookandfeel(confStack):
 		sw_font=True
 		self.box.addWidget(QLabel("Font Size"),0,0)
 		self.box.addWidget(btn,0,1)
+		self.widgets.update({"font":btn})
 
 		btn=QComboBox()
 		btn.addItem("Normal")
@@ -89,6 +90,7 @@ class lookandfeel(confStack):
 		sw_font=True
 		self.box.addWidget(QLabel("Cursor Size"),1,0)
 		self.box.addWidget(btn,1,1)
+		self.widgets.update({"cursor":btn})
 
 		btn=QComboBox()
 		btn.addItem("1024")
@@ -97,6 +99,11 @@ class lookandfeel(confStack):
 		sw_font=True
 		self.box.addWidget(QLabel("Set resolution"),2,0)
 		self.box.addWidget(btn,2,1)
+		self.widgets.update({"res":btn})
+
+		for wrkFile in self.wrkFiles:
+			systemConfig=functionHelper.getSystemConfig(wrkFile=wrkFile)
+			self.sysConfig.update(systemConfig)
 		"""
 
 		for wrkFile in self.wrkFiles:
@@ -221,26 +228,43 @@ class lookandfeel(confStack):
 	#def _udpate_screen
 
 	def _updateConfig(self,key):
-		widget=self._getWidgetFromKey(key)
-		self.setChanged(True)
-		section=self._getSectionFromKey(key)
-		if section:
-			if isinstance(widget,QCheckBox):
-				value=str(widget.isChecked()).lower()
-			elif isinstance(widget,QLineEdit):
-				value=widget.text()
-			self.config[self.level][section].update({key:value})
-		self.optionChanged.append(key)
-		self._debug("Changed: {}".format(key))
+		return
 		#	if key in self.kwinMethods:
 		#		self._exeKwinMethod(key) 
 
 	def writeConfig(self):
-		for section,option in self.config.get(self.level,{}).items():
-			if isinstance(option,dict):
-				for name,value in option.items():
-					if name in self.optionChanged:
-						print(name)
-						self._exeKwinMethod(name) 
+		for name,wdg in self.widgets.items():
+			if name=="font":
+				value=wdg.currentText()
+				size=11
+				minSize=9
+				inc=2
+				if value.lower()=="large":
+					size+=inc
+					minSize+=inc
+				if value.lower()=="extralarge":
+					size+=inc*2
+					minSize+=inc*2
+				fixed="Hack,{0},-1,5,50,0,0,0,0,0".format(size)
+				font="Noto Sans,{0},-1,5,50,0,0,0,0,0".format(size)
+				menufont="Noto Sans,{0},-1,5,50,0,0,0,0,0".format(size)
+				smallestreadablefont="Noto Sans,{0},-1,5,50,0,0,0,0,0".format(minSize)
+				toolbarfont="Noto Sans,{0},-1,5,50,0,0,0,0,0".format(size)
+				functionHelper._setKdeConfigSetting("General","fixed",fixed,"kdeglobals")
+				functionHelper._setKdeConfigSetting("General","font",font,"kdeglobals")
+				functionHelper._setKdeConfigSetting("General","menuFont",menufont,"kdeglobals")
+				functionHelper._setKdeConfigSetting("General","smallestReadableFont",smallestreadablefont,"kdeglobals")
+				functionHelper._setKdeConfigSetting("General","toolBarFont",toolbarfont,"kdeglobals")
+			elif name=="cursor":
+				value=wdg.currentText()
+				size=24
+				inc=12
+				if value.lower()=="large":
+					size+=inc
+				if value.lower()=="extralarge":
+					size+=inc*2
+			elif name=="res":
+				self._debug("Not implemented")
 		self.optionChanged=[]
+		return
 

@@ -94,7 +94,7 @@ class profiles(confStack):
 	def writeConfig(self):
 		self._debug("Taking snapshot")
 		name=self.inp_name.text()
-		name=os.basename(name)
+		name=os.path.basename(name)
 		if len(name)>20:
 			name=name[0:19]
 		functionHelper.take_snapshot(self.wrkDir,name)

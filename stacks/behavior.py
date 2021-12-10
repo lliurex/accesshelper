@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 import sys
 import os
-from PySide2.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QVBoxLayout,QLineEdit,QHBoxLayout,QComboBox,QCheckBox,QTabBar,QTabWidget,QTabBar,QTabWidget
+from PySide2.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QGridLayout,QLineEdit,QHBoxLayout,QComboBox,QCheckBox
 from PySide2 import QtGui
 from PySide2.QtCore import Qt,QSignalMapper
 from appconfig.appConfigStack import appConfigStack as confStack
@@ -12,7 +12,7 @@ QString=type("")
 
 i18n={
 	"CONFIG":_("Configuration"),
-	"DESCRIPTION":_("Desktop behaviour"),
+	"DESCRIPTION":_("Desktop behavior"),
 	"MENUDESCRIPTION":_("Configure how desktop works"),
 	"TOOLTIP":_("Set many options related with desktop behavior"),
 	"FOCUSCLICK":_("Click to focus"),
@@ -23,7 +23,7 @@ i18n={
 	"GRIDONMOVE":_("Show a grid when moving windows"),
 	"HOTCORNERS":_("Actions on top left screen corner"),
 	"RESOLUTION":_("Set screen resolution"),
-	"FOCUSPOLICY":_("Set the policy focus of windows and applicattions")
+	"FOCUSPOLICY":_("Focus follows pointer")
 	}
 
 class behavior(confStack):
@@ -39,60 +39,63 @@ class behavior(confStack):
 		self.defaultRepos={}
 		self.changed=[]
 		self.level='user'
-		self.bus=None
-		self.sysConfig={}
 		self.config={}
+		self.sysConfig={}
 		self.wrkFiles=["kdeglobals","kwinrc"]
 		self.wantSettings={"kwinrc":["FocusPolicy"]}
-		self.blockSettings={}
-		self.kaccessSections={"SingleClick":"KDE","ScrollbarLeftClickNavigatesByPage":"KDE"}
-		self.fileSections={"KDE":"kdeglobals"}
-		#self.kwinMethods=self._getKwinMethods()
-		self.kwinMethods={}
+		self.blockSettings={"kdeglobals":["General"]}
 		self.optionChanged=[]
 	#def __init__
 
 	def _load_screen(self):
-		self.box=QVBoxLayout()
-		self.tabBar=QTabWidget()
-		self.box.addWidget(self.tabBar,0)
+		self.box=QGridLayout()
 		self.setLayout(self.box)
 		sigmap_run=QSignalMapper(self)
 		sigmap_run.mapped[QString].connect(self._updateConfig)
 		self.widgets={}
 		self.level='user'
 		self.refresh=True
+		row,col=(0,0)
 		for wrkFile in self.wrkFiles:
 			systemConfig=functionHelper.getSystemConfig(wrkFile)
 			self.sysConfig.update(systemConfig)
 			for kfile,sections in systemConfig.items():
+				want=self.wantSettings.get(kfile,[])
+				block=self.blockSettings.get(kfile,[])
 				for section,settings in sections.items():
+					if section in block and len(want)==0:
+						continue
 					for setting in settings:
 						(name,data)=setting
-						want=self.wantSettings.get(kfile,[])
-						block=self.blockSettings.get(kfile,[])
 						if name in block or (len(want)>0 and name not in want):
 							continue
 						desc=i18n.get(name.upper(),name)
 						lbl=QLabel(desc)
-						if name=='FocusPolicy':
-							btn=QComboBox()
-							btn.addItem(i18n.get("FOCUSCLICK"))
-							btn.addItem(i18n.get("FOCUSFOLLOW"))
-						elif (data.lower() in ("true","false")) or (data==''):
+						#if (data.lower() in ("true","false")) or (data==''):
+						if (isinstance(data,str)):
 							btn=QCheckBox(desc)
+							#btn=QPushButton(desc)
+							#btn.setStyleSheet(functionHelper.cssStyle())
+							#btn.setAutoDefault(False)
+							#btn.setDefault(False)
+							#btn.setCheckable(True)
 							state=False
-							if data.lower()=="true":
+							#if  data in ("true","false"):
+							if data.lower()=="true" or data.lower()=="focusfollowsmouse":
 								state=True
 							btn.setChecked(state)
-						self.box.addWidget(btn)
 						self.widgets.update({name:btn})
+						self.box.addWidget(btn,row,col)
+						col+=1
+						if col==1:
+							row+=1
+							col=0
 
 		self.updateScreen()
 		return
 		self.config=self.getConfig(level=self.level)
 		config=self.config.get(self.level,{})
-		for key,item in config.get('desktopbehaviour',{}).items():
+		for key,item in config.get('desktopbehavior',{}).items():
 			if key.upper() in i18n.keys():
 				desc=i18n.get(key.upper())
 			else:
@@ -140,28 +143,31 @@ class behavior(confStack):
 	#def _udpate_screen
 
 	def _updateConfig(self,key):
-		widget=self._getWidgetFromKey(key)
-		self.setChanged(True)
-		section=self._getSectionFromKey(key)
-		if section:
-			if isinstance(widget,QCheckBox):
-				value=str(widget.isChecked()).lower()
-			elif isinstance(widget,QLineEdit):
-				value=widget.text()
-			self.config[self.level][section].update({key:value})
-		self.optionChanged.append(key)
-		self._debug("Changed: {}".format(key))
-		#	if key in self.kwinMethods:
-		#		self._exeKwinMethod(key) 
+		pass
 
 	def writeConfig(self):
-		for section,option in self.config.get(self.level,{}).items():
-			if isinstance(option,dict):
-				for name,value in option.items():
-					if name in self.optionChanged:
-						if name in self.kaccessSections:
-							self._debug("Setting {} -> {}".format(name,value))
-							self._setKdeConfigSetting(group=self.kaccessSections.get(name),key=name,value=value)
-						#self._exeKwinMethod(name) 
+		sysConfig=self.sysConfig.copy()
+		for kfile in self.wrkFiles:
+			for section,data in sysConfig.get(kfile,{}).items():
+				dataTmp=[]
+				for setting,value in data:
+					btn=self.widgets.get(setting,'')
+					if isinstance(btn,QPushButton):
+						value=btn.isChecked()
+						desc=btn.text()
+						if desc==i18n.get("FOCUSPOLICY",''):
+							if value:
+								value="FocusFollowsMouse"
+							else:
+								value=""
+						elif value:
+							value="true"
+						else:
+							value="false"
+					dataTmp.append((setting,value))
+				self.sysConfig[kfile][section]=dataTmp
+
+		functionHelper.setSystemConfig(self.sysConfig)
+		return
 		self.optionChanged=[]
 

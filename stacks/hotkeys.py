@@ -163,6 +163,5 @@ class hotkeys(confStack):
 			if isinstance(option,dict):
 				for name,value in option.items():
 					if name in self.optionChanged:
-						print(name)
 						self._exeKwinMethod(name) 
 		self.optionChanged=[]

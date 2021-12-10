@@ -16,11 +16,12 @@ settingsHotkeys={"invertWindow":"InvertWindow","invertEnabled":"Invert","trackmo
 
 def _debug(msg):
 	if DBG==True:
-		logging.debug("FH: {}".format(msg))
+		logging.warning("FH: {}".format(msg))
 
-def getSystemConfig(wrkFile=''):
+def getSystemConfig(wrkFile='',sourceFolder=''):
 	dictValues={}
 	data=''
+	#_debug("Reading folder {}".format(sourceFolder))
 	if wrkFile:
 		if dictFileData.get(wrkFile,None):
 			data={wrkFile:dictFileData[wrkFile].copy()}
@@ -31,14 +32,15 @@ def getSystemConfig(wrkFile=''):
 			settingData=[]
 			for setting in settings:
 				key,value=setting
-				value=_getKdeConfigSetting(group,key,kfile)
+				value=_getKdeConfigSetting(group,key,kfile,sourceFolder)
 				settingData.append((key,value))
 			data[kfile].update({group:settingData})
 	return (data)
 
-def _getKdeConfigSetting(group,key,kfile="kaccessrc"):
-	_debug("Reading value {} from {}".format(key,kfile))
-	kPath=os.path.join(os.environ.get('HOME',"/usr/share/acccessibility"),".config",kfile)
+def _getKdeConfigSetting(group,key,kfile="kaccessrc",sourceFolder=''):
+	if sourceFolder=='':
+		sourceFolder=os.path.join(os.environ.get('HOME',"/usr/share/acccessibility"),".config")
+	kPath=os.path.join(sourceFolder,kfile)
 	value=""
 	if os.path.isfile(kPath):
 		cmd=["kreadconfig5","--file",kPath,"--group",group,"--key",key]
@@ -46,7 +48,7 @@ def _getKdeConfigSetting(group,key,kfile="kaccessrc"):
 			value=subprocess.check_output(cmd,universal_newlines=True).strip()
 		except Exception as e:
 			print(e)
-	_debug("Read value: {}".format(value))
+	#_debug("Read value: {}".format(value))
 	return(value)
 
 def setSystemConfig(config,wrkFile=''):
@@ -58,7 +60,7 @@ def setSystemConfig(config,wrkFile=''):
 
 def _setKdeConfigSetting(group,key,value,kfile="kaccessrc"):
 	#kfile=kaccessrc
-	_debug("Writing value {} from {} -> {}".format(key,kfile,value))
+	#_debug("Writing value {} from {} -> {}".format(key,kfile,value))
 	if len(value):
 		cmd=["kwriteconfig5","--file",os.path.join(os.environ['HOME'],".config",kfile),"--group",group,"--key",key,"{}".format(value)]
 	else:
@@ -68,7 +70,7 @@ def _setKdeConfigSetting(group,key,value,kfile="kaccessrc"):
 		ret=subprocess.check_output(cmd,universal_newlines=True).strip()
 	except Exception as e:
 		print(e)
-	_debug("Write value: {}".format(ret))
+	#_debug("Write value: {}".format(ret))
 	return(ret)
 
 def take_snapshot(wrkDir,snapshotName=''):
@@ -92,12 +94,13 @@ def take_snapshot(wrkDir,snapshotName=''):
 		
 def restore_snapshot(wrkDir,snapshotName):
 	snapPath=os.path.join(wrkDir,snapshotName)
+	print("Restoring {}".format(snapPath))
 	if os.path.isdir(snapPath)==True:
-		for f in os.listdir(snapPath):
-			if f in dictFileData.keys():
-				kPath=os.path.join(wrkDir,snapshotName,f)
-				destFile=os.path.join(os.environ['HOME'],".config",f)
-				shutil.copy(kPath,destFile)
+		config=getSystemConfig(sourceFolder=snapPath)
+		for kfile,sections in config.items():
+			for section,data in sections.items():
+				for (desc,value) in data:
+					_setKdeConfigSetting(section,desc,value,kfile)
 #def restore_snapshot
 
 def getHotkey(setting):

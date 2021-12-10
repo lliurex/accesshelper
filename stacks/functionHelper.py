@@ -9,9 +9,10 @@ windows=[("FocusPolicy","")]
 kde=[("singleClick",""),("ScrollbarLeftClickNavigatesByPage","")]
 bell=[("SystemBell",""),("VisibleBell","")]
 hotkeys_kwin=[("ShowDesktopGrid",""),("Invert",""),("InvertWindow",""),("ToggleMouseClick",""),("TrackMouse",""),("view_zoom_in",""),("view_zoom_out","")]
-mouse=["cursorSize",""]
+mouse=[("cursorSize","")]
 general=[("fixed",""),("font",""),("menuFont",""),("smallestReadableFont",""),("toolBarFont","")]
-dictFileData={"kaccesrc":{"Bell":bell},"kwinrc":{"Plugins":plugins,"Windows":windows,"General":general},"kdeglobals":{"KDE":kde},"kglobalshortcutsrc":{"kwin":hotkeys_kwin},"kcminputrc":{"Mouse":mouse}}
+dictFileData={"kaccesrc":{"Bell":bell},"kwinrc":{"Plugins":plugins,"Windows":windows},"kdeglobals":{"KDE":kde,"General":general},"kglobalshortcutsrc":{"kwin":hotkeys_kwin},"kcminputrc":{"Mouse":mouse}}
+settingsHotkeys={"invertWindow":"InvertWindow","invertEnabled":"Invert","trackmouseEnabled":"TrackMouse","mouseclickEnabled":"ToggleMouseClick","view_zoom_in":"","view_zoom_out":""}
 
 def _debug(msg):
 	if DBG==True:
@@ -58,7 +59,10 @@ def setSystemConfig(config,wrkFile=''):
 def _setKdeConfigSetting(group,key,value,kfile="kaccessrc"):
 	#kfile=kaccessrc
 	_debug("Writing value {} from {} -> {}".format(key,kfile,value))
-	cmd=["kwriteconfig5","--file",os.path.join(os.environ['HOME'],".config",kfile),"--group",group,"--key",key,"{}".format(value)]
+	if len(value):
+		cmd=["kwriteconfig5","--file",os.path.join(os.environ['HOME'],".config",kfile),"--group",group,"--key",key,"{}".format(value)]
+	else:
+		cmd=["kwriteconfig5","--file",os.path.join(os.environ['HOME'],".config",kfile),"--group",group,"--key",key,"--delete"]
 	ret='false'
 	try:
 		ret=subprocess.check_output(cmd,universal_newlines=True).strip()
@@ -96,3 +100,23 @@ def restore_snapshot(wrkDir,snapshotName):
 				shutil.copy(kPath,destFile)
 #def restore_snapshot
 
+def getHotkey(setting):
+	hk=""
+	hksetting=settingsHotkeys.get(setting,"")
+	sc=getSystemConfig(wrkFile="kglobalshortcutsrc")
+	for kfile,sections in sc.items():
+		for section,settings in sections.items():
+			for setting in settings:
+				(name,data)=setting
+				if name.lower()==hksetting.lower():
+					data=data.split(",")
+					hk=data[0]
+	return(hk)
+
+def cssStyle():
+	style="""
+		QPushButton:checked{
+			background:lightgreen;
+		}
+	"""
+	return(style)

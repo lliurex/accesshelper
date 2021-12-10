@@ -6,7 +6,7 @@ DBG=True
 
 plugins=[("invertEnabled",""),("invertWindow",""),("magnifierEnabled",""),("lookingglassEnabled",""),("trackmouseEnabled",""),("zoomEnabled",""),("snaphelperEnabled",""),("mouseclickEnabled","")]
 windows=[("FocusPolicy","")]
-kde=[("singleClick","")]
+kde=[("singleClick",""),("ScrollbarLeftClickNavigatesByPage","")]
 bell=[("SystemBell",""),("VisibleBell","")]
 hotkeys_kwin=[("ShowDesktopGrid",""),("Invert",""),("InvertWindow",""),("ToggleMouseClick",""),("TrackMouse",""),("view_zoom_in",""),("view_zoom_out","")]
 dictFileData={"kaccesrc":{"Bell":bell},"kwinrc":{"Plugins":plugins,"Windows":windows},"kdeglobals":{"KDE":kde},"kglobalshortcutsrc":{"kwin":hotkeys_kwin}}

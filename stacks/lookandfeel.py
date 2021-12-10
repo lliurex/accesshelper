@@ -1,7 +1,8 @@
 #!/usr/bin/python3
+from . import functionHelper
 import sys
 import os
-from PySide2.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QVBoxLayout,QLineEdit,QHBoxLayout,QComboBox,QCheckBox,QTabBar,QTabWidget,QTabBar,QTabWidget
+from PySide2.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QGridLayout,QLineEdit,QHBoxLayout,QComboBox,QCheckBox,QTabBar,QTabWidget,QTabBar,QTabWidget
 from PySide2 import QtGui
 from PySide2.QtCore import Qt,QSignalMapper
 from appconfig.appConfigStack import appConfigStack as confStack
@@ -55,22 +56,112 @@ class lookandfeel(confStack):
 		self.defaultRepos={}
 		self.changed=[]
 		self.level='user'
-		self.bus=None
 		self.config={}
-		self.kwinMethods=self._getKwinMethods()
+		self.sysConfig={}
+		self.wrkFiles=["kdeglobals","kcminputrc"]
+		self.blockSettings={}
+		self.wantSettings={"kdeglobals":["General"]}
 		self.optionChanged=[]
 	#def __init__
 
 	def _load_screen(self):
-		self.box=QVBoxLayout()
-		self.tabBar=QTabWidget()
-		self.box.addWidget(self.tabBar,0)
+		self.box=QGridLayout()
 		self.setLayout(self.box)
+		row,col=(0,0)
 		sigmap_run=QSignalMapper(self)
 		sigmap_run.mapped[QString].connect(self._updateConfig)
 		self.widgets={}
 		self.level='user'
 		self.refresh=True
+
+		btn=QComboBox()
+		btn.addItem("Normal")
+		btn.addItem("Large")
+		btn.addItem("Extralarge")
+		sw_font=True
+		self.box.addWidget(QLabel("Font Size"),0,0)
+		self.box.addWidget(btn,0,1)
+
+		btn=QComboBox()
+		btn.addItem("Normal")
+		btn.addItem("Large")
+		btn.addItem("Extralarge")
+		sw_font=True
+		self.box.addWidget(QLabel("Cursor Size"),1,0)
+		self.box.addWidget(btn,1,1)
+
+		btn=QComboBox()
+		btn.addItem("1024")
+		btn.addItem("1440")
+		btn.addItem("HD")
+		sw_font=True
+		self.box.addWidget(QLabel("Set resolution"),2,0)
+		self.box.addWidget(btn,2,1)
+		"""
+
+		for wrkFile in self.wrkFiles:
+			systemConfig=functionHelper.getSystemConfig(wrkFile)
+			self.sysConfig.update(systemConfig)
+			for kfile,sections in systemConfig.items():
+				want=self.wantSettings.get(kfile,[])
+				block=self.blockSettings.get(kfile,[])
+				sw_font=False
+				for section,settings in sections.items():
+					if section in block and len(want)==0:
+						continue
+					for setting in settings:
+						(name,data)=setting
+						if name in block or (len(want)>0 and name not in want and section not in want):
+							continue
+						desc=i18n.get(name.upper(),name)
+						lbl=QLabel(desc)
+						#if (data.lower() in ("true","false")) or (data==''):
+						if (isinstance(data,str)):
+							#btn=QCheckBox(desc)
+							if ("font" in name.lower()) or ("fixed" in name.lower()):
+								if sw_font==True:
+									continue
+								btn=QComboBox()
+								btn.addItem("Normal")
+								btn.addItem("Large")
+								btn.addItem("Extralarge")
+								sw_font=True
+								self.box.addWidget(QLabel("Font Size"),row,col)
+								col+=1
+								if col==2:
+									row+=1
+									col=0
+							elif ("size") in name.lower():
+								btn=QComboBox()
+								btn.addItem("Normal")
+								btn.addItem("Large")
+								btn.addItem("Extralarge")
+								sw_font=True
+								self.box.addWidget(QLabel("Cursor Size"),row,col)
+								col+=1
+								if col==2:
+									row+=1
+									col=0
+
+							else:
+								btn=QPushButton(desc)
+								btn.setStyleSheet(functionHelper.cssStyle())
+								btn.setAutoDefault(False)
+								btn.setDefault(False)
+								btn.setCheckable(True)
+								state=False
+								#if  data in ("true","false"):
+								if data.lower()=="true" or data.lower()=="focusfollowsmouse":
+									state=True
+								btn.setChecked(state)
+						self.widgets.update({name:btn})
+						self.box.addWidget(btn,row,col)
+						col+=1
+						if col==2:
+							row+=1
+							col=0
+		"""
+		"""
 		self.config=self.getConfig(level=self.level)
 		config=self.config.get(self.level,{})
 		lookandfeelSections=['colours','fonts','cursor']
@@ -113,30 +204,20 @@ class lookandfeel(confStack):
 				elif (isinstance(item,dict)):
 					print("{} -> Dict".format(item))
 				if widget:
-					self.widgets[key]=widget
-					self.box.addWidget(widget)
+					#self.widgets[key]=widget
+					#self.box.addWidget(widget)
+					self.widgets.update({name:btn})
+					self.box.addWidget(btn,row,col)
+					col+=1
+					if col==2:
+						row+=1
+						col=0
+			"""
 		self.updateScreen()
 	#def _load_screen
 
 	def updateScreen(self):
-		self.level='user'
-		self.refresh=True
-		self.config=self.getConfig(level=self.level)
-		for section,option in self.config.get(self.level,{}).items():
-			if (isinstance(option,dict)):
-				for optionName,value in option.items():
-#					if optionName in self.kwinMethods:
-#						print("Kwin method {}".format(optionName))
-#					else:
-#						print("Item not found {}".format(optionName))
-					widget=self._getWidgetFromKey(optionName)
-					if isinstance(widget,QCheckBox):
-						state=False
-						if value.lower()=="true":
-							state=True
-						widget.setChecked(state)
-					if isinstance(widget,QLineEdit):
-						widget.setText(value)
+		pass
 	#def _udpate_screen
 
 	def _updateConfig(self,key):
@@ -163,48 +244,3 @@ class lookandfeel(confStack):
 						self._exeKwinMethod(name) 
 		self.optionChanged=[]
 
-	def _getSectionFromKey(self,key):
-		sec=''
-		for section,option in self.config.get(self.level,{}).items():
-			if isinstance(option,dict):
-				if key in option.keys():
-					sec=section
-					break
-		return(sec)
-
-	def _getWidgetFromKey(self,key):
-		return(self.widgets.get(key,''))
-
-	
-	def _connect(self):
-		bus=None
-		try:
-			bus=dbus.SessionBus()
-		except Exception as e:
-			bus=None
-			print("Could not get session bus: %s\nAborting"%e)
-		return(bus)
-
-	def _getKwinMethods(self):
-		relevantMethods=[]
-		bus=dbus.SessionBus()
-		#return(getDbusObject(,,""))
-		kbus=bus.get_object("org.kde.kglobalaccel","/component/kwin")
-		interface=dbus.Interface(kbus,"org.kde.kglobalaccel.Component")
-		#method=interface.get_dbus_method("org.kde.kglobalaccel.Component.allShortcutInfos")
-		method=interface.get_dbus_method("allShortcutInfos")
-		result=method()
-		for dbusRes in result:
-			relevantMethods.append(dbusRes[0])
-		return(relevantMethods)
-
-	def _exeKwinMethod(self,method):
-		bus=dbus.SessionBus()
-		kbus=bus.get_object("org.kde.kglobalaccel","/component/kwin")
-		interface=dbus.Interface(kbus,"org.kde.kglobalaccel.Component")
-		methodCall=interface.get_dbus_method("invokeShortcut")
-		self._debug("Calling {}".format(method))
-		methodCall(method)
-
-	def _disableKwinMethod(self,method):
-		pass

@@ -1,7 +1,4 @@
 {
-	"colours":
-	{
-	},
 	"fonts":
 	{
 		"size":"",
@@ -9,35 +6,6 @@
 	},
 	"cursor":
 	{
-		"cursorSize":"",
-		"animateOnClick":"false",
-		"followCursor":"false"
-	},
-	"aids":
-	{
-		"SystemBell":"false",
-		"ShowDesktopGrid":"false",
-		"zoomFish":"false",
-		"zoomGlass":"false",
-		"zoomNormal":"false",
-		"highContrast":"false",
-		"invertEnabled":"false",
-		"InvertWindow":"false"
-	},
-	"desktopbehaviour":
-	{
-		"SingleClick":"false",
-		"ScrollbarLeftClickNavigatesByPage":"false",
-		"hotCorners":"",
-		"focusPolicy":"",
-		"resolution":""
-	},
-	"hotkeys":
-	{
-		"nextWindow":"",
-		"prevWindow":"",
-		"closeWindow":"",
-		"launchCommand":"",
-		"showDesktop":""
+		"cursorSize":""
 	}
 }

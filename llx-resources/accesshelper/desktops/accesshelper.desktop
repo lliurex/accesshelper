@@ -1,0 +1,18 @@
+[Desktop Entry]
+Name=AccessHelper
+GenericName=AccessHelper
+Comment=Manage available accessibility options
+Comment[es]=Gestiona las opciones de accesibilidad
+Comment[ca_ES@valencia]=Gestiona les opciones d'accessibilitat
+Comment[ca_ES.UTF-8@valencia]=Gestiona les opciones d'accessibilitat
+Comment[ca]=Gestiona les opciones d'accessibilitat
+Exec=accesshelper
+Terminal=false
+Type=Application
+Icon=accesshelper
+Name[ca_ES.UTF-8@valencia]=AccessHelper
+Name[ca_ES@valencia]=AccessHelper
+Name[ca]=AccessHelper
+Name[es]=AccessHelper
+Categories=KDE;QT;Utilities;LliureX-Utilities;
+TryExec=/usr/bin/accesshelper

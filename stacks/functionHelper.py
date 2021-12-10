@@ -9,7 +9,10 @@ windows=[("FocusPolicy","")]
 kde=[("singleClick",""),("ScrollbarLeftClickNavigatesByPage","")]
 bell=[("SystemBell",""),("VisibleBell","")]
 hotkeys_kwin=[("ShowDesktopGrid",""),("Invert",""),("InvertWindow",""),("ToggleMouseClick",""),("TrackMouse",""),("view_zoom_in",""),("view_zoom_out","")]
-dictFileData={"kaccesrc":{"Bell":bell},"kwinrc":{"Plugins":plugins,"Windows":windows},"kdeglobals":{"KDE":kde},"kglobalshortcutsrc":{"kwin":hotkeys_kwin}}
+mouse=["cursorSize",""]
+general=[("fixed",""),("font",""),("menuFont",""),("smallestReadableFont",""),("toolBarFont","")]
+dictFileData={"kaccesrc":{"Bell":bell},"kwinrc":{"Plugins":plugins,"Windows":windows,"General":general},"kdeglobals":{"KDE":kde},"kglobalshortcutsrc":{"kwin":hotkeys_kwin},"kcminputrc":{"Mouse":mouse}}
+
 def _debug(msg):
 	if DBG==True:
 		logging.debug("FH: {}".format(msg))

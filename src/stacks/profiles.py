@@ -159,7 +159,7 @@ class profiles(confStack):
 					shutil.copy(kPath,destFile)
 					self._debug("Copying {0}->{1}".format(kPath,destFile))
 				except:
-					cmd=["pkexec","/usr/share/accesshelper/helper/acces-profiler.sh",kPath,destFile]
+					cmd=["pkexec","/usr/share/accesshelper/helper/profiler.sh",kPath,destFile]
 					try:
 						subprocess.run(cmd)
 					except Exception as e:

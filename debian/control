@@ -9,7 +9,7 @@ Homepage: https://github.com/lliurex/rebost
 
 Package: accesshelper
 Architecture: all
-Depends: ${misc:Depends}, ${python3:Depends}
+Depends: ${python3:Depends}
 Description: Set accessibility settings
  AccessHelper it's a common place for the
  available accessibility options 

@@ -52,7 +52,7 @@ if len(sys.argv)==1:
 	config.setBanner('access_banner.png')
 	#config.setBackgroundImage('repoman_login.svg')
 	#config.setConfig(confDirs={'system':'/usr/share/accesshelper','user':'%s/.config'%os.environ['HOME']},confFile="accesHelper.conf")
-	config.setConfig(confDirs={'system':'/usr/share/accesshelper','user':os.path.join(os.environ['HOME'],"git/accessibility_wizard")},confFile="accesshelper.json")
+	config.setConfig(confDirs={'system':'/usr/share/accesshelper','user':os.path.join(os.environ['HOME'],"git/accesshelper/src")},confFile="accesshelper.json")
 	config.Show()
 	#config.setFixedSize(config.width(),config.height())
 	config.setFixedSize(800,600)

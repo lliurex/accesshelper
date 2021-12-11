@@ -1,0 +1,334 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-12-11 23:20+0100\n"
+"PO-Revision-Date: 2021-12-11 23:35+0100\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.3\n"
+"Last-Translator: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: es\n"
+
+#: ../src/stacks/access.py:17
+msgid "Colours"
+msgstr "Colores"
+
+#: ../src/stacks/access.py:18
+msgid "Fonts"
+msgstr "Fuentes"
+
+#: ../src/stacks/access.py:19
+msgid "Cursor"
+msgstr "Cursor"
+
+#: ../src/stacks/access.py:20
+msgid "Visual Aids"
+msgstr "Ayudas visuales"
+
+#: ../src/stacks/access.py:21
+msgid "Screen Options"
+msgstr "Opciones de pantalla"
+
+#: ../src/stacks/access.py:22 ../src/stacks/hotkeys.py:16
+msgid "Keyboard Shortcuts"
+msgstr "Atajos de teclado"
+
+#: ../src/stacks/access.py:23
+msgid "Accessibility options"
+msgstr "Accesibilidad"
+
+#: ../src/stacks/access.py:24 ../src/stacks/behavior.py:14
+#: ../src/stacks/hotkeys.py:18 ../src/stacks/lookandfeel.py:17
+#: ../src/stacks/profiles.py:15 ../src/stacks/screenreader.py:16
+#: ../src/stacks/settings.py:14
+msgid "Configuration"
+msgstr "Configuración"
+
+#: ../src/stacks/access.py:25
+msgid "Accessibility configuration"
+msgstr "Configuración de accesibilidad"
+
+#: ../src/stacks/access.py:26
+msgid "Set accesibility options"
+msgstr "Gestiona las opciones de accesibilidad"
+
+#: ../src/stacks/access.py:27
+msgid "From here you can activate/deactivate accessibility aids"
+msgstr "Desde aquí puedes activar/desactivar las ayudas visuales"
+
+#: ../src/stacks/access.py:28
+msgid "Enable high contrast palette"
+msgstr "Paleta de alto contraste"
+
+#: ../src/stacks/access.py:29
+msgid "Invert screen colours"
+msgstr "Invertir colores"
+
+#: ../src/stacks/access.py:30
+msgid "Invert windows colours"
+msgstr "Invertir colores de ventana"
+
+#: ../src/stacks/access.py:31
+msgid "Show animation on click"
+msgstr "Mostrar animación al clicar"
+
+#: ../src/stacks/access.py:32 ../src/stacks/behavior.py:23
+msgid "Show a grid when moving windows"
+msgstr "Mostrar rejilla al mover una ventana"
+
+#: ../src/stacks/access.py:33
+msgid "Activate eyefish effect"
+msgstr "Efecto ojo de pez"
+
+#: ../src/stacks/access.py:34
+msgid "Glass effect"
+msgstr "Efecto lupa"
+
+#: ../src/stacks/access.py:35
+msgid "Zoom effect"
+msgstr "Efecto Zoom"
+
+#: ../src/stacks/access.py:36
+msgid "Acoustic system bell"
+msgstr "Campana de sistema audible"
+
+#: ../src/stacks/access.py:37
+msgid "Set the policy focus"
+msgstr "Política de foco"
+
+#: ../src/stacks/access.py:38
+msgid "Visible bell"
+msgstr "Campana de sistema visible"
+
+#: ../src/stacks/access.py:39
+msgid "Track pointer"
+msgstr "Localizar ratón al moverlo"
+
+#: ../src/stacks/access.py:40
+msgid "Track click"
+msgstr "Localizar ratón al pulsar"
+
+#: ../src/stacks/behavior.py:15
+msgid "Desktop behavior"
+msgstr "Comportamiento del escritoro"
+
+#: ../src/stacks/behavior.py:16
+msgid "Configure how desktop works"
+msgstr "Configura como se comporta el escritorio"
+
+#: ../src/stacks/behavior.py:17
+msgid "Set many options related with desktop behavior"
+msgstr "Diferentes opciones relacionadas con el comportamiento"
+
+#: ../src/stacks/behavior.py:18
+msgid "Click to focus"
+msgstr "Pulsar para enfocar"
+
+#: ../src/stacks/behavior.py:19 ../src/stacks/behavior.py:26
+msgid "Focus follows pointer"
+msgstr "El foco sigue al ratón"
+
+#: ../src/stacks/behavior.py:20
+msgid "Only one click for open elements"
+msgstr "Un click abre los elementos"
+
+#: ../src/stacks/behavior.py:21
+msgid "Click on scrollbar moves to position"
+msgstr "Click en la barra mueve a la posición"
+
+#: ../src/stacks/behavior.py:22
+msgid "Scrollbar sliding mode"
+msgstr "Modo de deslizamiento de la barra"
+
+#: ../src/stacks/behavior.py:24
+msgid "Actions on top left screen corner"
+msgstr "Actiones en la esquina superior izquierda"
+
+#: ../src/stacks/behavior.py:25
+msgid "Set screen resolution"
+msgstr "Resolución de pantalla"
+
+#: ../src/stacks/hotkeys.py:17
+msgid "hotkeys options"
+msgstr "opciones de atajos"
+
+#: ../src/stacks/hotkeys.py:19
+msgid "Hotkeys configuration"
+msgstr "Configuración de atajos"
+
+#: ../src/stacks/hotkeys.py:20
+msgid "Set hotkeys for launch applications"
+msgstr "Asocia combinaciones de teclas con aplicaciones"
+
+#: ../src/stacks/hotkeys.py:21 ../src/stacks/lookandfeel.py:20
+msgid "From here you can set hotkeys for launch apps"
+msgstr "Permite asociar pulsaciones de tecla a diferentes acciones del sistema"
+
+#: ../src/stacks/hotkeys.py:22
+msgid "Go to next window"
+msgstr "Siguiente ventana"
+
+#: ../src/stacks/hotkeys.py:23
+msgid "Go to previous window"
+msgstr "Ventana anterior"
+
+#: ../src/stacks/hotkeys.py:24
+msgid "Close window"
+msgstr "Cerrar ventana"
+
+#: ../src/stacks/hotkeys.py:25
+msgid "Open launch menu"
+msgstr "Abrir lanzador de aplicaciones"
+
+#: ../src/stacks/hotkeys.py:26
+msgid "Show desktop"
+msgstr "Mostrar escritorio"
+
+#: ../src/stacks/hotkeys.py:90
+msgid "Add new"
+msgstr "Añadir"
+
+#: ../src/stacks/lookandfeel.py:16
+msgid "Look&Feel options"
+msgstr "Apariencia visual"
+
+#: ../src/stacks/lookandfeel.py:18
+msgid "Look&Feel configuration"
+msgstr "Configuración de la apariencia visual"
+
+#: ../src/stacks/lookandfeel.py:19
+msgid "Modify appearence settings"
+msgstr "Modifica la apariencia del sistema"
+
+#: ../src/stacks/lookandfeel.py:21
+msgid "Font size"
+msgstr "Tamaño de fuente"
+
+#: ../src/stacks/lookandfeel.py:22
+msgid "Font family"
+msgstr "Familia"
+
+#: ../src/stacks/lookandfeel.py:23
+msgid "Cursor theme"
+msgstr "Tema del cursor"
+
+#: ../src/stacks/lookandfeel.py:24
+msgid "Cursor size"
+msgstr "Tamaño del cursor"
+
+#: ../src/stacks/lookandfeel.py:25
+msgid "Set resolution"
+msgstr "Resolución"
+
+#: ../src/stacks/profiles.py:16
+msgid "Manage profiles"
+msgstr "Gestionar perfiles"
+
+#: ../src/stacks/profiles.py:17
+msgid "Load and save custom profiles"
+msgstr "Carga y guarda perfiles"
+
+#: ../src/stacks/profiles.py:18
+msgid "Use profile templates for quick configuration"
+msgstr "Usa las plantillas para configurarlo todo al momento"
+
+#: ../src/stacks/profiles.py:19
+msgid "Save profile"
+msgstr "Guardar"
+
+#: ../src/stacks/profiles.py:20
+msgid "Load profile"
+msgstr "Cagar"
+
+#: ../src/stacks/profiles.py:21
+msgid "Permission denied"
+msgstr "Permiso denegado"
+
+#: ../src/stacks/profiles.py:22
+msgid "Profile added to system's profiles"
+msgstr "Perfil añadido al sistema"
+
+#: ../src/stacks/profiles.py:23
+msgid "Profile added to user's profiles"
+msgstr "Perfil añadido al usuario"
+
+#: ../src/stacks/screenreader.py:17
+msgid "Orca settings"
+msgstr "Configuración de Orca"
+
+#: ../src/stacks/screenreader.py:18
+msgid "Orca related options"
+msgstr "Opciones relacionadas con Orca"
+
+#: ../src/stacks/screenreader.py:19
+msgid "Some options related with Orca"
+msgstr "Algunas opciones para configurar Orca"
+
+#: ../src/stacks/screenreader.py:20
+msgid "Hotkey for launching Orca"
+msgstr "Atajo de teclado"
+
+#: ../src/stacks/screenreader.py:21
+msgid "Hotkey for restarting Orca"
+msgstr "Atajo para reinicio de Orca"
+
+#: ../src/stacks/screenreader.py:22
+msgid "Import Orca settings"
+msgstr "Importar configuración de Orca"
+
+#: ../src/stacks/settings.py:15
+msgid "Manage application"
+msgstr "Configuración"
+
+#: ../src/stacks/settings.py:16
+msgid "Configure some options"
+msgstr "Opciones de configuración"
+
+#: ../src/stacks/settings.py:17
+msgid "Set config level, default template.."
+msgstr "Elige la plantilla por defecto, arranque al inicio..."
+
+#: ../src/stacks/settings.py:41
+msgid "The config will be applied per user"
+msgstr "La configuracion se aplicara a cada usuario"
+
+#: ../src/stacks/settings.py:43
+msgid "The config will be applied to all users"
+msgstr "La configuración se aplicará a todos los usuarios"
+
+#: ../src/stacks/settings.py:45
+msgid "The config will be applied to all users and clients"
+msgstr "La configuración se aplicará a todos los usuarios y clientes"
+
+#: ../src/stacks/settings.py:48
+msgid "Choose the config level that should use the app"
+msgstr "Elige el nivel de configuración"
+
+#: ../src/stacks/settings.py:51
+msgid "User"
+msgstr "Usuario/a"
+
+#: ../src/stacks/settings.py:52
+msgid "System"
+msgstr "Sistema"
+
+#: ../src/stacks/settings.py:53
+msgid "N4d"
+msgstr "N4d"
+
+#: ../src/stacks/settings.py:60
+msgid "Session settings"
+msgstr "Opciones de sesión"
+
+#: ../src/stacks/settings.py:63
+msgid "Load template on start"
+msgstr "Cargar plantilla al incio"

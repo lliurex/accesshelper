@@ -33,7 +33,7 @@ class profiles(confStack):
 		self.level='user'
 		self.config={}
 		self.optionChanged=[]
-		self.wrkDir="/tmp/tpls"
+		self.wrkDir="/usr/share/accesshelper/profiles"
 		self.lst_profiles=QListWidget()
 		self.hideControlButtons()
 	#def __init__

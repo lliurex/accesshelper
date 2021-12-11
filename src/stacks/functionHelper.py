@@ -114,7 +114,13 @@ def getHotkey(setting):
 				if name.lower()==hksetting.lower():
 					data=data.split(",")
 					hk=data[0]
-	return(hk)
+					data=",".join(data)
+					break
+			if hk!="":
+				break
+		if hk!="":
+			break
+	return(hk,data,name,section)
 
 def cssStyle():
 	style="""

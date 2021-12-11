@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 import sys
-import os
+import os,shutil
 from PySide2.QtWidgets import QApplication,QLineEdit, QLabel, QWidget, QPushButton,QVBoxLayout,QLineEdit,QHBoxLayout,QListWidget
 from PySide2 import QtGui
 from PySide2.QtCore import Qt,QSignalMapper
@@ -16,7 +16,10 @@ i18n={
 	"MENUDESCRIPTION":_("Load and save custom profiles"),
 	"TOOLTIP":_("Use profile templates for quick configuration"),
 	"SAVE":_("Save profile"),
-	"LOAD":_("Load profile")
+	"LOAD":_("Load profile"),
+	"ERRORPERMS":_("Permission denied"),
+	"SNAPSHOT_SYSTEM":_("Profile added to system's profiles"),
+	"SNAPSHOT_USER":_("Profile added to user's profiles")
 	}
 
 class profiles(confStack):
@@ -30,10 +33,9 @@ class profiles(confStack):
 		self.index=11
 		self.enabled=True
 		self.changed=[]
-		self.level='user'
 		self.config={}
 		self.optionChanged=[]
-		self.wrkDir="/tmp/tpls"
+		self.wrkDir="/usr/share/accesshelper/profiles"
 		self.lst_profiles=QListWidget()
 		self.hideControlButtons()
 	#def __init__
@@ -65,18 +67,34 @@ class profiles(confStack):
 	def _updateText(self,*args):
 		widget=self.lst_profiles.currentItem()
 		if widget:
+			bg=widget.background()
 			fProfile=widget.text()
 			self.inp_name.setText(fProfile)
 	#def _updateText
 
 	def updateScreen(self):
 		self.lst_profiles.clear()
+		add=[]
 		if os.path.isdir(self.wrkDir):
 			for f in os.listdir(self.wrkDir):
 				if len(f)>20:
 					f=f[0:19]
-				self.lst_profiles.addItem(f)
+				if f not in add:
+					self.lst_profiles.addItem(f)
+					add.append(f)
+					item=self.lst_profiles.item(self.lst_profiles.count()-1)
+					brush=QtGui.QBrush(QtGui.QColor("orange"),Qt.Dense4Pattern)
+					item.setBackground(brush)
 		self.lst_profiles.sortItems()
+
+		wrkUserDir=os.path.join(os.environ['HOME'],".config","accesshelper","profiles")
+		if os.path.isdir(wrkUserDir):
+			for f in os.listdir(wrkUserDir):
+				if len(f)>20:
+					f=f[0:19]
+				if f not in add:
+					self.lst_profiles.addItem(f)
+					add.append(f)
 	#def _udpate_screen
 
 	def loadProfile(self,*args):
@@ -85,7 +103,8 @@ class profiles(confStack):
 		name=os.path.basename(name)
 		if len(name)>20:
 			name=name[0:19]
-		functionHelper.restore_snapshot(self.wrkDir,name)
+		self.restore_snapshot(self.wrkDir,name)
+		self.refresh=True
 		self.optionChanged=[]
 
 	def _updateConfig(self,key):
@@ -97,7 +116,62 @@ class profiles(confStack):
 		name=os.path.basename(name)
 		if len(name)>20:
 			name=name[0:19]
-		functionHelper.take_snapshot(self.wrkDir,name)
+		wrkDir=self.wrkDir
+		if len(self.lst_profiles.findItems(name,Qt.MatchExactly))==0:
+			wrkDir=os.join.path(os.environ.get("HOME"),".config","accesshelper","profiles")
+		else:
+			widget=self.lst_profiles.findItems(name,Qt.MatchExactly)[0]
+			print(widget.background().style())
+			if widget.background().style()==Qt.NoBrush:
+				wrkDir=os.path.join(os.environ.get("HOME"),".config","accesshelper","profiles")
+		if self.take_snapshot(wrkDir,name)==False:
+			self.showMsg("{}: {}".format(i18n.get("ERRORPERMS"),wrkDir))
+		else:
+			if wrkDir==self.wrkDir:
+				self.showMsg("{}".format(i18n.get("SNAPSHOT_SYSTEM")))
+			else:
+				self.showMsg("{}".format(i18n.get("SNAPSHOT_USER")))
 		self.optionChanged=[]
 		self.updateScreen()
 
+	def take_snapshot(self,wrkDir,snapshotName=''):
+		if snapshotName=='':
+			snapshotName="test"
+		self._debug("Take snapshot {}".format(snapshotName))
+		destPath=os.path.join(wrkDir,snapshotName)
+		self._debug("Destination {}".format(destPath))
+
+
+		sw=True
+		for kfile in functionHelper.dictFileData.keys():
+			kPath=os.path.join(os.environ['HOME'],".config",kfile)
+			if os.path.isfile(kPath):
+				destFile=os.path.join(destPath,kfile)
+				if os.path.isdir(destPath)==False:
+					if os.path.isfile(destPath):
+						destPath="_1".format(destPath)
+						destFile=os.path.join(destPath,kfile)
+					try:
+						os.makedirs(destPath)
+					except:
+						sw=False
+				try:
+					shutil.copy(kPath,destFile)
+					self._debug("Copying {0}->{1}".format(kPath,destFile))
+				except:
+					self._debug("Permission denied for {}".format(destPath))
+					sw=False
+					break
+		return sw
+	#def take_snapshot
+			
+	def restore_snapshot(self,wrkDir,snapshotName):
+		snapPath=os.path.join(wrkDir,snapshotName)
+		if os.path.isdir(snapPath)==True:
+			config=functionHelper.getSystemConfig(sourceFolder=snapPath)
+			for kfile,sections in config.items():
+				for section,data in sections.items():
+					for (desc,value) in data:
+						functionHelper._setKdeConfigSetting(section,desc,value,kfile)
+		self.refresh=True
+	#def restore_snapshot

@@ -150,18 +150,30 @@ class hotkeys(confStack):
 	#def eventFilter
 
 	def updateScreen(self):
+		for wrkFile in self.wrkFiles:
+			systemConfig=functionHelper.getSystemConfig(wrkFile)
+			self.sysConfig.update(systemConfig)
+			for kfile,sections in systemConfig.items():
+				for section,settings in sections.items():
+					row=0
+					for setting in settings:
+						(name,data)=setting
+						data=data.split(",")
+						desc=""
+						if len(data)>0:
+							desc=data[-1]
+						btn=self.widgets.get(name)
+						if btn:
+							btn.setText(data[0])
+							self.widgets.update({name:btn})
+							self.widgetsText.update({btn:name})
 		pass
 	#def _udpate_screen
 
 	def _updateConfig(self,name):
-		print(name)
+		pass
 
 	def writeConfig(self):
 		functionHelper.setSystemConfig(self.sysConfig)
-		return
-		for section,option in self.config.get(self.level,{}).items():
-			if isinstance(option,dict):
-				for name,value in option.items():
-					if name in self.optionChanged:
-						self._exeKwinMethod(name) 
+		self.refresh=True
 		self.optionChanged=[]

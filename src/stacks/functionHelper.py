@@ -73,48 +73,29 @@ def _setKdeConfigSetting(group,key,value,kfile="kaccessrc"):
 	#_debug("Write value: {}".format(ret))
 	return(ret)
 
-def take_snapshot(wrkDir,snapshotName=''):
-	if snapshotName=='':
-		snapshotName="test"
-	_debug("Take snapshot {}".format(snapshotName))
-	for kfile in dictFileData.keys():
-		kPath=os.path.join(os.environ['HOME'],".config",kfile)
-
-		if os.path.isfile(kPath):
-			destPath=os.path.join(wrkDir,snapshotName)
-			destFile=os.path.join(destPath,kfile)
-			if os.path.isdir(destPath)==False:
-				if os.path.isfile(destPath):
-					destPath="_1".format(destPath)
-					destFile=os.path.join(destPath,kfile)
-				os.makedirs(destPath)
-
-			shutil.copy(kPath,destFile)
-#def take_snapshot
-		
-def restore_snapshot(wrkDir,snapshotName):
-	snapPath=os.path.join(wrkDir,snapshotName)
-	print("Restoring {}".format(snapPath))
-	if os.path.isdir(snapPath)==True:
-		config=getSystemConfig(sourceFolder=snapPath)
-		for kfile,sections in config.items():
-			for section,data in sections.items():
-				for (desc,value) in data:
-					_setKdeConfigSetting(section,desc,value,kfile)
-#def restore_snapshot
-
 def getHotkey(setting):
 	hk=""
+	hksection=""
+	data=""
+	name=""
 	hksetting=settingsHotkeys.get(setting,"")
-	sc=getSystemConfig(wrkFile="kglobalshortcutsrc")
-	for kfile,sections in sc.items():
-		for section,settings in sections.items():
-			for setting in settings:
-				(name,data)=setting
-				if name.lower()==hksetting.lower():
-					data=data.split(",")
-					hk=data[0]
-	return(hk)
+	if hksetting:
+		sc=getSystemConfig(wrkFile="kglobalshortcutsrc")
+		for kfile,sections in sc.items():
+			for section,settings in sections.items():
+				hksection=section
+				for setting in settings:
+					(name,data)=setting
+					if name.lower()==hksetting.lower():
+						data=data.split(",")
+						hk=data[0]
+						data=",".join(data)
+						break
+				if hk!="":
+					break
+			if hk!="":
+				break
+	return(hk,data,name,hksection)
 
 def cssStyle():
 	style="""

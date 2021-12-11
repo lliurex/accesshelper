@@ -13,34 +13,16 @@ import dbus,dbus.service,dbus.exceptions
 QString=type("")
 
 i18n={
-	"COLOURS":_("Colours"),
-	"FONTS":_("Fonts"),
-	"CURSOR":_("Cursor"),
-	"AIDS":_("Visual Aids"),
-	"SCREEN":_("Screen Options"),
-	"HOTKEYS":_("Keyboard Shortcuts"),
 	"ACCESSIBILITY":_("Look&Feel options"),
 	"CONFIG":_("Configuration"),
 	"DESCRIPTION":_("Look&Feel configuration"),
 	"MENUDESCRIPTION":_("Modify appearence settings"),
 	"TOOLTIP":_("From here you can set hotkeys for launch apps"),
-	"HIGHCONTRAST":_("Enable high contrast palette"),
-	"INVERTSCREEN":_("Invert screen colours"),
-	"INVERTWINDOW":_("Invert windows colours"),
-	"SIZE":_("Font size"),
+	"FONTSIZE":_("Font size"),
 	"FAMILY":_("Font family"),
 	"CURSORTHEME":_("Cursor theme"),
 	"CURSORSIZE":_("Cursor size"),
-	"ANIMATEONCLICK":_("Show animation on button click"),
-	"FOLLOWPOINTER":_("Always follow the pointer"),
-	"ONECLICKOPEN":_("Only one click for open elements"),
-	"SCROLLBARMODE":_("Scrollbar sliding mode"),
-	"GRIDONMOVE":_("Show a grid when moving windows"),
-	"ZOOMFISH":_("Activate glass effect with a eyefish effect"),
-	"ZOOMGLASS":_("Activate glass effect"),
-	"ZOOMNORMAL":_("Zoom desktop"),
-	"HOTCORNERS":_("Actions on screen corners"),
-	"FOCUSPOLICY":_("Set the policy focus of windows and applicattions")
+	"RESOLUTION":_("Set resolution")
 	}
 
 class lookandfeel(confStack):
@@ -71,15 +53,20 @@ class lookandfeel(confStack):
 		sigmap_run=QSignalMapper(self)
 		sigmap_run.mapped[QString].connect(self._updateConfig)
 		self.widgets={}
-		self.level='user'
+		self.level='system'
 		self.refresh=True
+		self.config=self.getConfig(level=self.level)
+		config=self.config.get(self.level,{})
+		fontSize=config.get('fonts',{}).get('size',"Normal")
+		cursorSize=config.get('cursor',{}).get('size',"Normal")
 
 		btn=QComboBox()
 		btn.addItem("Normal")
 		btn.addItem("Large")
 		btn.addItem("Extralarge")
+		btn.setCurrentText(fontSize)
 		sw_font=True
-		self.box.addWidget(QLabel("Font Size"),0,0)
+		self.box.addWidget(QLabel(i18n.get("FONTSIZE")),0,0)
 		self.box.addWidget(btn,0,1)
 		self.widgets.update({"font":btn})
 
@@ -87,8 +74,9 @@ class lookandfeel(confStack):
 		btn.addItem("Normal")
 		btn.addItem("Large")
 		btn.addItem("Extralarge")
+		btn.setCurrentText(cursorSize)
 		sw_font=True
-		self.box.addWidget(QLabel("Cursor Size"),1,0)
+		self.box.addWidget(QLabel(i18n.get("CURSORSIZE")),1,0)
 		self.box.addWidget(btn,1,1)
 		self.widgets.update({"cursor":btn})
 
@@ -97,129 +85,13 @@ class lookandfeel(confStack):
 		btn.addItem("1440")
 		btn.addItem("HD")
 		sw_font=True
-		self.box.addWidget(QLabel("Set resolution"),2,0)
+		self.box.addWidget(QLabel(i18n.get("RESOLUTION")),2,0)
 		self.box.addWidget(btn,2,1)
 		self.widgets.update({"res":btn})
 
 		for wrkFile in self.wrkFiles:
 			systemConfig=functionHelper.getSystemConfig(wrkFile=wrkFile)
 			self.sysConfig.update(systemConfig)
-		"""
-
-		for wrkFile in self.wrkFiles:
-			systemConfig=functionHelper.getSystemConfig(wrkFile)
-			self.sysConfig.update(systemConfig)
-			for kfile,sections in systemConfig.items():
-				want=self.wantSettings.get(kfile,[])
-				block=self.blockSettings.get(kfile,[])
-				sw_font=False
-				for section,settings in sections.items():
-					if section in block and len(want)==0:
-						continue
-					for setting in settings:
-						(name,data)=setting
-						if name in block or (len(want)>0 and name not in want and section not in want):
-							continue
-						desc=i18n.get(name.upper(),name)
-						lbl=QLabel(desc)
-						#if (data.lower() in ("true","false")) or (data==''):
-						if (isinstance(data,str)):
-							#btn=QCheckBox(desc)
-							if ("font" in name.lower()) or ("fixed" in name.lower()):
-								if sw_font==True:
-									continue
-								btn=QComboBox()
-								btn.addItem("Normal")
-								btn.addItem("Large")
-								btn.addItem("Extralarge")
-								sw_font=True
-								self.box.addWidget(QLabel("Font Size"),row,col)
-								col+=1
-								if col==2:
-									row+=1
-									col=0
-							elif ("size") in name.lower():
-								btn=QComboBox()
-								btn.addItem("Normal")
-								btn.addItem("Large")
-								btn.addItem("Extralarge")
-								sw_font=True
-								self.box.addWidget(QLabel("Cursor Size"),row,col)
-								col+=1
-								if col==2:
-									row+=1
-									col=0
-
-							else:
-								btn=QPushButton(desc)
-								btn.setStyleSheet(functionHelper.cssStyle())
-								btn.setAutoDefault(False)
-								btn.setDefault(False)
-								btn.setCheckable(True)
-								state=False
-								#if  data in ("true","false"):
-								if data.lower()=="true" or data.lower()=="focusfollowsmouse":
-									state=True
-								btn.setChecked(state)
-						self.widgets.update({name:btn})
-						self.box.addWidget(btn,row,col)
-						col+=1
-						if col==2:
-							row+=1
-							col=0
-		"""
-		"""
-		self.config=self.getConfig(level=self.level)
-		config=self.config.get(self.level,{})
-		lookandfeelSections=['colours','fonts','cursor']
-		for section in lookandfeelSections:
-			for key,item in config.get(section,{}).items():
-				if key.upper() in i18n.keys():
-					desc=i18n.get(key.upper())
-				else:
-					desc=key
-				widget=None
-				if (isinstance(item,str)):
-					if item in ["true","false"]:
-						widget=QCheckBox(desc)
-						sigmap_run.setMapping(widget,key)
-						widget.stateChanged.connect(sigmap_run.map)
-					elif key=='size':
-						self.box.addWidget(QLabel(i18n.get('SIZE')))
-						widget=QComboBox()
-						widget.addItems(["12","13","14","15","16","17","18","19","20"])
-						sigmap_run.setMapping(widget,key)
-						widget.currentIndexChanged.connect(sigmap_run.map)
-					elif key=='family':
-						self.box.addWidget(QLabel(i18n.get('FAMILY')))
-						widget=QComboBox()
-						widget.addItems([])
-						sigmap_run.setMapping(widget,key)
-						widget.currentIndexChanged.connect(sigmap_run.map)
-					elif key=='cursorSize':
-						self.box.addWidget(QLabel(i18n.get('CURSORSIZE')))
-						widget=QComboBox()
-						widget.addItems(["Normal","Large","Extralarge"])
-						sigmap_run.setMapping(widget,key)
-						widget.currentIndexChanged.connect(sigmap_run.map)
-					else:
-						widget=QLineEdit()
-						sigmap_run.setMapping(widget,key)
-						widget.editingFinished.connect(sigmap_run.map)
-				elif (isinstance(item,list)):
-					print("{} -> List".format(item))
-				elif (isinstance(item,dict)):
-					print("{} -> Dict".format(item))
-				if widget:
-					#self.widgets[key]=widget
-					#self.box.addWidget(widget)
-					self.widgets.update({name:btn})
-					self.box.addWidget(btn,row,col)
-					col+=1
-					if col==2:
-						row+=1
-						col=0
-			"""
 		self.updateScreen()
 	#def _load_screen
 
@@ -245,6 +117,7 @@ class lookandfeel(confStack):
 				if value.lower()=="extralarge":
 					size+=inc*2
 					minSize+=inc*2
+				self.saveChanges('fonts',{"size":value})
 				fixed="Hack,{0},-1,5,50,0,0,0,0,0".format(size)
 				font="Noto Sans,{0},-1,5,50,0,0,0,0,0".format(size)
 				menufont="Noto Sans,{0},-1,5,50,0,0,0,0,0".format(size)
@@ -263,8 +136,10 @@ class lookandfeel(confStack):
 					size+=inc
 				if value.lower()=="extralarge":
 					size+=inc*2
+				self.saveChanges('cursor',{"size":value})
 			elif name=="res":
 				self._debug("Not implemented")
 		self.optionChanged=[]
+		self.refresh=True
 		return
 

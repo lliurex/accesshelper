@@ -79,8 +79,6 @@ class access(confStack):
 		self.installEventFilter(self)
 		self.box=QGridLayout()
 		self.setLayout(self.box)
-		sigmap_run=QSignalMapper(self)
-		sigmap_run.mapped[QString].connect(self._grab_alt_keys)
 		self.refresh=True
 		row,col=(0,0)
 		for wrkFile in self.wrkFiles:
@@ -98,33 +96,19 @@ class access(confStack):
 						lbl=QLabel(desc)
 						if (data.lower() in ("true","false")) or (data==''):
 							btn=QCheckBox(desc)
-							#btn=QPushButton(desc)
-							#btn.setAutoDefault(False)
-							#btn.setDefault(False)
-							#btn.setCheckable(True)
-							#btn.setStyleSheet(functionHelper.cssStyle())
-							state=False
-							if data.lower()=="true":
-								state=True
-							btn.setChecked(state)
 							self.widgets.update({name:btn})
 							self.box.addWidget(btn,row,col)
 							col+=1
-							btnName=functionHelper.getHotkey(name)
-							if btnName:
-								btn=QPushButton(btnName)
-								sigmap_run.setMapping(btn,btnName)
-								self.widgets.update({btnName:btn})
-								self.widgetsText.update({btn:btnName})
-								btn.clicked.connect(sigmap_run.map)
+							(mainHk,hkData,hkSetting,hkSection)=functionHelper.getHotkey(name)
+							if mainHk:
+								btn=QPushButton(mainHk)
+								self.widgets.update({mainHk:btn})
+								self.widgetsText.update({btn:{'mainHk':mainHk,'hkData':hkData,'hkSetting':hkSetting,'hkSection':hkSection}})
 								self.box.addWidget(btn,row,col,Qt.Alignment(1))
 							col+=1
 							if col==2:
 								row+=1
 								col=0
-
-						#ibtn.clicked
-		#lst_settings.resizeRowsToContents()
 		self.updateScreen()
 	#def _load_screen
 
@@ -146,7 +130,7 @@ class access(confStack):
 	def _set_config_key(self,keypress):
 		keypress=keypress.replace("Control","Ctrl")
 		self.btn.setText(keypress)
-		desc=self.widgetsText.get(self.btn)
+		desc=self.widgetsText.get(self.btn).get("mainHk")
 		sysConfig=self.sysConfig.copy()
 		for kfile in self.wrkFiles:
 			for section,data in sysConfig.get(kfile,{}).items():
@@ -185,11 +169,43 @@ class access(confStack):
 	#def eventFilter
 
 	def updateScreen(self):
+		sigmap_run=QSignalMapper(self)
+		sigmap_run.mapped[QString].connect(self._grab_alt_keys)
+		for kfile,sections in self.sysConfig.items():
+			want=self.wantSettings.get(kfile,[])
+			block=self.blockSettings.get(kfile,[])
+			for section,settings in sections.items():
+				for setting in settings:
+					(name,data)=setting
+					if name in block or (len(want)>0 and name not in want):
+						continue
+					desc=i18n.get(name.upper(),name)
+					lbl=QLabel(desc)
+					if (data.lower() in ("true","false")) or (data==''):
+						state=False
+						if data.lower()=="true":
+							state=True
+						self.widgets.get(name).setChecked(state)
+					(mainHk,hkData,hkSetting,hkSection)=functionHelper.getHotkey(name)
+
+					if mainHk:
+						btn=self.widgets.get(mainHk)
+						if isinstance(btn,QPushButton):
+							sigmap_run.setMapping(btn,mainHk)
+							self.widgets.update({mainHk:btn})
+							self.widgetsText.update({btn:{'mainHk':mainHk,'hkData':hkData,'hkSetting':hkSetting,'hkSection':hkSection}})
+							btn.clicked.connect(sigmap_run.map)
+							btn.setText(mainHk)
 		return
 	#def _udpate_screen
 
 	def _updateConfig(self,*args):
+		for wrkFile in self.wrkFiles:
+			systemConfig=functionHelper.getSystemConfig(wrkFile)
+			self.sysConfig.update(systemConfig)
 		return
+	#def _updateConfig
+
 	def writeConfig(self):
 		sysConfig=self.sysConfig.copy()
 		for kfile in self.wrkFiles:
@@ -198,15 +214,37 @@ class access(confStack):
 				for setting,value in data:
 					btn=self.widgets.get(setting,'')
 					if btn:
-						value=btn.isChecked()
-						if value:
-							value="true"
-						else:
-							value="false"
+						if isinstance(btn,QCheckBox):
+							value=btn.isChecked()
+							if value:
+								value="true"
+							else:
+								value="false"
 					dataTmp.append((setting,value))
 				self.sysConfig[kfile][section]=dataTmp
-
+		self.sysconfig=self._writeHotkeys()
 		functionHelper.setSystemConfig(self.sysConfig)
-		self._reloadConfig()
 		self.optionChanged=[]
+		self._updateConfig()
+		self.updateScreen()
+		self.refresh=True
 		return
+
+	def _writeHotkeys(self):
+		self.sysConfig["kglobalshortcutsrc"]={}
+		for desc,widget in self.widgets.items():
+			if isinstance(widget,QPushButton):
+				mainHk=self.widgetsText.get(widget,{}).get('mainHk',"")
+				if mainHk:
+					hkData=self.widgetsText.get(widget,{}).get('hkData',"None")
+					hkSection=self.widgetsText.get(widget,{}).get('hkSection',"None")
+					hkSetting=self.widgetsText.get(widget,{}).get('hkSetting',"None")
+					newHk=widget.text()
+					if newHk!=mainHk:
+						hkData=hkData.split(",")
+						hkData[0]=newHk
+						hkData[1]=newHk
+						hkData=",".join(hkData)
+					if self.sysConfig["kglobalshortcutsrc"].get(hkSection,None)==None:
+						self.sysConfig["kglobalshortcutsrc"][hkSection]=[]
+					self.sysConfig["kglobalshortcutsrc"][hkSection].append((hkSetting,hkData))

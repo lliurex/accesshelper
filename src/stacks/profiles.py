@@ -165,7 +165,7 @@ class profiles(confStack):
 					except Exception as e:
 						self._debug(e)
 						self._debug("Permission denied for {}".format(destPath))
-					sw=False
+						sw=False
 					break
 		return sw
 	#def take_snapshot

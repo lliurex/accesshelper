@@ -119,7 +119,7 @@ class profiles(confStack):
 			name=name[0:19]
 		wrkDir=self.wrkDir
 		if len(self.lst_profiles.findItems(name,Qt.MatchExactly))==0:
-			wrkDir=os.join.path(os.environ.get("HOME"),".config","accesshelper","profiles")
+			wrkDir=os.path.join(os.environ.get("HOME"),".config","accesshelper","profiles")
 		else:
 			widget=self.lst_profiles.findItems(name,Qt.MatchExactly)[0]
 			if widget.background().style()==Qt.NoBrush:

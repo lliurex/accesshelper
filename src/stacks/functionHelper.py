@@ -99,8 +99,11 @@ def getHotkey(setting):
 
 def cssStyle():
 	style="""
-		QPushButton:checked{
-			background:lightgreen;
-		}
+		QListWidget{
+			}
+		QListWidget::item{
+			margin:3px;
+			padding:3px;
+			}
 	"""
 	return(style)

@@ -13,34 +13,16 @@ import dbus,dbus.service,dbus.exceptions
 QString=type("")
 
 i18n={
-	"COLOURS":_("Colours"),
-	"FONTS":_("Fonts"),
-	"CURSOR":_("Cursor"),
-	"AIDS":_("Visual Aids"),
-	"SCREEN":_("Screen Options"),
-	"HOTKEYS":_("Keyboard Shortcuts"),
 	"ACCESSIBILITY":_("Look&Feel options"),
 	"CONFIG":_("Configuration"),
 	"DESCRIPTION":_("Look&Feel configuration"),
 	"MENUDESCRIPTION":_("Modify appearence settings"),
 	"TOOLTIP":_("From here you can set hotkeys for launch apps"),
-	"HIGHCONTRAST":_("Enable high contrast palette"),
-	"INVERTSCREEN":_("Invert screen colours"),
-	"INVERTWINDOW":_("Invert windows colours"),
-	"SIZE":_("Font size"),
+	"FONTSIZE":_("Font size"),
 	"FAMILY":_("Font family"),
 	"CURSORTHEME":_("Cursor theme"),
 	"CURSORSIZE":_("Cursor size"),
-	"ANIMATEONCLICK":_("Show animation on button click"),
-	"FOLLOWPOINTER":_("Always follow the pointer"),
-	"ONECLICKOPEN":_("Only one click for open elements"),
-	"SCROLLBARMODE":_("Scrollbar sliding mode"),
-	"GRIDONMOVE":_("Show a grid when moving windows"),
-	"ZOOMFISH":_("Activate glass effect with a eyefish effect"),
-	"ZOOMGLASS":_("Activate glass effect"),
-	"ZOOMNORMAL":_("Zoom desktop"),
-	"HOTCORNERS":_("Actions on screen corners"),
-	"FOCUSPOLICY":_("Set the policy focus of windows and applicattions")
+	"RESOLUTION":_("Set resolution")
 	}
 
 class lookandfeel(confStack):
@@ -71,15 +53,20 @@ class lookandfeel(confStack):
 		sigmap_run=QSignalMapper(self)
 		sigmap_run.mapped[QString].connect(self._updateConfig)
 		self.widgets={}
-		self.level='user'
+		self.level='system'
 		self.refresh=True
+		self.config=self.getConfig(level=self.level)
+		config=self.config.get(self.level,{})
+		fontSize=config.get('fonts',{}).get('size',"Normal")
+		cursorSize=config.get('cursor',{}).get('size',"Normal")
 
 		btn=QComboBox()
 		btn.addItem("Normal")
 		btn.addItem("Large")
 		btn.addItem("Extralarge")
+		btn.setCurrentText(fontSize)
 		sw_font=True
-		self.box.addWidget(QLabel("Font Size"),0,0)
+		self.box.addWidget(QLabel(i18n.get("FONTSIZE")),0,0)
 		self.box.addWidget(btn,0,1)
 		self.widgets.update({"font":btn})
 
@@ -87,8 +74,9 @@ class lookandfeel(confStack):
 		btn.addItem("Normal")
 		btn.addItem("Large")
 		btn.addItem("Extralarge")
+		btn.setCurrentText(cursorSize)
 		sw_font=True
-		self.box.addWidget(QLabel("Cursor Size"),1,0)
+		self.box.addWidget(QLabel(i18n.get("CURSORSIZE")),1,0)
 		self.box.addWidget(btn,1,1)
 		self.widgets.update({"cursor":btn})
 
@@ -97,7 +85,7 @@ class lookandfeel(confStack):
 		btn.addItem("1440")
 		btn.addItem("HD")
 		sw_font=True
-		self.box.addWidget(QLabel("Set resolution"),2,0)
+		self.box.addWidget(QLabel(i18n.get("RESOLUTION")),2,0)
 		self.box.addWidget(btn,2,1)
 		self.widgets.update({"res":btn})
 
@@ -245,6 +233,7 @@ class lookandfeel(confStack):
 				if value.lower()=="extralarge":
 					size+=inc*2
 					minSize+=inc*2
+				self.saveChanges('fonts',{"size":value})
 				fixed="Hack,{0},-1,5,50,0,0,0,0,0".format(size)
 				font="Noto Sans,{0},-1,5,50,0,0,0,0,0".format(size)
 				menufont="Noto Sans,{0},-1,5,50,0,0,0,0,0".format(size)
@@ -263,6 +252,7 @@ class lookandfeel(confStack):
 					size+=inc
 				if value.lower()=="extralarge":
 					size+=inc*2
+				self.saveChanges('cursor',{"size":value})
 			elif name=="res":
 				self._debug("Not implemented")
 		self.optionChanged=[]

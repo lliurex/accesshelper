@@ -6,6 +6,7 @@ from PySide2 import QtGui
 from PySide2.QtCore import Qt,QSignalMapper
 from appconfig.appConfigStack import appConfigStack as confStack
 import gettext
+import subprocess
 from . import functionHelper
 _ = gettext.gettext
 QString=type("")
@@ -121,7 +122,6 @@ class profiles(confStack):
 			wrkDir=os.join.path(os.environ.get("HOME"),".config","accesshelper","profiles")
 		else:
 			widget=self.lst_profiles.findItems(name,Qt.MatchExactly)[0]
-			print(widget.background().style())
 			if widget.background().style()==Qt.NoBrush:
 				wrkDir=os.path.join(os.environ.get("HOME"),".config","accesshelper","profiles")
 		if self.take_snapshot(wrkDir,name)==False:
@@ -159,7 +159,12 @@ class profiles(confStack):
 					shutil.copy(kPath,destFile)
 					self._debug("Copying {0}->{1}".format(kPath,destFile))
 				except:
-					self._debug("Permission denied for {}".format(destPath))
+					cmd=["pkexec","/usr/share/accesshelper/helper/acces-profiler.sh",kPath,destFile]
+					try:
+						subprocess.run(cmd)
+					except Exception as e:
+						self._debug(e)
+						self._debug("Permission denied for {}".format(destPath))
 					sw=False
 					break
 		return sw

@@ -92,122 +92,6 @@ class lookandfeel(confStack):
 		for wrkFile in self.wrkFiles:
 			systemConfig=functionHelper.getSystemConfig(wrkFile=wrkFile)
 			self.sysConfig.update(systemConfig)
-		"""
-
-		for wrkFile in self.wrkFiles:
-			systemConfig=functionHelper.getSystemConfig(wrkFile)
-			self.sysConfig.update(systemConfig)
-			for kfile,sections in systemConfig.items():
-				want=self.wantSettings.get(kfile,[])
-				block=self.blockSettings.get(kfile,[])
-				sw_font=False
-				for section,settings in sections.items():
-					if section in block and len(want)==0:
-						continue
-					for setting in settings:
-						(name,data)=setting
-						if name in block or (len(want)>0 and name not in want and section not in want):
-							continue
-						desc=i18n.get(name.upper(),name)
-						lbl=QLabel(desc)
-						#if (data.lower() in ("true","false")) or (data==''):
-						if (isinstance(data,str)):
-							#btn=QCheckBox(desc)
-							if ("font" in name.lower()) or ("fixed" in name.lower()):
-								if sw_font==True:
-									continue
-								btn=QComboBox()
-								btn.addItem("Normal")
-								btn.addItem("Large")
-								btn.addItem("Extralarge")
-								sw_font=True
-								self.box.addWidget(QLabel("Font Size"),row,col)
-								col+=1
-								if col==2:
-									row+=1
-									col=0
-							elif ("size") in name.lower():
-								btn=QComboBox()
-								btn.addItem("Normal")
-								btn.addItem("Large")
-								btn.addItem("Extralarge")
-								sw_font=True
-								self.box.addWidget(QLabel("Cursor Size"),row,col)
-								col+=1
-								if col==2:
-									row+=1
-									col=0
-
-							else:
-								btn=QPushButton(desc)
-								btn.setStyleSheet(functionHelper.cssStyle())
-								btn.setAutoDefault(False)
-								btn.setDefault(False)
-								btn.setCheckable(True)
-								state=False
-								#if  data in ("true","false"):
-								if data.lower()=="true" or data.lower()=="focusfollowsmouse":
-									state=True
-								btn.setChecked(state)
-						self.widgets.update({name:btn})
-						self.box.addWidget(btn,row,col)
-						col+=1
-						if col==2:
-							row+=1
-							col=0
-		"""
-		"""
-		self.config=self.getConfig(level=self.level)
-		config=self.config.get(self.level,{})
-		lookandfeelSections=['colours','fonts','cursor']
-		for section in lookandfeelSections:
-			for key,item in config.get(section,{}).items():
-				if key.upper() in i18n.keys():
-					desc=i18n.get(key.upper())
-				else:
-					desc=key
-				widget=None
-				if (isinstance(item,str)):
-					if item in ["true","false"]:
-						widget=QCheckBox(desc)
-						sigmap_run.setMapping(widget,key)
-						widget.stateChanged.connect(sigmap_run.map)
-					elif key=='size':
-						self.box.addWidget(QLabel(i18n.get('SIZE')))
-						widget=QComboBox()
-						widget.addItems(["12","13","14","15","16","17","18","19","20"])
-						sigmap_run.setMapping(widget,key)
-						widget.currentIndexChanged.connect(sigmap_run.map)
-					elif key=='family':
-						self.box.addWidget(QLabel(i18n.get('FAMILY')))
-						widget=QComboBox()
-						widget.addItems([])
-						sigmap_run.setMapping(widget,key)
-						widget.currentIndexChanged.connect(sigmap_run.map)
-					elif key=='cursorSize':
-						self.box.addWidget(QLabel(i18n.get('CURSORSIZE')))
-						widget=QComboBox()
-						widget.addItems(["Normal","Large","Extralarge"])
-						sigmap_run.setMapping(widget,key)
-						widget.currentIndexChanged.connect(sigmap_run.map)
-					else:
-						widget=QLineEdit()
-						sigmap_run.setMapping(widget,key)
-						widget.editingFinished.connect(sigmap_run.map)
-				elif (isinstance(item,list)):
-					print("{} -> List".format(item))
-				elif (isinstance(item,dict)):
-					print("{} -> Dict".format(item))
-				if widget:
-					#self.widgets[key]=widget
-					#self.box.addWidget(widget)
-					self.widgets.update({name:btn})
-					self.box.addWidget(btn,row,col)
-					col+=1
-					if col==2:
-						row+=1
-						col=0
-			"""
 		self.updateScreen()
 	#def _load_screen
 
@@ -256,5 +140,6 @@ class lookandfeel(confStack):
 			elif name=="res":
 				self._debug("Not implemented")
 		self.optionChanged=[]
+		self.refresh=True
 		return
 

@@ -187,6 +187,7 @@ class access(confStack):
 							state=True
 						self.widgets.get(name).setChecked(state)
 					(mainHk,hkData,hkSetting,hkSection)=functionHelper.getHotkey(name)
+
 					if mainHk:
 						btn=self.widgets.get(mainHk)
 						if isinstance(btn,QPushButton):
@@ -226,6 +227,7 @@ class access(confStack):
 		self.optionChanged=[]
 		self._updateConfig()
 		self.updateScreen()
+		self.refresh=True
 		return
 
 	def _writeHotkeys(self):

@@ -38,10 +38,12 @@ class profiles(confStack):
 		self.optionChanged=[]
 		self.wrkDir="/usr/share/accesshelper/profiles"
 		self.lst_profiles=QListWidget()
+		self.lst_userProfiles=QListWidget()
 		self.hideControlButtons()
 	#def __init__
 
 	def _load_screen(self):
+		self.setStyleSheet(functionHelper.cssStyle())
 		self.box=QVBoxLayout()
 		self.setLayout(self.box)
 		self.widgets={}
@@ -85,7 +87,13 @@ class profiles(confStack):
 					add.append(f)
 					item=self.lst_profiles.item(self.lst_profiles.count()-1)
 					brush=QtGui.QBrush(QtGui.QColor("orange"),Qt.Dense4Pattern)
-					item.setBackground(brush)
+					font=item.font()
+					font.setBold(True)
+					font.setStretch(120)
+				#	if font.pointSize()<14:
+				#		font.setPointSize(14)
+					item.setFont(font)
+					#item.setBackground(brush)
 		self.lst_profiles.sortItems()
 
 		wrkUserDir=os.path.join(os.environ['HOME'],".config","accesshelper","profiles")
@@ -95,6 +103,12 @@ class profiles(confStack):
 					f=f[0:19]
 				if f not in add:
 					self.lst_profiles.addItem(f)
+					item=self.lst_profiles.item(self.lst_profiles.count()-1)
+					font=item.font()
+					font.setStretch(120)
+				#	if font.pointSize()<14:
+				#		font.setPointSize(14)
+					item.setFont(font)
 					add.append(f)
 	#def _udpate_screen
 

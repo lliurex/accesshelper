@@ -45,7 +45,7 @@ def setProfile(profilePath):
 
 if len(sys.argv)==1:
 	app=QApplication(["AccessHelper"])
-	config=appConfig("AccesHelper",{'app':app})
+	config=appConfig("AccessHelper",{'app':app})
 	config.setRsrcPath("/usr/share/accesshelper/rsrc")
 	config.setIcon('accesshelper')
 	#config.setWiki('https://wiki.edu.gva.es/lliurex/tiki-index.php?page=Repoman+%28Bionic%29.')

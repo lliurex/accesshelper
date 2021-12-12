@@ -136,7 +136,8 @@ class profiles(confStack):
 			wrkDir=os.path.join(os.environ.get("HOME"),".config","accesshelper","profiles")
 		else:
 			widget=self.lst_profiles.findItems(name,Qt.MatchExactly)[0]
-			if widget.background().style()==Qt.NoBrush:
+			#if widget.background().style()==Qt.NoBrush:
+			if widget.font().bold()==False:
 				wrkDir=os.path.join(os.environ.get("HOME"),".config","accesshelper","profiles")
 		if self.take_snapshot(wrkDir,name)==False:
 			self.showMsg("{}: {}".format(i18n.get("ERRORPERMS"),wrkDir))

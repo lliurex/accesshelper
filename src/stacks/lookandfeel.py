@@ -33,7 +33,7 @@ class lookandfeel(confStack):
 		self.description=i18n.get('DESCRIPTION')
 		self.icon=('preferences-desktop-theme')
 		self.tooltip=i18n.get('TOOLTIP')
-		self.index=1
+		self.index=3
 		self.enabled=True
 		self.defaultRepos={}
 		self.changed=[]

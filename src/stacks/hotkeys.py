@@ -35,7 +35,7 @@ class hotkeys(confStack):
 		self.description=i18n.get('DESCRIPTION')
 		self.icon=('input-keyboard')
 		self.tooltip=i18n.get('TOOLTIP')
-		self.index=1
+		self.index=4
 		self.enabled=True
 		self.changed=[]
 		self.level='user'

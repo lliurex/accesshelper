@@ -34,7 +34,7 @@ class behavior(confStack):
 		self.description=i18n.get('DESCRIPTION')
 		self.icon=('application-x-desktop')
 		self.tooltip=i18n.get('TOOLTIP')
-		self.index=1
+		self.index=2
 		self.enabled=True
 		self.defaultRepos={}
 		self.changed=[]

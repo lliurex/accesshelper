@@ -25,7 +25,7 @@ class settings(confStack):
 		self.description=i18n.get('DESCRIPTION')
 		self.icon=('systemsettings')
 		self.tooltip=i18n.get('TOOLTIP')
-		self.index=22
+		self.index=6
 		self.enabled=True
 		self.changed=[]
 		self.level='user'

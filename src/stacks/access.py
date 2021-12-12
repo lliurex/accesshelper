@@ -6,11 +6,11 @@ from PySide2 import QtGui
 from PySide2.QtCore import Qt,Signal,QSignalMapper,QEvent
 from appconfig.appConfigStack import appConfigStack as confStack
 import gettext
-_ = gettext.gettext
 import json
 import subprocess
 import dbus,dbus.service,dbus.exceptions
 from . import functionHelper
+_ = gettext.gettext
 QString=type("")
 
 i18n={

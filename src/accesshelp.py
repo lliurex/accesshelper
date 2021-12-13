@@ -33,19 +33,18 @@ def listProfiles():
 
 def setProfile(profilePath):
 	wrkDir,name=("","")
-	if profilePath.endswith("/"):
-		profilePath=profilePath.rstrip("/")
-	if os.path.isdir(profilePath):
+	if os.path.isfile(profilePath):
 		wrkDir=os.path.dirname(profilePath)
 		name=os.path.basename(profilePath)
 	if wrkDir and name:
+		print("Loading profile {}".format(profilePath))
 		functionHelper.restore_snapshot(wrkDir,name)
 	else:
 		print("Profile {} could not be loaded".format(profilePath))
 
 if len(sys.argv)==1:
 	app=QApplication(["AccessHelper"])
-	config=appConfig("AccesHelper",{'app':app})
+	config=appConfig("AccessHelper",{'app':app})
 	config.setRsrcPath("/usr/share/accesshelper/rsrc")
 	config.setIcon('accesshelper')
 	#config.setWiki('https://wiki.edu.gva.es/lliurex/tiki-index.php?page=Repoman+%28Bionic%29.')
@@ -60,10 +59,12 @@ if len(sys.argv)==1:
 else:
 	if sys.argv[1].lower()=="--set":
 		tpl=sys.argv[2]
-		if os.path.isdir(tpl):
+		if tpl.endswith(".tar")==False:
+			tpl="{}.tar".format(tpl)
+		if os.path.isfile(tpl):
 			#call function blabla
 			setProfile(tpl)
-		elif os.path.isdir(os.path.join(wrkDir,tpl))==True:
+		elif os.path.isfile(os.path.join(wrkDir,tpl))==True:
 			#call function blabla
 			setProfile(os.path.join(wrkDir,tpl))
 		else:

@@ -28,8 +28,8 @@ class settings(confStack):
 		self.index=6
 		self.enabled=True
 		self.changed=[]
-		self.level='user'
 		self.config={}
+		self.widgets={}
 		self.wrkDir="/usr/share/accesshelper/profiles"
 		self.optionChanged=[]
 	#def __init__
@@ -54,6 +54,7 @@ class settings(confStack):
 		self.cmb_level.activated.connect(_change_osh)
 		self.cmb_level.setFixedWidth(100)
 		box.addWidget(self.cmb_level,0,1,1,1)
+		self.widgets.update({self.cmb_level:'config'})
 		lbl_help=QLabel("")
 		lbl_help.setAlignment(Qt.AlignTop)
 		box.addWidget(lbl_help,1,0,1,2)
@@ -62,7 +63,9 @@ class settings(confStack):
 		#box.addWidget(self.chk_startup,3,0,1,2)
 		chk_template=QCheckBox(_("Load template on start"))
 		box.addWidget(chk_template,3,0,1,1,Qt.AlignTop)
+		self.widgets.update({chk_template:'startup'})
 		cmb_template=QComboBox()
+		self.widgets.update({cmb_template:'profile'})
 		box.addWidget(cmb_template,3,1,1,1,Qt.AlignTop)
 		box.setRowStretch(0,1)
 		box.setRowStretch(1,0)
@@ -87,39 +90,58 @@ class settings(confStack):
 			level='system'
 		elif idx==2:
 			level='n4d'
+		self.cmb_level.setCurrentIndex(idx)
+	#	self.updateScreen()
+	#def fakeUpdate
+
+	def updateScreen(self,level=None):
 		config=self.getConfig(level)
-		close=False
+		level=self.level
+		profile=''
 		if level in config.keys():
-			close=config[level].get('close',False)
-		if close:
-			if str(close).lower()=='true':
-				close=True
-			else:
-				close=False
-		try:
-			self.chk_close.setChecked(close)
-		except:
-			pass
+			profile=config[level].get('profile','')
 		startup=config[level].get('startup',False)
 		if startup:
 			if str(startup).lower()=='true':
 				startup=True
 			else:
 				startup=False
-		try:
-			self.chk_startup.setChecked(startup)
-		except:
-			pass
-
-	#def fakeUpdate
-
-	def updateScreen(self):
-		pass
+		for widget,desc in self.widgets.items():
+			if desc=="startup":
+				widget.setChecked(startup)
+			elif desc=="profile":
+				widget.setCurrentIndex(idx)
+			elif desc=="config":
+				if level=="user":
+					idx=0
+				elif level=="system":
+					idx=1
+				elif level=="n4d":
+					idx=2
+				
+				widget.setCurrentIndex(idx)
 	#def _udpate_screen
 
 	def _updateConfig(self,key):
 		pass
 
 	def writeConfig(self):
-		pass
-
+		for widget,desc in self.widgets.items():
+			if isinstance(widget,QCheckBox):
+				value=widget.isChecked()
+				if value:
+					value="true"
+				else:
+					value="false"
+			elif isinstance(widget,QComboBox):
+				if desc=="config":
+					value=widget.currentIndex()
+					if value==0:
+						value="user"
+					elif value==1:
+						value="system"
+					elif value==2:
+						value="n4d"
+				else:
+					value=widget.currentText()
+			self.saveChanges(desc,value)

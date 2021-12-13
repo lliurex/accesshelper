@@ -84,8 +84,8 @@ class behavior(confStack):
 							if data.lower()=="true" or data.lower()=="focusfollowsmouse":
 								state=True
 							btn.setChecked(state)
-						self.widgets.update({name:btn})
-						self.box.addWidget(btn,row,col)
+							self.widgets.update({name:btn})
+							self.box.addWidget(btn,row,col)
 						col+=1
 						if col==1:
 							row+=1
@@ -152,7 +152,7 @@ class behavior(confStack):
 				dataTmp=[]
 				for setting,value in data:
 					btn=self.widgets.get(setting,'')
-					if isinstance(btn,QPushButton):
+					if isinstance(btn,QCheckBox):
 						value=btn.isChecked()
 						desc=btn.text()
 						if desc==i18n.get("FOCUSPOLICY",''):
@@ -165,6 +165,7 @@ class behavior(confStack):
 						else:
 							value="false"
 					dataTmp.append((setting,value))
+					print(dataTmp)
 				self.sysConfig[kfile][section]=dataTmp
 
 		functionHelper.setSystemConfig(self.sysConfig)

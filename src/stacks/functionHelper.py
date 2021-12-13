@@ -1,6 +1,8 @@
 #!/usr/bin/python3
 import logging
 import subprocess
+import tarfile
+import tempfile
 import os,shutil
 DBG=True
 
@@ -56,6 +58,7 @@ def setSystemConfig(config,wrkFile=''):
 		for section,data in sections.items():
 			for setting in data:
 				(desc,value)=setting
+				_debug("Setting {} -> {}".format(desc,value))
 				_setKdeConfigSetting(section,desc,value,kfile)
 
 def _setKdeConfigSetting(group,key,value,kfile="kaccessrc"):
@@ -107,3 +110,81 @@ def cssStyle():
 			}
 	"""
 	return(style)
+
+def take_snapshot(wrkDir,snapshotName='',appconfrc=''):
+	if snapshotName=='':
+		snapshotName="test"
+	_debug("Take snapshot {} {}".format(snapshotName,appconfrc))
+	destPath=os.path.join(wrkDir,"{}.tar".format(snapshotName))
+	_debug("Destination {}".format(destPath))
+	tmpFolder=tempfile.mkdtemp()
+	plasmaPath=os.path.join(tmpFolder,"plasma")
+	os.makedirs(plasmaPath)
+	configPath=os.path.join(tmpFolder,"appconfig")
+	os.makedirs(configPath)
+	flist=[]
+	for kfile in dictFileData.keys():
+		kPath=os.path.join(os.environ['HOME'],".config",kfile)
+		if os.path.isfile(kPath):
+			shutil.copy(kPath,plasmaPath)
+	if os.path.isfile(appconfrc):
+		shutil.copy(appconfrc,configPath)
+	(osHdl,tmpFile)=tempfile.mkstemp()
+	oldCwd=os.getcwd()
+	os.chdir(tmpFolder)
+	sw=True
+	with tarfile.open(tmpFile,"w") as tarFile:
+		for f in os.listdir(tmpFolder):
+			tarFile.add(os.path.basename(f))
+	os.chdir(oldCwd)
+	_debug("Copying {0}->{1}".format(tmpFile,destPath))
+	try:
+		shutil.copy(tmpFile,destPath)
+	except Exception as e:
+		_debug(e)
+		cmd=["pkexec","/usr/share/accesshelper/helper/profiler.sh",tmpFile,destPath]
+		try:
+			pk=subprocess.run(cmd)
+			if pk.returncode!=0:
+				sw=False
+		except Exception as e:
+			_debug(e)
+			_debug("Permission denied for {}".format(destPath))
+			sw=False
+	finally:
+		os.remove(tmpFile)
+	return sw
+#def take_snapshot
+		
+def restore_snapshot(wrkDir,snapshotName):
+	sw=False
+	profileTar=os.path.join(wrkDir,snapshotName)
+	if os.path.isfile(profileTar):
+		if tarfile.is_tarfile(profileTar)==False:
+			if tarfile.istarfile("{}.tar",profileTar)==True:
+				profileTar="{}.tar".format(profileTar)
+				sw=True
+		else:
+			sw=True
+	_debug(profileTar)
+	if sw:
+		tarProfile=tarfile.open(profileTar,'r')
+		tmpFolder=tempfile.mkdtemp()
+		tarProfile.extractall(path=tmpFolder)
+		plasmaPath=os.path.join(tmpFolder,"plasma")
+		if os.path.isdir(plasmaPath)==True:
+			config=getSystemConfig(sourceFolder=plasmaPath)
+			for kfile,sections in config.items():
+				for section,data in sections.items():
+					for (desc,value) in data:
+						_setKdeConfigSetting(section,desc,value,kfile)
+		confPath=os.path.join(tmpFolder,"appconfig","accesshelper.json")
+		if os.path.isfile(confPath)==True:
+			usrFolder=os.path.join(os.environ.get('HOME'),".config/accesshelper")
+			if os.path.isdir(usrFolder)==False:
+				os.makedirs(usrFolder)
+
+			_debug("Cp {} {}".format(confPath,usrFolder))
+			shutil.copy(confPath,usrFolder)
+	return(sw)
+#def restore_snapshot

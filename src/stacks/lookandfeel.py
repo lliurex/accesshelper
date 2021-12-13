@@ -53,9 +53,8 @@ class lookandfeel(confStack):
 		sigmap_run=QSignalMapper(self)
 		sigmap_run.mapped[QString].connect(self._updateConfig)
 		self.widgets={}
-		self.level='system'
 		self.refresh=True
-		self.config=self.getConfig(level=self.level)
+		self.config=self.getConfig()
 		config=self.config.get(self.level,{})
 		fontSize=config.get('fonts',{}).get('size',"Normal")
 		cursorSize=config.get('cursor',{}).get('size',"Normal")

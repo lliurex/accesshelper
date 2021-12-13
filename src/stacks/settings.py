@@ -1,10 +1,13 @@
 #!/usr/bin/python3
 import sys
 import os
+import shutil
 from PySide2.QtWidgets import QApplication,QLineEdit, QLabel, QWidget, QPushButton,QGridLayout,QLineEdit,QHBoxLayout,QComboBox,QCheckBox
 from PySide2 import QtGui
 from PySide2.QtCore import Qt,QSignalMapper
 from appconfig.appConfigStack import appConfigStack as confStack
+import subprocess
+import tempfile
 import gettext
 from . import functionHelper
 _ = gettext.gettext
@@ -15,6 +18,8 @@ i18n={
 	"DESCRIPTION":_("Manage application"),
 	"MENUDESCRIPTION":_("Configure some options"),
 	"TOOLTIP":_("Set config level, default template.."),
+	"AUTOSTART":_("Autostart enabled for user"),
+	"DISABLEAUTOSTART":_("Autostart disabled for user")
 	}
 
 class settings(confStack):
@@ -124,9 +129,14 @@ class settings(confStack):
 
 	def _updateConfig(self,key):
 		pass
+	#def _updateConfig
 
 	def writeConfig(self):
+		startWdg=None
+		profile=''
 		for widget,desc in self.widgets.items():
+			if desc=="startup":
+				startWdg=widget
 			if isinstance(widget,QCheckBox):
 				value=widget.isChecked()
 				if value:
@@ -144,4 +154,35 @@ class settings(confStack):
 						value="n4d"
 				else:
 					value=widget.currentText()
+					profile=value
 			self.saveChanges(desc,value)
+		if startWdg:
+			if startWdg.isChecked():
+				self._setAutostart(profile)
+			else:
+				self._removeAutostart(profile)
+	#def writeConfig
+
+	def _setAutostart(self,profile):
+		if profile:
+			tmpHdl,tmpF=tempfile.mkstemp()
+			tmpf=open(tmpF,'w')
+			with open("/usr/share/accesshelper/helper/accesshelper-profiler.desktop","r") as f:
+				lines=f.readlines()
+				for line in lines:
+					if line.startswith("Exec="):
+						line=line.replace("%u",profile)
+					tmpf.write(line)
+			tmpf.close()
+			destPath=os.path.join(os.environ.get("HOME"),".config/autostart/accesshelper-profiler.desktop")
+			shutil.copy(tmpF,destPath)
+			self.showMsg("{} {}".format(i18n.get("AUTOSTART"),os.environ.get("USER")))
+	#def _setAutostart
+
+	def _removeAutostart(self,profile):
+		destPath=os.path.join(os.environ.get("HOME"),".config/autostart/accesshelper-profiler.desktop")
+		if os.path.isfile(destPath):
+			os.remove(destPath)
+			self.showMsg("{} {}".format(i18n.get("DISABLEAUTOSTART"),os.environ.get("USER")))
+	#def _removeAutostart
+

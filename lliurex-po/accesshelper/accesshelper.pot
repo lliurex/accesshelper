@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-11 23:20+0100\n"
+"POT-Creation-Date: 2021-12-13 19:11+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -48,7 +48,7 @@ msgstr ""
 #: ../src/stacks/access.py:24 ../src/stacks/behavior.py:14
 #: ../src/stacks/hotkeys.py:18 ../src/stacks/lookandfeel.py:17
 #: ../src/stacks/profiles.py:15 ../src/stacks/screenreader.py:16
-#: ../src/stacks/settings.py:14
+#: ../src/stacks/settings.py:17
 msgid "Configuration"
 msgstr ""
 
@@ -260,6 +260,14 @@ msgstr ""
 msgid "Profile added to user's profiles"
 msgstr ""
 
+#: ../src/stacks/profiles.py:24
+msgid "Profile loaded"
+msgstr ""
+
+#: ../src/stacks/profiles.py:25
+msgid "An error ocurred"
+msgstr ""
+
 #: ../src/stacks/screenreader.py:17
 msgid "Orca settings"
 msgstr ""
@@ -284,50 +292,58 @@ msgstr ""
 msgid "Import Orca settings"
 msgstr ""
 
-#: ../src/stacks/settings.py:15
+#: ../src/stacks/settings.py:18
 msgid "Manage application"
 msgstr ""
 
-#: ../src/stacks/settings.py:16
+#: ../src/stacks/settings.py:19
 msgid "Configure some options"
 msgstr ""
 
-#: ../src/stacks/settings.py:17
+#: ../src/stacks/settings.py:20
 msgid "Set config level, default template.."
 msgstr ""
 
-#: ../src/stacks/settings.py:41
+#: ../src/stacks/settings.py:21
+msgid "Autostart enabled for user"
+msgstr ""
+
+#: ../src/stacks/settings.py:22
+msgid "Autostart disabled for user"
+msgstr ""
+
+#: ../src/stacks/settings.py:46
 msgid "The config will be applied per user"
 msgstr ""
 
-#: ../src/stacks/settings.py:43
+#: ../src/stacks/settings.py:48
 msgid "The config will be applied to all users"
 msgstr ""
 
-#: ../src/stacks/settings.py:45
+#: ../src/stacks/settings.py:50
 msgid "The config will be applied to all users and clients"
 msgstr ""
 
-#: ../src/stacks/settings.py:48
+#: ../src/stacks/settings.py:53
 msgid "Choose the config level that should use the app"
 msgstr ""
 
-#: ../src/stacks/settings.py:51
+#: ../src/stacks/settings.py:56
 msgid "User"
 msgstr ""
 
-#: ../src/stacks/settings.py:52
+#: ../src/stacks/settings.py:57
 msgid "System"
 msgstr ""
 
-#: ../src/stacks/settings.py:53
+#: ../src/stacks/settings.py:58
 msgid "N4d"
 msgstr ""
 
-#: ../src/stacks/settings.py:60
+#: ../src/stacks/settings.py:66
 msgid "Session settings"
 msgstr ""
 
-#: ../src/stacks/settings.py:63
+#: ../src/stacks/settings.py:69
 msgid "Load template on start"
 msgstr ""

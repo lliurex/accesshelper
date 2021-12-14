@@ -85,7 +85,7 @@ class lookandfeel(confStack):
 		btn.addItem("{}".format(currentWidth))
 		btn.addItem("1024")
 		btn.addItem("1440")
-		btn.addItem("HD")
+		btn.addItem("1920")
 		sw_font=True
 		self.box.addWidget(QLabel(i18n.get("RESOLUTION")),2,0)
 		self.box.addWidget(btn,2,1)
@@ -145,7 +145,24 @@ class lookandfeel(confStack):
 				self.saveChanges('cursor',{"size":value})
 				functionHelper._setKdeConfigSetting("Mouse","cursorSize","{}".format(size),"kcminputrc")
 			elif name=="res":
-				self._debug("Not implemented")
+				w=wdg.currentText()
+				if w=="1920":
+					h=1080
+				elif w=="1440":
+					h=900
+				elif w=="1024":
+					h=768
+				else:
+					h=int((w*9)/16)
+				h=str(h)
+				self._debug("Setting resolution to {} {}".format(w,h))
+				rH=resolutionHelper.kscreenDbus()
+				config=rH.getConfig()
+				modeId=rH.getResolutionMode(config,w,h)
+				if modeId:
+					rH.setResolution(config,modeId)
+
+				self.saveChanges('resolution',w)
 		self.optionChanged=[]
 		self.refresh=True
 		return

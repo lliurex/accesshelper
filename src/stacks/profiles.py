@@ -39,6 +39,8 @@ class profiles(confStack):
 		self.config={}
 		self.optionChanged=[]
 		self.wrkDir="/usr/share/accesshelper/profiles"
+		self.defaultDir="/usr/share/accesshelper/default"
+		self.profilesPath={}
 		self.lst_profiles=QListWidget()
 		self.lst_userProfiles=QListWidget()
 		self.hideControlButtons()
@@ -77,40 +79,32 @@ class profiles(confStack):
 	#def _updateText
 
 	def updateScreen(self):
+		self.profilesPath={}
 		self.lst_profiles.clear()
-		add=[]
-		if os.path.isdir(self.wrkDir):
-			for f in os.listdir(self.wrkDir):
-				if len(f)>20:
-					f=f[0:19]
-				if f not in add:
-					self.lst_profiles.addItem(f.rstrip(".tar"))
-					add.append(f)
-					item=self.lst_profiles.item(self.lst_profiles.count()-1)
-					brush=QtGui.QBrush(QtGui.QColor("orange"),Qt.Dense4Pattern)
-					font=item.font()
-					font.setBold(True)
-					font.setStretch(120)
-				#	if font.pointSize()<14:
-				#		font.setPointSize(14)
-					item.setFont(font)
-					#item.setBackground(brush)
-		self.lst_profiles.sortItems()
-
 		wrkUserDir=os.path.join(os.environ['HOME'],".config","accesshelper","profiles")
-		if os.path.isdir(wrkUserDir):
-			for f in os.listdir(wrkUserDir):
-				if len(f)>20:
-					f=f[0:19]
-				if f not in add:
-					self.lst_profiles.addItem(f.rstrip(".tar"))
-					item=self.lst_profiles.item(self.lst_profiles.count()-1)
-					font=item.font()
-					font.setStretch(120)
-				#	if font.pointSize()<14:
-				#		font.setPointSize(14)
-					item.setFont(font)
-					add.append(f)
+		add=[]
+		wrkDirs=[self.defaultDir,self.wrkDir,wrkUserDir]
+		for wrkDir in wrkDirs:
+			if os.path.isdir(wrkDir):
+				flist=os.listdir(wrkDir)
+				flist.sort()
+				for f in flist:
+					if len(f)>50:
+						f=f[0:49]
+					if f not in self.profilesPath.keys():
+						self.lst_profiles.addItem(f.rstrip(".tar"))
+						add.append(f)
+						self.profilesPath.update({f:os.path.join(wrkDir,f)})
+						item=self.lst_profiles.item(self.lst_profiles.count()-1)
+						font=item.font()
+						font.setStretch(120)
+						if wrkDir==self.wrkDir or wrkDir==self.defaultDir:
+							font.setBold(True)
+							if wrkDir==self.defaultDir:
+								font.setItalic(True)
+						#	if font.pointSize()<14:
+						#		font.setPointSize(14)
+						item.setFont(font)
 	#def _udpate_screen
 
 	def loadProfile(self,*args):
@@ -120,17 +114,9 @@ class profiles(confStack):
 		if len(name)>20:
 			name=name[0:19]
 		name="{}.tar".format(name)
-		filePath=os.path.join(self.wrkDir,name)
-		self._debug(filePath)
 		sw=False
-		if os.path.isfile(filePath):
-			sw=functionHelper.restore_snapshot(self.wrkDir,name)
-		else:
-			wrkDir=os.path.join(os.environ.get("HOME"),".config","accesshelper","profiles")
-			filePath=os.path.join(wrkDir,name)
-			self._debug(filePath)
-			if os.path.isfile(filePath):
-				sw=functionHelper.restore_snapshot(wrkDir,name)
+		if self.profilesPath.get(name,''):
+			sw=functionHelper.restore_snapshot(self.profilesPath.get(name))
 		if sw:
 			self.saveChanges('profile',name,level='user')
 			self.showMsg(i18n.get("RESTORESNAP"))
@@ -150,11 +136,9 @@ class profiles(confStack):
 			name=name[0:19]
 		wrkDir=self.wrkDir
 		self.optionChanged=[]
-		conf=self.getConfig()
-		appconfrc=os.path.join(os.path.dirname(self.wrkDir),"accesshelper.json")
-		if self.level=='user':
-			wrkDir=os.path.join(os.environ.get("HOME"),".config","accesshelper","profiles")
-			appconfrc=os.path.join(wrkDir,"accesshelper.json")
+		if self.profilesPath.get(name,''):
+			wrkDir=os.path.basename(self.profilesPath.get(name,''))
+		appconfrc=os.path.join(os.path.dirname(wrkDir),"appconfrc")
 			
 		if functionHelper.take_snapshot(wrkDir,name,appconfrc=appconfrc)==False:
 			self.showMsg("{}: {}".format(i18n.get("ERRORPERMS"),wrkDir))

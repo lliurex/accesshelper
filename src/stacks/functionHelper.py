@@ -156,9 +156,8 @@ def take_snapshot(wrkDir,snapshotName='',appconfrc=''):
 	return sw
 #def take_snapshot
 		
-def restore_snapshot(wrkDir,snapshotName):
+def restore_snapshot(profileTar):
 	sw=False
-	profileTar=os.path.join(wrkDir,snapshotName)
 	if os.path.isfile(profileTar):
 		if tarfile.is_tarfile(profileTar)==False:
 			if tarfile.istarfile("{}.tar",profileTar)==True:

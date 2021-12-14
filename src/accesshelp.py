@@ -5,7 +5,7 @@ from PySide2.QtWidgets import QApplication
 from appconfig.appConfigScreen import appConfigScreen as appConfig
 from stacks import functionHelper as functionHelper
 
-wrkDir="/usr/share/accesshelper/profiles"
+wrkDirList=["/usr/share/accesshelper/profiles","/usr/share/accesshelper/profiles",os.path.join(os.environ.get("HOME",''),".config/accesshelper/profiles")]
 
 def showHelp():
 	print("usage: accesshelper [--set profile]|[--list]")
@@ -14,33 +14,43 @@ def showHelp():
 	print("--set profile: Activate specified profile.\n\tCould be an absolute path or a profile from default profiles' path")
 	print("--list: List available profiles")
 	print("")
+#def showHelp():
 
 def listProfiles():
-	if os.path.isdir(wrkDir):
-		flist=[]
-		try:
-			flist=os.listdir(wrkDir)
-		except: 
-			print("{} could not be accessed".format(wrkDir))
-		flist.sort()
-		if len(flist)>0:
-			for f in flist:
-				print("* {}".format(f))
-		else:
-			print("There's no profiles at {}".format(wrkDir))
-	else:
-		print("{} not found".format(wrkDir))
+	add=[]
+	for wrkDir in wrkDirList:
+		if os.path.isdir(wrkDir):
+			flist=[]
+			try:
+				flist=os.listdir(wrkDir)
+			except: 
+				print("{} could not be accessed".format(wrkDir))
+			flist.sort()
+			if len(flist)>0:
+				for f in flist:
+					if f not in add:
+						print("* {}".format(f.rstrip(".tar")))
+						add.append(f)
+			else:
+				print("There's no profiles at {}".format(wrkDir))
+#def listProfiles
 
 def setProfile(profilePath):
-	wrkDir,name=("","")
-	if os.path.isfile(profilePath):
-		wrkDir=os.path.dirname(profilePath)
-		name=os.path.basename(profilePath)
-	if wrkDir and name:
-		print("Loading profile {}".format(profilePath))
-		functionHelper.restore_snapshot(wrkDir,name)
+	sw=False
+	wrkFile=""
+	for wrkDir in wrkDirList:
+		if os.path.isdir(wrkDir)==True:
+			fProfiles=os.listdir(wrkDir)
+			if profilePath in fProfiles:
+				wrkFile=os.path.join(wrkDir,profilePath)
+				break
+	if wrkFile:
+		print("Loading profile {}".format(wrkFile))
+		sw=functionHelper.restore_snapshot(wrkFile)
 	else:
 		print("Profile {} could not be loaded".format(profilePath))
+	return(sw)
+#def setProfile
 
 if len(sys.argv)==1:
 	app=QApplication(["AccessHelper"])
@@ -61,13 +71,8 @@ else:
 		tpl=sys.argv[2]
 		if tpl.endswith(".tar")==False:
 			tpl="{}.tar".format(tpl)
-		if os.path.isfile(tpl):
-			#call function blabla
-			setProfile(tpl)
-		elif os.path.isfile(os.path.join(wrkDir,tpl))==True:
-			#call function blabla
-			setProfile(os.path.join(wrkDir,tpl))
-		else:
+		#call function blabla
+		if setProfile(tpl)==False:
 			showHelp()
 	elif sys.argv[1].lower()=="--list":
 		listProfiles()

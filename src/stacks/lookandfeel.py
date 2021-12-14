@@ -55,7 +55,9 @@ class lookandfeel(confStack):
 		self.widgets={}
 		self.refresh=True
 		self.config=self.getConfig()
+		print(self.config)
 		config=self.config.get(self.level,{})
+		print(config)
 		fontSize=config.get('fonts',{}).get('size',"Normal")
 		cursorSize=config.get('cursor',{}).get('size',"Normal")
 

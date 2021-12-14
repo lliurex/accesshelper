@@ -111,11 +111,11 @@ def cssStyle():
 	"""
 	return(style)
 
-def take_snapshot(wrkDir,snapshotName='',appconfrc=''):
-	if snapshotName=='':
-		snapshotName="test"
-	_debug("Take snapshot {} {}".format(snapshotName,appconfrc))
-	destPath=os.path.join(wrkDir,"{}.tar".format(snapshotName))
+def takeSnapshot(profilePath,appconfrc=''):
+	_debug("Take snapshot {} {}".format(profilePath,appconfrc))
+	destName=os.path.basename(profilePath)
+	destDir=os.path.dirname(profilePath)
+	destPath=os.path.join(destDir,destName)
 	_debug("Destination {}".format(destPath))
 	tmpFolder=tempfile.mkdtemp()
 	plasmaPath=os.path.join(tmpFolder,"plasma")
@@ -156,7 +156,7 @@ def take_snapshot(wrkDir,snapshotName='',appconfrc=''):
 	return sw
 #def take_snapshot
 		
-def restore_snapshot(profileTar):
+def restoreSnapshot(profileTar):
 	sw=False
 	if os.path.isfile(profileTar):
 		if tarfile.is_tarfile(profileTar)==False:

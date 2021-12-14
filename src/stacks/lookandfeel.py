@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 from . import functionHelper
+from . import resolutionHelper
 import sys
 import os
 from PySide2.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QGridLayout,QLineEdit,QHBoxLayout,QComboBox,QCheckBox,QTabBar,QTabWidget,QTabBar,QTabWidget
@@ -55,9 +56,7 @@ class lookandfeel(confStack):
 		self.widgets={}
 		self.refresh=True
 		self.config=self.getConfig()
-		print(self.config)
 		config=self.config.get(self.level,{})
-		print(config)
 		fontSize=config.get('fonts',{}).get('size',"Normal")
 		cursorSize=config.get('cursor',{}).get('size',"Normal")
 
@@ -82,6 +81,8 @@ class lookandfeel(confStack):
 		self.widgets.update({"cursor":btn})
 
 		btn=QComboBox()
+		currentWidth,currentHeight=self.getCurrentResolution()
+		btn.addItem("{}".format(currentWidth))
 		btn.addItem("1024")
 		btn.addItem("1440")
 		btn.addItem("HD")
@@ -104,6 +105,10 @@ class lookandfeel(confStack):
 		return
 		#	if key in self.kwinMethods:
 		#		self._exeKwinMethod(key) 
+	
+	def getCurrentResolution(self):
+		rH=resolutionHelper.kscreenDbus()
+		return(rH.getCurrentResolution())
 
 	def writeConfig(self):
 		for name,wdg in self.widgets.items():
@@ -144,4 +149,5 @@ class lookandfeel(confStack):
 		self.optionChanged=[]
 		self.refresh=True
 		return
+	#def writeConfig
 

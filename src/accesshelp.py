@@ -46,7 +46,7 @@ def setProfile(profilePath):
 				break
 	if wrkFile:
 		print("Loading profile {}".format(wrkFile))
-		sw=functionHelper.restore_snapshot(wrkFile)
+		sw=functionHelper.restoreSnapshot(wrkFile)
 	else:
 		print("Profile {} could not be loaded".format(profilePath))
 	return(sw)

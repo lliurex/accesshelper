@@ -155,6 +155,8 @@ class settings(confStack):
 				else:
 					value=widget.currentText()
 					profile=value
+			print(desc)
+			print(value)
 			self.saveChanges(desc,value)
 		if startWdg:
 			if startWdg.isChecked():

@@ -116,7 +116,7 @@ class profiles(confStack):
 		name="{}.tar".format(name)
 		sw=False
 		if self.profilesPath.get(name,''):
-			sw=functionHelper.restore_snapshot(self.profilesPath.get(name))
+			sw=functionHelper.restoreSnapshot(self.profilesPath.get(name))
 		if sw:
 			self.saveChanges('profile',name,level='user')
 			self.showMsg(i18n.get("RESTORESNAP"))
@@ -128,22 +128,31 @@ class profiles(confStack):
 	def _updateConfig(self,key):
 		pass
 
-	def writeConfig(self):
+	def writeConfig(self,system=False):
 		self._debug("Taking snapshot")
 		name=self.inp_name.text()
 		name=os.path.basename(name)
-		if len(name)>20:
-			name=name[0:19]
-		wrkDir=self.wrkDir
+		if len(name)>50:
+			name=name[0:49]
+
+		if name.endswith(".tar")==False:
+			name="{}.tar".format(name)
 		self.optionChanged=[]
-		if self.profilesPath.get(name,''):
-			wrkDir=os.path.basename(self.profilesPath.get(name,''))
-		appconfrc=os.path.join(os.path.dirname(wrkDir),"appconfrc")
-			
-		if functionHelper.take_snapshot(wrkDir,name,appconfrc=appconfrc)==False:
-			self.showMsg("{}: {}".format(i18n.get("ERRORPERMS"),wrkDir))
+		profilePath=self.profilesPath.get(name,'')
+		if profilePath=='':
+			if self.level=='user':
+				profilePath=os.path.join(os.environ.get('HOME'),".config/accesshelper/profiles","{}".format(name))
+			else:
+				profilePath=os.path.join(self.wrkDir,"{}".format(name))
+		if self.level=='user':
+			appconfrc=os.path.join(os.environ.get('HOME'),".config/accesshelper/accesshelper.json")
 		else:
-			if wrkDir==self.wrkDir:
+			appconfrc=os.path.join(self.wrkDir,"accesshelper.json")
+			
+		if functionHelper.takeSnapshot(profilePath,appconfrc=appconfrc)==False:
+			self.showMsg("{}: {}".format(i18n.get("ERRORPERMS"),profilePath))
+		else:
+			if self.wrkDir in profilePath:
 				self.showMsg("{}".format(i18n.get("SNAPSHOT_SYSTEM")))
 			else:
 				self.showMsg("{}".format(i18n.get("SNAPSHOT_USER")))

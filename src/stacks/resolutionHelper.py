@@ -93,25 +93,46 @@ class kscreenDbus():
 
 	def setResolution(self,config,selectId):
 		if self.dbg:
-			with open('oldConf','w') as f:
-				f.write(str(config))
+#			with open('oldConf','w') as f:
+#				f.write(str(config))
 			self._debug("Generated oldConf with original values")
 
 		self._debug("Setting resolution id {} for monitors".format(selectId))
 		for output in config.get('outputs'):
 			if output.get('currentModeId'):
-				print("Change monitor {} current modeId {} to modeId {}".format(output.get('name'),output.get('currentModeId'),selectId))
+				self._debug("Change monitor {} current modeId {} to modeId {}".format(output.get('name'),output.get('currentModeId'),selectId))
 				output.update(({dbus.String('currentModeId'):dbus.String(selectId)}))
 			pos=output.get('pos')
 			if pos:
 				pos.update({dbus.String('x'):dbus.Int64(0),dbus.String('y'):dbus.Int64(0)})
 		self.bus.setConfig(config)
 		if self.dbg:
-			with open('newConf','w') as f:
-				f.write(str(config))
+#			with open('newConf','w') as f:
+#				f.write(str(config))
 			self._debug("Generated newConf with actual values")
 	#def setResolution
-			
+
+	def getResolutionMode(self,config,w,h):
+		self._debug("Searching for resolution id {}".format((w,h)))
+		w=int(w)
+		h=int(h)
+		candidates=[]
+		selected=''
+		for output in config.get('outputs'):
+			if output.get('currentModeId'):
+				for mode in output.get("modes"):
+					wId=int(mode.get('size',{}).get('width',''))
+					hId=int(mode.get('size',{}).get('height',''))
+					if  wId == w:
+						candidates.append(h)
+						if hId==h:
+							selected=mode.get('id')
+							break
+			if selected:
+				break
+		return(selected)
+	#def getResolutionMode
+				
 
 #bus=kscreenDbus()
 #config=bus.getConfig()

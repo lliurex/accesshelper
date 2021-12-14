@@ -138,6 +138,7 @@ class lookandfeel(confStack):
 				if value.lower()=="extralarge":
 					size+=inc*2
 				self.saveChanges('cursor',{"size":value})
+				functionHelper._setKdeConfigSetting("Mouse","cursorSize","{}".format(size),"kcminputrc")
 			elif name=="res":
 				self._debug("Not implemented")
 		self.optionChanged=[]

@@ -2,9 +2,10 @@
 from . import functionHelper
 import sys
 import os
-from PySide2.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QGridLayout,QLineEdit,QComboBox,QRadioButton,QListWidget,QGroupBox
+from PySide2.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QGridLayout,QLineEdit,QComboBox,QRadioButton,QListWidget,QGroupBox,QCompleter,QListWidgetItem
 from PySide2 import QtGui
 from PySide2.QtCore import Qt,Signal,QSignalMapper,QProcess,QEvent,QSize
+from app2menu import App2Menu
 from appconfig.appConfigStack import appConfigStack as confStack
 import gettext
 _ = gettext.gettext
@@ -30,6 +31,7 @@ class addHotkey(confStack):
 	def __init_stack__(self):
 		self.dbg=True
 		self._debug("addhotkeys load")
+		self.menu=App2Menu.app2menu()
 		self.menu_description=i18n.get('MENUDESCRIPTION')
 		self.description=i18n.get('DESCRIPTION')
 		self.icon=('input-keyboard')
@@ -38,7 +40,7 @@ class addHotkey(confStack):
 		self.visible=False
 		self.enabled=True
 		self.changed=[]
-		self.level='user'
+#		self.level='user'
 		self.sysConfig={}
 		self.wrkFiles=["kglobalshortcutsrc"]
 		self.optionChanged=[]
@@ -81,14 +83,21 @@ class addHotkey(confStack):
 		layOption.addWidget(opt2,1,0)
 		grpOptions.setLayout(layOption)
 		self.box.addWidget(grpOptions,0,0,1,3)
-		btn=QPushButton("")
-		self.box.addWidget(btn,1,0,2,1)
+		self.btnHk=QPushButton("")
+		self.btnHk.clicked.connect(self._grab_alt_keys)
+		self.box.addWidget(self.btnHk,1,0,3,1)
+		self.inpSearch=QLineEdit()
+		self.inpSearch.setPlaceholderText(_("Search"))
+		#self.inpSearch.textChanged.connect(searchList)
+		self.box.addWidget(self.inpSearch,1,1,1,2)
 		self.lstOptions=QListWidget()
-		self.box.addWidget(self.lstOptions,1,1,1,2)
-		lbl=QLabel(i18n.get("LBLCMD"))
-		self.box.addWidget(lbl,2,1,1,1)
+		self.box.addWidget(self.lstOptions,2,1,1,2)
+		self.lblCmd=QLabel(i18n.get("LBLCMD"))
+		self.box.addWidget(self.lblCmd,3,1,1,1)
 		self.inpCmd=QLineEdit()
-		self.box.addWidget(self.inpCmd,2,2,1,1)
+		self.inpCmd.setEnabled(False)
+		self.lblCmd.setEnabled(False)
+		self.box.addWidget(self.inpCmd,3,2,1,1)
 		opt.setChecked(True)
 		#self.updateScreen()
 	#def _load_screen
@@ -97,24 +106,15 @@ class addHotkey(confStack):
 		print(args)
 
 	def _grab_alt_keys(self,*args):
-		desc=''
-		btn=''
-		self.btn=btn
-		if len(args)>0:
-			desc=args[0]
-		if desc:
-			btn=self.widgets.get(desc,'')
-		if btn:
-			btn.setText("")
-			self.grabKeyboard()
-			self.keybind_signal.connect(self._set_config_key)
-			self.btn=btn
+		self.btnHk.setText("")
+		self.grabKeyboard()
+		self.keybind_signal.connect(self._set_config_key)
 	#def _grab_alt_keys
 
 	def _set_config_key(self,keypress):
 		keypress=keypress.replace("Control","Ctrl")
-		self.btn.setText(keypress)
-		desc=self.widgetsText.get(self.btn)
+		self.btnHk.setText(keypress)
+		desc=self.widgetsText.get(self.btnHk)
 		sysConfig=self.sysConfig.copy()
 		for kfile in self.wrkFiles:
 			for section,data in sysConfig.get(kfile,{}).items():
@@ -160,16 +160,54 @@ class addHotkey(confStack):
 					desc=self.widgets.get(args[0])
 					self.lstOptions.clear()
 					if desc=="TYPEAPP":
-						pass
+						self.inpCmd.setEnabled(False)
+						self.lblCmd.setEnabled(False)
+						self._loadApps()
 					elif desc=="TYPECMD":
-						self.inpCmd.enable()
-						pass
+						self.inpCmd.setEnabled(True)
+						self.lblCmd.setEnabled(True)
 					elif desc=="TYPEACT":
-						pass
+						self.inpCmd.setEnabled(False)
+						self.lblCmd.setEnabled(False)
+						self._loadActs()
 
 		
 		pass
 	#def _udpate_screen
+
+	def _loadApps(self,*args):
+		completer=QCompleter()
+		completer.setCaseSensitivity(Qt.CaseInsensitive)
+		model=QtGui.QStandardItemModel()
+		#Load available desktops
+		categories=self.menu.get_categories()
+		desktops={}
+		self.desktopDict={}
+		for category in categories:
+			desktops=self.menu.get_apps_from_category(category)
+			for desktop in desktops.keys():
+				desktopInfo=self.menu.get_desktop_info(os.path.join(self.menu.desktoppath,desktop))
+				if desktopInfo.get("NoDisplay",False):
+					continue
+				listWidget=QListWidgetItem()
+				desktopLayout=QGridLayout()
+				ficon=desktopInfo.get("Icon","shell")
+				icon=QtGui.QIcon.fromTheme(ficon)
+				if not icon:
+					continue
+				name=desktopInfo.get("Name","shell")
+				model.appendRow(QtGui.QStandardItem(name))
+				comment=desktopInfo.get("Comment","shell")
+				listWidget.setIcon(icon)
+				listWidget.setText(name)
+				if name not in self.desktopDict.keys():
+					self.lstOptions.addItem(listWidget)
+				self.desktopDict[name]={'icon':icon,'desktop':desktop}
+	#def _loadApps
+
+	def _loadActs(self,*args):
+		pass
+	#def _loadActs
 
 	def _updateConfig(self,name):
 		pass
@@ -177,5 +215,18 @@ class addHotkey(confStack):
 	def writeConfig(self):
 		#functionHelper.setSystemConfig(self.sysConfig)
 		self.refresh=True
+		config=self.getConfig(self.level).get(self.level,{})
+		hotkeys=config.get('hotkeys')
+		name=self.lstOptions.currentItem().text()
+		desktop=self.desktopDict.get(name,{}).get('desktop','')
+		if desktop:
+			desktopInfo=self.menu.get_desktop_info(os.path.join("/usr/share/applications/",desktop))
+			comment=desktopInfo.get("Comment",desktop)
+		launch='{0},,{1}'.format(self.btnHk.text(),comment)
+		hk={'[{0}]'.format(desktop):{'_k_friendly_name':name,'_launch':launch}}
+		hotkeys.update(hk)
+		functionHelper.setKdeConfigSetting(desktop,"_k_friendly_name",name,self.wrkFiles[0])
+		functionHelper.setKdeConfigSetting(desktop,"_launch",launch,self.wrkFiles[0])
+		self.saveChanges("hotkeys",hotkeys)
 		self.optionChanged=[]
-		self.stack.gotoStack(idx=4,parms="")
+		#self.stack.gotoStack(idx=4,parms="")

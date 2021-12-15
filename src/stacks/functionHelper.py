@@ -61,6 +61,9 @@ def setSystemConfig(config,wrkFile=''):
 				_debug("Setting {} -> {}".format(desc,value))
 				_setKdeConfigSetting(section,desc,value,kfile)
 
+def setKdeConfigSetting(group,key,value,kfile="kaccessrc"):
+	return(_setKdeConfigSetting(group,key,value,kfile))
+
 def _setKdeConfigSetting(group,key,value,kfile="kaccessrc"):
 	#kfile=kaccessrc
 	#_debug("Writing value {} from {} -> {}".format(key,kfile,value))

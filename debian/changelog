@@ -1,3 +1,10 @@
+accesshelper (0.2) focal; urgency=medium
+
+  * Shortcut management
+  * Add change resolution 
+
+ -- Juanma1980 <juanma1980@gmail.com>  Wed, 15 Dec 2021 16:10:05 +0100
+
 accesshelper (0.1.1) focal; urgency=medium
 
   * Beta release.

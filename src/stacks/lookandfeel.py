@@ -165,6 +165,7 @@ class lookandfeel(confStack):
 				self.saveChanges('resolution',w)
 		self.optionChanged=[]
 		self.refresh=True
-		return
+		f=open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'w')
+		f.close()
 	#def writeConfig
 

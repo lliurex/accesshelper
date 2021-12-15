@@ -2,7 +2,7 @@
 from . import functionHelper
 import sys
 import os
-from PySide2.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QGridLayout,QVBoxLayout,QLineEdit,QHBoxLayout,QComboBox,QCheckBox,QTabBar,QTabWidget,QTabBar,QTabWidget,QTableWidget
+from PySide2.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QGridLayout,QLineEdit,QComboBox,QCheckBox,QTableWidget
 from PySide2 import QtGui
 from PySide2.QtCore import Qt,Signal,QSignalMapper,QProcess,QEvent,QSize
 from appconfig.appConfigStack import appConfigStack as confStack
@@ -87,10 +87,14 @@ class hotkeys(confStack):
 						self.widgets.update({name:btn})
 						self.widgetsText.update({btn:name})
 
-		lbl_add=QLabel(_("Add new"))
-		self.box.addWidget(lbl_add)
+		btn_add=QPushButton(_("Add new"))
+		btn_add.clicked.connect(self._addHotkey)
+		self.box.addWidget(btn_add,row+1,0,1,2)
 		self.updateScreen()
 	#def _load_screen
+
+	def _addHotkey(self,*args):
+		self.stack.gotoStack(idx=7,parms="")
 
 	def _grab_alt_keys(self,*args):
 		desc=''

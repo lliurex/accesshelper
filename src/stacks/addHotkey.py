@@ -255,4 +255,4 @@ class addHotkey(confStack):
 		self.optionChanged=[]
 		f=open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'w')
 		f.close()
-		#self.stack.gotoStack(idx=4,parms="")
+		self.stack.gotoStack(idx=4,parms="")

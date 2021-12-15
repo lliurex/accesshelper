@@ -1,9 +1,13 @@
 #!/usr/bin/env python3
 import sys
+import subprocess
 import os
-from PySide2.QtWidgets import QApplication
+from PySide2.QtWidgets import QApplication,QDialog,QGridLayout,QLabel,QPushButton
 from appconfig.appConfigScreen import appConfigScreen as appConfig
 from stacks import functionHelper as functionHelper
+import gettext
+import time
+_ = gettext.gettext
 
 wrkDirList=["/usr/share/accesshelper/profiles","/usr/share/accesshelper/profiles",os.path.join(os.environ.get("HOME",''),".config/accesshelper/profiles")]
 
@@ -52,8 +56,37 @@ def setProfile(profilePath):
 	return(sw)
 #def setProfile
 
+def _restartSession(*args):
+	QApplication.quit()
+	cmd=["kquitapp5","plasmashell"]
+	subprocess.run(cmd)
+	cmd=["kstart5","plasmashell"]
+	subprocess.run(cmd)
+
+
+def showDialog(*args):
+	if os.path.isfile(configChanged)==False:
+		return
+	os.remove(configChanged)
+	dlgClose=QDialog()
+	layout=QGridLayout()
+	lbl=QLabel(_("Session must be restarted now."))
+	layout.addWidget(lbl,0,0,1,2)
+	btnRestart=QPushButton(_("Restart"))
+	btnRestart.clicked.connect(_restartSession)
+	layout.addWidget(btnRestart,1,0,1,1)
+	btnLater=QPushButton(_("Later"))
+	btnLater.clicked.connect(QApplication.quit)
+	layout.addWidget(btnLater,1,1,1,1)
+	dlgClose.setLayout(layout)
+	dlgClose.exec()
+#### MAIN ####
 if len(sys.argv)==1:
+	configChanged="/tmp/.accesshelper_{}".format(os.environ.get('USER'))
+	if os.path.isfile(configChanged):
+		os.remove(configChanged)
 	app=QApplication(["AccessHelper"])
+	app.aboutToQuit.connect(showDialog)
 	config=appConfig("AccessHelper",{'app':app})
 	config.setRsrcPath("/usr/share/accesshelper/rsrc")
 	config.setIcon('accesshelper')
@@ -78,3 +111,4 @@ else:
 		listProfiles()
 	else:
 		showHelp()
+

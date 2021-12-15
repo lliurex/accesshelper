@@ -240,7 +240,7 @@ class addHotkey(confStack):
 			self.optionChanged=[]
 			return
 		config=self.getConfig(self.level).get(self.level,{})
-		hotkeys=config.get('hotkeys')
+		hotkeys=config.get('hotkeys',{})
 		name=self.lstOptions.currentItem().text()
 		desktop=self.desktopDict.get(name,{}).get('desktop','')
 		if desktop:
@@ -253,4 +253,6 @@ class addHotkey(confStack):
 		functionHelper.setKdeConfigSetting(desktop,"_launch",launch,self.wrkFiles[0])
 		self.saveChanges("hotkeys",hotkeys)
 		self.optionChanged=[]
+		f=open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'w')
+		f.close()
 		#self.stack.gotoStack(idx=4,parms="")

@@ -169,6 +169,8 @@ class behavior(confStack):
 				self.sysConfig[kfile][section]=dataTmp
 
 		functionHelper.setSystemConfig(self.sysConfig)
-		return
+		f=open("/tmp/accesshelper_{}".format(os.environ.get('USER')),'w')
+		f.close()
 		self.optionChanged=[]
+		return
 

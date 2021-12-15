@@ -2,7 +2,7 @@
 from . import functionHelper
 import sys
 import os
-from PySide2.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QGridLayout,QLineEdit,QComboBox,QCheckBox,QTableWidget
+from PySide2.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QGridLayout,QLineEdit,QComboBox,QCheckBox,QTableWidget,QHeaderView
 from PySide2 import QtGui
 from PySide2.QtCore import Qt,Signal,QSignalMapper,QProcess,QEvent,QSize
 from appconfig.appConfigStack import appConfigStack as confStack
@@ -38,7 +38,6 @@ class hotkeys(confStack):
 		self.index=4
 		self.enabled=True
 		self.changed=[]
-		self.level='user'
 		self.sysConfig={}
 		self.wrkFiles=["kglobalshortcutsrc"]
 		self.optionChanged=[]
@@ -59,9 +58,13 @@ class hotkeys(confStack):
 	def _load_screen(self):
 		self.installEventFilter(self)
 		self.box=QGridLayout()
+		tblGrid=QTableWidget(0,2)
+		font=tblGrid.font()
+		minsize=font.pointSize()
 		self.setLayout(self.box)
 		sigmap_run=QSignalMapper(self)
 		sigmap_run.mapped[QString].connect(self._grab_alt_keys)
+		config=self.getConfig().get(self.level)
 		self.widgets={}
 		self.widgetsText={}
 		self.refresh=True
@@ -72,24 +75,55 @@ class hotkeys(confStack):
 				for section,settings in sections.items():
 					row=0
 					for setting in settings:
+						tblGrid.setRowCount(row+1) 
 						(name,data)=setting
 						data=data.split(",")
 						desc=""
 						if len(data)>0:
 							desc=data[-1]
 						lbl=QLabel(desc)
-						self.box.addWidget(lbl,row,0)
+						#self.box.addWidget(lbl,row,0)
+						tblGrid.setCellWidget(row,0,lbl)
 						btn=QPushButton(data[0])
 						sigmap_run.setMapping(btn,name)
 						btn.clicked.connect(sigmap_run.map)
-						self.box.addWidget(btn,row,1)
+						tblGrid.setCellWidget(row,1,btn)
+						tblGrid.resizeRowToContents(row)
+						#self.box.addWidget(btn,row,1)
 						row+=1
 						self.widgets.update({name:btn})
 						self.widgetsText.update({btn:name})
 
+		for desktop,info in config.get('hotkeys',{}).items():
+			tblGrid.setRowCount(row+1) 
+			name=desktop.replace("[","").replace("]","").rstrip(".desktop")
+			hk=info.get("_launch","").split(",")[0]
+			lbl=QLabel(name)
+			#self.box.addWidget(lbl,row,0)
+			tblGrid.setCellWidget(row,0,lbl)
+			btn=QPushButton(hk)
+			sigmap_run.setMapping(btn,name)
+			btn.clicked.connect(sigmap_run.map)
+			#self.box.addWidget(btn,row,1)
+			tblGrid.setCellWidget(row,1,btn)
+			tblGrid.resizeRowToContents(row)
+			row+=1
+			self.widgets.update({name:btn})
+			self.widgetsText.update({btn:name})
+		tblGrid.setShowGrid(False)
+		tblGrid.verticalHeader().hide()
+		tblGrid.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+		tblGrid.horizontalHeader().hide()
+		tblGrid.horizontalHeader().setSectionResizeMode(0, QHeaderView.Stretch)
+		tblGrid.resizeColumnToContents(1)
+		tblGrid.setSelectionBehavior(tblGrid.SelectRows)
+		tblGrid.setSelectionMode(tblGrid.SingleSelection)
+		self.box.addWidget(tblGrid,0,0,1,1)
+
+
 		btn_add=QPushButton(_("Add new"))
 		btn_add.clicked.connect(self._addHotkey)
-		self.box.addWidget(btn_add,row+1,0,1,2)
+		self.box.addWidget(btn_add,row+1,0,1,1)
 		self.updateScreen()
 	#def _load_screen
 
@@ -181,3 +215,6 @@ class hotkeys(confStack):
 		functionHelper.setSystemConfig(self.sysConfig)
 		self.refresh=True
 		self.optionChanged=[]
+		f=open("/tmp/accesshelper_{}".format(os.environ.get('USER')),'w')
+		f.close()
+		return

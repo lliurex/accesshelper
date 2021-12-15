@@ -156,6 +156,8 @@ class profiles(confStack):
 				self.showMsg("{}".format(i18n.get("SNAPSHOT_SYSTEM")))
 			else:
 				self.showMsg("{}".format(i18n.get("SNAPSHOT_USER")))
+		f=open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'w')
+		f.close()
 		self.updateScreen()
 		
 

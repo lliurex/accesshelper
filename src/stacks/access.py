@@ -228,6 +228,8 @@ class access(confStack):
 		self._updateConfig()
 		self.updateScreen()
 		self.refresh=True
+		f=open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'w')
+		f.close()
 		return
 
 	def _writeHotkeys(self):

@@ -1,4 +1,4 @@
 [Desktop Entry]
 Type=Application
 Name=accesHelper Profiler
-Exec=/usr/share/bin/accesshelper --set %u
+Exec=/usr/share/accesshelper/accesshelper.py --set %u

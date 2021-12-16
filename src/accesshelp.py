@@ -2,6 +2,7 @@
 import sys
 import subprocess
 import os
+import json
 from PySide2.QtWidgets import QApplication,QDialog,QGridLayout,QLabel,QPushButton
 from appconfig.appConfigScreen import appConfigScreen as appConfig
 from stacks import functionHelper as functionHelper
@@ -63,7 +64,7 @@ def _restartSession(*args):
 	subprocess.run(cmd)
 	#cmd=["kstart5","plasmashell"]
 	#subprocess.run(cmd)
-
+#def _restartSession
 
 def showDialog(*args):
 	if os.path.isfile(configChanged)==False:
@@ -81,7 +82,34 @@ def showDialog(*args):
 	layout.addWidget(btnLater,1,1,1,1)
 	dlgClose.setLayout(layout)
 	dlgClose.exec()
+#def showDialog
+
+def _isAutostartEnabled():
+	sysConf='/usr/share/accesshelper/accesshelper.json'
+	userConf=os.path.join(os.environ['HOME'],".config/accesshelper/accesshelper.json")
+	if os.path.isfile(sysConf):
+		j=''
+		with open(sysConf,'r') as f:
+			j=json.load(f)
+		if isinstance(j,dict):
+			level=j.get('config','')
+			autostart=j.get('startup','')
+			if level=='user':
+				with open(userconf,'r') as uf:
+					uj=json.load(f)
+					if isinstance(uj,dict):
+						level=j.get('config','')
+					if level=='user':
+						autostart=j.get('startup','')
+	sw=False
+	if autostart.lower()=="true":
+		sw=True
+	return sw
+
+##############
 #### MAIN ####
+##############
+
 if len(sys.argv)==1:
 	configChanged="/tmp/.accesshelper_{}".format(os.environ.get('USER'))
 	if os.path.isfile(configChanged):
@@ -102,12 +130,19 @@ if len(sys.argv)==1:
 	app.exec_()
 else:
 	if sys.argv[1].lower()=="--set":
+		if len(sys.argv)==4:
+			if sys.argv[3]=='init':
+				if _isAutostartEnabled()==True:
+					print(_("Profile not loaded: Autostart is disabled"))
+					sys.exit(1)
 		tpl=sys.argv[2]
 		if tpl.endswith(".tar")==False:
 			tpl="{}.tar".format(tpl)
 		#call function blabla
 		if setProfile(tpl)==False:
 			showHelp()
+		else:
+			print(_("Profile loaded"))
 	elif sys.argv[1].lower()=="--list":
 		listProfiles()
 	else:

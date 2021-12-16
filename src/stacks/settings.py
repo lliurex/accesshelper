@@ -19,7 +19,8 @@ i18n={
 	"MENUDESCRIPTION":_("Configure some options"),
 	"TOOLTIP":_("Set config level, default template.."),
 	"AUTOSTART":_("Autostart enabled for user"),
-	"DISABLEAUTOSTART":_("Autostart disabled for user")
+	"DISABLEAUTOSTART":_("Autostart disabled for user"),
+	"AUTOSTARTERROR":_("Autostart could not be disabled")
 	}
 
 class settings(confStack):
@@ -175,6 +176,7 @@ class settings(confStack):
 				lines=f.readlines()
 				for line in lines:
 					if line.startswith("Exec="):
+						profile="{} init".format(profile)
 						line=line.replace("%u",profile)
 					tmpf.write(line)
 			tmpf.close()
@@ -186,7 +188,10 @@ class settings(confStack):
 	def _removeAutostart(self,profile):
 		destPath=os.path.join(os.environ.get("HOME"),".config/autostart/accesshelper-profiler.desktop")
 		if os.path.isfile(destPath):
-			os.remove(destPath)
-			self.showMsg("{} {}".format(i18n.get("DISABLEAUTOSTART"),os.environ.get("USER")))
+			try:
+				os.remove(destPath)
+				self.showMsg("{} {}".format(i18n.get("DISABLEAUTOSTART"),os.environ.get("USER")))
+			except:
+				self.showMsg(i18n.get("AUTOSTARTERROR"))
 	#def _removeAutostart
 

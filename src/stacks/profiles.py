@@ -93,7 +93,7 @@ class profiles(confStack):
 					if len(f)>50:
 						f=f[0:49]
 					if f not in self.profilesPath.keys():
-						self.lst_profiles.addItem(f.rstrip(".tar"))
+						self.lst_profiles.addItem(f.replace(".tar",""))
 						add.append(f)
 						self.profilesPath.update({f:os.path.join(wrkDir,f)})
 						item=self.lst_profiles.item(self.lst_profiles.count()-1)

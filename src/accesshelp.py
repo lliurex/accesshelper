@@ -58,10 +58,11 @@ def setProfile(profilePath):
 
 def _restartSession(*args):
 	QApplication.quit()
-	cmd=["kquitapp5","plasmashell"]
+	cmd=["qdbus","org.kde.Shutdown","/Shutdown","logout"]
+	#cmd=["kquitapp5","plasmashell"]
 	subprocess.run(cmd)
-	cmd=["kstart5","plasmashell"]
-	subprocess.run(cmd)
+	#cmd=["kstart5","plasmashell"]
+	#subprocess.run(cmd)
 
 
 def showDialog(*args):
@@ -70,9 +71,9 @@ def showDialog(*args):
 	os.remove(configChanged)
 	dlgClose=QDialog()
 	layout=QGridLayout()
-	lbl=QLabel(_("Session must be restarted now."))
+	lbl=QLabel(_("It's recommended to logout from session now for avoiding inconsistencies"))
 	layout.addWidget(lbl,0,0,1,2)
-	btnRestart=QPushButton(_("Restart"))
+	btnRestart=QPushButton(_("Logout"))
 	btnRestart.clicked.connect(_restartSession)
 	layout.addWidget(btnRestart,1,0,1,1)
 	btnLater=QPushButton(_("Later"))

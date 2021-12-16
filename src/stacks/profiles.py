@@ -131,6 +131,8 @@ class profiles(confStack):
 
 	def writeConfig(self,system=False):
 		self._debug("Taking snapshot")
+		self.config=self.getConfig("system",{}).get("system",{})
+		self.level=self.config.get('config')
 		name=self.inp_name.text()
 		name=os.path.basename(name)
 		if len(name)>50:

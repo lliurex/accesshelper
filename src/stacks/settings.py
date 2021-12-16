@@ -155,6 +155,9 @@ class settings(confStack):
 						value="system"
 					elif value==2:
 						value="n4d"
+					self.level="user"
+					self.saveChanges(desc,self.level,level=self.level)
+					self.level=value
 				else:
 					value=widget.currentText()
 					profile=value

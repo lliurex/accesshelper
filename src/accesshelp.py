@@ -3,7 +3,8 @@ import sys
 import subprocess
 import os
 import json
-from PySide2.QtWidgets import QApplication,QDialog,QGridLayout,QLabel,QPushButton
+from PySide2.QtWidgets import QApplication,QMessageBox,QGridLayout,QLabel,QPushButton
+from PySide2.QtCore import Qt
 from appconfig.appConfigScreen import appConfigScreen as appConfig
 from stacks import functionHelper as functionHelper
 import gettext
@@ -70,18 +71,22 @@ def showDialog(*args):
 	if os.path.isfile(configChanged)==False:
 		return
 	os.remove(configChanged)
-	dlgClose=QDialog()
+	msg=_("It's recommended to logout from session now\nin order of avoid inconsistencies")
+	msgTitle=_("Logout")
+	dlgClose=QMessageBox(QMessageBox.Warning,msgTitle,msg)
+	dlgClose.setStandardButtons(QMessageBox.Ok|QMessageBox.Ignore)
 	layout=QGridLayout()
-	lbl=QLabel(_("It's recommended to logout from session now for avoiding inconsistencies"))
+	lbl=QLabel()
 	layout.addWidget(lbl,0,0,1,2)
 	btnRestart=QPushButton(_("Logout"))
 	btnRestart.clicked.connect(_restartSession)
-	layout.addWidget(btnRestart,1,0,1,1)
+	layout.addWidget(btnRestart,1,0,1,1,Qt.AlignCenter)
 	btnLater=QPushButton(_("Later"))
 	btnLater.clicked.connect(QApplication.quit)
-	layout.addWidget(btnLater,1,1,1,1)
+	#layout.addWidget(btnLater,1,1,1,1,Qt.AlignCenter)
 	dlgClose.setLayout(layout)
-	dlgClose.exec()
+	if dlgClose.exec()==QMessageBox.Ok:
+		_restartSession()
 #def showDialog
 
 def _isAutostartEnabled():

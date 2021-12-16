@@ -237,7 +237,9 @@ class addHotkey(confStack):
 		self.refresh=True
 		txt=self.btnHk.text()
 		if txt==i18n.get("BTNTXT") or txt=="":
+			self.changes=False
 			self.optionChanged=[]
+			self.stack.gotoStack(idx=4,parms="")
 			return
 		config=self.getConfig(self.level).get(self.level,{})
 		hotkeys=config.get('hotkeys',{})

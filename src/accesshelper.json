@@ -1,11 +1,11 @@
 {
-	"fonts":
-	{
-		"size":"",
-		"family":""
-	},
-	"cursor":
-	{
-		"size":""
-	}
+    "config": "user",
+    "cursor": {
+        "size": "Normal"
+    },
+    "fonts": {
+        "size": "Normal"
+    },
+    "profile": "default.tar",
+    "startup": "false"
 }

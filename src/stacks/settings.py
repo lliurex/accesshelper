@@ -137,6 +137,7 @@ class settings(confStack):
 	def writeConfig(self):
 		startWdg=None
 		profile=''
+		config=self.getConfig()
 		for widget,desc in self.widgets.items():
 			if desc=="startup":
 				startWdg=widget
@@ -155,9 +156,7 @@ class settings(confStack):
 						value="system"
 					elif value==2:
 						value="n4d"
-					self.level="user"
-					self.saveChanges(desc,self.level,level=self.level)
-					self.level=value
+					self.saveChanges(desc,value,level="user")
 				else:
 					value=widget.currentText()
 					profile=value
@@ -169,6 +168,7 @@ class settings(confStack):
 				self._removeAutostart(profile)
 		f=open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'w')
 		f.close()
+		self.refresh=True
 	#def writeConfig
 
 	def _setAutostart(self,profile):

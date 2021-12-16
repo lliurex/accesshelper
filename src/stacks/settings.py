@@ -167,7 +167,7 @@ class settings(confStack):
 				self._setAutostart(profile)
 			else:
 				self._removeAutostart(profile)
-		f=open("/tmp/accesshelper_{}".format(os.environ.get('USER')),'w')
+		f=open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'w')
 		f.close()
 	#def writeConfig
 

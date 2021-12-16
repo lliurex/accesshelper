@@ -35,7 +35,7 @@ class settings(confStack):
 		self.changed=[]
 		self.config={}
 		self.widgets={}
-		self.wrkDir="/usr/share/accesshelper/profiles"
+		self.wrkDirs=["/usr/share/accesshelper/profiles","/usr/share/accesshelper/default",os.path.join(os.environ.get('HOME'),".config/accesshelper/profiles")]
 		self.optionChanged=[]
 	#def __init__
 
@@ -76,10 +76,12 @@ class settings(confStack):
 		box.setRowStretch(1,0)
 		box.setRowStretch(2,0)
 		box.setRowStretch(3,2)
-		if os.path.isdir(self.wrkDir):
-			for f in os.listdir(self.wrkDir):
-				cmb_template.addItem("{}".format(f))
-			cmb_template.setCurrentText("default")
+
+		for wrkDir in self.wrkDirs:
+			if os.path.isdir(wrkDir):
+				for f in os.listdir(wrkDir):
+					cmb_template.addItem("{}".format(f))
+		cmb_template.setCurrentText("default")
 		self.setLayout(box)
 		_change_osh()
 		self.updateScreen()
@@ -115,7 +117,7 @@ class settings(confStack):
 			if desc=="startup":
 				widget.setChecked(startup)
 			elif desc=="profile":
-				widget.setCurrentIndex(idx)
+				widget.setCurrentText(profile)
 			elif desc=="config":
 				if level=="user":
 					idx=0

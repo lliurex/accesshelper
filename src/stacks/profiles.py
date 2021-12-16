@@ -19,6 +19,7 @@ i18n={
 	"SAVE":_("Save profile"),
 	"LOAD":_("Load profile"),
 	"ERRORPERMS":_("Permission denied"),
+	"ERRORDEFAULT":_("Default profiles could not be modified"),
 	"SNAPSHOT_SYSTEM":_("Profile added to system's profiles"),
 	"SNAPSHOT_USER":_("Profile added to user's profiles"),
 	"RESTORESNAP":_("Profile loaded"),
@@ -137,7 +138,11 @@ class profiles(confStack):
 
 		if name.endswith(".tar")==False:
 			name="{}.tar".format(name)
-		self.optionChanged=[]
+		if os.path.isdir(self.defaultDir)==True:
+			if name in os.listdir(self.defaultDir):
+				self.showMsg("{}".format(i18n.get("ERRORDEFAULT")))
+				self.optionChanged=[]
+				return
 		profilePath=self.profilesPath.get(name,'')
 		if profilePath=='':
 			if self.level=='user':
@@ -158,6 +163,7 @@ class profiles(confStack):
 				self.showMsg("{}".format(i18n.get("SNAPSHOT_USER")))
 		f=open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'w')
 		f.close()
+		self.optionChanged=[]
 		self.updateScreen()
 		
 

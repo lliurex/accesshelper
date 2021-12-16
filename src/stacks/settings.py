@@ -176,6 +176,7 @@ class settings(confStack):
 				lines=f.readlines()
 				for line in lines:
 					if line.startswith("Exec="):
+						profile="{} init".format(profile)
 						line=line.replace("%u",profile)
 					tmpf.write(line)
 			tmpf.close()

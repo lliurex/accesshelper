@@ -100,7 +100,7 @@ def _isAutostartEnabled():
 			level=j.get('config','')
 			autostart=j.get('startup','')
 			if level=='user':
-				with open(userconf,'r') as uf:
+				with open(userConf,'r') as uf:
 					uj=json.load(f)
 					if isinstance(uj,dict):
 						level=j.get('config','')

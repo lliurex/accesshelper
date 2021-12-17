@@ -108,12 +108,9 @@ class settings(confStack):
 		profile=''
 		if level in config.keys():
 			profile=config[level].get('profile','')
-		startup=config[level].get('startup',False)
-		if startup:
-			if str(startup).lower()=='true':
-				startup=True
-			else:
-				startup=False
+		startup=False
+		if os.path.isfile(os.path.join(os.environ.get('HOME'),".config/autostart/accesshelper_profiler.desktop")) or os.path.isfile("/etc/xdg/autostart/accesshelper_profiler.desktop"):
+			startup=True
 		for widget,desc in self.widgets.items():
 			if desc=="startup":
 				widget.setChecked(startup)

@@ -175,7 +175,7 @@ class settings(confStack):
 		if profile:
 			tmpHdl,tmpF=tempfile.mkstemp()
 			tmpf=open(tmpF,'w')
-			with open("/usr/share/accesshelper/helper/accesshelper-profiler.desktop","r") as f:
+			with open("/usr/share/accesshelper/helper/accesshelper_profiler.desktop","r") as f:
 				lines=f.readlines()
 				for line in lines:
 					if line.startswith("Exec="):
@@ -183,13 +183,13 @@ class settings(confStack):
 						line=line.replace("%u",profile)
 					tmpf.write(line)
 			tmpf.close()
-			destPath=os.path.join(os.environ.get("HOME"),".config/autostart/accesshelper-profiler.desktop")
+			destPath=os.path.join(os.environ.get("HOME"),".config/autostart/accesshelper_profiler.desktop")
 			shutil.copy(tmpF,destPath)
 			self.showMsg("{} {}".format(i18n.get("AUTOSTART"),os.environ.get("USER")))
 	#def _setAutostart
 
 	def _removeAutostart(self,profile):
-		destPath=os.path.join(os.environ.get("HOME"),".config/autostart/accesshelper-profiler.desktop")
+		destPath=os.path.join(os.environ.get("HOME"),".config/autostart/accesshelper_profiler.desktop")
 		if os.path.isfile(destPath):
 			try:
 				os.remove(destPath)

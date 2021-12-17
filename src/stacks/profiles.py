@@ -123,6 +123,9 @@ class profiles(confStack):
 		else:
 			self.showMsg(i18n.get("RESTOREERROR"))
 		self.refresh=True
+		f=open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'w')
+		f.close()
+		self.refresh=True
 		self.optionChanged=[]
 
 	def _updateConfig(self,key):

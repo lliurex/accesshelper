@@ -11,7 +11,7 @@ import gettext
 import time
 _ = gettext.gettext
 
-wrkDirList=["/usr/share/accesshelper/profiles","/usr/share/accesshelper/profiles",os.path.join(os.environ.get("HOME",''),".config/accesshelper/profiles")]
+wrkDirList=["/usr/share/accesshelper/profiles","/usr/share/accesshelper/default",os.path.join(os.environ.get("HOME",''),".config/accesshelper/profiles")]
 
 def showHelp():
 	print("usage: accesshelper [--set profile]|[--list]")
@@ -101,7 +101,7 @@ def _isAutostartEnabled():
 			autostart=j.get('startup','')
 			if level=='user':
 				with open(userConf,'r') as uf:
-					uj=json.load(f)
+					uj=json.load(uf)
 					if isinstance(uj,dict):
 						level=j.get('config','')
 					if level=='user':

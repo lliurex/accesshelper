@@ -38,7 +38,6 @@ class lookandfeel(confStack):
 		self.enabled=True
 		self.defaultRepos={}
 		self.changed=[]
-		self.level='user'
 		self.config={}
 		self.sysConfig={}
 		self.wrkFiles=["kdeglobals","kcminputrc"]
@@ -54,7 +53,6 @@ class lookandfeel(confStack):
 		sigmap_run=QSignalMapper(self)
 		sigmap_run.mapped[QString].connect(self._updateConfig)
 		self.widgets={}
-		self.refresh=True
 		self.config=self.getConfig()
 		config=self.config.get(self.level,{})
 		fontSize=config.get('fonts',{}).get('size',"Normal")
@@ -98,6 +96,20 @@ class lookandfeel(confStack):
 	#def _load_screen
 
 	def updateScreen(self):
+		self.config=self.getConfig()
+		config=self.config.get(self.level,{})
+		fontSize=config.get('fonts',{}).get('size',"Normal")
+		btn=self.widgets.get("font")
+		cursorSize=config.get('cursor',{}).get('size',"Normal")
+		if btn:
+			btn.setCurrentText(fontSize)
+		btn=self.widgets.get("cursor")
+		if btn:
+			btn.setCurrentText(cursorSize)
+		currentWidth,currentHeight=self.getCurrentResolution()
+		btn=self.widgets.get("res")
+		if btn:
+			btn.setCurrentText(str(currentWidth))
 		pass
 	#def _udpate_screen
 
@@ -123,6 +135,7 @@ class lookandfeel(confStack):
 				if value.lower()=="extralarge":
 					size+=inc*2
 					minSize+=inc*2
+				self._debug("FONTS SIZE {0} to {1}".format(value,self.level))
 				self.saveChanges('fonts',{"size":value})
 				fixed="Hack,{0},-1,5,50,0,0,0,0,0".format(size)
 				font="Noto Sans,{0},-1,5,50,0,0,0,0,0".format(size)

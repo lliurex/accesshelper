@@ -59,87 +59,61 @@ class behavior(confStack):
 		for wrkFile in self.wrkFiles:
 			systemConfig=functionHelper.getSystemConfig(wrkFile)
 			self.sysConfig.update(systemConfig)
-			for kfile,sections in systemConfig.items():
-				want=self.wantSettings.get(kfile,[])
-				block=self.blockSettings.get(kfile,[])
-				for section,settings in sections.items():
-					if section in block and len(want)==0:
+		for kfile,sections in self.sysConfig.items():
+			want=self.wantSettings.get(kfile,[])
+			block=self.blockSettings.get(kfile,[])
+			for section,settings in sections.items():
+				if section in block and len(want)==0:
+					continue
+				for setting in settings:
+					(name,data)=setting
+					if name in block or (len(want)>0 and name not in want):
 						continue
-					for setting in settings:
-						(name,data)=setting
-						if name in block or (len(want)>0 and name not in want):
-							continue
-						desc=i18n.get(name.upper(),name)
-						lbl=QLabel(desc)
-						#if (data.lower() in ("true","false")) or (data==''):
-						if (isinstance(data,str)):
-							btn=QCheckBox(desc)
-							#btn=QPushButton(desc)
-							#btn.setStyleSheet(functionHelper.cssStyle())
-							#btn.setAutoDefault(False)
-							#btn.setDefault(False)
-							#btn.setCheckable(True)
-							state=False
-							#if  data in ("true","false"):
-							if data.lower()=="true" or data.lower()=="focusfollowsmouse":
-								state=True
-							btn.setChecked(state)
-							self.widgets.update({name:btn})
-							self.box.addWidget(btn,row,col)
-						col+=1
-						if col==1:
-							row+=1
-							col=0
+					desc=i18n.get(name.upper(),name)
+					lbl=QLabel(desc)
+					#if (data.lower() in ("true","false")) or (data==''):
+					if (isinstance(data,str)):
+						btn=QCheckBox(desc)
+						#btn=QPushButton(desc)
+						#btn.setStyleSheet(functionHelper.cssStyle())
+						#btn.setAutoDefault(False)
+						#btn.setDefault(False)
+						#btn.setCheckable(True)
+						state=False
+						self.widgets.update({name:btn})
+						self.box.addWidget(btn,row,col)
+					col+=1
+					if col==1:
+						row+=1
+						col=0
 
-		self.updateScreen()
-		return
-		self.config=self.getConfig(level=self.level)
-		config=self.config.get(self.level,{})
-		for key,item in config.get('desktopbehavior',{}).items():
-			if key.upper() in i18n.keys():
-				desc=i18n.get(key.upper())
-			else:
-				desc=key
-			widget=None
-			if (isinstance(item,str)):
-				if item in ["true","false"]:
-					widget=QCheckBox(desc)
-					sigmap_run.setMapping(widget,key)
-					widget.stateChanged.connect(sigmap_run.map)
-				elif key=='focusPolicy':
-					self.box.addWidget(QLabel(i18n.get('FOCUSPOLICY')))
-					widget=QComboBox()
-					widget.addItems([i18n.get("FOCUSCLICK"),i18n.get("FOCUSFOLLOW")])
-					sigmap_run.setMapping(widget,key)
-					widget.currentIndexChanged.connect(sigmap_run.map)
-				elif key=='resolution':
-					self.box.addWidget(QLabel(i18n.get('RESOLUTION')))
-					widget=QComboBox()
-					widget.addItems([])
-					sigmap_run.setMapping(widget,key)
-					widget.currentIndexChanged.connect(sigmap_run.map)
-				elif key=='hotCorners':
-					self.box.addWidget(QLabel(i18n.get('HOTCORNERS')))
-					widget=QComboBox()
-					widget.addItems([])
-					sigmap_run.setMapping(widget,key)
-					widget.currentIndexChanged.connect(sigmap_run.map)
-				else:
-					widget=QLineEdit()
-					sigmap_run.setMapping(widget,key)
-					widget.editingFinished.connect(sigmap_run.map)
-			elif (isinstance(item,list)):
-				print("{} -> List".format(item))
-			elif (isinstance(item,dict)):
-				print("{} -> Dict".format(item))
-			if widget:
-				self.widgets[key]=widget
-				self.box.addWidget(widget)
 		self.updateScreen()
 	#def _load_screen
 
 	def updateScreen(self):
-		pass
+		for wrkFile in self.wrkFiles:
+			systemConfig=functionHelper.getSystemConfig(wrkFile)
+			self.sysConfig.update(systemConfig)
+		for kfile,sections in self.sysConfig.items():
+			want=self.wantSettings.get(kfile,[])
+			block=self.blockSettings.get(kfile,[])
+			for section,settings in sections.items():
+				if section in block and len(want)==0:
+					continue
+				for setting in settings:
+					(name,data)=setting
+					if name in block or (len(want)>0 and name not in want):
+						continue
+					desc=i18n.get(name.upper(),name)
+					lbl=QLabel(desc)
+					#if (data.lower() in ("true","false")) or (data==''):
+					if (isinstance(data,str)):
+						btn=self.widgets.get(name,'')
+						if btn:
+							state=False
+							if data.lower()=="true" or data.lower()=="focusfollowsmouse":
+								state=True
+							btn.setChecked(state)
 	#def _udpate_screen
 
 	def _updateConfig(self,key):

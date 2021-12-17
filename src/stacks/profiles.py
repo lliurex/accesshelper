@@ -125,7 +125,6 @@ class profiles(confStack):
 		self.refresh=True
 		f=open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'w')
 		f.close()
-		self.refresh=True
 		self.optionChanged=[]
 
 	def _updateConfig(self,key):
@@ -152,7 +151,7 @@ class profiles(confStack):
 		if self.level=='user':
 			appconfrc=os.path.join(os.environ.get('HOME'),".config/accesshelper/accesshelper.json")
 		else:
-			appconfrc=os.path.join(self.wrkDir,"accesshelper.json")
+			appconfrc=os.path.join(self.path.dirname(self.wrkDir),"accesshelper.json")
 			
 		if functionHelper.takeSnapshot(profilePath,appconfrc=appconfrc)==False:
 			self.showMsg("{}: {}".format(i18n.get("ERRORPERMS"),profilePath))

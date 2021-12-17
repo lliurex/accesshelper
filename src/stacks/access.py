@@ -171,6 +171,9 @@ class access(confStack):
 	def updateScreen(self):
 		sigmap_run=QSignalMapper(self)
 		sigmap_run.mapped[QString].connect(self._grab_alt_keys)
+		for wrkFile in self.wrkFiles:
+			systemConfig=functionHelper.getSystemConfig(wrkFile)
+			self.sysConfig.update(systemConfig)
 		for kfile,sections in self.sysConfig.items():
 			want=self.wantSettings.get(kfile,[])
 			block=self.blockSettings.get(kfile,[])

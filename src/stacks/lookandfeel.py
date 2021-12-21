@@ -128,7 +128,7 @@ class lookandfeel(confStack):
 				value=wdg.currentText()
 				size=11
 				minSize=9
-				inc=2
+				inc=6
 				if value.lower()=="large":
 					size+=inc
 					minSize+=inc

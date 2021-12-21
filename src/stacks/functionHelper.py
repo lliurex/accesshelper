@@ -67,10 +67,13 @@ def setKdeConfigSetting(group,key,value,kfile="kaccessrc"):
 def _setKdeConfigSetting(group,key,value,kfile="kaccessrc"):
 	#kfile=kaccessrc
 	#_debug("Writing value {} from {} -> {}".format(key,kfile,value))
+	kfilePath=os.path.join(os.environ['HOME'],".config",kfile)
+	if os.path.isfile(kfile)==False and kfile.endswith(".profile"):
+		kfilePath=os.path.join(os.environ['HOME'],".local/share/konsole/",kfile)
 	if len(value):
-		cmd=["kwriteconfig5","--file",os.path.join(os.environ['HOME'],".config",kfile),"--group",group,"--key",key,"{}".format(value)]
+		cmd=["kwriteconfig5","--file",kfilePath,"--group",group,"--key",key,"{}".format(value)]
 	else:
-		cmd=["kwriteconfig5","--file",os.path.join(os.environ['HOME'],".config",kfile),"--group",group,"--key",key,"--delete"]
+		cmd=["kwriteconfig5","--file",kfilePath,"--group",group,"--key",key,"--delete"]
 	ret='false'
 	try:
 		ret=subprocess.check_output(cmd,universal_newlines=True).strip()

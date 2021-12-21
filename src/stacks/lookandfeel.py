@@ -40,7 +40,7 @@ class lookandfeel(confStack):
 		self.changed=[]
 		self.config={}
 		self.sysConfig={}
-		self.wrkFiles=["kdeglobals","kcminputrc"]
+		self.wrkFiles=["kdeglobals","kcminputrc","konsolerc"]
 		self.blockSettings={}
 		self.wantSettings={"kdeglobals":["General"]}
 		self.optionChanged=[]
@@ -128,7 +128,7 @@ class lookandfeel(confStack):
 				value=wdg.currentText()
 				size=11
 				minSize=9
-				inc=2
+				inc=6
 				if value.lower()=="large":
 					size+=inc
 					minSize+=inc
@@ -147,6 +147,7 @@ class lookandfeel(confStack):
 				functionHelper._setKdeConfigSetting("General","menuFont",menufont,"kdeglobals")
 				functionHelper._setKdeConfigSetting("General","smallestReadableFont",smallestreadablefont,"kdeglobals")
 				functionHelper._setKdeConfigSetting("General","toolBarFont",toolbarfont,"kdeglobals")
+				functionHelper._setKdeConfigSetting("Appearance","Font",fixed,"Lliurex.profile")
 			elif name=="cursor":
 				value=wdg.currentText()
 				size=24
@@ -159,23 +160,26 @@ class lookandfeel(confStack):
 				functionHelper._setKdeConfigSetting("Mouse","cursorSize","{}".format(size),"kcminputrc")
 			elif name=="res":
 				w=wdg.currentText()
-				if w=="1920":
-					h=1080
-				elif w=="1440":
-					h=900
-				elif w=="1024":
-					h=768
-				else:
-					h=int((w*9)/16)
-				h=str(h)
-				self._debug("Setting resolution to {} {}".format(w,h))
-				rH=resolutionHelper.kscreenDbus()
-				config=rH.getConfig()
-				modeId=rH.getResolutionMode(config,w,h)
-				if modeId:
-					rH.setResolution(config,modeId)
+				self.config=self.getConfig()
+				currentw=self.config.get(self.level,{}).get("resolution","")
+				if currentw!=w:
+					if w=="1920":
+						h=1080
+					elif w=="1440":
+						h=900
+					elif w=="1024":
+						h=768
+					else:
+						h=int((w*9)/16)
+					h=str(h)
+					self._debug("Setting resolution to {} {}".format(w,h))
+					rH=resolutionHelper.kscreenDbus()
+					config=rH.getConfig()
+					modeId=rH.getResolutionMode(config,w,h)
+					if modeId:
+						rH.setResolution(config,modeId)
 
-				self.saveChanges('resolution',w)
+					self.saveChanges('resolution',w)
 		self.optionChanged=[]
 		self.refresh=True
 		f=open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'w')

@@ -40,7 +40,7 @@ class lookandfeel(confStack):
 		self.changed=[]
 		self.config={}
 		self.sysConfig={}
-		self.wrkFiles=["kdeglobals","kcminputrc"]
+		self.wrkFiles=["kdeglobals","kcminputrc","konsolerc"]
 		self.blockSettings={}
 		self.wantSettings={"kdeglobals":["General"]}
 		self.optionChanged=[]
@@ -147,6 +147,7 @@ class lookandfeel(confStack):
 				functionHelper._setKdeConfigSetting("General","menuFont",menufont,"kdeglobals")
 				functionHelper._setKdeConfigSetting("General","smallestReadableFont",smallestreadablefont,"kdeglobals")
 				functionHelper._setKdeConfigSetting("General","toolBarFont",toolbarfont,"kdeglobals")
+				functionHelper._setKdeConfigSetting("Appearance","Font",fixed,"Lliurex.profile")
 			elif name=="cursor":
 				value=wdg.currentText()
 				size=24

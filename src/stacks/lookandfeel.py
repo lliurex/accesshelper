@@ -148,6 +148,7 @@ class lookandfeel(confStack):
 				functionHelper._setKdeConfigSetting("General","smallestReadableFont",smallestreadablefont,"kdeglobals")
 				functionHelper._setKdeConfigSetting("General","toolBarFont",toolbarfont,"kdeglobals")
 				functionHelper._setKdeConfigSetting("Appearance","Font",fixed,"Lliurex.profile")
+				self._setMozillaFirefoxFonts(size)
 			elif name=="cursor":
 				value=wdg.currentText()
 				size=24
@@ -186,3 +187,32 @@ class lookandfeel(confStack):
 		f.close()
 	#def writeConfig
 
+	def _setMozillaFirefoxFonts(self,size):
+		size+=7 #Firefox font size is smallest.
+		mozillaDir=os.path.join(os.environ.get('HOME',''),".mozilla/firefox")
+		for mozillaF in os.listdir(mozillaDir):
+			self._debug("Reading MOZILLA {}".format(mozillaF))
+			fPath=os.path.join(mozillaDir,mozillaF)
+			if os.path.isdir(fPath):
+				self._debug("Reading DIR {}".format(mozillaF))
+				if "." in mozillaF:
+					self._debug("Reading DIR {}".format(mozillaF))
+					prefs=os.path.join(mozillaDir,mozillaF,"prefs.js")
+					if os.path.isfile(prefs):
+						with open(prefs,'r') as f:
+							lines=f.readlines()
+						newLines=[]
+						for line in lines:
+							if line.startswith('user_pref("font.minimum-size.x-unicode"'):
+								continue
+							elif line.startswith('user_pref("font.minimum-size.x-western"'):
+								continue
+							newLines.append(line)
+						line='user_pref("font.minimum-size.x-western", {});\n'.format(size)
+						newLines.append(line)
+						line='user_pref("font.minimum-size.x-unicode", {});\n'.format(size)
+						newLines.append(line)
+						self._debug("Writting MOZILLA {}".format(mozillaF))
+						with open(os.path.join(mozillaDir,mozillaF,"prefs.js"),'w') as f:
+							f.writelines(newLines)
+	#def _setMozillaFirefoxFonts

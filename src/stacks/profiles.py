@@ -208,4 +208,3 @@ class profiles(confStack):
 		self.optionChanged=[]
 		self.updateScreen()
 		
-

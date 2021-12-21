@@ -144,24 +144,33 @@ def takeSnapshot(profilePath,appconfrc=''):
 			tarFile.add(os.path.basename(f))
 	os.chdir(oldCwd)
 	_debug("Copying {0}->{1}".format(tmpFile,destPath))
+	self._copyTarProfile(tmpFile,destPath)
+	os.remove(tmpFile)
+#def take_snapshot
+
+def _copyTarProfile(orig,dest):
 	try:
-		shutil.copy(tmpFile,destPath)
+		shutil.copy(orig,dest)
 	except Exception as e:
 		_debug(e)
-		cmd=["pkexec","/usr/share/accesshelper/helper/profiler.sh",tmpFile,destPath]
+		cmd=["pkexec","/usr/share/accesshelper/helper/profiler.sh",orig,dest]
 		try:
 			pk=subprocess.run(cmd)
 			if pk.returncode!=0:
 				sw=False
 		except Exception as e:
 			_debug(e)
-			_debug("Permission denied for {}".format(destPath))
+			_debug("Permission denied for {}".format(dest))
 			sw=False
-	finally:
-		os.remove(tmpFile)
-	return sw
-#def take_snapshot
+#def _copyTarProfile
 		
+def importExportSnapshot(tarFile,dest):
+	if os.path.isfile(tarFile):
+		if tarfile.is_tarfile(tarFile)==True:
+			_debug("Import {} to {}".format(tarFile,dest))
+			_copyTarProfile(tarFile,dest)
+#def importSnapshot
+
 def restoreSnapshot(profileTar):
 	sw=False
 	if os.path.isfile(profileTar):

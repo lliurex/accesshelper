@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 import sys
 import os,shutil
-from PySide2.QtWidgets import QApplication,QLineEdit, QLabel, QWidget, QPushButton,QVBoxLayout,QLineEdit,QHBoxLayout,QListWidget
+from PySide2.QtWidgets import QApplication,QLineEdit, QLabel, QWidget, QPushButton,QGridLayout,QLineEdit,QHBoxLayout,QListWidget,QFileDialog
 from PySide2 import QtGui
 from PySide2.QtCore import Qt,QSignalMapper
 from appconfig.appConfigStack import appConfigStack as confStack
@@ -23,6 +23,8 @@ i18n={
 	"SNAPSHOT_SYSTEM":_("Profile added to system's profiles"),
 	"SNAPSHOT_USER":_("Profile added to user's profiles"),
 	"RESTORESNAP":_("Profile loaded"),
+	"IMPORT":_("Import profile"),
+	"EXPORT":_("Export profile"),
 	"RESTOREERROR":_("An error ocurred")
 	}
 
@@ -49,27 +51,63 @@ class profiles(confStack):
 
 	def _load_screen(self):
 		self.setStyleSheet(functionHelper.cssStyle())
-		self.box=QVBoxLayout()
+		self.box=QGridLayout()
 		self.setLayout(self.box)
 		self.widgets={}
 		self.refresh=True
-		self.box.addWidget(self.lst_profiles)
+		self.box.addWidget(self.lst_profiles,0,0,1,3)
 		btn_load=QPushButton(i18n.get("LOAD"))
-		self.box.addWidget(btn_load)
-		btn_save=QPushButton(i18n.get("SAVE"))
+		self.box.addWidget(btn_load,1,0,1,2)
+		btn_import=QPushButton(i18n.get("IMPORT"))
+		btn_import.clicked.connect(self._importProfile)
+		self.box.addWidget(btn_import,1,2,1,1)
 		self.inp_name=QLineEdit()
-		wdg_save=QWidget()
-		hbox=QHBoxLayout()
-		wdg_save.setLayout(hbox)
-		hbox.addWidget(self.inp_name)
-		hbox.addWidget(btn_save)
-		self.box.addWidget(wdg_save)
+		self.box.addWidget(self.inp_name,2,0,1,1)
+		btn_save=QPushButton(i18n.get("SAVE"))
+		self.box.addWidget(btn_save,2,1,1,1,Qt.Alignment(1))
+		btn_export=QPushButton(i18n.get("EXPORT"))
+		btn_export.clicked.connect(self._exportProfile)
+		self.box.addWidget(btn_export,2,2,1,1)
 
 		self.lst_profiles.currentRowChanged.connect(self._updateText)
 		btn_load.clicked.connect(self.loadProfile)
 		btn_save.clicked.connect(self.writeConfig)
 		self.updateScreen()
 	#def _load_screen
+
+	def _importProfile(self):
+		dlg = QFileDialog()
+		dlg.setFileMode(QFileDialog.AnyFile)
+		dlg.setNameFilters(["Tar files (*.tar)"])
+		dlg.selectNameFilter("Tar files (*.tar)")
+		if dlg.exec_():
+			filenames = dlg.selectedFiles()
+			if len(filenames):
+				f=filenames[0]
+				if self.level=='user':
+					wrkUserDir=os.path.join(os.environ['HOME'],".config","accesshelper","profiles")
+					functionHelper.importExportSnapshot(f,wrkUserDir)
+				else:
+					functionHelper.importExportSnapshot(f,self.wrkDir)
+				self.updateScreen()
+	#def _selectProfile
+
+	def _exportProfile(self):
+		name=self.inp_name.text()
+		name=os.path.basename(name)
+		if len(name)>20:
+			name=name[0:19]
+		name=self.profilesPath.get(name,'')
+		if name=='':
+			name="{}.tar".format(name)
+			name=self.profilesPath.get(name,'')
+		if name:
+			dlg = QFileDialog.getSaveFileName(self, i18n.get("EXPORT"),"{}".format(name))
+			f=dlg[0]
+			if f:
+				functionHelper.importExportSnapshot(name,f)
+	#def _exportProfile
+
 
 	def _updateText(self,*args):
 		widget=self.lst_profiles.currentItem()

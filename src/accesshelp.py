@@ -131,7 +131,7 @@ if len(sys.argv)==1:
 	config.setConfig(confDirs={'system':'/usr/share/accesshelper','user':os.path.join(os.environ['HOME'],".config/accesshelper")},confFile="accesshelper.json")
 	config.Show()
 	#config.setFixedSize(config.width(),config.height())
-	config.setFixedSize(800,600)
+#	config.setFixedSize(800,600)
 	app.exec_()
 else:
 	if sys.argv[1].lower()=="--set":

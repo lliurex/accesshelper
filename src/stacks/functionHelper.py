@@ -144,7 +144,7 @@ def takeSnapshot(profilePath,appconfrc=''):
 			tarFile.add(os.path.basename(f))
 	os.chdir(oldCwd)
 	_debug("Copying {0}->{1}".format(tmpFile,destPath))
-	self._copyTarProfile(tmpFile,destPath)
+	_copyTarProfile(tmpFile,destPath)
 	os.remove(tmpFile)
 #def take_snapshot
 

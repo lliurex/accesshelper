@@ -47,9 +47,12 @@ class lookandfeel(confStack):
 	#def __init__
 
 	def _load_screen(self):
-		def _showTl():
-			sld.setToolTip("{}".format(sld.value()))
-			QToolTip.showText(QtGui.QCursor.pos(),"{}".format(sld.value()))
+		def _showTlFont():
+			sldFont.setToolTip("{}".format(sldFont.value()))
+			QToolTip.showText(QtGui.QCursor.pos(),"{}".format(sldFont.value()))
+		def _showTlCursor():
+			sldCursor.setToolTip("{}".format(sldCursor.value()))
+			QToolTip.showText(QtGui.QCursor.pos(),"{}".format(sldCursor.value()))
 
 		self.box=QGridLayout()
 		self.setLayout(self.box)
@@ -62,33 +65,29 @@ class lookandfeel(confStack):
 		fontSize=config.get('fonts',{}).get('size',"Normal")
 		cursorSize=config.get('cursor',{}).get('size',"Normal")
 
-		sld=QSlider(Qt.Horizontal)
-		sld.setTickPosition(sld.TicksBothSides)
-		sld.setTickInterval(1)
-		sld.setMinimum(8)
-		sld.setMaximum(120)
-		sld.valueChanged.connect(_showTl)		
-		#btn=QComboBox()
-		#btn.addItem("Normal")
-		#btn.addItem("Large")
-		#btn.addItem("Extralarge")
-		#btn.setCurrentText(fontSize)
+		sldFont=QSlider(Qt.Horizontal)
+		sldFont.setTickPosition(sldFont.TicksBothSides)
+		sldFont.setTickInterval(1)
+		sldFont.setMinimum(8)
+		sldFont.setMaximum(120)
+		sldFont.valueChanged.connect(_showTlFont)		
 		sw_font=True
 		self.box.addWidget(QLabel(i18n.get("FONTSIZE")),0,0)
 		#self.box.addWidget(btn,0,1)
-		self.box.addWidget(sld,0,1)
+		self.box.addWidget(sldFont,0,1)
 		#self.widgets.update({"font":btn})
-		self.widgets.update({"font":sld})
+		self.widgets.update({"font":sldFont})
 
-		btn=QComboBox()
-		btn.addItem("Normal")
-		btn.addItem("Large")
-		btn.addItem("Extralarge")
-		btn.setCurrentText(cursorSize)
+		sldCursor=QSlider(Qt.Horizontal)
+		sldCursor.setTickPosition(sldCursor.TicksBothSides)
+		sldCursor.setTickInterval(1)
+		sldCursor.setMinimum(8)
+		sldCursor.setMaximum(120)
+		sldCursor.valueChanged.connect(_showTlCursor)		
 		sw_font=True
 		self.box.addWidget(QLabel(i18n.get("CURSORSIZE")),1,0)
-		self.box.addWidget(btn,1,1)
-		self.widgets.update({"cursor":btn})
+		self.box.addWidget(sldCursor,1,1)
+		self.widgets.update({"cursor":sldCursor})
 
 		btn=QComboBox()
 		currentWidth,currentHeight=self.getCurrentResolution()
@@ -120,7 +119,10 @@ class lookandfeel(confStack):
 			btn.setValue(int(fontSize))
 		btn=self.widgets.get("cursor")
 		if btn:
-			btn.setCurrentText(cursorSize)
+			if isinstance(cursorSize,str):
+				if cursorSize.isalpha():
+					cursorSize=24
+			btn.setValue(int(cursorSize))
 		currentWidth,currentHeight=self.getCurrentResolution()
 		btn=self.widgets.get("res")
 		if btn:
@@ -159,14 +161,8 @@ class lookandfeel(confStack):
 				functionHelper._setKdeConfigSetting("Appearance","Font",fixed,"Lliurex.profile")
 				self._setMozillaFirefoxFonts(size)
 			elif name=="cursor":
-				value=wdg.currentText()
-				size=24
-				inc=12
-				if value.lower()=="large":
-					size+=inc
-				if value.lower()=="extralarge":
-					size+=inc*2
-				self.saveChanges('cursor',{"size":value})
+				size=wdg.value()
+				self.saveChanges('cursor',{"size":size})
 				functionHelper._setKdeConfigSetting("Mouse","cursorSize","{}".format(size),"kcminputrc")
 			elif name=="res":
 				w=wdg.currentText()

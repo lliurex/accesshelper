@@ -3,7 +3,7 @@ from . import functionHelper
 from . import resolutionHelper
 import sys
 import os
-from PySide2.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QGridLayout,QLineEdit,QHBoxLayout,QComboBox,QCheckBox,QTabBar,QTabWidget,QTabBar,QTabWidget
+from PySide2.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QGridLayout,QLineEdit,QHBoxLayout,QComboBox,QCheckBox,QTabBar,QTabWidget,QTabBar,QTabWidget,QSlider,QToolTip
 from PySide2 import QtGui
 from PySide2.QtCore import Qt,QSignalMapper
 from appconfig.appConfigStack import appConfigStack as confStack
@@ -47,6 +47,10 @@ class lookandfeel(confStack):
 	#def __init__
 
 	def _load_screen(self):
+		def _showTl():
+			sld.setToolTip("{}".format(sld.value()))
+			QToolTip.showText(QtGui.QCursor.pos(),"{}".format(sld.value()))
+
 		self.box=QGridLayout()
 		self.setLayout(self.box)
 		row,col=(0,0)
@@ -58,15 +62,23 @@ class lookandfeel(confStack):
 		fontSize=config.get('fonts',{}).get('size',"Normal")
 		cursorSize=config.get('cursor',{}).get('size',"Normal")
 
-		btn=QComboBox()
-		btn.addItem("Normal")
-		btn.addItem("Large")
-		btn.addItem("Extralarge")
-		btn.setCurrentText(fontSize)
+		sld=QSlider(Qt.Horizontal)
+		sld.setTickPosition(sld.TicksBothSides)
+		sld.setTickInterval(1)
+		sld.setMinimum(8)
+		sld.setMaximum(120)
+		sld.valueChanged.connect(_showTl)		
+		#btn=QComboBox()
+		#btn.addItem("Normal")
+		#btn.addItem("Large")
+		#btn.addItem("Extralarge")
+		#btn.setCurrentText(fontSize)
 		sw_font=True
 		self.box.addWidget(QLabel(i18n.get("FONTSIZE")),0,0)
-		self.box.addWidget(btn,0,1)
-		self.widgets.update({"font":btn})
+		#self.box.addWidget(btn,0,1)
+		self.box.addWidget(sld,0,1)
+		#self.widgets.update({"font":btn})
+		self.widgets.update({"font":sld})
 
 		btn=QComboBox()
 		btn.addItem("Normal")
@@ -98,11 +110,14 @@ class lookandfeel(confStack):
 	def updateScreen(self):
 		self.config=self.getConfig()
 		config=self.config.get(self.level,{})
-		fontSize=config.get('fonts',{}).get('size',"Normal")
+		fontSize=config.get('fonts',{}).get('size',"11")
 		btn=self.widgets.get("font")
 		cursorSize=config.get('cursor',{}).get('size',"Normal")
 		if btn:
-			btn.setCurrentText(fontSize)
+			if isinstance(fontSize,str):
+				if fontSize.isalpha():
+					fontSize=11
+			btn.setValue(int(fontSize))
 		btn=self.widgets.get("cursor")
 		if btn:
 			btn.setCurrentText(cursorSize)
@@ -125,23 +140,17 @@ class lookandfeel(confStack):
 	def writeConfig(self):
 		for name,wdg in self.widgets.items():
 			if name=="font":
-				value=wdg.currentText()
-				size=11
-				minSize=9
-				inc=6
-				if value.lower()=="large":
-					size+=inc
-					minSize+=inc
-				if value.lower()=="extralarge":
-					size+=inc*2
-					minSize+=inc*2
-				self._debug("FONTS SIZE {0} to {1}".format(value,self.level))
-				self.saveChanges('fonts',{"size":value})
-				fixed="Hack,{0},-1,5,50,0,0,0,0,0".format(size)
-				font="Noto Sans,{0},-1,5,50,0,0,0,0,0".format(size)
-				menufont="Noto Sans,{0},-1,5,50,0,0,0,0,0".format(size)
-				smallestreadablefont="Noto Sans,{0},-1,5,50,0,0,0,0,0".format(minSize)
-				toolbarfont="Noto Sans,{0},-1,5,50,0,0,0,0,0".format(size)
+				size=wdg.value()
+				minSize=size-2
+				self._debug("FONTS SIZE {0} to {1}".format(size,self.level))
+				self.saveChanges('fonts',{"size":size})
+				fontFixed="Hack"
+				fontType="Noto Sans"
+				fixed="{0},{1},-1,5,50,0,0,0,0,0".format(fontFixed,size)
+				font="{0},{1},-1,5,50,0,0,0,0,0".format(fontType,size)
+				menufont="{0},{1},-1,5,50,0,0,0,0,0".format(fontType,size)
+				smallestreadablefont="{0},{1},-1,5,50,0,0,0,0,0".format(fontType,minSize)
+				toolbarfont="{0},{1},-1,5,50,0,0,0,0,0".format(fontType,size)
 				functionHelper._setKdeConfigSetting("General","fixed",fixed,"kdeglobals")
 				functionHelper._setKdeConfigSetting("General","font",font,"kdeglobals")
 				functionHelper._setKdeConfigSetting("General","menuFont",menufont,"kdeglobals")

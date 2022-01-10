@@ -3,7 +3,7 @@ from . import functionHelper
 from . import resolutionHelper
 import sys
 import os
-from PySide2.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QGridLayout,QLineEdit,QHBoxLayout,QComboBox,QCheckBox,QTabBar,QTabWidget,QTabBar,QTabWidget,QSlider,QToolTip
+from PySide2.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QGridLayout,QLineEdit,QHBoxLayout,QComboBox,QCheckBox,QTabBar,QTabWidget,QTabBar,QTabWidget,QSlider,QToolTip,QListWidget
 from PySide2 import QtGui
 from PySide2.QtCore import Qt,QSignalMapper
 from appconfig.appConfigStack import appConfigStack as confStack
@@ -23,7 +23,8 @@ i18n={
 	"FAMILY":_("Font family"),
 	"CURSORTHEME":_("Cursor theme"),
 	"CURSORSIZE":_("Cursor size"),
-	"RESOLUTION":_("Set resolution")
+	"RESOLUTION":_("Set resolution"),
+	"DEMO":_("Great A Tuin the turtle comes, swimming slowly through the interstellar gulf, hydrogen frost on his ponderous limbs, his huge and ancient shell pocked with meteor craters. Through sea-sized eyes that are crusted with rheum and asteroid dust He stares fixedly at the Destination.")
 	}
 
 class lookandfeel(confStack):
@@ -77,6 +78,14 @@ class lookandfeel(confStack):
 		self.box.addWidget(sldFont,0,1)
 		#self.widgets.update({"font":btn})
 		self.widgets.update({"font":sldFont})
+		self.box.addWidget(QLabel(i18n.get("FAMILY")),1,0)
+		lblDemo=QLabel(i18n.get("DEMO"))
+		lblDemo.setWordWrap(True)
+		self.box.addWidget(lblDemo,2,1,2,1)
+		lstFonts=QListWidget()
+		self.box.addWidget(lstFonts,2,0,1,1)
+		lblFontInfo=QLabel()
+		self.box.addWidget(lblFontInfo,3,0,1,1)
 
 		sldCursor=QSlider(Qt.Horizontal)
 		sldCursor.setTickPosition(sldCursor.TicksBothSides)
@@ -85,20 +94,9 @@ class lookandfeel(confStack):
 		sldCursor.setMaximum(120)
 		sldCursor.valueChanged.connect(_showTlCursor)		
 		sw_font=True
-		self.box.addWidget(QLabel(i18n.get("CURSORSIZE")),1,0)
-		self.box.addWidget(sldCursor,1,1)
+		self.box.addWidget(QLabel(i18n.get("CURSORSIZE")),4,0)
+		self.box.addWidget(sldCursor,4,1)
 		self.widgets.update({"cursor":sldCursor})
-
-		btn=QComboBox()
-		currentWidth,currentHeight=self.getCurrentResolution()
-		btn.addItem("{}".format(currentWidth))
-		btn.addItem("1024")
-		btn.addItem("1440")
-		btn.addItem("1920")
-		sw_font=True
-		self.box.addWidget(QLabel(i18n.get("RESOLUTION")),2,0)
-		self.box.addWidget(btn,2,1)
-		self.widgets.update({"res":btn})
 
 		for wrkFile in self.wrkFiles:
 			systemConfig=functionHelper.getSystemConfig(wrkFile=wrkFile)

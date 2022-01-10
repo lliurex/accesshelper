@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-13 19:11+0100\n"
+"POT-Creation-Date: 2022-01-10 12:52+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,28 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: ../src/accesshelp.py:74
+msgid ""
+"It's recommended to logout from session now\n"
+"in order of avoid inconsistencies"
+msgstr ""
+
+#: ../src/accesshelp.py:75 ../src/accesshelp.py:81
+msgid "Logout"
+msgstr ""
+
+#: ../src/accesshelp.py:84
+msgid "Later"
+msgstr ""
+
+#: ../src/accesshelp.py:141
+msgid "Profile not loaded: Autostart is disabled"
+msgstr ""
+
+#: ../src/accesshelp.py:150 ../src/stacks/profiles.py:24
+msgid "Profile loaded"
+msgstr ""
 
 #: ../src/stacks/access.py:17
 msgid "Colours"
@@ -37,7 +59,8 @@ msgstr ""
 msgid "Screen Options"
 msgstr ""
 
-#: ../src/stacks/access.py:22 ../src/stacks/hotkeys.py:16
+#: ../src/stacks/access.py:22 ../src/stacks/addHotkey.py:17
+#: ../src/stacks/hotkeys.py:16
 msgid "Keyboard Shortcuts"
 msgstr ""
 
@@ -45,10 +68,10 @@ msgstr ""
 msgid "Accessibility options"
 msgstr ""
 
-#: ../src/stacks/access.py:24 ../src/stacks/behavior.py:14
-#: ../src/stacks/hotkeys.py:18 ../src/stacks/lookandfeel.py:17
-#: ../src/stacks/profiles.py:15 ../src/stacks/screenreader.py:16
-#: ../src/stacks/settings.py:17
+#: ../src/stacks/access.py:24 ../src/stacks/addHotkey.py:19
+#: ../src/stacks/behavior.py:14 ../src/stacks/hotkeys.py:18
+#: ../src/stacks/lookandfeel.py:18 ../src/stacks/profiles.py:15
+#: ../src/stacks/screenreader.py:16 ../src/stacks/settings.py:17
 msgid "Configuration"
 msgstr ""
 
@@ -116,6 +139,50 @@ msgstr ""
 msgid "Track click"
 msgstr ""
 
+#: ../src/stacks/addHotkey.py:18 ../src/stacks/hotkeys.py:17
+msgid "hotkeys options"
+msgstr ""
+
+#: ../src/stacks/addHotkey.py:20
+msgid "Add hotkey"
+msgstr ""
+
+#: ../src/stacks/addHotkey.py:21
+msgid "Add a hotkey for an application, command or action"
+msgstr ""
+
+#: ../src/stacks/addHotkey.py:22
+msgid "Assign actions to keys"
+msgstr ""
+
+#: ../src/stacks/addHotkey.py:23
+msgid "Application from system"
+msgstr ""
+
+#: ../src/stacks/addHotkey.py:24
+msgid "Command-line order"
+msgstr ""
+
+#: ../src/stacks/addHotkey.py:25
+msgid "Desktop action"
+msgstr ""
+
+#: ../src/stacks/addHotkey.py:26
+msgid "Command"
+msgstr ""
+
+#: ../src/stacks/addHotkey.py:27
+msgid "Assign"
+msgstr ""
+
+#: ../src/stacks/addHotkey.py:28
+msgid "Press a key or key-combination for the shortcut"
+msgstr ""
+
+#: ../src/stacks/addHotkey.py:90
+msgid "Search"
+msgstr ""
+
 #: ../src/stacks/behavior.py:15
 msgid "Desktop behavior"
 msgstr ""
@@ -156,10 +223,6 @@ msgstr ""
 msgid "Set screen resolution"
 msgstr ""
 
-#: ../src/stacks/hotkeys.py:17
-msgid "hotkeys options"
-msgstr ""
-
 #: ../src/stacks/hotkeys.py:19
 msgid "Hotkeys configuration"
 msgstr ""
@@ -168,7 +231,7 @@ msgstr ""
 msgid "Set hotkeys for launch applications"
 msgstr ""
 
-#: ../src/stacks/hotkeys.py:21 ../src/stacks/lookandfeel.py:20
+#: ../src/stacks/hotkeys.py:21 ../src/stacks/lookandfeel.py:21
 msgid "From here you can set hotkeys for launch apps"
 msgstr ""
 
@@ -192,40 +255,48 @@ msgstr ""
 msgid "Show desktop"
 msgstr ""
 
-#: ../src/stacks/hotkeys.py:90
+#: ../src/stacks/hotkeys.py:124
 msgid "Add new"
 msgstr ""
 
-#: ../src/stacks/lookandfeel.py:16
+#: ../src/stacks/lookandfeel.py:17
 msgid "Look&Feel options"
 msgstr ""
 
-#: ../src/stacks/lookandfeel.py:18
+#: ../src/stacks/lookandfeel.py:19
 msgid "Look&Feel configuration"
 msgstr ""
 
-#: ../src/stacks/lookandfeel.py:19
+#: ../src/stacks/lookandfeel.py:20
 msgid "Modify appearence settings"
 msgstr ""
 
-#: ../src/stacks/lookandfeel.py:21
+#: ../src/stacks/lookandfeel.py:22
 msgid "Font size"
 msgstr ""
 
-#: ../src/stacks/lookandfeel.py:22
+#: ../src/stacks/lookandfeel.py:23
 msgid "Font family"
 msgstr ""
 
-#: ../src/stacks/lookandfeel.py:23
+#: ../src/stacks/lookandfeel.py:24
 msgid "Cursor theme"
 msgstr ""
 
-#: ../src/stacks/lookandfeel.py:24
+#: ../src/stacks/lookandfeel.py:25
 msgid "Cursor size"
 msgstr ""
 
-#: ../src/stacks/lookandfeel.py:25
+#: ../src/stacks/lookandfeel.py:26
 msgid "Set resolution"
+msgstr ""
+
+#: ../src/stacks/lookandfeel.py:27
+msgid ""
+"Great A Tuin the turtle comes, swimming slowly through the interstellar "
+"gulf, hydrogen frost on his ponderous limbs, his huge and ancient shell "
+"pocked with meteor craters. Through sea-sized eyes that are crusted with "
+"rheum and asteroid dust He stares fixedly at the Destination."
 msgstr ""
 
 #: ../src/stacks/profiles.py:16
@@ -260,11 +331,15 @@ msgstr ""
 msgid "Profile added to user's profiles"
 msgstr ""
 
-#: ../src/stacks/profiles.py:24
-msgid "Profile loaded"
+#: ../src/stacks/profiles.py:25
+msgid "Import profile"
 msgstr ""
 
-#: ../src/stacks/profiles.py:25
+#: ../src/stacks/profiles.py:26
+msgid "Export profile"
+msgstr ""
+
+#: ../src/stacks/profiles.py:27
 msgid "An error ocurred"
 msgstr ""
 
@@ -312,38 +387,42 @@ msgstr ""
 msgid "Autostart disabled for user"
 msgstr ""
 
-#: ../src/stacks/settings.py:46
+#: ../src/stacks/settings.py:23
+msgid "Autostart could not be disabled"
+msgstr ""
+
+#: ../src/stacks/settings.py:47
 msgid "The config will be applied per user"
 msgstr ""
 
-#: ../src/stacks/settings.py:48
+#: ../src/stacks/settings.py:49
 msgid "The config will be applied to all users"
 msgstr ""
 
-#: ../src/stacks/settings.py:50
+#: ../src/stacks/settings.py:51
 msgid "The config will be applied to all users and clients"
 msgstr ""
 
-#: ../src/stacks/settings.py:53
+#: ../src/stacks/settings.py:54
 msgid "Choose the config level that should use the app"
 msgstr ""
 
-#: ../src/stacks/settings.py:56
+#: ../src/stacks/settings.py:57
 msgid "User"
 msgstr ""
 
-#: ../src/stacks/settings.py:57
+#: ../src/stacks/settings.py:58
 msgid "System"
 msgstr ""
 
-#: ../src/stacks/settings.py:58
+#: ../src/stacks/settings.py:59
 msgid "N4d"
 msgstr ""
 
-#: ../src/stacks/settings.py:66
+#: ../src/stacks/settings.py:67
 msgid "Session settings"
 msgstr ""
 
-#: ../src/stacks/settings.py:69
+#: ../src/stacks/settings.py:70
 msgid "Load template on start"
 msgstr ""

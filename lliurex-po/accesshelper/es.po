@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-13 19:11+0100\n"
-"PO-Revision-Date: 2021-12-13 19:12+0100\n"
+"POT-Creation-Date: 2022-01-10 12:52+0100\n"
+"PO-Revision-Date: 2022-01-10 12:59+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es\n"
@@ -17,6 +17,28 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: ../src/accesshelp.py:74
+msgid ""
+"It's recommended to logout from session now\n"
+"in order of avoid inconsistencies"
+msgstr "Se recomienda terminar la sesión para evitar inconsistencias"
+
+#: ../src/accesshelp.py:75 ../src/accesshelp.py:81
+msgid "Logout"
+msgstr "Terminar"
+
+#: ../src/accesshelp.py:84
+msgid "Later"
+msgstr "Más tarde"
+
+#: ../src/accesshelp.py:141
+msgid "Profile not loaded: Autostart is disabled"
+msgstr "Perfil no cargado: El autoinicio esta desactivado"
+
+#: ../src/accesshelp.py:150 ../src/stacks/profiles.py:24
+msgid "Profile loaded"
+msgstr "Perfil cargado"
 
 #: ../src/stacks/access.py:17
 msgid "Colours"
@@ -38,7 +60,8 @@ msgstr "Ayudas visuales"
 msgid "Screen Options"
 msgstr "Opciones de pantalla"
 
-#: ../src/stacks/access.py:22 ../src/stacks/hotkeys.py:16
+#: ../src/stacks/access.py:22 ../src/stacks/addHotkey.py:17
+#: ../src/stacks/hotkeys.py:16
 msgid "Keyboard Shortcuts"
 msgstr "Atajos de teclado"
 
@@ -46,10 +69,10 @@ msgstr "Atajos de teclado"
 msgid "Accessibility options"
 msgstr "Accesibilidad"
 
-#: ../src/stacks/access.py:24 ../src/stacks/behavior.py:14
-#: ../src/stacks/hotkeys.py:18 ../src/stacks/lookandfeel.py:17
-#: ../src/stacks/profiles.py:15 ../src/stacks/screenreader.py:16
-#: ../src/stacks/settings.py:17
+#: ../src/stacks/access.py:24 ../src/stacks/addHotkey.py:19
+#: ../src/stacks/behavior.py:14 ../src/stacks/hotkeys.py:18
+#: ../src/stacks/lookandfeel.py:18 ../src/stacks/profiles.py:15
+#: ../src/stacks/screenreader.py:16 ../src/stacks/settings.py:17
 msgid "Configuration"
 msgstr "Configuración"
 
@@ -117,6 +140,50 @@ msgstr "Localizar ratón al moverlo"
 msgid "Track click"
 msgstr "Localizar ratón al pulsar"
 
+#: ../src/stacks/addHotkey.py:18 ../src/stacks/hotkeys.py:17
+msgid "hotkeys options"
+msgstr "opciones de atajos"
+
+#: ../src/stacks/addHotkey.py:20
+msgid "Add hotkey"
+msgstr "Añadir atajo"
+
+#: ../src/stacks/addHotkey.py:21
+msgid "Add a hotkey for an application, command or action"
+msgstr "Asocia combinaciones de teclas con aplicaciones"
+
+#: ../src/stacks/addHotkey.py:22
+msgid "Assign actions to keys"
+msgstr "Asigna acciones a atajos"
+
+#: ../src/stacks/addHotkey.py:23
+msgid "Application from system"
+msgstr "Aplicación del sistema"
+
+#: ../src/stacks/addHotkey.py:24
+msgid "Command-line order"
+msgstr "Orden de línea de comandos"
+
+#: ../src/stacks/addHotkey.py:25
+msgid "Desktop action"
+msgstr "Acción del escritorio"
+
+#: ../src/stacks/addHotkey.py:26
+msgid "Command"
+msgstr "Comando"
+
+#: ../src/stacks/addHotkey.py:27
+msgid "Assign"
+msgstr "Asignar"
+
+#: ../src/stacks/addHotkey.py:28
+msgid "Press a key or key-combination for the shortcut"
+msgstr "Pulsa una tecla o combincación de ellas para el atajo"
+
+#: ../src/stacks/addHotkey.py:90
+msgid "Search"
+msgstr "Buscar"
+
 #: ../src/stacks/behavior.py:15
 msgid "Desktop behavior"
 msgstr "Comportamiento del escritoro"
@@ -157,10 +224,6 @@ msgstr "Actiones en la esquina superior izquierda"
 msgid "Set screen resolution"
 msgstr "Resolución de pantalla"
 
-#: ../src/stacks/hotkeys.py:17
-msgid "hotkeys options"
-msgstr "opciones de atajos"
-
 #: ../src/stacks/hotkeys.py:19
 msgid "Hotkeys configuration"
 msgstr "Configuración de atajos"
@@ -169,7 +232,7 @@ msgstr "Configuración de atajos"
 msgid "Set hotkeys for launch applications"
 msgstr "Asocia combinaciones de teclas con aplicaciones"
 
-#: ../src/stacks/hotkeys.py:21 ../src/stacks/lookandfeel.py:20
+#: ../src/stacks/hotkeys.py:21 ../src/stacks/lookandfeel.py:21
 msgid "From here you can set hotkeys for launch apps"
 msgstr "Permite asociar pulsaciones de tecla a diferentes acciones del sistema"
 
@@ -193,41 +256,54 @@ msgstr "Abrir lanzador de aplicaciones"
 msgid "Show desktop"
 msgstr "Mostrar escritorio"
 
-#: ../src/stacks/hotkeys.py:90
+#: ../src/stacks/hotkeys.py:124
 msgid "Add new"
 msgstr "Añadir"
 
-#: ../src/stacks/lookandfeel.py:16
+#: ../src/stacks/lookandfeel.py:17
 msgid "Look&Feel options"
 msgstr "Apariencia visual"
 
-#: ../src/stacks/lookandfeel.py:18
+#: ../src/stacks/lookandfeel.py:19
 msgid "Look&Feel configuration"
 msgstr "Configuración de la apariencia visual"
 
-#: ../src/stacks/lookandfeel.py:19
+#: ../src/stacks/lookandfeel.py:20
 msgid "Modify appearence settings"
 msgstr "Modifica la apariencia del sistema"
 
-#: ../src/stacks/lookandfeel.py:21
+#: ../src/stacks/lookandfeel.py:22
 msgid "Font size"
 msgstr "Tamaño de fuente"
 
-#: ../src/stacks/lookandfeel.py:22
+#: ../src/stacks/lookandfeel.py:23
 msgid "Font family"
 msgstr "Familia"
 
-#: ../src/stacks/lookandfeel.py:23
+#: ../src/stacks/lookandfeel.py:24
 msgid "Cursor theme"
 msgstr "Tema del cursor"
 
-#: ../src/stacks/lookandfeel.py:24
+#: ../src/stacks/lookandfeel.py:25
 msgid "Cursor size"
 msgstr "Tamaño del cursor"
 
-#: ../src/stacks/lookandfeel.py:25
+#: ../src/stacks/lookandfeel.py:26
 msgid "Set resolution"
 msgstr "Resolución"
+
+#: ../src/stacks/lookandfeel.py:27
+msgid ""
+"Great A Tuin the turtle comes, swimming slowly through the interstellar "
+"gulf, hydrogen frost on his ponderous limbs, his huge and ancient shell "
+"pocked with meteor craters. Through sea-sized eyes that are crusted with "
+"rheum and asteroid dust He stares fixedly at the Destination."
+msgstr ""
+"La Gran Tortuga A'Tuin se acerca, nadando lentamente por el golfo "
+"interestelar, con los pesados miembros llenos de hidrógeno congelado, la "
+"enorme y viejísima concha llena de cráteres de meteoros. Con unos ojos del "
+"tamaño de mares, encostrados de lágrimas reumáticas y polvo de asteroides, "
+"Él contempla fijamente el Destino."
 
 #: ../src/stacks/profiles.py:16
 msgid "Manage profiles"
@@ -261,11 +337,15 @@ msgstr "Perfil añadido al sistema"
 msgid "Profile added to user's profiles"
 msgstr "Perfil añadido al usuario"
 
-#: ../src/stacks/profiles.py:24
-msgid "Profile loaded"
-msgstr "Perfil cargado"
-
 #: ../src/stacks/profiles.py:25
+msgid "Import profile"
+msgstr "Cargar"
+
+#: ../src/stacks/profiles.py:26
+msgid "Export profile"
+msgstr "Guardar"
+
+#: ../src/stacks/profiles.py:27
 msgid "An error ocurred"
 msgstr "Oucrrió un error"
 
@@ -307,44 +387,48 @@ msgstr "Elige la plantilla por defecto, arranque al inicio..."
 
 #: ../src/stacks/settings.py:21
 msgid "Autostart enabled for user"
-msgstr "Autoarranque activado para el usuario"
+msgstr "Autoinicio activado para el usuario"
 
 #: ../src/stacks/settings.py:22
 msgid "Autostart disabled for user"
-msgstr "Autoarranque desactivado para el usuario"
+msgstr "Autoinicio desactivado para el usuario"
 
-#: ../src/stacks/settings.py:46
+#: ../src/stacks/settings.py:23
+msgid "Autostart could not be disabled"
+msgstr "No se pudo desactivar el autoinicio"
+
+#: ../src/stacks/settings.py:47
 msgid "The config will be applied per user"
 msgstr "La configuracion se aplicara a cada usuario"
 
-#: ../src/stacks/settings.py:48
+#: ../src/stacks/settings.py:49
 msgid "The config will be applied to all users"
 msgstr "La configuración se aplicará a todos los usuarios"
 
-#: ../src/stacks/settings.py:50
+#: ../src/stacks/settings.py:51
 msgid "The config will be applied to all users and clients"
 msgstr "La configuración se aplicará a todos los usuarios y clientes"
 
-#: ../src/stacks/settings.py:53
+#: ../src/stacks/settings.py:54
 msgid "Choose the config level that should use the app"
 msgstr "Elige el nivel de configuración"
 
-#: ../src/stacks/settings.py:56
+#: ../src/stacks/settings.py:57
 msgid "User"
 msgstr "Usuario/a"
 
-#: ../src/stacks/settings.py:57
+#: ../src/stacks/settings.py:58
 msgid "System"
 msgstr "Sistema"
 
-#: ../src/stacks/settings.py:58
+#: ../src/stacks/settings.py:59
 msgid "N4d"
 msgstr "N4d"
 
-#: ../src/stacks/settings.py:66
+#: ../src/stacks/settings.py:67
 msgid "Session settings"
 msgstr "Opciones de sesión"
 
-#: ../src/stacks/settings.py:69
+#: ../src/stacks/settings.py:70
 msgid "Load template on start"
 msgstr "Cargar plantilla al incio"

@@ -36,7 +36,7 @@ class lookandfeel(confStack):
 		self.icon=('preferences-desktop-theme')
 		self.tooltip=i18n.get('TOOLTIP')
 		self.index=3
-		self.enabled=True
+		self.enabled=False
 		self.defaultRepos={}
 		self.changed=[]
 		self.config={}
@@ -97,12 +97,29 @@ class lookandfeel(confStack):
 		self.box.addWidget(QLabel(i18n.get("CURSORSIZE")),4,0)
 		self.box.addWidget(sldCursor,4,1)
 		self.widgets.update({"cursor":sldCursor})
-
+		self.box.addWidget(QLabel(i18n.get("CURSORTHEME")),5,0)
+		lblInfo=QLabel("")
+		lblInfo.setWordWrap(True)
+		self.box.addWidget(lblInfo,6,1,2,1)
+		lstCursors=QListWidget()
+		self.box.addWidget(lstCursors,6,0,1,1)
+		lblCursorInfo=QLabel()
+		self.box.addWidget(lblCursorInfo,7,0,1,1)
 		for wrkFile in self.wrkFiles:
 			systemConfig=functionHelper.getSystemConfig(wrkFile=wrkFile)
 			self.sysConfig.update(systemConfig)
+		self._loadCursors()
 		self.updateScreen()
 	#def _load_screen
+
+	def _loadCursors(self):
+		cursorTheme=os.environ.get("XCURSOR_THEME")
+		cursorPath=os.path.join("/usr/share/icons",cursorTheme,"cursors")
+		if os.path.isdir(cursorPath):
+			for f in os.listdir(cursorPath):
+				if os.path.isfile(os.path.join(cursorPath,f)):
+					qpx=QtGui.QPixmap(os.path.join(cursorPath,f))
+					print("- {}".format(qpx))
 
 	def updateScreen(self):
 		self.config=self.getConfig()

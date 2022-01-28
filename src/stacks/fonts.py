@@ -3,9 +3,9 @@ from . import functionHelper
 from . import resolutionHelper
 import sys
 import os
-from PySide2.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QGridLayout,QLineEdit,QHBoxLayout,QComboBox,QCheckBox,QTabBar,QTabWidget,QTabBar,QTabWidget,QSlider,QToolTip,QListWidget,QFontDialog
+from PySide2.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QGridLayout,QLineEdit,QHBoxLayout,QComboBox,QCheckBox,QTabBar,QTabWidget,QTabBar,QTabWidget,QSlider,QToolTip,QListWidget,QFontDialog,QGroupBox,QListView
 from PySide2 import QtGui
-from PySide2.QtCore import Qt,QSignalMapper
+from PySide2.QtCore import Qt,QSignalMapper,QEvent
 from appconfig.appConfigStack import appConfigStack as confStack
 import gettext
 _ = gettext.gettext
@@ -48,34 +48,76 @@ class fonts(confStack):
 	def _load_screen(self):
 		self.box=QGridLayout()
 		self.setLayout(self.box)
-		dlgFont=QFontDialog()
+		for wrkFile in self.wrkFiles:
+			systemConfig=functionHelper.getSystemConfig(wrkFile=wrkFile)
+			self.sysConfig.update(systemConfig)
+		kdevalues=self.sysConfig.get('kdeglobals',{}).get('General',[])
+		font=''
+		for value in kdevalues:
+			if isinstance(value,tuple):
+				if value[0]=='font':
+					font=value[1]
+					break
+		dlgFont=QFontDialog(font)
+		#Embed in window
 		dlgFont.setWindowFlags(Qt.Widget)
 		dlgFont.setOptions(dlgFont.NoButtons)
-		dlgFont.currentFontChanged.connect(self._dlgChange)
+		#dlgFont.currentFontChanged.connect(self._dlgChange)
+		#Customize widget
+		for chld in dlgFont.findChildren(QGroupBox):
+			for groupChld in chld.findChildren(QCheckBox):
+				chld.hide()
+				break
 
 		row,col=(0,0)
 		self.box.addWidget(dlgFont)
-		sigmap_run=QSignalMapper(self)
-		sigmap_run.mapped[QString].connect(self._updateConfig)
+		#sigmap_run=QSignalMapper(self)
+		#sigmap_run.mapped[QString].connect(self._updateConfig)
 		self.widgets={}
 		self.widgets.update({"font":dlgFont})
 		self.config=self.getConfig()
 		config=self.config.get(self.level,{})
-		for wrkFile in self.wrkFiles:
-			systemConfig=functionHelper.getSystemConfig(wrkFile=wrkFile)
-			self.sysConfig.update(systemConfig)
 		self.updateScreen()
 	#def _load_screen
 
-	def _dlgChange(self,*args):
+	def setChanged(self,*args):
 		self.btn_ok.setEnabled(True)
 		self.btn_cancel.setEnabled(True)
 		self.changes=True
+	#def _dlgChange(self,*args):
 
 	def updateScreen(self):
 		self.config=self.getConfig()
+		kdevalues=self.sysConfig.get('kdeglobals',{}).get('General',[])
+		for value in kdevalues:
+			if isinstance(value,tuple):
+				if value[0]=='font':
+					font=value[1]
+					break
+		qfont=QtGui.QFont(font)
+		dlgFont=self.widgets.get('font')
+		dlgFont.setCurrentFont(font)
+		#fix listview selections
+		style=font.split(",")[-1]
+		for chld in dlgFont.findChildren(QListView):
+			sw_alpha=True
+			model=chld.model()
+			if style.isalpha():
+				for row in range(model.rowCount()):
+					index=model.index(row,0)
+					data=model.data(index)
+					if data==style:
+						chld.setCurrentIndex(index)
+						break
+					elif data.isalpha==False:
+						sw_alpha=False
+						break
+				if sw_alpha==False:
+					break
+			chld.scrollTo(chld.currentIndex())
+		for chld in dlgFont.findChildren(QComboBox):
+			chld.setCurrentIndex(1)
 		config=self.config.get(self.level,{})
-		pass
 	#def _udpate_screen
 
 	def _updateConfig(self,key):

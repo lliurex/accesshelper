@@ -250,6 +250,8 @@ class access(confStack):
 		self.sysConfig["kglobalshortcutsrc"]={}
 		for desc,widget in self.widgets.items():
 			if isinstance(widget,QPushButton):
+					print(desc)
+					(mainHk,hkData,hkSetting,hkSection)=functionHelper.getHotkey(desc)
 					newHk=widget.text()
 					if newHk!=mainHk:
 						hkData=hkData.split(",")

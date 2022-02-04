@@ -19,12 +19,11 @@ i18n={
 	"DESCRIPTION":_("Look&Feel configuration"),
 	"MENUDESCRIPTION":_("Modify appearence settings"),
 	"TOOLTIP":_("From here you can set hotkeys for launch apps"),
-	"FONTSIZE":_("Font size"),
-	"FAMILY":_("Font family"),
+	"THEME":_("Desktop theme"),
+	"COLOURS":_("Theme colours"),
 	"CURSORTHEME":_("Cursor theme"),
 	"CURSORSIZE":_("Cursor size"),
 	"RESOLUTION":_("Set resolution"),
-	"DEMO":_("Great A Tuin the turtle comes, swimming slowly through the interstellar gulf, hydrogen frost on his ponderous limbs, his huge and ancient shell pocked with meteor craters. Through sea-sized eyes that are crusted with rheum and asteroid dust He stares fixedly at the Destination.")
 	}
 
 class lookandfeel(confStack):
@@ -35,7 +34,7 @@ class lookandfeel(confStack):
 		self.description=i18n.get('DESCRIPTION')
 		self.icon=('preferences-desktop-theme')
 		self.tooltip=i18n.get('TOOLTIP')
-		self.index=3
+		self.index=7
 		self.enabled=True
 		self.defaultRepos={}
 		self.changed=[]
@@ -48,13 +47,6 @@ class lookandfeel(confStack):
 	#def __init__
 
 	def _load_screen(self):
-		def _showTlFont():
-			sldFont.setToolTip("{}".format(sldFont.value()))
-			QToolTip.showText(QtGui.QCursor.pos(),"{}".format(sldFont.value()))
-		def _showTlCursor():
-			sldCursor.setToolTip("{}".format(sldCursor.value()))
-			QToolTip.showText(QtGui.QCursor.pos(),"{}".format(sldCursor.value()))
-
 		self.box=QGridLayout()
 		self.setLayout(self.box)
 		row,col=(0,0)

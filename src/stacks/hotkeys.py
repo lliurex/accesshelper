@@ -128,7 +128,7 @@ class hotkeys(confStack):
 	#def _load_screen
 
 	def _addHotkey(self,*args):
-		self.stack.gotoStack(idx=7,parms="")
+		self.stack.gotoStack(idx=17,parms="")
 
 	def _grab_alt_keys(self,*args):
 		desc=''

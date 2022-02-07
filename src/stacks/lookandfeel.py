@@ -3,7 +3,8 @@ from . import functionHelper
 from . import resolutionHelper
 import sys
 import os
-from PySide2.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QGridLayout,QLineEdit,QHBoxLayout,QComboBox,QCheckBox,QTabBar,QTabWidget,QTabBar,QTabWidget
+import subprocess
+from PySide2.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QGridLayout,QLineEdit,QHBoxLayout,QComboBox,QCheckBox,QTabBar,QTabWidget,QTabBar,QTabWidget,QSlider,QToolTip,QListWidget
 from PySide2 import QtGui
 from PySide2.QtCore import Qt,QSignalMapper
 from appconfig.appConfigStack import appConfigStack as confStack
@@ -19,11 +20,12 @@ i18n={
 	"DESCRIPTION":_("Look&Feel configuration"),
 	"MENUDESCRIPTION":_("Modify appearence settings"),
 	"TOOLTIP":_("From here you can set hotkeys for launch apps"),
-	"FONTSIZE":_("Font size"),
-	"FAMILY":_("Font family"),
+	"THEME":_("Desktop theme"),
+	"SCHEME":_("Colour scheme"),
+	"COLOURS":_("Theme colours"),
 	"CURSORTHEME":_("Cursor theme"),
 	"CURSORSIZE":_("Cursor size"),
-	"RESOLUTION":_("Set resolution")
+	"RESOLUTION":_("Set resolution"),
 	}
 
 class lookandfeel(confStack):
@@ -33,14 +35,15 @@ class lookandfeel(confStack):
 		self.menu_description=i18n.get('MENUDESCRIPTION')
 		self.description=i18n.get('DESCRIPTION')
 		self.icon=('preferences-desktop-theme')
+		self.themesDir="/usr/share/plasma/desktoptheme"
 		self.tooltip=i18n.get('TOOLTIP')
-		self.index=3
+		self.index=2
 		self.enabled=True
 		self.defaultRepos={}
 		self.changed=[]
 		self.config={}
 		self.sysConfig={}
-		self.wrkFiles=["kdeglobals","kcminputrc","konsolerc"]
+		self.wrkFiles=["kdeglobals","kcmimputrc"]
 		self.blockSettings={}
 		self.wantSettings={"kdeglobals":["General"]}
 		self.optionChanged=[]
@@ -53,64 +56,74 @@ class lookandfeel(confStack):
 		sigmap_run=QSignalMapper(self)
 		sigmap_run.mapped[QString].connect(self._updateConfig)
 		self.widgets={}
-		self.config=self.getConfig()
 		config=self.config.get(self.level,{})
-		fontSize=config.get('fonts',{}).get('size',"Normal")
-		cursorSize=config.get('cursor',{}).get('size',"Normal")
+		self.config=self.getConfig()
 
-		btn=QComboBox()
-		btn.addItem("Normal")
-		btn.addItem("Large")
-		btn.addItem("Extralarge")
-		btn.setCurrentText(fontSize)
-		sw_font=True
-		self.box.addWidget(QLabel(i18n.get("FONTSIZE")),0,0)
-		self.box.addWidget(btn,0,1)
-		self.widgets.update({"font":btn})
+		self.box.addWidget(QLabel(i18n.get("THEME")),0,0,1,1)
+		cmbTheme=QComboBox()
+		self.widgets.update({'theme':cmbTheme})
+		self.box.addWidget(cmbTheme,0,1,1,1)
 
-		btn=QComboBox()
-		btn.addItem("Normal")
-		btn.addItem("Large")
-		btn.addItem("Extralarge")
-		btn.setCurrentText(cursorSize)
-		sw_font=True
-		self.box.addWidget(QLabel(i18n.get("CURSORSIZE")),1,0)
-		self.box.addWidget(btn,1,1)
-		self.widgets.update({"cursor":btn})
+		self.box.addWidget(QLabel(i18n.get("SCHEME")),1,0,1,1)
+		cmbScheme=QComboBox()
+		self.widgets.update({'scheme':cmbScheme})
+		self.box.addWidget(cmbScheme,1,1,1,1)
 
-		btn=QComboBox()
-		currentWidth,currentHeight=self.getCurrentResolution()
-		btn.addItem("{}".format(currentWidth))
-		btn.addItem("1024")
-		btn.addItem("1440")
-		btn.addItem("1920")
-		sw_font=True
-		self.box.addWidget(QLabel(i18n.get("RESOLUTION")),2,0)
-		self.box.addWidget(btn,2,1)
-		self.widgets.update({"res":btn})
+		self.box.addWidget(QLabel(i18n.get("CURSORTHEME")),2,0,1,1)
+		cmbCursor=QComboBox()
+		self.widgets.update({'cursor':cmbCursor})
+		self.box.addWidget(cmbCursor,2,1,1,1)
 
-		for wrkFile in self.wrkFiles:
-			systemConfig=functionHelper.getSystemConfig(wrkFile=wrkFile)
-			self.sysConfig.update(systemConfig)
+		self.box.addWidget(QLabel(i18n.get("CURSORSIZE")),3,0,1,1)
+		cmbCursorSize=QComboBox()
+		self.widgets.update({'cursorSize':cmbCursorSize})
+		self.box.addWidget(cmbCursorSize,3,1,1,1)
+		cmbCursorSize.addItem("32")
+		cmbCursorSize.addItem("48")
+		cmbCursorSize.addItem("64")
+		cmbCursorSize.addItem("80")
+		cmbCursorSize.addItem("96")
+		cmbCursorSize.addItem("112")
+		cmbCursorSize.addItem("128")
+
 		self.updateScreen()
 	#def _load_screen
 
 	def updateScreen(self):
+		for wrkFile in self.wrkFiles:
+			systemConfig=functionHelper.getSystemConfig(wrkFile=wrkFile)
+			self.sysConfig.update(systemConfig)
 		self.config=self.getConfig()
+		theme=""
+		for value in self.sysConfig.get("kdeglobals",{}).get("General",[]):
+			if value[0]=="Name":
+				theme=value[1]
+		for cmbDesc in self.widgets.keys():
+			cmb=self.widgets.get(cmbDesc,"")
+			if isinstance(cmb,QComboBox):
+				if cmbDesc=="cursorSize":
+					cursorSize=32
+					cursorSettings=self.sysConfig.get('kcminputrc',{}).get('Mouse',[])
+					for setting in cursorSettings:
+						if isinstance(setting,tuple):
+							if setting[0]=="cursorSize":
+								cursorSize=setting[1]
+					if cmb.findText(cursorSize)==-1:
+						cmb.insertItem(0,cursorSize)
+					cmb.setCurrentText(cursorSize)
+				else:
+					if cmbDesc=="theme":
+						themes=self._getThemeList()
+					if cmbDesc=="scheme":
+						themes=self._getSchemeList()
+					if cmbDesc=="cursor":
+						themes=self._getCursorList()
+					for theme in themes:
+						if cmb.findText(theme)==-1:
+							cmb.addItem(theme)
+							if "(" in theme:
+								cmb.setCurrentText(theme)
 		config=self.config.get(self.level,{})
-		fontSize=config.get('fonts',{}).get('size',"Normal")
-		btn=self.widgets.get("font")
-		cursorSize=config.get('cursor',{}).get('size',"Normal")
-		if btn:
-			btn.setCurrentText(fontSize)
-		btn=self.widgets.get("cursor")
-		if btn:
-			btn.setCurrentText(cursorSize)
-		currentWidth,currentHeight=self.getCurrentResolution()
-		btn=self.widgets.get("res")
-		if btn:
-			btn.setCurrentText(str(currentWidth))
-		pass
 	#def _udpate_screen
 
 	def _updateConfig(self,key):
@@ -118,101 +131,98 @@ class lookandfeel(confStack):
 		#	if key in self.kwinMethods:
 		#		self._exeKwinMethod(key) 
 	
-	def getCurrentResolution(self):
-		rH=resolutionHelper.kscreenDbus()
-		return(rH.getCurrentResolution())
-
 	def writeConfig(self):
-		for name,wdg in self.widgets.items():
-			if name=="font":
-				value=wdg.currentText()
-				size=11
-				minSize=9
-				inc=6
-				if value.lower()=="large":
-					size+=inc
-					minSize+=inc
-				if value.lower()=="extralarge":
-					size+=inc*2
-					minSize+=inc*2
-				self._debug("FONTS SIZE {0} to {1}".format(value,self.level))
-				self.saveChanges('fonts',{"size":value})
-				fixed="Hack,{0},-1,5,50,0,0,0,0,0".format(size)
-				font="Noto Sans,{0},-1,5,50,0,0,0,0,0".format(size)
-				menufont="Noto Sans,{0},-1,5,50,0,0,0,0,0".format(size)
-				smallestreadablefont="Noto Sans,{0},-1,5,50,0,0,0,0,0".format(minSize)
-				toolbarfont="Noto Sans,{0},-1,5,50,0,0,0,0,0".format(size)
-				functionHelper._setKdeConfigSetting("General","fixed",fixed,"kdeglobals")
-				functionHelper._setKdeConfigSetting("General","font",font,"kdeglobals")
-				functionHelper._setKdeConfigSetting("General","menuFont",menufont,"kdeglobals")
-				functionHelper._setKdeConfigSetting("General","smallestReadableFont",smallestreadablefont,"kdeglobals")
-				functionHelper._setKdeConfigSetting("General","toolBarFont",toolbarfont,"kdeglobals")
-				functionHelper._setKdeConfigSetting("Appearance","Font",fixed,"Lliurex.profile")
-				self._setMozillaFirefoxFonts(size)
-			elif name=="cursor":
-				value=wdg.currentText()
-				size=24
-				inc=12
-				if value.lower()=="large":
-					size+=inc
-				if value.lower()=="extralarge":
-					size+=inc*2
-				self.saveChanges('cursor',{"size":value})
-				functionHelper._setKdeConfigSetting("Mouse","cursorSize","{}".format(size),"kcminputrc")
-			elif name=="res":
-				w=wdg.currentText()
-				self.config=self.getConfig()
-				currentw=self.config.get(self.level,{}).get("resolution","")
-				if currentw!=w:
-					if w=="1920":
-						h=1080
-					elif w=="1440":
-						h=900
-					elif w=="1024":
-						h=768
-					else:
-						h=int((w*9)/16)
-					h=str(h)
-					self._debug("Setting resolution to {} {}".format(w,h))
-					rH=resolutionHelper.kscreenDbus()
-					config=rH.getConfig()
-					modeId=rH.getResolutionMode(config,w,h)
-					if modeId:
-						rH.setResolution(config,modeId)
-
-					self.saveChanges('resolution',w)
+		#self.saveChanges('fonts',{"size":size})
 		self.optionChanged=[]
 		self.refresh=True
+		for cmbDesc in self.widgets.keys():
+			cmb=self.widgets.get(cmbDesc,"")
+			if isinstance(cmb,QComboBox):
+				theme=cmb.currentText()
+				theme=theme.split("(")[0].strip()
+				if cmbDesc=="theme":
+					self._setTheme(theme)
+				if cmbDesc=="scheme":
+					self._setScheme(theme)
+				if cmbDesc=="cursor":
+					self._setCursor(theme)
+				if cmbDesc=="cursorSize":
+					self._setCursorSize(cmb.currentText())
 		f=open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'w')
 		f.close()
 	#def writeConfig
 
-	def _setMozillaFirefoxFonts(self,size):
-		size+=7 #Firefox font size is smallest.
-		mozillaDir=os.path.join(os.environ.get('HOME',''),".mozilla/firefox")
-		for mozillaF in os.listdir(mozillaDir):
-			self._debug("Reading MOZILLA {}".format(mozillaF))
-			fPath=os.path.join(mozillaDir,mozillaF)
-			if os.path.isdir(fPath):
-				self._debug("Reading DIR {}".format(mozillaF))
-				if "." in mozillaF:
-					self._debug("Reading DIR {}".format(mozillaF))
-					prefs=os.path.join(mozillaDir,mozillaF,"prefs.js")
-					if os.path.isfile(prefs):
-						with open(prefs,'r') as f:
-							lines=f.readlines()
-						newLines=[]
-						for line in lines:
-							if line.startswith('user_pref("font.minimum-size.x-unicode"'):
-								continue
-							elif line.startswith('user_pref("font.minimum-size.x-western"'):
-								continue
-							newLines.append(line)
-						line='user_pref("font.minimum-size.x-western", {});\n'.format(size)
-						newLines.append(line)
-						line='user_pref("font.minimum-size.x-unicode", {});\n'.format(size)
-						newLines.append(line)
-						self._debug("Writting MOZILLA {}".format(mozillaF))
-						with open(os.path.join(mozillaDir,mozillaF,"prefs.js"),'w') as f:
-							f.writelines(newLines)
-	#def _setMozillaFirefoxFonts
+	def _getThemeList(self):
+		availableThemes=[]
+		themes=""
+		try:
+			themes=subprocess.run(["plasma-apply-desktoptheme","--list-themes"],stdout=subprocess.PIPE)
+		except Exception as e:
+			print(e)
+		if themes:
+			out=themes.stdout.decode()
+			for line in out.split("\n"):
+				theme=line.strip()
+				if theme.startswith("*"):
+					availableThemes.append(theme.replace("*","").strip())
+		return (availableThemes)
+	#def _getThemeList
+
+	def _getSchemeList(self):
+		availableSchemes=[]
+		schemes=""
+		try:
+			schemes=subprocess.run(["plasma-apply-colorscheme","--list-schemes"],stdout=subprocess.PIPE)
+		except Exception as e:
+			print(e)
+		if schemes:
+			out=schemes.stdout.decode()
+			for line in out.split("\n"):
+				scheme=line.strip()
+				if scheme.startswith("*"):
+					availableSchemes.append(scheme.replace("*","").strip())
+		return (availableSchemes)
+	#def _getSchemeList
+
+	def _getCursorList(self):
+		availableThemes=[]
+		themes=""
+		try:
+			themes=subprocess.run(["plasma-apply-cursortheme","--list-themes"],stdout=subprocess.PIPE)
+		except Exception as e:
+			print(e)
+		if themes:
+			out=themes.stdout.decode()
+			for line in out.split("\n"):
+				theme=line.strip()
+				if theme.startswith("*"):
+					availableThemes.append(theme.replace("*","").strip())
+		return (availableThemes)
+	#def _getCursorList
+
+	def _setTheme(self,theme):
+		try:
+			subprocess.run(["plasma-apply-desktoptheme",theme],stdout=subprocess.PIPE)
+		except Exception as e:
+			print(e)
+	#def _setTheme
+
+	def _setScheme(self,theme):
+		try:
+			subprocess.run(["plasma-apply-colorscheme",theme],stdout=subprocess.PIPE)
+		except Exception as e:
+			print(e)
+	#def _setScheme
+
+	def _setCursor(self,theme):
+		try:
+			subprocess.run(["plasma-apply-cursortheme",theme],stdout=subprocess.PIPE)
+		except Exception as e:
+			print(e)
+	#def _setCursor
+
+	def _setCursorSize(self,size):
+		self.saveChanges('cursor',{"size":size})
+		functionHelper._setKdeConfigSetting("Mouse","cursorSize","{}".format(size),"kcminputrc")
+	#def _setCursorSize(self):
+

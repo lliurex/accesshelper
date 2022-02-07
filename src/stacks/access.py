@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 import sys
 import os
-from PySide2.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QGridLayout,QLineEdit,QHBoxLayout,QComboBox,QCheckBox,QListWidget,QSizePolicy
+from PySide2.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QGridLayout,QLineEdit,QHBoxLayout,QComboBox,QCheckBox,QListWidget,QSizePolicy,QRadioButton
 from PySide2 import QtGui
 from PySide2.QtCore import Qt,Signal,QSignalMapper,QEvent
 from appconfig.appConfigStack import appConfigStack as confStack
@@ -88,27 +88,37 @@ class access(confStack):
 				want=self.wantSettings.get(kfile,[])
 				block=self.blockSettings.get(kfile,[])
 				for section,settings in sections.items():
+					zoomOptions=[]
 					for setting in settings:
 						(name,data)=setting
 						if name in block or (len(want)>0 and name not in want):
 							continue
+						if name.upper() in ["MAGNIFIERENABLED","ZOOMENABLED"]:
+							zoomOptions.append(setting)
+							continue
 						desc=i18n.get(name.upper(),name)
-						lbl=QLabel(desc)
-						if (data.lower() in ("true","false")) or (data==''):
-							btn=QCheckBox(desc)
-							self.widgets.update({name:btn})
-							self.box.addWidget(btn,row,col)
-							col+=1
-							(mainHk,hkData,hkSetting,hkSection)=functionHelper.getHotkey(name)
-							if mainHk:
-								btn=QPushButton(mainHk)
-								self.widgets.update({mainHk:btn})
-								self.widgetsText.update({btn:{'mainHk':mainHk,'hkData':hkData,'hkSetting':hkSetting,'hkSection':hkSection}})
-								self.box.addWidget(btn,row,col,Qt.Alignment(1))
-							col+=1
-							if col==2:
-								row+=1
-								col=0
+						btn=QCheckBox(desc)
+						self.widgets.update({name:btn})
+						self.box.addWidget(btn,row,col)
+						col+=1
+						(mainHk,hkData,hkSetting,hkSection)=functionHelper.getHotkey(name)
+						if mainHk:
+							btn=QPushButton(mainHk)
+							self.widgets.update({mainHk:btn})
+							self.widgetsText.update({btn:{'mainHk':mainHk,'hkData':hkData,'hkSetting':hkSetting,'hkSection':hkSection}})
+							self.box.addWidget(btn,row,col,Qt.Alignment(1))
+						col+=1
+						if col==2:
+							row+=1
+							col=0
+					for setting in zoomOptions:
+						(name,data)=setting
+						desc=i18n.get(name.upper(),name)
+						btn=QRadioButton(desc)
+						self.widgets.update({name:btn})
+						self.box.addWidget(btn,row,col)
+						row+=1
+
 		self.updateScreen()
 	#def _load_screen
 
@@ -147,6 +157,7 @@ class access(confStack):
 		#	self.changes=True
 		#	self.setChanged(self.btn_conf)
 	#def _set_config_key
+
 	def eventFilter(self,source,event):
 		sw_mod=False
 		keypressed=[]
@@ -178,17 +189,17 @@ class access(confStack):
 			want=self.wantSettings.get(kfile,[])
 			block=self.blockSettings.get(kfile,[])
 			for section,settings in sections.items():
+				zoomOptions=[]
 				for setting in settings:
 					(name,data)=setting
 					if name in block or (len(want)>0 and name not in want):
 						continue
-					desc=i18n.get(name.upper(),name)
-					lbl=QLabel(desc)
 					if (data.lower() in ("true","false")) or (data==''):
 						state=False
 						if data.lower()=="true":
 							state=True
 						self.widgets.get(name).setChecked(state)
+
 					(mainHk,hkData,hkSetting,hkSection)=functionHelper.getHotkey(name)
 
 					if mainHk:
@@ -217,7 +228,7 @@ class access(confStack):
 				for setting,value in data:
 					btn=self.widgets.get(setting,'')
 					if btn:
-						if isinstance(btn,QCheckBox):
+						if isinstance(btn,QCheckBox) or isinstance(btn,QRadioButton):
 							value=btn.isChecked()
 							if value:
 								value="true"
@@ -239,11 +250,8 @@ class access(confStack):
 		self.sysConfig["kglobalshortcutsrc"]={}
 		for desc,widget in self.widgets.items():
 			if isinstance(widget,QPushButton):
-				mainHk=self.widgetsText.get(widget,{}).get('mainHk',"")
-				if mainHk:
-					hkData=self.widgetsText.get(widget,{}).get('hkData',"None")
-					hkSection=self.widgetsText.get(widget,{}).get('hkSection',"None")
-					hkSetting=self.widgetsText.get(widget,{}).get('hkSetting',"None")
+					print(desc)
+					(mainHk,hkData,hkSetting,hkSection)=functionHelper.getHotkey(desc)
 					newHk=widget.text()
 					if newHk!=mainHk:
 						hkData=hkData.split(",")

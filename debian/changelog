@@ -1,9 +1,10 @@
-accesshelper (0.4) focal; urgency=medium
+accesshelper (0.4.1) focal; urgency=medium
 
   * Theme and cursor settings
   * Reworked font config
   * Disabled behavior stack
   * Minor bugfixes
+  * Add depends on accesshelper-data
 
  -- Juanma1980 <juanma1980@gmail.com>  Mon, 07 Feb 2022 11:34:51 +0100
 

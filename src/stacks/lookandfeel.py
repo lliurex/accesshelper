@@ -3,6 +3,7 @@ from . import functionHelper
 from . import resolutionHelper
 import sys
 import os
+import subprocess
 from PySide2.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QGridLayout,QLineEdit,QHBoxLayout,QComboBox,QCheckBox,QTabBar,QTabWidget,QTabBar,QTabWidget,QSlider,QToolTip,QListWidget
 from PySide2 import QtGui
 from PySide2.QtCore import Qt,QSignalMapper
@@ -20,6 +21,7 @@ i18n={
 	"MENUDESCRIPTION":_("Modify appearence settings"),
 	"TOOLTIP":_("From here you can set hotkeys for launch apps"),
 	"THEME":_("Desktop theme"),
+	"SCHEME":_("Colour scheme"),
 	"COLOURS":_("Theme colours"),
 	"CURSORTHEME":_("Cursor theme"),
 	"CURSORSIZE":_("Cursor size"),
@@ -33,6 +35,7 @@ class lookandfeel(confStack):
 		self.menu_description=i18n.get('MENUDESCRIPTION')
 		self.description=i18n.get('DESCRIPTION')
 		self.icon=('preferences-desktop-theme')
+		self.themesDir="/usr/share/plasma/desktoptheme"
 		self.tooltip=i18n.get('TOOLTIP')
 		self.index=7
 		self.enabled=True
@@ -57,10 +60,20 @@ class lookandfeel(confStack):
 		self.config=self.getConfig()
 
 		self.box.addWidget(QLabel(i18n.get("THEME")),0,0,1,1)
-
 		cmbTheme=QComboBox()
 		self.widgets.update({'theme':cmbTheme})
 		self.box.addWidget(cmbTheme,0,1,1,1)
+
+		self.box.addWidget(QLabel(i18n.get("SCHEME")),1,0,1,1)
+		cmbScheme=QComboBox()
+		self.widgets.update({'scheme':cmbScheme})
+		self.box.addWidget(cmbScheme,1,1,1,1)
+
+		self.box.addWidget(QLabel(i18n.get("CURSORTHEME")),2,0,1,1)
+		cmbCursor=QComboBox()
+		self.widgets.update({'cursor':cmbCursor})
+		self.box.addWidget(cmbCursor,2,1,1,1)
+
 		self.updateScreen()
 	#def _load_screen
 
@@ -73,12 +86,20 @@ class lookandfeel(confStack):
 		for value in self.sysConfig.get("kdeglobals",{}).get("General",[]):
 			if value[0]=="Name":
 				theme=value[1]
-		if isinstance(self.widgets.get("theme"),QComboBox) and theme!="":
-			cmb=self.widgets.get("theme")
-			if cmb.findText(theme)==-1:
-				cmb.addItem(theme)
-				
-			cmb.setCurrentText(theme)
+		for cmbDesc in self.widgets.keys():
+			cmb=self.widgets.get(cmbDesc,"")
+			if isinstance(cmb,QComboBox):
+				if cmbDesc=="theme":
+					themes=self._getThemeList()
+				if cmbDesc=="scheme":
+					themes=self._getSchemeList()
+				if cmbDesc=="cursor":
+					themes=self._getCursorList()
+				for theme in themes:
+					if cmb.findText(theme)==-1:
+						cmb.addItem(theme)
+						if "(" in theme:
+							cmb.setCurrentText(theme)
 		config=self.config.get(self.level,{})
 	#def _udpate_screen
 
@@ -95,3 +116,50 @@ class lookandfeel(confStack):
 		f.close()
 	#def writeConfig
 
+	def _getThemeList(self):
+		availableThemes=[]
+		themes=""
+		try:
+			themes=subprocess.run(["plasma-apply-desktoptheme","--list-themes"],stdout=subprocess.PIPE)
+		except Exception as e:
+			print(e)
+		if themes:
+			out=themes.stdout.decode()
+			for line in out.split("\n"):
+				theme=line.strip()
+				if theme.startswith("*"):
+					availableThemes.append(theme.replace("*","").strip())
+		return (availableThemes)
+	#def _getThemeList
+
+	def _getSchemeList(self):
+		availableSchemes=[]
+		schemes=""
+		try:
+			schemes=subprocess.run(["plasma-apply-colorscheme","--list-schemes"],stdout=subprocess.PIPE)
+		except Exception as e:
+			print(e)
+		if schemes:
+			out=schemes.stdout.decode()
+			for line in out.split("\n"):
+				scheme=line.strip()
+				if scheme.startswith("*"):
+					availableSchemes.append(scheme.replace("*","").strip())
+		return (availableSchemes)
+	#def _getSchemeList
+
+	def _getCursorList(self):
+		availableThemes=[]
+		themes=""
+		try:
+			themes=subprocess.run(["plasma-apply-cursortheme","--list-themes"],stdout=subprocess.PIPE)
+		except Exception as e:
+			print(e)
+		if themes:
+			out=themes.stdout.decode()
+			for line in out.split("\n"):
+				theme=line.strip()
+				if theme.startswith("*"):
+					availableThemes.append(theme.replace("*","").strip())
+		return (availableThemes)
+	#def _getCursorList

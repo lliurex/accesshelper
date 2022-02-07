@@ -40,7 +40,7 @@ class lookandfeel(confStack):
 		self.changed=[]
 		self.config={}
 		self.sysConfig={}
-		self.wrkFiles=["kdeglobals","kcminputrc","konsolerc"]
+		self.wrkFiles=["kdeglobals"]
 		self.blockSettings={}
 		self.wantSettings={"kdeglobals":["General"]}
 		self.optionChanged=[]
@@ -53,16 +53,32 @@ class lookandfeel(confStack):
 		sigmap_run=QSignalMapper(self)
 		sigmap_run.mapped[QString].connect(self._updateConfig)
 		self.widgets={}
-		self.config=self.getConfig()
 		config=self.config.get(self.level,{})
-		for wrkFile in self.wrkFiles:
-			systemConfig=functionHelper.getSystemConfig(wrkFile=wrkFile)
-			self.sysConfig.update(systemConfig)
+		self.config=self.getConfig()
+
+		self.box.addWidget(QLabel(i18n.get("THEME")),0,0,1,1)
+
+		cmbTheme=QComboBox()
+		self.widgets.update({'theme':cmbTheme})
+		self.box.addWidget(cmbTheme,0,1,1,1)
 		self.updateScreen()
 	#def _load_screen
 
 	def updateScreen(self):
+		for wrkFile in self.wrkFiles:
+			systemConfig=functionHelper.getSystemConfig(wrkFile=wrkFile)
+			self.sysConfig.update(systemConfig)
 		self.config=self.getConfig()
+		theme=""
+		for value in self.sysConfig.get("kdeglobals",{}).get("General",[]):
+			if value[0]=="Name":
+				theme=value[1]
+		if isinstance(self.widgets.get("theme"),QComboBox) and theme!="":
+			cmb=self.widgets.get("theme")
+			if cmb.findText(theme)==-1:
+				cmb.addItem(theme)
+				
+			cmb.setCurrentText(theme)
 		config=self.config.get(self.level,{})
 	#def _udpate_screen
 
@@ -79,32 +95,3 @@ class lookandfeel(confStack):
 		f.close()
 	#def writeConfig
 
-	def _setMozillaFirefoxFonts(self,size):
-		size+=7 #Firefox font size is smallest.
-		mozillaDir=os.path.join(os.environ.get('HOME',''),".mozilla/firefox")
-		for mozillaF in os.listdir(mozillaDir):
-			self._debug("Reading MOZILLA {}".format(mozillaF))
-			fPath=os.path.join(mozillaDir,mozillaF)
-			if os.path.isdir(fPath):
-				self._debug("Reading DIR {}".format(mozillaF))
-				if "." in mozillaF:
-					self._debug("Reading DIR {}".format(mozillaF))
-					prefs=os.path.join(mozillaDir,mozillaF,"prefs.js")
-					if os.path.isfile(prefs):
-						with open(prefs,'r') as f:
-							lines=f.readlines()
-						newLines=[]
-						for line in lines:
-							if line.startswith('user_pref("font.minimum-size.x-unicode"'):
-								continue
-							elif line.startswith('user_pref("font.minimum-size.x-western"'):
-								continue
-							newLines.append(line)
-						line='user_pref("font.minimum-size.x-western", {});\n'.format(size)
-						newLines.append(line)
-						line='user_pref("font.minimum-size.x-unicode", {});\n'.format(size)
-						newLines.append(line)
-						self._debug("Writting MOZILLA {}".format(mozillaF))
-						with open(os.path.join(mozillaDir,mozillaF,"prefs.js"),'w') as f:
-							f.writelines(newLines)
-	#def _setMozillaFirefoxFonts

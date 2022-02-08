@@ -19,7 +19,7 @@ i18n={
 	"CONFIG":_("Configuration"),
 	"DESCRIPTION":_("Look&Feel configuration"),
 	"MENUDESCRIPTION":_("Modify appearence settings"),
-	"TOOLTIP":_("From here you can set hotkeys for launch apps"),
+	"TOOLTIP":_("Set theme, color scheme or pointers"),
 	"THEME":_("Desktop theme"),
 	"SCHEME":_("Colour scheme"),
 	"COLOURS":_("Theme colours"),

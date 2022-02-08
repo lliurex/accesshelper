@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-08 09:40+0100\n"
-"PO-Revision-Date: 2022-02-08 09:41+0100\n"
+"POT-Creation-Date: 2022-02-08 12:30+0100\n"
+"PO-Revision-Date: 2022-02-08 12:32+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es\n"
@@ -70,10 +70,10 @@ msgid "Accessibility options"
 msgstr "Accesibilidad"
 
 #: ../src/stacks/access.py:24 ../src/stacks/addHotkey.py:19
-#: ../src/stacks/behavior.py:14 ../src/stacks/fonts.py:18
-#: ../src/stacks/hotkeys.py:18 ../src/stacks/lookandfeel.py:19
-#: ../src/stacks/profiles.py:15 ../src/stacks/screenreader.py:16
-#: ../src/stacks/settings.py:17
+#: ../src/stacks/alpha.py:18 ../src/stacks/behavior.py:14
+#: ../src/stacks/fonts.py:18 ../src/stacks/hotkeys.py:18
+#: ../src/stacks/lookandfeel.py:19 ../src/stacks/profiles.py:15
+#: ../src/stacks/screenreader.py:16 ../src/stacks/settings.py:17
 msgid "Configuration"
 msgstr "Configuración"
 
@@ -185,6 +185,22 @@ msgstr "Pulsa una tecla o combincación de ellas para el atajo"
 msgid "Search"
 msgstr "Buscar"
 
+#: ../src/stacks/alpha.py:19
+msgid "Color filter configuration"
+msgstr "Filtros de color"
+
+#: ../src/stacks/alpha.py:20
+msgid "Modify screen color levels"
+msgstr "Modifica los niveles de color"
+
+#: ../src/stacks/alpha.py:21
+msgid "Set color filter for the screen"
+msgstr "Establecer filtros de colores para la pantalla"
+
+#: ../src/stacks/alpha.py:22
+msgid "Color filter"
+msgstr "Filtro"
+
 #: ../src/stacks/behavior.py:15
 msgid "Desktop behavior"
 msgstr "Comportamiento del escritoro"
@@ -265,7 +281,7 @@ msgstr "Configuración de atajos"
 msgid "Set hotkeys for launch applications"
 msgstr "Asocia combinaciones de teclas con aplicaciones"
 
-#: ../src/stacks/hotkeys.py:21 ../src/stacks/lookandfeel.py:22
+#: ../src/stacks/hotkeys.py:21
 msgid "From here you can set hotkeys for launch apps"
 msgstr "Permite asociar pulsaciones de tecla a diferentes acciones del sistema"
 
@@ -305,6 +321,10 @@ msgstr "Configuración de la apariencia visual"
 msgid "Modify appearence settings"
 msgstr "Modifica la apariencia del sistema"
 
+#: ../src/stacks/lookandfeel.py:22
+msgid "Set theme, color scheme or pointers"
+msgstr "Selecciona tema, esquema de color o punteros"
+
 #: ../src/stacks/lookandfeel.py:23
 msgid "Desktop theme"
 msgstr "Tema del escritorio"
@@ -316,10 +336,6 @@ msgstr "Esquema de color"
 #: ../src/stacks/lookandfeel.py:25
 msgid "Theme colours"
 msgstr "Colores del tema"
-
-#: ../src/stacks/lookandfeel.py:28
-msgid "Set resolution"
-msgstr "Resolución"
 
 #: ../src/stacks/profiles.py:16
 msgid "Manage profiles"
@@ -448,6 +464,9 @@ msgstr "Opciones de sesión"
 #: ../src/stacks/settings.py:70
 msgid "Load template on start"
 msgstr "Cargar plantilla al incio"
+
+#~ msgid "Set resolution"
+#~ msgstr "Resolución"
 
 #~ msgid "Great A Tuin the turtle comes, swimming slowly through the interstellar gulf, hydrogen frost on his ponderous limbs, his huge and ancient shell pocked with meteor craters. Through sea-sized eyes that are crusted with rheum and asteroid dust He stares fixedly at the Destination."
 #~ msgstr "La Gran Tortuga A'Tuin se acerca, nadando lentamente por el golfo interestelar, con los pesados miembros llenos de hidrógeno congelado, la enorme y viejísima concha llena de cráteres de meteoros. Con unos ojos del tamaño de mares, encostrados de lágrimas reumáticas y polvo de asteroides, Él contempla fijamente el Destino."

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-10 12:52+0100\n"
+"POT-Creation-Date: 2022-02-08 09:40+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -69,9 +69,10 @@ msgid "Accessibility options"
 msgstr ""
 
 #: ../src/stacks/access.py:24 ../src/stacks/addHotkey.py:19
-#: ../src/stacks/behavior.py:14 ../src/stacks/hotkeys.py:18
-#: ../src/stacks/lookandfeel.py:18 ../src/stacks/profiles.py:15
-#: ../src/stacks/screenreader.py:16 ../src/stacks/settings.py:17
+#: ../src/stacks/behavior.py:14 ../src/stacks/fonts.py:18
+#: ../src/stacks/hotkeys.py:18 ../src/stacks/lookandfeel.py:19
+#: ../src/stacks/profiles.py:15 ../src/stacks/screenreader.py:16
+#: ../src/stacks/settings.py:17
 msgid "Configuration"
 msgstr ""
 
@@ -223,6 +224,38 @@ msgstr ""
 msgid "Set screen resolution"
 msgstr ""
 
+#: ../src/stacks/fonts.py:17
+msgid "Font options"
+msgstr ""
+
+#: ../src/stacks/fonts.py:19
+msgid "Font configuration"
+msgstr ""
+
+#: ../src/stacks/fonts.py:20
+msgid "Modify system fonts"
+msgstr ""
+
+#: ../src/stacks/fonts.py:21
+msgid "Customize the system fonts"
+msgstr ""
+
+#: ../src/stacks/fonts.py:22
+msgid "Font size"
+msgstr ""
+
+#: ../src/stacks/fonts.py:23
+msgid "Font family"
+msgstr ""
+
+#: ../src/stacks/fonts.py:24 ../src/stacks/lookandfeel.py:26
+msgid "Cursor theme"
+msgstr ""
+
+#: ../src/stacks/fonts.py:25 ../src/stacks/lookandfeel.py:27
+msgid "Cursor size"
+msgstr ""
+
 #: ../src/stacks/hotkeys.py:19
 msgid "Hotkeys configuration"
 msgstr ""
@@ -231,7 +264,7 @@ msgstr ""
 msgid "Set hotkeys for launch applications"
 msgstr ""
 
-#: ../src/stacks/hotkeys.py:21 ../src/stacks/lookandfeel.py:21
+#: ../src/stacks/hotkeys.py:21 ../src/stacks/lookandfeel.py:22
 msgid "From here you can set hotkeys for launch apps"
 msgstr ""
 
@@ -259,44 +292,32 @@ msgstr ""
 msgid "Add new"
 msgstr ""
 
-#: ../src/stacks/lookandfeel.py:17
+#: ../src/stacks/lookandfeel.py:18
 msgid "Look&Feel options"
 msgstr ""
 
-#: ../src/stacks/lookandfeel.py:19
+#: ../src/stacks/lookandfeel.py:20
 msgid "Look&Feel configuration"
 msgstr ""
 
-#: ../src/stacks/lookandfeel.py:20
+#: ../src/stacks/lookandfeel.py:21
 msgid "Modify appearence settings"
 msgstr ""
 
-#: ../src/stacks/lookandfeel.py:22
-msgid "Font size"
-msgstr ""
-
 #: ../src/stacks/lookandfeel.py:23
-msgid "Font family"
+msgid "Desktop theme"
 msgstr ""
 
 #: ../src/stacks/lookandfeel.py:24
-msgid "Cursor theme"
+msgid "Colour scheme"
 msgstr ""
 
 #: ../src/stacks/lookandfeel.py:25
-msgid "Cursor size"
+msgid "Theme colours"
 msgstr ""
 
-#: ../src/stacks/lookandfeel.py:26
+#: ../src/stacks/lookandfeel.py:28
 msgid "Set resolution"
-msgstr ""
-
-#: ../src/stacks/lookandfeel.py:27
-msgid ""
-"Great A Tuin the turtle comes, swimming slowly through the interstellar "
-"gulf, hydrogen frost on his ponderous limbs, his huge and ancient shell "
-"pocked with meteor craters. Through sea-sized eyes that are crusted with "
-"rheum and asteroid dust He stares fixedly at the Destination."
 msgstr ""
 
 #: ../src/stacks/profiles.py:16

@@ -25,7 +25,6 @@ i18n={
 	"COLOURS":_("Theme colours"),
 	"CURSORTHEME":_("Cursor theme"),
 	"CURSORSIZE":_("Cursor size"),
-	"RESOLUTION":_("Set resolution"),
 	}
 
 class lookandfeel(confStack):
@@ -119,10 +118,11 @@ class lookandfeel(confStack):
 					if cmbDesc=="cursor":
 						themes=self._getCursorList()
 					for theme in themes:
-						if cmb.findText(theme)==-1:
-							cmb.addItem(theme)
-							if "(" in theme:
-								cmb.setCurrentText(theme)
+						themeDesc=theme.split(" ")[0]
+						if cmb.findText(themeDesc)==-1:
+							cmb.addItem(themeDesc)
+							if "(" in theme and "plasma" in theme.lower():
+								cmb.setCurrentText(themeDesc)
 		config=self.config.get(self.level,{})
 	#def _udpate_screen
 

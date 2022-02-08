@@ -33,7 +33,7 @@ class fonts(confStack):
 		self.description=i18n.get('DESCRIPTION')
 		self.icon=('preferences-desktop-font')
 		self.tooltip=i18n.get('TOOLTIP')
-		self.index=3
+		self.index=4
 		self.enabled=True
 		self.defaultRepos={}
 		self.changed=[]

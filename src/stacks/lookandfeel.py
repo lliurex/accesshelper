@@ -25,7 +25,6 @@ i18n={
 	"COLOURS":_("Theme colours"),
 	"CURSORTHEME":_("Cursor theme"),
 	"CURSORSIZE":_("Cursor size"),
-	"RESOLUTION":_("Set resolution"),
 	}
 
 class lookandfeel(confStack):

@@ -4,9 +4,9 @@ from . import resolutionHelper
 import sys
 import os
 import subprocess
-from PySide2.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QGridLayout,QLineEdit,QHBoxLayout,QComboBox,QCheckBox,QTabBar,QTabWidget,QTabBar,QTabWidget,QSlider,QToolTip,QListWidget
+from PySide2.QtWidgets import QApplication, QLabel, QWidget, QGridLayout,QComboBox,QCheckBox,QToolTip
 from PySide2 import QtGui
-from PySide2.QtCore import Qt,QSignalMapper
+from PySide2.QtCore import Qt,QSignalMapper,QSize
 from appconfig.appConfigStack import appConfigStack as confStack
 import gettext
 _ = gettext.gettext
@@ -120,11 +120,30 @@ class lookandfeel(confStack):
 					for theme in themes:
 						themeDesc=theme.split(" ")[0]
 						if cmb.findText(themeDesc)==-1:
-							cmb.addItem(themeDesc)
+							if cmbDesc=="cursor":
+								icon=self._getPointerImage(themeDesc)
+								print(icon)
+								cmb.addItem(icon,themeDesc)
+							else:
+								cmb.addItem(themeDesc)
 							if "(" in theme and "plasma" in theme.lower():
 								cmb.setCurrentText(themeDesc)
 		config=self.config.get(self.level,{})
 	#def _udpate_screen
+
+	def _getPointerImage(self,theme):
+		icon=os.path.join("/usr/share/icons",theme,"cursors","left_ptr")
+		if os.path.isfile(icon)==False:
+			icon=os.path.join(os.environ.get("HOME",""),".config","icons",theme,"cursors","left_ptr")
+		qicon=QtGui.QIcon()
+		qpixmap=QtGui.QPixmap()
+		a=qpixmap.load(icon)
+		print(a)
+		qicon.addFile(icon,QSize(32,32))
+		if qicon.isNull():
+			print("NULL")
+		px=qicon.pixmap(QSize(32,32))
+		return(px)
 
 	def _updateConfig(self,key):
 		return

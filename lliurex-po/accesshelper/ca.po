@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-08 12:30+0100\n"
-"PO-Revision-Date: 2022-02-08 12:33+0100\n"
+"PO-Revision-Date: 2022-02-08 12:59+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ca\n"
@@ -371,7 +371,7 @@ msgstr "Perfil afegit a l'usuari"
 
 #: ../src/stacks/profiles.py:25
 msgid "Import profile"
-msgstr "Carga"
+msgstr "Importar"
 
 #: ../src/stacks/profiles.py:26
 msgid "Export profile"

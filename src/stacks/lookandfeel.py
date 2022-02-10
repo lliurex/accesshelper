@@ -3,6 +3,7 @@ from . import functionHelper
 from . import resolutionHelper
 import sys
 import os
+import tempfile
 import subprocess
 from PySide2.QtWidgets import QApplication, QLabel, QWidget, QGridLayout,QComboBox,QCheckBox,QToolTip
 from PySide2 import QtGui
@@ -86,6 +87,7 @@ class lookandfeel(confStack):
 		cmbCursorSize.addItem("128")
 
 		self.updateScreen()
+		self.updateCursorIcons()
 	#def _load_screen
 
 	def updateScreen(self):
@@ -110,6 +112,7 @@ class lookandfeel(confStack):
 					if cmb.findText(cursorSize)==-1:
 						cmb.insertItem(0,cursorSize)
 					cmb.setCurrentText(cursorSize)
+					cmb.currentIndexChanged.connect(self.updateCursorIcons)
 				else:
 					if cmbDesc=="theme":
 						themes=self._getThemeList()
@@ -117,12 +120,14 @@ class lookandfeel(confStack):
 						themes=self._getSchemeList()
 					if cmbDesc=="cursor":
 						themes=self._getCursorList()
+						cmb.currentIndexChanged.connect(self.updateCursorSizes)
 					for theme in themes:
 						themeDesc=theme.split(" ")[0]
 						if cmb.findText(themeDesc)==-1:
 							if cmbDesc=="cursor":
-								icon=self._getPointerImage(themeDesc)
-								print(icon)
+								#i18n could translate the description, real name needed
+								cursorTheme=theme.split(" ")[1].replace("(","").replace(")","")
+								icon,sizes=self._getPointerImage(cursorTheme)
 								cmb.addItem(icon,themeDesc)
 							else:
 								cmb.addItem(themeDesc)
@@ -131,19 +136,61 @@ class lookandfeel(confStack):
 		config=self.config.get(self.level,{})
 	#def _udpate_screen
 
+	def updateCursorIcons(self):
+		cmbSize=self.widgets.get("cursorSize")
+		cmbCursors=self.widgets.get("cursor")
+		cmbCursors.setIconSize(QSize(int(cmbSize.currentText()), int(cmbSize.currentText())))
+		cmbCursors.adjustSize()
+	#def updateSizes
+
+	def updateCursorSizes(self):
+		cmbSize=self.widgets.get("cursorSize")
+		cmbCursors=self.widgets.get("cursor")
+		icon=cmbCursors.itemIcon(cmbCursors.currentIndex())
+		maxw=0
+		for size in icon.availableSizes():
+			if size.width()>maxw:
+				maxw=size.width()
+		print(maxw)
+		for idx in range(0,cmbSize.count()):
+			size=cmbSize.itemText(idx)
+			if maxw<int(size) and int(size)>32:	
+				cmbSize.model().item(idx).setEnabled(False)
+			else:
+				cmbSize.model().item(idx).setEnabled(True)
+				cmbSize.setCurrentIndex(idx)
+		
 	def _getPointerImage(self,theme):
 		icon=os.path.join("/usr/share/icons",theme,"cursors","left_ptr")
 		if os.path.isfile(icon)==False:
-			icon=os.path.join(os.environ.get("HOME",""),".config","icons",theme,"cursors","left_ptr")
-		qicon=QtGui.QIcon()
-		qpixmap=QtGui.QPixmap()
-		a=qpixmap.load(icon)
-		print(a)
-		qicon.addFile(icon,QSize(32,32))
-		if qicon.isNull():
-			print("NULL")
-		px=qicon.pixmap(QSize(32,32))
-		return(px)
+			icon=os.path.join(os.environ.get("HOME",""),".icons",theme,"cursors","left_ptr")
+		qicon=""
+		sizes=[]
+		if os.path.isfile(icon):
+			tmpDir=tempfile.TemporaryDirectory()
+			cmd=["xcur2png","-d",tmpDir.name,icon]
+			try:
+				subprocess.run(cmd,stdout=subprocess.PIPE)
+			except Exception as e:
+				print("{}".format(e))
+			maxw=0
+			img=""
+			for i in os.listdir(tmpDir.name):
+				pixmap=os.path.join(tmpDir.name,i)
+				qpixmap=QtGui.QPixmap(pixmap)
+				size=qpixmap.size()
+				if size.width()>maxw:
+					print("MAXW: {0} {1} {2}".format(theme,size.width(),maxw))
+					maxw=size.width()
+					img=qpixmap
+				sizes.append(size)
+
+			if img=="":
+				img=pixmap
+			qicon=QtGui.QIcon(img)
+			tmpDir.cleanup()
+
+		return(qicon,sizes)
 
 	def _updateConfig(self,key):
 		return

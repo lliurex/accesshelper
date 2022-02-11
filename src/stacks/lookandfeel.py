@@ -72,6 +72,7 @@ class lookandfeel(confStack):
 		self.box.addWidget(QLabel(i18n.get("CURSORTHEME")),2,0,1,1)
 		cmbCursor=QComboBox()
 		self.widgets.update({'cursor':cmbCursor})
+		cmbCursor.currentIndexChanged.connect(self.updateCursorSizes)
 		self.box.addWidget(cmbCursor,2,1,1,1)
 
 		self.box.addWidget(QLabel(i18n.get("CURSORSIZE")),3,0,1,1)
@@ -85,9 +86,11 @@ class lookandfeel(confStack):
 		cmbCursorSize.addItem("96")
 		cmbCursorSize.addItem("112")
 		cmbCursorSize.addItem("128")
+		cmbCursorSize.currentIndexChanged.connect(self.updateCursorIcons)
 
 		self.updateScreen()
 		self.updateCursorIcons()
+		self.changes=False
 	#def _load_screen
 
 	def updateScreen(self):
@@ -112,7 +115,6 @@ class lookandfeel(confStack):
 					if cmb.findText(cursorSize)==-1:
 						cmb.insertItem(0,cursorSize)
 					cmb.setCurrentText(cursorSize)
-					cmb.currentIndexChanged.connect(self.updateCursorIcons)
 				else:
 					if cmbDesc=="theme":
 						themes=self._getThemeList()
@@ -120,7 +122,6 @@ class lookandfeel(confStack):
 						themes=self._getSchemeList()
 					if cmbDesc=="cursor":
 						themes=self._getCursorList()
-						cmb.currentIndexChanged.connect(self.updateCursorSizes)
 					for theme in themes:
 						themeDesc=theme.split(" ")[0]
 						if cmb.findText(themeDesc)==-1:
@@ -131,8 +132,8 @@ class lookandfeel(confStack):
 								cmb.addItem(icon,themeDesc)
 							else:
 								cmb.addItem(themeDesc)
-							if "(" in theme and "plasma" in theme.lower():
-								cmb.setCurrentText(themeDesc)
+						if "(" in theme and "plasma" in theme.lower():
+							cmb.setCurrentText(themeDesc)
 		config=self.config.get(self.level,{})
 	#def _udpate_screen
 
@@ -151,7 +152,6 @@ class lookandfeel(confStack):
 		for size in icon.availableSizes():
 			if size.width()>maxw:
 				maxw=size.width()
-		print(maxw)
 		for idx in range(0,cmbSize.count()):
 			size=cmbSize.itemText(idx)
 			if maxw<int(size) and int(size)>32:	
@@ -159,6 +159,7 @@ class lookandfeel(confStack):
 			else:
 				cmbSize.model().item(idx).setEnabled(True)
 				cmbSize.setCurrentIndex(idx)
+	#def updateCursorSizes
 		
 	def _getPointerImage(self,theme):
 		icon=os.path.join("/usr/share/icons",theme,"cursors","left_ptr")
@@ -180,7 +181,6 @@ class lookandfeel(confStack):
 				qpixmap=QtGui.QPixmap(pixmap)
 				size=qpixmap.size()
 				if size.width()>maxw:
-					print("MAXW: {0} {1} {2}".format(theme,size.width(),maxw))
 					maxw=size.width()
 					img=qpixmap
 				sizes.append(size)

@@ -77,12 +77,6 @@ class alpha(confStack):
 		self.updateScreen()
 	#def _load_screen
 
-	def setChanged(self,*args):
-		self.btn_ok.setEnabled(True)
-		self.btn_cancel.setEnabled(True)
-		self.changes=True
-	#def _dlgChange(self,*args):
-
 	def updateScreen(self):
 		self.config=self.getConfig()
 		qalpha=QtGui.QColor()
@@ -114,6 +108,7 @@ class alpha(confStack):
 					cmd=subprocess.run(xrand,capture_output=True,encoding="utf8")
 					self._debug(" ".join(["xrandr","--output",monitor,"--gamma","{0}:{1}:{2}".format(red,green,blue),"--brightness","2"]))
 					self._generateAutostartDesktop(xrand)
+				self.saveChanges('alpha','{}:{}:{}'.format(alpha.red(),alpha.green(),alpha.blue()))
 
 
 		self.optionChanged=[]

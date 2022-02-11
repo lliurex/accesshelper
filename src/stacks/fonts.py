@@ -80,12 +80,6 @@ class fonts(confStack):
 		self.updateScreen()
 	#def _load_screen
 
-	def setChanged(self,*args):
-		self.btn_ok.setEnabled(True)
-		self.btn_cancel.setEnabled(True)
-		self.changes=True
-	#def _dlgChange(self,*args):
-
 	def updateScreen(self):
 		self.config=self.getConfig()
 		kdevalues=self.sysConfig.get('kdeglobals',{}).get('General',[])

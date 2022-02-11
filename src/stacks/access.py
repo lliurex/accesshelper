@@ -43,7 +43,7 @@ i18n={
 class access(confStack):
 	keybind_signal=Signal("PyObject")
 	def __init_stack__(self):
-		self.dbg=True
+		self.dbg=False
 		self._debug("access Load")
 		self.menu_description=i18n.get('MENUDESCRIPTION')
 		self.description=i18n.get('DESCRIPTION')
@@ -250,7 +250,6 @@ class access(confStack):
 		self.sysConfig["kglobalshortcutsrc"]={}
 		for desc,widget in self.widgets.items():
 			if isinstance(widget,QPushButton):
-					print(desc)
 					(mainHk,hkData,hkSetting,hkSection)=functionHelper.getHotkey(desc)
 					newHk=widget.text()
 					if newHk!=mainHk:

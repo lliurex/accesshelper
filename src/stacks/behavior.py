@@ -139,7 +139,6 @@ class behavior(confStack):
 						else:
 							value="false"
 					dataTmp.append((setting,value))
-					print(dataTmp)
 				self.sysConfig[kfile][section]=dataTmp
 
 		functionHelper.setSystemConfig(self.sysConfig)

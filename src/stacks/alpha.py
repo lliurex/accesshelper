@@ -98,7 +98,6 @@ class alpha(confStack):
 				green=alpha.green()/255
 				cmd=subprocess.run(["xrandr","--listmonitors"],capture_output=True,encoding="utf8")
 				for xrandmonitor in cmd.stdout.split("\n"):
-					print(xrandmonitor)
 					monitor=xrandmonitor.split(" ")[-1].strip()
 					if not monitor or monitor.isdigit()==True:
 						continue

@@ -176,6 +176,7 @@ class lookandfeel(confStack):
 				print("{}".format(e))
 			maxw=0
 			img=""
+			pixmap=""
 			for i in os.listdir(tmpDir.name):
 				pixmap=os.path.join(tmpDir.name,i)
 				qpixmap=QtGui.QPixmap(pixmap)
@@ -185,7 +186,7 @@ class lookandfeel(confStack):
 					img=qpixmap
 				sizes.append(size)
 
-			if img=="":
+			if img=="" and pixmap!="":
 				img=pixmap
 			qicon=QtGui.QIcon(img)
 			tmpDir.cleanup()

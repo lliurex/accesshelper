@@ -169,7 +169,7 @@ class lookandfeel(confStack):
 		sizes=[]
 		if os.path.isfile(icon):
 			tmpDir=tempfile.TemporaryDirectory()
-			cmd=["xcur2png","-d",tmpDir.name,icon]
+			cmd=["xcur2png","-c","-","-d",tmpDir.name,icon]
 			try:
 				subprocess.run(cmd,stdout=subprocess.PIPE)
 			except Exception as e:

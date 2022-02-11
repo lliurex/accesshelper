@@ -36,7 +36,7 @@ class profiles(confStack):
 		self.description=i18n.get('DESCRIPTION')
 		self.icon=('application-vnd.iccprofile')
 		self.tooltip=i18n.get('TOOLTIP')
-		self.index=15
+		self.index=10
 		self.enabled=True
 		self.changed=[]
 		self.config={}

@@ -39,17 +39,13 @@ class kscreenDbus():
 		output=config.get('outputs',[])
 		if output:
 			currentModeId=output[0].get('currentModeId',{})
-			print("+**")
-			print(currentModeId)
 			modes=output[0].get('modes',{})
 			for mode in modes:
-				print(mode.get('id'))
 				if str(mode.get('id',''))==str(currentModeId):
 					size=mode.get('size',{})
 					width=size.get('width')
 					height=size.get('height')
 					break
-			print("+**")
 		return(width,height)
 
 	def getMaxCommonResolution(self,config):

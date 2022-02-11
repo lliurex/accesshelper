@@ -118,7 +118,7 @@ class addHotkey(confStack):
 			self.lstOptions.setCurrentItem(items[0])
 
 	def _addHotkey(self,*args):
-		print(args)
+		pass
 
 	def _grab_alt_keys(self,*args):
 		self.lblPress.show()
@@ -203,8 +203,6 @@ class addHotkey(confStack):
 		for category in categories:
 			desktops=self.menu.get_apps_from_category(category)
 			for desktop in desktops.keys():
-				if category=="network":
-					print(desktop)
 				desktopInfo=self.menu.get_desktop_info(os.path.join(self.menu.desktoppath,desktop))
 				if desktopInfo.get("NoDisplay",False):
 					continue

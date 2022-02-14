@@ -86,11 +86,11 @@ class lookandfeel(confStack):
 		cmbCursorSize.addItem("96")
 		cmbCursorSize.addItem("112")
 		cmbCursorSize.addItem("128")
-		cmbCursorSize.currentIndexChanged.connect(self.updateCursorIcons)
+		cmbCursorSize.currentTextChanged.connect(self.updateCursorIcons)
 
 		self.updateScreen()
 		self.updateCursorIcons()
-		self.changes=False
+		#self.changes=False
 	#def _load_screen
 
 	def updateScreen(self):

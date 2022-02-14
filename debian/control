@@ -9,7 +9,7 @@ Homepage: https://github.com/lliurex/rebost
 
 Package: accesshelper
 Architecture: all
-Depends: ${python3:Depends},python3-appconfig,python3-pyside2.qtgui,accesshelper-data (>=0.3),xcur2png
+Depends: ${python3:Depends},python3-appconfig,python3-pyside2.qtgui,accesshelper-data (>=0.4),xcur2png,xpanimated-yb-cursor-theme
 Description: Set accessibility settings
  AccessHelper it's a common place for the
  available accessibility options 

@@ -31,7 +31,7 @@ i18n={
 class addHotkey(confStack):
 	keybind_signal=Signal("PyObject")
 	def __init_stack__(self):
-		self.dbg=True
+		self.dbg=False
 		self._debug("addhotkeys load")
 		self.menu=App2Menu.app2menu()
 		self.menu_description=i18n.get('MENUDESCRIPTION')

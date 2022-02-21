@@ -29,7 +29,7 @@ i18n={
 class hotkeys(confStack):
 	keybind_signal=Signal("PyObject")
 	def __init_stack__(self):
-		self.dbg=True
+		self.dbg=False
 		self._debug("hotkeys load")
 		self.menu_description=i18n.get('MENUDESCRIPTION')
 		self.description=i18n.get('DESCRIPTION')
@@ -76,10 +76,11 @@ class hotkeys(confStack):
 					row=0
 					for setting in settings:
 						tblGrid.setRowCount(row+1) 
+						print(setting)
 						(name,data)=setting
 						data=data.split(",")
-						desc=""
-						if len(data)>0:
+						desc=name
+						if len(data)>1:
 							desc=data[-1]
 						lbl=QLabel(desc)
 						#self.box.addWidget(lbl,row,0)

@@ -20,6 +20,7 @@ i18n={
 	"MENUDESCRIPTION":_("Modify screen color levels"),
 	"TOOLTIP":_("Set color filter for the screen"),
 	"FILTER":_("Color filter"),
+	"REMOVEFILTER":_("Remove current filter"),
 	}
 
 class alpha(confStack):
@@ -82,6 +83,7 @@ class alpha(confStack):
 		qalpha=QtGui.QColor()
 		dlgColor=self.widgets.get('alpha')
 		config=self.config.get(self.level,{})
+		self.btn_cancel.setEnabled(True)
 	#def _udpate_screen
 
 	def _updateConfig(self,key):
@@ -93,28 +95,42 @@ class alpha(confStack):
 		for name,wdg in self.widgets.items():
 			if name=="alpha":
 				alpha=wdg.currentColor()
-				red=alpha.red()/255
-				blue=alpha.blue()/255
-				green=alpha.green()/255
-				cmd=subprocess.run(["xrandr","--listmonitors"],capture_output=True,encoding="utf8")
-				for xrandmonitor in cmd.stdout.split("\n"):
-					monitor=xrandmonitor.split(" ")[-1].strip()
-					if not monitor or monitor.isdigit()==True:
-						continue
+				red=alpha.red()/100
+				blue=alpha.blue()/100
+				green=alpha.green()/100
+				brightness=1
+				for monitor in self._getMonitors():
 					self._debug("Selected monitor {}".format(monitor))
 					self._debug("R: {0} G: {1} B: {2}".format(red,green,blue))
-					xrand=["xrandr","--output",monitor,"--gamma","{0}:{1}:{2}".format(red,green,blue),"--brightness","2"]
+					xrand=["xrandr","--output",monitor,"--gamma","{0}:{1}:{2}".format(red,green,blue),"--brightness",str(brightness)]
 					cmd=subprocess.run(xrand,capture_output=True,encoding="utf8")
-					self._debug(" ".join(["xrandr","--output",monitor,"--gamma","{0}:{1}:{2}".format(red,green,blue),"--brightness","2"]))
+					self._debug(" ".join(["xrandr","--output",monitor,"--gamma","{0}:{1}:{2}".format(red,green,blue),"--brightness",str(brightness)]))
 					self._generateAutostartDesktop(xrand)
 				self.saveChanges('alpha','{}:{}:{}'.format(alpha.red(),alpha.green(),alpha.blue()))
-
-
 		self.optionChanged=[]
 		self.refresh=True
 		f=open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'w')
 		f.close()
+		self.btn_cancel.setEnabled(True)
 	#def writeConfig
+
+	def _reset_screen(self,*args):
+		for monitor in self._getMonitors():
+			xrand=["xrandr","--output",monitor,"--gamma","1:1:1","--brightness","1"]
+			cmd=subprocess.run(xrand,capture_output=True,encoding="utf8")
+				
+		self.saveChanges('alpha','1:1:1')
+
+	def _getMonitors(self):
+		monitors=[]
+		cmd=subprocess.run(["xrandr","--listmonitors"],capture_output=True,encoding="utf8")
+		for xrandmonitor in cmd.stdout.split("\n"):
+			monitor=xrandmonitor.split(" ")[-1].strip()
+			if not monitor or monitor.isdigit()==True:
+				continue
+			monitors.append(monitor)
+		return(monitors)
+		self.saveChanges('alpha','1:1:1')
 
 	def _generateAutostartDesktop(self,cmd):
 		desktop=[]

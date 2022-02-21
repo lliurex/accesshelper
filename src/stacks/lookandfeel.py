@@ -30,7 +30,7 @@ i18n={
 
 class lookandfeel(confStack):
 	def __init_stack__(self):
-		self.dbg=True
+		self.dbg=False
 		self._debug("hotkeys load")
 		self.menu_description=i18n.get('MENUDESCRIPTION')
 		self.description=i18n.get('DESCRIPTION')
@@ -169,7 +169,7 @@ class lookandfeel(confStack):
 		sizes=[]
 		if os.path.isfile(icon):
 			tmpDir=tempfile.TemporaryDirectory()
-			cmd=["xcur2png","-c","-","-d",tmpDir.name,icon]
+			cmd=["xcur2png","-q","-c","-","-d",tmpDir.name,icon]
 			try:
 				subprocess.run(cmd,stdout=subprocess.PIPE)
 			except Exception as e:

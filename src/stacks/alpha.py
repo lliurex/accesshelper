@@ -20,7 +20,6 @@ i18n={
 	"MENUDESCRIPTION":_("Modify screen color levels"),
 	"TOOLTIP":_("Set color filter for the screen"),
 	"FILTER":_("Color filter"),
-	"REMOVEFILTER":_("Remove current filter"),
 	}
 
 class alpha(confStack):
@@ -75,6 +74,7 @@ class alpha(confStack):
 		self.widgets.update({"alpha":dlgColor})
 		self.config=self.getConfig()
 		config=self.config.get(self.level,{})
+		self.btn_ok.released.connect(self.updateScreen)
 		self.updateScreen()
 	#def _load_screen
 
@@ -111,15 +111,16 @@ class alpha(confStack):
 		self.refresh=True
 		f=open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'w')
 		f.close()
-		self.btn_cancel.setEnabled(True)
 	#def writeConfig
 
 	def _reset_screen(self,*args):
 		for monitor in self._getMonitors():
 			xrand=["xrandr","--output",monitor,"--gamma","1:1:1","--brightness","1"]
 			cmd=subprocess.run(xrand,capture_output=True,encoding="utf8")
-				
+		self.btn_ok.setEnabled(False)
 		self.saveChanges('alpha','1:1:1')
+		self._removeAutostartDesktop()
+	#def _reset_screen
 
 	def _getMonitors(self):
 		monitors=[]
@@ -130,7 +131,7 @@ class alpha(confStack):
 				continue
 			monitors.append(monitor)
 		return(monitors)
-		self.saveChanges('alpha','1:1:1')
+	#def _getMonitors
 
 	def _generateAutostartDesktop(self,cmd):
 		desktop=[]
@@ -148,3 +149,14 @@ class alpha(confStack):
 			wrkFile=os.path.join(home,".config","autostart","accesshelper_rgbFilter.desktop")
 			with open(wrkFile,"w") as f:
 				f.write("\n".join(desktop))
+	#def _generateAutostartDesktop
+
+	def _removeAutostartDesktop(self):
+		home=os.environ.get("HOME")
+		if home:
+			wrkFile=os.path.join(home,".config","autostart","accesshelper_rgbFilter.desktop")
+			if os.path.isfile(wrkFile):
+				self.changes=True
+				self.refresh=True
+				os.remove(wrkFile)
+	#def _removeAutostartDesktop

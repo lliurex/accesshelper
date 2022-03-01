@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-08 12:30+0100\n"
-"PO-Revision-Date: 2022-02-08 12:59+0100\n"
+"POT-Creation-Date: 2022-03-01 11:30+0100\n"
+"PO-Revision-Date: 2022-03-01 11:34+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ca\n"
@@ -36,7 +36,7 @@ msgstr "Després"
 msgid "Profile not loaded: Autostart is disabled"
 msgstr "Perfil no carregat: Autoinici desactivat"
 
-#: ../src/accesshelp.py:150 ../src/stacks/profiles.py:24
+#: ../src/accesshelp.py:150 ../src/stacks/profiles.py:25
 msgid "Profile loaded"
 msgstr "Perfil carregat"
 
@@ -72,7 +72,7 @@ msgstr "Opcions d'accessibilitat"
 #: ../src/stacks/access.py:24 ../src/stacks/addHotkey.py:19
 #: ../src/stacks/alpha.py:18 ../src/stacks/behavior.py:14
 #: ../src/stacks/fonts.py:18 ../src/stacks/hotkeys.py:18
-#: ../src/stacks/lookandfeel.py:19 ../src/stacks/profiles.py:15
+#: ../src/stacks/lookandfeel.py:20 ../src/stacks/profiles.py:15
 #: ../src/stacks/screenreader.py:16 ../src/stacks/settings.py:17
 msgid "Configuration"
 msgstr "Configuració"
@@ -265,11 +265,11 @@ msgstr "Tamany de font"
 msgid "Font family"
 msgstr "Familia"
 
-#: ../src/stacks/fonts.py:24 ../src/stacks/lookandfeel.py:26
+#: ../src/stacks/fonts.py:24 ../src/stacks/lookandfeel.py:27
 msgid "Cursor theme"
 msgstr "Tema per al punter"
 
-#: ../src/stacks/fonts.py:25 ../src/stacks/lookandfeel.py:27
+#: ../src/stacks/fonts.py:25 ../src/stacks/lookandfeel.py:28
 msgid "Cursor size"
 msgstr "Tamany de punter"
 
@@ -305,35 +305,51 @@ msgstr "Obrir menu d'aplicacions"
 msgid "Show desktop"
 msgstr "Mostrar escriptori"
 
-#: ../src/stacks/hotkeys.py:124
+#: ../src/stacks/hotkeys.py:27
+msgid "Invert colours"
+msgstr "Inverteix colors"
+
+#: ../src/stacks/hotkeys.py:28
+msgid "Invert window colours"
+msgstr "Inverteix colors de la finestra"
+
+#: ../src/stacks/hotkeys.py:29
+msgid "Show mouse click"
+msgstr "Posiciona el punter al fer clic"
+
+#: ../src/stacks/hotkeys.py:30
+msgid "Show mouse pointer"
+msgstr "Posicionar el punter"
+
+#: ../src/stacks/hotkeys.py:128
 msgid "Add new"
 msgstr "Afegir"
 
-#: ../src/stacks/lookandfeel.py:18
+#: ../src/stacks/lookandfeel.py:19
 msgid "Look&Feel options"
 msgstr "Opcions d'apariencia"
 
-#: ../src/stacks/lookandfeel.py:20
+#: ../src/stacks/lookandfeel.py:21
 msgid "Look&Feel configuration"
 msgstr "Configuració de l'apariencia"
 
-#: ../src/stacks/lookandfeel.py:21
+#: ../src/stacks/lookandfeel.py:22
 msgid "Modify appearence settings"
 msgstr "Modifica les opcions d'apariencia"
 
-#: ../src/stacks/lookandfeel.py:22
+#: ../src/stacks/lookandfeel.py:23
 msgid "Set theme, color scheme or pointers"
 msgstr "Selecciona tema, esquema de color o punters"
 
-#: ../src/stacks/lookandfeel.py:23
+#: ../src/stacks/lookandfeel.py:24
 msgid "Desktop theme"
 msgstr "Tema de l'escriptori"
 
-#: ../src/stacks/lookandfeel.py:24
+#: ../src/stacks/lookandfeel.py:25
 msgid "Colour scheme"
 msgstr "Esquema de colors"
 
-#: ../src/stacks/lookandfeel.py:25
+#: ../src/stacks/lookandfeel.py:26
 msgid "Theme colours"
 msgstr "Colors del tema"
 
@@ -362,22 +378,26 @@ msgid "Permission denied"
 msgstr "Permís denegat"
 
 #: ../src/stacks/profiles.py:22
+msgid "Default profiles could not be modified"
+msgstr "Els perfils per defecte no son modificables"
+
+#: ../src/stacks/profiles.py:23
 msgid "Profile added to system's profiles"
 msgstr "Perfil afegit al sistema"
 
-#: ../src/stacks/profiles.py:23
+#: ../src/stacks/profiles.py:24
 msgid "Profile added to user's profiles"
 msgstr "Perfil afegit a l'usuari"
 
-#: ../src/stacks/profiles.py:25
+#: ../src/stacks/profiles.py:26
 msgid "Import profile"
 msgstr "Importar"
 
-#: ../src/stacks/profiles.py:26
+#: ../src/stacks/profiles.py:27
 msgid "Export profile"
 msgstr "Exporta"
 
-#: ../src/stacks/profiles.py:27
+#: ../src/stacks/profiles.py:28
 msgid "An error ocurred"
 msgstr "Ocorregué un error"
 

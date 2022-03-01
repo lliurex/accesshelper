@@ -140,6 +140,8 @@ class lookandfeel(confStack):
 	def updateCursorIcons(self):
 		cmbSize=self.widgets.get("cursorSize")
 		cmbCursors=self.widgets.get("cursor")
+		if cmbSize.currentText()=='':
+	    		cmb.setCurrentText("32")
 		cmbCursors.setIconSize(QSize(int(cmbSize.currentText()), int(cmbSize.currentText())))
 		cmbCursors.adjustSize()
 	#def updateSizes

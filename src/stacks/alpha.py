@@ -147,6 +147,8 @@ class alpha(confStack):
 		home=os.environ.get("HOME")
 		if home:
 			wrkFile=os.path.join(home,".config","autostart","accesshelper_rgbFilter.desktop")
+			if os.path.isfile(os.path.dirname(wrkFile))==False:
+				os.makedirs(os.path.dirname(wrkFile))
 			with open(wrkFile,"w") as f:
 				f.write("\n".join(desktop))
 	#def _generateAutostartDesktop

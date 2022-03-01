@@ -141,7 +141,7 @@ class lookandfeel(confStack):
 		cmbSize=self.widgets.get("cursorSize")
 		cmbCursors=self.widgets.get("cursor")
 		if cmbSize.currentText()=='':
-	    		cmb.setCurrentText("32")
+	    		cmbSize.setCurrentText("32")
 		cmbCursors.setIconSize(QSize(int(cmbSize.currentText()), int(cmbSize.currentText())))
 		cmbCursors.adjustSize()
 	#def updateSizes

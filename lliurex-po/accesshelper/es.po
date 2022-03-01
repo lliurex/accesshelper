@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-08 12:30+0100\n"
-"PO-Revision-Date: 2022-02-08 12:59+0100\n"
+"POT-Creation-Date: 2022-03-01 11:30+0100\n"
+"PO-Revision-Date: 2022-03-01 11:33+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es\n"
@@ -36,7 +36,7 @@ msgstr "Más tarde"
 msgid "Profile not loaded: Autostart is disabled"
 msgstr "Perfil no cargado: El autoinicio esta desactivado"
 
-#: ../src/accesshelp.py:150 ../src/stacks/profiles.py:24
+#: ../src/accesshelp.py:150 ../src/stacks/profiles.py:25
 msgid "Profile loaded"
 msgstr "Perfil cargado"
 
@@ -72,7 +72,7 @@ msgstr "Accesibilidad"
 #: ../src/stacks/access.py:24 ../src/stacks/addHotkey.py:19
 #: ../src/stacks/alpha.py:18 ../src/stacks/behavior.py:14
 #: ../src/stacks/fonts.py:18 ../src/stacks/hotkeys.py:18
-#: ../src/stacks/lookandfeel.py:19 ../src/stacks/profiles.py:15
+#: ../src/stacks/lookandfeel.py:20 ../src/stacks/profiles.py:15
 #: ../src/stacks/screenreader.py:16 ../src/stacks/settings.py:17
 msgid "Configuration"
 msgstr "Configuración"
@@ -265,11 +265,11 @@ msgstr "Tamaño de fuente"
 msgid "Font family"
 msgstr "Familia"
 
-#: ../src/stacks/fonts.py:24 ../src/stacks/lookandfeel.py:26
+#: ../src/stacks/fonts.py:24 ../src/stacks/lookandfeel.py:27
 msgid "Cursor theme"
 msgstr "Tema del cursor"
 
-#: ../src/stacks/fonts.py:25 ../src/stacks/lookandfeel.py:27
+#: ../src/stacks/fonts.py:25 ../src/stacks/lookandfeel.py:28
 msgid "Cursor size"
 msgstr "Tamaño del cursor"
 
@@ -305,35 +305,51 @@ msgstr "Abrir lanzador de aplicaciones"
 msgid "Show desktop"
 msgstr "Mostrar escritorio"
 
-#: ../src/stacks/hotkeys.py:124
+#: ../src/stacks/hotkeys.py:27
+msgid "Invert colours"
+msgstr "Invertir colores"
+
+#: ../src/stacks/hotkeys.py:28
+msgid "Invert window colours"
+msgstr "Invertir colores de ventana"
+
+#: ../src/stacks/hotkeys.py:29
+msgid "Show mouse click"
+msgstr "Mostrar animación al clicar"
+
+#: ../src/stacks/hotkeys.py:30
+msgid "Show mouse pointer"
+msgstr "Localizar el puntero"
+
+#: ../src/stacks/hotkeys.py:128
 msgid "Add new"
 msgstr "Añadir"
 
-#: ../src/stacks/lookandfeel.py:18
+#: ../src/stacks/lookandfeel.py:19
 msgid "Look&Feel options"
 msgstr "Apariencia visual"
 
-#: ../src/stacks/lookandfeel.py:20
+#: ../src/stacks/lookandfeel.py:21
 msgid "Look&Feel configuration"
 msgstr "Configuración de la apariencia visual"
 
-#: ../src/stacks/lookandfeel.py:21
+#: ../src/stacks/lookandfeel.py:22
 msgid "Modify appearence settings"
 msgstr "Modifica la apariencia del sistema"
 
-#: ../src/stacks/lookandfeel.py:22
+#: ../src/stacks/lookandfeel.py:23
 msgid "Set theme, color scheme or pointers"
 msgstr "Selecciona tema, esquema de color o punteros"
 
-#: ../src/stacks/lookandfeel.py:23
+#: ../src/stacks/lookandfeel.py:24
 msgid "Desktop theme"
 msgstr "Tema del escritorio"
 
-#: ../src/stacks/lookandfeel.py:24
+#: ../src/stacks/lookandfeel.py:25
 msgid "Colour scheme"
 msgstr "Esquema de color"
 
-#: ../src/stacks/lookandfeel.py:25
+#: ../src/stacks/lookandfeel.py:26
 msgid "Theme colours"
 msgstr "Colores del tema"
 
@@ -362,22 +378,26 @@ msgid "Permission denied"
 msgstr "Permiso denegado"
 
 #: ../src/stacks/profiles.py:22
+msgid "Default profiles could not be modified"
+msgstr "Los perfiles por defecto no son modificables"
+
+#: ../src/stacks/profiles.py:23
 msgid "Profile added to system's profiles"
 msgstr "Perfil añadido al sistema"
 
-#: ../src/stacks/profiles.py:23
+#: ../src/stacks/profiles.py:24
 msgid "Profile added to user's profiles"
 msgstr "Perfil añadido al usuario"
 
-#: ../src/stacks/profiles.py:25
+#: ../src/stacks/profiles.py:26
 msgid "Import profile"
 msgstr "Importar"
 
-#: ../src/stacks/profiles.py:26
+#: ../src/stacks/profiles.py:27
 msgid "Export profile"
 msgstr "Guardar"
 
-#: ../src/stacks/profiles.py:27
+#: ../src/stacks/profiles.py:28
 msgid "An error ocurred"
 msgstr "Oucrrió un error"
 

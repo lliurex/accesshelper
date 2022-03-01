@@ -23,7 +23,11 @@ i18n={
 	"PREVWINDOW":_("Go to previous window"),
 	"CLOSEWINDOW":_("Close window"),
 	"LAUNCHCOMMAND":_("Open launch menu"),
-	"SHOWDESKTOP":_("Show desktop")
+	"SHOWDESKTOP":_("Show desktop"),
+	"Invert":_("Invert colours"),
+	"InvertWindow":_("Invert window colours"),
+	"ToggleMouseClick":_("Show mouse click"),
+	"TrackMouse":_("Show mouse pointer"),
 	}
 
 class hotkeys(confStack):
@@ -78,7 +82,7 @@ class hotkeys(confStack):
 						tblGrid.setRowCount(row+1) 
 						(name,data)=setting
 						data=data.split(",")
-						desc=name
+						desc=i18n.get(name,name)
 						if len(data)>1:
 							desc=data[-1]
 						lbl=QLabel(desc)

@@ -76,7 +76,6 @@ class hotkeys(confStack):
 					row=0
 					for setting in settings:
 						tblGrid.setRowCount(row+1) 
-						print(setting)
 						(name,data)=setting
 						data=data.split(",")
 						desc=name

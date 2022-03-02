@@ -16,7 +16,7 @@ kgammaValues=[("bgamma",""),("rgamma",""),("ggamma","")]
 kgammaSync=[("sync","")]
 mouse=[("cursorSize","")]
 general=[("Name",""),("fixed",""),("font",""),("menuFont",""),("smallestReadableFont",""),("toolBarFont","")]
-dictFileData={"kaccesrc":{"Bell":bell},"kwinrc":{"Plugins":plugins,"Windows":windows},"kdeglobals":{"KDE":kde,"General":general},"kglobalshortcutsrc":{"kwin":hotkeys_kwin},"kcminputrc":{"Mouse":mouse},"kgammarc":{"ConfigFile":kgammaConfig,"Screen 0":kgammaValues},"SyncBox":kgammaSync}
+dictFileData={"kaccesrc":{"Bell":bell},"kwinrc":{"Plugins":plugins,"Windows":windows},"kdeglobals":{"KDE":kde,"General":general},"kglobalshortcutsrc":{"kwin":hotkeys_kwin},"kcminputrc":{"Mouse":mouse},"kgammarc":{"ConfigFile":kgammaConfig,"Screen 0":kgammaValues,"SyncBox":kgammaSync}}
 settingsHotkeys={"invertWindow":"InvertWindow","invertEnabled":"Invert","trackmouseEnabled":"TrackMouse","mouseclickEnabled":"ToggleMouseClick","view_zoom_in":"","view_zoom_out":""}
 
 def _debug(msg):
@@ -58,11 +58,18 @@ def _getKdeConfigSetting(group,key,kfile="kaccessrc",sourceFolder=''):
 
 def setSystemConfig(config,wrkFile=''):
 	for kfile,sections in config.items():
+		print(kfile)
 		for section,data in sections.items():
+			print(section)
+			print(data)
 			for setting in data:
-				(desc,value)=setting
-				_debug("Setting {} -> {}".format(desc,value))
-				_setKdeConfigSetting(section,desc,value,kfile)
+				try:
+					(desc,value)=setting
+					_debug("Setting {} -> {}".format(desc,value))
+					_setKdeConfigSetting(section,desc,value,kfile)
+				except Exception as e:
+					print("Error on setting {}".format(setting))
+					print(e)
 
 def setKdeConfigSetting(group,key,value,kfile="kaccessrc"):
 	return(_setKdeConfigSetting(group,key,value,kfile))

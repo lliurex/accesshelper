@@ -36,9 +36,8 @@ class alpha(confStack):
 		self.changed=[]
 		self.config={}
 		self.sysConfig={}
-		self.wrkFiles=["kdeglobals","kcminputrc","konsolerc"]
+		self.wrkFiles=["kgammarc"]
 		self.blockSettings={}
-		self.wantSettings={"kdeglobals":["General"]}
 		self.optionChanged=[]
 	#def __init__
 
@@ -95,18 +94,24 @@ class alpha(confStack):
 		for name,wdg in self.widgets.items():
 			if name=="alpha":
 				alpha=wdg.currentColor()
-				red=alpha.red()/100
-				blue=alpha.blue()/100
-				green=alpha.green()/100
+				red=alpha.red()/255
+				blue=alpha.blue()/255
+				green=alpha.green()/255
 				brightness=1
-				for monitor in self._getMonitors():
-					self._debug("Selected monitor {}".format(monitor))
-					self._debug("R: {0} G: {1} B: {2}".format(red,green,blue))
-					xrand=["xrandr","--output",monitor,"--gamma","{0}:{1}:{2}".format(red,green,blue),"--brightness",str(brightness)]
-					cmd=subprocess.run(xrand,capture_output=True,encoding="utf8")
-					self._debug(" ".join(["xrandr","--output",monitor,"--gamma","{0}:{1}:{2}".format(red,green,blue),"--brightness",str(brightness)]))
-					self._generateAutostartDesktop(xrand)
-				self.saveChanges('alpha','{}:{}:{}'.format(alpha.red(),alpha.green(),alpha.blue()))
+				self.sysConfig['kgammarc']['ConfigFile']=[("use","kgammarc")]
+				self.sysConfig['kgammarc']['SyncBox']=[("sync","yes")]
+				values=[]
+				for gamma in self.sysConfig['kgammarc']['Screen 0']:
+					(desc,value)=gamma
+					if desc=='bgamma':
+						value=str(blue)
+					elif desc=='rgamma':
+						value=str(red)
+					if desc=='ggamma':
+						value=str(green)
+					values.append((desc,value))
+				self.sysConfig['kgammarc']['Screen 0']=values
+		functionHelper.setSystemConfig(self.sysConfig)
 		self.optionChanged=[]
 		self.refresh=True
 		f=open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'w')

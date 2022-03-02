@@ -111,18 +111,6 @@ class alpha(confStack):
 						value=str(green)
 					values.append((desc,value))
 				self.sysConfig['kgammarc']['Screen 0']=values
-
-				print(self.sysConfig['kgammarc'])
-				######OLD CODE
-		####	for monitor in self._getMonitors():
-		####		self._debug("Selected monitor {}".format(monitor))
-		####		self._debug("R: {0} G: {1} B: {2}".format(red,green,blue))
-		####		xrand=["xrandr","--output",monitor,"--gamma","{0}:{1}:{2}".format(red,green,blue),"--brightness",str(brightness)]
-		####		cmd=subprocess.run(xrand,capture_output=True,encoding="utf8")
-		####		self._debug(" ".join(["xrandr","--output",monitor,"--gamma","{0}:{1}:{2}".format(red,green,blue),"--brightness",str(brightness)]))
-		####		self._generateAutostartDesktop(xrand)
-		####	self.saveChanges('alpha','{}:{}:{}'.format(alpha.red(),alpha.green(),alpha.blue()))
-				######OLD CODE
 		functionHelper.setSystemConfig(self.sysConfig)
 		self.optionChanged=[]
 		self.refresh=True

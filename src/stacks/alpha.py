@@ -94,17 +94,19 @@ class alpha(confStack):
 		for name,wdg in self.widgets.items():
 			if name=="alpha":
 				alpha=wdg.currentColor()
-				red=alpha.red()/40
-				blue=alpha.blue()/100
-				green=alpha.green()/100
+				red=alpha.red()*(3.50/255)
+				blue=alpha.blue()*(3.50/255)
+				green=alpha.green()*(3.50/255)
 				if red+blue+green>6:
 					red-=1
 					green-=1
 					blue-=1
-				if blue<=0.3:
-					blue=0.3
-				if green<=0.3:
-					green=0.3
+				if blue<=0.5:
+					blue=0.50
+				if green<=0.5:
+					green=0.50
+				if red<=0.5:
+					red=0.50
 				brightness=1
 				self.sysConfig['kgammarc']['ConfigFile']=[("use","kgammarc")]
 				self.sysConfig['kgammarc']['SyncBox']=[("sync","yes")]
@@ -112,15 +114,24 @@ class alpha(confStack):
 				for gamma in self.sysConfig['kgammarc']['Screen 0']:
 					(desc,value)=gamma
 					if desc=='bgamma':
-						value=str(blue)
-					elif desc=='rgamma':
-						value=str(red)
+						value=blue
+					if desc=='rgamma':
+						value=red
 					if desc=='ggamma':
-						value=str(green)
-					values.append((desc,value))
+						value=green
+					#Adjust decimals
+					while (value*100)%5!=0:
+						value=round(value+0.01,2)
+					if desc=='bgamma':
+						blue=value
+					if desc=='rgamma':
+						red=value
+					if desc=='ggamma':
+						green=value
+					values.append((desc,"{0:.2f}".format(value)))
 				self.sysConfig['kgammarc']['Screen 0']=values
 				for monitor in self._getMonitors():
-					xrand=["xrandr","--output",monitor,"--gamma","{0}:{1}:{2}".format(red,green,blue),"--brightness","{}".format(brightness)]
+					xrand=["xrandr","--output",monitor,"--gamma","{0}:{1}:{2}".format(alpha.red()/255,alpha.green()/255,alpha.blue()/255),"--brightness","{}".format(brightness)]
 					cmd=subprocess.run(xrand,capture_output=True,encoding="utf8")
 		functionHelper.setSystemConfig(self.sysConfig)
 		self.optionChanged=[]

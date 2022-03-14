@@ -292,6 +292,7 @@ class lookandfeel(confStack):
 
 	def _setCursorSize(self,size):
 		self.saveChanges('cursor',{"size":size})
+
 		functionHelper._setKdeConfigSetting("Mouse","cursorSize","{}".format(size),"kcminputrc")
 	#def _setCursorSize(self):
 

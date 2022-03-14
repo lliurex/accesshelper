@@ -93,6 +93,7 @@ class fonts(confStack):
 		dlgFont.setCurrentFont(font)
 		#fix listview selections
 		style=font.split(",")[-1]
+		size=font.split(",")[1]
 		for chld in dlgFont.findChildren(QListView):
 			sw_alpha=True
 			model=chld.model()
@@ -107,6 +108,21 @@ class fonts(confStack):
 						sw_alpha=False
 						break
 				if sw_alpha==False:
+					break
+		for chld in dlgFont.findChildren(QListView):
+			model=chld.model()
+			if size.isdigit():
+				sw_num=True
+				for row in range(model.rowCount()):
+					index=model.index(row,0)
+					data=model.data(index)
+					if data==size:
+						chld.setCurrentIndex(index)
+						break
+					elif data.isdigit==False:
+						sw_num=False
+						break
+				if sw_num==False:
 					break
 			chld.scrollTo(chld.currentIndex())
 		for chld in dlgFont.findChildren(QComboBox):

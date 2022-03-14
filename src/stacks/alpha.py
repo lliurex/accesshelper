@@ -94,9 +94,17 @@ class alpha(confStack):
 		for name,wdg in self.widgets.items():
 			if name=="alpha":
 				alpha=wdg.currentColor()
-				red=alpha.red()/255
-				blue=alpha.blue()/255
-				green=alpha.green()/255
+				red=alpha.red()/40
+				blue=alpha.blue()/100
+				green=alpha.green()/100
+				if red+blue+green>6:
+					red-=1
+					green-=1
+					blue-=1
+				if blue<=0.3:
+					blue=0.3
+				if green<=0.3:
+					green=0.3
 				brightness=1
 				self.sysConfig['kgammarc']['ConfigFile']=[("use","kgammarc")]
 				self.sysConfig['kgammarc']['SyncBox']=[("sync","yes")]
@@ -111,6 +119,9 @@ class alpha(confStack):
 						value=str(green)
 					values.append((desc,value))
 				self.sysConfig['kgammarc']['Screen 0']=values
+				for monitor in self._getMonitors():
+					xrand=["xrandr","--output",monitor,"--gamma","{0}:{1}:{2}".format(red,green,blue),"--brightness","{}".format(brightness)]
+					cmd=subprocess.run(xrand,capture_output=True,encoding="utf8")
 		functionHelper.setSystemConfig(self.sysConfig)
 		self.optionChanged=[]
 		self.refresh=True

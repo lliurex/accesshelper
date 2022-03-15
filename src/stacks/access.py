@@ -102,11 +102,13 @@ class access(confStack):
 						self.box.addWidget(btn,row,col)
 						col+=1
 						(mainHk,hkData,hkSetting,hkSection)=functionHelper.getHotkey(name)
+						btn=QPushButton(mainHk)
+						self.widgets.update({mainHk:btn})
+						self.widgetsText.update({btn:{'mainHk':mainHk,'hkData':hkData,'hkSetting':hkSetting,'hkSection':hkSection}})
+						self.box.addWidget(btn,row,col,Qt.Alignment(1))
+						btn.hide()
 						if mainHk:
-							btn=QPushButton(mainHk)
-							self.widgets.update({mainHk:btn})
-							self.widgetsText.update({btn:{'mainHk':mainHk,'hkData':hkData,'hkSetting':hkSetting,'hkSection':hkSection}})
-							self.box.addWidget(btn,row,col,Qt.Alignment(1))
+							btn.show()
 						col+=1
 						if col==2:
 							row+=1
@@ -205,6 +207,7 @@ class access(confStack):
 					if mainHk:
 						btn=self.widgets.get(mainHk)
 						if isinstance(btn,QPushButton):
+							btn.show()
 							sigmap_run.setMapping(btn,mainHk)
 							self.widgets.update({mainHk:btn})
 							self.widgetsText.update({btn:{'mainHk':mainHk,'hkData':hkData,'hkSetting':hkSetting,'hkSection':hkSection}})

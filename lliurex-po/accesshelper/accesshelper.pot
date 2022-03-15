@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-01 11:30+0100\n"
+"POT-Creation-Date: 2022-03-15 18:02+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,25 +17,25 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../src/accesshelp.py:74
+#: ../src/accesshelp.py:75
 msgid ""
 "It's recommended to logout from session now\n"
 "in order of avoid inconsistencies"
 msgstr ""
 
-#: ../src/accesshelp.py:75 ../src/accesshelp.py:81
+#: ../src/accesshelp.py:76 ../src/accesshelp.py:82
 msgid "Logout"
 msgstr ""
 
-#: ../src/accesshelp.py:84
+#: ../src/accesshelp.py:85
 msgid "Later"
 msgstr ""
 
-#: ../src/accesshelp.py:141
+#: ../src/accesshelp.py:142
 msgid "Profile not loaded: Autostart is disabled"
 msgstr ""
 
-#: ../src/accesshelp.py:150 ../src/stacks/profiles.py:25
+#: ../src/accesshelp.py:151 ../src/stacks/profiles.py:25
 msgid "Profile loaded"
 msgstr ""
 
@@ -93,42 +93,43 @@ msgid "Enable high contrast palette"
 msgstr ""
 
 #: ../src/stacks/access.py:29
-msgid "Invert screen colours"
+msgid "Invert screen colors"
 msgstr ""
 
 #: ../src/stacks/access.py:30
-msgid "Invert windows colours"
+msgid "Invert windows colors"
 msgstr ""
 
-#: ../src/stacks/access.py:31
+#: ../src/stacks/access.py:31 ../src/stacks/access.py:45
 msgid "Show animation on click"
 msgstr ""
 
-#: ../src/stacks/access.py:32 ../src/stacks/behavior.py:23
+#: ../src/stacks/access.py:32 ../src/stacks/access.py:46
+#: ../src/stacks/behavior.py:23
 msgid "Show a grid when moving windows"
 msgstr ""
 
-#: ../src/stacks/access.py:33
+#: ../src/stacks/access.py:33 ../src/stacks/access.py:47
 msgid "Activate eyefish effect"
 msgstr ""
 
-#: ../src/stacks/access.py:34
+#: ../src/stacks/access.py:34 ../src/stacks/access.py:48
 msgid "Glass effect"
 msgstr ""
 
-#: ../src/stacks/access.py:35
+#: ../src/stacks/access.py:35 ../src/stacks/access.py:49
 msgid "Zoom effect"
 msgstr ""
 
-#: ../src/stacks/access.py:36
+#: ../src/stacks/access.py:36 ../src/stacks/access.py:50
 msgid "Acoustic system bell"
 msgstr ""
 
-#: ../src/stacks/access.py:37
+#: ../src/stacks/access.py:37 ../src/stacks/access.py:51
 msgid "Set the policy focus"
 msgstr ""
 
-#: ../src/stacks/access.py:38
+#: ../src/stacks/access.py:38 ../src/stacks/access.py:52
 msgid "Visible bell"
 msgstr ""
 
@@ -138,6 +139,10 @@ msgstr ""
 
 #: ../src/stacks/access.py:40
 msgid "Track click"
+msgstr ""
+
+#: ../src/stacks/access.py:44
+msgid "InvertWindow"
 msgstr ""
 
 #: ../src/stacks/addHotkey.py:18 ../src/stacks/hotkeys.py:17

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-01 11:30+0100\n"
-"PO-Revision-Date: 2022-03-01 11:34+0100\n"
+"PO-Revision-Date: 2022-03-15 10:06+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ca\n"
@@ -435,7 +435,7 @@ msgstr "Configurar algunes opcions"
 
 #: ../src/stacks/settings.py:20
 msgid "Set config level, default template.."
-msgstr "Trie l'nici automàtic, les plantilles per defecte...\t"
+msgstr "Trie l'nici automàtic, les plantilles per defecte..."
 
 #: ../src/stacks/settings.py:21
 msgid "Autostart enabled for user"

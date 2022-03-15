@@ -92,8 +92,12 @@ class fonts(confStack):
 		dlgFont=self.widgets.get('font')
 		dlgFont.setCurrentFont(font)
 		#fix listview selections
-		style=font.split(",")[-1]
-		size=font.split(",")[1]
+		try:
+			style=font.split(",")[-1]
+			size=font.split(",")[1]
+		except:
+			style=""
+			size=""
 		for chld in dlgFont.findChildren(QListView):
 			sw_alpha=True
 			model=chld.model()

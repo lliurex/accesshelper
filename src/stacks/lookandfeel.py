@@ -156,6 +156,9 @@ class lookandfeel(confStack):
 				maxw=size.width()
 		for idx in range(0,cmbSize.count()):
 			size=cmbSize.itemText(idx)
+			if size=="":
+				size="32"
+
 			if maxw<int(size) and int(size)>32:	
 				cmbSize.model().item(idx).setEnabled(False)
 			else:

@@ -93,7 +93,7 @@ class alpha(confStack):
 	def writeConfig(self):
 		def getRgbCompatValue(color):
 			(top,color)=color
-			c=round(color*(top/255),2)
+			c=round((color*top)/255,2)
 			return c
 
 		def adjustCompatValue(color):
@@ -107,8 +107,8 @@ class alpha(confStack):
 		for name,wdg in self.widgets.items():
 			if name=="alpha":
 				alpha=wdg.currentColor()
-				#xgamma uses 0.1-10 scale. Values>5 are too bright and values<0.5 too dark
-				maxXgamma=5
+				#xgamma uses 0.1-10 scale. Values>4 are too bright and values<0.5 too dark
+				maxXgamma=3.5
 				minXgamma=0.5
 				#kgamma uses 0.40-3.5 scale. 
 				maxKgamma=3.5
@@ -120,9 +120,9 @@ class alpha(confStack):
 					green-=1
 					blue-=1
 				multiplier=1
-				(xred,xblue,xgreen)=map(adjustCompatValue,[[multiplier,maxXgamma,alpha.red()],[multiplier,maxXgamma,alpha.blue()],[multiplier,maxXgamma,alpha.green()]])
+				(xred,xblue,xgreen)=map(adjustCompatValue,[[multiplier,minXgamma,xred],[multiplier,minXgamma,xblue],[multiplier,minXgamma,xgreen]])
 				multiplier=5
-				(red,blue,green)=map(adjustCompatValue,[[multiplier,maxKgamma,alpha.red()],[multiplier,maxKgamma,alpha.blue()],[multiplier,maxKgamma,alpha.green()]])
+				(red,blue,green)=map(adjustCompatValue,[[multiplier,minKgamma,red],[multiplier,minKgamma,blue],[multiplier,minKgamma,green]])
 				brightness=1
 				self.sysConfig['kgammarc']['ConfigFile']=[("use","kgammarc")]
 				self.sysConfig['kgammarc']['SyncBox']=[("sync","yes")]
@@ -139,7 +139,9 @@ class alpha(confStack):
 			####for monitor in self._getMonitors():
 			####	xrand=["xrandr","--output",monitor,"--gamma","{0}:{1}:{2}".format(alpha.red()/25.5,alpha.green()/25.5,alpha.blue()/25.5),"--brightness","{}".format(brightness)]
 				xgamma=["xgamma","-screen","0","-rgamma","{0:.2f}".format(xred),"-ggamma","{0:.2f}".format(xgreen),"-bgamma","{0:.2f}".format(xblue)]
+				print(xgamma)
 				cmd=subprocess.run(xgamma,capture_output=True,encoding="utf8")
+				print(cmd.stderr)
 		functionHelper.setSystemConfig(self.sysConfig)
 		self.optionChanged=[]
 		self.refresh=True

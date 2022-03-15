@@ -65,6 +65,8 @@ def setSystemConfig(config,wrkFile=''):
 			for setting in data:
 				try:
 					(desc,value)=setting
+					if desc=="":
+						continue
 					_debug("Setting {} -> {}".format(desc,value))
 					_setKdeConfigSetting(section,desc,value,kfile)
 				except Exception as e:

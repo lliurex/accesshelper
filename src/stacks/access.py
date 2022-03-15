@@ -108,7 +108,7 @@ class access(confStack):
 						self.widgets.update({mainHk:btn})
 						self.widgetsText.update({btn:{'mainHk':mainHk,'hkData':hkData,'hkSetting':hkSetting,'hkSection':hkSection}})
 						self.box.addWidget(btn,row,col,Qt.Alignment(1))
-						btn.hide()
+						btn.setEnabled(False)
 						col+=1
 						if col==2:
 							row+=1
@@ -130,10 +130,10 @@ class access(confStack):
 			if isinstance(chk,QCheckBox):
 				if chk.isChecked():
 					if isinstance(btn,QPushButton):
-						btn.show()
+						btn.setEnabled(True)
 				else:
 					if isinstance(btn,QPushButton):
-						btn.hide()
+						btn.setEnabled(False)
 
 	def _grab_alt_keys(self,*args):
 		desc=''

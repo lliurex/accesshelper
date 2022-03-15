@@ -94,6 +94,9 @@ class alpha(confStack):
 		for name,wdg in self.widgets.items():
 			if name=="alpha":
 				alpha=wdg.currentColor()
+				xred=alpha.red()*(4/255)
+				xblue=alpha.blue()*(4/255)
+				xgreen=alpha.green()*(4/255)
 				red=alpha.red()*(3.50/255)
 				blue=alpha.blue()*(3.50/255)
 				green=alpha.green()*(3.50/255)
@@ -101,12 +104,21 @@ class alpha(confStack):
 					red-=1
 					green-=1
 					blue-=1
-				if blue<=0.5:
+				if blue<=0.5 and blue>=0.2:
 					blue=0.50
-				if green<=0.5:
+				elif blue<=0.2:
+					blue=0.5
+					xblue=0.50
+				if green<=0.5 and green>=0.2:
 					green=0.50
-				if red<=0.5:
+				elif green<=0.2:
+					green=0.40
+					xgreen=0.50
+				if red<=0.5 and red >=0.2:
 					red=0.50
+				elif red<=0.2:
+					red=0.40
+					xred=0.50
 				brightness=1
 				self.sysConfig['kgammarc']['ConfigFile']=[("use","kgammarc")]
 				self.sysConfig['kgammarc']['SyncBox']=[("sync","yes")]
@@ -120,7 +132,7 @@ class alpha(confStack):
 					if desc=='ggamma':
 						value=green
 					#Adjust decimals
-					while (value*100)%5!=0:
+					while (value*100)%5!=0 and value!=0:
 						value=round(value+0.01,2)
 					if desc=='bgamma':
 						blue=value
@@ -131,8 +143,11 @@ class alpha(confStack):
 					values.append((desc,"{0:.2f}".format(value)))
 				self.sysConfig['kgammarc']['Screen 0']=values
 				for monitor in self._getMonitors():
-					xrand=["xrandr","--output",monitor,"--gamma","{0}:{1}:{2}".format(alpha.red()/255,alpha.green()/255,alpha.blue()/255),"--brightness","{}".format(brightness)]
-					cmd=subprocess.run(xrand,capture_output=True,encoding="utf8")
+					xrand=["xrandr","--output",monitor,"--gamma","{0}:{1}:{2}".format(alpha.red()/25.5,alpha.green()/25.5,alpha.blue()/25.5),"--brightness","{}".format(brightness)]
+				xgamma=["xgamma","-screen","0","-rgamma","{0:.2f}".format(xred),"-ggamma","{0:.2f}".format(xgreen),"-bgamma","{0:.2f}".format(xblue)]
+				print(xgamma)
+				cmd=subprocess.run(xgamma,capture_output=True,encoding="utf8")
+				print(cmd.stderr)
 		functionHelper.setSystemConfig(self.sysConfig)
 		self.optionChanged=[]
 		self.refresh=True
@@ -143,7 +158,11 @@ class alpha(confStack):
 	def _reset_screen(self,*args):
 		for monitor in self._getMonitors():
 			xrand=["xrandr","--output",monitor,"--gamma","1:1:1","--brightness","1"]
-			cmd=subprocess.run(xrand,capture_output=True,encoding="utf8")
+		xgamma=["xgamma","-screen","0","-rgamma","1","-ggamma","1","-bgamma","1"]
+		cmd=subprocess.run(xgamma,capture_output=True,encoding="utf8")
+		values=[("ggamma","1.00"),("bgamma","1.00"),("rgamma","1.00")]
+		self.sysConfig['kgammarc']['Screen 0']=values
+		functionHelper.setSystemConfig(self.sysConfig)
 		self.btn_ok.setEnabled(False)
 		self.saveChanges('alpha','1:1:1')
 		self._removeAutostartDesktop()

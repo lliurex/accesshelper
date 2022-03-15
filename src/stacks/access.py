@@ -62,6 +62,7 @@ class access(confStack):
 		self.widgetsText={}
 		self.optionChanged=[]
 		self.keymap={}
+		self.chkbtn={}
 		for key,value in vars(Qt).items():
 			if isinstance(value, Qt.Key):
 				self.keymap[value]=key.partition('_')[2]
@@ -97,9 +98,10 @@ class access(confStack):
 							zoomOptions.append(setting)
 							continue
 						desc=i18n.get(name.upper(),name)
-						btn=QCheckBox(desc)
-						self.widgets.update({name:btn})
-						self.box.addWidget(btn,row,col)
+						chk=QCheckBox(desc)
+						chk.stateChanged.connect(self._updateButtons)
+						self.widgets.update({name:chk})
+						self.box.addWidget(chk,row,col)
 						col+=1
 						(mainHk,hkData,hkSetting,hkSection)=functionHelper.getHotkey(name)
 						btn=QPushButton(mainHk)
@@ -107,12 +109,12 @@ class access(confStack):
 						self.widgetsText.update({btn:{'mainHk':mainHk,'hkData':hkData,'hkSetting':hkSetting,'hkSection':hkSection}})
 						self.box.addWidget(btn,row,col,Qt.Alignment(1))
 						btn.hide()
-						if mainHk:
-							btn.show()
 						col+=1
 						if col==2:
 							row+=1
 							col=0
+						if name.upper() not in ["SYSTEMBELL","VISIBLEBELL"]:
+							self.chkbtn[chk]=btn
 					for setting in zoomOptions:
 						(name,data)=setting
 						desc=i18n.get(name.upper(),name)
@@ -120,9 +122,18 @@ class access(confStack):
 						self.widgets.update({name:btn})
 						self.box.addWidget(btn,row,col)
 						row+=1
-
 		self.updateScreen()
 	#def _load_screen
+
+	def _updateButtons(self):
+		for chk,btn in self.chkbtn.items():
+			if isinstance(chk,QCheckBox):
+				if chk.isChecked():
+					if isinstance(btn,QPushButton):
+						btn.show()
+				else:
+					if isinstance(btn,QPushButton):
+						btn.hide()
 
 	def _grab_alt_keys(self,*args):
 		desc=''
@@ -213,6 +224,7 @@ class access(confStack):
 							self.widgetsText.update({btn:{'mainHk':mainHk,'hkData':hkData,'hkSetting':hkSetting,'hkSection':hkSection}})
 							btn.clicked.connect(sigmap_run.map)
 							btn.setText(mainHk)
+		self._updateButtons()
 		return
 	#def _udpate_screen
 

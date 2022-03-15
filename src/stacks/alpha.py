@@ -91,34 +91,38 @@ class alpha(confStack):
 		#		self._exeKwinMethod(key) 
 	
 	def writeConfig(self):
+		def getRgbCompatValue(color):
+			(top,color)=color
+			c=round((color*top)/255,2)
+			return c
+
+		def adjustCompatValue(color):
+			(multiplier,c,minValue)=color
+			while (c*100)%multiplier!=0 and c!=0:
+				c=round(c+0.01,2)
+			if c<=minValue:
+				c=minValue
+			return c
+
 		for name,wdg in self.widgets.items():
 			if name=="alpha":
 				alpha=wdg.currentColor()
-				xred=alpha.red()*(4/255)
-				xblue=alpha.blue()*(4/255)
-				xgreen=alpha.green()*(4/255)
-				red=alpha.red()*(3.50/255)
-				blue=alpha.blue()*(3.50/255)
-				green=alpha.green()*(3.50/255)
-				if red+blue+green>6:
+				#xgamma uses 0.1-10 scale. Values>4 are too bright and values<0.5 too dark
+				maxXgamma=3.5
+				minXgamma=0.5
+				#kgamma uses 0.40-3.5 scale. 
+				maxKgamma=3.5
+				minKgamma=0.4
+				(xred,xblue,xgreen)=map(getRgbCompatValue,[(maxXgamma,alpha.red()),(maxXgamma,alpha.blue()),(maxXgamma,alpha.green())])
+				(red,blue,green)=map(getRgbCompatValue,[(maxKgamma,alpha.red()),(maxKgamma,alpha.blue()),(maxKgamma,alpha.green())])
+				if red+blue+green>(maxKgamma*(2-(maxKgamma*0.10))): #maxKGamma*2=at least two channel very high, plus a 10% margin
 					red-=1
 					green-=1
 					blue-=1
-				if blue<=0.5 and blue>=0.2:
-					blue=0.50
-				elif blue<=0.2:
-					blue=0.5
-					xblue=0.50
-				if green<=0.5 and green>=0.2:
-					green=0.50
-				elif green<=0.2:
-					green=0.40
-					xgreen=0.50
-				if red<=0.5 and red >=0.2:
-					red=0.50
-				elif red<=0.2:
-					red=0.40
-					xred=0.50
+				multiplier=1
+				(xred,xblue,xgreen)=map(adjustCompatValue,[[multiplier,minXgamma,xred],[multiplier,minXgamma,xblue],[multiplier,minXgamma,xgreen]])
+				multiplier=5
+				(red,blue,green)=map(adjustCompatValue,[[multiplier,minKgamma,red],[multiplier,minKgamma,blue],[multiplier,minKgamma,green]])
 				brightness=1
 				self.sysConfig['kgammarc']['ConfigFile']=[("use","kgammarc")]
 				self.sysConfig['kgammarc']['SyncBox']=[("sync","yes")]
@@ -126,24 +130,14 @@ class alpha(confStack):
 				for gamma in self.sysConfig['kgammarc']['Screen 0']:
 					(desc,value)=gamma
 					if desc=='bgamma':
-						value=blue
-					if desc=='rgamma':
-						value=red
-					if desc=='ggamma':
-						value=green
-					#Adjust decimals
-					while (value*100)%5!=0 and value!=0:
-						value=round(value+0.01,2)
-					if desc=='bgamma':
-						blue=value
-					if desc=='rgamma':
-						red=value
-					if desc=='ggamma':
-						green=value
-					values.append((desc,"{0:.2f}".format(value)))
+						values.append((desc,"{0:.2f}".format(blue)))
+					elif desc=='rgamma':
+						values.append((desc,"{0:.2f}".format(red)))
+					elif desc=='ggamma':
+						values.append((desc,"{0:.2f}".format(green)))
 				self.sysConfig['kgammarc']['Screen 0']=values
-				for monitor in self._getMonitors():
-					xrand=["xrandr","--output",monitor,"--gamma","{0}:{1}:{2}".format(alpha.red()/25.5,alpha.green()/25.5,alpha.blue()/25.5),"--brightness","{}".format(brightness)]
+			####for monitor in self._getMonitors():
+			####	xrand=["xrandr","--output",monitor,"--gamma","{0}:{1}:{2}".format(alpha.red()/25.5,alpha.green()/25.5,alpha.blue()/25.5),"--brightness","{}".format(brightness)]
 				xgamma=["xgamma","-screen","0","-rgamma","{0:.2f}".format(xred),"-ggamma","{0:.2f}".format(xgreen),"-bgamma","{0:.2f}".format(xblue)]
 				print(xgamma)
 				cmd=subprocess.run(xgamma,capture_output=True,encoding="utf8")

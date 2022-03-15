@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-01 11:30+0100\n"
-"PO-Revision-Date: 2022-03-01 11:34+0100\n"
+"POT-Creation-Date: 2022-03-15 18:02+0100\n"
+"PO-Revision-Date: 2022-03-15 18:03+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ca\n"
@@ -18,25 +18,25 @@ msgstr ""
 "X-Generator: Poedit 2.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../src/accesshelp.py:74
+#: ../src/accesshelp.py:75
 msgid ""
 "It's recommended to logout from session now\n"
 "in order of avoid inconsistencies"
 msgstr "Es recomana tancar la sessió per evitar inconsistencies"
 
-#: ../src/accesshelp.py:75 ../src/accesshelp.py:81
+#: ../src/accesshelp.py:76 ../src/accesshelp.py:82
 msgid "Logout"
 msgstr "Tancar"
 
-#: ../src/accesshelp.py:84
+#: ../src/accesshelp.py:85
 msgid "Later"
 msgstr "Després"
 
-#: ../src/accesshelp.py:141
+#: ../src/accesshelp.py:142
 msgid "Profile not loaded: Autostart is disabled"
 msgstr "Perfil no carregat: Autoinici desactivat"
 
-#: ../src/accesshelp.py:150 ../src/stacks/profiles.py:25
+#: ../src/accesshelp.py:151 ../src/stacks/profiles.py:25
 msgid "Profile loaded"
 msgstr "Perfil carregat"
 
@@ -94,42 +94,43 @@ msgid "Enable high contrast palette"
 msgstr "Paleta d'alt contrast"
 
 #: ../src/stacks/access.py:29
-msgid "Invert screen colours"
+msgid "Invert screen colors"
 msgstr "Inverteix colors"
 
 #: ../src/stacks/access.py:30
-msgid "Invert windows colours"
+msgid "Invert windows colors"
 msgstr "Inverteix colors de la finestra"
 
-#: ../src/stacks/access.py:31
+#: ../src/stacks/access.py:31 ../src/stacks/access.py:45
 msgid "Show animation on click"
 msgstr "Posiciona el punter al fer clic"
 
-#: ../src/stacks/access.py:32 ../src/stacks/behavior.py:23
+#: ../src/stacks/access.py:32 ../src/stacks/access.py:46
+#: ../src/stacks/behavior.py:23
 msgid "Show a grid when moving windows"
 msgstr "Mostra una graella al moure finestres"
 
-#: ../src/stacks/access.py:33
+#: ../src/stacks/access.py:33 ../src/stacks/access.py:47
 msgid "Activate eyefish effect"
 msgstr "Activa ull de peix"
 
-#: ../src/stacks/access.py:34
+#: ../src/stacks/access.py:34 ../src/stacks/access.py:48
 msgid "Glass effect"
 msgstr "Activa lupa"
 
-#: ../src/stacks/access.py:35
+#: ../src/stacks/access.py:35 ../src/stacks/access.py:49
 msgid "Zoom effect"
 msgstr "Activa Zoom"
 
-#: ../src/stacks/access.py:36
+#: ../src/stacks/access.py:36 ../src/stacks/access.py:50
 msgid "Acoustic system bell"
 msgstr "Campana de sistema audible"
 
-#: ../src/stacks/access.py:37
+#: ../src/stacks/access.py:37 ../src/stacks/access.py:51
 msgid "Set the policy focus"
 msgstr "Política de focus"
 
-#: ../src/stacks/access.py:38
+#: ../src/stacks/access.py:38 ../src/stacks/access.py:52
 msgid "Visible bell"
 msgstr "Campana visible"
 
@@ -140,6 +141,10 @@ msgstr "Posiciona el punter al moure'l"
 #: ../src/stacks/access.py:40
 msgid "Track click"
 msgstr "Posiciona el punter al fer clic"
+
+#: ../src/stacks/access.py:44
+msgid "InvertWindow"
+msgstr "Inverteix colors de la finestra"
 
 #: ../src/stacks/addHotkey.py:18 ../src/stacks/hotkeys.py:17
 msgid "hotkeys options"
@@ -395,7 +400,7 @@ msgstr "Importar"
 
 #: ../src/stacks/profiles.py:27
 msgid "Export profile"
-msgstr "Exporta"
+msgstr "Exportar"
 
 #: ../src/stacks/profiles.py:28
 msgid "An error ocurred"
@@ -435,7 +440,7 @@ msgstr "Configurar algunes opcions"
 
 #: ../src/stacks/settings.py:20
 msgid "Set config level, default template.."
-msgstr "Trie l'nici automàtic, les plantilles per defecte...\t"
+msgstr "Trie l'nici automàtic, les plantilles per defecte..."
 
 #: ../src/stacks/settings.py:21
 msgid "Autostart enabled for user"

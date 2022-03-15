@@ -26,8 +26,8 @@ i18n={
 	"MENUDESCRIPTION":_("Set accesibility options"),
 	"TOOLTIP":_("From here you can activate/deactivate accessibility aids"),
 	"HIGHCONTRAST":_("Enable high contrast palette"),
-	"INVERTENABLED":_("Invert screen colours"),
-	"INVERTWINDOW":_("Invert windows colours"),
+	"INVERTENABLED":_("Invert screen colors"),
+	"INVERTWINDOW":_("Invert windows colors"),
 	"ANIMATEONCLICK":_("Show animation on click"),
 	"SNAPHELPERENABLED":_("Show a grid when moving windows"),
 	"LOOKINGGLASSENABLED":_("Activate eyefish effect"),
@@ -38,6 +38,18 @@ i18n={
 	"VISIBLEBELL":_("Visible bell"),
 	"TRACKMOUSEENABLED":_("Track pointer"),
 	"MOUSECLICKENABLED":_("Track click")
+	}
+descHk={
+	"INVERTENABLED":"Invert",
+	"INVERTWINDOW":_("InvertWindow"),
+	"ANIMATEONCLICK":_("Show animation on click"),
+	"SNAPHELPERENABLED":_("Show a grid when moving windows"),
+	"LOOKINGGLASSENABLED":_("Activate eyefish effect"),
+	"MAGNIFIERENABLED":_("Glass effect"),
+	"ZOOMENABLED":_("Zoom effect"),
+	"SYSTEMBELL":_("Acoustic system bell"),
+	"FOCUSPOLICY":_("Set the policy focus"),
+	"VISIBLEBELL":_("Visible bell")
 	}
 
 class access(confStack):
@@ -62,6 +74,7 @@ class access(confStack):
 		self.widgetsText={}
 		self.optionChanged=[]
 		self.keymap={}
+		self.chkbtn={}
 		for key,value in vars(Qt).items():
 			if isinstance(value, Qt.Key):
 				self.keymap[value]=key.partition('_')[2]
@@ -97,20 +110,30 @@ class access(confStack):
 							zoomOptions.append(setting)
 							continue
 						desc=i18n.get(name.upper(),name)
-						btn=QCheckBox(desc)
-						self.widgets.update({name:btn})
-						self.box.addWidget(btn,row,col)
+						chk=QCheckBox(desc)
+						chk.stateChanged.connect(self._updateButtons)
+						self.widgets.update({name:chk})
+						self.box.addWidget(chk,row,col)
 						col+=1
 						(mainHk,hkData,hkSetting,hkSection)=functionHelper.getHotkey(name)
-						if mainHk:
-							btn=QPushButton(mainHk)
-							self.widgets.update({mainHk:btn})
-							self.widgetsText.update({btn:{'mainHk':mainHk,'hkData':hkData,'hkSetting':hkSetting,'hkSection':hkSection}})
-							self.box.addWidget(btn,row,col,Qt.Alignment(1))
+						if mainHk=="none":
+							mainHk=""
+						btn=QPushButton(mainHk)
+						name="btn_{}".format(name)
+						if mainHk=="":
+							mainHk=name
+						self.widgets.update({name:btn})
+						self.widgetsText.update({btn:{'mainHk':mainHk,'hkData':hkData,'hkSetting':hkSetting,'hkSection':hkSection}})
+						self.box.addWidget(btn,row,col,Qt.Alignment(1))
+						btn.setEnabled(False)
 						col+=1
 						if col==2:
 							row+=1
 							col=0
+						if name.upper() not in ["SYSTEMBELL","VISIBLEBELL"]:
+							self.chkbtn[chk]=btn
+						else:
+							btn.hide()
 					for setting in zoomOptions:
 						(name,data)=setting
 						desc=i18n.get(name.upper(),name)
@@ -118,9 +141,18 @@ class access(confStack):
 						self.widgets.update({name:btn})
 						self.box.addWidget(btn,row,col)
 						row+=1
-
 		self.updateScreen()
 	#def _load_screen
+
+	def _updateButtons(self):
+		for chk,btn in self.chkbtn.items():
+			if isinstance(chk,QCheckBox):
+				if chk.isChecked():
+					if isinstance(btn,QPushButton):
+						btn.setEnabled(True)
+				else:
+					if isinstance(btn,QPushButton):
+						btn.setEnabled(False)
 
 	def _grab_alt_keys(self,*args):
 		desc=''
@@ -131,7 +163,7 @@ class access(confStack):
 		if desc:
 			btn=self.widgets.get(desc,'')
 		if btn:
-			btn.setText("")
+			btn.setText("Press keys")
 			self.grabKeyboard()
 			self.keybind_signal.connect(self._set_config_key)
 			self.btn=btn
@@ -198,18 +230,23 @@ class access(confStack):
 						state=False
 						if data.lower()=="true":
 							state=True
-						self.widgets.get(name).setChecked(state)
+						if name:
+							self.widgets.get(name).setChecked(state)
 
 					(mainHk,hkData,hkSetting,hkSection)=functionHelper.getHotkey(name)
 
-					if mainHk:
-						btn=self.widgets.get(mainHk)
-						if isinstance(btn,QPushButton):
-							sigmap_run.setMapping(btn,mainHk)
-							self.widgets.update({mainHk:btn})
-							self.widgetsText.update({btn:{'mainHk':mainHk,'hkData':hkData,'hkSetting':hkSetting,'hkSection':hkSection}})
-							btn.clicked.connect(sigmap_run.map)
-							btn.setText(mainHk)
+					if mainHk=="" or mainHk.lower()=="none":
+						mainHk=""
+					name="btn_{}".format(name)
+					btn=self.widgets.get(name)
+					if isinstance(btn,QPushButton):
+						btn.show()
+						sigmap_run.setMapping(btn,name)
+						self.widgets.update({name:btn})
+						self.widgetsText.update({btn:{'mainHk':mainHk,'hkData':hkData,'hkSetting':hkSetting,'hkSection':hkSection}})
+						btn.clicked.connect(sigmap_run.map)
+						btn.setText(mainHk)
+		self._updateButtons()
 		return
 	#def _udpate_screen
 
@@ -255,7 +292,14 @@ class access(confStack):
 					if newHk!=mainHk:
 						hkData=hkData.split(",")
 						hkData[0]=newHk
-						hkData[1]=newHk
+						if len(hkData)<=1:
+							hkData.append(newHk)
+							desc=desc.replace("btn_","").upper()
+							hkData.append(i18n.get(desc,desc))
+							hkSetting=descHk.get(desc,desc)  
+							hkSection="kwin"
+						else:
+							hkData[1]=newHk
 						hkData=",".join(hkData)
 					if self.sysConfig["kglobalshortcutsrc"].get(hkSection,None)==None:
 						self.sysConfig["kglobalshortcutsrc"][hkSection]=[]

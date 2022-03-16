@@ -188,6 +188,8 @@ class access(confStack):
 		#if keypress!=self.keytext:
 		#	self.changes=True
 		#	self.setChanged(self.btn_conf)
+		self.btn_ok.setEnabled(True)
+		self.btn_cancel.setEnabled(True)
 	#def _set_config_key
 
 	def eventFilter(self,source,event):

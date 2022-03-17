@@ -62,6 +62,7 @@ def _restartSession(*args):
 	QApplication.quit()
 	cmd=["qdbus","org.kde.Shutdown","/Shutdown","logout"]
 	cmd=["qdbus","org.kde.KWin","/KWin","org.kde.KWin.reconfigure"]
+	cmd=["plasmashell","--replace"]
 	#cmd=["kquitapp5","plasmashell"]
 	subprocess.run(cmd)
 	#cmd=["kstart5","plasmashell"]

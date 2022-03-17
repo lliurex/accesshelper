@@ -61,9 +61,12 @@ def setProfile(profilePath):
 def _restartSession(*args):
 	QApplication.quit()
 	cmd=["qdbus","org.kde.Shutdown","/Shutdown","logout"]
-	cmd=["qdbus","org.kde.KWin","/KWin","org.kde.KWin.reconfigure"]
 	cmd=["plasmashell","--replace"]
+	subprocess.run(cmd)
+	cmd=["qdbus","org.kde.KWin","/KWin","org.kde.KWin.reconfigure"]
+	subprocess.run(cmd)
 	#cmd=["kquitapp5","plasmashell"]
+	cmd=["kcminit"]
 	subprocess.run(cmd)
 	#cmd=["kstart5","plasmashell"]
 	#subprocess.run(cmd)

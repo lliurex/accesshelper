@@ -98,8 +98,8 @@ class profiles(confStack):
 		name=os.path.basename(name)
 		if len(name)>20:
 			name=name[0:19]
-		name=self.profilesPath.get(name,'')
-		if name=='':
+		nameProfile=self.profilesPath.get(name,'')
+		if nameProfile=='':
 			name="{}.tar".format(name)
 			name=self.profilesPath.get(name,'')
 		if name:
@@ -197,7 +197,7 @@ class profiles(confStack):
 		else:
 			appconfrc=os.path.join(os.path.dirname(self.wrkDir),"accesshelper.json")
 			
-		if self.accesshelper.takeSnapshot(profilePath,appconfrc=appconfrc)==False:
+		if self.accesshelper.takeSnapshot(profilePath,appconfrc)==False:
 			self.showMsg("{}: {}".format(i18n.get("ERRORPERMS"),profilePath))
 		else:
 			if self.wrkDir in profilePath:

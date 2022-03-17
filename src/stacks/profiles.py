@@ -7,7 +7,7 @@ from PySide2.QtCore import Qt,QSignalMapper
 from appconfig.appConfigStack import appConfigStack as confStack
 import gettext
 import subprocess
-from . import functionHelper
+from . import libaccesshelper
 _ = gettext.gettext
 QString=type("")
 
@@ -47,10 +47,11 @@ class profiles(confStack):
 		self.lst_profiles=QListWidget()
 		self.lst_userProfiles=QListWidget()
 		self.hideControlButtons()
+		self.accesshelper=libaccesshelper.accesshelper()
 	#def __init__
 
 	def _load_screen(self):
-		self.setStyleSheet(functionHelper.cssStyle())
+		self.setStyleSheet(self.accesshelper.cssStyle())
 		self.box=QGridLayout()
 		self.setLayout(self.box)
 		self.widgets={}
@@ -86,9 +87,9 @@ class profiles(confStack):
 				f=filenames[0]
 				if self.level=='user':
 					wrkUserDir=os.path.join(os.environ['HOME'],".config","accesshelper","profiles")
-					functionHelper.importExportSnapshot(f,wrkUserDir)
+					self.accesshelper.importExportSnapshot(f,wrkUserDir)
 				else:
-					functionHelper.importExportSnapshot(f,self.wrkDir)
+					self.accesshelper.importExportSnapshot(f,self.wrkDir)
 				self.updateScreen()
 	#def _selectProfile
 
@@ -105,7 +106,7 @@ class profiles(confStack):
 			dlg = QFileDialog.getSaveFileName(self, i18n.get("EXPORT"),"{}".format(name))
 			f=dlg[0]
 			if f:
-				functionHelper.importExportSnapshot(name,f)
+				self.accesshelper.importExportSnapshot(name,f)
 	#def _exportProfile
 
 
@@ -155,7 +156,7 @@ class profiles(confStack):
 		name="{}.tar".format(name)
 		sw=False
 		if self.profilesPath.get(name,''):
-			sw=functionHelper.restoreSnapshot(self.profilesPath.get(name))
+			sw=self.accesshelper.restoreSnapshot(self.profilesPath.get(name))
 		if sw:
 			self.saveChanges('profile',name,level='user')
 			self.showMsg(i18n.get("RESTORESNAP"))
@@ -196,7 +197,7 @@ class profiles(confStack):
 		else:
 			appconfrc=os.path.join(os.path.dirname(self.wrkDir),"accesshelper.json")
 			
-		if functionHelper.takeSnapshot(profilePath,appconfrc=appconfrc)==False:
+		if self.accesshelper.takeSnapshot(profilePath,appconfrc=appconfrc)==False:
 			self.showMsg("{}: {}".format(i18n.get("ERRORPERMS"),profilePath))
 		else:
 			if self.wrkDir in profilePath:

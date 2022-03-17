@@ -9,7 +9,7 @@ import gettext
 import json
 import subprocess
 import dbus,dbus.service,dbus.exceptions
-from . import functionHelper
+from . import libaccesshelper
 _ = gettext.gettext
 QString=type("")
 
@@ -86,6 +86,7 @@ class access(confStack):
 					Qt.GroupSwitchModifier: self.keymap[Qt.Key_AltGr],
 					Qt.KeypadModifier: self.keymap[Qt.Key_NumLock]
 					}
+		self.accesshelper=libaccesshelper.accesshelper()
 	#def __init__
 
 	def _load_screen(self):
@@ -95,7 +96,7 @@ class access(confStack):
 		self.refresh=True
 		row,col=(0,0)
 		for wrkFile in self.wrkFiles:
-			systemConfig=functionHelper.getSystemConfig(wrkFile)
+			systemConfig=self.accesshelper.getSystemConfig(wrkFile)
 			self.sysConfig.update(systemConfig)
 			for kfile,sections in systemConfig.items():
 				want=self.wantSettings.get(kfile,[])
@@ -115,7 +116,7 @@ class access(confStack):
 						self.widgets.update({name:chk})
 						self.box.addWidget(chk,row,col)
 						col+=1
-						(mainHk,hkData,hkSetting,hkSection)=functionHelper.getHotkey(name)
+						(mainHk,hkData,hkSetting,hkSection)=self.accesshelper.getHotkey(name)
 						if mainHk=="none":
 							mainHk=""
 						btn=QPushButton(mainHk)
@@ -219,7 +220,7 @@ class access(confStack):
 		sigmap_run=QSignalMapper(self)
 		sigmap_run.mapped[QString].connect(self._grab_alt_keys)
 		for wrkFile in self.wrkFiles:
-			systemConfig=functionHelper.getSystemConfig(wrkFile)
+			systemConfig=self.accesshelper.getSystemConfig(wrkFile)
 			self.sysConfig.update(systemConfig)
 		for kfile,sections in self.sysConfig.items():
 			want=self.wantSettings.get(kfile,[])
@@ -237,7 +238,7 @@ class access(confStack):
 						if name:
 							self.widgets.get(name).setChecked(state)
 
-					(mainHk,hkData,hkSetting,hkSection)=functionHelper.getHotkey(name)
+					(mainHk,hkData,hkSetting,hkSection)=self.accesshelper.getHotkey(name)
 
 					if mainHk=="" or mainHk.lower()=="none":
 						mainHk=""
@@ -257,7 +258,7 @@ class access(confStack):
 
 	def _updateConfig(self,*args):
 		for wrkFile in self.wrkFiles:
-			systemConfig=functionHelper.getSystemConfig(wrkFile)
+			systemConfig=self.accesshelper.getSystemConfig(wrkFile)
 			self.sysConfig.update(systemConfig)
 		return
 	#def _updateConfig
@@ -279,7 +280,7 @@ class access(confStack):
 					dataTmp.append((setting,value))
 				self.sysConfig[kfile][section]=dataTmp
 		self.sysconfig=self._writeHotkeys()
-		functionHelper.setSystemConfig(self.sysConfig)
+		self.accesshelper.setSystemConfig(self.sysConfig)
 		self.optionChanged=[]
 		self._updateConfig()
 		self.updateScreen()
@@ -292,7 +293,7 @@ class access(confStack):
 		self.sysConfig["kglobalshortcutsrc"]={}
 		for desc,widget in self.widgets.items():
 			if isinstance(widget,QPushButton):
-					(mainHk,hkData,hkSetting,hkSection)=functionHelper.getHotkey(desc)
+					(mainHk,hkData,hkSetting,hkSection)=self.accesshelper.getHotkey(desc)
 					newHk=widget.text()
 					if newHk!=mainHk:
 						hkData=hkData.split(",")

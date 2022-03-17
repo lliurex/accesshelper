@@ -9,7 +9,6 @@ from appconfig.appConfigStack import appConfigStack as confStack
 import subprocess
 import tempfile
 import gettext
-from . import functionHelper
 _ = gettext.gettext
 QString=type("")
 

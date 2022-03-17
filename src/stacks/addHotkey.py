@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-from . import functionHelper
+from . import libaccesshelper
 import sys
 import os
 from PySide2.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QGridLayout,QLineEdit,QComboBox,QRadioButton,QListWidget,QGroupBox,QCompleter,QListWidgetItem
@@ -58,6 +58,7 @@ class addHotkey(confStack):
 					Qt.GroupSwitchModifier: self.keymap[Qt.Key_AltGr],
 					Qt.KeypadModifier: self.keymap[Qt.Key_NumLock]
 					}
+		self.accesshelper=libaccesshelper.accesshelper()
 	#def __init__
 
 	def _load_screen(self):
@@ -249,8 +250,8 @@ class addHotkey(confStack):
 		launch='{0},,{1}'.format(txt,comment)
 		hk={'[{0}]'.format(desktop):{'_k_friendly_name':name,'_launch':launch}}
 		hotkeys.update(hk)
-		functionHelper.setKdeConfigSetting(desktop,"_k_friendly_name",name,self.wrkFiles[0])
-		functionHelper.setKdeConfigSetting(desktop,"_launch",launch,self.wrkFiles[0])
+		self.accesshelper.setKdeConfigSetting(desktop,"_k_friendly_name",name,self.wrkFiles[0])
+		self.accesshelper.setKdeConfigSetting(desktop,"_launch",launch,self.wrkFiles[0])
 		self.saveChanges("hotkeys",hotkeys)
 		self.optionChanged=[]
 		f=open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'w')

@@ -1,6 +1,5 @@
 #!/usr/bin/python3
-from . import functionHelper
-from . import resolutionHelper
+from . import libaccesshelper
 import sys
 import os
 import subprocess
@@ -39,13 +38,14 @@ class alpha(confStack):
 		self.wrkFiles=["kgammarc"]
 		self.blockSettings={}
 		self.optionChanged=[]
+		self.accesshelper=libaccesshelper.accesshelper()
 	#def __init__
 
 	def _load_screen(self):
 		self.box=QGridLayout()
 		self.setLayout(self.box)
 		for wrkFile in self.wrkFiles:
-			systemConfig=functionHelper.getSystemConfig(wrkFile=wrkFile)
+			systemConfig=self.accesshelper.getSystemConfig(wrkFile)
 			self.sysConfig.update(systemConfig)
 		kdevalues=self.sysConfig.get('kdeglobals',{}).get('General',[])
 		alpha=''
@@ -142,7 +142,7 @@ class alpha(confStack):
 				print(xgamma)
 				cmd=subprocess.run(xgamma,capture_output=True,encoding="utf8")
 				print(cmd.stderr)
-		functionHelper.setSystemConfig(self.sysConfig)
+		self.accesshelper.setSystemConfig(self.sysConfig)
 		self.optionChanged=[]
 		self.refresh=True
 		f=open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'w')
@@ -156,7 +156,7 @@ class alpha(confStack):
 		cmd=subprocess.run(xgamma,capture_output=True,encoding="utf8")
 		values=[("ggamma","1.00"),("bgamma","1.00"),("rgamma","1.00")]
 		self.sysConfig['kgammarc']['Screen 0']=values
-		functionHelper.setSystemConfig(self.sysConfig)
+		self.accesshelper.setSystemConfig(self.sysConfig)
 		self.btn_ok.setEnabled(False)
 		self.saveChanges('alpha','1:1:1')
 		self._removeAutostartDesktop()

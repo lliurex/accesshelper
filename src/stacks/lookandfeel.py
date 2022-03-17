@@ -1,6 +1,5 @@
 #!/usr/bin/python3
-from . import functionHelper
-from . import resolutionHelper
+from . import libaccesshelper
 import sys
 import os
 import tempfile
@@ -48,6 +47,7 @@ class lookandfeel(confStack):
 		self.wantSettings={"kdeglobals":["General"]}
 		self.optionChanged=[]
 		self.cursorDesc={}
+		self.accesshelper=libaccesshelper.accesshelper()
 	#def __init__
 
 	def _load_screen(self):
@@ -96,7 +96,7 @@ class lookandfeel(confStack):
 
 	def updateScreen(self):
 		for wrkFile in self.wrkFiles:
-			systemConfig=functionHelper.getSystemConfig(wrkFile=wrkFile)
+			systemConfig=self.accesshelper.getSystemConfig(wrkFile)
 			self.sysConfig.update(systemConfig)
 		self.config=self.getConfig()
 		theme=""
@@ -234,78 +234,36 @@ class lookandfeel(confStack):
 	#def writeConfig
 
 	def _getThemeList(self):
-		availableThemes=[]
-		themes=""
-		try:
-			themes=subprocess.run(["plasma-apply-desktoptheme","--list-themes"],stdout=subprocess.PIPE)
-		except Exception as e:
-			print(e)
-		if themes:
-			out=themes.stdout.decode()
-			for line in out.split("\n"):
-				theme=line.strip()
-				if theme.startswith("*"):
-					availableThemes.append(theme.replace("*","").strip())
+		availableThemes=self.accesshelper.getThemes()
 		return (availableThemes)
 	#def _getThemeList
 
 	def _getSchemeList(self):
-		availableSchemes=[]
-		schemes=""
-		try:
-			schemes=subprocess.run(["plasma-apply-colorscheme","--list-schemes"],stdout=subprocess.PIPE)
-		except Exception as e:
-			print(e)
-		if schemes:
-			out=schemes.stdout.decode()
-			for line in out.split("\n"):
-				scheme=line.strip()
-				if scheme.startswith("*"):
-					availableSchemes.append(scheme.replace("*","").strip())
+		availableSchemes=self.accesshelper.getSchemes()
 		return (availableSchemes)
 	#def _getSchemeList
 
 	def _getCursorList(self):
-		availableThemes=[]
-		themes=""
-		try:
-			themes=subprocess.run(["plasma-apply-cursortheme","--list-themes"],stdout=subprocess.PIPE)
-		except Exception as e:
-			print(e)
-		if themes:
-			out=themes.stdout.decode()
-			for line in out.split("\n"):
-				theme=line.strip()
-				if theme.startswith("*"):
-					availableThemes.append(theme.replace("*","").strip())
+		availableThemes=self.accesshelper.getCursors()
 		return (availableThemes)
 	#def _getCursorList
 
 	def _setTheme(self,theme):
-		try:
-			subprocess.run(["plasma-apply-desktoptheme",theme],stdout=subprocess.PIPE)
-		except Exception as e:
-			print(e)
+		self.accesshelper.setTheme(theme)
 	#def _setTheme
 
-	def _setScheme(self,theme):
-		try:
-			subprocess.run(["plasma-apply-colorscheme",theme],stdout=subprocess.PIPE)
-		except Exception as e:
-			print(e)
+	def _setScheme(self,scheme):
+		self.accesshelper.setScheme(scheme)
 	#def _setScheme
 
 	def _setCursor(self,themeDesc):
 		theme=self.cursorDesc.get(themeDesc,themeDesc)
 		self._debug("Set cursor theme: {} was {}".format(theme,themeDesc))
-		try:
-			subprocess.run(["plasma-apply-cursortheme",theme],stdout=subprocess.PIPE)
-		except Exception as e:
-			print(e)
+		self.accesshelper.setCursor(theme)
 	#def _setCursor
 
 	def _setCursorSize(self,size):
 		self.saveChanges('cursor',{"size":size})
-		functionHelper._setKdeConfigSetting("Mouse","cursorSize","{}".format(size),"kcminputrc")
+		self.accesshelper.setCursorSize(size)
 	#def _setCursorSize(self):
 

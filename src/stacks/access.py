@@ -55,7 +55,7 @@ descHk={
 class access(confStack):
 	keybind_signal=Signal("PyObject")
 	def __init_stack__(self):
-		self.dbg=False
+		self.dbg=True
 		self._debug("access Load")
 		self.menu_description=i18n.get('MENUDESCRIPTION')
 		self.description=i18n.get('DESCRIPTION')
@@ -130,7 +130,7 @@ class access(confStack):
 						if col==2:
 							row+=1
 							col=0
-						if name.upper() not in ["SYSTEMBELL","VISIBLEBELL"]:
+						if name.replace("btn_","").upper() not in ["SYSTEMBELL","VISIBLEBELL"]:
 							self.chkbtn[chk]=btn
 						else:
 							btn.hide()
@@ -149,10 +149,12 @@ class access(confStack):
 			if isinstance(chk,QCheckBox):
 				if chk.isChecked():
 					if isinstance(btn,QPushButton):
-						btn.setEnabled(True)
+						if btn.isVisible():
+							btn.setEnabled(True)
 				else:
 					if isinstance(btn,QPushButton):
-						btn.setEnabled(False)
+						if btn.isVisible():
+							btn.setEnabled(False)
 
 	def _grab_alt_keys(self,*args):
 		desc=''
@@ -242,12 +244,13 @@ class access(confStack):
 					name="btn_{}".format(name)
 					btn=self.widgets.get(name)
 					if isinstance(btn,QPushButton):
-						btn.show()
-						sigmap_run.setMapping(btn,name)
-						self.widgets.update({name:btn})
-						self.widgetsText.update({btn:{'mainHk':mainHk,'hkData':hkData,'hkSetting':hkSetting,'hkSection':hkSection}})
-						btn.clicked.connect(sigmap_run.map)
-						btn.setText(mainHk)
+						if btn.isVisible():
+							btn.show()
+							sigmap_run.setMapping(btn,name)
+							self.widgets.update({name:btn})
+							self.widgetsText.update({btn:{'mainHk':mainHk,'hkData':hkData,'hkSetting':hkSetting,'hkSection':hkSection}})
+							btn.clicked.connect(sigmap_run.map)
+							btn.setText(mainHk)
 		self._updateButtons()
 		return
 	#def _udpate_screen

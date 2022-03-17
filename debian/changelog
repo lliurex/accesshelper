@@ -1,3 +1,10 @@
+accesshelper (0.5) focal; urgency=medium
+
+  * Implement helper as loadable module
+  * Functionality provided by helper module
+
+ -- Juanma1980 <juanma1980@gmail.com>  Thu, 17 Mar 2022 12:59:23 +0100
+
 accesshelper (0.4.7.4) focal; urgency=medium
 
   * Implemented cursor preview

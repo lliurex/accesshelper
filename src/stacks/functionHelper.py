@@ -161,6 +161,8 @@ def takeSnapshot(profilePath,appconfrc=''):
 #def take_snapshot
 
 def _copyTarProfile(orig,dest):
+	if os.path.isdir(os.path.dirname(dest))==False:
+		os.makedirs(os.path.dirname(dest))
 	try:
 		shutil.copy(orig,dest)
 	except Exception as e:

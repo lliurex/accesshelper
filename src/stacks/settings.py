@@ -181,6 +181,8 @@ class settings(confStack):
 					tmpf.write(line)
 			tmpf.close()
 			destPath=os.path.join(os.environ.get("HOME"),".config/autostart/accesshelper_profiler.desktop")
+			if os.path.isdir(os.path.dirname(destPath))==False:
+				os.makedirs(os.path.dirname(destPath))
 			shutil.copy(tmpF,destPath)
 			self.showMsg("{} {}".format(i18n.get("AUTOSTART"),os.environ.get("USER")))
 	#def _setAutostart

@@ -139,7 +139,7 @@ class functionHelperClass():
 		configPath=os.path.join(tmpFolder,"appconfig")
 		os.makedirs(configPath)
 		flist=[]
-		for kfile in dictFileData.keys():
+		for kfile in self.dictFileData.keys():
 			kPath=os.path.join(os.environ['HOME'],".config",kfile)
 			if os.path.isfile(kPath):
 				shutil.copy(kPath,plasmaPath)
@@ -177,6 +177,7 @@ class functionHelperClass():
 	#def _copyTarProfile
 			
 	def importExportSnapshot(self,tarFile,dest):
+		self._debug(tarFile)
 		if os.path.isfile(tarFile):
 			if tarfile.is_tarfile(tarFile)==True:
 				self._debug("Import {} to {}".format(tarFile,dest))
@@ -313,11 +314,11 @@ class accesshelper():
 	def setKdeConfigSetting(self,*args):
 		return(self.functionHelper.setKdeConfigSetting(*args))
 
-	def takeSnapshot(self,*args):
-		return(self.functionHelper.takeSnapshot(*args))
+	def takeSnapshot(self,*args,**kwargs):
+		return(self.functionHelper.takeSnapshot(*args,**kwargs))
 
 	def restoreSnapshot(self,*args):
 		return(self.functionHelper.restoreSnapshot(*args))
 
-	def importExportSnapshot(self,*args):
-		return(self.functionHelper.importExportSnapshots(*args))
+	def importExportSnapshot(self,*args,**kwargs):
+		return(self.functionHelper.importExportSnapshot(*args,**kwargs))

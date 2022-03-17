@@ -6,7 +6,7 @@ import json
 from PySide2.QtWidgets import QApplication,QMessageBox,QGridLayout,QLabel,QPushButton
 from PySide2.QtCore import Qt
 from appconfig.appConfigScreen import appConfigScreen as appConfig
-from stacks import functionHelper as functionHelper
+from stacks import libaccesshelper
 import gettext
 import time
 _ = gettext.gettext
@@ -52,7 +52,7 @@ def setProfile(profilePath):
 				break
 	if wrkFile:
 		print("Loading profile {}".format(wrkFile))
-		sw=functionHelper.restoreSnapshot(wrkFile)
+		sw=libaccesshelper.functionHelper.restoreSnapshot(wrkFile)
 	else:
 		print("Profile {} could not be loaded".format(profilePath))
 	return(sw)

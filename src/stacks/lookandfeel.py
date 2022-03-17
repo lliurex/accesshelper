@@ -30,7 +30,7 @@ i18n={
 
 class lookandfeel(confStack):
 	def __init_stack__(self):
-		self.dbg=False
+		self.dbg=True
 		self._debug("hotkeys load")
 		self.menu_description=i18n.get('MENUDESCRIPTION')
 		self.description=i18n.get('DESCRIPTION')
@@ -47,6 +47,7 @@ class lookandfeel(confStack):
 		self.blockSettings={}
 		self.wantSettings={"kdeglobals":["General"]}
 		self.optionChanged=[]
+		self.cursorDesc={}
 	#def __init__
 
 	def _load_screen(self):
@@ -123,13 +124,18 @@ class lookandfeel(confStack):
 					if cmbDesc=="cursor":
 						themes=self._getCursorList()
 					for theme in themes:
-						themeDesc=theme.split(" ")[0]
+						themeDesc=theme.split("(")[0].replace("(","").rstrip(" ")
 						if cmb.findText(themeDesc)==-1:
 							if cmbDesc=="cursor":
 								#i18n could translate the description, real name needed
-								cursorTheme=theme.split(" ")[1].replace("(","").replace(")","")
+								cursorTheme=theme.split("(")[1].replace("(","").replace(")","")
+								cursorTheme=cursorTheme.split(" ")[0]
 								icon,sizes=self._getPointerImage(cursorTheme)
-								cmb.addItem(icon,themeDesc)
+								if icon:
+									cmb.addItem(icon,themeDesc)
+								else:
+									cmb.addItem(themeDesc)
+								self.cursorDesc[themeDesc]=cursorTheme
 							else:
 								cmb.addItem(themeDesc)
 						if "(" in theme and "plasma" in theme.lower():
@@ -140,8 +146,8 @@ class lookandfeel(confStack):
 	def updateCursorIcons(self):
 		cmbSize=self.widgets.get("cursorSize")
 		cmbCursors=self.widgets.get("cursor")
-		if cmbSize.currentText()=='':
-	    		cmbSize.setCurrentText("32")
+		if cmbSize.currentText()=='' or cmbSize.currentText().isdigit()==False:
+			cmbSize.setCurrentText("32")
 		cmbCursors.setIconSize(QSize(int(cmbSize.currentText()), int(cmbSize.currentText())))
 		cmbCursors.adjustSize()
 	#def updateSizes
@@ -156,9 +162,6 @@ class lookandfeel(confStack):
 				maxw=size.width()
 		for idx in range(0,cmbSize.count()):
 			size=cmbSize.itemText(idx)
-			if size=="":
-				size="32"
-
 			if maxw<int(size) and int(size)>32:	
 				cmbSize.model().item(idx).setEnabled(False)
 			else:
@@ -168,6 +171,7 @@ class lookandfeel(confStack):
 		
 	def _getPointerImage(self,theme):
 		icon=os.path.join("/usr/share/icons",theme,"cursors","left_ptr")
+		self._debug("Extracting imgs for icon {}".format(icon))
 		if os.path.isfile(icon)==False:
 			icon=os.path.join(os.environ.get("HOME",""),".icons",theme,"cursors","left_ptr")
 		qicon=""
@@ -207,6 +211,8 @@ class lookandfeel(confStack):
 		#self.saveChanges('fonts',{"size":size})
 		self.optionChanged=[]
 		self.refresh=True
+		cursorTheme=""
+		size=""
 		for cmbDesc in self.widgets.keys():
 			cmb=self.widgets.get(cmbDesc,"")
 			if isinstance(cmb,QComboBox):
@@ -217,9 +223,12 @@ class lookandfeel(confStack):
 				if cmbDesc=="scheme":
 					self._setScheme(theme)
 				if cmbDesc=="cursor":
-					self._setCursor(theme)
+					cursorTheme=theme
 				if cmbDesc=="cursorSize":
-					self._setCursorSize(cmb.currentText())
+					size=cmb.currentText()
+		#Ensure size is applied before theme change
+		self._setCursorSize(size)
+		self._setCursor(cursorTheme)
 		f=open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'w')
 		f.close()
 	#def writeConfig
@@ -286,7 +295,9 @@ class lookandfeel(confStack):
 			print(e)
 	#def _setScheme
 
-	def _setCursor(self,theme):
+	def _setCursor(self,themeDesc):
+		theme=self.cursorDesc.get(themeDesc,themeDesc)
+		self._debug("Set cursor theme: {} was {}".format(theme,themeDesc))
 		try:
 			subprocess.run(["plasma-apply-cursortheme",theme],stdout=subprocess.PIPE)
 		except Exception as e:
@@ -295,7 +306,6 @@ class lookandfeel(confStack):
 
 	def _setCursorSize(self,size):
 		self.saveChanges('cursor',{"size":size})
-
 		functionHelper._setKdeConfigSetting("Mouse","cursorSize","{}".format(size),"kcminputrc")
 	#def _setCursorSize(self):
 

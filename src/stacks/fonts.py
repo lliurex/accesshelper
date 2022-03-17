@@ -1,6 +1,5 @@
 #!/usr/bin/python3
-from . import functionHelper
-from . import resolutionHelper
+from . import libaccesshelper
 import sys
 import os
 from PySide2.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QGridLayout,QLineEdit,QHBoxLayout,QComboBox,QCheckBox,QTabBar,QTabWidget,QTabBar,QTabWidget,QSlider,QToolTip,QListWidget,QFontDialog,QGroupBox,QListView
@@ -43,13 +42,14 @@ class fonts(confStack):
 		self.blockSettings={}
 		self.wantSettings={"kdeglobals":["General"]}
 		self.optionChanged=[]
+		self.accesshelper=libaccesshelper.accesshelper()
 	#def __init__
 
 	def _load_screen(self):
 		self.box=QGridLayout()
 		self.setLayout(self.box)
 		for wrkFile in self.wrkFiles:
-			systemConfig=functionHelper.getSystemConfig(wrkFile=wrkFile)
+			systemConfig=self.accesshelper.getSystemConfig(wrkFile)
 			self.sysConfig.update(systemConfig)
 		kdevalues=self.sysConfig.get('kdeglobals',{}).get('General',[])
 		font=''
@@ -154,12 +154,12 @@ class fonts(confStack):
 				if size>8:
 					qfont.setPointSize(size-2)
 					minFont=qfont.toString()
-				functionHelper._setKdeConfigSetting("General","fixed",fixed,"kdeglobals")
-				functionHelper._setKdeConfigSetting("General","font",font,"kdeglobals")
-				functionHelper._setKdeConfigSetting("General","menuFont",font,"kdeglobals")
-				functionHelper._setKdeConfigSetting("General","smallestReadableFont",minFont,"kdeglobals")
-				functionHelper._setKdeConfigSetting("General","toolBarFont",font,"kdeglobals")
-				functionHelper._setKdeConfigSetting("Appearance","Font",fixed,"Lliurex.profile")
+				self.accesshelper.setKdeConfigSetting("General","fixed",fixed,"kdeglobals")
+				self.accesshelper.setKdeConfigSetting("General","font",font,"kdeglobals")
+				self.accesshelper.setKdeConfigSetting("General","menuFont",font,"kdeglobals")
+				self.accesshelper.setKdeConfigSetting("General","smallestReadableFont",minFont,"kdeglobals")
+				self.accesshelper.setKdeConfigSetting("General","toolBarFont",font,"kdeglobals")
+				self.accesshelper.setKdeConfigSetting("Appearance","Font",fixed,"Lliurex.profile")
 				self._setMozillaFirefoxFonts(size)
 		self.optionChanged=[]
 		self.refresh=True

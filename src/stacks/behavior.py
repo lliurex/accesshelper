@@ -5,7 +5,7 @@ from PySide2.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QGridLa
 from PySide2 import QtGui
 from PySide2.QtCore import Qt,QSignalMapper
 from appconfig.appConfigStack import appConfigStack as confStack
-from . import functionHelper
+from . import libaccesshelper
 import gettext
 _ = gettext.gettext
 QString=type("")
@@ -45,6 +45,7 @@ class behavior(confStack):
 		self.wantSettings={"kwinrc":["FocusPolicy"]}
 		self.blockSettings={"kdeglobals":["General"]}
 		self.optionChanged=[]
+		self.accesshelper=libaccesshelper.accesshelper()
 	#def __init__
 
 	def _load_screen(self):
@@ -57,7 +58,7 @@ class behavior(confStack):
 		self.refresh=True
 		row,col=(0,0)
 		for wrkFile in self.wrkFiles:
-			systemConfig=functionHelper.getSystemConfig(wrkFile)
+			systemConfig=self.accesshelper.getSystemConfig(wrkFile)
 			self.sysConfig.update(systemConfig)
 		for kfile,sections in self.sysConfig.items():
 			want=self.wantSettings.get(kfile,[])
@@ -75,7 +76,7 @@ class behavior(confStack):
 					if (isinstance(data,str)):
 						btn=QCheckBox(desc)
 						#btn=QPushButton(desc)
-						#btn.setStyleSheet(functionHelper.cssStyle())
+						#btn.setStyleSheet(self.accesshelper.cssStyle())
 						#btn.setAutoDefault(False)
 						#btn.setDefault(False)
 						#btn.setCheckable(True)
@@ -92,7 +93,7 @@ class behavior(confStack):
 
 	def updateScreen(self):
 		for wrkFile in self.wrkFiles:
-			systemConfig=functionHelper.getSystemConfig(wrkFile)
+			systemConfig=self.accesshelper.getSystemConfig(wrkFile)
 			self.sysConfig.update(systemConfig)
 		for kfile,sections in self.sysConfig.items():
 			want=self.wantSettings.get(kfile,[])
@@ -141,7 +142,7 @@ class behavior(confStack):
 					dataTmp.append((setting,value))
 				self.sysConfig[kfile][section]=dataTmp
 
-		functionHelper.setSystemConfig(self.sysConfig)
+		self.accesshelper.setSystemConfig(self.sysConfig)
 		f=open("/tmp/accesshelper_{}".format(os.environ.get('USER')),'w')
 		f.close()
 		self.optionChanged=[]

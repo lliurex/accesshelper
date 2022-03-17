@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-from . import functionHelper
+from . import libaccesshelper
 import sys
 import os
 from PySide2.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QGridLayout,QLineEdit,QComboBox,QCheckBox,QTableWidget,QHeaderView
@@ -57,6 +57,7 @@ class hotkeys(confStack):
 					Qt.GroupSwitchModifier: self.keymap[Qt.Key_AltGr],
 					Qt.KeypadModifier: self.keymap[Qt.Key_NumLock]
 					}
+		self.accesshelper=libaccesshelper.accesshelper()
 	#def __init__
 
 	def _load_screen(self):
@@ -73,7 +74,7 @@ class hotkeys(confStack):
 		self.widgetsText={}
 		self.refresh=True
 		for wrkFile in self.wrkFiles:
-			systemConfig=functionHelper.getSystemConfig(wrkFile)
+			systemConfig=self.accesshelper.getSystemConfig(wrkFile)
 			self.sysConfig.update(systemConfig)
 			for kfile,sections in systemConfig.items():
 				for section,settings in sections.items():
@@ -193,7 +194,7 @@ class hotkeys(confStack):
 
 	def updateScreen(self):
 		for wrkFile in self.wrkFiles:
-			systemConfig=functionHelper.getSystemConfig(wrkFile)
+			systemConfig=self.accesshelper.getSystemConfig(wrkFile)
 			self.sysConfig.update(systemConfig)
 			for kfile,sections in systemConfig.items():
 				for section,settings in sections.items():
@@ -216,7 +217,7 @@ class hotkeys(confStack):
 		pass
 
 	def writeConfig(self):
-		functionHelper.setSystemConfig(self.sysConfig)
+		self.accesshelper.setSystemConfig(self.sysConfig)
 		self.refresh=True
 		self.optionChanged=[]
 		f=open("/tmp/accesshelper_{}".format(os.environ.get('USER')),'w')

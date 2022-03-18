@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=AccessDock
+GenericName=AccessDock
+Comment=Dock companion for accesshelper
+Exec=/usr/share/accesshelper/accessdock.py
+Terminal=false
+Type=Application
+Icon=accessdock
+Categories=KDE;Qt;Utility;X-LliureX-Utilities;
+TryExec=/usr/share/accesshelper/accessdock.py

@@ -26,10 +26,10 @@ class accessdock(QWidget):
 		self.fastSettings={"color":"color","font_size":"","pointer_size":"","read":"","config":"","hide":""}
 		self.widgets={}
 		self.accesshelper=libaccesshelper.accesshelper()
+		self.coordx=0
+		self.coordy=0
 		self._loadConfig()
 		self._renderGui()
-		self.x=0
-		self.y=0
 	#def __init__
 
 	def _debug(self,msg):
@@ -46,6 +46,8 @@ class accessdock(QWidget):
 				hotkey=str(config.get("hotkey"))
 			else:
 				hotkey="Ctrl+Space"
+			if config.get("coords",""):
+				self.coordx,self.coordy=config.get("coords")
 			self._setKdeHotkey(hotkey)
 	#def _loadConfig
 
@@ -91,6 +93,8 @@ class accessdock(QWidget):
 			col+=1
 
 		self.setLayout(layout)
+		print("MOVE TO {} {}".format(self.coordx,self.coordy))
+		self.move(self.coordx,self.coordy)
 	#def _renderGui
 
 	def execute(self,*args,**kwargs):
@@ -108,6 +112,18 @@ class accessdock(QWidget):
 		y = e.globalY()
 		self.move(x, y)
 	#def mouseMoveEvent
+
+	def mouseReleaseEvent(self, e):
+		x = e.globalX()-(self.width()/2)
+		y = e.globalY()
+		config={}
+		if os.path.isfile(os.path.join(os.environ.get('HOME'),".config",self.confFile)):
+			with open(os.path.join(os.environ.get('HOME'),".config",self.confFile),'r') as f:
+				config.update(json.loads(f.read()))
+		config={"coords":[x,y]}
+		with open(os.path.join(os.environ.get('HOME'),".config",self.confFile),'w') as f:
+			f.write(json.dumps(config,indent=4))
+	#def mousePressEvent
 
 if os.path.isfile("/tmp/.accessdock.pid"):
 	kill=True

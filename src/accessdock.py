@@ -1,9 +1,10 @@
 #!/usr/bin/python3
 import os,sys
-from PySide2.QtWidgets import QApplication,QMessageBox,QGridLayout,QLabel,QPushButton,QWidget
+from PySide2.QtWidgets import QApplication,QMessageBox,QGridLayout,QLabel,QPushButton,QWidget,QFrame
 from PySide2.QtCore import Qt,QSignalMapper
 from stacks import libaccesshelper
 import gettext
+import signal
 import time
 import json
 from app2menu import App2Menu
@@ -11,9 +12,13 @@ _ = gettext.gettext
 QString=type("")
 QInt=type(0)
 
+
+
 class accessdock(QWidget):
+
 	def __init__(self,*args,**kwargs):
 		super().__init__()
+		signal.signal(signal.SIGUSR1,self.handler)
 		self.dbg=True
 		self.menu=App2Menu.app2menu()
 		self.confFile="accessdock.json"
@@ -31,6 +36,8 @@ class accessdock(QWidget):
 		if self.dbg:
 			print("dock: {}".format(msg))
 	#def _debug
+	def handler(self,signal_received, frame):
+		print('SIGINT or CTRL-C detected. Exiting gracefully')
 
 	def _loadConfig(self):
 		config=self._readConfig()
@@ -38,7 +45,7 @@ class accessdock(QWidget):
 			if config.get("hotkey",""):
 				hotkey=str(config.get("hotkey"))
 			else:
-				hotkey="Alt+F3"
+				hotkey="Ctrl+Space"
 			self._setKdeHotkey(hotkey)
 	#def _loadConfig
 
@@ -66,16 +73,20 @@ class accessdock(QWidget):
 		self.setWindowModality(Qt.WindowModal)
 		self.setWindowFlags(Qt.NoDropShadowWindowHint|Qt.WindowStaysOnTopHint|Qt.FramelessWindowHint)
 		layout=QGridLayout()
+		frame=QFrame()
+		frame.setFrameShape(QFrame.Panel)
+		layout.addWidget(frame)
+		layout2 = QGridLayout(frame)
 		col=0
 		sigmap_run=QSignalMapper(self)
 		sigmap_run.mapped[QString].connect(self.execute)
 		for setting,value in self.fastSettings.items():
 			lbl=QLabel(setting.replace("_"," ").capitalize())
-			layout.addWidget(lbl,0,col,1,1)
+			layout2.addWidget(lbl,0,col,1,1)
 			btn=QPushButton()
 			sigmap_run.setMapping(btn,setting)
 			btn.clicked.connect(sigmap_run.map)
-			layout.addWidget(btn,1,col,1,1)
+			layout2.addWidget(btn,1,col,1,1)
 			self.widgets[setting]=btn
 			col+=1
 
@@ -85,7 +96,7 @@ class accessdock(QWidget):
 	def execute(self,*args,**kwargs):
 		if isinstance(args,tuple):
 			if args[0].lower()=="hide":
-				self.hide()
+				self.close()
 	#def execute
 
 	def mousePressEvent(self, event):
@@ -97,7 +108,23 @@ class accessdock(QWidget):
 		y = e.globalY()
 		self.move(x, y)
 	#def mouseMoveEvent
-		
+
+if os.path.isfile("/tmp/.accessdock.pid"):
+	kill=True
+	try:
+		pid=int(open("/tmp/.accessdock.pid").read())
+	except:
+		kill=False
+	if kill:
+		try:
+			os.kill(pid,signal.SIGUSR1)
+		except:
+			kill=False
+	if kill:
+		sys.exit(0)
+
+with open("/tmp/.accessdock.pid","w") as f:
+	f.write("{}".format(os.getpid()))
 
 app=QApplication(["AccessDock"])
 dock=accessdock()

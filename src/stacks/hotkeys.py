@@ -43,6 +43,7 @@ class hotkeys(confStack):
 		self.enabled=True
 		self.changed=[]
 		self.sysConfig={}
+		self.config={}
 		self.wrkFiles=["kglobalshortcutsrc"]
 		self.optionChanged=[]
 		self.keymap={}
@@ -163,9 +164,29 @@ class hotkeys(confStack):
 						valueArray=value.split(",")
 						valueArray[0]=keypress
 						valueArray[1]=keypress
+						valueArray[2]=valueArray[2].replace(",","")
 						value=",".join(valueArray)
 					dataTmp.append((setting,value))
 				self.sysConfig[kfile][section]=dataTmp
+		self.config=self.getConfig().get(self.level)
+		config=self.config.copy()
+		for setting,valueDict in config.get("hotkeys",{}).items():
+			if isinstance(valueDict,dict):
+				if valueDict.get('_launch','')!='':
+					dataTmp=[]
+					type(setting)
+					valueArray=valueDict.get('_launch').split(",")
+					desc=" ".join(valueArray[2:])
+					value=",".join([keypress,keypress,desc])
+					dataTmp.append(("_launch",value))
+					self.config['hotkeys'][setting]["_launch"]=value
+					k_friendly_name=setting.replace("[","").replace("]","").replace(".desktop","").capitalize()
+					self.config['hotkeys'][setting]["_k_friendly_name"]=k_friendly_name
+					dataTmp.append(("_k_friendly_name",k_friendly_name))
+					self.sysConfig['kglobalshortcutsrc']["{}".format(setting.replace("[","").replace("]",""))]=dataTmp
+			
+		self.btn_ok.setEnabled(True)
+		self.btn_cancel.setEnabled(True)
 		#if keypress!=self.keytext:
 		#	self.changes=True
 		#	self.setChanged(self.btn_conf)
@@ -218,6 +239,7 @@ class hotkeys(confStack):
 
 	def writeConfig(self):
 		self.accesshelper.setSystemConfig(self.sysConfig)
+		self.saveChanges('hotkeys',self.config.get('hotkeys',{}),'user')
 		self.refresh=True
 		self.optionChanged=[]
 		f=open("/tmp/accesshelper_{}".format(os.environ.get('USER')),'w')

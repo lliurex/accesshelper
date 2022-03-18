@@ -35,9 +35,11 @@ class accessdock(QWidget):
 	def _loadConfig(self):
 		config=self._readConfig()
 		if isinstance(config,dict):
-			for setting,value in config.items():
-				if setting=="hotkey":
-					self._setHotkey(value)
+			if config.get("hotkey",""):
+				hotkey=str(config.get("hotkey"))
+			else:
+				hotkey="Alt+F3"
+			self._setKdeHotkey(hotkey)
 	#def _loadConfig
 
 	def _readConfig(self):
@@ -51,9 +53,13 @@ class accessdock(QWidget):
 		return(config)
 	#def _readConfig
 
-	def _setHotkey(self,*args):
-		data=args
-		print(data)
+	def _setKdeHotkey(self,*args):
+		data=[]
+		desc="{0},{0},show accessdock".format(args[0])
+		data.append(("_launch",desc))
+		data.append(("_k_friendly_name","accessdock"))
+		config={'kglobalshortcutsrc':{'accessdock.desktop':data}}
+		self.accesshelper.setSystemConfig(config)
 
 	def _renderGui(self):
 		#self.setWindowFlags(Qt.X11BypassWindowManagerHint)

@@ -19,7 +19,9 @@ i18n={
 	"TOOLTIP":_("Set config level, default template.."),
 	"AUTOSTART":_("Autostart enabled for user"),
 	"DISABLEAUTOSTART":_("Autostart disabled for user"),
-	"AUTOSTARTERROR":_("Autostart could not be disabled")
+	"AUTOSTARTERROR":_("Autostart could not be disabled"),
+	"ENABLEDOCK":_("Enabled accessibilty dock"),
+	"DISABLEDOCK":_("Disabled accessibilty dock")
 	}
 
 class settings(confStack):
@@ -72,10 +74,14 @@ class settings(confStack):
 		cmb_template=QComboBox()
 		self.widgets.update({cmb_template:'profile'})
 		box.addWidget(cmb_template,3,1,1,1,Qt.AlignTop)
+		chk_dock=QCheckBox(_("Enable accesshelper dock"))
+		box.addWidget(chk_dock,4,0,1,1,Qt.AlignTop)
+		self.widgets.update({chk_dock:'dock'})
 		box.setRowStretch(0,1)
 		box.setRowStretch(1,0)
 		box.setRowStretch(2,0)
-		box.setRowStretch(3,2)
+		box.setRowStretch(3,0)
+		box.setRowStretch(4,2)
 
 		for wrkDir in self.wrkDirs:
 			if os.path.isdir(wrkDir):
@@ -137,6 +143,8 @@ class settings(confStack):
 		for widget,desc in self.widgets.items():
 			if desc=="startup":
 				startWdg=widget
+			if desc=="dock":
+				dockWdg=widget
 			if isinstance(widget,QCheckBox):
 				value=widget.isChecked()
 				if value:
@@ -162,6 +170,11 @@ class settings(confStack):
 				self._setAutostart(profile)
 			else:
 				self._removeAutostart(profile)
+		if dockWdg:
+			if dockWdg.isChecked():
+				self._setAutostartDock()
+			else:
+				self._removeAutostartDock()
 		f=open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'w')
 		f.close()
 		self.refresh=True
@@ -192,6 +205,24 @@ class settings(confStack):
 			try:
 				os.remove(destPath)
 				self.showMsg("{} {}".format(i18n.get("DISABLEAUTOSTART"),os.environ.get("USER")))
+			except:
+				self.showMsg(i18n.get("AUTOSTARTERROR"))
+	#def _removeAutostart
+
+	def _setAutostartDock(self):
+			destPath=os.path.join(os.environ.get("HOME"),".config/autostart/accessdock.desktop")
+			if os.path.isdir(os.path.dirname(destPath))==False:
+				os.makedirs(os.path.dirname(destPath))
+			tmpF="/usr/share/applications/accessdock.desktop"
+			shutil.copy(tmpF,destPath)
+			self.showMsg("{}".format(i18n.get("ENABLEDOCK")))
+
+	def _removeAutostartDock(self):
+		destPath=os.path.join(os.environ.get("HOME"),".config/autostart/accessdock.desktop")
+		if os.path.isfile(destPath):
+			try:
+				os.remove(destPath)
+				self.showMsg("{}".format(i18n.get("DISABLEDOCK")))
 			except:
 				self.showMsg(i18n.get("AUTOSTARTERROR"))
 	#def _removeAutostart

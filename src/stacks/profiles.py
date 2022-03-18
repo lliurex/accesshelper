@@ -109,7 +109,6 @@ class profiles(confStack):
 				self.accesshelper.importExportSnapshot(name,f)
 	#def _exportProfile
 
-
 	def _updateText(self,*args):
 		widget=self.lst_profiles.currentItem()
 		if widget:

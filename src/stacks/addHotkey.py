@@ -149,6 +149,8 @@ class addHotkey(confStack):
 		#	self.changes=True
 		#	self.setChanged(self.btn_conf)
 		self.lblPress.hide()
+		self.btn_ok.setEnabled(True)
+		self.btn_cancel.setEnabled(True)
 	#def _set_config_key
 
 	def eventFilter(self,source,event):

@@ -170,37 +170,7 @@ class lookandfeel(confStack):
 	#def updateCursorSizes
 		
 	def _getPointerImage(self,theme):
-		icon=os.path.join("/usr/share/icons",theme,"cursors","left_ptr")
-		self._debug("Extracting imgs for icon {}".format(icon))
-		if os.path.isfile(icon)==False:
-			icon=os.path.join(os.environ.get("HOME",""),".icons",theme,"cursors","left_ptr")
-		qicon=""
-		sizes=[]
-		if os.path.isfile(icon):
-			tmpDir=tempfile.TemporaryDirectory()
-			cmd=["xcur2png","-q","-c","-","-d",tmpDir.name,icon]
-			try:
-				subprocess.run(cmd,stdout=subprocess.PIPE)
-			except Exception as e:
-				print("{}".format(e))
-			maxw=0
-			img=""
-			pixmap=""
-			for i in os.listdir(tmpDir.name):
-				pixmap=os.path.join(tmpDir.name,i)
-				qpixmap=QtGui.QPixmap(pixmap)
-				size=qpixmap.size()
-				if size.width()>maxw:
-					maxw=size.width()
-					img=qpixmap
-				sizes.append(size)
-
-			if img=="" and pixmap!="":
-				img=pixmap
-			qicon=QtGui.QIcon(img)
-			tmpDir.cleanup()
-
-		return(qicon,sizes)
+		return(self.accesshelper.getPointerImage(theme=theme))
 
 	def _updateConfig(self,key):
 		return

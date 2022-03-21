@@ -3,6 +3,7 @@ import subprocess,os
 import tarfile
 import tempfile
 import shutil
+from PySide2.QtGui import QIcon,QPixmap
 
 class functionHelperClass():
 	def __init__(self):
@@ -216,6 +217,40 @@ class functionHelperClass():
 		return(sw)
 	#def restore_snapshot
 
+	def getPointerImage(self,theme):
+		icon=os.path.join("/usr/share/icons",theme,"cursors","left_ptr")
+		self._debug("Extracting imgs for icon {}".format(icon))
+		if os.path.isfile(icon)==False:
+			icon=os.path.join(os.environ.get("HOME",""),".icons",theme,"cursors","left_ptr")
+		qicon=""
+		sizes=[]
+		if os.path.isfile(icon):
+			tmpDir=tempfile.TemporaryDirectory()
+			cmd=["xcur2png","-q","-c","-","-d",tmpDir.name,icon]
+			try:
+				subprocess.run(cmd,stdout=subprocess.PIPE)
+			except Exception as e:
+				print("{}".format(e))
+			maxw=0
+			img=""
+			pixmap=""
+			for i in os.listdir(tmpDir.name):
+				pixmap=os.path.join(tmpDir.name,i)
+				qpixmap=QPixmap(pixmap)
+				size=qpixmap.size()
+				if size.width()>maxw:
+					maxw=size.width()
+					img=qpixmap
+				sizes.append(size)
+
+			if img=="" and pixmap!="":
+				img=pixmap
+			qicon=QIcon(img)
+			tmpDir.cleanup()
+
+		return(qicon,sizes)
+	#def getPointerImage
+
 class accesshelper():
 	def __init__(self):
 		self.functionHelper=functionHelperClass()
@@ -266,7 +301,9 @@ class accesshelper():
 					availableThemes.append(theme.replace("*","").strip())
 		return (availableThemes)
 
-	def setCursor(self,theme):
+	def setCursor(self,theme="default"):
+		if theme=="default":
+			theme=self._getCursorTheme()
 		err=0
 		try:
 			subprocess.run(["plasma-apply-cursortheme",theme],stdout=subprocess.PIPE)
@@ -276,6 +313,7 @@ class accesshelper():
 		return(err)
 
 	def setCursorSize(self,size):
+		print("Sizing to: {}".format(size))
 		self.functionHelper.setKdeConfigSetting("Mouse","cursorSize","{}".format(size),"kcminputrc")
 
 	def setScheme(self,scheme):
@@ -322,3 +360,19 @@ class accesshelper():
 
 	def importExportSnapshot(self,*args,**kwargs):
 		return(self.functionHelper.importExportSnapshot(*args,**kwargs))
+	
+	def _getCursorTheme(self):
+		themes=self.getCursors()
+		theme="default"
+		for available in themes:
+			desc=available.split(" ")[1:]
+			if len(desc)>1:
+				theme=desc[0].replace("(","").replace(")","")
+				break
+		return(theme)
+
+	def getPointerImage(self,*args,theme="default"):
+		if theme=="default":
+			theme=self._getCursorTheme()
+		return(self.functionHelper.getPointerImage(*args,theme))
+

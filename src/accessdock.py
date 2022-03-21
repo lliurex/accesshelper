@@ -28,7 +28,7 @@ class accessdock(QWidget):
 		self.menu=App2Menu.app2menu()
 		self.confFile="accessdock.json"
 		self.confDir="/usr/share/accesshelper/"
-		self.fastSettings={"color":"color","font_size":"","pointer_size":"","read":"","config":"","osk":"","hide":""}
+		self.fastSettings={"color":"color","font_size":"","pointer_size":"","read":"","osk":"","config":"","hide":""}
 		self.widgets={}
 		self.accesshelper=libaccesshelper.accesshelper()
 		self.coordx=0

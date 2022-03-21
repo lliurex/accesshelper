@@ -1,13 +1,17 @@
 #!/usr/bin/python3
-import os,sys
+import os,sys,io
 from PySide2.QtWidgets import QApplication,QMessageBox,QGridLayout,QLabel,QToolButton,QWidget,QFrame,QDialog,QPushButton
-from PySide2.QtCore import Qt,QSignalMapper,QByteArray,QSize
-from PySide2.QtGui import QIcon,QPixmap,QCursor
+from PySide2.QtCore import Qt,QSignalMapper,QByteArray,QSize,QBuffer
+from PySide2.QtGui import QIcon,QPixmap,QCursor,QClipboard
 import dbus
 import dbus.mainloop.glib
 from stacks import libaccesshelper
 from appconfig.appConfigStack import appConfigStack as confStack
 from stacks.alpha import alpha
+import cv2
+import numpy as np
+import tesserocr 
+from PIL import Image
 import gettext
 import time
 import json
@@ -24,11 +28,12 @@ class accessdock(QWidget):
 		self.menu=App2Menu.app2menu()
 		self.confFile="accessdock.json"
 		self.confDir="/usr/share/accesshelper/"
-		self.fastSettings={"color":"color","font_size":"","pointer_size":"","read":"","config":"","hide":""}
+		self.fastSettings={"color":"color","font_size":"","pointer_size":"","read":"","config":"","osk":"","hide":""}
 		self.widgets={}
 		self.accesshelper=libaccesshelper.accesshelper()
 		self.coordx=0
 		self.coordy=0
+		self.clipboard=QClipboard()
 		self._loadConfig()
 		self._renderGui()
 	#def __init__
@@ -109,6 +114,10 @@ class accessdock(QWidget):
 				icn=QIcon.fromTheme("preferences-desktop-screensaver")
 				btn.setText(_("Filter"))
 				btn.setIcon(icn)
+			elif setting=="osk":
+				icn=QIcon.fromTheme("input-keyboard")
+				btn.setText(_("Keyboard"))
+				btn.setIcon(icn)
 
 			sigmap_run.setMapping(btn,setting)
 			btn.clicked.connect(sigmap_run.map)
@@ -138,11 +147,14 @@ class accessdock(QWidget):
 				self._fontCursorSize("pointer")
 			elif args[0].lower()=="read":
 				self._readScreen()
+			elif args[0].lower()=="osk":
+				self._showOsk()
 			elif args[0].lower()=="config":
 				self.hide()
 				subprocess.run(["accesshelper"])
 				self.show()
 	#def execute
+
 	def _fontCursorSize(self,setting):
 		def moreFontSize(*args):
 			font=lblTest.font()
@@ -240,88 +252,75 @@ class accessdock(QWidget):
 		self.accesshelper.setKdeConfigSetting("Appearance","Font",fixed,"Lliurex.profile")
 		self.widgets["font_size"].setText("{:.0f}/nFont".format(size))
 
-	def _fontSize(self):
-		def moreSize(*args):
-			font=lblTest.font()
-			size=font.pointSizeF()+1
-			font.setPointSizeF(size)
-			lblTest.setFont(font)
-		def lessSize(*args):
-			font=lblTest.font()
-			size=font.pointSizeF()-1
-			font.setPointSizeF(size)
-			lblTest.setFont(font)
-			
-		dlg=QDialog()
-		lay=QGridLayout()
-		dlg.setLayout(lay)
-		frame=QFrame()
-		frame.setFrameShape(QFrame.Panel)
-		lay.addWidget(frame)
-		lay2 = QGridLayout(frame)
-		btnPlus=QPushButton("+")
-		btnPlus.clicked.connect(moreSize)
-		lay2.addWidget(btnPlus,0,0,1,1)
-		btnMinus=QPushButton("-")
-		btnMinus.clicked.connect(lessSize)
-		lay2.addWidget(btnMinus,1,0,1,1)
-		lblTest=QLabel("Texto de prueba")
-		lblTest.setWordWrap(True)
-		lay2.addWidget(lblTest,0,2,2,1)
-		btnCancel=QPushButton("Cancel")
-		btnCancel.clicked.connect(dlg.close)
-		lay2.addWidget(btnCancel,2,0,2,1)
-		btnOk=QPushButton("Apply")
-		btnOk.clicked.connect(dlg.accept)
-		lay2.addWidget(btnOk,2,2,1,1)
-		dlg.move(self.coordx,self.coordy)
-		dlg.setWindowModality(Qt.WindowModal)
-		dlg.setWindowFlags(Qt.NoDropShadowWindowHint|Qt.WindowStaysOnTopHint|Qt.FramelessWindowHint)
-		change=dlg.exec()
-		if change:
-			qfont=lblTest.font()
-			font=qfont.toString()
-			minfont=font
-			size=qfont.pointSize()
-			minSize=size-2
-			fontFixed="Hack"
-			fixed="{0},{1},-1,5,50,0,0,0,0,0".format(fontFixed,size)
-			if size>8:
-				qfont.setPointSize(size-2)
-				minFont=qfont.toString()
-			self.accesshelper.setKdeConfigSetting("General","fixed",fixed,"kdeglobals")
-			self.accesshelper.setKdeConfigSetting("General","font",font,"kdeglobals")
-			self.accesshelper.setKdeConfigSetting("General","menuFont",font,"kdeglobals")
-			self.accesshelper.setKdeConfigSetting("General","smallestReadableFont",minFont,"kdeglobals")
-			self.accesshelper.setKdeConfigSetting("General","toolBarFont",font,"kdeglobals")
-			self.accesshelper.setKdeConfigSetting("Appearance","Font",fixed,"Lliurex.profile")
-			self.widgets["font_size"].setText("{:.0f}/nFont".format(size))
-
 	def _readScreen(self,*args):
-		dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
-		self._debug("Setting dbus")
-		bus=dbus.SessionBus()
-		#register your signal callback
-		bus.add_signal_receiver(self._screenshotHandler,
-			bus_name='org.kde.KWin',
-			interface_keyword='Screenshot',
-			member_keyword='screenshotCreated',
-			path_keyword='/Screenshot',
-			message_keyword='msg')
+		self.hide()
+		subprocess.run(["spectacle","-u","-b","-c"])
+		txt=self.clipboard.text(self.clipboard.Selection)
+		if not txt:
+			img=self.clipboard.image()
+			buffer = QBuffer()
+			buffer.open(QBuffer.ReadWrite)
+			img.save(buffer, "PNG")
+			pil_im = Image.open(io.BytesIO(buffer.data()))
+			pil_im=pil_im.convert('L').resize([3 * _ for _ in pil_im.size], Image.BICUBIC).point(lambda p: p > 75 and p + 100)
+			txt=tesserocr.image_to_text(pil_im)
+		self.clipboard.clear(self.clipboard.Selection)
+		self.clipboard.clear()
+		self.show()
+		# Adding custom options
+	
 
-	def _screenshotHandler(self,*args,**kwargs):
-		print("args: {}".format(args))
-		print("kwargs: {}".format(kwargs))
-		bsize=args[0]
-		bsize=bsize.bit_length()
-		print(bsize)
-		data=QByteArray(args[0].to_bytes(bsize,"little"))
-		print(data)
-		a=QPixmap()
-		a.loadFromData(data)
-		print(a)
+	# get grayscale image
+	def get_grayscale(self,image):
+		return cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+	# noise removal
+	def remove_noise(self,image):
+		return cv2.medianBlur(image,5)
+	 
+	#thresholding
+	def thresholding(self,image):
+		return cv2.threshold(image, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
+
+	#dilation
+	def dilate(self,image):
+		kernel = np.ones((5,5),np.uint8)
+		return cv2.dilate(image, kernel, iterations = 1)
 		
+	#erosion
+	def erode(self,image):
+		kernel = np.ones((5,5),np.uint8)
+		return cv2.erode(image, kernel, iterations = 1)
 
+	#opening - erosion followed by dilation
+	def opening(self,image):
+		kernel = np.ones((5,5),np.uint8)
+		return cv2.morphologyEx(image, cv2.MORPH_OPEN, kernel)
+
+	#canny edge detection
+	def canny(self,image):
+		return cv2.Canny(image, 100, 200)
+
+	#skew correction
+	def deskew(self,image):
+		coords = np.column_stack(np.where(image > 0))
+		angle = cv2.minAreaRect(coords)[-1]
+		if angle < -45:
+			angle = -(90 + angle)
+		else:
+			angle = -angle
+		(h, w) = image.shape[:2]
+		center = (w // 2, h // 2)
+		M = cv2.getRotationMatrix2D(center, angle, 1.0)
+		rotated = cv2.warpAffine(image, M, (w, h), flags=cv2.INTER_CUBIC, borderMode=cv2.BORDER_REPLICATE)
+		return rotated
+
+	#template matching
+	def match_template(self,image, template):
+		return cv2.matchTemplate(image, template, cv2.TM_CCOEFF_NORMED) 
+
+	def _showOsk(self):
+		subprocess.run(["qdbus","org.onboard.Onboard","/org/onboard/Onboard/Keyboard","org.onboard.Onboard.Keyboard.ToggleVisible"])
 
 	def mousePressEvent(self, event):
 		event.accept()

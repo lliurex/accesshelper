@@ -16,6 +16,7 @@ import gettext
 import time
 import json
 import subprocess
+import speechd
 from app2menu import App2Menu
 _ = gettext.gettext
 QString=type("")
@@ -93,7 +94,7 @@ class accessdock(QWidget):
 			btn=QToolButton()
 			btn.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextUnderIcon)
 			if setting=="font_size":
-				btn.setText("{:.0f}\nFont".format(self.font().pointSizeF()))
+				btn.setText("{:.0f}px\nFont".format(self.font().pointSizeF()))
 			elif setting=="hide":
 				icn=QIcon.fromTheme("view-hidden")
 				btn.setText(_("Hide"))
@@ -227,7 +228,7 @@ class accessdock(QWidget):
 		dlg.setWindowFlags(Qt.NoDropShadowWindowHint|Qt.WindowStaysOnTopHint|Qt.FramelessWindowHint)
 		change=dlg.exec()
 		if change:
-			if str(setting)=="fonts":
+			if str(setting)=="font":
 				qfont=lblTest.font()
 				self._saveFont(qfont)
 			else:
@@ -240,6 +241,7 @@ class accessdock(QWidget):
 		size=qfont.pointSize()
 		minSize=size-2
 		fontFixed="Hack"
+		print("SIZE: {}".format(size))
 		fixed="{0},{1},-1,5,50,0,0,0,0,0".format(fontFixed,size)
 		if size>8:
 			qfont.setPointSize(size-2)
@@ -250,7 +252,7 @@ class accessdock(QWidget):
 		self.accesshelper.setKdeConfigSetting("General","smallestReadableFont",minFont,"kdeglobals")
 		self.accesshelper.setKdeConfigSetting("General","toolBarFont",font,"kdeglobals")
 		self.accesshelper.setKdeConfigSetting("Appearance","Font",fixed,"Lliurex.profile")
-		self.widgets["font_size"].setText("{:.0f}/nFont".format(size))
+		self.widgets["font_size"].setText("{:.0f}px\nFont".format(size))
 
 	def _readScreen(self,*args):
 		self.hide()
@@ -266,6 +268,14 @@ class accessdock(QWidget):
 			txt=tesserocr.image_to_text(pil_im)
 		self.clipboard.clear(self.clipboard.Selection)
 		self.clipboard.clear()
+		speech=speechd.Client()
+		speech.set_language("es")
+		speech.set_pitch(60)
+		speech.set_rate(60)
+		txtArray=txt.split("\n")
+		for txtLine in txtArray:
+			if txtLine!="":
+				speech.say("{}".format(txtLine))
 		self.show()
 		# Adding custom options
 	

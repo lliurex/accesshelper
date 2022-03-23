@@ -16,6 +16,7 @@ import gettext
 import time
 import json
 import subprocess
+import speechd
 from app2menu import App2Menu
 _ = gettext.gettext
 QString=type("")
@@ -93,7 +94,7 @@ class accessdock(QWidget):
 			btn=QToolButton()
 			btn.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextUnderIcon)
 			if setting=="font_size":
-				btn.setText("{:.0f}\nFont".format(self.font().pointSizeF()))
+				btn.setText("{:.0f}px\nFont".format(self.font().pointSizeF()))
 			elif setting=="hide":
 				icn=QIcon.fromTheme("view-hidden")
 				btn.setText(_("Hide"))
@@ -227,7 +228,7 @@ class accessdock(QWidget):
 		dlg.setWindowFlags(Qt.NoDropShadowWindowHint|Qt.WindowStaysOnTopHint|Qt.FramelessWindowHint)
 		change=dlg.exec()
 		if change:
-			if str(setting)=="fonts":
+			if str(setting)=="font":
 				qfont=lblTest.font()
 				self._saveFont(qfont)
 			else:
@@ -240,6 +241,7 @@ class accessdock(QWidget):
 		size=qfont.pointSize()
 		minSize=size-2
 		fontFixed="Hack"
+		print("SIZE: {}".format(size))
 		fixed="{0},{1},-1,5,50,0,0,0,0,0".format(fontFixed,size)
 		if size>8:
 			qfont.setPointSize(size-2)
@@ -250,25 +252,65 @@ class accessdock(QWidget):
 		self.accesshelper.setKdeConfigSetting("General","smallestReadableFont",minFont,"kdeglobals")
 		self.accesshelper.setKdeConfigSetting("General","toolBarFont",font,"kdeglobals")
 		self.accesshelper.setKdeConfigSetting("Appearance","Font",fixed,"Lliurex.profile")
-		self.widgets["font_size"].setText("{:.0f}/nFont".format(size))
+		self.widgets["font_size"].setText("{:.0f}px\nFont".format(size))
 
 	def _readScreen(self,*args):
 		self.hide()
-		subprocess.run(["spectacle","-u","-b","-c"])
 		txt=self.clipboard.text(self.clipboard.Selection)
+		self._debug("Read selection: {}".format(txt))
+		txt=txt.strip()
 		if not txt:
-			img=self.clipboard.image()
-			buffer = QBuffer()
-			buffer.open(QBuffer.ReadWrite)
-			img.save(buffer, "PNG")
-			pil_im = Image.open(io.BytesIO(buffer.data()))
-			pil_im=pil_im.convert('L').resize([3 * _ for _ in pil_im.size], Image.BICUBIC).point(lambda p: p > 75 and p + 100)
-			txt=tesserocr.image_to_text(pil_im)
-		self.clipboard.clear(self.clipboard.Selection)
-		self.clipboard.clear()
+			self._debug("Taking Screenshot")
+			subprocess.run(["spectacle","-a","-e","-b","-c","-o","/tmp/out.png"])
+			#img=self.clipboard.image()
+			#buffer = QBuffer()
+			#buffer.open(QBuffer.ReadWrite)
+			#img.save(buffer, "PNG")
+			pil_im=None
+			try:
+				#pil_im = Image.open(io.BytesIO(buffer.data()))
+				self._processImg("/tmp/out.png")
+				pil_im = Image.open("/tmp/out.png")
+			except Exception as e:
+				print(e)
+				self._debug("Taking Screenshot to clipboard")
+				subprocess.run(["spectacle","-a","-b","-c"])
+				img=self.clipboard.image()
+				buffer = QBuffer()
+				buffer.open(QBuffer.ReadWrite)
+				img.save(buffer, "PNG")
+				try:
+					pil_im = Image.open(io.BytesIO(buffer.data()))
+				except Exception as e:
+					print(e)
+					self.show()
+			if pil_im:
+				pil_im=pil_im.convert('L').resize([3 * _ for _ in pil_im.size], Image.BICUBIC).point(lambda p: p > 75 and p + 100)
+				txt=tesserocr.image_to_text(pil_im)
+				self.clipboard.clear()
+		if txt:
+			pitch=80
+			rate=300
+			subprocess.run(["speak-ng","-p","{}".format(pitch),"-s","{}".format(rate),"-v","roa/es","-w","/tmp/out.wav",txt])
+			subprocess.run(["vlc","/tmp/out.wav"])
+####	speech=speechd.Client()
+####	speech.set_language("es")
+####	speech.set_pause_context(2)
+####	speech.set_pitch(60)
+####	speech.set_rate(60)
+####	txtArray=txt.split("\n")
+####
+####	for txtLine in txtArray:
+####		if txtLine!="":
+####			speech.say(txtLine)
 		self.show()
 		# Adding custom options
 	
+	def _processImg(self,img):
+		image=cv2.imread(img)
+		image=self.get_grayscale(image)
+		cv2.imwrite("/tmp/out.png",image)
+		 
 
 	# get grayscale image
 	def get_grayscale(self,image):

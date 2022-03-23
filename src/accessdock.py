@@ -170,9 +170,11 @@ class accessdock(QWidget):
 		def moreCursorSize(*args):
 			pixmap=lblTest.pixmap()
 			size=pixmap.size().width()
+			print(sizes)
 			if size in sizes:
 				if size<sizes[-1]:
 					size=sizes[sizes.index(size)+1]
+					print(size)
 					pixmap=img[0].pixmap(QSize(size,size))
 					lblTest.setPixmap(pixmap)
 					cursor=QCursor(pixmap,0,0)
@@ -211,7 +213,8 @@ class accessdock(QWidget):
 			qsizes=img[1]
 			sizes=[]
 			for qsize in qsizes:
-				sizes.append(qsize.width())
+				if qsize.width() not in sizes:
+					sizes.append(qsize.width())
 			sizes.sort()
 			pixmap=img[0].pixmap(QSize(32,32))
 			lblTest=QLabel()
@@ -234,6 +237,9 @@ class accessdock(QWidget):
 			else:
 				self.accesshelper.setCursorSize(lblTest.pixmap().size().width())
 				self.accesshelper.setCursor()
+			self.hide()
+			self.accesshelper.applyChanges()
+			self.show()
 
 	def _saveFont(self,qfont):
 		font=qfont.toString()

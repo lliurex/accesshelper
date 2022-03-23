@@ -12,6 +12,7 @@ import time
 _ = gettext.gettext
 
 wrkDirList=["/usr/share/accesshelper/profiles","/usr/share/accesshelper/default",os.path.join(os.environ.get("HOME",''),".config/accesshelper/profiles")]
+accesshelper=libaccesshelper.accesshelper()
 
 def showHelp():
 	print("usage: accesshelper [--set profile]|[--list]")
@@ -52,7 +53,7 @@ def setProfile(profilePath):
 				break
 	if wrkFile:
 		print("Loading profile {}".format(wrkFile))
-		sw=libaccesshelper.functionHelper.restoreSnapshot(wrkFile)
+		sw=accesshelper.restoreSnapshot(wrkFile)
 	else:
 		print("Profile {} could not be loaded".format(profilePath))
 	return(sw)
@@ -60,16 +61,7 @@ def setProfile(profilePath):
 
 def _restartSession(*args):
 	QApplication.quit()
-	cmd=["qdbus","org.kde.Shutdown","/Shutdown","logout"]
-	cmd=["plasmashell","--replace"]
-	subprocess.run(cmd)
-	cmd=["qdbus","org.kde.KWin","/KWin","org.kde.KWin.reconfigure"]
-	subprocess.run(cmd)
-	#cmd=["kquitapp5","plasmashell"]
-	cmd=["kcminit"]
-	subprocess.run(cmd)
-	#cmd=["kstart5","plasmashell"]
-	#subprocess.run(cmd)
+	accesshelper.applyChanges()
 #def _restartSession
 
 def showDialog(*args):

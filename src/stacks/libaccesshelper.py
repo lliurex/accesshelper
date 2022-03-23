@@ -310,11 +310,27 @@ class accesshelper():
 		except Exception as e:
 			print(e)
 			err=1
+		os.environ["XCURSOR_THEME"]=theme
 		return(err)
 
 	def setCursorSize(self,size):
 		print("Sizing to: {}".format(size))
-		self.functionHelper.setKdeConfigSetting("Mouse","cursorSize","{}".format(size),"kcminputrc")
+		self.setKdeConfigSetting("Mouse","cursorSize","{}".format(size),"kcminputrc")
+		xdefault=os.path.join(os.environ.get("HOME"),".Xdefaults")
+		xcursor="Xcursor.size: {}".format(size)
+		xcursor=""
+		fcontents=[]
+		if os.path.isfile(xdefault):
+			with open(xdefault,"r") as f:
+				fcontent=f.readlines()
+		newContent=[]
+		for line in fcontents:
+			if line.startswith("Xcursor.size:"):
+				line=xcursor
+			newContent.append(line)
+		with open(xdefault,"w") as f:
+			f.writelines(newContent)
+		os.environ["XCURSOR_SIZE"]=str(size)
 
 	def setScheme(self,scheme):
 		err=0
@@ -376,3 +392,9 @@ class accesshelper():
 			theme=self._getCursorTheme()
 		return(self.functionHelper.getPointerImage(*args,theme))
 
+
+	def applyChanges(self):
+		cmd=["qdbus","org.kde.KWin","/KWin","org.kde.KWin.reconfigure"]
+		subprocess.run(cmd)
+		cmd=["plasmashell","--replace"]
+		subprocess.run(cmd)

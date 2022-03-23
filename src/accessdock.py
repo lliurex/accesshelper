@@ -256,29 +256,61 @@ class accessdock(QWidget):
 
 	def _readScreen(self,*args):
 		self.hide()
-		subprocess.run(["spectacle","-u","-b","-c"])
 		txt=self.clipboard.text(self.clipboard.Selection)
+		self._debug("Read selection: {}".format(txt))
+		txt=txt.strip()
 		if not txt:
-			img=self.clipboard.image()
-			buffer = QBuffer()
-			buffer.open(QBuffer.ReadWrite)
-			img.save(buffer, "PNG")
-			pil_im = Image.open(io.BytesIO(buffer.data()))
-			pil_im=pil_im.convert('L').resize([3 * _ for _ in pil_im.size], Image.BICUBIC).point(lambda p: p > 75 and p + 100)
-			txt=tesserocr.image_to_text(pil_im)
-		self.clipboard.clear(self.clipboard.Selection)
-		self.clipboard.clear()
-		speech=speechd.Client()
-		speech.set_language("es")
-		speech.set_pitch(60)
-		speech.set_rate(60)
-		txtArray=txt.split("\n")
-		for txtLine in txtArray:
-			if txtLine!="":
-				speech.say("{}".format(txtLine))
+			self._debug("Taking Screenshot")
+			subprocess.run(["spectacle","-a","-e","-b","-c","-o","/tmp/out.png"])
+			#img=self.clipboard.image()
+			#buffer = QBuffer()
+			#buffer.open(QBuffer.ReadWrite)
+			#img.save(buffer, "PNG")
+			pil_im=None
+			try:
+				#pil_im = Image.open(io.BytesIO(buffer.data()))
+				self._processImg("/tmp/out.png")
+				pil_im = Image.open("/tmp/out.png")
+			except Exception as e:
+				print(e)
+				self._debug("Taking Screenshot to clipboard")
+				subprocess.run(["spectacle","-a","-b","-c"])
+				img=self.clipboard.image()
+				buffer = QBuffer()
+				buffer.open(QBuffer.ReadWrite)
+				img.save(buffer, "PNG")
+				try:
+					pil_im = Image.open(io.BytesIO(buffer.data()))
+				except Exception as e:
+					print(e)
+					self.show()
+			if pil_im:
+				pil_im=pil_im.convert('L').resize([3 * _ for _ in pil_im.size], Image.BICUBIC).point(lambda p: p > 75 and p + 100)
+				txt=tesserocr.image_to_text(pil_im)
+				self.clipboard.clear()
+		if txt:
+			pitch=80
+			rate=300
+			subprocess.run(["speak-ng","-p","{}".format(pitch),"-s","{}".format(rate),"-v","roa/es","-w","/tmp/out.wav",txt])
+			subprocess.run(["vlc","/tmp/out.wav"])
+####	speech=speechd.Client()
+####	speech.set_language("es")
+####	speech.set_pause_context(2)
+####	speech.set_pitch(60)
+####	speech.set_rate(60)
+####	txtArray=txt.split("\n")
+####
+####	for txtLine in txtArray:
+####		if txtLine!="":
+####			speech.say(txtLine)
 		self.show()
 		# Adding custom options
 	
+	def _processImg(self,img):
+		image=cv2.imread(img)
+		image=self.get_grayscale(image)
+		cv2.imwrite("/tmp/out.png",image)
+		 
 
 	# get grayscale image
 	def get_grayscale(self,image):

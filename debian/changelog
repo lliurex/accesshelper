@@ -1,4 +1,4 @@
-accesshelper (0.5.3.1) focal; urgency=medium
+accesshelper (0.5.3.2) focal; urgency=medium
 
   * Implement helper as loadable module
   * Functionality provided by helper module

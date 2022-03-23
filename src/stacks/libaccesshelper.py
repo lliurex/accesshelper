@@ -310,6 +310,7 @@ class accesshelper():
 		except Exception as e:
 			print(e)
 			err=1
+		os.environ["XCURSOR_THEME"]=theme
 		return(err)
 
 	def setCursorSize(self,size):
@@ -329,6 +330,7 @@ class accesshelper():
 			newContent.append(line)
 		with open(xdefault,"w") as f:
 			f.writelines(newContent)
+		os.environ["XCURSOR_SIZE"]=size
 
 	def setScheme(self,scheme):
 		err=0
@@ -390,3 +392,9 @@ class accesshelper():
 			theme=self._getCursorTheme()
 		return(self.functionHelper.getPointerImage(*args,theme))
 
+
+	def applyChanges(self):
+		cmd=["qdbus","org.kde.KWin","/KWin","org.kde.KWin.reconfigure"]
+		subprocess.run(cmd)
+		cmd=["plasmashell","--replace"]
+		subprocess.run(cmd)

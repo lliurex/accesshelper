@@ -314,7 +314,21 @@ class accesshelper():
 
 	def setCursorSize(self,size):
 		print("Sizing to: {}".format(size))
-		self.functionHelper.setKdeConfigSetting("Mouse","cursorSize","{}".format(size),"kcminputrc")
+		self.setKdeConfigSetting("Mouse","cursorSize","{}".format(size),"kcminputrc")
+		xdefault=os.path.join(os.environ.get("HOME"),".Xdefaults")
+		xcursor="Xcursor.size: {}".format(size)
+		xcursor=""
+		fcontents=[]
+		if os.path.isfile(xdefault):
+			with open(xdefault,"r") as f:
+				fcontent=f.readlines()
+		newContent=[]
+		for line in fcontents:
+			if line.startswith("Xcursor.size:"):
+				line=xcursor
+			newContent.append(line)
+		with open(xdefault,"w") as f:
+			f.writelines(newContent)
 
 	def setScheme(self,scheme):
 		err=0

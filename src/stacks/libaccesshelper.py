@@ -330,7 +330,7 @@ class accesshelper():
 			newContent.append(line)
 		with open(xdefault,"w") as f:
 			f.writelines(newContent)
-		os.environ["XCURSOR_SIZE"]=size
+		os.environ["XCURSOR_SIZE"]=str(size)
 
 	def setScheme(self,scheme):
 		err=0

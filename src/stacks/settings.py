@@ -226,6 +226,11 @@ class settings(confStack):
 
 	def _removeAutostartDock(self):
 		destPath=os.path.join(os.environ.get("HOME"),".config/autostart/accessdock.desktop")
+		hotkey=""
+		desc="{0},{0},show accessdock".format(hotkey)
+		data=[("_launch",desc),("_k_friendly_name","accessdock")]
+		config={'kglobalshortcutsrc':{'accessdock.desktop':data}}
+		self.accesshelper.setSystemConfig(config)
 		if os.path.isfile(destPath):
 			try:
 				os.remove(destPath)

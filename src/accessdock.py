@@ -13,7 +13,6 @@ import numpy as np
 import tesserocr 
 from PIL import Image
 import gettext
-import time
 import json
 import subprocess
 import speechd
@@ -89,10 +88,13 @@ class accessdock(QWidget):
 		col=0
 		sigmap_run=QSignalMapper(self)
 		sigmap_run.mapped[QString].connect(self.execute)
+		maxw=0
+		maxh=0
 		for setting,value in self.fastSettings.items():
 			#lbl=QLabel(setting.replace("_"," ").capitalize())
 			#layout2.addWidget(lbl,0,col,1,1)
 			btn=QToolButton()
+			btnSize=QSize(256,72)
 			btn.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextUnderIcon)
 			if setting=="font_size":
 				btn.setText("{:.0f}px\nFont".format(self.font().pointSizeF()))
@@ -121,9 +123,11 @@ class accessdock(QWidget):
 				btn.setText(_("Keyboard"))
 				btn.setIcon(icn)
 
+
 			sigmap_run.setMapping(btn,setting)
 			btn.clicked.connect(sigmap_run.map)
-			layout2.addWidget(btn,0,col,1,1)
+			btn.setMaximumSize(btnSize)
+			layout2.addWidget(btn,0,col,1,1,Qt.AlignLeft)
 			self.widgets[setting]=btn
 			col+=1
 		self.setLayout(layout)
@@ -279,8 +283,8 @@ class accessdock(QWidget):
 			pil_im=None
 			try:
 				#pil_im = Image.open(io.BytesIO(buffer.data()))
-				self._processImg("/tmp/out.png")
-				pil_im = Image.open("/tmp/out.png")
+				img=self._processImg("/tmp/out.png")
+				pil_im = Image.open(img)
 			except Exception as e:
 				print(e)
 				self._debug("Taking Screenshot to clipboard")
@@ -299,10 +303,11 @@ class accessdock(QWidget):
 				txt=tesserocr.image_to_text(pil_im)
 				self.clipboard.clear()
 		if txt:
-			pitch=80
-			rate=300
+			pitch=60
+			rate=200
 			subprocess.run(["speak-ng","-p","{}".format(pitch),"-s","{}".format(rate),"-v","roa/es","-w","/tmp/out.wav",txt])
 			subprocess.run(["vlc","/tmp/out.wav"])
+			self.clipboard.clear(self.clipboard.Selection)
 ####	speech=speechd.Client()
 ####	speech.set_language("es")
 ####	speech.set_pause_context(2)
@@ -317,44 +322,25 @@ class accessdock(QWidget):
 		# Adding custom options
 	
 	def _processImg(self,img):
+		outImg="{}_2".format(img)
 		image=cv2.imread(img)
-		image=self.get_grayscale(image)
-		cv2.imwrite("/tmp/out.png",image)
+		image=self.cvGrayscale(image)
+		#image=self.cvCanny(image)
+		image=self.cvDeskew(image)
+		print("Saving processed img as {}".format(outImg))
+		cv2.imwrite(outImg,image)
+		return(outImg)
 		 
-
 	# get grayscale image
-	def get_grayscale(self,image):
+	def cvGrayscale(self,image):
 		return cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
-	# noise removal
-	def remove_noise(self,image):
-		return cv2.medianBlur(image,5)
-	 
-	#thresholding
-	def thresholding(self,image):
-		return cv2.threshold(image, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
-
-	#dilation
-	def dilate(self,image):
-		kernel = np.ones((5,5),np.uint8)
-		return cv2.dilate(image, kernel, iterations = 1)
-		
-	#erosion
-	def erode(self,image):
-		kernel = np.ones((5,5),np.uint8)
-		return cv2.erode(image, kernel, iterations = 1)
-
-	#opening - erosion followed by dilation
-	def opening(self,image):
-		kernel = np.ones((5,5),np.uint8)
-		return cv2.morphologyEx(image, cv2.MORPH_OPEN, kernel)
-
 	#canny edge detection
-	def canny(self,image):
+	def cvCanny(self,image):
 		return cv2.Canny(image, 100, 200)
 
 	#skew correction
-	def deskew(self,image):
+	def cvDeskew(self,image):
 		coords = np.column_stack(np.where(image > 0))
 		angle = cv2.minAreaRect(coords)[-1]
 		if angle < -45:
@@ -366,10 +352,6 @@ class accessdock(QWidget):
 		M = cv2.getRotationMatrix2D(center, angle, 1.0)
 		rotated = cv2.warpAffine(image, M, (w, h), flags=cv2.INTER_CUBIC, borderMode=cv2.BORDER_REPLICATE)
 		return rotated
-
-	#template matching
-	def match_template(self,image, template):
-		return cv2.matchTemplate(image, template, cv2.TM_CCOEFF_NORMED) 
 
 	def _showOsk(self):
 		subprocess.run(["qdbus","org.onboard.Onboard","/org/onboard/Onboard/Keyboard","org.onboard.Onboard.Keyboard.ToggleVisible"])

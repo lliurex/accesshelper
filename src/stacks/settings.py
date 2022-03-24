@@ -118,6 +118,9 @@ class settings(confStack):
 		startup=False
 		if os.path.isfile(os.path.join(os.environ.get('HOME'),".config/autostart/accesshelper_profiler.desktop")) or os.path.isfile("/etc/xdg/autostart/accesshelper_profiler.desktop"):
 			startup=True
+		dock=False
+		if os.path.isfile(os.path.join(os.environ.get("HOME"),".config/autostart/accessdock.desktop")):
+			dock=True
 		for widget,desc in self.widgets.items():
 			if desc=="startup":
 				widget.setChecked(startup)
@@ -130,8 +133,9 @@ class settings(confStack):
 					idx=1
 				elif level=="n4d":
 					idx=2
-				
 				widget.setCurrentIndex(idx)
+			elif desc=="dock":
+				widget.setChecked(dock)
 	#def _udpate_screen
 
 	def _updateConfig(self,key):

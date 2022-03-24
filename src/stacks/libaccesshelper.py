@@ -285,7 +285,6 @@ class accesshelper():
 					availableSchemes.append(scheme.replace("*","").strip())
 		return availableSchemes
 
-
 	def getThemes(self):
 		availableThemes=[]
 		themes=""
@@ -392,9 +391,20 @@ class accesshelper():
 			theme=self._getCursorTheme()
 		return(self.functionHelper.getPointerImage(*args,theme))
 
+	def getPointerSize(self,*args):
+		systemConfig=self.getSystemConfig("kcminputrc")
+		cursorSettings=systemConfig.get('kcminputrc',{}).get('Mouse',[])
+		cursorSize=32
+		for setting in cursorSettings:
+			if isinstance(setting,tuple):
+				if setting[0]=="cursorSize":
+					cursorSize=int(setting[1])
+		return(cursorSize)
 
 	def applyChanges(self):
 		cmd=["qdbus","org.kde.KWin","/KWin","org.kde.KWin.reconfigure"]
 		subprocess.run(cmd)
-		cmd=["plasmashell","--replace"]
+		cmd=["kquitapp5","plasmashell"]
+		subprocess.run(cmd)
+		cmd=["kstart5","plasmashell"]
 		subprocess.run(cmd)

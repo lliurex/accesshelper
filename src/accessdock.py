@@ -37,6 +37,7 @@ class accessdock(QWidget):
 		self.clipboard=QClipboard()
 		self._loadConfig()
 		self._renderGui()
+		self.fontSize=None
 	#def __init__
 
 	def _debug(self,msg):
@@ -159,33 +160,33 @@ class accessdock(QWidget):
 	def _fontCursorSize(self,setting):
 		def moreFontSize(*args):
 			font=lblTest.font()
-			size=font.pointSizeF()+1
-			font.setPointSizeF(size)
+			fsize=font.pointSizeF()+1
+			font.setPointSizeF(fsize)
 			lblTest.setFont(font)
+			self.fontSize=font
 		def lessFontSize(*args):
 			font=lblTest.font()
-			size=font.pointSizeF()-1
-			font.setPointSizeF(size)
+			fsize=font.pointSizeF()-1
+			font.setPointSizeF(fsize)
 			lblTest.setFont(font)
+			self.fontSize=font
 		def moreCursorSize(*args):
 			pixmap=lblTest.pixmap()
-			size=pixmap.size().width()
-			print(sizes)
-			if size in sizes:
-				if size<sizes[-1]:
-					size=sizes[sizes.index(size)+1]
-					print(size)
-					pixmap=img[0].pixmap(QSize(size,size))
+			ptsize=pixmap.size().width()
+			if ptsize in sizes:
+				if ptsize<sizes[-1]:
+					ptsize=sizes[sizes.index(ptsize)+1]
+					pixmap=img[0].pixmap(QSize(ptsize,ptsize))
 					lblTest.setPixmap(pixmap)
 					cursor=QCursor(pixmap,0,0)
 					dlg.setCursor(cursor)
 		def lessCursorSize(*args):
 			pixmap=lblTest.pixmap()
-			size=pixmap.size().width()
-			if size in sizes:
-				if size>sizes[0]:
-					size=sizes[sizes.index(size)-1]
-					pixmap=img[0].pixmap(QSize(size,size))
+			ptsize=pixmap.size().width()
+			if ptsize in sizes:
+				if ptsize>sizes[0]:
+					ptsize=sizes[sizes.index(ptsize)-1]
+					pixmap=img[0].pixmap(QSize(ptsize,ptsize))
 					lblTest.setPixmap(pixmap)
 					cursor=QCursor(pixmap,0,0)
 					dlg.setCursor(cursor)
@@ -206,17 +207,20 @@ class accessdock(QWidget):
 			btnMinus.clicked.connect(lessFontSize)
 			lblTest=QLabel("Texto de prueba")
 			lblTest.setWordWrap(True)
+			if self.fontSize:
+				lblTest.setFont(self.fontSize)
 		else:
 			btnPlus.clicked.connect(moreCursorSize)
 			btnMinus.clicked.connect(lessCursorSize)
 			img=self.accesshelper.getPointerImage()
+			ptSize=self.accesshelper.getPointerSize()
 			qsizes=img[1]
 			sizes=[]
 			for qsize in qsizes:
 				if qsize.width() not in sizes:
 					sizes.append(qsize.width())
 			sizes.sort()
-			pixmap=img[0].pixmap(QSize(32,32))
+			pixmap=img[0].pixmap(QSize(ptSize,ptSize))
 			lblTest=QLabel()
 			lblTest.setPixmap(pixmap)
 		lay2.addWidget(lblTest,0,1,2,1)
@@ -243,11 +247,11 @@ class accessdock(QWidget):
 
 	def _saveFont(self,qfont):
 		font=qfont.toString()
+		self.setFont(qfont)
 		minfont=font
 		size=qfont.pointSize()
 		minSize=size-2
 		fontFixed="Hack"
-		print("SIZE: {}".format(size))
 		fixed="{0},{1},-1,5,50,0,0,0,0,0".format(fontFixed,size)
 		if size>8:
 			qfont.setPointSize(size-2)

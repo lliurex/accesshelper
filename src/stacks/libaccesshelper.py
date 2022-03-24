@@ -116,6 +116,7 @@ class functionHelperClass():
 		return(ret)
 
 	def setSystemConfig(self,config,wrkFile=''):
+		self._debug("Config: {}".format(config))
 		for kfile,sections in config.items():
 			for section,data in sections.items():
 				for setting in data:
@@ -128,6 +129,8 @@ class functionHelperClass():
 					except Exception as e:
 						print("Error on setting {}".format(setting))
 						print(e)
+	#def setSystemConfig
+
 	def takeSnapshot(self,profilePath,appconfrc=''):
 		self._debug("Take snapshot {} {}".format(profilePath,appconfrc))
 		destName=os.path.basename(profilePath)
@@ -402,9 +405,13 @@ class accesshelper():
 		return(cursorSize)
 
 	def applyChanges(self):
+		cmd=["kquitapp5","kglobalaccel"]
+		subprocess.run(cmd)
 		cmd=["qdbus","org.kde.KWin","/KWin","org.kde.KWin.reconfigure"]
 		subprocess.run(cmd)
 		cmd=["kquitapp5","plasmashell"]
+		subprocess.run(cmd)
+		cmd=["kstart5","kglobalaccel"]
 		subprocess.run(cmd)
 		cmd=["kstart5","plasmashell"]
 		subprocess.run(cmd)

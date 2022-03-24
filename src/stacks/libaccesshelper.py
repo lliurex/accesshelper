@@ -407,11 +407,11 @@ class accesshelper():
 	def applyChanges(self):
 		cmd=["kquitapp5","kglobalaccel"]
 		subprocess.run(cmd)
+		cmd=["kstart5","kglobalaccel"]
+		subprocess.run(cmd)
 		cmd=["qdbus","org.kde.KWin","/KWin","org.kde.KWin.reconfigure"]
 		subprocess.run(cmd)
 		cmd=["kquitapp5","plasmashell"]
-		subprocess.run(cmd)
-		cmd=["kstart5","kglobalaccel"]
 		subprocess.run(cmd)
 		cmd=["kstart5","plasmashell"]
 		subprocess.run(cmd)

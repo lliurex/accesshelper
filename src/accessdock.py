@@ -58,7 +58,7 @@ class accessdock(QWidget):
 	#def _loadConfig
 
 	def _readConfig(self):
-		config=""
+		config={}
 		if os.path.isfile(os.path.join(self.confDir,self.confFile)):
 			with open(os.path.join(self.confDir,self.confFile)) as f:
 				config=json.loads(f.read())

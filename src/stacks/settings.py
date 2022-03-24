@@ -6,6 +6,7 @@ from PySide2.QtWidgets import QApplication,QLineEdit, QLabel, QWidget, QPushButt
 from PySide2 import QtGui
 from PySide2.QtCore import Qt,QSignalMapper
 from appconfig.appConfigStack import appConfigStack as confStack
+from . import libaccesshelper
 import subprocess
 import tempfile
 import gettext
@@ -20,7 +21,7 @@ i18n={
 	"AUTOSTART":_("Autostart enabled for user"),
 	"DISABLEAUTOSTART":_("Autostart disabled for user"),
 	"AUTOSTARTERROR":_("Autostart could not be disabled"),
-	"ENABLEDOCK":_("Enabled accessibilty dock"),
+	"ENABLEDOCK":_("Enabled accessibilty dock. Press ctrl+space to show"),
 	"DISABLEDOCK":_("Disabled accessibilty dock")
 	}
 
@@ -39,6 +40,7 @@ class settings(confStack):
 		self.widgets={}
 		self.wrkDirs=["/usr/share/accesshelper/profiles","/usr/share/accesshelper/default",os.path.join(os.environ.get('HOME'),".config/accesshelper/profiles")]
 		self.optionChanged=[]
+		self.accesshelper=libaccesshelper.accesshelper()
 	#def __init__
 
 	def _load_screen(self):
@@ -116,6 +118,9 @@ class settings(confStack):
 		startup=False
 		if os.path.isfile(os.path.join(os.environ.get('HOME'),".config/autostart/accesshelper_profiler.desktop")) or os.path.isfile("/etc/xdg/autostart/accesshelper_profiler.desktop"):
 			startup=True
+		dock=False
+		if os.path.isfile(os.path.join(os.environ.get("HOME"),".config/autostart/accessdock.desktop")):
+			dock=True
 		for widget,desc in self.widgets.items():
 			if desc=="startup":
 				widget.setChecked(startup)
@@ -128,8 +133,9 @@ class settings(confStack):
 					idx=1
 				elif level=="n4d":
 					idx=2
-				
 				widget.setCurrentIndex(idx)
+			elif desc=="dock":
+				widget.setChecked(dock)
 	#def _udpate_screen
 
 	def _updateConfig(self,key):
@@ -216,9 +222,19 @@ class settings(confStack):
 			tmpF="/usr/share/applications/accessdock.desktop"
 			shutil.copy(tmpF,destPath)
 			self.showMsg("{}".format(i18n.get("ENABLEDOCK")))
+			hotkey="Ctrl+Space"
+			desc="{0},{0},show accessdock".format(hotkey)
+			data=[("_launch",desc),("_k_friendly_name","accessdock")]
+			config={'kglobalshortcutsrc':{'accessdock.desktop':data}}
+			self.accesshelper.setSystemConfig(config)
 
 	def _removeAutostartDock(self):
 		destPath=os.path.join(os.environ.get("HOME"),".config/autostart/accessdock.desktop")
+		hotkey=""
+		desc="{0},{0},show accessdock".format(hotkey)
+		data=[("_launch",""),("_k_friendly_name","")]
+		config={'kglobalshortcutsrc':{'accessdock.desktop':data}}
+		self.accesshelper.setSystemConfig(config)
 		if os.path.isfile(destPath):
 			try:
 				os.remove(destPath)

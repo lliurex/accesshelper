@@ -232,7 +232,7 @@ class settings(confStack):
 		destPath=os.path.join(os.environ.get("HOME"),".config/autostart/accessdock.desktop")
 		hotkey=""
 		desc="{0},{0},show accessdock".format(hotkey)
-		data=[("_launch",desc),("_k_friendly_name","accessdock")]
+		data=[("_launch",""),("_k_friendly_name","")]
 		config={'kglobalshortcutsrc':{'accessdock.desktop':data}}
 		self.accesshelper.setSystemConfig(config)
 		if os.path.isfile(destPath):

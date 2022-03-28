@@ -271,8 +271,11 @@ class accessdock(QWidget):
 	def _readScreen(self,*args):
 		self.hide()
 		txt=self.clipboard.text(self.clipboard.Selection)
-		self._debug("Read selection: {}".format(txt))
 		txt=txt.strip()
+		if not txt:
+			txt=self.clipboard.text()
+			self.clipboard.clear()
+		self._debug("Read selection: {}".format(txt))
 		if not txt:
 			self._debug("Taking Screenshot")
 			subprocess.run(["spectacle","-a","-e","-b","-c","-o","/tmp/out.png"])

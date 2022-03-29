@@ -10,12 +10,14 @@ from appconfig.appConfigStack import appConfigStack as confStack
 from stacks.alpha import alpha
 import cv2
 import numpy as np
-import tesserocr 
+import tesserocr
 from PIL import Image
 import gettext
 import json
 import subprocess
 import speechd
+import string
+from spellchecker import SpellChecker
 from app2menu import App2Menu
 _ = gettext.gettext
 QString=type("")
@@ -96,34 +98,7 @@ class accessdock(QWidget):
 			btn=QToolButton()
 			btnSize=QSize(256,72)
 			btn.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextUnderIcon)
-			if setting=="font_size":
-				btn.setText("{:.0f}px\nFont".format(self.font().pointSizeF()))
-			elif setting=="hide":
-				icn=QIcon.fromTheme("view-hidden")
-				btn.setText(_("Hide"))
-				btn.setIcon(icn)
-			elif setting=="config":
-				icn=QIcon.fromTheme("preferences")
-				btn.setText(_("Configure"))
-				btn.setIcon(icn)
-			elif setting=="read":
-				icn=QIcon.fromTheme("audio-ready")
-				btn.setText(_("Read screen"))
-				btn.setIcon(icn)
-			elif setting=="pointer_size":
-				icn=QIcon.fromTheme("pointer")
-				btn.setText(_("Pointer"))
-				btn.setIcon(icn)
-			elif setting=="color":
-				icn=QIcon.fromTheme("preferences-desktop-screensaver")
-				btn.setText(_("Filter"))
-				btn.setIcon(icn)
-			elif setting=="osk":
-				icn=QIcon.fromTheme("input-keyboard")
-				btn.setText(_("Keyboard"))
-				btn.setIcon(icn)
-
-
+			self._assignButton(setting,btn)
 			sigmap_run.setMapping(btn,setting)
 			btn.clicked.connect(sigmap_run.map)
 			btn.setMaximumSize(btnSize)
@@ -133,6 +108,34 @@ class accessdock(QWidget):
 		self.setLayout(layout)
 		self.move(self.coordx,self.coordy)
 	#def _renderGui
+
+	def _assignButton(self,setting,btn):
+		if setting=="font_size":
+			btn.setText("{:.0f}px\nFont".format(self.font().pointSizeF()))
+		elif setting=="hide":
+			icn=QIcon.fromTheme("view-hidden")
+			btn.setText(_("Hide"))
+			btn.setIcon(icn)
+		elif setting=="config":
+			icn=QIcon.fromTheme("preferences")
+			btn.setText(_("Configure"))
+			btn.setIcon(icn)
+		elif setting=="read":
+			icn=QIcon.fromTheme("audio-ready")
+			btn.setText(_("Read screen"))
+			btn.setIcon(icn)
+		elif setting=="pointer_size":
+			icn=QIcon.fromTheme("pointer")
+			btn.setText(_("Pointer"))
+			btn.setIcon(icn)
+		elif setting=="color":
+			icn=QIcon.fromTheme("preferences-desktop-screensaver")
+			btn.setText(_("Filter"))
+			btn.setIcon(icn)
+		elif setting=="osk":
+			icn=QIcon.fromTheme("input-keyboard")
+			btn.setText(_("Keyboard"))
+			btn.setIcon(icn)
 
 	def execute(self,*args,**kwargs):
 		if isinstance(args,tuple):
@@ -270,77 +273,199 @@ class accessdock(QWidget):
 
 	def _readScreen(self,*args):
 		self.hide()
+		txt=self._getClipboardText()
+		if not txt:
+			img=self._getImgForOCR()
+			if img:
+				imgPIL=None
+				img=self._processImg(img)
+				try:
+					imgPIL = Image.open(img)
+					self._debug("Opened IMG. Waiting OCR")
+				except Exception as e:
+					print(e)
+					try:
+						buffer=self.getClipboardImg()
+						imgPIL = Image.open(io.BytesIO(buffer.data()))
+					except Exception as e:
+						print(e)
+			if imgPIL:
+				txt=self._readImg(imgPIL)
+				self.clipboard.clear()
+		if txt:
+			self._invokeReader(txt,player=True)
+			self.clipboard.clear()
+			self.clipboard.clear(self.clipboard.Selection)
+		self.show()
+	#def _readScreen
+	
+	def _getClipboardText(self):
 		txt=self.clipboard.text(self.clipboard.Selection)
 		txt=txt.strip()
 		if not txt:
 			txt=self.clipboard.text()
-			self.clipboard.clear()
 		self._debug("Read selection: {}".format(txt))
-		if not txt:
-			self._debug("Taking Screenshot")
-			subprocess.run(["spectacle","-a","-e","-b","-c","-o","/tmp/out.png"])
-			#img=self.clipboard.image()
-			#buffer = QBuffer()
-			#buffer.open(QBuffer.ReadWrite)
-			#img.save(buffer, "PNG")
-			pil_im=None
-			try:
-				#pil_im = Image.open(io.BytesIO(buffer.data()))
-				img=self._processImg("/tmp/out.png")
-				pil_im = Image.open(img)
-			except Exception as e:
-				print(e)
-				self._debug("Taking Screenshot to clipboard")
-				subprocess.run(["spectacle","-a","-b","-c"])
-				img=self.clipboard.image()
-				buffer = QBuffer()
-				buffer.open(QBuffer.ReadWrite)
-				img.save(buffer, "PNG")
-				try:
-					pil_im = Image.open(io.BytesIO(buffer.data()))
-				except Exception as e:
-					print(e)
-					self.show()
-			if pil_im:
-				pil_im=pil_im.convert('L').resize([3 * _ for _ in pil_im.size], Image.BICUBIC).point(lambda p: p > 75 and p + 100)
-				txt=tesserocr.image_to_text(pil_im)
-				self.clipboard.clear()
-		if txt:
-			pitch=60
-			rate=200
+		return(txt)
+	#def _getClipboardText
+
+	def _getClipboardImg(self):
+		self._debug("Taking Screenshot to clipboard")
+		subprocess.run(["spectacle","-a","-b","-c"])
+		img=self.clipboard.image()
+		buffer = QBuffer()
+		buffer.open(QBuffer.ReadWrite)
+		img.save(buffer, "PNG")
+		return(buffer)
+	#def _getClipboardImg
+
+	def _getImgForOCR(self):
+		outImg="/tmp/out.png"
+		img=self.clipboard.image()
+		if img:
+			self._debug("Reading clipboard IMG")
+			img.save(outImg, "PNG")
+		else:
+			img=self.clipboard.pixmap()
+			if img:
+				self._debug("Reading clipboard PXM")
+				img.save(outImg, "PNG")
+			else:
+				self._debug("Taking Screenshot")
+				subprocess.run(["spectacle","-a","-e","-b","-c","-o",outImg])
+		return(outImg)
+	#def _getImgForOCR
+
+	def _invokeReader(self,txt,player):
+		spell=SpellChecker(language='es')
+		correctedTxt=[]
+		for word in txt.split():
+			word=word.replace("\"","")
+			if word.capitalize().istitle():
+				correctedTxt.append(spell.correction(word))
+			else:
+				print(word)
+		txt=" ".join(correctedTxt)
+		
+		with open("/tmp/say.txt","w") as f:
+			f.write(txt)
+		pitch=60
+		rate=200
+		if player==True:
 			subprocess.run(["speak-ng","-p","{}".format(pitch),"-s","{}".format(rate),"-v","roa/es","-w","/tmp/out.wav",txt])
 			subprocess.run(["vlc","/tmp/out.wav"])
-			self.clipboard.clear(self.clipboard.Selection)
-####	speech=speechd.Client()
-####	speech.set_language("es")
-####	speech.set_pause_context(2)
-####	speech.set_pitch(60)
-####	speech.set_rate(60)
-####	txtArray=txt.split("\n")
-####
-####	for txtLine in txtArray:
-####		if txtLine!="":
-####			speech.say(txtLine)
-		self.show()
-		# Adding custom options
-	
+		else:
+			pass
+	####	speech=speechd.Client()
+	####	speech.set_language("es")
+	####	speech.set_pause_context(2)
+	####	speech.set_pitch(60)
+	####	speech.set_rate(60)
+	####	txtArray=txt.split("\n")
+	####
+	####	for txtLine in txtArray:
+	####		if txtLine!="":
+	####			speech.say(txtLine)
+	#def _invokeReader
+
+	def _readImg(self,imgPIL):
+		txt=""
+		imgPIL=imgPIL.convert('L').resize([5 * _ for _ in imgPIL.size], Image.BICUBIC)
+		imgPIL.save("/tmp/proc.png")
+		with tesserocr.PyTessBaseAPI(lang="spa",psm=11) as api:
+			api.ReadConfigFile('digits')
+			# Consider having string with the white list chars in the config_file, for instance: "0123456789"
+			whitelist=string.ascii_letters+string.digits+string.punctuation+string.whitespace
+			api.SetVariable("classify_bln_numeric_mode", "0")
+			#api.SetPageSegMode(tesserocr.PSM.DEFAULT)
+			api.SetVariable('tessedit_char_whitelist', whitelist)
+			api.SetImage(imgPIL)
+			api.Recognize()
+			txt=api.GetUTF8Text()
+			print(api.AllWordConfidences())
+		#txt=tesserocr.image_to_text(imgPIL,lang="spa")
+		return(txt)
+
 	def _processImg(self,img):
-		outImg="{}_2".format(img)
-		image=cv2.imread(img)
+		outImg="{}".format(img)
+		image=cv2.imread(img,flags=cv2.IMREAD_COLOR)
+		h, w, c = image.shape
+		print(f'Image shape: {h}H x {w}W x {c}C')
+
 		image=self.cvGrayscale(image)
-		#image=self.cvCanny(image)
-		image=self.cvDeskew(image)
+	#	image = image[:, :, 0]
+
+#		image=self.sobel(image)
+#		image=self.thresholding(image)
+#		image=self.cvDeskew(image)
+#		image=self.opening(image)
+#		image=self.smooth(image)
+#		image=self.cvCanny(image)
 		print("Saving processed img as {}".format(outImg))
 		cv2.imwrite(outImg,image)
 		return(outImg)
+
+	def opening(self,img):
+		kernel = np.ones((5,5),np.uint8)
+		return cv2.morphologyEx(img, cv2.MORPH_OPEN, kernel)
+
+	def thresholding(self,image):
+		return cv2.threshold(image, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
+
+
+	def sobel(self,img):
+		img = cv2.cvtColor(
+			src=img,
+			code=cv2.COLOR_RGB2GRAY,
+		)
+
+		dx, dy = 1, 0
+		img_sobel = cv2.Sobel(
+			src=img,
+			ddepth=cv2.CV_64F,
+			dx=dx,
+			dy=dy,
+			ksize=5,
+		)
+		return(img_sobel)
+
 		 
+	def morph(self,img):
+		
+####	op = cv2.MORPH_OPEN
+
+####	img_morphology = cv2.morphologyEx(
+####		src=img,
+####		op=op,
+####		kernel=np.ones((5, 5), np.uint8),
+####	)
+		op = cv2.MORPH_CLOSE
+		img_morphology = cv2.morphologyEx(
+			src=img_morphology,
+			op=op,
+			kernel=np.ones((5, 5), np.uint8),
+		)
+		return(img_morphology)
+	
 	# get grayscale image
 	def cvGrayscale(self,image):
-		return cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+		return cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
+
 
 	#canny edge detection
 	def cvCanny(self,image):
 		return cv2.Canny(image, 100, 200)
+
+	def smooth(self,image):
+		return cv2.bilateralFilter(image,9,75,75)
+
+	def gaussian(self,image):
+		img_gaussian = cv2.GaussianBlur(
+			src=image,
+			ksize=(5, 5),
+			sigmaX=0,
+			sigmaY=0,
+		)
+		return(img_gaussian)
 
 	#skew correction
 	def cvDeskew(self,image):

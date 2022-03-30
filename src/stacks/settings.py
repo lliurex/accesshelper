@@ -22,7 +22,9 @@ i18n={
 	"DISABLEAUTOSTART":_("Autostart disabled for user"),
 	"AUTOSTARTERROR":_("Autostart could not be disabled"),
 	"ENABLEDOCK":_("Enabled accessibilty dock. Press ctrl+space to show"),
-	"DISABLEDOCK":_("Disabled accessibilty dock")
+	"DISABLEDOCK":_("Disabled accessibilty dock"),
+	"VOICESPEED":_("Voice speed when reading (in words per minute)"),
+	"VOICEPITCH":_("Voice pitch")
 	}
 
 class settings(confStack):
@@ -66,7 +68,7 @@ class settings(confStack):
 		self.widgets.update({self.cmb_level:'config'})
 		lbl_help=QLabel("")
 		lbl_help.setAlignment(Qt.AlignTop)
-		box.addWidget(lbl_help,1,0,1,2)
+		box.addWidget(lbl_help,1,0,1,2,Qt.AlignTop|Qt.AlignCenter)
 		box.addWidget(QLabel(_("Session settings")),2,0,1,2,Qt.AlignTop)
 		#self.chk_startup=QCheckBox(_("Launch at startup"))
 		#box.addWidget(self.chk_startup,3,0,1,2)
@@ -79,11 +81,29 @@ class settings(confStack):
 		chk_dock=QCheckBox(_("Enable accesshelper dock"))
 		box.addWidget(chk_dock,4,0,1,1,Qt.AlignTop)
 		self.widgets.update({chk_dock:'dock'})
+		lbl_speed=QLabel(i18n.get("VOICESPEED"))
+		box.addWidget(lbl_speed,5,0,1,1,Qt.AlignTop)
+		cmb_speed=QComboBox()
+		i=0
+		while i<=3:
+			if isinstance(i,float):
+				if i.is_integer():
+					i=int(i)
+			cmb_speed.addItem("{}x".format(str(i)))
+			i+=0.25
+		box.addWidget(cmb_speed,5,1,1,1,Qt.AlignTop)
+		self.widgets.update({cmb_speed:'speed'})
+		lbl_pitch=QLabel(i18n.get("VOICEPITCH"))
+		box.addWidget(lbl_pitch,6,0,1,1,Qt.AlignTop)
+		cmb_pitch=QComboBox()
+		for i in range (1,101):
+			cmb_pitch.addItem(str(i))
+		box.addWidget(cmb_pitch,6,1,1,1,Qt.AlignTop)
+		self.widgets.update({cmb_pitch:'pitch'})
 		box.setRowStretch(0,1)
-		box.setRowStretch(1,0)
-		box.setRowStretch(2,0)
-		box.setRowStretch(3,0)
-		box.setRowStretch(4,2)
+		for i in range (1,6):
+			box.setRowStretch(i,0)
+		box.setRowStretch(i+1,2)
 
 		for wrkDir in self.wrkDirs:
 			if os.path.isdir(wrkDir):
@@ -115,6 +135,8 @@ class settings(confStack):
 		profile=''
 		if level in config.keys():
 			profile=config[level].get('profile','')
+			speed=config[level].get('speed','1x')
+			pitch=config[level].get('pitch','50')
 		startup=False
 		if os.path.isfile(os.path.join(os.environ.get('HOME'),".config/autostart/accesshelper_profiler.desktop")) or os.path.isfile("/etc/xdg/autostart/accesshelper_profiler.desktop"):
 			startup=True
@@ -126,6 +148,10 @@ class settings(confStack):
 				widget.setChecked(startup)
 			elif desc=="profile":
 				widget.setCurrentText(profile)
+			elif desc=="speed":
+				widget.setCurrentText(speed)
+			elif desc=="pitch":
+				widget.setCurrentText(pitch)
 			elif desc=="config":
 				if level=="user":
 					idx=0
@@ -169,7 +195,8 @@ class settings(confStack):
 					self.saveChanges(desc,value,level="user")
 				else:
 					value=widget.currentText()
-					profile=value
+					if desc=="profile":
+						profile=value
 			self.saveChanges(desc,value)
 		if startWdg:
 			if startWdg.isChecked():

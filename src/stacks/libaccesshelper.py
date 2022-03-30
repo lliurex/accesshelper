@@ -257,6 +257,7 @@ class functionHelperClass():
 class accesshelper():
 	def __init__(self):
 		self.functionHelper=functionHelperClass()
+	#def __init__
 
 	def getCursors(self):
 		availableThemes=[]
@@ -272,6 +273,7 @@ class accesshelper():
 				if theme.startswith("*"):
 					availableThemes.append(theme.replace("*","").strip())
 		return(availableThemes)
+	#def getCursors
 
 	def getSchemes(self):
 		availableSchemes=[]
@@ -287,6 +289,7 @@ class accesshelper():
 				if scheme.startswith("*"):
 					availableSchemes.append(scheme.replace("*","").strip())
 		return availableSchemes
+	#def getSchemes
 
 	def getThemes(self):
 		availableThemes=[]
@@ -302,6 +305,7 @@ class accesshelper():
 				if theme.startswith("*"):
 					availableThemes.append(theme.replace("*","").strip())
 		return (availableThemes)
+	#def getThemes
 
 	def setCursor(self,theme="default"):
 		if theme=="default":
@@ -314,25 +318,26 @@ class accesshelper():
 			err=1
 		os.environ["XCURSOR_THEME"]=theme
 		return(err)
+	#def setCursor
 
 	def setCursorSize(self,size):
-		print("Sizing to: {}".format(size))
+		self._debug("Sizing to: {}".format(size))
 		self.setKdeConfigSetting("Mouse","cursorSize","{}".format(size),"kcminputrc")
 		xdefault=os.path.join(os.environ.get("HOME"),".Xdefaults")
 		xcursor="Xcursor.size: {}".format(size)
-		xcursor=""
 		fcontents=[]
 		if os.path.isfile(xdefault):
 			with open(xdefault,"r") as f:
 				fcontent=f.readlines()
 		newContent=[]
 		for line in fcontents:
-			if line.startswith("Xcursor.size:"):
-				line=xcursor
-			newContent.append(line)
+			if line.startswith("Xcursor.size:")==False:
+				newContent.append(line)
+		newContent.append(xcursor)
 		with open(xdefault,"w") as f:
 			f.writelines(newContent)
 		os.environ["XCURSOR_SIZE"]=str(size)
+	#def setCursorSize
 
 	def setScheme(self,scheme):
 		err=0
@@ -342,6 +347,7 @@ class accesshelper():
 			print(e)
 			err=1
 		return(err)
+	#def setScheme
 
 	def setTheme(self,theme):
 		err=0
@@ -351,33 +357,43 @@ class accesshelper():
 			err=1
 			print(e)
 		return(err)
+	#def setTheme
 
 	def cssStyle(self,*args):
 		return(self.functionHelper.cssStyle(*args))
+	#def cssStyle
 
 	def getHotkey(self,*args):
 		return(self.functionHelper.getHotkey(*args))
+	#def getHotkey
 
 	def getSystemConfig(self,*args):
 		return(self.functionHelper.getSystemConfig(*args))
+	#def getSystemConfig
 
 	def setSystemConfig(self,*args):
 		return(self.functionHelper.setSystemConfig(*args))
+	#def setSystemConfig
 
 	def getKdeConfigSetting(self,*args):
 		return(self.functionHelper.getKdeConfigSetting(*args))
+	#def getKdeConfigSetting
 
 	def setKdeConfigSetting(self,*args):
 		return(self.functionHelper.setKdeConfigSetting(*args))
+	#def setKdeConfigSetting
 
 	def takeSnapshot(self,*args,**kwargs):
 		return(self.functionHelper.takeSnapshot(*args,**kwargs))
+	#def takeSnapshot
 
 	def restoreSnapshot(self,*args):
 		return(self.functionHelper.restoreSnapshot(*args))
+	#def restoreSnapshot
 
 	def importExportSnapshot(self,*args,**kwargs):
 		return(self.functionHelper.importExportSnapshot(*args,**kwargs))
+	#def importExportSnapshot
 	
 	def _getCursorTheme(self):
 		themes=self.getCursors()
@@ -388,11 +404,13 @@ class accesshelper():
 				theme=desc[0].replace("(","").replace(")","")
 				break
 		return(theme)
+	#def _getCursorTheme
 
 	def getPointerImage(self,*args,theme="default"):
 		if theme=="default":
 			theme=self._getCursorTheme()
 		return(self.functionHelper.getPointerImage(*args,theme))
+	#def getPointerImage
 
 	def getPointerSize(self,*args):
 		systemConfig=self.getSystemConfig("kcminputrc")
@@ -403,6 +421,7 @@ class accesshelper():
 				if setting[0]=="cursorSize":
 					cursorSize=int(setting[1])
 		return(cursorSize)
+	#def getPointerSize
 
 	def applyChanges(self):
 		cmd=["kquitapp5","kglobalaccel"]
@@ -415,3 +434,4 @@ class accesshelper():
 		subprocess.run(cmd)
 		cmd=["kstart5","plasmashell"]
 		subprocess.run(cmd)
+	#def applyChanges

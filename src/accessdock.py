@@ -28,13 +28,15 @@ class accessdock(QWidget):
 		super().__init__()
 		self.dbg=True
 		self.menu=App2Menu.app2menu()
-		self.confFile="accessdock.json"
+		self.confFile="accesshelper.json"
 		self.confDir="/usr/share/accesshelper/"
 		self.fastSettings={"color":"color","font_size":"","pointer_size":"","read":"","osk":"","config":"","hide":""}
 		self.widgets={}
 		self.accesshelper=libaccesshelper.accesshelper()
 		self.coordx=0
 		self.coordy=0
+		self.rate=0
+		self.pitch=50
 		self.clipboard=QClipboard()
 		self._loadConfig()
 		self._renderGui()
@@ -55,6 +57,11 @@ class accessdock(QWidget):
 				hotkey="Ctrl+Space"
 			if config.get("coords",""):
 				self.coordx,self.coordy=config.get("coords")
+			speed=config.get("speed","1x")
+			self.pitch=config.get("pitch","50")
+			speed=speed.replace("x","")
+			#eSpeak min speed=80 max speed=390
+			self.rate=int(80+((float(speed)*310)/3))
 			self._setKdeHotkey(hotkey)
 	#def _loadConfig
 
@@ -63,8 +70,8 @@ class accessdock(QWidget):
 		if os.path.isfile(os.path.join(self.confDir,self.confFile)):
 			with open(os.path.join(self.confDir,self.confFile)) as f:
 				config=json.loads(f.read())
-		if os.path.isfile(os.path.join(os.environ.get('HOME'),".config",self.confFile)):
-			with open(os.path.join(os.environ.get('HOME'),".config",self.confFile)) as f:
+		if os.path.isfile(os.path.join(os.environ.get('HOME'),".config","accesshelper",self.confFile)):
+			with open(os.path.join(os.environ.get('HOME'),".config","accesshelper",self.confFile)) as f:
 				config.update(json.loads(f.read()))
 		return(config)
 	#def _readConfig
@@ -343,15 +350,17 @@ class accessdock(QWidget):
 			if word.capitalize().istitle():
 				correctedTxt.append(spell.correction(word))
 			else:
-				print(word)
+				onlytext = ''.join(filter(str.isalnum, word)) 
+				if onlytext.capitalize().istitle():
+					correctedTxt.append(spell.correction(onlytext))
+				elif self.dbg:
+					self._debug("Exclude: {}".format(word))
 		txt=" ".join(correctedTxt)
-		
-		with open("/tmp/say.txt","w") as f:
-			f.write(txt)
-		pitch=60
-		rate=200
+		if self.dbg:
+			with open("/tmp/say_accessdocker.txt","w") as f:
+				f.write(txt)
 		if player==True:
-			subprocess.run(["speak-ng","-p","{}".format(pitch),"-s","{}".format(rate),"-v","roa/es","-w","/tmp/out.wav",txt])
+			subprocess.run(["speak-ng","-p","{}".format(self.pitch),"-s","{}".format(self.rate),"-v","roa/es","-w","/tmp/out.wav",txt])
 			subprocess.run(["vlc","/tmp/out.wav"])
 		else:
 			pass
@@ -498,12 +507,12 @@ class accessdock(QWidget):
 		x = e.globalX()-(self.width()/2)
 		y = e.globalY()
 		config={}
-		if os.path.isfile(os.path.join(os.environ.get('HOME'),".config",self.confFile)):
-			with open(os.path.join(os.environ.get('HOME'),".config",self.confFile),'r') as f:
+		if os.path.isfile(os.path.join(os.environ.get('HOME'),".config","accesshelper",self.confFile)):
+			with open(os.path.join(os.environ.get('HOME'),".config","accesshelper",self.confFile),'r') as f:
 				config.update(json.loads(f.read()))
 		config={"coords":[x,y]}
 		self.coordx,self.coordy=(x,y)
-		with open(os.path.join(os.environ.get('HOME'),".config",self.confFile),'w') as f:
+		with open(os.path.join(os.environ.get('HOME'),".config","accesshelper",self.confFile),'w') as f:
 			f.write(json.dumps(config,indent=4))
 	#def mouseReleaseEvent
 

@@ -155,6 +155,7 @@ class accessdock(QWidget):
 				alphaDlg._load_screen()
 				alphaDlg.btn_ok.clicked.connect(alphaDlg.close)
 				alphaDlg.btn_cancel.clicked.connect(alphaDlg.close)
+				alphaDlg.btn_cancel.setShortcut("Esc")
 				alphaDlg.setWindowModality(Qt.WindowModal)
 				alphaDlg.setWindowFlags(Qt.NoDropShadowWindowHint|Qt.WindowStaysOnTopHint|Qt.FramelessWindowHint)
 				alphaDlg.show()

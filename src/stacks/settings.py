@@ -23,7 +23,7 @@ i18n={
 	"AUTOSTARTERROR":_("Autostart could not be disabled"),
 	"ENABLEDOCK":_("Enabled accessibilty dock. Press ctrl+space to show"),
 	"DISABLEDOCK":_("Disabled accessibilty dock"),
-	"VOICESPEED":_("Voice speed when reading (in words per minute)"),
+	"VOICESPEED":_("Voice speed when reading"),
 	"VOICEPITCH":_("Voice pitch")
 	}
 

@@ -12,13 +12,14 @@ import cv2
 import numpy as np
 import tesserocr
 from PIL import Image
-import gettext
 import json
 import subprocess
 import speechd
 import string
 from spellchecker import SpellChecker
 from app2menu import App2Menu
+import gettext
+gettext.textdomain('accesshelper')
 _ = gettext.gettext
 QString=type("")
 QInt=type(0)

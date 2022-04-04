@@ -28,7 +28,7 @@ class functionHelperClass():
 
 	def _debug(self,msg):
 		if self.dbg:
-			print("libaccess: {}".format(msg))
+			print("libhelper: {}".format(msg))
 
 	def cssStyle(self):
 		style="""
@@ -256,8 +256,14 @@ class functionHelperClass():
 
 class accesshelper():
 	def __init__(self):
+		self.dbg=True
 		self.functionHelper=functionHelperClass()
 	#def __init__
+
+	def _debug(self,msg):
+		if self.dbg:
+			print("libaccess: {}".format(msg))
+	#def _debug
 
 	def getCursors(self):
 		availableThemes=[]

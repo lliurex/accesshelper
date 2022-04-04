@@ -113,7 +113,7 @@ class lookandfeel(confStack):
 						if isinstance(setting,tuple):
 							if setting[0]=="cursorSize":
 								cursorSize=setting[1]
-					if cmb.findText(cursorSize)==-1:
+					if cmb.findText(cursorSize)==-1 and isinstance(cursorSize,int):
 						cmb.insertItem(0,cursorSize)
 					cmb.setCurrentText(cursorSize)
 				else:

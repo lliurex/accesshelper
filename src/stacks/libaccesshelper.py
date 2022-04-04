@@ -28,7 +28,7 @@ class functionHelperClass():
 
 	def _debug(self,msg):
 		if self.dbg:
-			print("libaccess: {}".format(msg))
+			print("libhelper: {}".format(msg))
 
 	def cssStyle(self):
 		style="""
@@ -256,8 +256,14 @@ class functionHelperClass():
 
 class accesshelper():
 	def __init__(self):
+		self.dbg=True
 		self.functionHelper=functionHelperClass()
 	#def __init__
+
+	def _debug(self,msg):
+		if self.dbg:
+			print("libaccess: {}".format(msg))
+	#def _debug
 
 	def getCursors(self):
 		availableThemes=[]
@@ -399,9 +405,9 @@ class accesshelper():
 		themes=self.getCursors()
 		theme="default"
 		for available in themes:
-			desc=available.split(" ")[1:]
-			if len(desc)>1:
-				theme=desc[0].replace("(","").replace(")","")
+			if ("current") in available:
+				theme=available.split("(")[1].replace("(","").replace(")","")
+				theme=theme.split(" ")[0]
 				break
 		return(theme)
 	#def _getCursorTheme
@@ -419,7 +425,10 @@ class accesshelper():
 		for setting in cursorSettings:
 			if isinstance(setting,tuple):
 				if setting[0]=="cursorSize":
-					cursorSize=int(setting[1])
+					size=setting[1]
+					if not size:
+						size=32
+					cursorSize=int(size)
 		return(cursorSize)
 	#def getPointerSize
 

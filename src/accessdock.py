@@ -239,7 +239,7 @@ class accessdock(QWidget):
 			pixmap=img[0].pixmap(QSize(ptSize,ptSize))
 			lblTest=QLabel()
 			lblTest.setPixmap(pixmap)
-		lay2.addWidget(lblTest,0,1,2,1)
+		lay2.addWidget(lblTest,0,1,2,1,Qt.AlignCenter)
 		btnCancel=QPushButton("Cancel")
 		btnCancel.clicked.connect(dlg.close)
 		lay2.addWidget(btnCancel,2,0,1,1)

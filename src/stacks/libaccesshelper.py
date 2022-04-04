@@ -420,7 +420,7 @@ class accesshelper():
 			if isinstance(setting,tuple):
 				if setting[0]=="cursorSize":
 					if isinstance(setting[1],int)==False:
-						setting[=[1]=32
+						setting[1]=32
 					cursorSize=int(setting[1])
 		return(cursorSize)
 	#def getPointerSize

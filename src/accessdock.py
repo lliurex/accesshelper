@@ -236,6 +236,9 @@ class accessdock(QWidget):
 				if qsize.width() not in sizes:
 					sizes.append(qsize.width())
 			sizes.sort()
+			print("*^******")
+			print(img)
+			print("*^******")
 			pixmap=img[0].pixmap(QSize(ptSize,ptSize))
 			lblTest=QLabel()
 			lblTest.setPixmap(pixmap)

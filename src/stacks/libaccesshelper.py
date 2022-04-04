@@ -399,9 +399,9 @@ class accesshelper():
 		themes=self.getCursors()
 		theme="default"
 		for available in themes:
-			desc=available.split(" ")[1:]
-			if len(desc)>1:
-				theme=desc[0].replace("(","").replace(")","")
+			if ("current") in available:
+				theme=available.split("(")[1].replace("(","").replace(")","")
+				theme=theme.split(" ")[0]
 				break
 		return(theme)
 	#def _getCursorTheme
@@ -419,9 +419,10 @@ class accesshelper():
 		for setting in cursorSettings:
 			if isinstance(setting,tuple):
 				if setting[0]=="cursorSize":
-					if isinstance(setting[1],int)==False:
-						setting[1]=32
-					cursorSize=int(setting[1])
+					size=setting[1]
+					if not size:
+						size=32
+					cursorSize=int(size)
 		return(cursorSize)
 	#def getPointerSize
 

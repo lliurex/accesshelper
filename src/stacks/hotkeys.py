@@ -42,7 +42,7 @@ class hotkeys(confStack):
 		self.index=4
 		self.enabled=True
 		self.changed=[]
-		self.sysConfig={}
+		self.plasmaConfig={}
 		self.config={}
 		self.wrkFiles=["kglobalshortcutsrc"]
 		self.optionChanged=[]
@@ -75,9 +75,9 @@ class hotkeys(confStack):
 		self.widgetsText={}
 		self.refresh=True
 		for wrkFile in self.wrkFiles:
-			systemConfig=self.accesshelper.getSystemConfig(wrkFile)
-			self.sysConfig.update(systemConfig)
-			for kfile,sections in systemConfig.items():
+			plasmaConfig=self.accesshelper.getPlasmaConfig(wrkFile)
+			self.plasmaConfig.update(plasmaConfig)
+			for kfile,sections in plasmaConfig.items():
 				for section,settings in sections.items():
 					row=0
 					for setting in settings:
@@ -155,9 +155,9 @@ class hotkeys(confStack):
 		keypress=keypress.replace("Control","Ctrl")
 		self.btn.setText(keypress)
 		desc=self.widgetsText.get(self.btn)
-		sysConfig=self.sysConfig.copy()
+		plasmaConfig=self.plasmaConfig.copy()
 		for kfile in self.wrkFiles:
-			for section,data in sysConfig.get(kfile,{}).items():
+			for section,data in plasmaConfig.get(kfile,{}).items():
 				dataTmp=[]
 				for setting,value in data:
 					if setting==desc:
@@ -167,7 +167,7 @@ class hotkeys(confStack):
 						valueArray[2]=valueArray[2].replace(",","")
 						value=",".join(valueArray)
 					dataTmp.append((setting,value))
-				self.sysConfig[kfile][section]=dataTmp
+				self.plasmaConfig[kfile][section]=dataTmp
 		self.config=self.getConfig().get(self.level)
 		config=self.config.copy()
 		for setting,valueDict in config.get("hotkeys",{}).items():
@@ -183,7 +183,7 @@ class hotkeys(confStack):
 					k_friendly_name=setting.replace("[","").replace("]","").replace(".desktop","").capitalize()
 					self.config['hotkeys'][setting]["_k_friendly_name"]=k_friendly_name
 					dataTmp.append(("_k_friendly_name",k_friendly_name))
-					self.sysConfig['kglobalshortcutsrc']["{}".format(setting.replace("[","").replace("]",""))]=dataTmp
+					self.plasmaConfig['kglobalshortcutsrc']["{}".format(setting.replace("[","").replace("]",""))]=dataTmp
 			
 		self.btn_ok.setEnabled(True)
 		self.btn_cancel.setEnabled(True)
@@ -215,9 +215,9 @@ class hotkeys(confStack):
 
 	def updateScreen(self):
 		for wrkFile in self.wrkFiles:
-			systemConfig=self.accesshelper.getSystemConfig(wrkFile)
-			self.sysConfig.update(systemConfig)
-			for kfile,sections in systemConfig.items():
+			plasmaConfig=self.accesshelper.getPlasmaConfig(wrkFile)
+			self.plasmaConfig.update(plasmaConfig)
+			for kfile,sections in plasmaConfig.items():
 				for section,settings in sections.items():
 					row=0
 					for setting in settings:
@@ -238,7 +238,7 @@ class hotkeys(confStack):
 		pass
 
 	def writeConfig(self):
-		self.accesshelper.setSystemConfig(self.sysConfig)
+		self.accesshelper.setPlasmaConfig(self.plasmaConfig)
 		self.saveChanges('hotkeys',self.config.get('hotkeys',{}),'user')
 		self.refresh=True
 		self.optionChanged=[]

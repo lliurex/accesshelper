@@ -41,6 +41,8 @@ class settings(confStack):
 		self.config={}
 		self.widgets={}
 		self.wrkDirs=["/usr/share/accesshelper/profiles","/usr/share/accesshelper/default",os.path.join(os.environ.get('HOME'),".config/accesshelper/profiles")]
+		self.profilerAuto="accesshelper_profiler.desktop"
+		self.dockAuto="accessdock.desktop"
 		self.optionChanged=[]
 		self.accesshelper=libaccesshelper.accesshelper()
 	#def __init__
@@ -129,6 +131,17 @@ class settings(confStack):
 	#	self.updateScreen()
 	#def fakeUpdate
 
+	def _getAutostartFile(self,f):
+		autostartFiles={}
+		if os.path.isfile(os.path.join(os.environ.get('HOME'),".config/autostart/","{}".format(f))):
+			autostartFiles['user']=os.path.join(os.environ.get('HOME'),".config/autostart/","{}".format(f))
+			autostartFiles['enabled']=True
+		if os.path.isfile(os.path.join("/etc/xdg/autostart/","{}".format(f))):
+			autostartFiles['system']=os.path.join("/etc/xdg/autostart/","{}".format(f))
+			autostartFiles['enabled']=True
+		return(autostartFiles)
+	#def _getAutostartFile
+
 	def updateScreen(self,level=None):
 		config=self.getConfig(level)
 		level=self.level
@@ -138,10 +151,10 @@ class settings(confStack):
 			speed=config[level].get('speed','1x')
 			pitch=config[level].get('pitch','50')
 		startup=False
-		if os.path.isfile(os.path.join(os.environ.get('HOME'),".config/autostart/accesshelper_profiler.desktop")) or os.path.isfile("/etc/xdg/autostart/accesshelper_profiler.desktop"):
+		if self._getAutostartFile(self.profilerAuto).get('enabled'):
 			startup=True
 		dock=False
-		if os.path.isfile(os.path.join(os.environ.get("HOME"),".config/autostart/accessdock.desktop")):
+		if self._getAutostartFile(self.dockAuto).get('enabled'):
 			dock=True
 		for widget,desc in self.widgets.items():
 			if desc=="startup":
@@ -217,7 +230,8 @@ class settings(confStack):
 		if profile:
 			tmpHdl,tmpF=tempfile.mkstemp()
 			tmpf=open(tmpF,'w')
-			with open("/usr/share/accesshelper/helper/accesshelper_profiler.desktop","r") as f:
+			fprof=os.path.join("/usr/share/accesshelper/helper/",self.profilerAuto)
+			with open(fprof,"r") as f:
 				lines=f.readlines()
 				for line in lines:
 					if line.startswith("Exec="):
@@ -225,7 +239,7 @@ class settings(confStack):
 						line=line.replace("%u",profile)
 					tmpf.write(line)
 			tmpf.close()
-			destPath=os.path.join(os.environ.get("HOME"),".config/autostart/accesshelper_profiler.desktop")
+			destPath=os.path.join(os.environ.get("HOME"),".config/autostart/",self.profilerAuto)
 			if os.path.isdir(os.path.dirname(destPath))==False:
 				os.makedirs(os.path.dirname(destPath))
 			shutil.copy(tmpF,destPath)
@@ -233,36 +247,36 @@ class settings(confStack):
 	#def _setAutostart
 
 	def _removeAutostart(self,profile):
-		destPath=os.path.join(os.environ.get("HOME"),".config/autostart/accesshelper_profiler.desktop")
-		if os.path.isfile(destPath):
+		autoFiles=self._getAutostartFile(self.profilerAuto)
+		if os.path.isfile(autoFiles.get('home',''))==True:
 			try:
-				os.remove(destPath)
+				os.remove(autoFiles['home'])
 				self.showMsg("{} {}".format(i18n.get("DISABLEAUTOSTART"),os.environ.get("USER")))
 			except:
 				self.showMsg(i18n.get("AUTOSTARTERROR"))
 	#def _removeAutostart
 
 	def _setAutostartDock(self):
-			destPath=os.path.join(os.environ.get("HOME"),".config/autostart/accessdock.desktop")
-			if os.path.isdir(os.path.dirname(destPath))==False:
-				os.makedirs(os.path.dirname(destPath))
-			tmpF="/usr/share/applications/accessdock.desktop"
-			shutil.copy(tmpF,destPath)
-			self.showMsg("{}".format(i18n.get("ENABLEDOCK")))
-			hotkey="Ctrl+Space"
-			desc="{0},{0},show accessdock".format(hotkey)
-			data=[("_launch",desc),("_k_friendly_name","accessdock")]
-			config={'kglobalshortcutsrc':{'accessdock.desktop':data}}
-			self.accesshelper.setSystemConfig(config)
+		destPath=os.path.join(os.environ.get("HOME"),".config/autostart/accessdock.desktop")
+		if os.path.isdir(os.path.dirname(destPath))==False:
+			os.makedirs(os.path.dirname(destPath))
+		tmpF="/usr/share/applications/accessdock.desktop"
+		shutil.copy(tmpF,destPath)
+		self.showMsg("{}".format(i18n.get("ENABLEDOCK")))
+		hotkey="Ctrl+Space"
+		desc="{0},{0},show accessdock".format(hotkey)
+		data=[("_launch",desc),("_k_friendly_name","accessdock")]
+		config={'kglobalshortcutsrc':{'accessdock.desktop':data}}
+		self.accesshelper.setPlasmaConfig(config)
 
 	def _removeAutostartDock(self):
-		destPath=os.path.join(os.environ.get("HOME"),".config/autostart/accessdock.desktop")
+		autoFiles=self._getAutostartFile(self.profilerAuto)
 		hotkey=""
 		desc="{0},{0},show accessdock".format(hotkey)
 		data=[("_launch",""),("_k_friendly_name","")]
 		config={'kglobalshortcutsrc':{'accessdock.desktop':data}}
-		self.accesshelper.setSystemConfig(config)
-		if os.path.isfile(destPath):
+		self.accesshelper.setPlasmaConfig(config)
+		if os.path.isfile(autoFiles.get('home',''))==True:
 			try:
 				os.remove(destPath)
 				self.showMsg("{}".format(i18n.get("DISABLEDOCK")))

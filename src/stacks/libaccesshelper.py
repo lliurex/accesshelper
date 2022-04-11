@@ -41,7 +41,7 @@ class functionHelperClass():
 		"""
 		return(style)
 
-	def getSystemConfig(self,wrkFile='',sourceFolder=''):
+	def getPlasmaConfig(self,wrkFile='',sourceFolder=''):
 		dictValues={}
 		data=''
 		if wrkFile:
@@ -80,7 +80,7 @@ class functionHelperClass():
 		name=""
 		hksetting=self.settingsHotkeys.get(setting,"")
 		if hksetting:
-			sc=self.getSystemConfig(wrkFile="kglobalshortcutsrc")
+			sc=self.getPlasmaConfig(wrkFile="kglobalshortcutsrc")
 			for kfile,sections in sc.items():
 				for section,settings in sections.items():
 					hksection=section
@@ -115,7 +115,7 @@ class functionHelperClass():
 		#_debug("Write value: {}".format(ret))
 		return(ret)
 
-	def setSystemConfig(self,config,wrkFile=''):
+	def setPlasmaConfig(self,config,wrkFile=''):
 		self._debug("Config: {}".format(config))
 		for kfile,sections in config.items():
 			for section,data in sections.items():
@@ -129,7 +129,7 @@ class functionHelperClass():
 					except Exception as e:
 						print("Error on setting {}".format(setting))
 						print(e)
-	#def setSystemConfig
+	#def setPlasmaConfig
 
 	def takeSnapshot(self,profilePath,appconfrc=''):
 		self._debug("Take snapshot {} {}".format(profilePath,appconfrc))
@@ -197,14 +197,14 @@ class functionHelperClass():
 					sw=True
 			else:
 				sw=True
-		self._debug(profileTar)
+		self._debug("{0} {1}".format(profileTar,sw))
 		if sw:
 			tarProfile=tarfile.open(profileTar,'r')
 			tmpFolder=tempfile.mkdtemp()
 			tarProfile.extractall(path=tmpFolder)
 			plasmaPath=os.path.join(tmpFolder,"plasma")
 			if os.path.isdir(plasmaPath)==True:
-				config=self.getSystemConfig(sourceFolder=plasmaPath)
+				config=self.getPlasmaConfig(sourceFolder=plasmaPath)
 				for kfile,sections in config.items():
 					for section,data in sections.items():
 						for (desc,value) in data:
@@ -217,6 +217,7 @@ class functionHelperClass():
 
 				self._debug("Cp {} {}".format(confPath,usrFolder))
 				shutil.copy(confPath,usrFolder)
+				data=self.getPlasmaConfig()
 		return(sw)
 	#def restore_snapshot
 
@@ -373,13 +374,13 @@ class accesshelper():
 		return(self.functionHelper.getHotkey(*args))
 	#def getHotkey
 
-	def getSystemConfig(self,*args):
-		return(self.functionHelper.getSystemConfig(*args))
-	#def getSystemConfig
+	def getPlasmaConfig(self,*args):
+		return(self.functionHelper.getPlasmaConfig(*args))
+	#def getPlasmaConfig
 
-	def setSystemConfig(self,*args):
-		return(self.functionHelper.setSystemConfig(*args))
-	#def setSystemConfig
+	def setPlasmaConfig(self,*args):
+		return(self.functionHelper.setPlasmaConfig(*args))
+	#def setPlasmaConfig
 
 	def getKdeConfigSetting(self,*args):
 		return(self.functionHelper.getKdeConfigSetting(*args))
@@ -419,8 +420,8 @@ class accesshelper():
 	#def getPointerImage
 
 	def getPointerSize(self,*args):
-		systemConfig=self.getSystemConfig("kcminputrc")
-		cursorSettings=systemConfig.get('kcminputrc',{}).get('Mouse',[])
+		plasmaConfig=self.getPlasmaConfig("kcminputrc")
+		cursorSettings=plasmaConfig.get('kcminputrc',{}).get('Mouse',[])
 		cursorSize=32
 		for setting in cursorSettings:
 			if isinstance(setting,tuple):

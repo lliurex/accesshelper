@@ -83,7 +83,7 @@ class accessdock(QWidget):
 		data.append(("_launch",desc))
 		data.append(("_k_friendly_name","accessdock"))
 		config={'kglobalshortcutsrc':{'accessdock.desktop':data}}
-		self.accesshelper.setSystemConfig(config)
+		self.accesshelper.setPlasmaConfig(config)
 	#def _setKdeHotkey
 
 	def _renderGui(self):

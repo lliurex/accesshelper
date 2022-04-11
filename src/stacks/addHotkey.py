@@ -43,7 +43,7 @@ class addHotkey(confStack):
 		self.enabled=True
 		self.changed=[]
 #		self.level='user'
-		self.sysConfig={}
+		self.plasmaConfig={}
 		self.wrkFiles=["kglobalshortcutsrc"]
 		self.optionChanged=[]
 		self.keymap={}
@@ -133,9 +133,9 @@ class addHotkey(confStack):
 		keypress=keypress.replace("Control","Ctrl")
 		self.btnHk.setText(keypress)
 		desc=self.widgetsText.get(self.btnHk)
-		sysConfig=self.sysConfig.copy()
+		plasmaConfig=self.plasmaConfig.copy()
 		for kfile in self.wrkFiles:
-			for section,data in sysConfig.get(kfile,{}).items():
+			for section,data in plasmaConfig.get(kfile,{}).items():
 				dataTmp=[]
 				for setting,value in data:
 					if setting==desc:
@@ -144,7 +144,7 @@ class addHotkey(confStack):
 						valueArray[1]=keypress
 						value=",".join(valueArray)
 					dataTmp.append((setting,value))
-				self.sysConfig[kfile][section]=dataTmp
+				self.plasmaConfig[kfile][section]=dataTmp
 		#if keypress!=self.keytext:
 		#	self.changes=True
 		#	self.setChanged(self.btn_conf)
@@ -234,7 +234,7 @@ class addHotkey(confStack):
 		pass
 
 	def writeConfig(self):
-		#functionHelper.setSystemConfig(self.sysConfig)
+		#functionHelper.setPlasmaConfig(self.plasmaConfig)
 		self.refresh=True
 		txt=self.btnHk.text()
 		if txt==i18n.get("BTNTXT") or txt=="":

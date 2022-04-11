@@ -41,7 +41,7 @@ class lookandfeel(confStack):
 		self.defaultRepos={}
 		self.changed=[]
 		self.config={}
-		self.sysConfig={}
+		self.plasmaConfig={}
 		self.wrkFiles=["kdeglobals","kcmimputrc"]
 		self.blockSettings={}
 		self.wantSettings={"kdeglobals":["General"]}
@@ -96,11 +96,11 @@ class lookandfeel(confStack):
 
 	def updateScreen(self):
 		for wrkFile in self.wrkFiles:
-			systemConfig=self.accesshelper.getSystemConfig(wrkFile)
-			self.sysConfig.update(systemConfig)
+			plasmaConfig=self.accesshelper.getPlasmaConfig(wrkFile)
+			self.plasmaConfig.update(plasmaConfig)
 		self.config=self.getConfig()
 		theme=""
-		for value in self.sysConfig.get("kdeglobals",{}).get("General",[]):
+		for value in self.plasmaConfig.get("kdeglobals",{}).get("General",[]):
 			if value[0]=="Name":
 				theme=value[1]
 		for cmbDesc in self.widgets.keys():
@@ -108,7 +108,7 @@ class lookandfeel(confStack):
 			if isinstance(cmb,QComboBox):
 				if cmbDesc=="cursorSize":
 					cursorSize=32
-					cursorSettings=self.sysConfig.get('kcminputrc',{}).get('Mouse',[])
+					cursorSettings=self.plasmaConfig.get('kcminputrc',{}).get('Mouse',[])
 					for setting in cursorSettings:
 						if isinstance(setting,tuple):
 							if setting[0]=="cursorSize":

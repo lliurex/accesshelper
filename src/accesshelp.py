@@ -10,7 +10,7 @@ from stacks import libaccesshelper
 import gettext
 import time
 _ = gettext.gettext
-gettext.textdomain('accesshelper')
+gettext.textdomain('access_helper')
 
 
 wrkDirList=["/usr/share/accesshelper/profiles","/usr/share/accesshelper/default",os.path.join(os.environ.get("HOME",''),".config/accesshelper/profiles")]

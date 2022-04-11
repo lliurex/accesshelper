@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-11 09:27+0200\n"
+"POT-Creation-Date: 2022-04-11 12:46+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -41,63 +41,63 @@ msgstr ""
 msgid "Keyboard"
 msgstr ""
 
-#: ../src/accesshelp.py:17
+#: ../src/accesshelp.py:19
 msgid "usage: accesshelper [--set profile]|[--list]"
 msgstr ""
 
-#: ../src/accesshelp.py:18
+#: ../src/accesshelp.py:20
 msgid "With no args launch accesshelper GUI"
 msgstr ""
 
-#: ../src/accesshelp.py:19
+#: ../src/accesshelp.py:21
 msgid ""
 "--set [profile]: Activate specified profile.\n"
 "\tCould be an absolute path or a profile from default profiles path"
 msgstr ""
 
-#: ../src/accesshelp.py:20
+#: ../src/accesshelp.py:22
 msgid "--list: List available profiles"
 msgstr ""
 
-#: ../src/accesshelp.py:21
+#: ../src/accesshelp.py:23
 msgid "could not be accessed"
 msgstr ""
 
-#: ../src/accesshelp.py:22
+#: ../src/accesshelp.py:24
 msgid "There's no profiles at"
 msgstr ""
 
-#: ../src/accesshelp.py:23
+#: ../src/accesshelp.py:25
 msgid "Error loading"
 msgstr ""
 
-#: ../src/accesshelp.py:24
+#: ../src/accesshelp.py:26
 msgid "Must select one from:"
 msgstr ""
 
-#: ../src/accesshelp.py:25
+#: ../src/accesshelp.py:27
 msgid "Loading profile"
 msgstr ""
 
-#: ../src/accesshelp.py:26
+#: ../src/accesshelp.py:28
 msgid ""
 "It's recommended to logout from session now\n"
 "in order of avoid inconsistencies"
 msgstr ""
 
-#: ../src/accesshelp.py:27
+#: ../src/accesshelp.py:29
 msgid "Logout"
 msgstr ""
 
-#: ../src/accesshelp.py:28
+#: ../src/accesshelp.py:30
 msgid "Later"
 msgstr ""
 
-#: ../src/accesshelp.py:29
+#: ../src/accesshelp.py:31
 msgid "Profile not loaded: Autostart is disabled"
 msgstr ""
 
-#: ../src/accesshelp.py:30 ../src/stacks/profiles.py:25
+#: ../src/accesshelp.py:32 ../src/stacks/profiles.py:25
 msgid "Profile loaded"
 msgstr ""
 
@@ -531,42 +531,42 @@ msgstr ""
 msgid "Voice pitch"
 msgstr ""
 
-#: ../src/stacks/settings.py:52
+#: ../src/stacks/settings.py:54
 msgid "The config will be applied per user"
 msgstr ""
 
-#: ../src/stacks/settings.py:54
+#: ../src/stacks/settings.py:56
 msgid "The config will be applied to all users"
 msgstr ""
 
-#: ../src/stacks/settings.py:56
+#: ../src/stacks/settings.py:58
 msgid "The config will be applied to all users and clients"
 msgstr ""
 
-#: ../src/stacks/settings.py:59
+#: ../src/stacks/settings.py:61
 msgid "Choose the config level that should use the app"
 msgstr ""
 
-#: ../src/stacks/settings.py:62
+#: ../src/stacks/settings.py:64
 msgid "User"
 msgstr ""
 
-#: ../src/stacks/settings.py:63
+#: ../src/stacks/settings.py:65
 msgid "System"
 msgstr ""
 
-#: ../src/stacks/settings.py:64
+#: ../src/stacks/settings.py:66
 msgid "N4d"
 msgstr ""
 
-#: ../src/stacks/settings.py:72
+#: ../src/stacks/settings.py:74
 msgid "Session settings"
 msgstr ""
 
-#: ../src/stacks/settings.py:75
+#: ../src/stacks/settings.py:77
 msgid "Load template on start"
 msgstr ""
 
-#: ../src/stacks/settings.py:81
+#: ../src/stacks/settings.py:83
 msgid "Enable accesshelper dock"
 msgstr ""

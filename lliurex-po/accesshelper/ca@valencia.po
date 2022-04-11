@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-01 11:58+0200\n"
-"PO-Revision-Date: 2022-04-01 12:01+0200\n"
+"POT-Creation-Date: 2022-04-11 09:27+0200\n"
+"PO-Revision-Date: 2022-04-11 09:33+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ca\n"
@@ -18,49 +18,89 @@ msgstr ""
 "X-Generator: Poedit 2.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../src/accessdock.py:124
+#: ../src/accessdock.py:125
 msgid "Hide"
 msgstr "Amaga"
 
-#: ../src/accessdock.py:128
+#: ../src/accessdock.py:129
 msgid "Configure"
 msgstr "Configuració"
 
-#: ../src/accessdock.py:132
+#: ../src/accessdock.py:133
 msgid "Read screen"
 msgstr "Llegir"
 
-#: ../src/accessdock.py:136
+#: ../src/accessdock.py:137
 msgid "Pointer"
 msgstr "Punter"
 
-#: ../src/accessdock.py:140
+#: ../src/accessdock.py:141
 msgid "Filter"
 msgstr "Filtre"
 
-#: ../src/accessdock.py:144
+#: ../src/accessdock.py:145
 msgid "Keyboard"
 msgstr "Teclat"
 
-#: ../src/accesshelp.py:71
+#: ../src/accesshelp.py:17
+msgid "usage: accesshelper [--set profile]|[--list]"
+msgstr "Ús: accesshelper [--set perfil]|[--list]"
+
+#: ../src/accesshelp.py:18
+msgid "With no args launch accesshelper GUI"
+msgstr "Sense arguments executa la GUI de l'accesshelper"
+
+#: ../src/accesshelp.py:19
+msgid ""
+"--set [profile]: Activate specified profile.\n"
+"\tCould be an absolute path or a profile from default profiles path"
+msgstr ""
+"--set [perfil]: Activa el perfil indicat.\n"
+"\tPot ser una ruta absoluta a un fitxer o el nom d'un perfil"
+
+#: ../src/accesshelp.py:20
+msgid "--list: List available profiles"
+msgstr "--list: Mostra els perfils"
+
+#: ../src/accesshelp.py:21
+msgid "could not be accessed"
+msgstr "no existeix"
+
+#: ../src/accesshelp.py:22
+msgid "There's no profiles at"
+msgstr "No hi han perfils a"
+
+#: ../src/accesshelp.py:23
+msgid "Error loading"
+msgstr "Error carregant"
+
+#: ../src/accesshelp.py:24
+msgid "Must select one from:"
+msgstr "Cal seleccionar un perfil de:"
+
+#: ../src/accesshelp.py:25
+msgid "Loading profile"
+msgstr "Carregant perfil"
+
+#: ../src/accesshelp.py:26
 msgid ""
 "It's recommended to logout from session now\n"
 "in order of avoid inconsistencies"
 msgstr "Es recomana tancar la sessió per evitar inconsistencies"
 
-#: ../src/accesshelp.py:72 ../src/accesshelp.py:78
+#: ../src/accesshelp.py:27
 msgid "Logout"
 msgstr "Tancar"
 
-#: ../src/accesshelp.py:81
+#: ../src/accesshelp.py:28
 msgid "Later"
 msgstr "Després"
 
-#: ../src/accesshelp.py:138
+#: ../src/accesshelp.py:29
 msgid "Profile not loaded: Autostart is disabled"
 msgstr "Perfil no carregat: Autoinici desactivat"
 
-#: ../src/accesshelp.py:147 ../src/stacks/profiles.py:25
+#: ../src/accesshelp.py:30 ../src/stacks/profiles.py:25
 msgid "Profile loaded"
 msgstr "Perfil carregat"
 

@@ -66,7 +66,7 @@ class access(confStack):
 		self.changed=[]
 		self.level='user'
 		self.config={}
-		self.sysConfig={}
+		self.plasmaConfig={}
 		self.wrkFiles=["kaccesrc","kwinrc"]
 		self.blockSettings={"kwinrc":["FocusPolicy","lookingglassEnabled"]}
 		self.wantSettings={}
@@ -96,9 +96,9 @@ class access(confStack):
 		self.refresh=True
 		row,col=(0,0)
 		for wrkFile in self.wrkFiles:
-			systemConfig=self.accesshelper.getSystemConfig(wrkFile)
-			self.sysConfig.update(systemConfig)
-			for kfile,sections in systemConfig.items():
+			plasmaConfig=self.accesshelper.getPlasmaConfig(wrkFile)
+			self.plasmaConfig.update(plasmaConfig)
+			for kfile,sections in plasmaConfig.items():
 				want=self.wantSettings.get(kfile,[])
 				block=self.blockSettings.get(kfile,[])
 				for section,settings in sections.items():
@@ -176,9 +176,9 @@ class access(confStack):
 		keypress=keypress.replace("Control","Ctrl")
 		self.btn.setText(keypress)
 		desc=self.widgetsText.get(self.btn).get("mainHk")
-		sysConfig=self.sysConfig.copy()
+		plasmaConfig=self.plasmaConfig.copy()
 		for kfile in self.wrkFiles:
-			for section,data in sysConfig.get(kfile,{}).items():
+			for section,data in plasmaConfig.get(kfile,{}).items():
 				dataTmp=[]
 				for setting,value in data:
 					if setting==desc:
@@ -187,7 +187,7 @@ class access(confStack):
 						valueArray[1]=keypress
 						value=",".join(valueArray)
 					dataTmp.append((setting,value))
-				self.sysConfig[kfile][section]=dataTmp
+				self.plasmaConfig[kfile][section]=dataTmp
 		#if keypress!=self.keytext:
 		#	self.changes=True
 		#	self.setChanged(self.btn_conf)
@@ -220,9 +220,9 @@ class access(confStack):
 		sigmap_run=QSignalMapper(self)
 		sigmap_run.mapped[QString].connect(self._grab_alt_keys)
 		for wrkFile in self.wrkFiles:
-			systemConfig=self.accesshelper.getSystemConfig(wrkFile)
-			self.sysConfig.update(systemConfig)
-		for kfile,sections in self.sysConfig.items():
+			plasmaConfig=self.accesshelper.getPlasmaConfig(wrkFile)
+			self.plasmaConfig.update(plasmaConfig)
+		for kfile,sections in self.plasmaConfig.items():
 			want=self.wantSettings.get(kfile,[])
 			block=self.blockSettings.get(kfile,[])
 			for section,settings in sections.items():
@@ -258,15 +258,15 @@ class access(confStack):
 
 	def _updateConfig(self,*args):
 		for wrkFile in self.wrkFiles:
-			systemConfig=self.accesshelper.getSystemConfig(wrkFile)
-			self.sysConfig.update(systemConfig)
+			plasmaConfig=self.accesshelper.getPlasmaConfig(wrkFile)
+			self.plasmaConfig.update(plasmaConfig)
 		return
 	#def _updateConfig
 
 	def writeConfig(self):
-		sysConfig=self.sysConfig.copy()
+		plasmaConfig=self.plasmaConfig.copy()
 		for kfile in self.wrkFiles:
-			for section,data in sysConfig.get(kfile,{}).items():
+			for section,data in plasmaConfig.get(kfile,{}).items():
 				dataTmp=[]
 				for setting,value in data:
 					btn=self.widgets.get(setting,'')
@@ -278,9 +278,9 @@ class access(confStack):
 							else:
 								value="false"
 					dataTmp.append((setting,value))
-				self.sysConfig[kfile][section]=dataTmp
+				self.plasmaConfig[kfile][section]=dataTmp
 		self.sysconfig=self._writeHotkeys()
-		self.accesshelper.setSystemConfig(self.sysConfig)
+		self.accesshelper.setPlasmaConfig(self.plasmaConfig)
 		self.optionChanged=[]
 		self._updateConfig()
 		self.updateScreen()
@@ -290,7 +290,7 @@ class access(confStack):
 		return
 
 	def _writeHotkeys(self):
-		self.sysConfig["kglobalshortcutsrc"]={}
+		self.plasmaConfig["kglobalshortcutsrc"]={}
 		for desc,widget in self.widgets.items():
 			if isinstance(widget,QPushButton):
 					(mainHk,hkData,hkSetting,hkSection)=self.accesshelper.getHotkey(desc)
@@ -307,6 +307,6 @@ class access(confStack):
 						else:
 							hkData[1]=newHk
 						hkData=",".join(hkData)
-					if self.sysConfig["kglobalshortcutsrc"].get(hkSection,None)==None:
-						self.sysConfig["kglobalshortcutsrc"][hkSection]=[]
-					self.sysConfig["kglobalshortcutsrc"][hkSection].append((hkSetting,hkData))
+					if self.plasmaConfig["kglobalshortcutsrc"].get(hkSection,None)==None:
+						self.plasmaConfig["kglobalshortcutsrc"][hkSection]=[]
+					self.plasmaConfig["kglobalshortcutsrc"][hkSection].append((hkSetting,hkData))

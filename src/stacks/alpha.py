@@ -34,7 +34,7 @@ class alpha(confStack):
 		self.defaultRepos={}
 		self.changed=[]
 		self.config={}
-		self.sysConfig={}
+		self.plasmaConfig={}
 		self.wrkFiles=["kgammarc"]
 		self.blockSettings={}
 		self.optionChanged=[]
@@ -45,9 +45,9 @@ class alpha(confStack):
 		self.box=QGridLayout()
 		self.setLayout(self.box)
 		for wrkFile in self.wrkFiles:
-			systemConfig=self.accesshelper.getSystemConfig(wrkFile)
-			self.sysConfig.update(systemConfig)
-		kdevalues=self.sysConfig.get('kdeglobals',{}).get('General',[])
+			plasmaConfig=self.accesshelper.getPlasmaConfig(wrkFile)
+			self.plasmaConfig.update(plasmaConfig)
+		kdevalues=self.plasmaConfig.get('kdeglobals',{}).get('General',[])
 		alpha=''
 		for value in kdevalues:
 			if isinstance(value,tuple):
@@ -124,10 +124,10 @@ class alpha(confStack):
 				multiplier=5
 				(red,blue,green)=map(adjustCompatValue,[[multiplier,minKgamma,red],[multiplier,minKgamma,blue],[multiplier,minKgamma,green]])
 				brightness=1
-				self.sysConfig['kgammarc']['ConfigFile']=[("use","kgammarc")]
-				self.sysConfig['kgammarc']['SyncBox']=[("sync","yes")]
+				self.plasmaConfig['kgammarc']['ConfigFile']=[("use","kgammarc")]
+				self.plasmaConfig['kgammarc']['SyncBox']=[("sync","yes")]
 				values=[]
-				for gamma in self.sysConfig['kgammarc']['Screen 0']:
+				for gamma in self.plasmaConfig['kgammarc']['Screen 0']:
 					(desc,value)=gamma
 					if desc=='bgamma':
 						values.append((desc,"{0:.2f}".format(blue)))
@@ -135,14 +135,14 @@ class alpha(confStack):
 						values.append((desc,"{0:.2f}".format(red)))
 					elif desc=='ggamma':
 						values.append((desc,"{0:.2f}".format(green)))
-				self.sysConfig['kgammarc']['Screen 0']=values
+				self.plasmaConfig['kgammarc']['Screen 0']=values
 			####for monitor in self._getMonitors():
 			####	xrand=["xrandr","--output",monitor,"--gamma","{0}:{1}:{2}".format(alpha.red()/25.5,alpha.green()/25.5,alpha.blue()/25.5),"--brightness","{}".format(brightness)]
 				xgamma=["xgamma","-screen","0","-rgamma","{0:.2f}".format(xred),"-ggamma","{0:.2f}".format(xgreen),"-bgamma","{0:.2f}".format(xblue)]
 				print(xgamma)
 				cmd=subprocess.run(xgamma,capture_output=True,encoding="utf8")
 				print(cmd.stderr)
-		self.accesshelper.setSystemConfig(self.sysConfig)
+		self.accesshelper.setPlasmaConfig(self.plasmaConfig)
 		self.optionChanged=[]
 		self.refresh=True
 		f=open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'w')
@@ -155,8 +155,8 @@ class alpha(confStack):
 		xgamma=["xgamma","-screen","0","-rgamma","1","-ggamma","1","-bgamma","1"]
 		cmd=subprocess.run(xgamma,capture_output=True,encoding="utf8")
 		values=[("ggamma","1.00"),("bgamma","1.00"),("rgamma","1.00")]
-		self.sysConfig['kgammarc']['Screen 0']=values
-		self.accesshelper.setSystemConfig(self.sysConfig)
+		self.plasmaConfig['kgammarc']['Screen 0']=values
+		self.accesshelper.setPlasmaConfig(self.plasmaConfig)
 		self.btn_ok.setEnabled(False)
 		self.saveChanges('alpha','1:1:1')
 		self._removeAutostartDesktop()

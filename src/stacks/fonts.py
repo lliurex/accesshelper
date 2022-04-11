@@ -37,7 +37,7 @@ class fonts(confStack):
 		self.defaultRepos={}
 		self.changed=[]
 		self.config={}
-		self.sysConfig={}
+		self.plasmaConfig={}
 		self.wrkFiles=["kdeglobals","kcminputrc","konsolerc"]
 		self.blockSettings={}
 		self.wantSettings={"kdeglobals":["General"]}
@@ -49,9 +49,9 @@ class fonts(confStack):
 		self.box=QGridLayout()
 		self.setLayout(self.box)
 		for wrkFile in self.wrkFiles:
-			systemConfig=self.accesshelper.getSystemConfig(wrkFile)
-			self.sysConfig.update(systemConfig)
-		kdevalues=self.sysConfig.get('kdeglobals',{}).get('General',[])
+			plasmaConfig=self.accesshelper.getPlasmaConfig(wrkFile)
+			self.plasmaConfig.update(plasmaConfig)
+		kdevalues=self.plasmaConfig.get('kdeglobals',{}).get('General',[])
 		font=''
 		for value in kdevalues:
 			if isinstance(value,tuple):
@@ -82,7 +82,7 @@ class fonts(confStack):
 
 	def updateScreen(self):
 		self.config=self.getConfig()
-		kdevalues=self.sysConfig.get('kdeglobals',{}).get('General',[])
+		kdevalues=self.plasmaConfig.get('kdeglobals',{}).get('General',[])
 		for value in kdevalues:
 			if isinstance(value,tuple):
 				if value[0]=='font':

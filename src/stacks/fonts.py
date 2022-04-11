@@ -161,6 +161,7 @@ class fonts(confStack):
 				self.accesshelper.setKdeConfigSetting("General","toolBarFont",font,"kdeglobals")
 				self.accesshelper.setKdeConfigSetting("Appearance","Font",fixed,"Lliurex.profile")
 				self._setMozillaFirefoxFonts(size)
+				self._setGtkFonts(font)
 		self.optionChanged=[]
 		self.refresh=True
 		f=open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'w')
@@ -196,3 +197,24 @@ class fonts(confStack):
 						with open(os.path.join(mozillaDir,mozillaF,"prefs.js"),'w') as f:
 							f.writelines(newLines)
 	#def _setMozillaFirefoxFonts
+
+	def _setGtkFonts(self,font):
+		fontArray=font.split(',')
+		gtkFont="{0}, {1} {2}".format(fontArray[0],fontArray[-1],fontArray[1])
+		gtkDirs=[os.path.join("/home",os.environ.get('USER',''),".config/gtk-3.0"),os.path.join("/home",os.environ.get('USER',''),".config/gtk-4.0")]
+		for gtkDir in gtkDirs:
+			fcontent=[]
+			if os.path.isfile(os.path.join(gtkDir,"settings.ini"))==True:
+				with  open(os.path.join(gtkDir,"settings.ini"),"r") as f:
+					for line in f.readlines():
+						if line.startswith("gtk-font-name")==False:
+							fcontent.append(line)
+			fcontent.append("gtk-font-name={}\n".format(gtkFont))
+			with  open(os.path.join(gtkDir,"settings.ini"),"w") as f:
+				try:
+					f.writelines(fcontent)
+				except Exception as e:
+					self._debug("error saving gtk fonts")
+
+
+

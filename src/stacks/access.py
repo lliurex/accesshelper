@@ -49,13 +49,15 @@ descHk={
 	"ZOOMENABLED":_("Zoom effect"),
 	"SYSTEMBELL":_("Acoustic system bell"),
 	"FOCUSPOLICY":_("Set the policy focus"),
-	"VISIBLEBELL":_("Visible bell")
+	"VISIBLEBELL":_("Visible bell"),
+	"TRACKMOUSEENABLED":_("TrackMouse"),
+	"MOUSECLICKENABLED":_("ToggleMouseClick")
 	}
 
 class access(confStack):
 	keybind_signal=Signal("PyObject")
 	def __init_stack__(self):
-		self.dbg=True
+		self.dbg=False
 		self._debug("access Load")
 		self.menu_description=i18n.get('MENUDESCRIPTION')
 		self.description=i18n.get('DESCRIPTION')

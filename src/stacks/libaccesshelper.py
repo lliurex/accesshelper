@@ -7,7 +7,7 @@ from PySide2.QtGui import QIcon,QPixmap
 
 class functionHelperClass():
 	def __init__(self):
-		self.dbg=True
+		self.dbg=False
 		self.dictFileData={}
 		self._initValues()
 
@@ -257,7 +257,7 @@ class functionHelperClass():
 
 class accesshelper():
 	def __init__(self):
-		self.dbg=True
+		self.dbg=False
 		self.functionHelper=functionHelperClass()
 	#def __init__
 

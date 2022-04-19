@@ -1,0 +1,14 @@
+[Desktop Entry]
+Name=AccessDock
+GenericName=AccessDock
+Comment=Dock companion for Access Helper
+Comment[es]=Barra auxiliar de Access Helper
+Comment[ca_ES@valencia]=Barra auxiliar del Access Helper
+Comment[ca_ES.UTF-8@valencia]=Barra auxiliar del Access Helper
+Comment[ca]=Barra auxiliar del Access Helper
+Exec=/usr/share/accesshelper/accessdock.py
+Terminal=false
+Type=Application
+Icon=accessdock
+Categories=KDE;Qt;Utility;X-Lliurex;X-Utilities;
+TryExec=/usr/share/accesshelper/accessdock.py

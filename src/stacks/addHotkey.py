@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-from . import functionHelper
+from . import libaccesshelper
 import sys
 import os
 from PySide2.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QGridLayout,QLineEdit,QComboBox,QRadioButton,QListWidget,QGroupBox,QCompleter,QListWidgetItem
@@ -43,7 +43,7 @@ class addHotkey(confStack):
 		self.enabled=True
 		self.changed=[]
 #		self.level='user'
-		self.sysConfig={}
+		self.plasmaConfig={}
 		self.wrkFiles=["kglobalshortcutsrc"]
 		self.optionChanged=[]
 		self.keymap={}
@@ -58,6 +58,7 @@ class addHotkey(confStack):
 					Qt.GroupSwitchModifier: self.keymap[Qt.Key_AltGr],
 					Qt.KeypadModifier: self.keymap[Qt.Key_NumLock]
 					}
+		self.accesshelper=libaccesshelper.accesshelper()
 	#def __init__
 
 	def _load_screen(self):
@@ -132,9 +133,9 @@ class addHotkey(confStack):
 		keypress=keypress.replace("Control","Ctrl")
 		self.btnHk.setText(keypress)
 		desc=self.widgetsText.get(self.btnHk)
-		sysConfig=self.sysConfig.copy()
+		plasmaConfig=self.plasmaConfig.copy()
 		for kfile in self.wrkFiles:
-			for section,data in sysConfig.get(kfile,{}).items():
+			for section,data in plasmaConfig.get(kfile,{}).items():
 				dataTmp=[]
 				for setting,value in data:
 					if setting==desc:
@@ -143,11 +144,13 @@ class addHotkey(confStack):
 						valueArray[1]=keypress
 						value=",".join(valueArray)
 					dataTmp.append((setting,value))
-				self.sysConfig[kfile][section]=dataTmp
+				self.plasmaConfig[kfile][section]=dataTmp
 		#if keypress!=self.keytext:
 		#	self.changes=True
 		#	self.setChanged(self.btn_conf)
 		self.lblPress.hide()
+		self.btn_ok.setEnabled(True)
+		self.btn_cancel.setEnabled(True)
 	#def _set_config_key
 
 	def eventFilter(self,source,event):
@@ -231,7 +234,7 @@ class addHotkey(confStack):
 		pass
 
 	def writeConfig(self):
-		#functionHelper.setSystemConfig(self.sysConfig)
+		#functionHelper.setPlasmaConfig(self.plasmaConfig)
 		self.refresh=True
 		txt=self.btnHk.text()
 		if txt==i18n.get("BTNTXT") or txt=="":
@@ -249,8 +252,8 @@ class addHotkey(confStack):
 		launch='{0},,{1}'.format(txt,comment)
 		hk={'[{0}]'.format(desktop):{'_k_friendly_name':name,'_launch':launch}}
 		hotkeys.update(hk)
-		functionHelper.setKdeConfigSetting(desktop,"_k_friendly_name",name,self.wrkFiles[0])
-		functionHelper.setKdeConfigSetting(desktop,"_launch",launch,self.wrkFiles[0])
+		self.accesshelper.setKdeConfigSetting(desktop,"_k_friendly_name",name,self.wrkFiles[0])
+		self.accesshelper.setKdeConfigSetting(desktop,"_launch",launch,self.wrkFiles[0])
 		self.saveChanges("hotkeys",hotkeys)
 		self.optionChanged=[]
 		f=open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'w')

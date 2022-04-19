@@ -5,7 +5,7 @@ from PySide2.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QGridLa
 from PySide2 import QtGui
 from PySide2.QtCore import Qt,QSignalMapper
 from appconfig.appConfigStack import appConfigStack as confStack
-from . import functionHelper
+from . import libaccesshelper
 import gettext
 _ = gettext.gettext
 QString=type("")
@@ -40,11 +40,12 @@ class behavior(confStack):
 		self.changed=[]
 		self.level='user'
 		self.config={}
-		self.sysConfig={}
+		self.plasmaConfig={}
 		self.wrkFiles=["kdeglobals","kwinrc"]
 		self.wantSettings={"kwinrc":["FocusPolicy"]}
 		self.blockSettings={"kdeglobals":["General"]}
 		self.optionChanged=[]
+		self.accesshelper=libaccesshelper.accesshelper()
 	#def __init__
 
 	def _load_screen(self):
@@ -57,9 +58,9 @@ class behavior(confStack):
 		self.refresh=True
 		row,col=(0,0)
 		for wrkFile in self.wrkFiles:
-			systemConfig=functionHelper.getSystemConfig(wrkFile)
-			self.sysConfig.update(systemConfig)
-		for kfile,sections in self.sysConfig.items():
+			plasmaConfig=self.accesshelper.getPlasmaConfig(wrkFile)
+			self.plasmaConfig.update(plasmaConfig)
+		for kfile,sections in self.plasmaConfig.items():
 			want=self.wantSettings.get(kfile,[])
 			block=self.blockSettings.get(kfile,[])
 			for section,settings in sections.items():
@@ -75,7 +76,7 @@ class behavior(confStack):
 					if (isinstance(data,str)):
 						btn=QCheckBox(desc)
 						#btn=QPushButton(desc)
-						#btn.setStyleSheet(functionHelper.cssStyle())
+						#btn.setStyleSheet(self.accesshelper.cssStyle())
 						#btn.setAutoDefault(False)
 						#btn.setDefault(False)
 						#btn.setCheckable(True)
@@ -92,9 +93,9 @@ class behavior(confStack):
 
 	def updateScreen(self):
 		for wrkFile in self.wrkFiles:
-			systemConfig=functionHelper.getSystemConfig(wrkFile)
-			self.sysConfig.update(systemConfig)
-		for kfile,sections in self.sysConfig.items():
+			plasmaConfig=self.accesshelper.getPlasmaConfig(wrkFile)
+			self.plasmaConfig.update(plasmaConfig)
+		for kfile,sections in self.plasmaConfig.items():
 			want=self.wantSettings.get(kfile,[])
 			block=self.blockSettings.get(kfile,[])
 			for section,settings in sections.items():
@@ -120,9 +121,9 @@ class behavior(confStack):
 		pass
 
 	def writeConfig(self):
-		sysConfig=self.sysConfig.copy()
+		plasmaConfig=self.plasmaConfig.copy()
 		for kfile in self.wrkFiles:
-			for section,data in sysConfig.get(kfile,{}).items():
+			for section,data in plasmaConfig.get(kfile,{}).items():
 				dataTmp=[]
 				for setting,value in data:
 					btn=self.widgets.get(setting,'')
@@ -139,9 +140,9 @@ class behavior(confStack):
 						else:
 							value="false"
 					dataTmp.append((setting,value))
-				self.sysConfig[kfile][section]=dataTmp
+				self.plasmaConfig[kfile][section]=dataTmp
 
-		functionHelper.setSystemConfig(self.sysConfig)
+		self.accesshelper.setPlasmaConfig(self.plasmaConfig)
 		f=open("/tmp/accesshelper_{}".format(os.environ.get('USER')),'w')
 		f.close()
 		self.optionChanged=[]

@@ -1,6 +1,5 @@
 #!/usr/bin/python3
-from . import functionHelper
-from . import resolutionHelper
+from . import libaccesshelper
 import sys
 import os
 from PySide2.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QGridLayout,QLineEdit,QHBoxLayout,QComboBox,QCheckBox,QTabBar,QTabWidget,QTabBar,QTabWidget,QSlider,QToolTip,QListWidget,QFontDialog,QGroupBox,QListView
@@ -33,25 +32,26 @@ class fonts(confStack):
 		self.description=i18n.get('DESCRIPTION')
 		self.icon=('preferences-desktop-font')
 		self.tooltip=i18n.get('TOOLTIP')
-		self.index=4
+		self.index=5
 		self.enabled=True
 		self.defaultRepos={}
 		self.changed=[]
 		self.config={}
-		self.sysConfig={}
+		self.plasmaConfig={}
 		self.wrkFiles=["kdeglobals","kcminputrc","konsolerc"]
 		self.blockSettings={}
 		self.wantSettings={"kdeglobals":["General"]}
 		self.optionChanged=[]
+		self.accesshelper=libaccesshelper.accesshelper()
 	#def __init__
 
 	def _load_screen(self):
 		self.box=QGridLayout()
 		self.setLayout(self.box)
 		for wrkFile in self.wrkFiles:
-			systemConfig=functionHelper.getSystemConfig(wrkFile=wrkFile)
-			self.sysConfig.update(systemConfig)
-		kdevalues=self.sysConfig.get('kdeglobals',{}).get('General',[])
+			plasmaConfig=self.accesshelper.getPlasmaConfig(wrkFile)
+			self.plasmaConfig.update(plasmaConfig)
+		kdevalues=self.plasmaConfig.get('kdeglobals',{}).get('General',[])
 		font=''
 		for value in kdevalues:
 			if isinstance(value,tuple):
@@ -82,7 +82,7 @@ class fonts(confStack):
 
 	def updateScreen(self):
 		self.config=self.getConfig()
-		kdevalues=self.sysConfig.get('kdeglobals',{}).get('General',[])
+		kdevalues=self.plasmaConfig.get('kdeglobals',{}).get('General',[])
 		for value in kdevalues:
 			if isinstance(value,tuple):
 				if value[0]=='font':
@@ -92,8 +92,12 @@ class fonts(confStack):
 		dlgFont=self.widgets.get('font')
 		dlgFont.setCurrentFont(font)
 		#fix listview selections
-		style=font.split(",")[-1]
-		size=font.split(",")[1]
+		try:
+			style=font.split(",")[-1]
+			size=font.split(",")[1]
+		except:
+			style=""
+			size=""
 		for chld in dlgFont.findChildren(QListView):
 			sw_alpha=True
 			model=chld.model()
@@ -150,13 +154,14 @@ class fonts(confStack):
 				if size>8:
 					qfont.setPointSize(size-2)
 					minFont=qfont.toString()
-				functionHelper._setKdeConfigSetting("General","fixed",fixed,"kdeglobals")
-				functionHelper._setKdeConfigSetting("General","font",font,"kdeglobals")
-				functionHelper._setKdeConfigSetting("General","menuFont",font,"kdeglobals")
-				functionHelper._setKdeConfigSetting("General","smallestReadableFont",minFont,"kdeglobals")
-				functionHelper._setKdeConfigSetting("General","toolBarFont",font,"kdeglobals")
-				functionHelper._setKdeConfigSetting("Appearance","Font",fixed,"Lliurex.profile")
+				self.accesshelper.setKdeConfigSetting("General","fixed",fixed,"kdeglobals")
+				self.accesshelper.setKdeConfigSetting("General","font",font,"kdeglobals")
+				self.accesshelper.setKdeConfigSetting("General","menuFont",font,"kdeglobals")
+				self.accesshelper.setKdeConfigSetting("General","smallestReadableFont",minFont,"kdeglobals")
+				self.accesshelper.setKdeConfigSetting("General","toolBarFont",font,"kdeglobals")
+				self.accesshelper.setKdeConfigSetting("Appearance","Font",fixed,"Lliurex.profile")
 				self._setMozillaFirefoxFonts(size)
+				self._setGtkFonts(font)
 		self.optionChanged=[]
 		self.refresh=True
 		f=open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'w')
@@ -192,3 +197,24 @@ class fonts(confStack):
 						with open(os.path.join(mozillaDir,mozillaF,"prefs.js"),'w') as f:
 							f.writelines(newLines)
 	#def _setMozillaFirefoxFonts
+
+	def _setGtkFonts(self,font):
+		fontArray=font.split(',')
+		gtkFont="{0}, {1} {2}".format(fontArray[0],fontArray[-1],fontArray[1])
+		gtkDirs=[os.path.join("/home",os.environ.get('USER',''),".config/gtk-3.0"),os.path.join("/home",os.environ.get('USER',''),".config/gtk-4.0")]
+		for gtkDir in gtkDirs:
+			fcontent=[]
+			if os.path.isfile(os.path.join(gtkDir,"settings.ini"))==True:
+				with  open(os.path.join(gtkDir,"settings.ini"),"r") as f:
+					for line in f.readlines():
+						if line.startswith("gtk-font-name")==False:
+							fcontent.append(line)
+			fcontent.append("gtk-font-name={}\n".format(gtkFont))
+			with  open(os.path.join(gtkDir,"settings.ini"),"w") as f:
+				try:
+					f.writelines(fcontent)
+				except Exception as e:
+					self._debug("error saving gtk fonts")
+
+
+

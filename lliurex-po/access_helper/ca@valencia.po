@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-08 09:40+0100\n"
-"PO-Revision-Date: 2022-02-08 09:43+0100\n"
+"POT-Creation-Date: 2022-04-11 09:27+0200\n"
+"PO-Revision-Date: 2022-04-11 10:34+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ca\n"
@@ -18,25 +18,89 @@ msgstr ""
 "X-Generator: Poedit 2.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../src/accesshelp.py:74
+#: ../src/accessdock.py:125
+msgid "Hide"
+msgstr "Amaga"
+
+#: ../src/accessdock.py:129
+msgid "Configure"
+msgstr "Configuració"
+
+#: ../src/accessdock.py:133
+msgid "Read screen"
+msgstr "Llegir"
+
+#: ../src/accessdock.py:137
+msgid "Pointer"
+msgstr "Punter"
+
+#: ../src/accessdock.py:141
+msgid "Filter"
+msgstr "Filtre"
+
+#: ../src/accessdock.py:145
+msgid "Keyboard"
+msgstr "Teclat"
+
+#: ../src/accesshelp.py:17
+msgid "usage: accesshelper [--set profile]|[--list]"
+msgstr "Ús: accesshelper [--set perfil]|[--list]"
+
+#: ../src/accesshelp.py:18
+msgid "With no args launch accesshelper GUI"
+msgstr "Sense arguments executa la GUI de l'accesshelper"
+
+#: ../src/accesshelp.py:19
+msgid ""
+"--set [profile]: Activate specified profile.\n"
+"\tCould be an absolute path or a profile from default profiles path"
+msgstr ""
+"--set [perfil]: Activa el perfil indicat.\n"
+"\tPot ser una ruta absoluta a un fitxer o el nom d'un perfil"
+
+#: ../src/accesshelp.py:20
+msgid "--list: List available profiles"
+msgstr "--list: Mostra els perfils"
+
+#: ../src/accesshelp.py:21
+msgid "could not be accessed"
+msgstr "no existeix"
+
+#: ../src/accesshelp.py:22
+msgid "There's no profiles at"
+msgstr "No hi han perfils a"
+
+#: ../src/accesshelp.py:23
+msgid "Error loading"
+msgstr "Error carregant"
+
+#: ../src/accesshelp.py:24
+msgid "Must select one from:"
+msgstr "Cal seleccionar un perfil de:"
+
+#: ../src/accesshelp.py:25
+msgid "Loading profile"
+msgstr "Carregant perfil"
+
+#: ../src/accesshelp.py:26
 msgid ""
 "It's recommended to logout from session now\n"
 "in order of avoid inconsistencies"
 msgstr "Es recomana tancar la sessió per evitar inconsistencies"
 
-#: ../src/accesshelp.py:75 ../src/accesshelp.py:81
+#: ../src/accesshelp.py:27
 msgid "Logout"
 msgstr "Tancar"
 
-#: ../src/accesshelp.py:84
+#: ../src/accesshelp.py:28
 msgid "Later"
 msgstr "Després"
 
-#: ../src/accesshelp.py:141
+#: ../src/accesshelp.py:29
 msgid "Profile not loaded: Autostart is disabled"
 msgstr "Perfil no carregat: Autoinici desactivat"
 
-#: ../src/accesshelp.py:150 ../src/stacks/profiles.py:24
+#: ../src/accesshelp.py:30 ../src/stacks/profiles.py:25
 msgid "Profile loaded"
 msgstr "Perfil carregat"
 
@@ -70,10 +134,10 @@ msgid "Accessibility options"
 msgstr "Opcions d'accessibilitat"
 
 #: ../src/stacks/access.py:24 ../src/stacks/addHotkey.py:19
-#: ../src/stacks/behavior.py:14 ../src/stacks/fonts.py:18
-#: ../src/stacks/hotkeys.py:18 ../src/stacks/lookandfeel.py:19
-#: ../src/stacks/profiles.py:15 ../src/stacks/screenreader.py:16
-#: ../src/stacks/settings.py:17
+#: ../src/stacks/alpha.py:17 ../src/stacks/behavior.py:14
+#: ../src/stacks/fonts.py:17 ../src/stacks/hotkeys.py:18
+#: ../src/stacks/lookandfeel.py:19 ../src/stacks/profiles.py:15
+#: ../src/stacks/screenreader.py:16 ../src/stacks/settings.py:17
 msgid "Configuration"
 msgstr "Configuració"
 
@@ -94,42 +158,43 @@ msgid "Enable high contrast palette"
 msgstr "Paleta d'alt contrast"
 
 #: ../src/stacks/access.py:29
-msgid "Invert screen colours"
+msgid "Invert screen colors"
 msgstr "Inverteix colors"
 
 #: ../src/stacks/access.py:30
-msgid "Invert windows colours"
+msgid "Invert windows colors"
 msgstr "Inverteix colors de la finestra"
 
-#: ../src/stacks/access.py:31
+#: ../src/stacks/access.py:31 ../src/stacks/access.py:45
 msgid "Show animation on click"
 msgstr "Posiciona el punter al fer clic"
 
-#: ../src/stacks/access.py:32 ../src/stacks/behavior.py:23
+#: ../src/stacks/access.py:32 ../src/stacks/access.py:46
+#: ../src/stacks/behavior.py:23
 msgid "Show a grid when moving windows"
 msgstr "Mostra una graella al moure finestres"
 
-#: ../src/stacks/access.py:33
+#: ../src/stacks/access.py:33 ../src/stacks/access.py:47
 msgid "Activate eyefish effect"
 msgstr "Activa ull de peix"
 
-#: ../src/stacks/access.py:34
+#: ../src/stacks/access.py:34 ../src/stacks/access.py:48
 msgid "Glass effect"
 msgstr "Activa lupa"
 
-#: ../src/stacks/access.py:35
+#: ../src/stacks/access.py:35 ../src/stacks/access.py:49
 msgid "Zoom effect"
 msgstr "Activa Zoom"
 
-#: ../src/stacks/access.py:36
+#: ../src/stacks/access.py:36 ../src/stacks/access.py:50
 msgid "Acoustic system bell"
 msgstr "Campana de sistema audible"
 
-#: ../src/stacks/access.py:37
+#: ../src/stacks/access.py:37 ../src/stacks/access.py:51
 msgid "Set the policy focus"
 msgstr "Política de focus"
 
-#: ../src/stacks/access.py:38
+#: ../src/stacks/access.py:38 ../src/stacks/access.py:52
 msgid "Visible bell"
 msgstr "Campana visible"
 
@@ -140,6 +205,10 @@ msgstr "Posiciona el punter al moure'l"
 #: ../src/stacks/access.py:40
 msgid "Track click"
 msgstr "Posiciona el punter al fer clic"
+
+#: ../src/stacks/access.py:44
+msgid "InvertWindow"
+msgstr "Inverteix colors de la finestra"
 
 #: ../src/stacks/addHotkey.py:18 ../src/stacks/hotkeys.py:17
 msgid "hotkeys options"
@@ -181,9 +250,25 @@ msgstr "Assigna"
 msgid "Press a key or key-combination for the shortcut"
 msgstr "Prem una tecla o combinació per a la drecera"
 
-#: ../src/stacks/addHotkey.py:90
+#: ../src/stacks/addHotkey.py:91
 msgid "Search"
 msgstr "Cerca"
+
+#: ../src/stacks/alpha.py:18
+msgid "Color filter configuration"
+msgstr "Filtres de color"
+
+#: ../src/stacks/alpha.py:19
+msgid "Modify screen color levels"
+msgstr "Modifica els nivells de color"
+
+#: ../src/stacks/alpha.py:20
+msgid "Set color filter for the screen"
+msgstr "Estableix un filre de color per a la pantalla"
+
+#: ../src/stacks/alpha.py:21
+msgid "Color filter"
+msgstr "Filtre"
 
 #: ../src/stacks/behavior.py:15
 msgid "Desktop behavior"
@@ -225,35 +310,35 @@ msgstr "Accions al cantó superior esquerre"
 msgid "Set screen resolution"
 msgstr "Resolució de pantalla"
 
-#: ../src/stacks/fonts.py:17
+#: ../src/stacks/fonts.py:16
 msgid "Font options"
 msgstr "Opciones de lletra"
 
-#: ../src/stacks/fonts.py:19
+#: ../src/stacks/fonts.py:18
 msgid "Font configuration"
 msgstr "Configuració de les fonts"
 
-#: ../src/stacks/fonts.py:20
+#: ../src/stacks/fonts.py:19
 msgid "Modify system fonts"
 msgstr "Modificar les fonts"
 
-#: ../src/stacks/fonts.py:21
+#: ../src/stacks/fonts.py:20
 msgid "Customize the system fonts"
 msgstr "Personalitzar les fonts del sistema"
 
-#: ../src/stacks/fonts.py:22
+#: ../src/stacks/fonts.py:21
 msgid "Font size"
 msgstr "Tamany de font"
 
-#: ../src/stacks/fonts.py:23
+#: ../src/stacks/fonts.py:22
 msgid "Font family"
 msgstr "Familia"
 
-#: ../src/stacks/fonts.py:24 ../src/stacks/lookandfeel.py:26
+#: ../src/stacks/fonts.py:23 ../src/stacks/lookandfeel.py:26
 msgid "Cursor theme"
 msgstr "Tema per al punter"
 
-#: ../src/stacks/fonts.py:25 ../src/stacks/lookandfeel.py:27
+#: ../src/stacks/fonts.py:24 ../src/stacks/lookandfeel.py:27
 msgid "Cursor size"
 msgstr "Tamany de punter"
 
@@ -265,7 +350,7 @@ msgstr "Configuració de les dreseres"
 msgid "Set hotkeys for launch applications"
 msgstr "Assigna tecles per a llançar accions"
 
-#: ../src/stacks/hotkeys.py:21 ../src/stacks/lookandfeel.py:22
+#: ../src/stacks/hotkeys.py:21
 msgid "From here you can set hotkeys for launch apps"
 msgstr "Des d'aci es poden assignar dreceres per a les diferents accions"
 
@@ -289,7 +374,23 @@ msgstr "Obrir menu d'aplicacions"
 msgid "Show desktop"
 msgstr "Mostrar escriptori"
 
-#: ../src/stacks/hotkeys.py:124
+#: ../src/stacks/hotkeys.py:27
+msgid "Invert colours"
+msgstr "Inverteix colors"
+
+#: ../src/stacks/hotkeys.py:28
+msgid "Invert window colours"
+msgstr "Inverteix colors de la finestra"
+
+#: ../src/stacks/hotkeys.py:29
+msgid "Show mouse click"
+msgstr "Posiciona el punter al fer clic"
+
+#: ../src/stacks/hotkeys.py:30
+msgid "Show mouse pointer"
+msgstr "Posicionar el punter"
+
+#: ../src/stacks/hotkeys.py:130
 msgid "Add new"
 msgstr "Afegir"
 
@@ -305,6 +406,10 @@ msgstr "Configuració de l'apariencia"
 msgid "Modify appearence settings"
 msgstr "Modifica les opcions d'apariencia"
 
+#: ../src/stacks/lookandfeel.py:22
+msgid "Set theme, color scheme or pointers"
+msgstr "Selecciona tema, esquema de color o punters"
+
 #: ../src/stacks/lookandfeel.py:23
 msgid "Desktop theme"
 msgstr "Tema de l'escriptori"
@@ -316,10 +421,6 @@ msgstr "Esquema de colors"
 #: ../src/stacks/lookandfeel.py:25
 msgid "Theme colours"
 msgstr "Colors del tema"
-
-#: ../src/stacks/lookandfeel.py:28
-msgid "Set resolution"
-msgstr "Resolució"
 
 #: ../src/stacks/profiles.py:16
 msgid "Manage profiles"
@@ -346,22 +447,26 @@ msgid "Permission denied"
 msgstr "Permís denegat"
 
 #: ../src/stacks/profiles.py:22
+msgid "Default profiles could not be modified"
+msgstr "Els perfils per defecte no son modificables"
+
+#: ../src/stacks/profiles.py:23
 msgid "Profile added to system's profiles"
 msgstr "Perfil afegit al sistema"
 
-#: ../src/stacks/profiles.py:23
+#: ../src/stacks/profiles.py:24
 msgid "Profile added to user's profiles"
 msgstr "Perfil afegit a l'usuari"
 
-#: ../src/stacks/profiles.py:25
-msgid "Import profile"
-msgstr "Carga"
-
 #: ../src/stacks/profiles.py:26
-msgid "Export profile"
-msgstr "Exporta"
+msgid "Import profile"
+msgstr "Importar"
 
 #: ../src/stacks/profiles.py:27
+msgid "Export profile"
+msgstr "Exportar"
+
+#: ../src/stacks/profiles.py:28
 msgid "An error ocurred"
 msgstr "Ocorregué un error"
 
@@ -399,55 +504,78 @@ msgstr "Configurar algunes opcions"
 
 #: ../src/stacks/settings.py:20
 msgid "Set config level, default template.."
-msgstr "Trie l'nici automàtic, les plantilles per defecte...\t"
+msgstr "Trie l'nici automàtic, les plantilles per defecte..."
 
 #: ../src/stacks/settings.py:21
 msgid "Autostart enabled for user"
-msgstr "Autoinici activar per a l'usuari"
+msgstr "Autoinici activat per a l'usuari"
 
 #: ../src/stacks/settings.py:22
 msgid "Autostart disabled for user"
-msgstr "Autoinici desactivar per a l'usuari"
+msgstr "Autoinici desactivat per a l'usuari"
 
 #: ../src/stacks/settings.py:23
 msgid "Autostart could not be disabled"
 msgstr "No s'ha pogut desactivar l'autoinici"
 
-#: ../src/stacks/settings.py:47
+#: ../src/stacks/settings.py:24
+msgid "Enabled accessibilty dock. Press ctrl+space to show"
+msgstr "Barra d'accesibilitat activada. Prem CTRL+Espaci per a mostrar"
+
+#: ../src/stacks/settings.py:25
+msgid "Disabled accessibilty dock"
+msgstr "Barra d'accesibilitat inhabilitada"
+
+#: ../src/stacks/settings.py:26
+msgid "Voice speed when reading"
+msgstr "Velocitat de la veu al llegir"
+
+#: ../src/stacks/settings.py:27
+msgid "Voice pitch"
+msgstr "To de la veu"
+
+#: ../src/stacks/settings.py:52
 msgid "The config will be applied per user"
 msgstr "La configuració serà per usuari"
 
-#: ../src/stacks/settings.py:49
+#: ../src/stacks/settings.py:54
 msgid "The config will be applied to all users"
 msgstr "La configuració serà per a tots els usuaris"
 
-#: ../src/stacks/settings.py:51
+#: ../src/stacks/settings.py:56
 msgid "The config will be applied to all users and clients"
 msgstr "La configuració serà per a to usuari i client"
 
-#: ../src/stacks/settings.py:54
+#: ../src/stacks/settings.py:59
 msgid "Choose the config level that should use the app"
 msgstr "Trie el nivell de configuració per a l'aplicació"
 
-#: ../src/stacks/settings.py:57
+#: ../src/stacks/settings.py:62
 msgid "User"
 msgstr "Usuari"
 
-#: ../src/stacks/settings.py:58
+#: ../src/stacks/settings.py:63
 msgid "System"
 msgstr "Sistema"
 
-#: ../src/stacks/settings.py:59
+#: ../src/stacks/settings.py:64
 msgid "N4d"
 msgstr "N4d"
 
-#: ../src/stacks/settings.py:67
+#: ../src/stacks/settings.py:72
 msgid "Session settings"
 msgstr "Opcions de sessió"
 
-#: ../src/stacks/settings.py:70
+#: ../src/stacks/settings.py:75
 msgid "Load template on start"
 msgstr "Carregar plantilla en arrancar"
+
+#: ../src/stacks/settings.py:81
+msgid "Enable accesshelper dock"
+msgstr "Habilita barra d'accesibilitat"
+
+#~ msgid "Set resolution"
+#~ msgstr "Resolució"
 
 #~ msgid "Great A Tuin the turtle comes, swimming slowly through the interstellar gulf, hydrogen frost on his ponderous limbs, his huge and ancient shell pocked with meteor craters. Through sea-sized eyes that are crusted with rheum and asteroid dust He stares fixedly at the Destination."
 #~ msgstr "Arriba la tortuga Great A Tuin, nedant lentament a través del golf interestel·lar, amb gebre d'hidrogen a les seues pesades extremitats, la seua enorme i antiga closca plena de cràters de meteorits. A través d'ulls de la mida d'un mar coberts de pols d'asteroides i lleganyes, mira fixament el destí."

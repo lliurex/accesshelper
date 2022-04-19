@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-01 11:30+0100\n"
+"POT-Creation-Date: 2022-04-11 12:46+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,25 +17,87 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../src/accesshelp.py:74
+#: ../src/accessdock.py:125
+msgid "Hide"
+msgstr ""
+
+#: ../src/accessdock.py:129
+msgid "Configure"
+msgstr ""
+
+#: ../src/accessdock.py:133
+msgid "Read screen"
+msgstr ""
+
+#: ../src/accessdock.py:137
+msgid "Pointer"
+msgstr ""
+
+#: ../src/accessdock.py:141
+msgid "Filter"
+msgstr ""
+
+#: ../src/accessdock.py:145
+msgid "Keyboard"
+msgstr ""
+
+#: ../src/accesshelp.py:19
+msgid "usage: accesshelper [--set profile]|[--list]"
+msgstr ""
+
+#: ../src/accesshelp.py:20
+msgid "With no args launch accesshelper GUI"
+msgstr ""
+
+#: ../src/accesshelp.py:21
+msgid ""
+"--set [profile]: Activate specified profile.\n"
+"\tCould be an absolute path or a profile from default profiles path"
+msgstr ""
+
+#: ../src/accesshelp.py:22
+msgid "--list: List available profiles"
+msgstr ""
+
+#: ../src/accesshelp.py:23
+msgid "could not be accessed"
+msgstr ""
+
+#: ../src/accesshelp.py:24
+msgid "There's no profiles at"
+msgstr ""
+
+#: ../src/accesshelp.py:25
+msgid "Error loading"
+msgstr ""
+
+#: ../src/accesshelp.py:26
+msgid "Must select one from:"
+msgstr ""
+
+#: ../src/accesshelp.py:27
+msgid "Loading profile"
+msgstr ""
+
+#: ../src/accesshelp.py:28
 msgid ""
 "It's recommended to logout from session now\n"
 "in order of avoid inconsistencies"
 msgstr ""
 
-#: ../src/accesshelp.py:75 ../src/accesshelp.py:81
+#: ../src/accesshelp.py:29
 msgid "Logout"
 msgstr ""
 
-#: ../src/accesshelp.py:84
+#: ../src/accesshelp.py:30
 msgid "Later"
 msgstr ""
 
-#: ../src/accesshelp.py:141
+#: ../src/accesshelp.py:31
 msgid "Profile not loaded: Autostart is disabled"
 msgstr ""
 
-#: ../src/accesshelp.py:150 ../src/stacks/profiles.py:25
+#: ../src/accesshelp.py:32 ../src/stacks/profiles.py:25
 msgid "Profile loaded"
 msgstr ""
 
@@ -69,9 +131,9 @@ msgid "Accessibility options"
 msgstr ""
 
 #: ../src/stacks/access.py:24 ../src/stacks/addHotkey.py:19
-#: ../src/stacks/alpha.py:18 ../src/stacks/behavior.py:14
-#: ../src/stacks/fonts.py:18 ../src/stacks/hotkeys.py:18
-#: ../src/stacks/lookandfeel.py:20 ../src/stacks/profiles.py:15
+#: ../src/stacks/alpha.py:17 ../src/stacks/behavior.py:14
+#: ../src/stacks/fonts.py:17 ../src/stacks/hotkeys.py:18
+#: ../src/stacks/lookandfeel.py:19 ../src/stacks/profiles.py:15
 #: ../src/stacks/screenreader.py:16 ../src/stacks/settings.py:17
 msgid "Configuration"
 msgstr ""
@@ -93,42 +155,43 @@ msgid "Enable high contrast palette"
 msgstr ""
 
 #: ../src/stacks/access.py:29
-msgid "Invert screen colours"
+msgid "Invert screen colors"
 msgstr ""
 
 #: ../src/stacks/access.py:30
-msgid "Invert windows colours"
+msgid "Invert windows colors"
 msgstr ""
 
-#: ../src/stacks/access.py:31
+#: ../src/stacks/access.py:31 ../src/stacks/access.py:45
 msgid "Show animation on click"
 msgstr ""
 
-#: ../src/stacks/access.py:32 ../src/stacks/behavior.py:23
+#: ../src/stacks/access.py:32 ../src/stacks/access.py:46
+#: ../src/stacks/behavior.py:23
 msgid "Show a grid when moving windows"
 msgstr ""
 
-#: ../src/stacks/access.py:33
+#: ../src/stacks/access.py:33 ../src/stacks/access.py:47
 msgid "Activate eyefish effect"
 msgstr ""
 
-#: ../src/stacks/access.py:34
+#: ../src/stacks/access.py:34 ../src/stacks/access.py:48
 msgid "Glass effect"
 msgstr ""
 
-#: ../src/stacks/access.py:35
+#: ../src/stacks/access.py:35 ../src/stacks/access.py:49
 msgid "Zoom effect"
 msgstr ""
 
-#: ../src/stacks/access.py:36
+#: ../src/stacks/access.py:36 ../src/stacks/access.py:50
 msgid "Acoustic system bell"
 msgstr ""
 
-#: ../src/stacks/access.py:37
+#: ../src/stacks/access.py:37 ../src/stacks/access.py:51
 msgid "Set the policy focus"
 msgstr ""
 
-#: ../src/stacks/access.py:38
+#: ../src/stacks/access.py:38 ../src/stacks/access.py:52
 msgid "Visible bell"
 msgstr ""
 
@@ -138,6 +201,10 @@ msgstr ""
 
 #: ../src/stacks/access.py:40
 msgid "Track click"
+msgstr ""
+
+#: ../src/stacks/access.py:44
+msgid "InvertWindow"
 msgstr ""
 
 #: ../src/stacks/addHotkey.py:18 ../src/stacks/hotkeys.py:17
@@ -180,23 +247,23 @@ msgstr ""
 msgid "Press a key or key-combination for the shortcut"
 msgstr ""
 
-#: ../src/stacks/addHotkey.py:90
+#: ../src/stacks/addHotkey.py:91
 msgid "Search"
 msgstr ""
 
-#: ../src/stacks/alpha.py:19
+#: ../src/stacks/alpha.py:18
 msgid "Color filter configuration"
 msgstr ""
 
-#: ../src/stacks/alpha.py:20
+#: ../src/stacks/alpha.py:19
 msgid "Modify screen color levels"
 msgstr ""
 
-#: ../src/stacks/alpha.py:21
+#: ../src/stacks/alpha.py:20
 msgid "Set color filter for the screen"
 msgstr ""
 
-#: ../src/stacks/alpha.py:22
+#: ../src/stacks/alpha.py:21
 msgid "Color filter"
 msgstr ""
 
@@ -240,35 +307,35 @@ msgstr ""
 msgid "Set screen resolution"
 msgstr ""
 
-#: ../src/stacks/fonts.py:17
+#: ../src/stacks/fonts.py:16
 msgid "Font options"
 msgstr ""
 
-#: ../src/stacks/fonts.py:19
+#: ../src/stacks/fonts.py:18
 msgid "Font configuration"
 msgstr ""
 
-#: ../src/stacks/fonts.py:20
+#: ../src/stacks/fonts.py:19
 msgid "Modify system fonts"
 msgstr ""
 
-#: ../src/stacks/fonts.py:21
+#: ../src/stacks/fonts.py:20
 msgid "Customize the system fonts"
 msgstr ""
 
-#: ../src/stacks/fonts.py:22
+#: ../src/stacks/fonts.py:21
 msgid "Font size"
 msgstr ""
 
-#: ../src/stacks/fonts.py:23
+#: ../src/stacks/fonts.py:22
 msgid "Font family"
 msgstr ""
 
-#: ../src/stacks/fonts.py:24 ../src/stacks/lookandfeel.py:27
+#: ../src/stacks/fonts.py:23 ../src/stacks/lookandfeel.py:26
 msgid "Cursor theme"
 msgstr ""
 
-#: ../src/stacks/fonts.py:25 ../src/stacks/lookandfeel.py:28
+#: ../src/stacks/fonts.py:24 ../src/stacks/lookandfeel.py:27
 msgid "Cursor size"
 msgstr ""
 
@@ -320,35 +387,35 @@ msgstr ""
 msgid "Show mouse pointer"
 msgstr ""
 
-#: ../src/stacks/hotkeys.py:128
+#: ../src/stacks/hotkeys.py:130
 msgid "Add new"
 msgstr ""
 
-#: ../src/stacks/lookandfeel.py:19
+#: ../src/stacks/lookandfeel.py:18
 msgid "Look&Feel options"
 msgstr ""
 
-#: ../src/stacks/lookandfeel.py:21
+#: ../src/stacks/lookandfeel.py:20
 msgid "Look&Feel configuration"
 msgstr ""
 
-#: ../src/stacks/lookandfeel.py:22
+#: ../src/stacks/lookandfeel.py:21
 msgid "Modify appearence settings"
 msgstr ""
 
-#: ../src/stacks/lookandfeel.py:23
+#: ../src/stacks/lookandfeel.py:22
 msgid "Set theme, color scheme or pointers"
 msgstr ""
 
-#: ../src/stacks/lookandfeel.py:24
+#: ../src/stacks/lookandfeel.py:23
 msgid "Desktop theme"
 msgstr ""
 
-#: ../src/stacks/lookandfeel.py:25
+#: ../src/stacks/lookandfeel.py:24
 msgid "Colour scheme"
 msgstr ""
 
-#: ../src/stacks/lookandfeel.py:26
+#: ../src/stacks/lookandfeel.py:25
 msgid "Theme colours"
 msgstr ""
 
@@ -448,38 +515,58 @@ msgstr ""
 msgid "Autostart could not be disabled"
 msgstr ""
 
-#: ../src/stacks/settings.py:47
-msgid "The config will be applied per user"
+#: ../src/stacks/settings.py:24
+msgid "Enabled accessibilty dock. Press ctrl+space to show"
 msgstr ""
 
-#: ../src/stacks/settings.py:49
-msgid "The config will be applied to all users"
+#: ../src/stacks/settings.py:25
+msgid "Disabled accessibilty dock"
 msgstr ""
 
-#: ../src/stacks/settings.py:51
-msgid "The config will be applied to all users and clients"
+#: ../src/stacks/settings.py:26
+msgid "Voice speed when reading"
+msgstr ""
+
+#: ../src/stacks/settings.py:27
+msgid "Voice pitch"
 msgstr ""
 
 #: ../src/stacks/settings.py:54
-msgid "Choose the config level that should use the app"
+msgid "The config will be applied per user"
 msgstr ""
 
-#: ../src/stacks/settings.py:57
-msgid "User"
+#: ../src/stacks/settings.py:56
+msgid "The config will be applied to all users"
 msgstr ""
 
 #: ../src/stacks/settings.py:58
+msgid "The config will be applied to all users and clients"
+msgstr ""
+
+#: ../src/stacks/settings.py:61
+msgid "Choose the config level that should use the app"
+msgstr ""
+
+#: ../src/stacks/settings.py:64
+msgid "User"
+msgstr ""
+
+#: ../src/stacks/settings.py:65
 msgid "System"
 msgstr ""
 
-#: ../src/stacks/settings.py:59
+#: ../src/stacks/settings.py:66
 msgid "N4d"
 msgstr ""
 
-#: ../src/stacks/settings.py:67
+#: ../src/stacks/settings.py:74
 msgid "Session settings"
 msgstr ""
 
-#: ../src/stacks/settings.py:70
+#: ../src/stacks/settings.py:77
 msgid "Load template on start"
+msgstr ""
+
+#: ../src/stacks/settings.py:83
+msgid "Enable accesshelper dock"
 msgstr ""

@@ -1,6 +1,5 @@
 #!/usr/bin/python3
-from . import functionHelper
-from . import resolutionHelper
+from . import libaccesshelper
 import sys
 import os
 import tempfile
@@ -30,7 +29,7 @@ i18n={
 
 class lookandfeel(confStack):
 	def __init_stack__(self):
-		self.dbg=False
+		self.dbg=True
 		self._debug("hotkeys load")
 		self.menu_description=i18n.get('MENUDESCRIPTION')
 		self.description=i18n.get('DESCRIPTION')
@@ -42,11 +41,13 @@ class lookandfeel(confStack):
 		self.defaultRepos={}
 		self.changed=[]
 		self.config={}
-		self.sysConfig={}
+		self.plasmaConfig={}
 		self.wrkFiles=["kdeglobals","kcmimputrc"]
 		self.blockSettings={}
 		self.wantSettings={"kdeglobals":["General"]}
 		self.optionChanged=[]
+		self.cursorDesc={}
+		self.accesshelper=libaccesshelper.accesshelper()
 	#def __init__
 
 	def _load_screen(self):
@@ -95,11 +96,11 @@ class lookandfeel(confStack):
 
 	def updateScreen(self):
 		for wrkFile in self.wrkFiles:
-			systemConfig=functionHelper.getSystemConfig(wrkFile=wrkFile)
-			self.sysConfig.update(systemConfig)
+			plasmaConfig=self.accesshelper.getPlasmaConfig(wrkFile)
+			self.plasmaConfig.update(plasmaConfig)
 		self.config=self.getConfig()
 		theme=""
-		for value in self.sysConfig.get("kdeglobals",{}).get("General",[]):
+		for value in self.plasmaConfig.get("kdeglobals",{}).get("General",[]):
 			if value[0]=="Name":
 				theme=value[1]
 		for cmbDesc in self.widgets.keys():
@@ -107,12 +108,12 @@ class lookandfeel(confStack):
 			if isinstance(cmb,QComboBox):
 				if cmbDesc=="cursorSize":
 					cursorSize=32
-					cursorSettings=self.sysConfig.get('kcminputrc',{}).get('Mouse',[])
+					cursorSettings=self.plasmaConfig.get('kcminputrc',{}).get('Mouse',[])
 					for setting in cursorSettings:
 						if isinstance(setting,tuple):
 							if setting[0]=="cursorSize":
 								cursorSize=setting[1]
-					if cmb.findText(cursorSize)==-1:
+					if cmb.findText(cursorSize)==-1 and isinstance(cursorSize,int):
 						cmb.insertItem(0,cursorSize)
 					cmb.setCurrentText(cursorSize)
 				else:
@@ -123,13 +124,18 @@ class lookandfeel(confStack):
 					if cmbDesc=="cursor":
 						themes=self._getCursorList()
 					for theme in themes:
-						themeDesc=theme.split(" ")[0]
+						themeDesc=theme.split("(")[0].replace("(","").rstrip(" ")
 						if cmb.findText(themeDesc)==-1:
 							if cmbDesc=="cursor":
 								#i18n could translate the description, real name needed
-								cursorTheme=theme.split(" ")[1].replace("(","").replace(")","")
+								cursorTheme=theme.split("(")[1].replace("(","").replace(")","")
+								cursorTheme=cursorTheme.split(" ")[0]
 								icon,sizes=self._getPointerImage(cursorTheme)
-								cmb.addItem(icon,themeDesc)
+								if icon:
+									cmb.addItem(icon,themeDesc)
+								else:
+									cmb.addItem(themeDesc)
+								self.cursorDesc[themeDesc]=cursorTheme
 							else:
 								cmb.addItem(themeDesc)
 						if "(" in theme and "plasma" in theme.lower():
@@ -140,8 +146,8 @@ class lookandfeel(confStack):
 	def updateCursorIcons(self):
 		cmbSize=self.widgets.get("cursorSize")
 		cmbCursors=self.widgets.get("cursor")
-		if cmbSize.currentText()=='':
-	    		cmbSize.setCurrentText("32")
+		if cmbSize.currentText()=='' or cmbSize.currentText().isdigit()==False:
+			cmbSize.setCurrentText("32")
 		cmbCursors.setIconSize(QSize(int(cmbSize.currentText()), int(cmbSize.currentText())))
 		cmbCursors.adjustSize()
 	#def updateSizes
@@ -164,36 +170,7 @@ class lookandfeel(confStack):
 	#def updateCursorSizes
 		
 	def _getPointerImage(self,theme):
-		icon=os.path.join("/usr/share/icons",theme,"cursors","left_ptr")
-		if os.path.isfile(icon)==False:
-			icon=os.path.join(os.environ.get("HOME",""),".icons",theme,"cursors","left_ptr")
-		qicon=""
-		sizes=[]
-		if os.path.isfile(icon):
-			tmpDir=tempfile.TemporaryDirectory()
-			cmd=["xcur2png","-q","-c","-","-d",tmpDir.name,icon]
-			try:
-				subprocess.run(cmd,stdout=subprocess.PIPE)
-			except Exception as e:
-				print("{}".format(e))
-			maxw=0
-			img=""
-			pixmap=""
-			for i in os.listdir(tmpDir.name):
-				pixmap=os.path.join(tmpDir.name,i)
-				qpixmap=QtGui.QPixmap(pixmap)
-				size=qpixmap.size()
-				if size.width()>maxw:
-					maxw=size.width()
-					img=qpixmap
-				sizes.append(size)
-
-			if img=="" and pixmap!="":
-				img=pixmap
-			qicon=QtGui.QIcon(img)
-			tmpDir.cleanup()
-
-		return(qicon,sizes)
+		return(self.accesshelper.getPointerImage(theme=theme))
 
 	def _updateConfig(self,key):
 		return
@@ -204,6 +181,8 @@ class lookandfeel(confStack):
 		#self.saveChanges('fonts',{"size":size})
 		self.optionChanged=[]
 		self.refresh=True
+		cursorTheme=""
+		size=""
 		for cmbDesc in self.widgets.keys():
 			cmb=self.widgets.get(cmbDesc,"")
 			if isinstance(cmb,QComboBox):
@@ -214,85 +193,47 @@ class lookandfeel(confStack):
 				if cmbDesc=="scheme":
 					self._setScheme(theme)
 				if cmbDesc=="cursor":
-					self._setCursor(theme)
+					cursorTheme=theme
 				if cmbDesc=="cursorSize":
-					self._setCursorSize(cmb.currentText())
+					size=cmb.currentText()
+		#Ensure size is applied before theme change
+		self._setCursorSize(size)
+		self._setCursor(cursorTheme)
 		f=open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'w')
 		f.close()
 	#def writeConfig
 
 	def _getThemeList(self):
-		availableThemes=[]
-		themes=""
-		try:
-			themes=subprocess.run(["plasma-apply-desktoptheme","--list-themes"],stdout=subprocess.PIPE)
-		except Exception as e:
-			print(e)
-		if themes:
-			out=themes.stdout.decode()
-			for line in out.split("\n"):
-				theme=line.strip()
-				if theme.startswith("*"):
-					availableThemes.append(theme.replace("*","").strip())
+		availableThemes=self.accesshelper.getThemes()
 		return (availableThemes)
 	#def _getThemeList
 
 	def _getSchemeList(self):
-		availableSchemes=[]
-		schemes=""
-		try:
-			schemes=subprocess.run(["plasma-apply-colorscheme","--list-schemes"],stdout=subprocess.PIPE)
-		except Exception as e:
-			print(e)
-		if schemes:
-			out=schemes.stdout.decode()
-			for line in out.split("\n"):
-				scheme=line.strip()
-				if scheme.startswith("*"):
-					availableSchemes.append(scheme.replace("*","").strip())
+		availableSchemes=self.accesshelper.getSchemes()
 		return (availableSchemes)
 	#def _getSchemeList
 
 	def _getCursorList(self):
-		availableThemes=[]
-		themes=""
-		try:
-			themes=subprocess.run(["plasma-apply-cursortheme","--list-themes"],stdout=subprocess.PIPE)
-		except Exception as e:
-			print(e)
-		if themes:
-			out=themes.stdout.decode()
-			for line in out.split("\n"):
-				theme=line.strip()
-				if theme.startswith("*"):
-					availableThemes.append(theme.replace("*","").strip())
+		availableThemes=self.accesshelper.getCursors()
 		return (availableThemes)
 	#def _getCursorList
 
 	def _setTheme(self,theme):
-		try:
-			subprocess.run(["plasma-apply-desktoptheme",theme],stdout=subprocess.PIPE)
-		except Exception as e:
-			print(e)
+		self.accesshelper.setTheme(theme)
 	#def _setTheme
 
-	def _setScheme(self,theme):
-		try:
-			subprocess.run(["plasma-apply-colorscheme",theme],stdout=subprocess.PIPE)
-		except Exception as e:
-			print(e)
+	def _setScheme(self,scheme):
+		self.accesshelper.setScheme(scheme)
 	#def _setScheme
 
-	def _setCursor(self,theme):
-		try:
-			subprocess.run(["plasma-apply-cursortheme",theme],stdout=subprocess.PIPE)
-		except Exception as e:
-			print(e)
+	def _setCursor(self,themeDesc):
+		theme=self.cursorDesc.get(themeDesc,themeDesc)
+		self._debug("Set cursor theme: {} was {}".format(theme,themeDesc))
+		self.accesshelper.setCursor(theme)
 	#def _setCursor
 
 	def _setCursorSize(self,size):
 		self.saveChanges('cursor',{"size":size})
-
-		functionHelper._setKdeConfigSetting("Mouse","cursorSize","{}".format(size),"kcminputrc")
+		self.accesshelper.setCursorSize(size)
 	#def _setCursorSize(self):
 

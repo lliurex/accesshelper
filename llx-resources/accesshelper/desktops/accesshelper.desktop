@@ -1,6 +1,6 @@
 [Desktop Entry]
-Name=AccessHelper
-GenericName=AccessHelper
+Name=Access Helper
+GenericName=Access Helper
 Comment=Manage available accessibility options
 Comment[es]=Gestiona las opciones de accesibilidad
 Comment[ca_ES@valencia]=Gestiona les opciones d'accessibilitat
@@ -10,9 +10,9 @@ Exec=accesshelper
 Terminal=false
 Type=Application
 Icon=accesshelper
-Name[ca_ES.UTF-8@valencia]=AccessHelper
-Name[ca_ES@valencia]=AccessHelper
-Name[ca]=AccessHelper
-Name[es]=AccessHelper
-Categories=KDE;QT;Utilities;LliureX-Utilities;
+Name[ca_ES.UTF-8@valencia]=Access Helper
+Name[ca_ES@valencia]=Access Helper
+Name[ca]=Access Helper
+Name[es]=Access Helper
+Categories=KDE;Qt;Utility;X-Lliurex;X-Utilities;
 TryExec=/usr/bin/accesshelper

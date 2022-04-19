@@ -331,7 +331,7 @@ class accesshelper():
 		self._debug("Sizing to: {}".format(size))
 		self.setKdeConfigSetting("Mouse","cursorSize","{}".format(size),"kcminputrc")
 		xdefault=os.path.join(os.environ.get("HOME"),".Xdefaults")
-		xcursor="Xcursor.size: {}\n".format(size)
+		xcursor="Xcursor.size:{}\n".format(size)
 		fcontents=[]
 		if os.path.isfile(xdefault):
 			with open(xdefault,"r") as f:

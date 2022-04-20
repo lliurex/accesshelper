@@ -7,7 +7,7 @@ from PySide2.QtGui import QIcon,QPixmap
 
 class functionHelperClass():
 	def __init__(self):
-		self.dbg=False
+		self.dbg=True
 		self.dictFileData={}
 		self._initValues()
 
@@ -17,12 +17,13 @@ class functionHelperClass():
 		kde=[("singleClick",""),("ScrollbarLeftClickNavigatesByPage","")]
 		bell=[("SystemBell",""),("VisibleBell","")]
 		hotkeys_kwin=[("ShowDesktopGrid",""),("Invert",""),("InvertWindow",""),("ToggleMouseClick",""),("TrackMouse",""),("view_zoom_in",""),("view_zoom_out","")]
+		hotkeys_dock=[("_launch","")]
 		kgammaConfig=[("use","")]
 		kgammaValues=[("bgamma",""),("rgamma",""),("ggamma","")]
 		kgammaSync=[("sync","")]
 		mouse=[("cursorSize","")]
 		general=[("Name",""),("fixed",""),("font",""),("menuFont",""),("smallestReadableFont",""),("toolBarFont","")]
-		self.dictFileData={"kaccesrc":{"Bell":bell},"kwinrc":{"Plugins":plugins,"Windows":windows},"kdeglobals":{"KDE":kde,"General":general},"kglobalshortcutsrc":{"kwin":hotkeys_kwin},"kcminputrc":{"Mouse":mouse},"kgammarc":{"ConfigFile":kgammaConfig,"Screen 0":kgammaValues,"SyncBox":kgammaSync}}
+		self.dictFileData={"kaccesrc":{"Bell":bell},"kwinrc":{"Plugins":plugins,"Windows":windows},"kdeglobals":{"KDE":kde,"General":general},"kglobalshortcutsrc":{"kwin":hotkeys_kwin,"accessdock.desktop":hotkeys_dock},"kcminputrc":{"Mouse":mouse},"kgammarc":{"ConfigFile":kgammaConfig,"Screen 0":kgammaValues,"SyncBox":kgammaSync}}
 		self.settingsHotkeys={"invertWindow":"InvertWindow","invertEnabled":"Invert","trackmouseEnabled":"TrackMouse","mouseclickEnabled":"ToggleMouseClick","view_zoom_in":"","view_zoom_out":""}
 	#def _initValues
 
@@ -78,9 +79,10 @@ class functionHelperClass():
 		hksection=""
 		data=""
 		name=""
+		print("Hotkey for {}".format(setting))
 		hksetting=self.settingsHotkeys.get(setting,"")
+		sc=self.getPlasmaConfig(wrkFile="kglobalshortcutsrc")
 		if hksetting:
-			sc=self.getPlasmaConfig(wrkFile="kglobalshortcutsrc")
 			for kfile,sections in sc.items():
 				for section,settings in sections.items():
 					hksection=section
@@ -95,6 +97,15 @@ class functionHelperClass():
 						break
 				if hk!="":
 					break
+		else:
+			for kfile,sections in sc.items():
+				if setting.lower() in sections.keys():
+					(name,data)=sections[setting][0]
+					if name.lower()=="_launch":
+						data=data.split(",")
+						hk=data[0]
+						hksection=setting
+						data=",".join(data)
 		return(hk,data,name,hksection)
 
 	def setKdeConfigSetting(self,group,key,value,kfile="kaccessrc"):
@@ -119,6 +130,7 @@ class functionHelperClass():
 		self._debug("Config: {}".format(config))
 		for kfile,sections in config.items():
 			for section,data in sections.items():
+				self._debug("Section {}".format(section))
 				for setting in data:
 					try:
 						(desc,value)=setting

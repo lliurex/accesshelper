@@ -21,7 +21,7 @@ i18n={
 	"AUTOSTART":_("Autostart enabled for user"),
 	"DISABLEAUTOSTART":_("Autostart disabled for user"),
 	"AUTOSTARTERROR":_("Autostart could not be disabled"),
-	"ENABLEDOCK":_("Enabled accessibilty dock. Press ctrl+space to show"),
+	"ENABLEDOCK":_("Enabled accessibilty dock with hotkey"),
 	"DISABLEDOCK":_("Disabled accessibilty dock"),
 	"VOICESPEED":_("Voice speed when reading"),
 	"VOICEPITCH":_("Voice pitch")
@@ -350,7 +350,6 @@ class settings(confStack):
 			os.makedirs(os.path.dirname(destPath))
 		tmpF="/usr/share/applications/accessdock.desktop"
 		shutil.copy(tmpF,destPath)
-		self.showMsg("{}".format(i18n.get("ENABLEDOCK")))
 		btnHk="Ctrl+Space"
 		for widget in self.widgets.keys():
 			if isinstance(widget,QPushButton):
@@ -362,6 +361,7 @@ class settings(confStack):
 		data=[("_launch",desc),("_k_friendly_name","accessdock")]
 		config={'kglobalshortcutsrc':{'accessdock.desktop':data}}
 		self.accesshelper.setPlasmaConfig(config)
+		self.showMsg("{0} {1}".format(i18n.get("ENABLEDOCK"),hotkey))
 
 	def _removeAutostartDock(self):
 		autoFiles=self._getAutostartFile(self.profilerAuto)

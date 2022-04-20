@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-11 12:46+0200\n"
+"POT-Creation-Date: 2022-04-20 17:13+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,27 +17,27 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../src/accessdock.py:125
+#: ../src/accessdock.py:128
 msgid "Hide"
 msgstr ""
 
-#: ../src/accessdock.py:129
+#: ../src/accessdock.py:132
 msgid "Configure"
 msgstr ""
 
-#: ../src/accessdock.py:133
+#: ../src/accessdock.py:136
 msgid "Read screen"
 msgstr ""
 
-#: ../src/accessdock.py:137
+#: ../src/accessdock.py:140
 msgid "Pointer"
 msgstr ""
 
-#: ../src/accessdock.py:141
+#: ../src/accessdock.py:144
 msgid "Filter"
 msgstr ""
 
-#: ../src/accessdock.py:145
+#: ../src/accessdock.py:148
 msgid "Keyboard"
 msgstr ""
 
@@ -205,6 +205,14 @@ msgstr ""
 
 #: ../src/stacks/access.py:44
 msgid "InvertWindow"
+msgstr ""
+
+#: ../src/stacks/access.py:53
+msgid "TrackMouse"
+msgstr ""
+
+#: ../src/stacks/access.py:54
+msgid "ToggleMouseClick"
 msgstr ""
 
 #: ../src/stacks/addHotkey.py:18 ../src/stacks/hotkeys.py:17
@@ -516,7 +524,7 @@ msgid "Autostart could not be disabled"
 msgstr ""
 
 #: ../src/stacks/settings.py:24
-msgid "Enabled accessibilty dock. Press ctrl+space to show"
+msgid "Enabled accessibilty dock with hotkey"
 msgstr ""
 
 #: ../src/stacks/settings.py:25
@@ -531,42 +539,46 @@ msgstr ""
 msgid "Voice pitch"
 msgstr ""
 
-#: ../src/stacks/settings.py:54
+#: ../src/stacks/settings.py:67
 msgid "The config will be applied per user"
 msgstr ""
 
-#: ../src/stacks/settings.py:56
+#: ../src/stacks/settings.py:69
 msgid "The config will be applied to all users"
 msgstr ""
 
-#: ../src/stacks/settings.py:58
+#: ../src/stacks/settings.py:71
 msgid "The config will be applied to all users and clients"
 msgstr ""
 
-#: ../src/stacks/settings.py:61
+#: ../src/stacks/settings.py:75
 msgid "Choose the config level that should use the app"
 msgstr ""
 
-#: ../src/stacks/settings.py:64
+#: ../src/stacks/settings.py:78
 msgid "User"
 msgstr ""
 
-#: ../src/stacks/settings.py:65
+#: ../src/stacks/settings.py:79
 msgid "System"
 msgstr ""
 
-#: ../src/stacks/settings.py:66
+#: ../src/stacks/settings.py:80
 msgid "N4d"
 msgstr ""
 
-#: ../src/stacks/settings.py:74
+#: ../src/stacks/settings.py:88
 msgid "Session settings"
 msgstr ""
 
-#: ../src/stacks/settings.py:77
+#: ../src/stacks/settings.py:91
 msgid "Load template on start"
 msgstr ""
 
-#: ../src/stacks/settings.py:83
+#: ../src/stacks/settings.py:97
 msgid "Enable accesshelper dock"
+msgstr ""
+
+#: ../src/stacks/settings.py:100
+msgid "Ctrl+Space"
 msgstr ""

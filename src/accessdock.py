@@ -52,10 +52,13 @@ class accessdock(QWidget):
 	def _loadConfig(self):
 		config=self._readConfig()
 		if isinstance(config,dict):
-			if config.get("hotkey",""):
-				hotkey=str(config.get("hotkey"))
+			hotkey="Ctrl+Space"
+			if config.get("dockHk",""):
+				hotkey=str(config.get("dockHk"))
 			else:
-				hotkey="Ctrl+Space"
+				(mainHk,hkData,hkSetting,hkSection)=self.accesshelper.getHotkey("accessdock.desktop")
+				if mainHk!="":
+					hotkey=mainHk
 			if config.get("coords",""):
 				self.coordx,self.coordy=config.get("coords")
 			speed=config.get("speed","1x")

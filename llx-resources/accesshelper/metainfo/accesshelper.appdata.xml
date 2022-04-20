@@ -2,7 +2,7 @@
 <component type="desktop-application">
 <id>accesshelper</id>
 <metadata_license>CC0-1.0</metadata_license>
-<name>AccessHelper</name>
+<name>Access Helper</name>
 <name xml:lang="ca_ES.UTF-8@valencia">AccessHelper</name>
 <name xml:lang="ca_ES@valencia">AccessHelper</name>
 <name xml:lang="ca">AccessHelper</name>
@@ -13,17 +13,17 @@
 <summary xml:lang="ca_ES.UTF-8@valencia">Gestiona les opciones d'accessibilitat</summary>
 <summary xml:lang="ca">Gestiona les opciones d'accessibilitat</summary>
 <description>
-<p>AccessHelper it's a simple app that aims to be a common place for all the accesibiliy options spreaded over system's configuration.</p>
-<p xml:lang="es">AccessHelper trata de juntar todas las opciones de accesibilidad disponibles en una misma aplicación</p>
-<p xml:lang="ca_ES@valencia">AccessHelper tracta de juntar totes las opcions d'accesibilitat del sistema a una mateixa aplicació</p>
-<p xml:lang="ca_ES.UTF-8@valencia">AccessHelper tracta de juntar totes las opcions d'accesibilitat del sistema a una mateixa aplicació</p>
-<p xml:lang="ca">AccessHelper tracta de juntar totes las opcions d'accesibilitat del sistema a una mateixa aplicació</p>
+<p>Access Helper it's a simple app that aims to be a common place for all the accesibiliy options spreaded over system's configuration.</p>
+<p xml:lang="es">Access Helper trata de juntar todas las opciones de accesibilidad disponibles en una misma aplicación</p>
+<p xml:lang="ca_ES@valencia">Access Helper tracta de juntar totes las opcions d'accesibilitat del sistema a una mateixa aplicació</p>
+<p xml:lang="ca_ES.UTF-8@valencia">Access Helper tracta de juntar totes las opcions d'accesibilitat del sistema a una mateixa aplicació</p>
+<p xml:lang="ca">Access Helper tracta de juntar totes las opcions d'accesibilitat del sistema a una mateixa aplicació</p>
 </description>
 <categories>
 <category>KDE</category>
 <category>QT</category>
-<category>LliureX</category>
-<category>Utilities</category>
+<category>X-Lliurex</category>
+<category>X-Utilities</category>
 </categories>
 <icon type="stock">accesshelper</icon>
 <provides><binary>accesshelper</binary></provides>

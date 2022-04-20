@@ -92,6 +92,26 @@ class access(confStack):
 	#def __init__
 
 	def _load_screen(self):
+		def sortArraySettings(settings):
+			ordArray=[]
+			ordDict={}
+			for name,value in settings:
+				if "bell" in name.lower():
+					bell=ordDict.get('bell',[])
+					bell.append((name,value))
+					ordDict['bell']=bell
+				elif "mouse" in name.lower():
+					mouse=ordDict.get('mouse',[])
+					mouse.append((name,value))
+					ordDict['mouse']=mouse
+				else:
+					other=ordDict.get('other',[])
+					other.append((name,value))
+					ordDict['other']=other
+			for key,item in ordDict.items():
+				ordArray.extend(item)
+				
+			return(ordArray)
 		self.installEventFilter(self)
 		self.box=QGridLayout()
 		self.setLayout(self.box)
@@ -105,6 +125,8 @@ class access(confStack):
 				block=self.blockSettings.get(kfile,[])
 				for section,settings in sections.items():
 					zoomOptions=[]
+					settings=sortArraySettings(settings)
+
 					for setting in settings:
 						(name,data)=setting
 						if name in block or (len(want)>0 and name not in want):

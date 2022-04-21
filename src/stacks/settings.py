@@ -311,6 +311,9 @@ class settings(confStack):
 				self.saveChanges("dockHk","",level="user")
 		f=open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'w')
 		f.close()
+		self.btn_ok.setEnabled(True)
+		self.btn_cancel.setEnabled(True)
+		self.changes=""
 		self.refresh=True
 	#def writeConfig
 

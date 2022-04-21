@@ -185,6 +185,8 @@ class settings(confStack):
 			dataTmp=[]
 			if setting=="_launch":
 				valueArray=value.split(",")
+				while (len(valueArray)<2):
+					valueArray.append([])
 				valueArray[0]=keypress
 				valueArray[1]=keypress
 				value=",".join(valueArray)

@@ -185,6 +185,8 @@ class settings(confStack):
 			dataTmp=[]
 			if setting=="_launch":
 				valueArray=value.split(",")
+				while (len(valueArray)<2):
+					valueArray.append([])
 				valueArray[0]=keypress
 				valueArray[1]=keypress
 				value=",".join(valueArray)
@@ -311,6 +313,9 @@ class settings(confStack):
 				self.saveChanges("dockHk","",level="user")
 		f=open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'w')
 		f.close()
+		self.btn_ok.setEnabled(True)
+		self.btn_cancel.setEnabled(True)
+		self.changes=""
 		self.refresh=True
 	#def writeConfig
 

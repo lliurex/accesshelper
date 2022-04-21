@@ -61,6 +61,9 @@ class accessdock(QWidget):
 					hotkey=mainHk
 			if config.get("coords",""):
 				self.coordx,self.coordy=config.get("coords")
+			else:
+				cursorPosition =QCursor.pos()
+				self.coordx,self.coordy=cursorPosition.x(),cursorPosition.y()
 			speed=config.get("speed","1x")
 			self.pitch=config.get("pitch","50")
 			speed=speed.replace("x","")
@@ -515,7 +518,7 @@ class accessdock(QWidget):
 		if os.path.isfile(os.path.join(os.environ.get('HOME'),".config","accesshelper",self.confFile)):
 			with open(os.path.join(os.environ.get('HOME'),".config","accesshelper",self.confFile),'r') as f:
 				config.update(json.loads(f.read()))
-		config={"coords":[x,y]}
+		config["coords"]=[x,y]
 		self.coordx,self.coordy=(x,y)
 		with open(os.path.join(os.environ.get('HOME'),".config","accesshelper",self.confFile),'w') as f:
 			f.write(json.dumps(config,indent=4))

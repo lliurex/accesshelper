@@ -78,27 +78,27 @@ class hotkeys(confStack):
 			plasmaConfig=self.accesshelper.getPlasmaConfig(wrkFile)
 			self.plasmaConfig.update(plasmaConfig)
 			for kfile,sections in plasmaConfig.items():
-				for section,settings in sections.items():
-					row=0
-					for setting in settings:
-						tblGrid.setRowCount(row+1) 
-						(name,data)=setting
-						data=data.split(",")
-						desc=i18n.get(name,name)
-						if len(data)>1:
-							desc=data[-1]
-						lbl=QLabel(desc)
-						#self.box.addWidget(lbl,row,0)
-						tblGrid.setCellWidget(row,0,lbl)
-						btn=QPushButton(data[0])
-						sigmap_run.setMapping(btn,name)
-						btn.clicked.connect(sigmap_run.map)
-						tblGrid.setCellWidget(row,1,btn)
-						tblGrid.resizeRowToContents(row)
-						#self.box.addWidget(btn,row,1)
-						row+=1
-						self.widgets.update({name:btn})
-						self.widgetsText.update({btn:name})
+				settings=sections.get('kwin',[])
+				row=0
+				for setting in settings:
+					tblGrid.setRowCount(row+1) 
+					(name,data)=setting
+					data=data.split(",")
+					desc=i18n.get(name,name)
+					if len(data)>1:
+						desc=data[-1]
+					lbl=QLabel(desc)
+					#self.box.addWidget(lbl,row,0)
+					tblGrid.setCellWidget(row,0,lbl)
+					btn=QPushButton(data[0])
+					sigmap_run.setMapping(btn,name)
+					btn.clicked.connect(sigmap_run.map)
+					tblGrid.setCellWidget(row,1,btn)
+					tblGrid.resizeRowToContents(row)
+					#self.box.addWidget(btn,row,1)
+					row+=1
+					self.widgets.update({name:btn})
+					self.widgetsText.update({btn:name})
 
 		for desktop,info in config.get('hotkeys',{}).items():
 			tblGrid.setRowCount(row+1) 
@@ -130,7 +130,8 @@ class hotkeys(confStack):
 		btn_add=QPushButton(_("Add new"))
 		btn_add.clicked.connect(self._addHotkey)
 		self.box.addWidget(btn_add,row+1,0,1,1)
-		self.updateScreen()
+		self._debug("LOAD SCREEN FINISHED")
+		#self.updateScreen()
 	#def _load_screen
 
 	def _addHotkey(self,*args):
@@ -214,11 +215,14 @@ class hotkeys(confStack):
 	#def eventFilter
 
 	def updateScreen(self):
+		self._debug("UPDATE SCREEN BEGINS")
 		for wrkFile in self.wrkFiles:
 			plasmaConfig=self.accesshelper.getPlasmaConfig(wrkFile)
+			self._debug("Read {}".format(wrkFile))
 			self.plasmaConfig.update(plasmaConfig)
 			for kfile,sections in plasmaConfig.items():
 				for section,settings in sections.items():
+					self._debug("Section {}".format(section))
 					row=0
 					for setting in settings:
 						(name,data)=setting
@@ -231,6 +235,8 @@ class hotkeys(confStack):
 							btn.setText(data[0])
 							self.widgets.update({name:btn})
 							self.widgetsText.update({btn:name})
+
+		self._debug("UPDATE SCREEN FINISHED")
 		pass
 	#def _udpate_screen
 

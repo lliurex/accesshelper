@@ -347,7 +347,7 @@ class accesshelper():
 		fcontents=[]
 		if os.path.isfile(xdefault):
 			with open(xdefault,"r") as f:
-				fcontent=f.readlines()
+				fcontents=f.readlines()
 		newContent=[]
 		for line in fcontents:
 			if line.startswith("Xcursor.size:")==False:
@@ -447,11 +447,11 @@ class accesshelper():
 	#def getPointerSize
 
 	def applyChanges(self):
+		cmd=["qdbus","org.kde.KWin","/KWin","org.kde.KWin.reconfigure"]
+		subprocess.run(cmd)
 		cmd=["kquitapp5","kglobalaccel"]
 		subprocess.run(cmd)
 		cmd=["kstart5","kglobalaccel"]
-		subprocess.run(cmd)
-		cmd=["qdbus","org.kde.KWin","/KWin","org.kde.KWin.reconfigure"]
 		subprocess.run(cmd)
 		cmd=["kquitapp5","plasmashell"]
 		subprocess.run(cmd)

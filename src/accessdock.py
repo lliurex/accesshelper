@@ -195,23 +195,42 @@ class accessdock(QWidget):
 		def moreCursorSize(*args):
 			pixmap=lblTest.pixmap()
 			ptsize=pixmap.size().width()
-			if ptsize in sizes:
-				if ptsize<sizes[-1]:
-					ptsize=sizes[sizes.index(ptsize)+1]
-					pixmap=img[0].pixmap(QSize(ptsize,ptsize))
-					lblTest.setPixmap(pixmap)
-					cursor=QCursor(pixmap,0,0)
-					dlg.setCursor(cursor)
+			sizes.sort()
+			if ptsize not in sizes:
+				newptsize=32
+				for size in sizes:
+					newptsize=size
+					if ptsize<=size:
+						newptsize=size
+						break
+
+				ptsize=newptsize
+				
+			if ptsize<sizes[-1]:
+				ptsize=sizes[sizes.index(ptsize)+1]
+				pixmap=img[0].pixmap(QSize(ptsize,ptsize))
+				lblTest.setPixmap(pixmap)
+				cursor=QCursor(pixmap,0,0)
+				dlg.setCursor(cursor)
 		def lessCursorSize(*args):
 			pixmap=lblTest.pixmap()
 			ptsize=pixmap.size().width()
-			if ptsize in sizes:
-				if ptsize>sizes[0]:
-					ptsize=sizes[sizes.index(ptsize)-1]
-					pixmap=img[0].pixmap(QSize(ptsize,ptsize))
-					lblTest.setPixmap(pixmap)
-					cursor=QCursor(pixmap,0,0)
-					dlg.setCursor(cursor)
+			sizes.sort()
+			if ptsize not in sizes:
+				newptsize=32
+				for size in sizes:
+					newptsize=size
+					if ptsize<=size:
+						newptsize=size
+						break
+
+				ptsize=newptsize
+			if ptsize>sizes[0]:
+				ptsize=sizes[sizes.index(ptsize)-1]
+				pixmap=img[0].pixmap(QSize(ptsize,ptsize))
+				lblTest.setPixmap(pixmap)
+				cursor=QCursor(pixmap,0,0)
+				dlg.setCursor(cursor)
 			
 		dlg=QDialog()
 		lay=QGridLayout()

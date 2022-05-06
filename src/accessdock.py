@@ -391,16 +391,16 @@ class accessdock(QWidget):
 			subprocess.run(["vlc","/tmp/out.wav"])
 		else:
 			pass
-	####	speech=speechd.Client()
-	####	speech.set_language("es")
-	####	speech.set_pause_context(2)
-	####	speech.set_pitch(60)
-	####	speech.set_rate(60)
-	####	txtArray=txt.split("\n")
-	####
-	####	for txtLine in txtArray:
-	####		if txtLine!="":
-	####			speech.say(txtLine)
+		####speech=speechd.Client()
+		####speech.set_language("es")
+		####speech.set_pause_context(2)
+		####speech.set_pitch(60)
+		####speech.set_rate(60)
+		####txtArray=txt.split("\n")
+		
+		####for txtLine in txtArray:
+		####	if txtLine!="":
+		####		speech.say(txtLine)
 	#def _invokeReader
 
 	def _readImg(self,imgPIL):

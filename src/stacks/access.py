@@ -159,12 +159,16 @@ class access(confStack):
 							self.chkbtn[chk]=btn
 						else:
 							btn.hide()
+					lbl=None
 					for setting in zoomOptions:
+						if lbl==None:
+							lbl=QLabel("Meta+=/Meta+-")
+							self.box.addWidget(lbl,row,1,2,1)
 						(name,data)=setting
 						desc=i18n.get(name.upper(),name)
 						btn=QRadioButton(desc)
 						self.widgets.update({name:btn})
-						self.box.addWidget(btn,row,col)
+						self.box.addWidget(btn,row,0)
 						row+=1
 		self.updateScreen()
 	#def _load_screen

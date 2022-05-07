@@ -1,7 +1,9 @@
-accesshelper (0.6.3.6.1) focal; urgency=medium
+accesshelper (0.6.4) focal; urgency=medium
 
   * Accessdocker supports TTS from images (no real tts, some limitations)
   * Same config file for accessdocker and accesshelper
+  * Multiple bug fixes
+  * WIP on real TTS
 
  -- Juanma1980 <juanma1980@gmail.com>  Tue, 29 Mar 2022 13:07:52 +0200
 

@@ -54,6 +54,12 @@ descHk={
 	"MOUSECLICKENABLED":_("ToggleMouseClick")
 	}
 
+actionHk={
+	"INVERTENABLED":"Invert",
+	"INVERTWINDOW":"InvertWindow",
+	"TRACKMOUSEENABLED":"TrackMouse",
+	"MOUSECLICKENABLED":"ToggleMouseClick"
+	}
 class access(confStack):
 	keybind_signal=Signal("PyObject")
 	def __init_stack__(self):
@@ -155,7 +161,7 @@ class access(confStack):
 						if col==2:
 							row+=1
 							col=0
-						if name.replace("btn_","").upper() not in ["SYSTEMBELL","VISIBLEBELL"]:
+						if name.replace("btn_","").upper() not in ["SYSTEMBELL","VISIBLEBELL","SNAPHELPERENABLED"]:
 							self.chkbtn[chk]=btn
 						else:
 							btn.hide()
@@ -321,20 +327,29 @@ class access(confStack):
 		self.plasmaConfig["kglobalshortcutsrc"]={}
 		for desc,widget in self.widgets.items():
 			if isinstance(widget,QPushButton):
-					(mainHk,hkData,hkSetting,hkSection)=self.accesshelper.getHotkey(desc)
-					newHk=widget.text()
-					if newHk!=mainHk:
-						hkData=hkData.split(",")
-						hkData[0]=newHk
-						if len(hkData)<=1:
-							hkData.append(newHk)
-							desc=desc.replace("btn_","").upper()
-							hkData.append(i18n.get(desc,desc))
-							hkSetting=descHk.get(desc,desc)  
-							hkSection="kwin"
-						else:
-							hkData[1]=newHk
-						hkData=",".join(hkData)
-					if self.plasmaConfig["kglobalshortcutsrc"].get(hkSection,None)==None:
-						self.plasmaConfig["kglobalshortcutsrc"][hkSection]=[]
-					self.plasmaConfig["kglobalshortcutsrc"][hkSection].append((hkSetting,hkData))
+					desc=desc.replace("btn_","")
+					if desc.upper() in actionHk.keys():
+						(mainHk,hkData,hkSetting,hkSection)=self.accesshelper.getHotkey(actionHk[desc.upper()])
+						self._debug("*******************************")
+						self._debug("mainHk: {}".format(mainHk))
+						self._debug("hkData: {}".format(hkData))
+						self._debug("hkSetting: {}".format(hkSetting))
+						self._debug("hkSection: {}".format(hkSection))
+						self._debug("*******************************")
+						newHk=widget.text()
+						if newHk!=mainHk:
+							hkData=hkData.split(",")
+							hkData[0]=newHk
+							if len(hkData)<=1:
+								hkData.append(newHk)
+								dataDesc=desc.upper()
+								hkData.append(i18n.get(dataDesc,dataDesc))
+								#hkSetting=descHk.get(desc,desc)  
+								hkSection="kwin"
+							else:
+								hkData[1]=newHk
+							hkSetting=actionHk.get(desc.upper())
+							hkData=",".join(hkData)
+						if self.plasmaConfig["kglobalshortcutsrc"].get(hkSection,None)==None:
+							self.plasmaConfig["kglobalshortcutsrc"][hkSection]=[]
+						self.plasmaConfig["kglobalshortcutsrc"][hkSection].append((hkSetting,hkData))

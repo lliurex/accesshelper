@@ -84,6 +84,13 @@ def _restartSession(*args):
 #def _restartSession
 
 def showDialog(*args):
+	if os.path.isfile("/tmp/.set_scheme"):
+		scheme=""
+		with open("/tmp/.set_scheme","r") as f:
+			scheme=f.read()
+		if scheme:
+			accesshelper.setScheme(scheme)
+		os.remove("/tmp/.set_scheme")
 	if os.path.isfile(configChanged)==False:
 		return
 	os.remove(configChanged)
@@ -146,7 +153,7 @@ if len(sys.argv)==1:
 	#config.setBackgroundImage('repoman_login.svg')
 	config.setConfig(confDirs={'system':'/usr/share/accesshelper','user':os.path.join(os.environ['HOME'],".config/accesshelper")},confFile="accesshelper.json")
 	config.Show()
-	config.setFixedSize(config.width(),config.height())
+	#config.setFixedSize(config.width(),config.height())
 	app.exec_()
 else:
 	if sys.argv[1].lower()=="--set":

@@ -359,7 +359,9 @@ class accesshelper():
 		newContent.append(xcursor)
 		with open(xdefault,"w") as f:
 			f.writelines(newContent)
-		os.environ["XCURSOR_SIZE"]=str(size)
+		cmd=["xrdb","-merge",xdefault]
+		subprocess.run(cmd)
+		#os.environ["XCURSOR_SIZE"]=str(size)
 	#def setCursorSize
 
 	def setScheme(self,scheme):

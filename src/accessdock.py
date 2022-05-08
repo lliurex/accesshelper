@@ -280,8 +280,13 @@ class accessdock(QWidget):
 				qfont=lblTest.font()
 				self._saveFont(qfont)
 			else:
+				themes=self.accesshelper.getCursors()
+				for theme in themes:
+					if "(" in theme and ("plasma" in theme.lower() or "actual" in theme.lower()):
+						themeDesc=theme
+						break
 				self.accesshelper.setCursorSize(lblTest.pixmap().size().width())
-				self.accesshelper.setCursor()
+				self.accesshelper.setCursor(themeDesc)
 			self.hide()
 			self.accesshelper.applyChanges()
 			self.show()

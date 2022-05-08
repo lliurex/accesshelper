@@ -285,8 +285,10 @@ class accessdock(QWidget):
 					if "(" in theme and ("plasma" in theme.lower() or "actual" in theme.lower()):
 						themeDesc=theme
 						break
-				self.accesshelper.setCursorSize(lblTest.pixmap().size().width())
+				themeDesc=themeDesc.split("(")[0].replace("(","").rstrip(" ")
+				self._debug("Default cursor theme {}".format(themeDesc))
 				self.accesshelper.setCursor(themeDesc)
+				self.accesshelper.setCursorSize(lblTest.pixmap().size().width())
 			self.hide()
 			self.accesshelper.applyChanges()
 			self.show()

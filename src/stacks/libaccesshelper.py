@@ -272,7 +272,7 @@ class functionHelperClass():
 
 class accesshelper():
 	def __init__(self):
-		self.dbg=False
+		self.dbg=True
 		self.functionHelper=functionHelperClass()
 	#def __init__
 
@@ -456,8 +456,8 @@ class accesshelper():
 		subprocess.run(cmd)
 		cmd=["kstart5","kglobalaccel"]
 		subprocess.run(cmd)
-		cmd=["kquitapp5","plasmashell"]
-		subprocess.run(cmd)
-		cmd=["kstart5","plasmashell"]
-		subprocess.run(cmd)
+		#cmd=["kquitapp5","plasmashell"]
+		#subprocess.run(cmd)
+		cmd=["plasmashell","--replace"]
+		subprocess.Popen(cmd)
 	#def applyChanges

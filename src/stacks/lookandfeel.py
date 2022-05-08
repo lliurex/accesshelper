@@ -138,7 +138,7 @@ class lookandfeel(confStack):
 								self.cursorDesc[themeDesc]=cursorTheme
 							else:
 								cmb.addItem(themeDesc)
-						if "(" in theme and "plasma" in theme.lower():
+						if "(" in theme and ("plasma" in theme.lower() or "actual" in theme.lower()):
 							cmb.setCurrentText(themeDesc)
 		config=self.config.get(self.level,{})
 	#def _udpate_screen
@@ -201,6 +201,7 @@ class lookandfeel(confStack):
 		self._setCursor(cursorTheme)
 		f=open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'w')
 		f.close()
+		#Close and open window
 	#def writeConfig
 
 	def _getThemeList(self):
@@ -223,7 +224,11 @@ class lookandfeel(confStack):
 	#def _setTheme
 
 	def _setScheme(self,scheme):
-		self.accesshelper.setScheme(scheme)
+		print("Setting scheme to {}".format(scheme))
+		with open("/tmp/.set_scheme","w") as f:
+			f.write(scheme)
+		#Apply scheme change on exit
+
 	#def _setScheme
 
 	def _setCursor(self,themeDesc):

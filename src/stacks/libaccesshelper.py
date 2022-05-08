@@ -79,7 +79,7 @@ class functionHelperClass():
 		hksection=""
 		data=""
 		name=""
-		print("Hotkey for {}".format(setting))
+		self._debug("Hotkey for {}".format(setting))
 		hksetting=self.settingsHotkeys.get(setting,"")
 		sc=self.getPlasmaConfig(wrkFile="kglobalshortcutsrc")
 		if hksetting:
@@ -106,6 +106,9 @@ class functionHelperClass():
 						hk=data[0]
 						hksection=setting
 						data=",".join(data)
+		self._debug("-------------------")
+		self._debug("{0} {1} {2} {3}".format(hk,data,name,hksection))
+		self._debug("-------------------")
 		return(hk,data,name,hksection)
 
 	def setKdeConfigSetting(self,group,key,value,kfile="kaccessrc"):

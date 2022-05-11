@@ -148,7 +148,7 @@ if len(sys.argv)==1:
 	config.setWindowTitle("Access Helper")
 	config.setRsrcPath("/usr/share/accesshelper/rsrc")
 	config.setIcon('accesshelper')
-	config.setWiki('https://wiki.edu.gva.es/lliurex/tiki-index.php?page=Accesibilidad-en-Lliurex:-Accesshelper')
+	config.setWiki('https://wiki.edu.gva.es/lliurex/tiki-index.php?page=Accesibilidad%20en%20Lliurex:%20Access%20Helper')
 	config.setBanner('access_banner.png')
 	#config.setBackgroundImage('repoman_login.svg')
 	config.setConfig(confDirs={'system':'/usr/share/accesshelper','user':os.path.join(os.environ['HOME'],".config/accesshelper")},confFile="accesshelper.json")

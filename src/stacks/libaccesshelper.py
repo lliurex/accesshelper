@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 import subprocess,os
-import dbus
 import tarfile
 import tempfile
 import shutil
@@ -271,23 +270,6 @@ class functionHelperClass():
 		return(qicon,sizes)
 	#def getPointerImage
 
-	def setPlasmaBackgroundColor(self,color):
-		plugin='org.kde.color'
-		jscript = """
-		var allDesktops = desktops();
-		print (allDesktops);
-		for (i=0;i<allDesktops.length;i++) {
-			d = allDesktops[i];
-			d.wallpaperPlugin = "%s";
-			d.currentConfigGroup = Array("Wallpaper", "%s", "General");
-			d.writeConfig("Color", "%s")
-		}
-		"""
-		bus = dbus.SessionBus()
-		plasma = dbus.Interface(bus.get_object(
-			'org.kde.plasmashell', '/PlasmaShell'), dbus_interface='org.kde.PlasmaShell')
-		plasma.evaluateScript(jscript % (plugin, plugin, color))	
-
 class accesshelper():
 	def __init__(self):
 		self.dbg=True
@@ -437,10 +419,6 @@ class accesshelper():
 	def importExportSnapshot(self,*args,**kwargs):
 		return(self.functionHelper.importExportSnapshot(*args,**kwargs))
 	#def importExportSnapshot
-
-	def setPlasmaBackgroundColor(self,*args):
-		return(self.functionHelper.setPlasmaBackgroundColor(*args))
-	#def setPlasmaBackgroundColor
 	
 	def _getCursorTheme(self):
 		themes=self.getCursors()

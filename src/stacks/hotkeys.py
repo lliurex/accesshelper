@@ -33,7 +33,7 @@ i18n={
 class hotkeys(confStack):
 	keybind_signal=Signal("PyObject")
 	def __init_stack__(self):
-		self.dbg=False
+		self.dbg=True
 		self._debug("hotkeys load")
 		self.menu_description=i18n.get('MENUDESCRIPTION')
 		self.description=i18n.get('DESCRIPTION')

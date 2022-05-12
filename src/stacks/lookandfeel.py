@@ -24,8 +24,15 @@ i18n={
 	"SCHEME":_("Color scheme"),
 	"COLORS":_("Theme colors"),
 	"BACKGROUND":_("Background color"),
+	"CURRENTBKG":_("Current background"),
 	"CURSORTHEME":_("Cursor theme"),
 	"CURSORSIZE":_("Cursor size"),
+	"WHITE":_("White"),
+	"RED":_("Red"),
+	"BLUE":_("Blue"),
+	"GREEN":_("Green"),
+	"YELLOW":_("Yellow"),
+	"BLACK":_("Black"),
 	}
 
 class lookandfeel(confStack):
@@ -129,6 +136,8 @@ class lookandfeel(confStack):
 						themes=self._getSchemeList()
 					if cmbDesc=="cursor":
 						themes=self._getCursorList()
+					if cmbDesc=="background":
+						themes=self._fillBackgroundCmb()
 					for theme in themes:
 						themeDesc=theme.split("(")[0].replace("(","").rstrip(" ")
 						if cmb.findText(themeDesc)==-1:
@@ -142,6 +151,8 @@ class lookandfeel(confStack):
 								else:
 									cmb.addItem(themeDesc)
 								self.cursorDesc[themeDesc]=cursorTheme
+							elif cmbDesc=="background":
+								cmb.addItem(themeDesc)
 							else:
 								cmb.addItem(themeDesc)
 						if "(" in theme and ("plasma" in theme.lower() or "actual" in theme.lower()):
@@ -174,6 +185,13 @@ class lookandfeel(confStack):
 				cmbSize.model().item(idx).setEnabled(True)
 				cmbSize.setCurrentIndex(idx)
 	#def updateCursorSizes
+
+	def _fillBackgroundCmb(self):
+		colors=[i18n.get("CURRENTBKG","Current background")]
+		for i in (i18n.get("BLACK","black"),i18n.get("RED","red"),i18n.get("BLUE","blue"),i18n.get("GREEN","green"),\
+					i18n.get("YELLOW","yellow"),i18n.get("WHITE","white")):
+			colors.append(i)
+		return(colors)
 		
 	def _getPointerImage(self,theme):
 		return(self.accesshelper.getPointerImage(theme=theme))

@@ -21,8 +21,9 @@ i18n={
 	"MENUDESCRIPTION":_("Modify appearence settings"),
 	"TOOLTIP":_("Set theme, color scheme or pointers"),
 	"THEME":_("Desktop theme"),
-	"SCHEME":_("Colour scheme"),
-	"COLOURS":_("Theme colours"),
+	"SCHEME":_("Color scheme"),
+	"COLORS":_("Theme colors"),
+	"BACKGROUND":_("Background color"),
 	"CURSORTHEME":_("Cursor theme"),
 	"CURSORSIZE":_("Cursor size"),
 	}
@@ -70,16 +71,21 @@ class lookandfeel(confStack):
 		self.widgets.update({'scheme':cmbScheme})
 		self.box.addWidget(cmbScheme,1,1,1,1)
 
-		self.box.addWidget(QLabel(i18n.get("CURSORTHEME")),2,0,1,1)
+		self.box.addWidget(QLabel(i18n.get("BACKGROUND")),2,0,1,1)
+		cmbBackground=QComboBox()
+		self.widgets.update({'background':cmbBackground})
+		self.box.addWidget(cmbBackground,2,1,1,1)
+
+		self.box.addWidget(QLabel(i18n.get("CURSORTHEME")),3,0,1,1)
 		cmbCursor=QComboBox()
 		self.widgets.update({'cursor':cmbCursor})
 		cmbCursor.currentIndexChanged.connect(self.updateCursorSizes)
-		self.box.addWidget(cmbCursor,2,1,1,1)
+		self.box.addWidget(cmbCursor,3,1,1,1)
 
-		self.box.addWidget(QLabel(i18n.get("CURSORSIZE")),3,0,1,1)
+		self.box.addWidget(QLabel(i18n.get("CURSORSIZE")),4,0,1,1)
 		cmbCursorSize=QComboBox()
 		self.widgets.update({'cursorSize':cmbCursorSize})
-		self.box.addWidget(cmbCursorSize,3,1,1,1)
+		self.box.addWidget(cmbCursorSize,4,1,1,1)
 		cmbCursorSize.addItem("32")
 		cmbCursorSize.addItem("48")
 		cmbCursorSize.addItem("64")

@@ -37,7 +37,7 @@ i18n={
 
 class lookandfeel(confStack):
 	def __init_stack__(self):
-		self.dbg=False
+		self.dbg=True
 		self._debug("hotkeys load")
 		self.menu_description=i18n.get('MENUDESCRIPTION')
 		self.description=i18n.get('DESCRIPTION')
@@ -152,7 +152,15 @@ class lookandfeel(confStack):
 									cmb.addItem(themeDesc)
 								self.cursorDesc[themeDesc]=cursorTheme
 							elif cmbDesc=="background":
-								cmb.addItem(themeDesc)
+								print(theme)
+								bkgColor=theme.split("(")[1].replace("(","").replace(")","")
+								px=QtGui.QPixmap(64,64)
+								if bkgColor:
+									px.fill(QtGui.QColor(bkgColor))
+									icon=QtGui.QIcon(px)
+									cmb.addItem(icon,themeDesc)
+								else:
+									cmb.addItem(themeDesc)
 							else:
 								cmb.addItem(themeDesc)
 						if "(" in theme and ("plasma" in theme.lower() or "actual" in theme.lower()):
@@ -187,10 +195,11 @@ class lookandfeel(confStack):
 	#def updateCursorSizes
 
 	def _fillBackgroundCmb(self):
-		colors=[i18n.get("CURRENTBKG","Current background")]
-		for i in (i18n.get("BLACK","black"),i18n.get("RED","red"),i18n.get("BLUE","blue"),i18n.get("GREEN","green"),\
-					i18n.get("YELLOW","yellow"),i18n.get("WHITE","white")):
-			colors.append(i)
+		colors=["{} ()".format(i18n.get("CURRENTBKG","Current background"))]
+		colorList=["black","red","blue","green","yellow","white"]
+		for color in colorList:
+			i18Color=i18n.get(color,color.capitalize())
+			colors.append("{} ({})".format(i18Color,color))
 		return(colors)
 		
 	def _getPointerImage(self,theme):
@@ -207,6 +216,7 @@ class lookandfeel(confStack):
 		self.refresh=True
 		cursorTheme=""
 		size=""
+		colorStr=""
 		for cmbDesc in self.widgets.keys():
 			cmb=self.widgets.get(cmbDesc,"")
 			if isinstance(cmb,QComboBox):
@@ -220,9 +230,20 @@ class lookandfeel(confStack):
 					cursorTheme=theme
 				if cmbDesc=="cursorSize":
 					size=cmb.currentText()
+				if cmbDesc=="background":
+					idx=cmb.currentIndex()
+					icon=cmb.itemIcon(idx)
+					if icon:
+						px=icon.pixmap(64,64,icon.Mode.Normal)
+						pxColor=px.toImage().pixel(1,1)
+						color=QtGui.QColor(pxColor).getRgb()
+						colorStr="{0},{1},{2}".format(color[0],color[1],color[2])
 		#Ensure size is applied before theme change
 		self._setCursorSize(size)
 		self._setCursor(cursorTheme)
+		if colorStr:
+			self._debug("Set background color {}".format(colorStr))
+			self.accesshelper.setPlasmaBackgroundColor(colorStr)
 		f=open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'w')
 		f.close()
 		#Close and open window
@@ -257,11 +278,13 @@ class lookandfeel(confStack):
 
 	def _setCursor(self,themeDesc):
 		theme=self.cursorDesc.get(themeDesc,themeDesc)
-		self._debug("Set cursor theme: {} was {}".format(theme,themeDesc))
-		self.accesshelper.setCursor(theme)
+		if theme!=themeDesc:
+			self._debug("Set cursor theme: {} was {}".format(theme,themeDesc))
+			self.accesshelper.setCursor(theme)
 	#def _setCursor
 
 	def _setCursorSize(self,size):
+		self._debug("Set cursor size: {} was {}".format(size,size))
 		self.saveChanges('cursor',{"size":size})
 		self.accesshelper.setCursorSize(size)
 	#def _setCursorSize(self):

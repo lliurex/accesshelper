@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-import os,sys,io
+import os,sys,io,psutil
 from PySide2.QtWidgets import QApplication,QMessageBox,QGridLayout,QLabel,QToolButton,QWidget,QFrame,QDialog,QPushButton
 from PySide2.QtCore import Qt,QSignalMapper,QByteArray,QSize,QBuffer
 from PySide2.QtGui import QIcon,QPixmap,QCursor,QClipboard
@@ -28,6 +28,7 @@ class accessdock(QWidget):
 	def __init__(self,*args,**kwargs):
 		super().__init__()
 		self.dbg=True
+		self._chkDockRunning()
 		self.menu=App2Menu.app2menu()
 		self.confFile="accesshelper.json"
 		self.confDir="/usr/share/accesshelper/"
@@ -48,6 +49,19 @@ class accessdock(QWidget):
 		if self.dbg:
 			print("dock: {}".format(msg))
 	#def _debug
+
+	def _chkDockRunning(self):
+		ps=list(psutil.process_iter())
+		pid=os.getpid()
+		count=0
+		for p in ps:
+			if "accessdock" in str(p.name):
+				count+=1
+				if count>1:
+					self._debug("Accessdock is running as pid {}".format(pid))
+					sys.exit(0)
+				pid=p.pid
+	#def _chkDockRunning
 
 	def _loadConfig(self):
 		config=self._readConfig()
@@ -397,17 +411,23 @@ class accessdock(QWidget):
 			subprocess.run(["speak-ng","-p","{}".format(self.pitch),"-s","{}".format(self.rate),"-v","roa/es","-w","/tmp/out.wav",txt])
 			subprocess.run(["vlc","/tmp/out.wav"])
 		else:
-			pass
-		####speech=speechd.Client()
-		####speech.set_language("es")
-		####speech.set_pause_context(2)
-		####speech.set_pitch(60)
-		####speech.set_rate(60)
-		####txtArray=txt.split("\n")
+			speech=speechd.Client()
+			speech.set_language("es")
+			speech.set_pause_context(2)
+			#eSpeak min speed=80 max speed=390
+			#speechd min=-100 max=100
+			#rate 155=speed 0. <155<0.>155>0
+
+			rate=self.rate*200 #speechd scale has 200 points
+			rate=rate/310 #espeak rate has 310 
+			rate=rate-100
+			speech.set_pitch(int(self.pitch))
+			speech.set_rate(int(rate))
+			txtArray=txt.split(".")
 		
-		####for txtLine in txtArray:
-		####	if txtLine!="":
-		####		speech.say(txtLine)
+			for txtLine in txtArray:
+				if txtLine!="":
+					speech.say(txtLine)
 	#def _invokeReader
 
 	def _readImg(self,imgPIL):

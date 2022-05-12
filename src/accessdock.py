@@ -411,17 +411,23 @@ class accessdock(QWidget):
 			subprocess.run(["speak-ng","-p","{}".format(self.pitch),"-s","{}".format(self.rate),"-v","roa/es","-w","/tmp/out.wav",txt])
 			subprocess.run(["vlc","/tmp/out.wav"])
 		else:
-			pass
-		####speech=speechd.Client()
-		####speech.set_language("es")
-		####speech.set_pause_context(2)
-		####speech.set_pitch(60)
-		####speech.set_rate(60)
-		####txtArray=txt.split("\n")
+			speech=speechd.Client()
+			speech.set_language("es")
+			speech.set_pause_context(2)
+			#eSpeak min speed=80 max speed=390
+			#speechd min=-100 max=100
+			#rate 155=speed 0. <155<0.>155>0
+
+			rate=self.rate*200 #speechd scale has 200 points
+			rate=rate/310 #espeak rate has 310 
+			rate=rate-100
+			speech.set_pitch(int(self.pitch))
+			speech.set_rate(int(rate))
+			txtArray=txt.split(".")
 		
-		####for txtLine in txtArray:
-		####	if txtLine!="":
-		####		speech.say(txtLine)
+			for txtLine in txtArray:
+				if txtLine!="":
+					speech.say(txtLine)
 	#def _invokeReader
 
 	def _readImg(self,imgPIL):

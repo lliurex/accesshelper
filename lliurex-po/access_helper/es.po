@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-20 17:13+0200\n"
-"PO-Revision-Date: 2022-04-20 17:16+0200\n"
+"POT-Creation-Date: 2022-05-12 11:45+0200\n"
+"PO-Revision-Date: 2022-05-12 11:47+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es\n"
@@ -18,27 +18,27 @@ msgstr ""
 "X-Generator: Poedit 2.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../src/accessdock.py:128
+#: ../src/accessdock.py:145
 msgid "Hide"
 msgstr "Ocultar"
 
-#: ../src/accessdock.py:132
+#: ../src/accessdock.py:149
 msgid "Configure"
 msgstr "Configurar"
 
-#: ../src/accessdock.py:136
+#: ../src/accessdock.py:153
 msgid "Read screen"
 msgstr "Leer"
 
-#: ../src/accessdock.py:140
+#: ../src/accessdock.py:157
 msgid "Pointer"
 msgstr "Puntero"
 
-#: ../src/accessdock.py:144
+#: ../src/accessdock.py:161
 msgid "Filter"
 msgstr "Filtro"
 
-#: ../src/accessdock.py:148
+#: ../src/accessdock.py:165
 msgid "Keyboard"
 msgstr "Teclado"
 
@@ -342,11 +342,11 @@ msgstr "Tamaño de fuente"
 msgid "Font family"
 msgstr "Familia"
 
-#: ../src/stacks/fonts.py:23 ../src/stacks/lookandfeel.py:26
+#: ../src/stacks/fonts.py:23 ../src/stacks/lookandfeel.py:28
 msgid "Cursor theme"
 msgstr "Tema del cursor"
 
-#: ../src/stacks/fonts.py:24 ../src/stacks/lookandfeel.py:27
+#: ../src/stacks/fonts.py:24 ../src/stacks/lookandfeel.py:29
 msgid "Cursor size"
 msgstr "Tamaño del cursor"
 
@@ -423,12 +423,44 @@ msgid "Desktop theme"
 msgstr "Tema del escritorio"
 
 #: ../src/stacks/lookandfeel.py:24
-msgid "Colour scheme"
+msgid "Color scheme"
 msgstr "Esquema de color"
 
 #: ../src/stacks/lookandfeel.py:25
-msgid "Theme colours"
+msgid "Theme colors"
 msgstr "Colores del tema"
+
+#: ../src/stacks/lookandfeel.py:26
+msgid "Background color"
+msgstr "Color del escritorio"
+
+#: ../src/stacks/lookandfeel.py:27
+msgid "Current background"
+msgstr "Imagen actual"
+
+#: ../src/stacks/lookandfeel.py:30
+msgid "White"
+msgstr "Blanco"
+
+#: ../src/stacks/lookandfeel.py:31
+msgid "Red"
+msgstr "Rojo"
+
+#: ../src/stacks/lookandfeel.py:32
+msgid "Blue"
+msgstr "Azul"
+
+#: ../src/stacks/lookandfeel.py:33
+msgid "Green"
+msgstr "Verde"
+
+#: ../src/stacks/lookandfeel.py:34
+msgid "Yellow"
+msgstr "Amarillo"
+
+#: ../src/stacks/lookandfeel.py:35
+msgid "Black"
+msgstr "Negro"
 
 #: ../src/stacks/profiles.py:16
 msgid "Manage profiles"
@@ -476,7 +508,7 @@ msgstr "Guardar"
 
 #: ../src/stacks/profiles.py:28
 msgid "An error ocurred"
-msgstr "Oucrrió un error"
+msgstr "Ocurrió un error"
 
 #: ../src/stacks/screenreader.py:17
 msgid "Orca settings"

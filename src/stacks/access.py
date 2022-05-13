@@ -144,8 +144,7 @@ class access(confStack):
 						chk=QCheckBox(desc)
 						chk.stateChanged.connect(self._updateButtons)
 						self.widgets.update({name:chk})
-						self.box.addWidget(chk,row,col)
-						col+=1
+						self.box.addWidget(chk,row,0)
 						(mainHk,hkData,hkSetting,hkSection)=self.accesshelper.getHotkey(name)
 						if mainHk=="none":
 							mainHk=""
@@ -155,16 +154,13 @@ class access(confStack):
 							mainHk=name
 						self.widgets.update({name:btn})
 						self.widgetsText.update({btn:{'mainHk':mainHk,'hkData':hkData,'hkSetting':hkSetting,'hkSection':hkSection}})
-						self.box.addWidget(btn,row,col,Qt.Alignment(1))
+						self.box.addWidget(btn,row,1)
 						btn.setEnabled(False)
-						col+=1
-						if col==2:
-							row+=1
-							col=0
 						if name.replace("btn_","").upper() not in ["SYSTEMBELL","VISIBLEBELL","SNAPHELPERENABLED"]:
 							self.chkbtn[chk]=btn
 						else:
 							btn.hide()
+						row+=1
 					lbl=None
 					for setting in zoomOptions:
 						if lbl==None:

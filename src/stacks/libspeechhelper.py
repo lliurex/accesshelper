@@ -108,7 +108,7 @@ class speechhelper():
 		txtFile=os.path.join(self.txtDir,fileName)
 		if self.dbg:
 			with open(txtFile,"w") as f:
-				f.write(txt)
+				f.write("\"{}\"".format(txt))
 		mp3=self.festival.textToMp3File(txt)
 		mp3File="{}.mp3".format(currentDate.strftime("%Y%m%d_%H%M%S"))
 		shutil.move(mp3,os.path.join(self.mp3Dir,mp3File))

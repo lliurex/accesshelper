@@ -3,7 +3,7 @@ import sys
 import os
 from PySide2.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QGridLayout,QComboBox,QTableWidget,QHeaderView
 from PySide2 import QtGui
-from PySide2.QtCore import Qt,QSignalMapper
+from PySide2.QtCore import Qt,QSignalMapper,QSize
 from appconfig.appConfigStack import appConfigStack as confStack
 import gettext
 _ = gettext.gettext
@@ -26,8 +26,9 @@ i18n={
 	"INTERNALTTS":_("Use internal TTS"),
 	"VLCTTS":_("Use VLC player"),
 	"FILE":_("File"),
-	"RECORD":_("Recording"),
-	"TEXT":_("Text File")
+	"RECORD":_("Mp3"),
+	"SAVE":_("Save"),
+	"TEXT":_("Text")
 	}
 
 class screenreader(confStack):
@@ -95,8 +96,9 @@ class screenreader(confStack):
 				widget.clear()
 			elif isinstance(widget,QTableWidget):
 				widget.setRowCount(0)
-				widget.setColumnCount(3)
-				widget.setHorizontalHeaderLabels([i18n.get("FILE"),i18n.get("RECORD"),i18n.get("TEXT")])
+				widget.setColumnCount(4)
+				widget.setHorizontalHeaderLabels([i18n.get("FILE"),i18n.get("RECORD"),i18n.get("TEXT"),i18n.get("SAVE")])
+				widget.setAlternatingRowColors(True)
 			if desc=="voice":
 				self._debug("Getting installed voices")
 				for i in self.accesshelper.getFestivalVoices():
@@ -129,14 +131,21 @@ class screenreader(confStack):
 	def _populateFileList(self,widget):
 		sigmap_run=QSignalMapper(self)
 		sigmap_run.mapped[QString].connect(self._processTtsFile)
+		iconSize=QSize(64,64)
+		btnSize=QSize(128,72)
 		mp3Icon=QtGui.QIcon.fromTheme("media-playback-start")
 		txtIcon=QtGui.QIcon.fromTheme("document-open")
+		saveIcon=QtGui.QIcon.fromTheme("document-save")
 		self._debug("Populating file list")
 		fileDict=self.accesshelper.getTtsFiles()
 		for key,files in fileDict.items():
 			row=widget.rowCount()
 			widget.insertRow(row)
-			lbl=QLabel(key)
+			dateKey=key.split("_")[0]
+			dateKey=dateKey[0:4]+"/"+dateKey[4:6]+"/"+dateKey[6:8]
+			timeKey=key.split("_")[1]
+			timeKey=timeKey[0:2]+":"+timeKey[2:4]+":"+timeKey[4:6]
+			lbl=QLabel("{}_{}".format(dateKey,timeKey))
 			widget.setCellWidget(row,0,lbl)
 			btn=""
 			if files.get("mp3",None):
@@ -145,12 +154,24 @@ class screenreader(confStack):
 				relFile=key
 				sigmap_run.setMapping(btn,"{}.mp3".format(key))
 				btn.clicked.connect(sigmap_run.map)
+				btn.setIconSize(iconSize)
+				btn.setFixedSize(btnSize)
 			if files.get("txt",None):
 				btn=QPushButton(txtIcon,"")
 				widget.setCellWidget(row,2,btn)
 				sigmap_run.setMapping(btn,"{}.txt".format(key))
 				btn.clicked.connect(sigmap_run.map)
+				btn.setIconSize(iconSize)
+				btn.setFixedSize(btnSize)
+			if btn:
+				btn=QPushButton(saveIcon,"")
+				widget.setCellWidget(row,3,btn)
+				sigmap_run.setMapping(btn,"{}".format(key))
+				btn.clicked.connect(sigmap_run.map)
+				btn.setIconSize(iconSize)
+				btn.setFixedSize(btnSize)
 		widget.resizeColumnsToContents()
+		widget.resizeRowsToContents()
 		widget.horizontalHeader().setSectionResizeMode(0,QHeaderView.Stretch)
 	#def _populateFileList
 

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-20 17:13+0200\n"
-"PO-Revision-Date: 2022-04-20 17:17+0200\n"
+"POT-Creation-Date: 2022-05-12 11:45+0200\n"
+"PO-Revision-Date: 2022-05-12 11:49+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ca\n"
@@ -18,27 +18,27 @@ msgstr ""
 "X-Generator: Poedit 2.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../src/accessdock.py:128
+#: ../src/accessdock.py:145
 msgid "Hide"
 msgstr "Amaga"
 
-#: ../src/accessdock.py:132
+#: ../src/accessdock.py:149
 msgid "Configure"
 msgstr "Configuració"
 
-#: ../src/accessdock.py:136
+#: ../src/accessdock.py:153
 msgid "Read screen"
 msgstr "Llegir"
 
-#: ../src/accessdock.py:140
+#: ../src/accessdock.py:157
 msgid "Pointer"
 msgstr "Punter"
 
-#: ../src/accessdock.py:144
+#: ../src/accessdock.py:161
 msgid "Filter"
 msgstr "Filtre"
 
-#: ../src/accessdock.py:148
+#: ../src/accessdock.py:165
 msgid "Keyboard"
 msgstr "Teclat"
 
@@ -342,11 +342,11 @@ msgstr "Tamany de font"
 msgid "Font family"
 msgstr "Familia"
 
-#: ../src/stacks/fonts.py:23 ../src/stacks/lookandfeel.py:26
+#: ../src/stacks/fonts.py:23 ../src/stacks/lookandfeel.py:28
 msgid "Cursor theme"
 msgstr "Tema per al punter"
 
-#: ../src/stacks/fonts.py:24 ../src/stacks/lookandfeel.py:27
+#: ../src/stacks/fonts.py:24 ../src/stacks/lookandfeel.py:29
 msgid "Cursor size"
 msgstr "Tamany de punter"
 
@@ -423,12 +423,44 @@ msgid "Desktop theme"
 msgstr "Tema de l'escriptori"
 
 #: ../src/stacks/lookandfeel.py:24
-msgid "Colour scheme"
+msgid "Color scheme"
 msgstr "Esquema de colors"
 
 #: ../src/stacks/lookandfeel.py:25
-msgid "Theme colours"
+msgid "Theme colors"
 msgstr "Colors del tema"
+
+#: ../src/stacks/lookandfeel.py:26
+msgid "Background color"
+msgstr "Color de l'escriptori"
+
+#: ../src/stacks/lookandfeel.py:27
+msgid "Current background"
+msgstr "Imatge actual"
+
+#: ../src/stacks/lookandfeel.py:30
+msgid "White"
+msgstr "Blanc"
+
+#: ../src/stacks/lookandfeel.py:31
+msgid "Red"
+msgstr "Roig"
+
+#: ../src/stacks/lookandfeel.py:32
+msgid "Blue"
+msgstr "Blau"
+
+#: ../src/stacks/lookandfeel.py:33
+msgid "Green"
+msgstr "Verd"
+
+#: ../src/stacks/lookandfeel.py:34
+msgid "Yellow"
+msgstr "Groc"
+
+#: ../src/stacks/lookandfeel.py:35
+msgid "Black"
+msgstr "Negre"
 
 #: ../src/stacks/profiles.py:16
 msgid "Manage profiles"

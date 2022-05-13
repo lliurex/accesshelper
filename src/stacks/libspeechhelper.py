@@ -103,19 +103,6 @@ class libspeechhelper():
 	#def _getImgForOCR
 
 	def _invokeReader(self,txt,player):
-		spell=SpellChecker(language='es')
-		correctedTxt=[]
-		for word in txt.split():
-			word=word.replace("\"","")
-			if word.capitalize().istitle():
-				correctedTxt.append(spell.correction(word))
-			else:
-				onlytext = ''.join(filter(str.isalnum, word)) 
-				if onlytext.capitalize().istitle():
-					correctedTxt.append(spell.correction(onlytext))
-				elif self.dbg:
-					self._debug("Exclude: {}".format(word))
-		txt=" ".join(correctedTxt)
 		currentDate=datetime.now()
 		fileName="{}.txt".format(currentDate.strftime("%Y%m%d_%H%M%S"))
 		txtFile=os.path.join(self.txtDir,fileName)
@@ -135,6 +122,23 @@ class libspeechhelper():
 			self.festival.sayFile(txtFile)
 	#def _invokeReader
 
+	def _spellCheck(self,txt):
+		spell=SpellChecker(language='es')
+		correctedTxt=[]
+		for word in txt.split():
+			word=word.replace("\"","")
+			if word.capitalize().istitle():
+				correctedTxt.append(spell.correction(word))
+			else:
+				onlytext = ''.join(filter(str.isalnum, word)) 
+				if onlytext.capitalize().istitle():
+					correctedTxt.append(spell.correction(onlytext))
+				elif self.dbg:
+					self._debug("Exclude: {}".format(word))
+		txt=" ".join(correctedTxt)
+		return(txt)
+	#def _spellCheck
+
 	def _readImg(self,imgPIL):
 		txt=""
 		imgPIL=imgPIL.convert('L').resize([5 * _ for _ in imgPIL.size], Image.BICUBIC)
@@ -149,8 +153,9 @@ class libspeechhelper():
 			api.SetImage(imgPIL)
 			api.Recognize()
 			txt=api.GetUTF8Text()
-			print(api.AllWordConfidences())
+			self._debug((api.AllWordConfidences()))
 		#txt=tesserocr.image_to_text(imgPIL,lang="spa")
+		txt=self._spellCheck(txt)
 		return(txt)
 
 	def _processImg(self,img):

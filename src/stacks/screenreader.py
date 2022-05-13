@@ -143,9 +143,7 @@ class screenreader(confStack):
 				btn=QPushButton(mp3Icon,"")
 				widget.setCellWidget(row,1,btn)
 				relFile=key
-				if files.get("txt",None):
-					relFile=files.get("txt")
-				sigmap_run.setMapping(btn,"{}.mp3".format(relFile))
+				sigmap_run.setMapping(btn,"{}.mp3".format(key))
 				btn.clicked.connect(sigmap_run.map)
 			if files.get("txt",None):
 				btn=QPushButton(txtIcon,"")
@@ -160,12 +158,7 @@ class screenreader(confStack):
 		confDir=os.path.join(os.environ.get('HOME','/tmp'),".config/accesshelper/tts")
 		self._debug("Opening {}".format(ttsFile))
 		if ttsFile.endswith(".mp3"):
-			partialPath="mp3"
-			#Use TTS engine if translation exists
-			if ttsFile.endswith(".txt.mp3"):
-				partialPath="txt"
-				ttsFile=ttsFile.replace(".txt.mp3",".txt")
-			self.speech.readFile(os.path.join(confDir,partialPath,ttsFile))
+			self.speech.readFile(os.path.join(confDir,"mp3",ttsFile))
 		elif ttsFile.endswith(".txt"):
 			subprocess.run(["scite",os.path.join(confDir,"txt",ttsFile)])
 	#def _processTtsFile

@@ -99,6 +99,8 @@ class screenreader(confStack):
 				widget.setHorizontalHeaderLabels([i18n.get("FILE"),i18n.get("RECORD"),i18n.get("TEXT")])
 			if key=="voice":
 				self._debug("Getting installed voices")
+				for i in self.accesshelper.getFestivalVoices():
+					widget.addItem(i)
 			if key=="speed":
 				self._debug("Setting speed values")
 				i=0

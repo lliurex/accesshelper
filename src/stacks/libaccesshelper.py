@@ -481,6 +481,15 @@ class accesshelper():
 		return(ordDict)
 	#def getTtsFiles
 
+	def getFestivalVoices(self):
+		voices=[]
+		spanishFestival="/usr/share/festival/voices/spanish"
+		if os.path.isdir(spanishFestival):
+			for i in os.listdir(spanishFestival):
+				voices.append(i)
+		return(voices)
+	#def getFestivalVoices
+
 	def applyChanges(self):
 		cmd=["qdbus","org.kde.KWin","/KWin","org.kde.KWin.reconfigure"]
 		subprocess.run(cmd)

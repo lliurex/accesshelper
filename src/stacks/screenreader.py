@@ -181,7 +181,7 @@ class screenreader(confStack):
 		if ttsFile.endswith(".mp3"):
 			self.speech.readFile(os.path.join(confDir,"mp3",ttsFile))
 		elif ttsFile.endswith(".txt"):
-			subprocess.run(["scite",os.path.join(confDir,"txt",ttsFile)])
+			subprocess.run(["kwrite",os.path.join(confDir,"txt",ttsFile)])
 	#def _processTtsFile
 
 	def _updateConfig(self,key):

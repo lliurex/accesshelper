@@ -3,6 +3,7 @@ import subprocess,os
 import tarfile
 import tempfile
 import shutil
+from collections import OrderedDict
 from PySide2.QtGui import QIcon,QPixmap
 
 class functionHelperClass():
@@ -30,6 +31,7 @@ class functionHelperClass():
 	def _debug(self,msg):
 		if self.dbg:
 			print("libhelper: {}".format(msg))
+	#def _debug
 
 	def cssStyle(self):
 		style="""
@@ -41,6 +43,7 @@ class functionHelperClass():
 				}
 		"""
 		return(style)
+	#def cssStyle
 
 	def getPlasmaConfig(self,wrkFile='',sourceFolder=''):
 		dictValues={}
@@ -59,6 +62,7 @@ class functionHelperClass():
 					settingData.append((key,value))
 				data[kfile].update({group:settingData})
 		return (data)
+	#def getPlasmaConfig
 
 	def getKdeConfigSetting(self,group,key,kfile="kaccessrc",sourceFolder=''):
 		if sourceFolder=='':
@@ -73,6 +77,7 @@ class functionHelperClass():
 				print(e)
 		#_debug("Read value: {}".format(value))
 		return(value)
+	#def getKdeConfigSetting
 
 	def getHotkey(self,setting):
 		hk=""
@@ -110,6 +115,7 @@ class functionHelperClass():
 		self._debug("{0} {1} {2} {3}".format(hk,data,name,hksection))
 		self._debug("-------------------")
 		return(hk,data,name,hksection)
+	#def getHotkey
 
 	def setKdeConfigSetting(self,group,key,value,kfile="kaccessrc"):
 		#kfile=kaccessrc
@@ -128,6 +134,7 @@ class functionHelperClass():
 			print(e)
 		#_debug("Write value: {}".format(ret))
 		return(ret)
+	#def setKdeConfigSetting
 
 	def setPlasmaConfig(self,config,wrkFile=''):
 		self._debug("Config: {}".format(config))
@@ -450,6 +457,29 @@ class accesshelper():
 					cursorSize=int(size)
 		return(cursorSize)
 	#def getPointerSize
+
+	def getTtsFiles(self):
+		ttsDir=os.path.join(os.environ.get('HOME'),".config/accesshelper/tts")
+		allDict={}
+		if os.path.isdir(ttsDir)==True:
+			mp3Dir=os.path.join(ttsDir,"mp3")
+			txtDir=os.path.join(ttsDir,"txt")
+			txtDict={}
+			mp3Dict={}
+			for f in os.listdir(mp3Dir):
+				mp3Dict[f.replace(".mp3","")]=f
+			for f in os.listdir(txtDir):
+				txtDict[f.replace(".txt","")]=f
+			for key,item in mp3Dict.items():
+				allDict[key]={"mp3":item}
+			for key,item in txtDict.items():
+				if allDict.get(key):
+					allDict[key].update({"txt":item})
+				else:
+					allDict[key]={"txt":item}
+		ordDict=OrderedDict(sorted(allDict.items(),reverse=True))
+		return(ordDict)
+	#def getTtsFiles
 
 	def applyChanges(self):
 		cmd=["qdbus","org.kde.KWin","/KWin","org.kde.KWin.reconfigure"]

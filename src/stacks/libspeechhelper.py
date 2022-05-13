@@ -13,7 +13,7 @@ from PIL import Image
 import subprocess
 from datetime import datetime
 
-class libspeechhelper():
+class speechhelper():
 	def __init__(self):
 		self.dbg=True
 		self.confDir=os.path.join(os.environ.get('HOME','/tmp'),".config/accesshelper")
@@ -115,12 +115,18 @@ class libspeechhelper():
 		mp3=os.path.join(self.mp3Dir,mp3File)
 		player=False
 		if player==True:
-			self._debug("Playing {} with vlc".format(mp3))
-			subprocess.run(["vlc",mp3])
+			self.readFile(mp3)
 		else:
-			self._debug("Playing {} with TTS".format(txtFile))
-			self.festival.sayFile(txtFile)
+			self.readFile(txtFile)
 	#def _invokeReader
+
+	def readFile(self,fileName):
+		if fileName.endswith(".mp3"):
+			self._debug("Playing {} with vlc".format(fileName))
+			subprocess.run(["vlc",fileName])
+		elif fileName.endswith(".txt"):
+			self._debug("Playing {} with TTS".format(fileName))
+			self.festival.sayFile(fileName)
 
 	def _spellCheck(self,txt):
 		spell=SpellChecker(language='es')
@@ -162,7 +168,7 @@ class libspeechhelper():
 		outImg="{}".format(img)
 		image=cv2.imread(img,flags=cv2.IMREAD_COLOR)
 		h, w, c = image.shape
-		print(f'Image shape: {h}H x {w}W x {c}C')
+		self._debug(f'Image shape: {h}H x {w}W x {c}C')
 
 		image=self.cvGrayscale(image)
 	#	image = image[:, :, 0]
@@ -173,7 +179,7 @@ class libspeechhelper():
 #		image=self.opening(image)
 #		image=self.smooth(image)
 #		image=self.cvCanny(image)
-		print("Saving processed img as {}".format(outImg))
+		self._debug("Saving processed img as {}".format(outImg))
 		cv2.imwrite(outImg,image)
 		return(outImg)
 

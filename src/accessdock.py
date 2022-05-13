@@ -30,7 +30,7 @@ class accessdock(QWidget):
 		self.fastSettings={"color":"color","font_size":"","pointer_size":"","read":"","osk":"","config":"","hide":""}
 		self.widgets={}
 		self.accesshelper=libaccesshelper.accesshelper()
-		self.speech=speech.libspeechhelper()
+		self.speech=speech.speechhelper()
 		self.coordx=0
 		self.coordy=0
 		self.rate=0

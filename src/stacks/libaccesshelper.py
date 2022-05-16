@@ -467,9 +467,11 @@ class accesshelper():
 			txtDict={}
 			mp3Dict={}
 			for f in os.listdir(mp3Dir):
-				mp3Dict[f.replace(".mp3","")]=f
+				if f.endswith(".mp3") and "_" in f:
+					mp3Dict[f.replace(".mp3","")]=f
 			for f in os.listdir(txtDir):
-				txtDict[f.replace(".txt","")]=f
+				if f.endswith(".txt") and "_" in f:
+					txtDict[f.replace(".txt","")]=f
 			for key,item in mp3Dict.items():
 				allDict[key]={"mp3":item}
 			for key,item in txtDict.items():

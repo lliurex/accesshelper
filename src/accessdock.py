@@ -3,8 +3,6 @@ import os,sys,io,psutil
 from PySide2.QtWidgets import QApplication,QMessageBox,QGridLayout,QLabel,QToolButton,QWidget,QFrame,QDialog,QPushButton
 from PySide2.QtCore import Qt,QSignalMapper,QByteArray,QSize,QBuffer
 from PySide2.QtGui import QIcon,QPixmap,QCursor
-import dbus
-import dbus.mainloop.glib
 from stacks import libaccesshelper
 from stacks import libspeechhelper as speech
 from appconfig.appConfigStack import appConfigStack as confStack

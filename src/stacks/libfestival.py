@@ -12,8 +12,12 @@ stretch=float(sys.argv[2])
 voice=sys.argv[3]
 currentDate=sys.argv[4]
 
-p=subprocess.Popen(["festival"],stdout=subprocess.PIPE,stdin=subprocess.PIPE,stderr=subprocess.PIPE)
-p.stdin.write("(voice_{})\n".format(voice).encode("utf8"))
+p=subprocess.Popen(["festival","--pipe"],stdout=subprocess.PIPE,stdin=subprocess.PIPE,stderr=subprocess.PIPE)
+print("Setting voice {}".format(voice))
+if voice.startswith("voice_")==False:
+	voice="voice_{}".format(voice)
+p.stdin.write("({})\n".format(voice).encode("utf8"))
+print("Setting stretch {}".format(stretch))
 p.stdin.write("(Parameter.set 'Duration_Stretch {})\n".format(stretch).encode("utf8"))
 p.stdin.write("(set! utt (Utterance Text {}))\n".format(txt).encode("iso8859-1"))
 p.stdin.write("(utt.synth utt)\n".encode("utf8"))

@@ -130,9 +130,10 @@ class speechhelper():
 		print(txt)
 		print("***************")
 		#self.tts.setStretchFactor(self.stretch)
-		tts=Process(target=self.readFile,args=(txtFile,currentDate,))
-		tts.start()
-		tts.join()
+		self.readFile(txtFile,currentDate)
+	#	tts=Process(target=self.readFile,args=(txtFile,currentDate,))
+	#	tts.start()
+	#	tts.join()
 	#def _invokeReader
 
 	def readFile(self,txt,currentDate):

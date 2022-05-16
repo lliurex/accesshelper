@@ -1,10 +1,11 @@
-accesshelper (0.7.3) focal; urgency=medium
+accesshelper (0.7.3.1) focal; urgency=medium
 
   * TTS uses festival engine
   * WIP on festival settings
   * Manager for text/sounds generated from TTS engine
   * Add setting for background plain color
   * Play/Stop recordings from reader
+  * Preliminar support for catalan voices
 
  -- Juanma1980 <juanma1980@gmail.com>  Fri, 13 May 2022 17:02:45 +0200
 

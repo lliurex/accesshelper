@@ -139,6 +139,7 @@ class screenreader(confStack):
 		self._debug("Populating file list")
 		fileDict=self.accesshelper.getTtsFiles()
 		for key,files in fileDict.items():
+			print("Read {} {}".format(key,files))
 			row=widget.rowCount()
 			widget.insertRow(row)
 			dateKey=key.split("_")[0]
@@ -179,8 +180,10 @@ class screenreader(confStack):
 		confDir=os.path.join(os.environ.get('HOME','/tmp'),".config/accesshelper/tts")
 		self._debug("Opening {}".format(ttsFile))
 		if ttsFile.endswith(".mp3"):
-			self.speech.readFile(os.path.join(confDir,"mp3",ttsFile))
+			currentDate=ttsFile.replace(".mp3","")
+			self.speech.readFile(os.path.join(confDir,"mp3",ttsFile),currentDate)
 		elif ttsFile.endswith(".txt"):
+			currentDate=ttsFile.replace(".txt","")
 			subprocess.run(["kwrite",os.path.join(confDir,"txt",ttsFile)])
 	#def _processTtsFile
 

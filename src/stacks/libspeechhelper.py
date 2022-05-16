@@ -1,7 +1,5 @@
 #!/usr/bin/python3
 ### This library implements atspi communications
-#import pyatspi
-#import festival
 import os,shutil
 from spellchecker import SpellChecker
 from PySide2.QtGui import QClipboard
@@ -11,11 +9,11 @@ import tesserocr
 from PIL import Image
 import subprocess
 from datetime import datetime
-from multiprocessing import Process
 
 class speechhelper():
 	def __init__(self):
 		self.dbg=True
+		self.libfestival="/usr/share/accesshelper/stacks/libfestival.py"
 		self.confDir=os.path.join(os.environ.get('HOME','/tmp'),".config/accesshelper")
 		self.txtDir=os.path.join(self.confDir,"tts/txt")
 		self.mp3Dir=os.path.join(self.confDir,"tts/mp3")
@@ -23,13 +21,12 @@ class speechhelper():
 			os.makedirs(self.txtDir)
 		if os.path.isdir(self.mp3Dir)==False:
 			os.makedirs(self.mp3Dir)
-		#self.tts=festival
 		self.clipboard=QClipboard()
 		self.pitch=50
 		self.stretch=0
 		self.setRate(1)
-		#eSpeak min speed=80 max speed=390
 		self.voice="JuntaDeAndalucia_es_pa_diphone"
+		self.player="tts"
 	#def __init__
 
 	def _debug(self,msg):
@@ -53,11 +50,15 @@ class speechhelper():
 			self.voice="voice_{}".format(self.voice)
 	#def setVoice
 
+	def setPlayer(self,player):
+		if player=="vlc":
+			self.player="vlc"
+		else:
+			self.player="tts"
+	#def setVoice
+
 	def readScreen(self,*args):
 		txt=self._getClipboardText()
-		print("???????????????????")
-		print(txt)
-		print("???????????????????")
 		if not txt:
 			img=self._getImgForOCR()
 			if img:
@@ -77,7 +78,7 @@ class speechhelper():
 				txt=self._readImg(imgPIL)
 				self.clipboard.clear()
 		if txt:
-			self._invokeReader(txt,player=True)
+			self._invokeReader(txt)
 			self.clipboard.clear()
 			self.clipboard.clear(self.clipboard.Selection)
 	#def _readScreen
@@ -118,7 +119,7 @@ class speechhelper():
 		return(outImg)
 	#def _getImgForOCR
 
-	def _invokeReader(self,txt,player):
+	def _invokeReader(self,txt):
 		currentDate=datetime.now()
 		fileName="{}.txt".format(currentDate.strftime("%Y%m%d_%H%M%S"))
 		txtFile=os.path.join(self.txtDir,fileName)
@@ -126,35 +127,13 @@ class speechhelper():
 			with open(txtFile,"w") as f:
 				f.write("\"{}\"".format(txt))
 		self._debug("Generating with Strech {}".format(self.stretch))
-		print("***************")
-		print(txt)
-		print("***************")
-		#self.tts.setStretchFactor(self.stretch)
 		self.readFile(txtFile,currentDate)
-	#	tts=Process(target=self.readFile,args=(txtFile,currentDate,))
-	#	tts.start()
-	#	tts.join()
 	#def _invokeReader
 
 	def readFile(self,txt,currentDate):
-		print("***************")
-		print(txt)
-		print("***************")
-		#festival.setStretchFactor(self.stretch)
-		subprocess.run(["python3","/home/juanma/git/accesshelper/src/stacks/libfestival.py",txt,str(self.stretch),self.voice,currentDate.strftime("%Y%m%d_%H%M%S")])
-#		import festival
-#		festival.setStretchFactor(0.4)
-#		mp3=festival.textToMp3File(txt)
-#		mp3File="{}.mp3".format(currentDate.strftime("%Y%m%d_%H%M%S"))
-#		shutil.move(mp3,os.path.join(self.mp3Dir,mp3File))
-#		mp3=os.path.join(self.mp3Dir,mp3File)
-#		player=False
-#		if player==True:
-#			self._debug("Playing {} with vlc".format(mp3))
-#			subprocess.run(["vlc",mp3])
-#		else:
-#			self._debug("Playing {} with TTS Strech {}".format(mp3,self.stretch))
-#			subprocess.run(["play",mp3])
+		if isinstance(currentDate,str)==False:
+			currentDate.strftime("%Y%m%d_%H%M%S")
+		subprocess.run(["python3",self.libfestival,txt,str(self.stretch),self.voice,currentDate,self.player])
 
 	def _spellCheck(self,txt):
 		spell=SpellChecker(language='es')

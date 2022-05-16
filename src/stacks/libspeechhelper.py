@@ -88,7 +88,7 @@ class speechhelper():
 		txt=txt.strip()
 		if not txt:
 			txt=self.clipboard.text()
-		self._debug("Read selection: {}".format(txt))
+		#self._debug("Read selection: {}".format(txt))
 		return(txt)
 	#def _getClipboardText
 

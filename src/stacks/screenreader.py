@@ -1,14 +1,15 @@
 #!/usr/bin/python3
 import sys
-import os
+import os,signal
 from PySide2.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QGridLayout,QComboBox,QTableWidget,QHeaderView
 from PySide2 import QtGui
-from PySide2.QtCore import Qt,QSignalMapper,QSize
+from PySide2.QtCore import Qt,QSignalMapper,QSize,QThread,QObject,Signal
 from appconfig.appConfigStack import appConfigStack as confStack
 import gettext
 _ = gettext.gettext
 import json
 import subprocess
+import multiprocessing
 from stacks import libaccesshelper
 from stacks import libspeechhelper
 QString=type("")
@@ -31,6 +32,29 @@ i18n={
 	"TEXT":_("Text")
 	}
 
+class playSignal(QObject):
+	sig = Signal(str)
+
+class playFile(QThread):
+	def __init__(self,ttsFile,parent=None):
+		QThread.__init__(self, parent)
+		self.ttsFile=ttsFile
+		self.exiting = False
+		self.pid=None
+		self.signal = playSignal()
+		self.signalStart = playSignal()
+
+	def run(self):
+		self.pid=subprocess.Popen(["play",self.ttsFile])
+		self.exiting=True
+		self.signalStart.sig.emit(self.pid.pid)
+
+	def stopPlay(self):
+		if self.pid:
+			print("KILL!!")
+			os.kill(self.pid.pid,signal.SIGKILL)
+		self.signal.sig.emit('OK')
+
 class screenreader(confStack):
 	def __init_stack__(self):
 		self.dbg=False
@@ -46,6 +70,8 @@ class screenreader(confStack):
 		self.changed=[]
 		self.level='user'
 		self.config={}
+		self.mp3BtnDict={}
+		self.playing=[]
 		self.optionChanged=[]
 	#def __init__
 
@@ -139,7 +165,6 @@ class screenreader(confStack):
 		self._debug("Populating file list")
 		fileDict=self.accesshelper.getTtsFiles()
 		for key,files in fileDict.items():
-			print("Read {} {}".format(key,files))
 			row=widget.rowCount()
 			widget.insertRow(row)
 			dateKey=key.split("_")[0]
@@ -154,6 +179,7 @@ class screenreader(confStack):
 				widget.setCellWidget(row,1,btn)
 				relFile=key
 				sigmap_run.setMapping(btn,"{}.mp3".format(key))
+				self.mp3BtnDict.update({"{}.mp3".format(key):btn})
 				btn.clicked.connect(sigmap_run.map)
 				btn.setIconSize(iconSize)
 				btn.setFixedSize(btnSize)
@@ -180,12 +206,32 @@ class screenreader(confStack):
 		confDir=os.path.join(os.environ.get('HOME','/tmp'),".config/accesshelper/tts")
 		self._debug("Opening {}".format(ttsFile))
 		if ttsFile.endswith(".mp3"):
-			currentDate=ttsFile.replace(".mp3","")
-			self.speech.readFile(os.path.join(confDir,"mp3",ttsFile),currentDate)
+			btn=self.mp3BtnDict.get(ttsFile)
+			self._playFile(os.path.join(confDir,"mp3",ttsFile),btn)
 		elif ttsFile.endswith(".txt"):
-			currentDate=ttsFile.replace(".txt","")
 			subprocess.run(["kwrite",os.path.join(confDir,"txt",ttsFile)])
 	#def _processTtsFile
+
+	def _playFile(self,ttsFile,btn):
+		if btn in self.playing:
+			#self.playThread.stopPlay()
+			self.playThread.stopPlay()
+			self.playing.pop(self.playing.index(btn))
+		elif len(self.playing)==0:
+			self.playing.append(btn)
+			self.playThread=playFile(ttsFile)
+			self.playThread.signal.sig.connect(lambda:(self._stopPlay(btn)))
+			self.playThread.signalStart.sig.connect(self._startPlay)
+			mp3Icon=QtGui.QIcon.fromTheme("media-playback-stop")
+			btn.setIcon(mp3Icon)
+			self.playThread.start()
+
+	def _startPlay(self,pid):
+		print("Playing with pid: {}".format(pid))
+
+	def _stopPlay(self,btn):
+		mp3Icon=QtGui.QIcon.fromTheme("media-playback-start")
+		btn.setIcon(mp3Icon)
 
 	def _updateConfig(self,key):
 		pass

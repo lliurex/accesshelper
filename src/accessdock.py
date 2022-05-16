@@ -77,7 +77,9 @@ class accessdock(QWidget):
 			self.pitch=config.get("pitch","50")
 			speed=speed.replace("x","")
 			#eSpeak min speed=80 max speed=390
-			self.rate=int(80+((float(speed)*310)/3))
+			self.rate=self.speech.setRate(speed)
+			self.voice=config.get("voice","JuntaDeAndalucia_es_pa_diphone")
+			self.speech.setVoice(self.voice)
 			self._setKdeHotkey(hotkey)
 	#def _loadConfig
 

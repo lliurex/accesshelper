@@ -98,6 +98,7 @@ class screenreader(confStack):
 		lblPitch=QLabel(i18n.get("PITCH"))
 		self.box.addWidget(lblPitch,2,0,1,1)
 		cmbPitch=QComboBox()
+		cmbPitch.setEnabled(False)
 		self.widgets.update({cmbPitch:"pitch"})
 		self.box.addWidget(cmbPitch,2,1,1,1)
 		lblSynt=QLabel(i18n.get("SYNT"))

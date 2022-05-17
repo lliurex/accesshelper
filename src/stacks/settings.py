@@ -104,27 +104,27 @@ class settings(confStack):
 		btn_dockHk.clicked.connect(lambda: self._grab_alt_keys(btn_dockHk))
 		box.addWidget(btn_dockHk,4,1,1,1,Qt.AlignTop)
 		self.widgets.update({btn_dockHk:'dockHk'})
-		lbl_speed=QLabel(i18n.get("VOICESPEED"))
-		box.addWidget(lbl_speed,5,0,1,1,Qt.AlignTop)
-		cmb_speed=QComboBox()
-		i=0
-		while i<=3:
-			if isinstance(i,float):
-				if i.is_integer():
-					i=int(i)
-			cmb_speed.addItem("{}x".format(str(i)))
-			i+=0.25
-		box.addWidget(cmb_speed,5,1,1,1,Qt.AlignTop)
-		self.widgets.update({cmb_speed:'speed'})
-		lbl_pitch=QLabel(i18n.get("VOICEPITCH"))
-		box.addWidget(lbl_pitch,6,0,1,1,Qt.AlignTop)
-		cmb_pitch=QComboBox()
-		for i in range (1,101):
-			cmb_pitch.addItem(str(i))
-		box.addWidget(cmb_pitch,6,1,1,1,Qt.AlignTop)
-		self.widgets.update({cmb_pitch:'pitch'})
+	#	lbl_speed=QLabel(i18n.get("VOICESPEED"))
+	#	box.addWidget(lbl_speed,5,0,1,1,Qt.AlignTop)
+	#	cmb_speed=QComboBox()
+	#	i=0
+	#	while i<=3:
+	#		if isinstance(i,float):
+	#			if i.is_integer():
+	#				i=int(i)
+	#		cmb_speed.addItem("{}x".format(str(i)))
+	#		i+=0.25
+	#	box.addWidget(cmb_speed,5,1,1,1,Qt.AlignTop)
+	#	self.widgets.update({cmb_speed:'speed'})
+	#	lbl_pitch=QLabel(i18n.get("VOICEPITCH"))
+	#	box.addWidget(lbl_pitch,6,0,1,1,Qt.AlignTop)
+	#	cmb_pitch=QComboBox()
+	#	for i in range (1,101):
+	#		cmb_pitch.addItem(str(i))
+	#	box.addWidget(cmb_pitch,6,1,1,1,Qt.AlignTop)
+	#	self.widgets.update({cmb_pitch:'pitch'})
 		box.setRowStretch(0,1)
-		for i in range (1,6):
+		for i in range (1,4):
 			box.setRowStretch(i,0)
 		box.setRowStretch(i+1,2)
 

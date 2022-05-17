@@ -51,7 +51,7 @@ class playFile(QThread):
 	#def run
 
 	def stopPlay(self):
-		if self.start==False:
+		if self.start==True:
 			self.player.stop()
 			self.signal.sig.emit('OK')
 		self.start = False
@@ -227,7 +227,7 @@ class screenreader(confStack):
 			self.playThread.signal.sig.connect(lambda:(self._stopPlay(btn)))
 			mp3Icon=QtGui.QIcon.fromTheme("media-playback-stop")
 			btn.setIcon(mp3Icon)
-			self.playThread.start()
+			self.playThread.run()
 
 	def _startPlay(self,pid):
 		print("Playing with pid: {}".format(pid))

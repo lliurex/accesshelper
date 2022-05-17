@@ -152,7 +152,12 @@ class lookandfeel(confStack):
 									cmb.addItem(themeDesc)
 								self.cursorDesc[themeDesc]=cursorTheme
 							elif cmbDesc=="background":
-								cmb.addItem(themeDesc)
+								color=theme.split("(")[1].replace("(","").replace(")","")
+								px=QtGui.QPixmap(64,64)
+								if color:
+									px.fill(QtGui.QColor(color))
+								icon=QtGui.QIcon(px)
+								cmb.addItem(icon,themeDesc)
 							else:
 								cmb.addItem(themeDesc)
 						if "(" in theme and ("plasma" in theme.lower() or "actual" in theme.lower()):
@@ -187,10 +192,11 @@ class lookandfeel(confStack):
 	#def updateCursorSizes
 
 	def _fillBackgroundCmb(self):
-		colors=[i18n.get("CURRENTBKG","Current background")]
-		for i in (i18n.get("BLACK","black"),i18n.get("RED","red"),i18n.get("BLUE","blue"),i18n.get("GREEN","green"),\
-					i18n.get("YELLOW","yellow"),i18n.get("WHITE","white")):
-			colors.append(i)
+		colors=["{0} ({1})".format(i18n.get("CURRENTBKG","Current background"),"white")]
+		colorList=["black","red","blue","green","yellow","white"]
+		for color in colorList:
+			desc=i18n.get(color.upper(),color)
+			colors.append("{0} ({1})".format(desc,color))
 		return(colors)
 		
 	def _getPointerImage(self,theme):
@@ -220,6 +226,14 @@ class lookandfeel(confStack):
 					cursorTheme=theme
 				if cmbDesc=="cursorSize":
 					size=cmb.currentText()
+				if cmbDesc=="background":
+					idx=cmb.currentIndex()
+					icon=cmb.itemIcon(idx)
+					px=icon.pixmap(64,64)
+					img=px.toImage()
+					pixel=img.pixel(1,1)
+					color=QtGui.QColor(pixel)
+					self.accesshelper.setBackgroundColor(color)
 		#Ensure size is applied before theme change
 		self._setCursorSize(size)
 		self._setCursor(cursorTheme)

@@ -5,6 +5,7 @@ import tempfile
 import shutil
 from collections import OrderedDict
 from PySide2.QtGui import QIcon,QPixmap
+import dbus
 
 class functionHelperClass():
 	def __init__(self):
@@ -277,6 +278,7 @@ class functionHelperClass():
 		return(qicon,sizes)
 	#def getPointerImage
 
+
 class accesshelper():
 	def __init__(self):
 		self.dbg=True
@@ -391,6 +393,30 @@ class accesshelper():
 		return(err)
 	#def setTheme
 
+	def setBackgroundColor(self,qcolor):
+		(r,g,b,alpha)=qcolor.getRgbF()
+		r=int(r*255)
+		g=int(g*255)
+		b=int(b*255)
+		color="{0},{1},{2}".format(r,g,b)
+		plugin='org.kde.color'
+		jscript = """
+		var allDesktops = desktops();
+		print (allDesktops);
+		for (i=0;i<allDesktops.length;i++) {
+			d = allDesktops[i];
+			d.wallpaperPlugin = "%s";
+			d.currentConfigGroup = Array("Wallpaper", "%s", "General");
+			d.writeConfig("Color", "%s")
+		}
+		"""
+		bus = dbus.SessionBus()
+		plasma = dbus.Interface(bus.get_object(
+			'org.kde.plasmashell', '/PlasmaShell'), dbus_interface='org.kde.PlasmaShell')
+		plasma.evaluateScript(jscript % (plugin, plugin, color))
+	#def setBackgroundColor
+
+	#def setBackgroundColor
 	def cssStyle(self,*args):
 		return(self.functionHelper.cssStyle(*args))
 	#def cssStyle

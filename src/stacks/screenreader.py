@@ -3,13 +3,12 @@ import sys
 import os,signal
 from PySide2.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QGridLayout,QComboBox,QTableWidget,QHeaderView
 from PySide2 import QtGui
-from PySide2.QtCore import Qt,QSignalMapper,QSize,QThread,QObject,Signal
+from PySide2 import QtMultimedia
+from PySide2.QtCore import Qt,QSignalMapper,QSize,QThread,QObject,Signal,QUrl
 from appconfig.appConfigStack import appConfigStack as confStack
 import gettext
 _ = gettext.gettext
-import json
 import subprocess
-import multiprocessing
 from stacks import libaccesshelper
 from stacks import libspeechhelper
 QString=type("")
@@ -34,26 +33,30 @@ i18n={
 
 class playSignal(QObject):
 	sig = Signal(str)
+#class playSignal
 
 class playFile(QThread):
 	def __init__(self,ttsFile,parent=None):
 		QThread.__init__(self, parent)
-		self.ttsFile=ttsFile
-		self.exiting = False
-		self.pid=None
+		self.player=QtMultimedia.QMediaPlayer()
+		content=QtMultimedia.QMediaContent(QUrl.fromLocalFile(ttsFile))
+		self.player.setMedia(content)
 		self.signal = playSignal()
-		self.signalStart = playSignal()
+		self.start = True
+	#def __init__
 
 	def run(self):
-		self.pid=subprocess.Popen(["play",self.ttsFile])
-		self.exiting=True
-		self.signalStart.sig.emit(self.pid.pid)
+		self.player.play()
+		self.player.stateChanged.connect(self.stopPlay)
+	#def run
 
 	def stopPlay(self):
-		if self.pid:
-			print("KILL!!")
-			os.kill(self.pid.pid,signal.SIGKILL)
-		self.signal.sig.emit('OK')
+		if self.start==False:
+			self.player.stop()
+			self.signal.sig.emit('OK')
+		self.start = False
+	#def stopPlay
+#class playFile
 
 class screenreader(confStack):
 	def __init_stack__(self):
@@ -221,7 +224,6 @@ class screenreader(confStack):
 			self.playing.append(btn)
 			self.playThread=playFile(ttsFile)
 			self.playThread.signal.sig.connect(lambda:(self._stopPlay(btn)))
-			self.playThread.signalStart.sig.connect(self._startPlay)
 			mp3Icon=QtGui.QIcon.fromTheme("media-playback-stop")
 			btn.setIcon(mp3Icon)
 			self.playThread.start()

@@ -489,6 +489,10 @@ class accesshelper():
 		if os.path.isdir(spanishFestival):
 			for i in os.listdir(spanishFestival):
 				voices.append(i)
+		catalanFestival="/usr/share/festival/voices/catalan"
+		if os.path.isdir(catalanFestival):
+			for i in os.listdir(catalanFestival):
+				voices.append(i)
 		return(voices)
 	#def getFestivalVoices
 

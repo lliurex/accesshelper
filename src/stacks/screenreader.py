@@ -1,7 +1,8 @@
 #!/usr/bin/python3
 import sys
 import os,signal
-from PySide2.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QGridLayout,QComboBox,QTableWidget,QHeaderView
+import shutil
+from PySide2.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QGridLayout,QComboBox,QTableWidget,QHeaderView,QFileDialog
 from PySide2 import QtGui
 from PySide2 import QtMultimedia
 from PySide2.QtCore import Qt,QSignalMapper,QSize,QThread,QObject,Signal,QUrl
@@ -28,7 +29,8 @@ i18n={
 	"FILE":_("File"),
 	"RECORD":_("Mp3"),
 	"SAVE":_("Save"),
-	"TEXT":_("Text")
+	"TEXT":_("Text"),
+	"EXPORT":_("Files exported to")
 	}
 
 class playSignal(QObject):
@@ -60,7 +62,7 @@ class playFile(QThread):
 
 class screenreader(confStack):
 	def __init_stack__(self):
-		self.dbg=False
+		self.dbg=True
 		self._debug("tts Load")
 		self.accesshelper=libaccesshelper.accesshelper()
 		self.speech=libspeechhelper.speechhelper()
@@ -214,6 +216,17 @@ class screenreader(confStack):
 			self._playFile(os.path.join(confDir,"mp3",ttsFile),btn)
 		elif ttsFile.endswith(".txt"):
 			subprocess.run(["kwrite",os.path.join(confDir,"txt",ttsFile)])
+		else:
+			destDir=QFileDialog.getExistingDirectory()
+			if destDir:
+				self._debug("Exporting {0} to {1}".format(ttsFile,destDir))
+				mp3File="{}.mp3".format(ttsFile)
+				txtFile="{}.txt".format(ttsFile)
+				mp3Path=os.path.join(confDir,"mp3",mp3File)
+				txtPath=os.path.join(confDir,"txt",txtFile)
+				shutil.copy(mp3Path,os.path.join(destDir,mp3File))
+				shutil.copy(txtPath,os.path.join(destDir,txtFile))
+				self.showMsg("{} {}".format(i18n.get("EXPORT"),destDir))
 	#def _processTtsFile
 
 	def _playFile(self,ttsFile,btn):
@@ -228,13 +241,12 @@ class screenreader(confStack):
 			mp3Icon=QtGui.QIcon.fromTheme("media-playback-stop")
 			btn.setIcon(mp3Icon)
 			self.playThread.run()
-
-	def _startPlay(self,pid):
-		print("Playing with pid: {}".format(pid))
+	#def _playFile
 
 	def _stopPlay(self,btn):
 		mp3Icon=QtGui.QIcon.fromTheme("media-playback-start")
 		btn.setIcon(mp3Icon)
+	#def _stopPlay
 
 	def _updateConfig(self,key):
 		pass

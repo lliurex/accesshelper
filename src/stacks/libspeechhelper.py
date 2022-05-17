@@ -9,6 +9,7 @@ import tesserocr
 from PIL import Image
 import subprocess
 from datetime import datetime
+import string
 
 class speechhelper():
 	def __init__(self):
@@ -132,7 +133,8 @@ class speechhelper():
 
 	def readFile(self,txt,currentDate):
 		if isinstance(currentDate,str)==False:
-			currentDate.strftime("%Y%m%d_%H%M%S")
+			currentDate=currentDate.strftime("%Y%m%d_%H%M%S")
+		print("Date type {}".format(type(currentDate)))
 		subprocess.run(["python3",self.libfestival,txt,str(self.stretch),self.voice,currentDate,self.player])
 
 	def _spellCheck(self,txt):

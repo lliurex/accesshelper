@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 import sys
 import os
-from PySide2.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QGridLayout,QLineEdit,QHBoxLayout,QComboBox,QCheckBox,QListWidget,QSizePolicy,QRadioButton
+from PySide2.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QGridLayout,QLineEdit,QVBoxLayout,QComboBox,QCheckBox,QListWidget,QSizePolicy,QRadioButton,QFrame
 from PySide2 import QtGui
 from PySide2.QtCore import Qt,Signal,QSignalMapper,QEvent
 from appconfig.appConfigStack import appConfigStack as confStack
@@ -33,6 +33,7 @@ i18n={
 	"LOOKINGGLASSENABLED":_("Activate eyefish effect"),
 	"MAGNIFIERENABLED":_("Glass effect"),
 	"ZOOMENABLED":_("Zoom effect"),
+	"MAGNIFIEREFFECTS":_("Enable magnify effects"),
 	"SYSTEMBELL":_("Acoustic system bell"),
 	"FOCUSPOLICY":_("Set the policy focus"),
 	"VISIBLEBELL":_("Visible bell"),
@@ -76,7 +77,7 @@ class access(confStack):
 		self.config={}
 		self.plasmaConfig={}
 		self.wrkFiles=["kaccesrc","kwinrc"]
-		self.blockSettings={"kwinrc":["FocusPolicy","lookingglassEnabled"]}
+		self.blockSettings={"kwinrc":["FocusPolicy"]}
 		self.wantSettings={}
 		self.widgets={}
 		self.widgetsText={}
@@ -137,7 +138,7 @@ class access(confStack):
 						(name,data)=setting
 						if name in block or (len(want)>0 and name not in want):
 							continue
-						if name.upper() in ["MAGNIFIERENABLED","ZOOMENABLED"]:
+						if name.upper() in ["MAGNIFIERENABLED","ZOOMENABLED","LOOKINGGLASSENABLED"]:
 							zoomOptions.append(setting)
 							continue
 						desc=i18n.get(name.upper(),name)
@@ -162,15 +163,21 @@ class access(confStack):
 							btn.hide()
 						row+=1
 					lbl=None
+					lay=QVBoxLayout()
 					for setting in zoomOptions:
 						if lbl==None:
 							lbl=QLabel("Meta+=/Meta+-")
-							self.box.addWidget(lbl,row,1,2,1)
+							chk=QCheckBox(i18n.get("MAGNIFIEREFFECTS"))
+							chk.stateChanged.connect(self._setZoomOptionsEnabled)
+							self.widgets.update({"magnifier":chk})
+							self.box.addWidget(chk,row,0,1,1)
+							row+=1
+							self.box.addWidget(lbl,row,1,3,1)
 						(name,data)=setting
 						desc=i18n.get(name.upper(),name)
 						btn=QRadioButton(desc)
 						self.widgets.update({name:btn})
-						self.box.addWidget(btn,row,0)
+						self.box.addWidget(btn,row,0,1,1)
 						row+=1
 		self.updateScreen()
 	#def _load_screen
@@ -266,7 +273,11 @@ class access(confStack):
 						if data.lower()=="true":
 							state=True
 						if name:
-							self.widgets.get(name).setChecked(state)
+							wdg=self.widgets.get(name)
+							if isinstance(wdg,QRadioButton):
+								if state==True:
+									self.widgets.get("magnifier").setChecked(True)
+								wdg.setChecked(state)
 
 					(mainHk,hkData,hkSetting,hkSection)=self.accesshelper.getHotkey(name)
 
@@ -283,8 +294,18 @@ class access(confStack):
 							btn.clicked.connect(sigmap_run.map)
 							btn.setText(mainHk)
 		self._updateButtons()
+		self._setZoomOptionsEnabled()
 		return
-	#def _udpate_screen
+	#def _update_screen
+
+	def _setZoomOptionsEnabled(self):
+		if isinstance(self.widgets.get("magnifier",None),QCheckBox):
+			state=self.widgets.get("magnifier").isChecked()
+			for i in ["magnifierEnabled","zoomEnabled","lookingglassEnabled"]:
+				if state==False:
+					self.widgets.get(i).setChecked(False)
+				self.widgets.get(i).setEnabled(state)
+	#def _setZoomOptionsEnabled
 
 	def _updateConfig(self,*args):
 		for wrkFile in self.wrkFiles:
@@ -302,11 +323,17 @@ class access(confStack):
 					btn=self.widgets.get(setting,'')
 					if btn:
 						if isinstance(btn,QCheckBox) or isinstance(btn,QRadioButton):
-							value=btn.isChecked()
-							if value:
-								value="true"
-							else:
-								value="false"
+							#Optionbuttons depends on magnifier state
+							value=""
+							if isinstance(btn,QRadioButton):
+								if self.widgets.get("magnifier").isChecked()==False:
+									value="false"
+							if value!="false":
+								value=btn.isChecked()
+								if value:
+									value="true"
+								else:
+									value="false"
 					dataTmp.append((setting,value))
 				self.plasmaConfig[kfile][section]=dataTmp
 		self.sysconfig=self._writeHotkeys()

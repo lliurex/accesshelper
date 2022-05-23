@@ -19,6 +19,7 @@ i18n={
 	"MENUDESCRIPTION":_("Modify screen color levels"),
 	"TOOLTIP":_("Set color filter for the screen"),
 	"FILTER":_("Color filter"),
+	"DEFAULT":_("By default")
 	}
 
 class alpha(confStack):
@@ -31,7 +32,6 @@ class alpha(confStack):
 		self.tooltip=i18n.get('TOOLTIP')
 		self.index=3
 		self.enabled=True
-		self.defaultRepos={}
 		self.changed=[]
 		self.config={}
 		self.plasmaConfig={}
@@ -47,14 +47,12 @@ class alpha(confStack):
 		for wrkFile in self.wrkFiles:
 			plasmaConfig=self.accesshelper.getPlasmaConfig(wrkFile)
 			self.plasmaConfig.update(plasmaConfig)
-		kdevalues=self.plasmaConfig.get('kdeglobals',{}).get('General',[])
-		alpha=''
-		for value in kdevalues:
-			if isinstance(value,tuple):
-				if value[0]=='alpha':
-					alpha=value[1]
-					break
+		kdevalues=self.plasmaConfig.get('kgammarc',{}).get('Screen 0',[])
+		config=self.getConfig()
+		alpha=config.get(self.level,{}).get('alpha',[])
 		dlgColor=QColorDialog()
+		if len(alpha)==4:
+			dlgColor.setCurrentColor(QtGui.QColor(alpha[0],alpha[1],alpha[2],alpha[3]))
 		#Embed in window
 		dlgColor.setWindowFlags(Qt.Widget)
 		dlgColor.setOptions(dlgColor.NoButtons)
@@ -73,6 +71,8 @@ class alpha(confStack):
 		self.widgets.update({"alpha":dlgColor})
 		self.config=self.getConfig()
 		config=self.config.get(self.level,{})
+		self.btn_cancel.setText(i18n.get("DEFAULT"))
+		self.btn_cancel.setEnabled(True)
 		self.btn_ok.released.connect(self.updateScreen)
 		self.updateScreen()
 	#def _load_screen
@@ -83,6 +83,7 @@ class alpha(confStack):
 		dlgColor=self.widgets.get('alpha')
 		config=self.config.get(self.level,{})
 		self.btn_cancel.setEnabled(True)
+		self.btn_cancel.adjustSize()
 	#def _udpate_screen
 
 	def _updateConfig(self,key):
@@ -139,12 +140,12 @@ class alpha(confStack):
 			####for monitor in self._getMonitors():
 			####	xrand=["xrandr","--output",monitor,"--gamma","{0}:{1}:{2}".format(alpha.red()/25.5,alpha.green()/25.5,alpha.blue()/25.5),"--brightness","{}".format(brightness)]
 				xgamma=["xgamma","-screen","0","-rgamma","{0:.2f}".format(xred),"-ggamma","{0:.2f}".format(xgreen),"-bgamma","{0:.2f}".format(xblue)]
-				print(xgamma)
 				cmd=subprocess.run(xgamma,capture_output=True,encoding="utf8")
-				print(cmd.stderr)
 		self.accesshelper.setPlasmaConfig(self.plasmaConfig)
+		self.saveChanges("alpha",alpha.getRgb())
 		self.optionChanged=[]
 		self.refresh=True
+		self.btn_cancel.setEnabled(True)
 		f=open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'w')
 		f.close()
 	#def writeConfig
@@ -158,7 +159,8 @@ class alpha(confStack):
 		self.plasmaConfig['kgammarc']['Screen 0']=values
 		self.accesshelper.setPlasmaConfig(self.plasmaConfig)
 		self.btn_ok.setEnabled(False)
-		self.saveChanges('alpha','1:1:1')
+		self.btn_cancel.setEnabled(True)
+		self.saveChanges('alpha',[])
 		self._removeAutostartDesktop()
 	#def _reset_screen
 

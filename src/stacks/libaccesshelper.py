@@ -112,12 +112,23 @@ class functionHelperClass():
 						hk=data[0]
 						hksection=setting
 						data=",".join(data)
-		self._debug("-------------------")
-		self._debug("{0} {1} {2} {3}".format(hk,data,name,hksection))
-		self._debug("-------------------")
 		return(hk,data,name,hksection)
 	#def getHotkey
 
+	def getSettingForHotkey(self,hotkey):
+		kfile="kglobalshortcutsrc"
+		assigned=""
+		sourceFolder=os.path.join(os.environ.get('HOME',"/usr/share/acccessibility"),".config")
+		kPath=os.path.join(sourceFolder,kfile)
+		with open(kPath,"r") as f:
+			lines=f.readlines()
+		for line in lines:
+			if hotkey.lower() in line.lower():
+				assigned=line.split(",")[-1]
+				break
+		return(assigned)
+	#def getSettingForHotkey
+				
 	def setKdeConfigSetting(self,group,key,value,kfile="kaccessrc"):
 		#kfile=kaccessrc
 		#_debug("Writing value {} from {} -> {}".format(key,kfile,value))
@@ -521,6 +532,9 @@ class accesshelper():
 				voices.append(i)
 		return(voices)
 	#def getFestivalVoices
+
+	def getSettingForHotkey(self,*args):
+		return(self.functionHelper.getSettingForHotkey(*args))
 
 	def applyChanges(self):
 		cmd=["qdbus","org.kde.KWin","/KWin","org.kde.KWin.reconfigure"]

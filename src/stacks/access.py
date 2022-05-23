@@ -38,6 +38,7 @@ i18n={
 	"FOCUSPOLICY":_("Set the policy focus"),
 	"VISIBLEBELL":_("Visible bell"),
 	"TRACKMOUSEENABLED":_("Track pointer"),
+	"HKASSIGNED":_("already assigned to action"),
 	"MOUSECLICKENABLED":_("Track click")
 	}
 descHk={
@@ -197,12 +198,14 @@ class access(confStack):
 	def _grab_alt_keys(self,*args):
 		desc=''
 		btn=''
+		self.txt=""
 		self.btn=btn
 		if len(args)>0:
 			desc=args[0]
 		if desc:
 			btn=self.widgets.get(desc,'')
 		if btn:
+			self.text=btn.text()
 			btn.setText("Press keys")
 			self.grabKeyboard()
 			self.keybind_signal.connect(self._set_config_key)
@@ -214,6 +217,13 @@ class access(confStack):
 		self.btn.setText(keypress)
 		desc=self.widgetsText.get(self.btn).get("mainHk")
 		plasmaConfig=self.plasmaConfig.copy()
+		if keypress=="Ctrl" or keypress=="Alt" or keypress=="Meta":
+			return
+		action=self.accesshelper.getSettingForHotkey(keypress)
+		if action!="":
+			self.showMsg("{0} {1} {2}".format(keypress,i18n.get("HKASSIGNED"),action))
+			self.btn.setText(self.text)
+		return
 		for kfile in self.wrkFiles:
 			for section,data in plasmaConfig.get(kfile,{}).items():
 				dataTmp=[]
@@ -353,12 +363,6 @@ class access(confStack):
 					desc=desc.replace("btn_","")
 					if desc.upper() in actionHk.keys():
 						(mainHk,hkData,hkSetting,hkSection)=self.accesshelper.getHotkey(actionHk[desc.upper()])
-						self._debug("*******************************")
-						self._debug("mainHk: {}".format(mainHk))
-						self._debug("hkData: {}".format(hkData))
-						self._debug("hkSetting: {}".format(hkSetting))
-						self._debug("hkSection: {}".format(hkSection))
-						self._debug("*******************************")
 						newHk=widget.text()
 						if newHk!=mainHk:
 							hkData=hkData.split(",")

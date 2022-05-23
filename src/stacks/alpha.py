@@ -48,8 +48,9 @@ class alpha(confStack):
 			plasmaConfig=self.accesshelper.getPlasmaConfig(wrkFile)
 			self.plasmaConfig.update(plasmaConfig)
 		kdevalues=self.plasmaConfig.get('kgammarc',{}).get('Screen 0',[])
-		config=self.getConfig()
-		alpha=config.get(self.level,{}).get('alpha',[])
+		self.config=self.getConfig()
+		config=self.config.get(self.level,{})
+		alpha=config.get('alpha',[])
 		dlgColor=QColorDialog()
 		if len(alpha)==4:
 			dlgColor.setCurrentColor(QtGui.QColor(alpha[0],alpha[1],alpha[2],alpha[3]))
@@ -69,8 +70,6 @@ class alpha(confStack):
 		#sigmap_run.mapped[QString].connect(self._updateConfig)
 		self.widgets={}
 		self.widgets.update({"alpha":dlgColor})
-		self.config=self.getConfig()
-		config=self.config.get(self.level,{})
 		self.btn_cancel.setText(i18n.get("DEFAULT"))
 		self.btn_cancel.setEnabled(True)
 		self.btn_ok.released.connect(self.updateScreen)
@@ -79,9 +78,11 @@ class alpha(confStack):
 
 	def updateScreen(self):
 		self.config=self.getConfig()
-		qalpha=QtGui.QColor()
-		dlgColor=self.widgets.get('alpha')
 		config=self.config.get(self.level,{})
+		alpha=config.get('alpha',[])
+		dlgColor=self.widgets.get('alpha')
+		if len(alpha)==4:
+			dlgColor.setCurrentColor(QtGui.QColor(alpha[0],alpha[1],alpha[2],alpha[3]))
 		self.btn_cancel.setEnabled(True)
 		self.btn_cancel.adjustSize()
 	#def _udpate_screen
@@ -161,6 +162,8 @@ class alpha(confStack):
 		self.btn_ok.setEnabled(False)
 		self.btn_cancel.setEnabled(True)
 		self.saveChanges('alpha',[])
+		dlgColor=self.widgets.get('alpha')
+		dlgColor.setCurrentColor("white")
 		self._removeAutostartDesktop()
 	#def _reset_screen
 

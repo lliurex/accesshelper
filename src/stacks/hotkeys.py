@@ -28,6 +28,7 @@ i18n={
 	"InvertWindow":_("Invert window colours"),
 	"ToggleMouseClick":_("Show mouse click"),
 	"TrackMouse":_("Show mouse pointer"),
+	"HKASSIGNED":_("already assigned to action")
 	}
 
 class hotkeys(confStack):
@@ -135,17 +136,19 @@ class hotkeys(confStack):
 	#def _load_screen
 
 	def _addHotkey(self,*args):
-		self.stack.gotoStack(idx=8,parms="")
+		self.stack.gotoStack(idx=9,parms="")
 
 	def _grab_alt_keys(self,*args):
 		desc=''
 		btn=''
+		self.text=""
 		self.btn=btn
 		if len(args)>0:
 			desc=args[0]
 		if desc:
 			btn=self.widgets.get(desc,'')
 		if btn:
+			self.text=btn.text()
 			btn.setText("")
 			self.grabKeyboard()
 			self.keybind_signal.connect(self._set_config_key)
@@ -170,12 +173,18 @@ class hotkeys(confStack):
 					dataTmp.append((setting,value))
 				self.plasmaConfig[kfile][section]=dataTmp
 		self.config=self.getConfig().get(self.level)
+		if keypress=="Ctrl" or keypress=="Alt" or keypress=="Meta":
+			return
+		action=self.accesshelper.getSettingForHotkey(keypress)
+		if action!="":
+			self.showMsg("{0} {1} {2}".format(keypress,i18n.get("HKASSIGNED"),action))
+			self.btn.setText(self.text)
+		return
 		config=self.config.copy()
 		for setting,valueDict in config.get("hotkeys",{}).items():
 			if isinstance(valueDict,dict):
 				if valueDict.get('_launch','')!='':
 					dataTmp=[]
-					type(setting)
 					valueArray=valueDict.get('_launch').split(",")
 					desc=" ".join(valueArray[2:])
 					value=",".join([keypress,keypress,desc])

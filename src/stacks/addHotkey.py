@@ -25,7 +25,8 @@ i18n={
 	"TYPEACT":_("Desktop action"),
 	"LBLCMD":_("Command"),
 	"BTNTXT":_("Assign"),
-	"PRESSKEY":_("Press a key or key-combination for the shortcut")
+	"PRESSKEY":_("Press a key or key-combination for the shortcut"),
+	"HKASSIGNED":_("already assigned to action")
 	}
 
 class addHotkey(confStack):
@@ -38,7 +39,7 @@ class addHotkey(confStack):
 		self.description=i18n.get('DESCRIPTION')
 		self.icon=('input-keyboard')
 		self.tooltip=i18n.get('TOOLTIP')
-		self.index=17
+		self.index=19
 		self.visible=False
 		self.enabled=True
 		self.changed=[]
@@ -237,6 +238,11 @@ class addHotkey(confStack):
 		#functionHelper.setPlasmaConfig(self.plasmaConfig)
 		self.refresh=True
 		txt=self.btnHk.text()
+		action=self.accesshelper.getSettingForHotkey(txt)
+		if action!="":
+			self.showMsg("{0} {1} {2}".format(txt,i18n.get("HKASSIGNED"),action))
+			self.btnHk.setText(i18n.get("BTNTXT"))
+		return
 		if txt==i18n.get("BTNTXT") or txt=="":
 			self.changes=False
 			self.optionChanged=[]

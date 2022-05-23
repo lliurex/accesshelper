@@ -70,7 +70,7 @@ class screenreader(confStack):
 		self.description=i18n.get('DESCRIPTION')
 		self.icon=('preferences-desktop-text-to-speech')
 		self.tooltip=i18n.get('TOOLTIP')
-		self.index=11
+		self.index=7
 		self.enabled=True
 		self.changed=[]
 		self.level='user'

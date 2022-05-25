@@ -43,6 +43,7 @@ class fonts(confStack):
 		self.wantSettings={"kdeglobals":["General"]}
 		self.optionChanged=[]
 		self.accesshelper=libaccesshelper.accesshelper()
+		self.btn_cancel.setVisible(False)
 	#def __init__
 
 	def _load_screen(self):

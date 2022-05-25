@@ -3,7 +3,7 @@ from . import libaccesshelper
 import sys
 import os
 import subprocess
-from PySide2.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QGridLayout,QLineEdit,QHBoxLayout,QComboBox,QCheckBox,QTabBar,QTabWidget,QTabBar,QTabWidget,QSlider,QToolTip,QListWidget,QColorDialog,QGroupBox,QListView
+from PySide2.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QGridLayout,QLineEdit,QHBoxLayout,QComboBox,QCheckBox,QTabBar,QTabWidget,QTabBar,QTabWidget,QSlider,QToolTip,QListWidget,QColorDialog,QGroupBox,QListView,QFrame
 from PySide2 import QtGui
 from PySide2.QtCore import Qt,QSignalMapper,QEvent
 from appconfig.appConfigStack import appConfigStack as confStack
@@ -48,8 +48,9 @@ class alpha(confStack):
 			plasmaConfig=self.accesshelper.getPlasmaConfig(wrkFile)
 			self.plasmaConfig.update(plasmaConfig)
 		kdevalues=self.plasmaConfig.get('kgammarc',{}).get('Screen 0',[])
-		config=self.getConfig()
-		alpha=config.get(self.level,{}).get('alpha',[])
+		self.config=self.getConfig()
+		config=self.config.get(self.level,{})
+		alpha=config.get('alpha',[])
 		dlgColor=QColorDialog()
 		if len(alpha)==4:
 			dlgColor.setCurrentColor(QtGui.QColor(alpha[0],alpha[1],alpha[2],alpha[3]))
@@ -62,6 +63,20 @@ class alpha(confStack):
 			for groupChld in chld.findChildren(QCheckBox):
 				chld.hide()
 				break
+		#btns=dlgColor.findChildren(QPushButton)
+		#btns[1].released.connect(self._enableDefault)
+		cont=0
+		for chld in dlgColor.findChildren(QWidget):
+			if "qwidget" in str(chld).lower():
+				if cont==1:
+					#for children in chld.findChildren(QWidget):
+					chld.setVisible(False)
+					print(chld)
+					break
+				cont+=1
+		#		for children in chld.findChildren(QWidget):
+		#			children.setVisible(False)
+
 
 		row,col=(0,0)
 		self.box.addWidget(dlgColor)
@@ -69,19 +84,22 @@ class alpha(confStack):
 		#sigmap_run.mapped[QString].connect(self._updateConfig)
 		self.widgets={}
 		self.widgets.update({"alpha":dlgColor})
-		self.config=self.getConfig()
-		config=self.config.get(self.level,{})
 		self.btn_cancel.setText(i18n.get("DEFAULT"))
 		self.btn_cancel.setEnabled(True)
 		self.btn_ok.released.connect(self.updateScreen)
-		self.updateScreen()
+		self.updateScreen
 	#def _load_screen
+
+	def _enableDefault(self,*args):
+		self.btn_cancel.setEnabled(True)
 
 	def updateScreen(self):
 		self.config=self.getConfig()
-		qalpha=QtGui.QColor()
-		dlgColor=self.widgets.get('alpha')
 		config=self.config.get(self.level,{})
+		alpha=config.get('alpha',[])
+		dlgColor=self.widgets.get('alpha')
+		if len(alpha)==4:
+			dlgColor.setCurrentColor(QtGui.QColor(alpha[0],alpha[1],alpha[2],alpha[3]))
 		self.btn_cancel.setEnabled(True)
 		self.btn_cancel.adjustSize()
 	#def _udpate_screen
@@ -161,6 +179,8 @@ class alpha(confStack):
 		self.btn_ok.setEnabled(False)
 		self.btn_cancel.setEnabled(True)
 		self.saveChanges('alpha',[])
+		dlgColor=self.widgets.get('alpha')
+		dlgColor.setCurrentColor("white")
 		self._removeAutostartDesktop()
 	#def _reset_screen
 

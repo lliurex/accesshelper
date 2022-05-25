@@ -123,9 +123,10 @@ class functionHelperClass():
 		with open(kPath,"r") as f:
 			lines=f.readlines()
 		for line in lines:
-			if hotkey.lower() in line.lower():
-				assigned=line.split(",")[-1]
-				break
+			if len(line.split(","))>2:
+				if hotkey.lower()==line.split(",")[-2].lower():
+					assigned=line.split(",")[-1]
+					break
 		return(assigned)
 	#def getSettingForHotkey
 				

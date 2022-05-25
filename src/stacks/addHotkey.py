@@ -110,6 +110,9 @@ class addHotkey(confStack):
 		self.lblPress.setFont(font)
 		self.lblPress.setVisible(False)
 		self.box.addWidget(self.lblPress,0,0,2,3)
+		self.btn_cancel.setText(i18n.get("CANCEL","Cancel"))
+		self.btn_cancel.clicked.connect(self._exit)
+		self.btn_cancel.setEnabled(True)
 		#self.updateScreen()
 	#def _load_screen
 
@@ -192,7 +195,7 @@ class addHotkey(confStack):
 						self.inpCmd.setEnabled(False)
 						self.lblCmd.setEnabled(False)
 						self._loadActs()
-		pass
+		self.btn_cancel.setEnabled(True)
 	#def _udpate_screen
 
 	def _loadApps(self,*args):
@@ -242,11 +245,9 @@ class addHotkey(confStack):
 		if action!="":
 			self.showMsg("{0} {1} {2}".format(txt,i18n.get("HKASSIGNED"),action))
 			self.btnHk.setText(i18n.get("BTNTXT"))
-		return
+			return
 		if txt==i18n.get("BTNTXT") or txt=="":
-			self.changes=False
-			self.optionChanged=[]
-			self.stack.gotoStack(idx=4,parms="")
+			self._exit()
 			return
 		config=self.getConfig(self.level).get(self.level,{})
 		hotkeys=config.get('hotkeys',{})
@@ -264,4 +265,9 @@ class addHotkey(confStack):
 		self.optionChanged=[]
 		f=open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'w')
 		f.close()
+		self.stack.gotoStack(idx=4,parms="")
+
+	def _exit(self):
+		self.changes=False
+		self.optionChanged=[]
 		self.stack.gotoStack(idx=4,parms="")

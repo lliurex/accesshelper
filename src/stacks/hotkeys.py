@@ -12,6 +12,18 @@ import json
 import subprocess
 QString=type("")
 
+class delButton(QLabel):
+	clicked=Signal()
+	def __init__(self,parent=None):
+		QLabel.__init__(self, parent)
+	def setIcon(self,icon):
+		self.setPixmap(icon.pixmap(48,48))
+	def setIconSize(self,*args):
+		pass
+	def mousePressEvent(self, ev):
+		self.clicked.emit()
+
+
 i18n={
 	"HOTKEYS":_("Keyboard Shortcuts"),
 	"ACCESSIBILITY":_("hotkeys options"),
@@ -65,7 +77,7 @@ class hotkeys(confStack):
 	def _load_screen(self):
 		self.installEventFilter(self)
 		self.box=QGridLayout()
-		self.tblGrid=QTableWidget(0,2)
+		self.tblGrid=QTableWidget(0,3)
 		font=self.tblGrid.font()
 		minsize=font.pointSize()
 		self.setLayout(self.box)
@@ -109,10 +121,18 @@ class hotkeys(confStack):
 			#self.box.addWidget(lbl,row,0)
 			self.tblGrid.setCellWidget(row,0,lbl)
 			btn=QPushButton(hk)
+			delIcon=QtGui.QIcon.fromTheme("edit-delete")
+			btnDel=delButton()
+			btnDel.setIcon(delIcon)
+			btnDel.setIconSize(QSize(48,48))
+			delName="{}_btn_delete".format(name)
 			self.sigmap_run.setMapping(btn,name)
+			self.sigmap_run.setMapping(btnDel,delName)
 			btn.clicked.connect(self.sigmap_run.map)
+			btnDel.clicked.connect(self.sigmap_run.map)
 			#self.box.addWidget(btn,row,1)
 			self.tblGrid.setCellWidget(row,1,btn)
+			self.tblGrid.setCellWidget(row,2,btnDel)
 			self.tblGrid.resizeRowToContents(row)
 			row+=1
 			self.widgets.update({name:btn})
@@ -126,8 +146,6 @@ class hotkeys(confStack):
 		self.tblGrid.setSelectionBehavior(self.tblGrid.SelectRows)
 		self.tblGrid.setSelectionMode(self.tblGrid.SingleSelection)
 		self.box.addWidget(self.tblGrid,0,0,1,1)
-
-
 		btn_add=QPushButton(_("Add new"))
 		btn_add.clicked.connect(self._addHotkey)
 		self.box.addWidget(btn_add,row+1,0,1,1)
@@ -138,21 +156,35 @@ class hotkeys(confStack):
 	def _addHotkey(self,*args):
 		self.stack.gotoStack(idx=9,parms="")
 
+	def _deleteHotkey(self,hotkey):
+		keypress=""
+		self.btn=self.widgets.get(hotkey,'')
+		#self._set_config_key(keypress)
+	#def _deleteHotkey
+
 	def _grab_alt_keys(self,*args):
 		desc=''
 		btn=''
+		swDelete=False
 		self.text=""
 		self.btn=btn
 		if len(args)>0:
 			desc=args[0]
 		if desc:
+			if desc.endswith("_btn_delete"):
+				desc=desc.replace("_btn_delete","")
+				self._deleteHotkey(desc)
+				swDelete=True
 			btn=self.widgets.get(desc,'')
-		if btn:
 			self.text=btn.text()
-			btn.setText("")
-			self.grabKeyboard()
-			self.keybind_signal.connect(self._set_config_key)
 			self.btn=btn
+		self.keybind_signal.connect(self._set_config_key)
+		if btn and swDelete==False:
+			self.grabKeyboard()
+		elif swDelete:
+			self.grabKeyboard()
+			self.keybind_signal.emit("")
+			self.releaseKeyboard()
 	#def _grab_alt_keys
 
 	def _set_config_key(self,keypress):
@@ -175,12 +207,23 @@ class hotkeys(confStack):
 		self.config=self.getConfig().get(self.level)
 		if keypress=="Ctrl" or keypress=="Alt" or keypress=="Meta":
 			return
-		action=self.accesshelper.getSettingForHotkey(keypress)
+		action=""
+		if keypress=="":
+			for i in range(0,self.tblGrid.rowCount()):
+				wdg=self.tblGrid.cellWidget(i,1)
+				if wdg==self.btn:
+					self._debug("Attempting to remove row {}".format(i))
+					self.tblGrid.removeRow(i)
+					break
+				
+		else:
+			action=self.accesshelper.getSettingForHotkey(keypress)
 		if action!="":
 			self.showMsg("{0} {1} {2}".format(keypress,i18n.get("HKASSIGNED"),action))
 			self.btn.setText(self.text)
-		return
+			return
 		config=self.config.copy()
+		self.config={"hotkeys":{}}
 		for setting,valueDict in config.get("hotkeys",{}).items():
 			if isinstance(valueDict,dict):
 				if valueDict.get('_launch','')!='':
@@ -189,17 +232,17 @@ class hotkeys(confStack):
 					desc=" ".join(valueArray[2:])
 					value=",".join([keypress,keypress,desc])
 					dataTmp.append(("_launch",value))
-					self.config['hotkeys'][setting]["_launch"]=value
 					k_friendly_name=setting.replace("[","").replace("]","").replace(".desktop","").capitalize()
-					self.config['hotkeys'][setting]["_k_friendly_name"]=k_friendly_name
 					dataTmp.append(("_k_friendly_name",k_friendly_name))
 					self.plasmaConfig['kglobalshortcutsrc']["{}".format(setting.replace("[","").replace("]",""))]=dataTmp
-			
+					if keypress!="":
+						if setting not in self.config['hotkeys'].keys():
+							self.config['hotkeys']={setting:{"_launch":""}}
+							self.config['hotkeys']={setting:{"_k_friendly_name":""}}
+						self.config['hotkeys'][setting]["_launch"]=value
+						self.config['hotkeys'][setting]["_k_friendly_name"]=k_friendly_name
 		self.btn_ok.setEnabled(True)
 		self.btn_cancel.setEnabled(True)
-		#if keypress!=self.keytext:
-		#	self.changes=True
-		#	self.setChanged(self.btn_conf)
 	#def _set_config_key
 
 	def eventFilter(self,source,event):
@@ -245,7 +288,7 @@ class hotkeys(confStack):
 							self.widgetsText.update({btn:name})
 		self.changes=True
 		config=self.getConfig().get(self.level)
-		self.changes=False
+		#self.changes=False
 		for desktop,info in config.get('hotkeys',{}).items():
 			name=desktop.replace("[","").replace("]","").replace(".desktop","")
 			btn=self.widgets.get(name,'')
@@ -254,31 +297,40 @@ class hotkeys(confStack):
 				btn.setText(hk)
 			else: #New button
 				row=self.tblGrid.rowCount()
-				self._debug("Add new button for {} at row".format(name,row))
+				self._debug("Add new item for {} at row {}".format(name,row))
 				self.tblGrid.setRowCount(row+1) 
 				lbl=QLabel(name)
 				#self.box.addWidget(lbl,row,0)
 				self.tblGrid.setCellWidget(row,0,lbl)
 				btn=QPushButton(hk)
+
+				delIcon=QtGui.QIcon.fromTheme("edit-delete")
+				btnDel=delButton()
+				btnDel.setIcon(delIcon)
 				self.sigmap_run.setMapping(btn,name)
 				btn.clicked.connect(self.sigmap_run.map)
+				btnDel.clicked.connect(self.sigmap_run.map)
 				#self.box.addWidget(btn,row,1)
 				self.tblGrid.setCellWidget(row,1,btn)
+				self.tblGrid.setCellWidget(row,2,btnDel)
 				self.tblGrid.resizeRowToContents(row)
 				btn.show()
+				btnDel.show()
 				self.widgets.update({name:btn})
 				self.widgetsText.update({btn:name})
 		self._debug("UPDATE SCREEN FINISHED")
-	#def _udpate_screen
+	#def _update_screen
 
 	def _updateConfig(self,name):
 		pass
 
 	def writeConfig(self):
 		self.accesshelper.setPlasmaConfig(self.plasmaConfig)
-		self.saveChanges('hotkeys',self.config.get('hotkeys',{}),'user')
+		hotkeys=self.config.get('hotkeys',{})
+		self.saveChanges('hotkeys',hotkeys,'user')
 		self.refresh=True
 		self.optionChanged=[]
 		f=open("/tmp/accesshelper_{}".format(os.environ.get('USER')),'w')
 		f.close()
+		self.updateScreen()
 		return

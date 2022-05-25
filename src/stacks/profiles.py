@@ -148,6 +148,8 @@ class profiles(confStack):
 
 	def loadProfile(self,*args):
 		self._debug("Restoring snapshot")
+		cursor=QtGui.QCursor(Qt.WaitCursor)
+		self.setCursor(cursor)
 		name=self.inp_name.text()
 		name=os.path.basename(name)
 		if len(name)>20:
@@ -165,6 +167,9 @@ class profiles(confStack):
 		f=open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'w')
 		f.close()
 		self.optionChanged=[]
+		cursor=QtGui.QCursor(Qt.PointingHandCursor)
+		self.setCursor(cursor)
+	#def loadProfile(self,*args):
 
 	def _updateConfig(self,key):
 		pass

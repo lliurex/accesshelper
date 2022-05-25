@@ -102,12 +102,16 @@ class fonts(confStack):
 		for chld in dlgFont.findChildren(QListView):
 			sw_alpha=True
 			model=chld.model()
-			if style.isalpha():
+			if style:
+				if style.isdigit():
+					style="Regular"
 				for row in range(model.rowCount()):
 					index=model.index(row,0)
 					data=model.data(index)
+					print("{}-{}-".format(data,style))
 					if data==style:
 						chld.setCurrentIndex(index)
+						print("FIND: {}".format(index))
 						break
 					elif data.isalpha==False:
 						sw_alpha=False

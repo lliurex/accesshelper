@@ -3,7 +3,7 @@ from . import libaccesshelper
 import sys
 import os
 import subprocess
-from PySide2.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QGridLayout,QLineEdit,QHBoxLayout,QComboBox,QCheckBox,QTabBar,QTabWidget,QTabBar,QTabWidget,QSlider,QToolTip,QListWidget,QColorDialog,QGroupBox,QListView
+from PySide2.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QGridLayout,QLineEdit,QHBoxLayout,QComboBox,QCheckBox,QTabBar,QTabWidget,QTabBar,QTabWidget,QSlider,QToolTip,QListWidget,QColorDialog,QGroupBox,QListView,QFrame
 from PySide2 import QtGui
 from PySide2.QtCore import Qt,QSignalMapper,QEvent
 from appconfig.appConfigStack import appConfigStack as confStack
@@ -63,6 +63,20 @@ class alpha(confStack):
 			for groupChld in chld.findChildren(QCheckBox):
 				chld.hide()
 				break
+		#btns=dlgColor.findChildren(QPushButton)
+		#btns[1].released.connect(self._enableDefault)
+		cont=0
+		for chld in dlgColor.findChildren(QWidget):
+			if "qwidget" in str(chld).lower():
+				if cont==1:
+					#for children in chld.findChildren(QWidget):
+					chld.setVisible(False)
+					print(chld)
+					break
+				cont+=1
+		#		for children in chld.findChildren(QWidget):
+		#			children.setVisible(False)
+
 
 		row,col=(0,0)
 		self.box.addWidget(dlgColor)
@@ -73,8 +87,11 @@ class alpha(confStack):
 		self.btn_cancel.setText(i18n.get("DEFAULT"))
 		self.btn_cancel.setEnabled(True)
 		self.btn_ok.released.connect(self.updateScreen)
-		self.updateScreen()
+		self.updateScreen
 	#def _load_screen
+
+	def _enableDefault(self,*args):
+		self.btn_cancel.setEnabled(True)
 
 	def updateScreen(self):
 		self.config=self.getConfig()

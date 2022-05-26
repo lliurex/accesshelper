@@ -35,7 +35,7 @@ class accessdock(QWidget):
 		self.pitch=50
 		self._loadConfig()
 		self._renderGui()
-		self.fontSize=None
+		self.fontSize=""
 	#def __init__
 
 	def _debug(self,msg):
@@ -301,6 +301,10 @@ class accessdock(QWidget):
 			self.hide()
 			self.accesshelper.applyChanges()
 			self.show()
+		else:
+			font=self.font()
+			self.fontSize=font
+			lblTest.setFont(font)
 
 	def _saveFont(self,qfont):
 		font=qfont.toString()

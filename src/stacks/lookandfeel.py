@@ -117,6 +117,10 @@ class lookandfeel(confStack):
 			plasmaConfig=self.accesshelper.getPlasmaConfig(wrkFile)
 			self.plasmaConfig.update(plasmaConfig)
 		self.config=self.getConfig()
+		config=self.config.get(self.level,{})
+		selectedColor=""
+		if config.get("bkg","")=="color":
+			selectedColor=config.get("bkgColor","")
 		theme=""
 		for value in self.plasmaConfig.get("kdeglobals",{}).get("General",[]):
 			if value[0]=="Name":
@@ -169,7 +173,11 @@ class lookandfeel(confStack):
 								cmb.addItem(themeDesc)
 						if "(" in theme and ("plasma" in theme.lower() or "actual" in theme.lower()):
 							cmb.setCurrentText(themeDesc)
-		config=self.config.get(self.level,{})
+			if selectedColor!="":
+				cmb=self.widgets.get("background",QComboBox())
+				cmb.setCurrentText(selectedColor)
+
+						
 	#def _udpate_screen
 
 	def updateCursorIcons(self):
@@ -243,12 +251,23 @@ class lookandfeel(confStack):
 				if cmbDesc=="background":
 					idx=cmb.currentIndex()
 					if idx>0:
-						icon=cmb.itemIcon(idx)
-						px=QtGui.QPixmap(self.bkgIconSize,self.bkgIconSize)
-						img=px.toImage()
-						pixel=img.pixel(1,1)
-						color=QtGui.QColor(pixel)
-						self.accesshelper.setBackgroundColor(color)
+						color=cmb.currentText()
+						colorList=["black","red","blue","green","yellow","white"]
+						for i18color in colorList:
+							if i18n.get(i18color.upper(),"")==color:
+								qcolor=QtGui.QColor(i18color)
+								
+						#icon=cmb.itemIcon(idx)
+						#px=QtGui.QPixmap(self.bkgIconSize,self.bkgIconSize)
+						#img=px.toImage()
+						#pixel=img.pixel(1,1)
+						self.saveChanges('bkgColor',color)
+						self.saveChanges('bkg',"color")
+						if qcolor:
+							self.accesshelper.setBackgroundColor(qcolor)
+					else:
+						self.saveChanges('bkg',"image")
+						self.accesshelper.setBackgroundImg(self.imgFile)
 		#Ensure size is applied before theme change
 		self._setCursorSize(size)
 		self._setCursor(cursorTheme)

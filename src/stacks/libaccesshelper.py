@@ -448,7 +448,7 @@ class accesshelper():
 		plasma = dbus.Interface(bus.get_object(
 			'org.kde.plasmashell', '/PlasmaShell'), dbus_interface='org.kde.PlasmaShell')
 		plasma.evaluateScript(jscript % (plugin, plugin, imgFile))
-	#def setBackgroundColor
+	#def setBackgroundImg
 
 	def getBackgroundImg(self):
 		#Dirt method to get wallpaper: parse plasma-org.kde.plasma.desktop-appletsrc

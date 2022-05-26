@@ -405,6 +405,10 @@ class accesshelper():
 		return(err)
 	#def setTheme
 
+	def cssStyle(self,*args):
+		return(self.functionHelper.cssStyle(*args))
+	#def cssStyle
+
 	def setBackgroundColor(self,qcolor):
 		(r,g,b,alpha)=qcolor.getRgbF()
 		r=int(r*255)
@@ -428,10 +432,36 @@ class accesshelper():
 		plasma.evaluateScript(jscript % (plugin, plugin, color))
 	#def setBackgroundColor
 
+	def setBackgroundImg(self,imgFile):
+		plugin='org.kde.image'
+		jscript = """
+		var allDesktops = desktops();
+		print (allDesktops);
+		for (i=0;i<allDesktops.length;i++) {
+			d = allDesktops[i];
+			d.wallpaperPlugin = "%s";
+			d.currentConfigGroup = Array("Wallpaper", "%s", "General");
+			d.writeConfig("Image", "%s")
+		}
+		"""
+		bus = dbus.SessionBus()
+		plasma = dbus.Interface(bus.get_object(
+			'org.kde.plasmashell', '/PlasmaShell'), dbus_interface='org.kde.PlasmaShell')
+		plasma.evaluateScript(jscript % (plugin, plugin, imgFile))
 	#def setBackgroundColor
-	def cssStyle(self,*args):
-		return(self.functionHelper.cssStyle(*args))
-	#def cssStyle
+
+	def getBackgroundImg(self):
+		#Dirt method to get wallpaper: parse plasma-org.kde.plasma.desktop-appletsrc
+		confFile=os.path.join(os.environ.get("HOME",""),".config","plasma-org.kde.plasma.desktop-appletsrc")
+		img=""
+		if os.path.isfile(confFile):
+			with open (confFile,"r") as f:
+				for line in f.readlines():
+					if line.startswith("Image=file://"):
+						img=line.replace("Image=file://","")
+						break
+		return img.strip()
+	#def getBackgroundImg
 
 	def getHotkey(self,*args):
 		return(self.functionHelper.getHotkey(*args))

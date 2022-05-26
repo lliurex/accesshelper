@@ -221,20 +221,23 @@ class access(confStack):
 			return
 		action=self.accesshelper.getSettingForHotkey(keypress)
 		if action!="":
-			self.showMsg("{0} {1} {2}".format(keypress,i18n.get("HKASSIGNED"),action))
+			try:
+				self.showMsg("{0} {1} {2}".format(keypress,i18n.get("HKASSIGNED"),action))
+			except:
+				pass
 			self.btn.setText(self.text)
-		return
-		for kfile in self.wrkFiles:
-			for section,data in plasmaConfig.get(kfile,{}).items():
-				dataTmp=[]
-				for setting,value in data:
-					if setting==desc:
-						valueArray=value.split(",")
-						valueArray[0]=keypress
-						valueArray[1]=keypress
-						value=",".join(valueArray)
-					dataTmp.append((setting,value))
-				self.plasmaConfig[kfile][section]=dataTmp
+		else:
+			for kfile in self.wrkFiles:
+				for section,data in plasmaConfig.get(kfile,{}).items():
+					dataTmp=[]
+					for setting,value in data:
+						if setting==desc:
+							valueArray=value.split(",")
+							valueArray[0]=keypress
+							valueArray[1]=keypress
+							value=",".join(valueArray)
+						dataTmp.append((setting,value))
+					self.plasmaConfig[kfile][section]=dataTmp
 		#if keypress!=self.keytext:
 		#	self.changes=True
 		#	self.setChanged(self.btn_conf)

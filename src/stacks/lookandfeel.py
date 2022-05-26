@@ -54,6 +54,8 @@ class lookandfeel(confStack):
 		self.blockSettings={}
 		self.wantSettings={"kdeglobals":["General"]}
 		self.optionChanged=[]
+		self.imgFile=""
+		self.bkgIconSize=96
 		self.cursorDesc={}
 		self.accesshelper=libaccesshelper.accesshelper()
 	#def __init__
@@ -65,8 +67,10 @@ class lookandfeel(confStack):
 		sigmap_run=QSignalMapper(self)
 		sigmap_run.mapped[QString].connect(self._updateConfig)
 		self.widgets={}
-		config=self.config.get(self.level,{})
 		self.config=self.getConfig()
+		config=self.config.get(self.level,{})
+		if config.get("background"):
+			self.imgFile=config.get("background")
 
 		self.box.addWidget(QLabel(i18n.get("THEME")),0,0,1,1)
 		cmbTheme=QComboBox()
@@ -80,6 +84,7 @@ class lookandfeel(confStack):
 
 		self.box.addWidget(QLabel(i18n.get("BACKGROUND")),2,0,1,1)
 		cmbBackground=QComboBox()
+		cmbBackground.setIconSize(QSize(self.bkgIconSize,self.bkgIconSize))
 		self.widgets.update({'background':cmbBackground})
 		self.box.addWidget(cmbBackground,2,1,1,1)
 
@@ -153,8 +158,10 @@ class lookandfeel(confStack):
 								self.cursorDesc[themeDesc]=cursorTheme
 							elif cmbDesc=="background":
 								color=theme.split("(")[1].replace("(","").replace(")","")
-								px=QtGui.QPixmap(64,64)
-								if color:
+								px=QtGui.QPixmap(self.bkgIconSize,self.bkgIconSize)
+								if os.path.isfile(color):
+									px.load(color)
+								elif color:
 									px.fill(QtGui.QColor(color))
 								icon=QtGui.QIcon(px)
 								cmb.addItem(icon,themeDesc)
@@ -192,7 +199,14 @@ class lookandfeel(confStack):
 	#def updateCursorSizes
 
 	def _fillBackgroundCmb(self):
-		colors=["{0} ({1})".format(i18n.get("CURRENTBKG","Current background"),"white")]
+		if self.imgFile=="":
+			imgFile=self.accesshelper.getBackgroundImg()
+			self.imgFile=imgFile
+		else:
+			imgFile=self.imgFile
+		if imgFile=="":
+			imgFile="white"
+		colors=["{0} ({1})".format(i18n.get("CURRENTBKG","Current background"),imgFile)]
 		colorList=["black","red","blue","green","yellow","white"]
 		for color in colorList:
 			desc=i18n.get(color.upper(),color)
@@ -208,7 +222,7 @@ class lookandfeel(confStack):
 		#		self._exeKwinMethod(key) 
 	
 	def writeConfig(self):
-		#self.saveChanges('fonts',{"size":size})
+		self.saveChanges('background',self.imgFile)
 		self.optionChanged=[]
 		self.refresh=True
 		cursorTheme=""
@@ -228,12 +242,13 @@ class lookandfeel(confStack):
 					size=cmb.currentText()
 				if cmbDesc=="background":
 					idx=cmb.currentIndex()
-					icon=cmb.itemIcon(idx)
-					px=icon.pixmap(64,64)
-					img=px.toImage()
-					pixel=img.pixel(1,1)
-					color=QtGui.QColor(pixel)
-					self.accesshelper.setBackgroundColor(color)
+					if idx>0:
+						icon=cmb.itemIcon(idx)
+						px=QtGui.QPixmap(self.bkgIconSize,self.bkgIconSize)
+						img=px.toImage()
+						pixel=img.pixel(1,1)
+						color=QtGui.QColor(pixel)
+						self.accesshelper.setBackgroundColor(color)
 		#Ensure size is applied before theme change
 		self._setCursorSize(size)
 		self._setCursor(cursorTheme)

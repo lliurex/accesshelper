@@ -287,6 +287,7 @@ class access(confStack):
 							if isinstance(wdg,QRadioButton):
 								if state==True:
 									self.widgets.get("magnifier").setChecked(True)
+							else:
 								wdg.setChecked(state)
 
 					(mainHk,hkData,hkSetting,hkSection)=self.accesshelper.getHotkey(name)

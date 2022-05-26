@@ -72,6 +72,7 @@ class accessdock(QWidget):
 				cursorPosition =QCursor.pos()
 				self.coordx,self.coordy=cursorPosition.x(),cursorPosition.y()
 			speed=config.get("speed","1x")
+			self.fonts=config.get("fonts","")
 			self.pitch=config.get("pitch","50")
 			speed=speed.replace("x","")
 			#eSpeak min speed=80 max speed=390
@@ -185,6 +186,10 @@ class accessdock(QWidget):
 			elif args[0].lower()=="config":
 				self.hide()
 				subprocess.run(["accesshelper"])
+				btn=self.widgets.get("font_size")
+				self._loadConfig()
+				font=self.fonts.split(",")[1]
+				btn.setText("{}px\nFont".format(font))
 				self.show()
 	#def execute
 

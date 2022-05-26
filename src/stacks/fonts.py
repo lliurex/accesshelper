@@ -108,10 +108,8 @@ class fonts(confStack):
 				for row in range(model.rowCount()):
 					index=model.index(row,0)
 					data=model.data(index)
-					print("{}-{}-".format(data,style))
 					if data==style:
 						chld.setCurrentIndex(index)
-						print("FIND: {}".format(index))
 						break
 					elif data.isalpha==False:
 						sw_alpha=False

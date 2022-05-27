@@ -39,7 +39,7 @@ class speechhelper():
 		#3x=0.40 0x=1.40 1x=0.90
 		#steps are 0.25. Between 3 and 0 there are 12 steps
 		#speed/0.25=Steps from 0x. Each step=8.3
-		speed=abs(int(speed)-3)
+		speed=abs(float(speed)-3)
 		steps=float(speed)/0.25
 		self.stretch=(steps*0.083)+0.40
 		#return speed

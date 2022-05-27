@@ -91,6 +91,10 @@ class QHotkeyButton(QPushButton):
 				if hotkey.lower()==line.split(",")[-2].lower():
 					action=line.split(",")[-1]
 					break
+				elif line.startswith("_launch"):
+					if hotkey.lower()==line.replace("_launch=","").split(",")[0].lower():
+						action=line.split(",")[-1]
+						break
 		return(action.replace("\n",""))
 	#def getSettingForHotkey
 

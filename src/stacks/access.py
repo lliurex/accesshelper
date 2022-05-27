@@ -2,7 +2,7 @@
 from . import libaccesshelper
 from . import libhotkeys
 import os
-from PySide2.QtWidgets import QApplication,QLabel,QGridLayout,QCheckBox,QSizePolicy,QRadioButton,QTableWidget,QHeaderView
+from PySide2.QtWidgets import QApplication,QLabel,QGridLayout,QCheckBox,QSizePolicy,QRadioButton,QTableWidget,QHeaderView,QTableWidgetItem
 from PySide2 import QtGui
 from PySide2.QtCore import Qt
 from appconfig.appConfigStack import appConfigStack as confStack
@@ -105,7 +105,7 @@ class access(confStack):
 		self.box=QGridLayout()
 		self.setLayout(self.box)
 		self.tblGrid=QTableWidget()
-		self.tblGrid.setColumnCount(2)
+		self.tblGrid.setColumnCount(3)
 		self.tblGrid.setShowGrid(False)
 		self.tblGrid.verticalHeader().hide()
 		self.tblGrid.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
@@ -130,16 +130,15 @@ class access(confStack):
 	#def _testHotkey
 
 	def _updateButtons(self):
-		for chk,btn in self.chkbtn.items():
-			if isinstance(chk,QCheckBox):
-				if chk.isChecked():
-					if isinstance(btn,libhotkeys.QHotkeyButton):
-						if btn.isVisible():
-							btn.setEnabled(True)
-				else:
-					if isinstance(btn,libhotkeys.QHotkeyButton):
-						if btn.isVisible():
-							btn.setEnabled(False)
+		row=self.tblGrid.currentRow()
+		self._debug("Setting state for row {}".format(row))
+		btn=self.tblGrid.cellWidget(row,1)
+		chk=self.tblGrid.cellWidget(row,0)
+		if btn:
+			btn.setEnabled(chk.isChecked())
+		self.btn_cancel.setEnabled(True)
+		self.btn_ok.setEnabled(True)
+	#def _updateButtons(self):
 
 	def updateScreen(self):
 		self.tblGrid.clear()
@@ -153,7 +152,7 @@ class access(confStack):
 				want=self.wantSettings.get(kfile,[])
 				block=self.blockSettings.get(kfile,[])
 				for section,settings in sections.items():
-		#			settings=self.sortArraySettings(settings)
+					settings=self.sortArraySettings(settings)
 					for setting in settings:
 						(name,data)=setting
 						if name in block or (len(want)>0 and name not in want):
@@ -165,25 +164,32 @@ class access(confStack):
 						self.tblGrid.setRowCount(row+1)
 						desc=i18n.get(name.upper(),name)
 						chk=QCheckBox(desc)
+						if data=="true":
+							chk.setChecked(True)
 						chk.stateChanged.connect(self._updateButtons)
 						self.tblGrid.setCellWidget(row,0,chk)
-						(mainHk,hkData,hkSetting,hkSection)=self.accesshelper.getHotkey(name)
-						if mainHk=="none":
-							mainHk=""
-						if mainHk=="":
-							mainHk=name
+						item=QTableWidgetItem()
+						item.setData(Qt.UserRole,actionHk.get(name.upper(),name))
+						self.tblGrid.setItem(row,2,item)
 						if name.upper() not in ["SYSTEMBELL","VISIBLEBELL","SNAPHELPERENABLED"]:
-							btn=libhotkeys.QHotkeyButton(mainHk)
+							(mainHk,hkData,hkSetting,hkSection)=self.accesshelper.getHotkey(name)
+							btn=libhotkeys.QHotkeyButton()
+							btn.setText(mainHk)
 							btn.hotkeyAssigned.connect(self._testHotkey)
 							self.chkbtn[chk]=btn
 							self.tblGrid.setCellWidget(row,1,btn)
-							btn.setEnabled(False)
+							btn.setEnabled(chk.isChecked())
 						self.tblGrid.resizeRowToContents(row)
+		self._loadZoomOptions(zoomOptions)
+	#def _update_screen
+
+	def _loadZoomOptions(self,zoomOptions):
 		chk=QCheckBox("{} (Meta+=/Meta+-)".format(i18n.get("MAGNIFIEREFFECTS")))
 		chk.stateChanged.connect(self._setZoomOptionsEnabled)
 		row=self.tblGrid.rowCount()
 		self.tblGrid.setRowCount(row+1)
 		self.tblGrid.setCellWidget(row,0,chk)
+		zoomRow=row
 		self.tblGrid.resizeRowToContents(row)
 		for setting in zoomOptions:
 			row=self.tblGrid.rowCount()
@@ -192,19 +198,22 @@ class access(confStack):
 			desc=i18n.get(name.upper(),name)
 			btn=QRadioButton(desc)
 			self.tblGrid.setCellWidget(row,1,btn)
-		self._updateButtons()
-		self._setZoomOptionsEnabled()
-		return
-	#def _update_screen
+			item=QTableWidgetItem()
+			item.setData(Qt.UserRole,name)
+			self.tblGrid.setItem(row,2,item)
+		self._setZoomOptionsEnabled(init=zoomRow)
+	#def _loadZoomOptions
 
-	def _setZoomOptionsEnabled(self):
-		return
-		if isinstance(self.widgets.get("magnifier",None),QCheckBox):
-			state=self.widgets.get("magnifier").isChecked()
-			for i in ["magnifierEnabled","zoomEnabled","lookingglassEnabled"]:
-				if state==False:
-					self.widgets.get(i).setChecked(False)
-				self.widgets.get(i).setEnabled(state)
+	def _setZoomOptionsEnabled(self,*args,init=None):
+		if init:
+			row=init
+		else:
+			row=self.tblGrid.currentRow()
+		chk=self.tblGrid.cellWidget(row,0)
+		for i in range(row+1,row+4):
+			opt=self.tblGrid.cellWidget(i,1)
+			if opt:
+				opt.setEnabled(chk.isChecked())
 	#def _setZoomOptionsEnabled
 
 	def _updateConfig(self,*args):
@@ -214,62 +223,70 @@ class access(confStack):
 		return
 	#def _updateConfig
 
+	def updateDataFromTable(self):
+		for i in range(self.tblGrid.rowCount()):
+			chk=self.tblGrid.cellWidget(i,0)
+			if chk:
+				state=chk.isChecked()
+			item=self.tblGrid.item(i,2)
+			if item:
+				value=item.data(Qt.UserRole)
+			btn=self.tblGrid.cellWidget(i,1)
+			hotkey=None
+			if isinstance(btn,libhotkeys.QHotkeyButton):
+				hotkey=btn.text()
+				self._getPlasmaHotkeysFromTable(value,hotkey)
+			elif isinstance(btn,QRadioButton):
+				state=btn.isChecked()
+			if isinstance(state,bool) and item:
+				self._setPlasmaConfigFromTable(value,state)
+	#def updateHotkeysFromTable
+
+	def _getPlasmaHotkeysFromTable(self,desc,hotkey):
+		self._debug("Set hotkey {} for {}".format(hotkey,desc))
+		newSections={}
+		plasmaConfig={}
+		if self.plasmaConfig.get('kglobalshortcutsrc',{})=={}:
+			plasmaConfig=self.accesshelper.getPlasmaConfig('kglobalshortcutsrc')
+		else:
+			plasmaConfig['kglobalshortcutsrc']=self.plasmaConfig.get('kglobalshortcutsrc')
+		for kfile,sections in plasmaConfig.items():
+			settings=sections.get('kwin',[])
+			newSettings=[]
+			for setting in settings:
+				(description,value)=setting
+				if description==desc:
+					arraySetting=value.split(',')
+					arraySetting[0]=hotkey
+					arraySetting[1]=hotkey
+					value=",".join(arraySetting)
+				newSettings.append((description,value))
+			if 'kwin' in sections.keys():
+				newSections['kwin']=newSettings
+				self.plasmaConfig.update({kfile:newSections})
+	#def _getPlasmaHotkeysFromTable
+
+	def _setPlasmaConfigFromTable(self,value,state):
+		for kfile,sections in self.plasmaConfig.items():
+			if kfile=='kglobalshortcutsrc':
+				continue
+			newSections={}
+			for section,settings in sections.items():
+				newSettings=[]
+				for setting in settings:
+					(description,origState)=setting
+					if description==value:
+						setting=(description,str(state).lower())
+					newSettings.append(setting)
+				newSections[section]=newSettings
+			self.plasmaConfig.update({kfile:newSections})
+	#def _setPlasmaConfigFromTable(self,value,state):
+
 	def writeConfig(self):
-		return
-		plasmaConfig=self.plasmaConfig.copy()
-		for kfile in self.wrkFiles:
-			for section,data in plasmaConfig.get(kfile,{}).items():
-				dataTmp=[]
-				for setting,value in data:
-					#btn=self.widgets.get(setting,'')
-					btn=""
-					if btn:
-						if isinstance(btn,QCheckBox) or isinstance(btn,QRadioButton):
-							#Optionbuttons depends on magnifier state
-							value=""
-							if isinstance(btn,QRadioButton):
-								if self.widgets.get("magnifier").isChecked()==False:
-									value="false"
-							if value!="false":
-								value=btn.isChecked()
-								if value:
-									value="true"
-								else:
-									value="false"
-					dataTmp.append((setting,value))
-				self.plasmaConfig[kfile][section]=dataTmp
-		self.sysconfig=self._writeHotkeys()
+		self.updateDataFromTable()
 		self.accesshelper.setPlasmaConfig(self.plasmaConfig)
 		self.optionChanged=[]
-		self._updateConfig()
-		self.updateScreen()
 		self.refresh=True
 		f=open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'w')
 		f.close()
 		return
-
-	def _writeHotkeys(self):
-		return
-		self.plasmaConfig["kglobalshortcutsrc"]={}
-		for desc,widget in self.widgets.items():
-			if isinstance(widget,libhotkeys.QHotkeyButton):
-					desc=desc.replace("btn_","")
-					if desc.upper() in actionHk.keys():
-						(mainHk,hkData,hkSetting,hkSection)=self.accesshelper.getHotkey(actionHk[desc.upper()])
-						newHk=widget.text()
-						if newHk!=mainHk:
-							hkData=hkData.split(",")
-							hkData[0]=newHk
-							if len(hkData)<=1:
-								hkData.append(newHk)
-								dataDesc=desc.upper()
-								hkData.append(i18n.get(dataDesc,dataDesc))
-								#hkSetting=descHk.get(desc,desc)  
-								hkSection="kwin"
-							else:
-								hkData[1]=newHk
-							hkSetting=actionHk.get(desc.upper())
-							hkData=",".join(hkData)
-						if self.plasmaConfig["kglobalshortcutsrc"].get(hkSection,None)==None:
-							self.plasmaConfig["kglobalshortcutsrc"][hkSection]=[]
-						self.plasmaConfig["kglobalshortcutsrc"][hkSection].append((hkSetting,hkData))

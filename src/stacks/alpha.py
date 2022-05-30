@@ -75,6 +75,7 @@ class alpha(confStack):
 
 	def _enableDefault(self,*args):
 		self.btn_cancel.setEnabled(True)
+	#def _enableDefault
 
 	def updateScreen(self):
 		self.config=self.getConfig()
@@ -91,13 +92,11 @@ class alpha(confStack):
 
 	def _updateConfig(self,key):
 		return
+	#def _updateConfig
 	
 	def writeConfig(self):
-		print("Getting alpha")
 		qalpha=self.widgets.get("alpha").currentColor()
-		print(qalpha)
 		(red,green,blue)=self.accesshelper.setRGBFilter(qalpha)
-		print("RED: {0} GREEN: {1} BLUE: {2}".format(red,green,blue))
 		self.plasmaConfig['kgammarc']['ConfigFile']=[("use","kgammarc")]
 		self.plasmaConfig['kgammarc']['SyncBox']=[("sync","yes")]
 		values=[]

@@ -188,6 +188,7 @@ class functionHelperClass():
 		plasmaPath=os.path.join(tmpFolder,"plasma")
 		os.makedirs(plasmaPath)
 		configPath=os.path.join(tmpFolder,"appconfig")
+		onboard=os.path.join(os.path.dirname(appconfrc),"onboard.dconf")
 		os.makedirs(configPath)
 		desktopPath=os.path.join(tmpFolder,"autostart")
 		os.makedirs(desktopPath)
@@ -200,6 +201,9 @@ class functionHelperClass():
 				shutil.copy(kPath,plasmaPath)
 		if os.path.isfile(appconfrc):
 			shutil.copy(appconfrc,configPath)
+		print("Looking for {}".format(onboard))
+		if os.path.isfile(onboard):
+			shutil.copy(onboard,configPath)
 		if os.path.isdir(autostartPath):
 			for f in os.listdir(autostartPath):
 				if f.startswith("access"):
@@ -270,10 +274,16 @@ class functionHelperClass():
 				usrFolder=os.path.join(os.environ.get('HOME'),".config/accesshelper")
 				if os.path.isdir(usrFolder)==False:
 					os.makedirs(usrFolder)
-
 				self._debug("Cp {} {}".format(confPath,usrFolder))
 				shutil.copy(confPath,usrFolder)
 				data=self.getPlasmaConfig()
+			confPath=os.path.join(tmpFolder,"appconfig","onboard.dconf")
+			if os.path.isfile(confPath)==True:
+				usrFolder=os.path.join(os.environ.get('HOME'),".config/accesshelper")
+				if os.path.isdir(usrFolder)==False:
+					os.makedirs(usrFolder)
+				self._debug("Cp {} {}".format(confPath,usrFolder))
+				shutil.copy(confPath,usrFolder)
 			desktopPath=os.path.join(tmpFolder,"autostart")
 			if os.path.isdir(desktopPath)==True:
 				autostartFolder=os.path.join(os.environ.get('HOME'),".config","autostart")
@@ -336,6 +346,16 @@ class accesshelper():
 		return(self.functionHelper._getMonitors(*args))
 	#def getMonitors
 
+	def setOnboardConfig(self):
+		home=os.environ.get("HOME")
+		wrkFile=os.path.join(home,".config/accesshelper","onboard.dconf")
+		if os.path.isfile(wrkFile):
+			cmd=["cat",wrkFile]
+			cat=subprocess.Popen(cmd,stdout=subprocess.PIPE)
+			cmd=["dconf","load","/org/onboard/"]
+			dconf=subprocess.run(cmd,stdin=cat.stdout)
+	#def setOnboardConfig
+
 	def removeRGBFilter(self):
 		for monitor in self.getMonitors():
 			xrand=["xrandr","--output",monitor,"--gamma","1:1:1","--brightness","1"]
@@ -344,13 +364,13 @@ class accesshelper():
 		values=[("ggamma","1.00"),("bgamma","1.00"),("rgamma","1.00")]
 		plasmaConfig={'kgammarc':{'Screen 0':values}}
 		self.setPlasmaConfig(plasmaConfig)
-		self.removeAutostartDesktop()
+		self.removeAutostartDesktop("accesshelper_rgbFilter.desktop")
 	#def resetRGBFilter
 
-	def removeAutostartDesktop(self):
+	def removeAutostartDesktop(self,desktop):
 		home=os.environ.get("HOME")
 		if home:
-			wrkFile=os.path.join(home,".config","autostart","accesshelper_rgbFilter.desktop")
+			wrkFile=os.path.join(home,".config","autostart",desktop)
 			if os.path.isfile(wrkFile):
 				os.remove(wrkFile)
 	#def _removeAutostartDesktop

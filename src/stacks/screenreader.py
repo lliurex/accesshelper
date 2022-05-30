@@ -30,7 +30,10 @@ i18n={
 	"RECORD":_("Mp3"),
 	"SAVE":_("Save"),
 	"TEXT":_("Text"),
-	"EXPORT":_("Files exported to")
+	"EXPORT":_("Files exported to"),
+	"SPANISHMAN":_("Spanish man"),
+	"SPANISHWOMAN":_("Spanish woman"),
+	"VALENCIANWOMAN":_("Valencian")
 	}
 
 class playSignal(QObject):
@@ -114,7 +117,6 @@ class screenreader(confStack):
 		tblFiles.verticalHeader().setVisible(False)
 		self.widgets.update({tblFiles:"files"})
 		self.box.addWidget(tblFiles,5,0,1,2)
-		self.updateScreen()
 	#def _load_screen
 
 	def updateScreen(self):
@@ -132,9 +134,22 @@ class screenreader(confStack):
 				widget.setHorizontalHeaderLabels([i18n.get("FILE"),i18n.get("RECORD"),i18n.get("TEXT"),i18n.get("SAVE")])
 				widget.setAlternatingRowColors(True)
 			if desc=="voice":
+				select=""
+				if "_es_pa_" in voice:
+					select=i18n.get("SPANISHMAN")
+				elif "_es_sf_" in voice:
+					select=i18n.get("SPANISHWOMAN")
+				elif "_ca_" in voice:
+					select=i18n.get("VALENCIANWOMAN")
 				self._debug("Getting installed voices")
 				for i in self.accesshelper.getFestivalVoices():
-					widget.addItem(i)
+					if "_es_pa_" in i:
+						widget.addItem(i18n.get("SPANISHMAN"))
+					elif "_es_sf_" in i:
+						widget.addItem(i18n.get("SPANISHWOMAN"))
+					elif "_ca_":
+						widget.addItem(i18n.get("VALENCIANWOMAN"))
+				widget.setCurrentText(select)
 			if desc=="speed":
 				self._debug("Setting speed values")
 				i=0
@@ -257,6 +272,12 @@ class screenreader(confStack):
 			value=""
 			if desc=="voice":
 				value=widget.currentText()
+				if value==i18n.get("SPANISHMAN"):
+					value="JuntaDeAndalucia_es_pa_diphone"
+				elif value==i18n.get("SPANISHWOMAN"):
+					value="JuntaDeAndalucia_es_sf_diphone"
+				elif value==i18n.get("VALENCIANWOMAN"):
+					value="upc_ca_ona_hts"
 			if desc=="speed":
 				value=widget.currentText()
 			if desc=="pitch":

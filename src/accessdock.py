@@ -301,8 +301,8 @@ class accessdock(QWidget):
 						break
 				themeDesc=themeDesc.split("(")[0].replace("(","").rstrip(" ")
 				self._debug("Default cursor theme {}".format(themeDesc))
-				self.accesshelper.setCursor(themeDesc)
 				self.accesshelper.setCursorSize(lblTest.pixmap().size().width())
+				self.accesshelper.setCursor(themeDesc)
 			self.hide()
 			self.accesshelper.applyChanges()
 			self.show()

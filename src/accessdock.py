@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-import os,sys,io,psutil
+import os,sys,io,psutil,shutil
 from PySide2.QtWidgets import QApplication,QMessageBox,QGridLayout,QLabel,QToolButton,QWidget,QFrame,QDialog,QPushButton
 from PySide2.QtCore import Qt,QSignalMapper,QByteArray,QSize,QBuffer
 from PySide2.QtGui import QIcon,QPixmap,QCursor
@@ -80,6 +80,20 @@ class accessdock(QWidget):
 			self.voice=config.get("voice","JuntaDeAndalucia_es_pa_diphone")
 			self.speech.setVoice(self.voice)
 			self._setKdeHotkey(hotkey)
+		home=os.environ.get("HOME")
+		onboard="/usr/share/accesshelper/onboard.dconf"
+		if os.path.isfile(os.path.join(home,".config/accesshelper/onboard.dconf"))==False:
+			if os.path.isfile(onboard):
+				shutil.copy(onboard,os.path.join(home,".config/accesshelper/onboard.dconf"))
+			else:
+				cmd=["dconf","dump","/org/onboard/"]
+				fout=open(os.path.join(home,".config/accesshelper/onboard.dconf"),"wb")
+				subprocess.run(cmd,stdout=fout)
+		else:
+			cmd=["dconf","dump","/org/onboard/"]
+			fout=open(os.path.join(home,".config/accesshelper/onboard.dconf"),"wb")
+			subprocess.run(cmd,stdout=fout)
+			
 	#def _loadConfig
 
 	def _readConfig(self):

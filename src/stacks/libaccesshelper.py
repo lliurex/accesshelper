@@ -201,7 +201,6 @@ class functionHelperClass():
 				shutil.copy(kPath,plasmaPath)
 		if os.path.isfile(appconfrc):
 			shutil.copy(appconfrc,configPath)
-		print("Looking for {}".format(onboard))
 		if os.path.isfile(onboard):
 			shutil.copy(onboard,configPath)
 		if os.path.isdir(autostartPath):

@@ -30,7 +30,7 @@ i18n={
 
 class settings(confStack):
 	def __init_stack__(self):
-		self.dbg=False
+		self.dbg=True
 		self._debug("settings Load")
 		self.menu_description=i18n.get('MENUDESCRIPTION')
 		self.description=i18n.get('DESCRIPTION')
@@ -113,7 +113,6 @@ class settings(confStack):
 		cmb_template.setCurrentText("default")
 		self.setLayout(box)
 		_change_osh()
-		self.updateScreen()
 		return(self)
 	#def _load_screen
 
@@ -266,9 +265,9 @@ class settings(confStack):
 
 	def _removeAutostart(self,profile):
 		autoFiles=self._getAutostartFile(self.profilerAuto)
-		if os.path.isfile(autoFiles.get('home',''))==True:
+		if os.path.isfile(autoFiles.get('user',''))==True:
 			try:
-				os.remove(autoFiles['home'])
+				os.remove(autoFiles['user'])
 				self.showMsg("{} {}".format(i18n.get("DISABLEAUTOSTART"),os.environ.get("USER")))
 			except:
 				self.showMsg(i18n.get("AUTOSTARTERROR"))
@@ -293,15 +292,15 @@ class settings(confStack):
 		self.showMsg("{0} {1}".format(i18n.get("ENABLEDOCK"),hotkey))
 
 	def _removeAutostartDock(self):
-		autoFiles=self._getAutostartFile(self.profilerAuto)
+		autoFiles=self._getAutostartFile(self.dockAuto)
 		hotkey=""
 		desc="{0},{0},show accessdock".format(hotkey)
 		data=[("_launch",""),("_k_friendly_name","")]
 		config={'kglobalshortcutsrc':{'accessdock.desktop':data}}
 		self.accesshelper.setPlasmaConfig(config)
-		if os.path.isfile(autoFiles.get('home',''))==True:
+		if os.path.isfile(autoFiles.get('user',''))==True:
 			try:
-				os.remove(destPath)
+				os.remove(autoFiles.get('user'))
 				self.showMsg("{}".format(i18n.get("DISABLEDOCK")))
 			except:
 				self.showMsg(i18n.get("AUTOSTARTERROR"))

@@ -37,8 +37,9 @@ i18n={
 	"HKASSIGNED":_("already assigned to action"),
 	"MOUSECLICKENABLED":_("Track click")
 	}
+
 descHk={
-	"INVERTENABLED":"Invert",
+	"INVERTENABLED":_("Invert",),
 	"INVERTWINDOW":_("InvertWindow"),
 	"ANIMATEONCLICK":_("Show animation on click"),
 	"SNAPHELPERENABLED":_("Show a grid when moving windows"),
@@ -56,7 +57,8 @@ actionHk={
 	"INVERTENABLED":"Invert",
 	"INVERTWINDOW":"InvertWindow",
 	"TRACKMOUSEENABLED":"TrackMouse",
-	"MOUSECLICKENABLED":"ToggleMouseClick"
+	"MOUSECLICKENABLED":"ToggleMouseClick",
+	"SNAPHELPERENABLED":"ShowDesktopGrid"
 	}
 class access(confStack):
 	def __init_stack__(self):
@@ -77,6 +79,7 @@ class access(confStack):
 		self.wantSettings={}
 		self.optionChanged=[]
 		self.chkbtn={}
+		self.zoomRow=0
 		self.accesshelper=libaccesshelper.accesshelper()
 	#def __init__
 
@@ -105,7 +108,7 @@ class access(confStack):
 		self.box=QGridLayout()
 		self.setLayout(self.box)
 		self.tblGrid=QTableWidget()
-		self.tblGrid.setColumnCount(3)
+		self.tblGrid.setColumnCount(2)
 		self.tblGrid.setShowGrid(False)
 		self.tblGrid.verticalHeader().hide()
 		self.tblGrid.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
@@ -134,24 +137,67 @@ class access(confStack):
 		self._debug("Setting state for row {}".format(row))
 		btn=self.tblGrid.cellWidget(row,1)
 		chk=self.tblGrid.cellWidget(row,0)
-		if btn:
+		newValue="false"
+		if isinstance(chk,QCheckBox):
+			newValue=str(chk.isChecked()).lower()
+		elif isinstance(btn,QRadioButton):
+			newValue=str(btn.isChecked()).lower()
+		item=self.tblGrid.item(row,0)
+		if item==None:
+			return
+		data=item.data(Qt.UserRole)
+		(kfile,section,setting,value)=data.split("~")
+		if value=="":
+			value="false"
+		settings=self.plasmaConfig[kfile][section]
+		if btn and chk:
 			btn.setEnabled(chk.isChecked())
+		elif btn: #disable all zoom options, enable it later
+			settings=self._disableZoomOptions(settings)
+			value="false"
+		idx=settings.index((setting,value))
+		settings.pop(idx)
+		settings.append((setting,newValue))
+		itemData="{0}~{1}~{2}~{3}".format(kfile,section,setting,newValue)
+		if btn and not chk:
+			if newValue=="true":
+				btn.setChecked(True)
+		item.setData(Qt.UserRole,itemData)
+		self.plasmaConfig[kfile][section]=settings
 		self.btn_cancel.setEnabled(True)
 		self.btn_ok.setEnabled(True)
 	#def _updateButtons(self):
+
+	def _disableZoomOptions(self,settings):
+		for i in range(self.zoomRow+1,self.zoomRow+4):
+			zbtn=self.tblGrid.cellWidget(i,1)
+			zoomItem=self.tblGrid.item(i,0)
+			zoomData=zoomItem.data(Qt.UserRole)
+			(zkfile,zsection,zsetting,zvalue)=zoomData.split("~")
+			idx=settings.index((zsetting,zvalue))
+			settings.pop(idx)
+			settings.append((zsetting,"false"))
+			zoomItemData="{0}~{1}~{2}~{3}".format(zkfile,zsection,zsetting,"false")
+			zoomItem.setData(Qt.UserRole,zoomItemData)
+		#	zbtn.setAutoExclusive(False)
+		#	zbtn.setChecked(False)
+		#	zbtn.setAutoExclusive(True)
+		return(settings)
 
 	def updateScreen(self):
 		self.tblGrid.clear()
 		self.tblGrid.setRowCount(0)
 		self.chkbtn={}
-		zoomOptions=[]
 		for wrkFile in self.wrkFiles:
 			plasmaConfig=self.accesshelper.getPlasmaConfig(wrkFile)
 			self.plasmaConfig.update(plasmaConfig)
 			for kfile,sections in plasmaConfig.items():
+				zoomOptions=[]
+				zoomOptions.append(kfile)
 				want=self.wantSettings.get(kfile,[])
 				block=self.blockSettings.get(kfile,[])
 				for section,settings in sections.items():
+					zoomOptions.append(section)
 					settings=self.sortArraySettings(settings)
 					for setting in settings:
 						(name,data)=setting
@@ -169,19 +215,30 @@ class access(confStack):
 						chk.stateChanged.connect(self._updateButtons)
 						self.tblGrid.setCellWidget(row,0,chk)
 						item=QTableWidgetItem()
-						item.setData(Qt.UserRole,actionHk.get(name.upper(),name))
-						self.tblGrid.setItem(row,2,item)
+						itemData="{0}~{1}~{2}~{3}".format(kfile,section,name,data)
+						item.setData(Qt.UserRole,itemData)
+						self.tblGrid.setItem(row,0,item)
 						if name.upper() not in ["SYSTEMBELL","VISIBLEBELL","SNAPHELPERENABLED"]:
-							(mainHk,hkData,hkSetting,hkSection)=self.accesshelper.getHotkey(name)
-							btn=libhotkeys.QHotkeyButton()
-							btn.setText(mainHk)
-							btn.hotkeyAssigned.connect(self._testHotkey)
-							self.chkbtn[chk]=btn
-							self.tblGrid.setCellWidget(row,1,btn)
-							btn.setEnabled(chk.isChecked())
+							self._addHotkeyButton(name,row,chk)
 						self.tblGrid.resizeRowToContents(row)
 		self._loadZoomOptions(zoomOptions)
+		self.btn_cancel.setEnabled(False)
+		self.btn_ok.setEnabled(False)
 	#def _update_screen
+
+	def _addHotkeyButton(self,name,row,chk):
+		(mainHk,hkData,hkSetting,hkSection)=self.accesshelper.getHotkey(name)
+		item=QTableWidgetItem()
+		itemData="{0}".format(hkSetting)
+		item.setData(Qt.UserRole,itemData)
+		self.tblGrid.setItem(row,1,item)
+		btn=libhotkeys.QHotkeyButton()
+		btn.setText(mainHk)
+		btn.hotkeyAssigned.connect(self._testHotkey)
+		self.chkbtn[chk]=btn
+		self.tblGrid.setCellWidget(row,1,btn)
+		btn.setEnabled(chk.isChecked())
+	#def _addHotkeyButton
 
 	def _loadZoomOptions(self,zoomOptions):
 		chk=QCheckBox("{} (Meta+=/Meta+-)".format(i18n.get("MAGNIFIEREFFECTS")))
@@ -189,31 +246,45 @@ class access(confStack):
 		row=self.tblGrid.rowCount()
 		self.tblGrid.setRowCount(row+1)
 		self.tblGrid.setCellWidget(row,0,chk)
-		zoomRow=row
-		self.tblGrid.resizeRowToContents(row)
+		self.zoomRow=row
+		kfile=zoomOptions.pop(0)
+		section=zoomOptions.pop(0)
 		for setting in zoomOptions:
 			row=self.tblGrid.rowCount()
 			self.tblGrid.setRowCount(row+1)
+			if isinstance(setting,tuple)==False:
+				continue
 			(name,data)=setting
 			desc=i18n.get(name.upper(),name)
 			btn=QRadioButton(desc)
+			btn.toggled.connect(self._updateButtons)
+			if data=="true":
+				chk.setChecked(True)
+				btn.setChecked(True)
 			self.tblGrid.setCellWidget(row,1,btn)
 			item=QTableWidgetItem()
-			item.setData(Qt.UserRole,name)
-			self.tblGrid.setItem(row,2,item)
-		self._setZoomOptionsEnabled(init=zoomRow)
+			itemData="{0}~{1}~{2}~{3}".format(kfile,section,name,data)
+			item.setData(Qt.UserRole,itemData)
+			self.tblGrid.setItem(row,0,item)
+			self.tblGrid.resizeRowToContents(row)
+		self._setZoomOptionsEnabled()
 	#def _loadZoomOptions
 
-	def _setZoomOptionsEnabled(self,*args,init=None):
-		if init:
-			row=init
-		else:
-			row=self.tblGrid.currentRow()
-		chk=self.tblGrid.cellWidget(row,0)
-		for i in range(row+1,row+4):
+	def _setZoomOptionsEnabled(self,*args):
+		chk=self.tblGrid.cellWidget(self.zoomRow,0)
+		item=None
+		for i in range(self.zoomRow+1,self.zoomRow+4):
 			opt=self.tblGrid.cellWidget(i,1)
+			if item==None:
+				item=self.tblGrid.item(i,0)
+				(kfile,section,setting,data)=item.data(Qt.UserRole).split("~")
+				settings=self.plasmaConfig[kfile][section]
 			if opt:
 				opt.setEnabled(chk.isChecked())
+				if chk.isChecked()==False:
+					self._disableZoomOptions(settings)
+		self.btn_cancel.setEnabled(True)
+		self.btn_ok.setEnabled(True)
 	#def _setZoomOptionsEnabled
 
 	def _updateConfig(self,*args):
@@ -227,32 +298,22 @@ class access(confStack):
 		for i in range(self.tblGrid.rowCount()):
 			chk=self.tblGrid.cellWidget(i,0)
 			if chk:
-				state=chk.isChecked()
-			item=self.tblGrid.item(i,2)
-			if item:
-				value=item.data(Qt.UserRole)
-			btn=self.tblGrid.cellWidget(i,1)
-			hotkey=None
-			if isinstance(btn,libhotkeys.QHotkeyButton):
-				hotkey=btn.text()
-				self._getPlasmaHotkeysFromTable(value,hotkey)
-			elif isinstance(btn,QRadioButton):
-				state=btn.isChecked()
-			if isinstance(state,bool) and item:
-				self._setPlasmaConfigFromTable(value,state)
+				btn=self.tblGrid.cellWidget(i,1)
+				if isinstance(btn,libhotkeys.QHotkeyButton):
+					if (chk.isChecked()):
+						hotkey=btn.text()
+						item=self.tblGrid.item(i,1)
+						setting=item.data(Qt.UserRole)
+						self._setPlasmaHotkeysFromTable(setting,hotkey)
 	#def updateHotkeysFromTable
 
-	def _getPlasmaHotkeysFromTable(self,desc,hotkey):
+	def _setPlasmaHotkeysFromTable(self,desc,hotkey):
 		self._debug("Set hotkey {} for {}".format(hotkey,desc))
-		newSections={}
-		plasmaConfig={}
+		newSettings=[]
 		if self.plasmaConfig.get('kglobalshortcutsrc',{})=={}:
-			plasmaConfig=self.accesshelper.getPlasmaConfig('kglobalshortcutsrc')
-		else:
-			plasmaConfig['kglobalshortcutsrc']=self.plasmaConfig.get('kglobalshortcutsrc')
-		for kfile,sections in plasmaConfig.items():
-			settings=sections.get('kwin',[])
-			newSettings=[]
+			self.plasmaConfig["kglobalshortcutsrc"]=self.accesshelper.getPlasmaConfig('kglobalshortcutsrc').get("kglobalshortcutsrc","")
+		settings=self.plasmaConfig.get('kglobalshortcutsrc',{}).get("kwin",[])
+		if len(settings)>0:
 			for setting in settings:
 				(description,value)=setting
 				if description==desc:
@@ -261,26 +322,8 @@ class access(confStack):
 					arraySetting[1]=hotkey
 					value=",".join(arraySetting)
 				newSettings.append((description,value))
-			if 'kwin' in sections.keys():
-				newSections['kwin']=newSettings
-				self.plasmaConfig.update({kfile:newSections})
+		self.plasmaConfig["kglobalshortcutsrc"]["kwin"]=newSettings
 	#def _getPlasmaHotkeysFromTable
-
-	def _setPlasmaConfigFromTable(self,value,state):
-		for kfile,sections in self.plasmaConfig.items():
-			if kfile=='kglobalshortcutsrc':
-				continue
-			newSections={}
-			for section,settings in sections.items():
-				newSettings=[]
-				for setting in settings:
-					(description,origState)=setting
-					if description==value:
-						setting=(description,str(state).lower())
-					newSettings.append(setting)
-				newSections[section]=newSettings
-			self.plasmaConfig.update({kfile:newSections})
-	#def _setPlasmaConfigFromTable(self,value,state):
 
 	def writeConfig(self):
 		self.updateDataFromTable()

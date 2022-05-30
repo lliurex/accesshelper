@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-import os,sys,io,psutil,shutil
+import os,sys,io,psutil,shutil,signal
 from PySide2.QtWidgets import QApplication,QMessageBox,QGridLayout,QLabel,QToolButton,QWidget,QFrame,QDialog,QPushButton
 from PySide2.QtCore import Qt,QSignalMapper,QByteArray,QSize,QBuffer
 from PySide2.QtGui import QIcon,QPixmap,QCursor
@@ -52,6 +52,8 @@ class accessdock(QWidget):
 				count+=1
 				if count>1:
 					self._debug("Accessdock is running as pid {}".format(pid))
+					os.kill(p.pid,signal.SIGKILL)
+
 					sys.exit(0)
 				pid=p.pid
 	#def _chkDockRunning

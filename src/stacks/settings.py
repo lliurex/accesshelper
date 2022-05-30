@@ -2,11 +2,12 @@
 import sys
 import os
 import shutil
-from PySide2.QtWidgets import QApplication,QLineEdit, QLabel, QWidget, QPushButton,QGridLayout,QLineEdit,QHBoxLayout,QComboBox,QCheckBox
+from PySide2.QtWidgets import QApplication, QLabel, QWidget, QGridLayout,QComboBox,QCheckBox
 from PySide2 import QtGui
-from PySide2.QtCore import Qt,QSignalMapper,Signal,QEvent
+from PySide2.QtCore import Qt
 from appconfig.appConfigStack import appConfigStack as confStack
 from . import libaccesshelper
+from . import libhotkeys
 import subprocess
 import tempfile
 import gettext
@@ -28,7 +29,6 @@ i18n={
 	}
 
 class settings(confStack):
-	keybind_signal=Signal("PyObject")
 	def __init_stack__(self):
 		self.dbg=False
 		self._debug("settings Load")
@@ -86,8 +86,6 @@ class settings(confStack):
 		lbl_help.setAlignment(Qt.AlignTop)
 		box.addWidget(lbl_help,1,0,1,2,Qt.AlignTop|Qt.AlignCenter)
 		box.addWidget(QLabel(_("Session settings")),2,0,1,2,Qt.AlignTop)
-		#self.chk_startup=QCheckBox(_("Launch at startup"))
-		#box.addWidget(self.chk_startup,3,0,1,2)
 		chk_template=QCheckBox(_("Load template on start"))
 		box.addWidget(chk_template,3,0,1,1,Qt.AlignTop)
 		self.widgets.update({chk_template:'startup'})
@@ -97,37 +95,17 @@ class settings(confStack):
 		chk_dock=QCheckBox(_("Enable accesshelper dock"))
 		box.addWidget(chk_dock,4,0,1,1,Qt.AlignTop)
 		self.widgets.update({chk_dock:'dock'})
-		btn_dockHk=QPushButton(_("Ctrl+Space"))
 		(mainHk,hkData,hkSetting,hkSection)=self.accesshelper.getHotkey("accessdock.desktop")
-		if mainHk!="":
-			btn_dockHk.setText("{}".format(mainHk))
-		btn_dockHk.clicked.connect(lambda: self._grab_alt_keys(btn_dockHk))
-		box.addWidget(btn_dockHk,4,1,1,1,Qt.AlignTop)
-		self.widgets.update({btn_dockHk:'dockHk'})
-	#	lbl_speed=QLabel(i18n.get("VOICESPEED"))
-	#	box.addWidget(lbl_speed,5,0,1,1,Qt.AlignTop)
-	#	cmb_speed=QComboBox()
-	#	i=0
-	#	while i<=3:
-	#		if isinstance(i,float):
-	#			if i.is_integer():
-	#				i=int(i)
-	#		cmb_speed.addItem("{}x".format(str(i)))
-	#		i+=0.25
-	#	box.addWidget(cmb_speed,5,1,1,1,Qt.AlignTop)
-	#	self.widgets.update({cmb_speed:'speed'})
-	#	lbl_pitch=QLabel(i18n.get("VOICEPITCH"))
-	#	box.addWidget(lbl_pitch,6,0,1,1,Qt.AlignTop)
-	#	cmb_pitch=QComboBox()
-	#	for i in range (1,101):
-	#		cmb_pitch.addItem(str(i))
-	#	box.addWidget(cmb_pitch,6,1,1,1,Qt.AlignTop)
-	#	self.widgets.update({cmb_pitch:'pitch'})
+		if mainHk=="":
+			mainHk="Ctrl+Space"
+		self.btn_dockHk=libhotkeys.QHotkeyButton(mainHk)
+		self.btn_dockHk.hotkeyAssigned.connect(self._testHotkey)
+		box.addWidget(self.btn_dockHk,4,1,1,1,Qt.AlignTop)
+		self.widgets.update({self.btn_dockHk:'dockHk'})
 		box.setRowStretch(0,1)
 		for i in range (1,4):
 			box.setRowStretch(i,0)
 		box.setRowStretch(i+1,2)
-
 		for wrkDir in self.wrkDirs:
 			if os.path.isdir(wrkDir):
 				for f in os.listdir(wrkDir):
@@ -138,6 +116,18 @@ class settings(confStack):
 		self.updateScreen()
 		return(self)
 	#def _load_screen
+
+	def _testHotkey(self,hotkey):
+		self._debug("Read Hotkey {} from {}".format(hotkey,self.btn_dockHk))
+		if not hotkey.get("action","")=="":
+			try:
+				self.showMsg("{0} {1} {2}".format(hotkey.get("hotkey"),i18n.get("HKASSIGNED"),hotkey.get("action")))
+			except:
+				pass
+			self.btn_dockHk.revertHotkey()
+		self.btn_ok.setEnabled(True)
+		self.btn_cancel.setEnabled(True)
+	#def _testHotkey
 
 	def fakeUpdate(self):
 		idx=self.cmb_level.currentIndex()
@@ -151,71 +141,6 @@ class settings(confStack):
 		self.cmb_level.setCurrentIndex(idx)
 	#	self.updateScreen()
 	#def fakeUpdate
-	
-	def _grab_alt_keys(self,*args):
-		desc=''
-		btn=''
-		if len(args)>0:
-			btn=args[0]
-		if btn:
-			desc=self.widgets.get(btn,'')
-		if btn:
-			btn.setText("Press keys")
-			self.grabKeyboard()
-			self.keybind_signal.connect(self._set_config_key)
-
-	def _set_config_key(self,keypress):
-		keypress=keypress.replace("Control","Ctrl")
-		btn=""
-		for widget in self.widgets.keys():
-			if isinstance(widget,QPushButton):
-				if self.widgets.get(widget,"")=="dockHk":
-					btn=widget
-					break
-		if btn:
-			desc="_launch"
-			kfile="kglobalshortcutsrc"
-			section="accessdock.desktop"
-			btn.setText(keypress)
-			plasmaConfig=self.accesshelper.getPlasmaConfig(kfile,'')
-			configData=plasmaConfig.get(kfile,{})
-			sectionData=configData.get(section,{})
-			data=sectionData[0]
-			(setting,value)=data
-			dataTmp=[]
-			if setting=="_launch":
-				valueArray=value.split(",")
-				while (len(valueArray)<2):
-					valueArray.append([])
-				valueArray[0]=keypress
-				valueArray[1]=keypress
-				value=",".join(valueArray)
-			dataTmp.append((setting,value))
-			plasmaConfig[kfile][section]=dataTmp
-		self.btn_ok.setEnabled(True)
-		self.btn_cancel.setEnabled(True)
-	#def _set_config_key
-
-	def eventFilter(self,source,event):
-		sw_mod=False
-		keypressed=[]
-		if (event.type()==QEvent.KeyPress):
-			for modifier,text in self.modmap.items():
-				if event.modifiers() & modifier:
-					sw_mod=True
-					keypressed.append(text)
-			key=self.keymap.get(event.key(),event.text())
-			if key not in keypressed:
-				if sw_mod==True:
-					sw_mod=False
-				keypressed.append(key)
-			if sw_mod==False:
-				self.keybind_signal.emit("+".join(keypressed))
-		if (event.type()==QEvent.KeyRelease):
-			self.releaseKeyboard()
-
-		return False
-	#def eventFilter
 
 	def _getAutostartFile(self,f):
 		autostartFiles={}
@@ -357,10 +282,9 @@ class settings(confStack):
 		shutil.copy(tmpF,destPath)
 		btnHk="Ctrl+Space"
 		for widget in self.widgets.keys():
-			if isinstance(widget,QPushButton):
-				if self.widgets.get(widget,"")=="dockHk":
-					btnHk=widget.text()
-					break
+			if isinstance(widget,libhotkeys.QHotkeyButton):
+				btnHk=widget.text()
+				break
 		hotkey=btnHk
 		desc="{0},{0},show accessdock".format(hotkey)
 		data=[("_launch",desc),("_k_friendly_name","accessdock")]

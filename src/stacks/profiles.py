@@ -46,6 +46,7 @@ class profiles(confStack):
 		self.profilesPath={}
 		self.lst_profiles=QListWidget()
 		self.lst_userProfiles=QListWidget()
+		self.onboardConf="onboard.dconf"
 		self.hideControlButtons()
 		self.accesshelper=libaccesshelper.accesshelper()
 	#def __init__
@@ -174,8 +175,13 @@ class profiles(confStack):
 
 	def _applyProfileSettings(self):
 		self.config=self.getConfig("user",{}).get("user",{})
-		if "alfa" not in self.config.keys():
-			self.accesshelper.removeAutostartDesktop()
+		if self.config.get('alpha',[])==[]:
+			self.removeAutostartDesktop("accesshelper_rgbFilter.desktop")
+		if self.config.get('startup','false')=='false':
+			self.removeAutostartDesktop("accesshelper_profiler.desktop")
+		if self.config.get('dock','false')=='false':
+			self.removeAutostartDesktop("accessdock.desktop")
+		self.acceshelper.setOnboardConfig()
 	#def _applyProfileSettings
 
 	def _updateConfig(self,key):

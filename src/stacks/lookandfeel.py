@@ -107,8 +107,8 @@ class lookandfeel(confStack):
 		cmbCursorSize.addItem("128")
 		cmbCursorSize.currentTextChanged.connect(self.updateCursorIcons)
 
-		self.updateScreen()
-		self.updateCursorIcons()
+#		self.updateScreen()
+#		self.updateCursorIcons()
 		#self.changes=False
 	#def _load_screen
 
@@ -176,8 +176,6 @@ class lookandfeel(confStack):
 			if selectedColor!="":
 				cmb=self.widgets.get("background",QComboBox())
 				cmb.setCurrentText(selectedColor)
-
-						
 	#def _udpate_screen
 
 	def updateCursorIcons(self):

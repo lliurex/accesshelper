@@ -6,6 +6,7 @@ import shutil
 from collections import OrderedDict
 from PySide2.QtGui import QIcon,QPixmap
 import dbus
+import json
 
 class functionHelperClass():
 	def __init__(self):
@@ -45,6 +46,17 @@ class functionHelperClass():
 		"""
 		return(style)
 	#def cssStyle
+	
+	def _getMonitors(self,*args):
+		monitors=[]
+		cmd=subprocess.run(["xrandr","--listmonitors"],capture_output=True,encoding="utf8")
+		for xrandmonitor in cmd.stdout.split("\n"):
+			monitor=xrandmonitor.split(" ")[-1].strip()
+			if not monitor or monitor.isdigit()==True:
+				continue
+			monitors.append(monitor)
+		return(monitors)
+	#def _getMonitors
 
 	def getPlasmaConfig(self,wrkFile='',sourceFolder=''):
 		dictValues={}
@@ -177,6 +189,10 @@ class functionHelperClass():
 		os.makedirs(plasmaPath)
 		configPath=os.path.join(tmpFolder,"appconfig")
 		os.makedirs(configPath)
+		desktopPath=os.path.join(tmpFolder,"autostart")
+		os.makedirs(desktopPath)
+		home=os.environ.get("HOME")
+		autostartPath=os.path.join(home,".config","autostart")
 		flist=[]
 		for kfile in self.dictFileData.keys():
 			kPath=os.path.join(os.environ['HOME'],".config",kfile)
@@ -184,6 +200,11 @@ class functionHelperClass():
 				shutil.copy(kPath,plasmaPath)
 		if os.path.isfile(appconfrc):
 			shutil.copy(appconfrc,configPath)
+		if os.path.isdir(autostartPath):
+			for f in os.listdir(autostartPath):
+				if f.startswith("access"):
+					autostart=os.path.join(autostartPath,f)
+					shutil.copy(autostart,desktopPath)
 		(osHdl,tmpFile)=tempfile.mkstemp()
 		oldCwd=os.getcwd()
 		os.chdir(tmpFolder)
@@ -253,6 +274,15 @@ class functionHelperClass():
 				self._debug("Cp {} {}".format(confPath,usrFolder))
 				shutil.copy(confPath,usrFolder)
 				data=self.getPlasmaConfig()
+			desktopPath=os.path.join(tmpFolder,"autostart")
+			if os.path.isdir(desktopPath)==True:
+				autostartFolder=os.path.join(os.environ.get('HOME'),".config","autostart")
+				if os.path.isdir(autostartFolder)==False:
+					os.makedirs(autostartFolder)
+				for f in os.listdir(desktopPath):
+					desktopPath=os.path.join(desktopPath,f)
+					self._debug("Cp {} {}".format(desktopPath,autostartFolder))
+					shutil.copy(desktopPath,autostartFolder)
 		return(sw)
 	#def restore_snapshot
 
@@ -301,6 +331,85 @@ class accesshelper():
 		if self.dbg:
 			print("libaccess: {}".format(msg))
 	#def _debug
+
+	def getMonitors(self,*args):
+		return(self.functionHelper._getMonitors(*args))
+	#def getMonitors
+
+	def removeRGBFilter(self):
+		for monitor in self.getMonitors():
+			xrand=["xrandr","--output",monitor,"--gamma","1:1:1","--brightness","1"]
+		xgamma=["xgamma","-screen","0","-rgamma","1","-ggamma","1","-bgamma","1"]
+		cmd=subprocess.run(xgamma,capture_output=True,encoding="utf8")
+		values=[("ggamma","1.00"),("bgamma","1.00"),("rgamma","1.00")]
+		plasmaConfig={'kgammarc':{'Screen 0':values}}
+		self.setPlasmaConfig(plasmaConfig)
+		self.removeAutostartDesktop()
+	#def resetRGBFilter
+
+	def removeAutostartDesktop(self):
+		home=os.environ.get("HOME")
+		if home:
+			wrkFile=os.path.join(home,".config","autostart","accesshelper_rgbFilter.desktop")
+			if os.path.isfile(wrkFile):
+				os.remove(wrkFile)
+	#def _removeAutostartDesktop
+
+	def setRGBFilter(self,alpha):
+		def getRgbCompatValue(color):
+			(top,color)=color
+			c=round((color*top)/255,2)
+			return c
+		def adjustCompatValue(color):
+			(multiplier,c,minValue)=color
+			while (c*100)%multiplier!=0 and c!=0:
+				c=round(c+0.01,2)
+			if c<=minValue:
+				c=minValue
+			return c
+		#xgamma uses 0.1-10 scale. Values>4 are too bright and values<0.5 too dark
+		maxXgamma=3.5
+		minXgamma=0.5
+		#kgamma uses 0.40-3.5 scale. 
+		maxKgamma=3.5
+		minKgamma=0.4
+		(xred,xblue,xgreen)=map(getRgbCompatValue,[(maxXgamma,alpha.red()),(maxXgamma,alpha.blue()),(maxXgamma,alpha.green())])
+		(red,blue,green)=map(getRgbCompatValue,[(maxKgamma,alpha.red()),(maxKgamma,alpha.blue()),(maxKgamma,alpha.green())])
+		if red+blue+green>(maxKgamma*(2-(maxKgamma*0.10))): #maxKGamma*2=at least two channel very high, plus a 10% margin
+			red-=1
+			green-=1
+			blue-=1
+		multiplier=1
+		(xred,xblue,xgreen)=map(adjustCompatValue,[[multiplier,minXgamma,xred],[multiplier,minXgamma,xblue],[multiplier,minXgamma,xgreen]])
+		multiplier=5
+		(red,blue,green)=map(adjustCompatValue,[[multiplier,minKgamma,red],[multiplier,minKgamma,blue],[multiplier,minKgamma,green]])
+		brightness=1
+		xgamma=["xgamma","-screen","0","-rgamma","{0:.2f}".format(xred),"-ggamma","{0:.2f}".format(xgreen),"-bgamma","{0:.2f}".format(xblue)]
+		cmd=subprocess.run(xgamma,capture_output=True,encoding="utf8")
+		self._generateAutostartDesktop(xgamma)
+		return(red,green,blue)
+	#def setRGBFilter
+
+	def _generateAutostartDesktop(self,cmd):
+		desktop=[]
+		desktop.append("[Desktop Entry]")
+		desktop.append("Encoding=UTF-8")
+		desktop.append("Type=Application")
+		desktop.append("Name=rgb_filter")
+		desktop.append("Comment=Apply rgb filters")
+		desktop.append("Exec={}".format(" ".join(cmd)))
+		desktop.append("StartupNotify=false")
+		desktop.append("Terminal=false")
+		desktop.append("Hidden=false")
+		home=os.environ.get("HOME")
+		if home:
+			wrkFile=os.path.join(home,".config","autostart","accesshelper_rgbFilter.desktop")
+			if os.path.isdir(os.path.dirname(wrkFile))==False:
+				os.makedirs(os.path.dirname(wrkFile))
+			with open(wrkFile,"w") as f:
+				f.write("\n".join(desktop))
+	#def _generateAutostartDesktop
+
 
 	def getCursors(self):
 		availableThemes=[]

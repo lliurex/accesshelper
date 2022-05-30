@@ -168,8 +168,15 @@ class profiles(confStack):
 		f.close()
 		self.optionChanged=[]
 		cursor=QtGui.QCursor(Qt.PointingHandCursor)
+		self._applyProfileSettings()
 		self.setCursor(cursor)
 	#def loadProfile(self,*args):
+
+	def _applyProfileSettings(self):
+		self.config=self.getConfig("user",{}).get("user",{})
+		if "alfa" not in self.config.keys():
+			self.accesshelper.removeAutostartDesktop()
+	#def _applyProfileSettings
 
 	def _updateConfig(self,key):
 		pass

@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 from . import libaccesshelper
-from . import libhotkeys
+from . import appconfigControls
 import os
 from PySide2.QtWidgets import QLabel, QPushButton,QGridLayout,QLineEdit,QRadioButton,QListWidget,QGroupBox,QCompleter,QListWidgetItem
 from PySide2 import QtGui
@@ -69,7 +69,7 @@ class addHotkey(confStack):
 		#layOption.addWidget(opt2,0,1)
 		grpOptions.setLayout(layOption)
 		#self.box.addWidget(grpOptions,0,0,1,3)
-		self.btnHk=libhotkeys.QHotkeyButton(i18n.get("BTNTXT"))
+		self.btnHk=appconfigControls.QHotkeyButton(i18n.get("BTNTXT"))
 		self.btnHk.hotkeyAssigned.connect(self._testHotkey)
 		self.box.addWidget(self.btnHk,1,0,3,1)
 		self.inpSearch=QLineEdit()

@@ -15,7 +15,7 @@ from stacks import libspeechhelper
 QString=type("")
 
 i18n={
-	"CONFIG":_("Configuration"),
+	"CONFIG":_("Screen reader"),
 	"DESCRIPTION":_("TTS settings"),
 	"MENUDESCRIPTION":_("Text-To-Speech related options"),
 	"TOOLTIP":_("Some options related with TTS"),
@@ -268,10 +268,15 @@ class screenreader(confStack):
 
 	def writeConfig(self):
 		config=self.getConfig()
+		voice=""
+		speed=""
+		pitch=""
+		synt=""
 		for widget,desc in self.widgets.items():
 			value=""
 			if desc=="voice":
 				value=widget.currentText()
+				voice=value
 				if value==i18n.get("SPANISHMAN"):
 					value="JuntaDeAndalucia_es_pa_diphone"
 				elif value==i18n.get("SPANISHWOMAN"):
@@ -280,18 +285,25 @@ class screenreader(confStack):
 					value="upc_ca_ona_hts"
 			if desc=="speed":
 				value=widget.currentText()
+				speed=value
 			if desc=="pitch":
 				value=widget.currentText()
+				pitch=value
 			if desc=="synt":
 				value="tts"
 				if "vlc" in widget.currentText().lower():
 					value="vlc"
+				synt=value
 			if value!="":
 				self.saveChanges(desc,value)
-		f=open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'w')
-		f.close()
-		self.changes=""
-		self.refresh=True
-		return
+		self._writeFileChanges(voice,speed,pitch,synt)
 	#def writeConfig
-
+		
+	def _writeFileChanges(self,voice,speed,pitch,synt):
+		with open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'a') as f:
+			f.write("<b>{}</b>\n".format(i18n.get("CONFIG")))
+			f.write("{0}->{1}\n".format(i18n.get("VOICE"),voice))
+			f.write("{0}->{1}\n".format(i18n.get("SPEED"),speed))
+			f.write("{0}->{1}\n".format(i18n.get("PITCH"),pitch))
+			f.write("{0}->{1}\n".format(i18n.get("SYNT"),synt))
+	#def _writeFileChanges(self):

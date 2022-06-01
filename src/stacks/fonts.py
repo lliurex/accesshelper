@@ -14,14 +14,15 @@ QString=type("")
 
 i18n={
 	"ACCESSIBILITY":_("Font options"),
-	"CONFIG":_("Configuration"),
+	"CONFIG":_("Fonts"),
 	"DESCRIPTION":_("Font configuration"),
 	"MENUDESCRIPTION":_("Modify system fonts"),
 	"TOOLTIP":_("Customize the system fonts"),
 	"FONTSIZE":_("Font size"),
 	"FAMILY":_("Font family"),
 	"CURSORTHEME":_("Cursor theme"),
-	"CURSORSIZE":_("Cursor size")
+	"CURSORSIZE":_("Cursor size"),
+	"SETFONT":_("Font")
 	}
 
 class fonts(confStack):
@@ -143,81 +144,33 @@ class fonts(confStack):
 		#		self._exeKwinMethod(key) 
 	
 	def writeConfig(self):
-		for name,wdg in self.widgets.items():
-			if name=="font":
-				qfont=wdg.currentFont()
-				font=qfont.toString()
-				minfont=font
-				size=qfont.pointSize()
-				minSize=size-2
-				self._debug("FONT: {}".format(size))
-				self.saveChanges('fonts','{}'.format(font))
-				fontFixed="Hack"
-				fixed="{0},{1},-1,5,50,0,0,0,0,0".format(fontFixed,size)
-				if size>8:
-					qfont.setPointSize(size-2)
-					minFont=qfont.toString()
-				self.accesshelper.setKdeConfigSetting("General","fixed",fixed,"kdeglobals")
-				self.accesshelper.setKdeConfigSetting("General","font",font,"kdeglobals")
-				self.accesshelper.setKdeConfigSetting("General","menuFont",font,"kdeglobals")
-				self.accesshelper.setKdeConfigSetting("General","smallestReadableFont",minFont,"kdeglobals")
-				self.accesshelper.setKdeConfigSetting("General","toolBarFont",font,"kdeglobals")
-				self.accesshelper.setKdeConfigSetting("Appearance","Font",fixed,"Lliurex.profile")
-				self._setMozillaFirefoxFonts(size)
-				self._setGtkFonts(font)
-		self.optionChanged=[]
-		self.refresh=True
-		f=open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'w')
-		f.close()
+		wdg=self.widgets.get("font")
+		qfont=wdg.currentFont()
+		font=qfont.toString()
+		minfont=font
+		size=qfont.pointSize()
+		minSize=size-2
+		self._debug("FONT: {}".format(size))
+		self.saveChanges('fonts','{}'.format(font))
+		fontFixed="Hack"
+		fixed="{0},{1},-1,5,50,0,0,0,0,0".format(fontFixed,size)
+		if size>8:
+			qfont.setPointSize(size-2)
+			minFont=qfont.toString()
+		self.accesshelper.setKdeConfigSetting("General","fixed",fixed,"kdeglobals")
+		self.accesshelper.setKdeConfigSetting("General","font",font,"kdeglobals")
+		self.accesshelper.setKdeConfigSetting("General","menuFont",font,"kdeglobals")
+		self.accesshelper.setKdeConfigSetting("General","smallestReadableFont",minFont,"kdeglobals")
+		self.accesshelper.setKdeConfigSetting("General","toolBarFont",font,"kdeglobals")
+		self.accesshelper.setKdeConfigSetting("Appearance","Font",fixed,"Lliurex.profile")
+		self.accesshelper.setMozillaFirefoxFonts(size)
+		self.accesshelper.setGtkFonts(font)
+		self._writeFileChanges(font)
 	#def writeConfig
 
-	def _setMozillaFirefoxFonts(self,size):
-		size+=7 #Firefox font size is smallest.
-		mozillaDir=os.path.join(os.environ.get('HOME',''),".mozilla/firefox")
-		for mozillaF in os.listdir(mozillaDir):
-			self._debug("Reading MOZILLA {}".format(mozillaF))
-			fPath=os.path.join(mozillaDir,mozillaF)
-			if os.path.isdir(fPath):
-				self._debug("Reading DIR {}".format(mozillaF))
-				if "." in mozillaF:
-					self._debug("Reading DIR {}".format(mozillaF))
-					prefs=os.path.join(mozillaDir,mozillaF,"prefs.js")
-					if os.path.isfile(prefs):
-						with open(prefs,'r') as f:
-							lines=f.readlines()
-						newLines=[]
-						for line in lines:
-							if line.startswith('user_pref("font.minimum-size.x-unicode"'):
-								continue
-							elif line.startswith('user_pref("font.minimum-size.x-western"'):
-								continue
-							newLines.append(line)
-						line='user_pref("font.minimum-size.x-western", {});\n'.format(size)
-						newLines.append(line)
-						line='user_pref("font.minimum-size.x-unicode", {});\n'.format(size)
-						newLines.append(line)
-						self._debug("Writting MOZILLA {}".format(mozillaF))
-						with open(os.path.join(mozillaDir,mozillaF,"prefs.js"),'w') as f:
-							f.writelines(newLines)
-	#def _setMozillaFirefoxFonts
-
-	def _setGtkFonts(self,font):
-		fontArray=font.split(',')
-		gtkFont="{0}, {1} {2}".format(fontArray[0],fontArray[-1],fontArray[1])
-		gtkDirs=[os.path.join("/home",os.environ.get('USER',''),".config/gtk-3.0"),os.path.join("/home",os.environ.get('USER',''),".config/gtk-4.0")]
-		for gtkDir in gtkDirs:
-			fcontent=[]
-			if os.path.isfile(os.path.join(gtkDir,"settings.ini"))==True:
-				with  open(os.path.join(gtkDir,"settings.ini"),"r") as f:
-					for line in f.readlines():
-						if line.startswith("gtk-font-name")==False:
-							fcontent.append(line)
-			fcontent.append("gtk-font-name={}\n".format(gtkFont))
-			with  open(os.path.join(gtkDir,"settings.ini"),"w") as f:
-				try:
-					f.writelines(fcontent)
-				except Exception as e:
-					self._debug("error saving gtk fonts")
-
-
-
+	def _writeFileChanges(self,font):
+		arrayFont=font.split(",")
+		with open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'a') as f:
+			f.write("<b>{}</b>\n".format(i18n.get("CONFIG")))
+			f.write("{0}->{1} {2} {3}\n".format(i18n.get("SETFONT"),arrayFont[0],arrayFont[1],arrayFont[-1]))
+	#def _writeFileChanges(self):

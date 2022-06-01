@@ -14,12 +14,13 @@ import dbus,dbus.service,dbus.exceptions
 QString=type("")
 
 i18n={
-	"CONFIG":_("Configuration"),
+	"CONFIG":_("Color"),
 	"DESCRIPTION":_("Color filter configuration"),
 	"MENUDESCRIPTION":_("Modify screen color levels"),
 	"TOOLTIP":_("Set color filter for the screen"),
 	"FILTER":_("Color filter"),
-	"DEFAULT":_("By default")
+	"DEFAULT":_("By default"),
+	"OPTIONCOLOR":_("Set color filter: ")
 	}
 
 class alpha(confStack):
@@ -114,8 +115,7 @@ class alpha(confStack):
 		self.optionChanged=[]
 		self.refresh=True
 		self.btn_cancel.setEnabled(True)
-		f=open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'w')
-		f.close()
+		self._writeFileChanges(qalpha)
 	#def writeConfig
 
 	def _reset_screen(self,*args):
@@ -129,3 +129,9 @@ class alpha(confStack):
 		self.changes=False
 		self.refresh=False
 	#def _reset_screen
+
+	def _writeFileChanges(self,qalpha):
+		with open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'a') as f:
+			f.write("<b>{}<b>\n".format(i18n.get("CONFIG")))
+			f.write("{0}->{1}\n".format(i18n.get("FILTER"),qalpha.getRgb()))
+	#def _writeFileChanges(self):

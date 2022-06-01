@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 from . import libaccesshelper
-from . import libhotkeys
+from . import appconfigControls
 import os
 from PySide2.QtWidgets import QApplication,QLabel,QGridLayout,QCheckBox,QSizePolicy,QRadioButton,QTableWidget,QHeaderView,QTableWidgetItem
 from PySide2 import QtGui
@@ -10,18 +10,11 @@ import gettext
 _ = gettext.gettext
 
 i18n={
-	"COLOURS":_("Colours"),
-	"FONTS":_("Fonts"),
-	"CURSOR":_("Cursor"),
-	"AIDS":_("Visual Aids"),
-	"SCREEN":_("Screen Options"),
-	"HOTKEYS":_("Keyboard Shortcuts"),
+	"CONFIG":_("Accessibility"),
 	"ACCESSIBILITY":_("Accessibility options"),
-	"CONFIG":_("Configuration"),
 	"DESCRIPTION":_("Accessibility configuration"),
 	"MENUDESCRIPTION":_("Set accesibility options"),
 	"TOOLTIP":_("From here you can activate/deactivate accessibility aids"),
-	"HIGHCONTRAST":_("Enable high contrast palette"),
 	"INVERTENABLED":_("Invert screen colors"),
 	"INVERTWINDOW":_("Invert windows colors"),
 	"ANIMATEONCLICK":_("Show animation on click"),
@@ -31,11 +24,12 @@ i18n={
 	"ZOOMENABLED":_("Zoom effect"),
 	"MAGNIFIEREFFECTS":_("Enable magnify effects"),
 	"SYSTEMBELL":_("Acoustic system bell"),
-	"FOCUSPOLICY":_("Set the policy focus"),
 	"VISIBLEBELL":_("Visible bell"),
 	"TRACKMOUSEENABLED":_("Track pointer"),
 	"HKASSIGNED":_("already assigned to action"),
-	"MOUSECLICKENABLED":_("Track click")
+	"MOUSECLICKENABLED":_("Track click"),
+	"FALSE":_("Disabled"),
+	"TRUE":_("Enabled")
 	}
 
 descHk={
@@ -47,7 +41,6 @@ descHk={
 	"MAGNIFIERENABLED":_("Glass effect"),
 	"ZOOMENABLED":_("Zoom effect"),
 	"SYSTEMBELL":_("Acoustic system bell"),
-	"FOCUSPOLICY":_("Set the policy focus"),
 	"VISIBLEBELL":_("Visible bell"),
 	"TRACKMOUSEENABLED":_("TrackMouse"),
 	"MOUSECLICKENABLED":_("ToggleMouseClick")
@@ -232,7 +225,7 @@ class access(confStack):
 		itemData="{0}".format(hkSetting)
 		item.setData(Qt.UserRole,itemData)
 		self.tblGrid.setItem(row,1,item)
-		btn=libhotkeys.QHotkeyButton()
+		btn=appconfigControls.QHotkeyButton()
 		btn.setText(mainHk)
 		btn.hotkeyAssigned.connect(self._testHotkey)
 		self.chkbtn[chk]=btn
@@ -299,7 +292,7 @@ class access(confStack):
 			chk=self.tblGrid.cellWidget(i,0)
 			if chk:
 				btn=self.tblGrid.cellWidget(i,1)
-				if isinstance(btn,libhotkeys.QHotkeyButton):
+				if isinstance(btn,appconfigControls.QHotkeyButton):
 					if (chk.isChecked()):
 						hotkey=btn.text()
 						item=self.tblGrid.item(i,1)
@@ -330,6 +323,17 @@ class access(confStack):
 		self.accesshelper.setPlasmaConfig(self.plasmaConfig)
 		self.optionChanged=[]
 		self.refresh=True
-		f=open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'w')
-		f.close()
+		self._writeFileChanges()
 		return
+
+	def _writeFileChanges(self):
+		with open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'a') as f:
+			f.write("<b>{}</b>\n".format(i18n.get("CONFIG")))
+			for kfile,sections in self.plasmaConfig.items():
+				for section,settings in sections.items():
+					for setting in settings:
+						value=i18n.get(setting[1].upper())
+						desc=i18n.get(setting[0].upper(),"")
+						if desc!="":
+							f.write("{0}->{1}\n".format(desc,value))
+	#def _writeFileChanges(self):

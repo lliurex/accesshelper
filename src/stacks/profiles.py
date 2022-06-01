@@ -176,12 +176,12 @@ class profiles(confStack):
 	def _applyProfileSettings(self):
 		self.config=self.getConfig("user",{}).get("user",{})
 		if self.config.get('alpha',[])==[]:
-			self.removeAutostartDesktop("accesshelper_rgbFilter.desktop")
+			self.accesshelper.removeAutostartDesktop("accesshelper_rgbFilter.desktop")
 		if self.config.get('startup','false')=='false':
-			self.removeAutostartDesktop("accesshelper_profiler.desktop")
+			self.accesshelper.removeAutostartDesktop("accesshelper_profiler.desktop")
 		if self.config.get('dock','false')=='false':
-			self.removeAutostartDesktop("accessdock.desktop")
-		self.acceshelper.setOnboardConfig()
+			self.accesshelper.removeAutostartDesktop("accessdock.desktop")
+		self.accesshelper.setOnboardConfig()
 	#def _applyProfileSettings
 
 	def _updateConfig(self,key):

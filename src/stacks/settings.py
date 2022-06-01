@@ -7,7 +7,7 @@ from PySide2 import QtGui
 from PySide2.QtCore import Qt
 from appconfig.appConfigStack import appConfigStack as confStack
 from . import libaccesshelper
-from . import appconfigControls
+from appconfig import appconfigControls
 import subprocess
 import tempfile
 import gettext

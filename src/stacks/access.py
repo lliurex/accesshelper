@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 from . import libaccesshelper
-from . import appconfigControls
+from appconfig import appconfigControls
 import os
 from PySide2.QtWidgets import QApplication,QLabel,QGridLayout,QCheckBox,QSizePolicy,QRadioButton,QTableWidget,QHeaderView,QTableWidgetItem
 from PySide2 import QtGui

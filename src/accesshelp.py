@@ -8,7 +8,7 @@ from PySide2.QtCore import Qt
 from PySide2 import QtGui
 from appconfig.appConfigScreen import appConfigScreen as appConfig
 from stacks import libaccesshelper
-from stacks import appconfigControls
+from appconfig import appconfigControls
 import gettext
 import time
 _ = gettext.gettext

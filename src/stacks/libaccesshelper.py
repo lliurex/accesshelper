@@ -60,6 +60,8 @@ class functionHelperClass():
 	#def _getMonitors
 
 	def getPlasmaConfig(self,wrkFile='',sourceFolder=''):
+		if sourceFolder:
+			self._debug("Reading kfiles from {}".format(sourceFolder))
 		dictValues={}
 		data=''
 		if wrkFile:
@@ -74,6 +76,7 @@ class functionHelperClass():
 					key,value=setting
 					value=self.getKdeConfigSetting(group,key,kfile,sourceFolder)
 					settingData.append((key,value))
+					self._debug("Wrting {0}->{1}".format(key,value))
 				data[kfile].update({group:settingData})
 		return (data)
 	#def getPlasmaConfig
@@ -89,7 +92,7 @@ class functionHelperClass():
 				value=subprocess.check_output(cmd,universal_newlines=True).strip()
 			except Exception as e:
 				print(e)
-		#_debug("Read value: {}".format(value))
+		self._debug("Read value: {}".format(value))
 		return(value)
 	#def getKdeConfigSetting
 
@@ -143,6 +146,33 @@ class functionHelperClass():
 		return(assigned)
 	#def getSettingForHotkey
 				
+	def _getMozillaSettingsFiles(self):
+		mozillaFiles=[]
+		mozillaDir=os.path.join(os.environ.get('HOME',''),".mozilla/firefox")
+		for mozillaF in os.listdir(mozillaDir):
+			self._debug("Reading MOZILLA {}".format(mozillaF))
+			fPath=os.path.join(mozillaDir,mozillaF)
+			if os.path.isdir(fPath):
+				self._debug("Reading DIR {}".format(mozillaF))
+				if "." in mozillaF:
+					self._debug("Reading DIR {}".format(mozillaF))
+					prefs=os.path.join(mozillaDir,mozillaF,"prefs.js")
+					if os.path.isfile(prefs):
+						mozillaFiles.append(prefs)
+		return mozillaFiles
+	#def _getMozillaSettingsFiles
+
+	def _getGtkSettingsFiles(self,checkExists=False):
+		gtkFiles=[]
+		gtkDirs=[os.path.join("/home",os.environ.get('USER',''),".config/gtk-3.0"),os.path.join("/home",os.environ.get('USER',''),".config/gtk-4.0")]
+		for gtkDir in gtkDirs:
+			if checkExists==False:
+				gtkFiles.append(os.path.join(gtkDir,"settings.ini"))
+			elif os.path.isfile(os.path.join(gtkDir,"settings.ini"))==True:
+				gtkFiles.append(os.path.join(gtkDir,"settings.ini"))
+		return gtkFiles
+	#def _getGtkFiles
+
 	def setKdeConfigSetting(self,group,key,value,kfile="kaccessrc",tmpDir=''):
 		#kfile=kaccessrc
 		#_debug("Writing value {} from {} -> {}".format(key,kfile,value))
@@ -192,21 +222,35 @@ class functionHelperClass():
 	#def consolidatePlasmaConfig(self):
 
 	def takeSnapshot(self,profilePath,appconfrc=''):
+		home=os.environ.get("HOME")
+		if appconfrc=='':
+			appconfrc=os.path.join(home,".config/accesshelper/accesshelper.json")
 		self._debug("Take snapshot {} {}".format(profilePath,appconfrc))
 		destName=os.path.basename(profilePath)
 		destDir=os.path.dirname(profilePath)
 		destPath=os.path.join(destDir,destName)
 		self._debug("Destination {}".format(destPath))
+		#Generate tmp folders
 		tmpFolder=tempfile.mkdtemp()
-		plasmaPath=os.path.join(tmpFolder,"plasma")
+		#Plasma config goes to .config
+		plasmaPath=os.path.join(tmpFolder,".config")
 		os.makedirs(plasmaPath)
-		configPath=os.path.join(tmpFolder,"appconfig")
+		#accesshelper to .config/accesshelper
+		configPath=os.path.join(tmpFolder,".config/accesshelper")
 		onboard=os.path.join(os.path.dirname(appconfrc),"onboard.dconf")
 		os.makedirs(configPath)
-		desktopPath=os.path.join(tmpFolder,"autostart")
+		#autostart
+		desktopPath=os.path.join(tmpFolder,".config/autostart")
 		os.makedirs(desktopPath)
-		home=os.environ.get("HOME")
 		autostartPath=os.path.join(home,".config","autostart")
+		#mozilla
+		mozillaPath=os.path.join(tmpFolder,".mozilla")
+		os.makedirs(mozillaPath)
+		#gtk
+		gtkPath=os.path.join(tmpFolder,".config")
+		if os.path.isdir(gtkPath)==False:
+			os.makedirs(gtkPath)
+
 		flist=[]
 		for kfile in self.dictFileData.keys():
 			kPath=os.path.join(os.environ['HOME'],".config",kfile)
@@ -221,6 +265,18 @@ class functionHelperClass():
 				if f.startswith("access"):
 					autostart=os.path.join(autostartPath,f)
 					shutil.copy(autostart,desktopPath)
+		mozillaFiles=self._getMozillaSettingsFiles()
+		for mozillaFile in mozillaFiles:
+			destdir=os.path.basename(os.path.dirname(mozillaFile))
+			destdir=os.path.join(mozillaPath,destdir)
+			os.makedirs(destdir)
+			shutil.copy(mozillaFile,destdir)
+		gtkFiles=self._getGtkSettingsFiles(True)
+		for gtkFile in gtkFiles:
+			destdir=os.path.basename(os.path.dirname(gtkFile))
+			destdir=os.path.join(gtkPath,destdir)
+			os.makedirs(destdir)
+			shutil.copy(gtkFile,destdir)
 		(osHdl,tmpFile)=tempfile.mkstemp()
 		oldCwd=os.getcwd()
 		os.chdir(tmpFolder)
@@ -261,38 +317,32 @@ class functionHelperClass():
 				self._copyTarProfile(tarFile,dest)
 	#def importSnapshot
 
-	def restoreSnapshot(self,profileTar):
+	def _checkSnapshot(self,profileTar):
 		sw=False
 		if os.path.isfile(profileTar):
-			if tarfile.is_tarfile(profileTar)==False:
-				if tarfile.istarfile("{}.tar",profileTar)==True:
-					profileTar="{}.tar".format(profileTar)
-					sw=True
-			else:
-				sw=True
+			sw=tarfile.is_tarfile(profileTar)
 		self._debug("{0} {1}".format(profileTar,sw))
+		return(sw)
+
+	def restoreSnapshot(self,profileTar):
+		sw=self._checkSnapshot(profileTar)
 		if sw:
 			tarProfile=tarfile.open(profileTar,'r')
 			tmpFolder=tempfile.mkdtemp()
 			tarProfile.extractall(path=tmpFolder)
-			plasmaPath=os.path.join(tmpFolder,"plasma")
-			self._loadPlasmaConfigFromFolder(plasmaPath)
-			confPath=os.path.join(tmpFolder,"appconfig","accesshelper.json")
-			if os.path.isfile(confPath)==True:
+			basePath=os.path.join(tmpFolder,".config")
+			self._loadPlasmaConfigFromFolder(basePath)
+			confPath=os.path.join(tmpFolder,".config/accesshelper")
+			if os.path.isdir(confPath)==True:
 				usrFolder=os.path.join(os.environ.get('HOME'),".config/accesshelper")
 				if os.path.isdir(usrFolder)==False:
 					os.makedirs(usrFolder)
-				self._debug("Cp {} {}".format(confPath,usrFolder))
-				shutil.copy(confPath,usrFolder)
+				for confFile in os.listdir(confPath):
+					sourceFile=os.path.join(confPath,confFile)
+					self._debug("Cp {} {}".format(sourceFile,usrFolder))
+					shutil.copy(sourceFile,usrFolder)
 				data=self.getPlasmaConfig()
-			confPath=os.path.join(tmpFolder,"appconfig","onboard.dconf")
-			if os.path.isfile(confPath)==True:
-				usrFolder=os.path.join(os.environ.get('HOME'),".config/accesshelper")
-				if os.path.isdir(usrFolder)==False:
-					os.makedirs(usrFolder)
-				self._debug("Cp {} {}".format(confPath,usrFolder))
-				shutil.copy(confPath,usrFolder)
-			desktopPath=os.path.join(tmpFolder,"autostart")
+			desktopPath=os.path.join(tmpFolder,".config/autostart")
 			if os.path.isdir(desktopPath)==True:
 				autostartFolder=os.path.join(os.environ.get('HOME'),".config","autostart")
 				if os.path.isdir(autostartFolder)==False:
@@ -301,6 +351,28 @@ class functionHelperClass():
 					desktopFile=os.path.join(desktopPath,f)
 					self._debug("Cp {} {}".format(desktopFile,autostartFolder))
 					shutil.copy(desktopFile,autostartFolder)
+			mozillaPath=os.path.join(tmpFolder,".mozilla")
+			if os.path.isdir(mozillaPath)==True:
+				mozillaFolder=os.path.join(os.environ.get('HOME'),".mozilla/firefox")
+				for folder in os.listdir(mozillaPath):
+					sourceFolder=os.path.join(mozillaPath,folder)
+					destFolder=os.path.join(mozillaFolder,folder)
+					if os.path.isdir(destFolder)==True:
+						for mozillaFile in os.listdir(os.path.join(mozillaPath,folder)):
+							sourceFile=os.path.join(sourceFolder,mozillaFile)
+							self._debug("Cp {} {}".format(sourceFile,destFolder))
+							shutil.copy(sourceFile,destFolder)
+			if os.path.isdir(basePath):
+				for folder in os.listdir(basePath):
+					if folder.startswith('gtk') and os.path.isdir(os.path.join(basePath,folder)):
+						destFolder=os.path.join(os.environ.get('HOME'),".config",folder)
+						if os.path.isdir(destFolder)==False:
+							os.makedirs(destFolder)
+						sourceFolder=os.path.join(basePath,folder)
+						for gtkFile in os.listdir(sourceFolder):
+							sourceFile=os.path.join(sourceFolder,gtkFile)
+							self._debug("Cp {} {}".format(sourceFile,destFolder))
+							shutil.copy(sourceFile,destFolder)
 		return(sw)
 	#def restore_snapshot
 
@@ -744,49 +816,41 @@ class accesshelper():
 	def getSettingForHotkey(self,*args):
 		return(self.functionHelper.getSettingForHotkey(*args))
 
+
 	def setMozillaFirefoxFonts(self,size):
 		size+=7 #Firefox font size is smallest.
-		mozillaDir=os.path.join(os.environ.get('HOME',''),".mozilla/firefox")
-		for mozillaF in os.listdir(mozillaDir):
-			self._debug("Reading MOZILLA {}".format(mozillaF))
-			fPath=os.path.join(mozillaDir,mozillaF)
-			if os.path.isdir(fPath):
-				self._debug("Reading DIR {}".format(mozillaF))
-				if "." in mozillaF:
-					self._debug("Reading DIR {}".format(mozillaF))
-					prefs=os.path.join(mozillaDir,mozillaF,"prefs.js")
-					if os.path.isfile(prefs):
-						with open(prefs,'r') as f:
-							lines=f.readlines()
-						newLines=[]
-						for line in lines:
-							if line.startswith('user_pref("font.minimum-size.x-unicode"'):
-								continue
-							elif line.startswith('user_pref("font.minimum-size.x-western"'):
-								continue
-							newLines.append(line)
-						line='user_pref("font.minimum-size.x-western", {});\n'.format(size)
-						newLines.append(line)
-						line='user_pref("font.minimum-size.x-unicode", {});\n'.format(size)
-						newLines.append(line)
-						self._debug("Writting MOZILLA {}".format(mozillaF))
-						with open(os.path.join(mozillaDir,mozillaF,"prefs.js"),'w') as f:
-							f.writelines(newLines)
+		for prefs in self.functionhelper._getMozillaSettingsFiles():
+			with open(prefs,'r') as f:
+				lines=f.readlines()
+			newLines=[]
+			for line in lines:
+				if line.startswith('user_pref("font.minimum-size.x-unicode"'):
+					continue
+				elif line.startswith('user_pref("font.minimum-size.x-western"'):
+					continue
+				newLines.append(line)
+			line='user_pref("font.minimum-size.x-western", {});\n'.format(size)
+			newLines.append(line)
+			line='user_pref("font.minimum-size.x-unicode", {});\n'.format(size)
+			newLines.append(line)
+			self._debug("Writting MOZILLA {}".format(mozillaF))
+			with open(os.path.join(mozillaDir,mozillaF,"prefs.js"),'w') as f:
+				f.writelines(newLines)
 	#def setMozillaFirefoxFonts
 
 	def setGtkFonts(self,font):
 		fontArray=font.split(',')
 		gtkFont="{0}, {1} {2}".format(fontArray[0],fontArray[-1],fontArray[1])
 		gtkDirs=[os.path.join("/home",os.environ.get('USER',''),".config/gtk-3.0"),os.path.join("/home",os.environ.get('USER',''),".config/gtk-4.0")]
-		for gtkDir in gtkDirs:
+		for gtkFile in self.functionhelper._getGtkSettingsFiles():
 			fcontent=[]
-			if os.path.isfile(os.path.join(gtkDir,"settings.ini"))==True:
-				with  open(os.path.join(gtkDir,"settings.ini"),"r") as f:
+			if os.path.isfile(gtkFile)==True:
+				with  open(gtkFile,"r") as f:
 					for line in f.readlines():
 						if line.startswith("gtk-font-name")==False:
 							fcontent.append(line)
 			fcontent.append("gtk-font-name={}\n".format(gtkFont))
-			with  open(os.path.join(gtkDir,"settings.ini"),"w") as f:
+			with  open(gtkFile,"w") as f:
 				try:
 					f.writelines(fcontent)
 				except Exception as e:
@@ -799,8 +863,10 @@ class accesshelper():
 		subprocess.run(cmd)
 		cmd=["kstart5","kglobalaccel"]
 		subprocess.run(cmd)
-		#cmd=["kquitapp5","plasmashell"]
-		#subprocess.run(cmd)
+#		cmd=["kquitapp5","plasmashell"]
+#		subprocess.run(cmd)
+#		cmd=["kstart5","plasmashell"]
+#		subprocess.run(cmd)
 		cmd=["plasmashell","--replace"]
 		subprocess.Popen(cmd)
 	#def applyChanges

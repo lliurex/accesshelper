@@ -589,7 +589,7 @@ class accesshelper():
 		return (availableThemes)
 	#def getThemes
 
-	def setCursor(self,theme="default",size="32"):
+	def setCursor(self,theme="default",size=""):
 		if theme=="default":
 			theme=self._getCursorTheme()
 		err=0
@@ -599,16 +599,16 @@ class accesshelper():
 			print(e)
 			err=1
 		os.environ["XCURSOR_THEME"]=theme
-		if (isinstance(size,str))==False:
-			size=str(size)
-		self.setCursorSize(size)
-		try:
-			cmd=["/usr/share/accesshelper/helper/setcursortheme",theme,size]
-			subprocess.run(cmd,stdout=subprocess.PIPE)
-		except Exception as e:
-			print(e)
-			err=2
-			
+		if size!="":
+			if (isinstance(size,str))==False:
+				size=str(size)
+			self.setCursorSize(size)
+			try:
+				cmd=["/usr/share/accesshelper/helper/setcursortheme",theme,size]
+				subprocess.run(cmd,stdout=subprocess.PIPE)
+			except Exception as e:
+				print(e)
+				err=2
 		return(err)
 	#def setCursor
 
@@ -631,7 +631,6 @@ class accesshelper():
 			f.writelines(newContent)
 		cmd=["xrdb","-merge",xdefault]
 		subprocess.run(cmd)
-		#os.environ["XCURSOR_SIZE"]=str(size)
 	#def setCursorSize
 
 	def setScheme(self,scheme):
@@ -863,10 +862,11 @@ class accesshelper():
 		subprocess.run(cmd)
 		cmd=["kstart5","kglobalaccel"]
 		subprocess.run(cmd)
-#		cmd=["kquitapp5","plasmashell"]
-#		subprocess.run(cmd)
-#		cmd=["kstart5","plasmashell"]
-#		subprocess.run(cmd)
 		cmd=["plasmashell","--replace"]
 		subprocess.Popen(cmd)
 	#def applyChanges
+
+	def restartSession(self):
+		cmd=["qdbus","org.kde.Shutdown","/Shutdown org.kde.Shutdown.logout"]
+		subprocess.run(cmd)
+	#def restartSession

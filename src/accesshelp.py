@@ -30,7 +30,7 @@ ERR_NOPROFILE=_("There's no profiles at")
 ERR_LOADPROFILE=_("Error loading")
 ERR_SETPROFILE=_("Must select one from:")
 MSG_LOADPROFILE=_("Loading profile")
-MSG_REBOOT=_("It's recommended to logout from session now\nin order of avoid inconsistencies")
+MSG_REBOOT=_("Changes will only apply after session restart")
 MSG_LOGOUT=_("Logout")
 MSG_CHANGES=_("Options selected:")
 MSG_LATER=_("Later")
@@ -89,7 +89,7 @@ def setProfile(profilePath):
 
 def _restartSession(*args):
 	QApplication.quit()
-	accesshelper.applyChanges()
+	accesshelper.restartSession()
 #def _restartSession
 
 def _readChanges():

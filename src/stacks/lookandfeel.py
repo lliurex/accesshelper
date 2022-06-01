@@ -108,10 +108,6 @@ class lookandfeel(confStack):
 		cmbCursorSize.addItem("112")
 		cmbCursorSize.addItem("128")
 		cmbCursorSize.currentTextChanged.connect(self.updateCursorIcons)
-
-#		self.updateScreen()
-#		self.updateCursorIcons()
-		#self.changes=False
 	#def _load_screen
 
 	def updateScreen(self):
@@ -298,11 +294,6 @@ class lookandfeel(confStack):
 						for i18color in colorList:
 							if i18n.get(i18color.upper(),"")==color:
 								qcolor=QtGui.QColor(i18color)
-								
-						#icon=cmb.itemIcon(idx)
-						#px=QtGui.QPixmap(self.bkgIconSize,self.bkgIconSize)
-						#img=px.toImage()
-						#pixel=img.pixel(1,1)
 						self.saveChanges('bkgColor',color)
 						self.saveChanges('bkg',"color")
 						if qcolor:

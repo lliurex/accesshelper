@@ -16,7 +16,7 @@ QString=type("")
 
 i18n={
 	"ACCESSIBILITY":_("Look&Feel options"),
-	"CONFIG":_("Configuration"),
+	"CONFIG":_("Look&Feel"),
 	"DESCRIPTION":_("Look&Feel configuration"),
 	"MENUDESCRIPTION":_("Modify appearence settings"),
 	"TOOLTIP":_("Set theme, color scheme or pointers"),
@@ -24,9 +24,11 @@ i18n={
 	"SCHEME":_("Color scheme"),
 	"COLORS":_("Theme colors"),
 	"BACKGROUND":_("Background color"),
+	"BACKIMG":_("Desktop background"),
 	"CURRENTBKG":_("Current background"),
 	"CURSORTHEME":_("Cursor theme"),
 	"CURSORSIZE":_("Cursor size"),
+	"CURSORTHEME":_("Cursor theme"),
 	"WHITE":_("White"),
 	"RED":_("Red"),
 	"BLUE":_("Blue"),
@@ -227,53 +229,6 @@ class lookandfeel(confStack):
 		#	if key in self.kwinMethods:
 		#		self._exeKwinMethod(key) 
 	
-	def writeConfig(self):
-		self.saveChanges('background',self.imgFile)
-		self.optionChanged=[]
-		self.refresh=True
-		cursorTheme=""
-		size=""
-		for cmbDesc in self.widgets.keys():
-			cmb=self.widgets.get(cmbDesc,"")
-			if isinstance(cmb,QComboBox):
-				theme=cmb.currentText()
-				theme=theme.split("(")[0].strip()
-				if cmbDesc=="theme":
-					self._setTheme(theme)
-				if cmbDesc=="scheme":
-					self._setScheme(theme)
-				if cmbDesc=="cursor":
-					cursorTheme=theme
-				if cmbDesc=="cursorSize":
-					size=cmb.currentText()
-				if cmbDesc=="background":
-					idx=cmb.currentIndex()
-					if idx>0:
-						color=cmb.currentText()
-						colorList=["black","red","blue","green","yellow","white"]
-						for i18color in colorList:
-							if i18n.get(i18color.upper(),"")==color:
-								qcolor=QtGui.QColor(i18color)
-								
-						#icon=cmb.itemIcon(idx)
-						#px=QtGui.QPixmap(self.bkgIconSize,self.bkgIconSize)
-						#img=px.toImage()
-						#pixel=img.pixel(1,1)
-						self.saveChanges('bkgColor',color)
-						self.saveChanges('bkg',"color")
-						if qcolor:
-							self.accesshelper.setBackgroundColor(qcolor)
-					else:
-						self.saveChanges('bkg',"image")
-						self.accesshelper.setBackgroundImg(self.imgFile)
-		#Ensure size is applied before theme change
-		self._setCursorSize(size)
-		self._setCursor(cursorTheme)
-		f=open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'w')
-		f.close()
-		#Close and open window
-	#def writeConfig
-
 	def _getThemeList(self):
 		availableThemes=self.accesshelper.getThemes()
 		return (availableThemes)
@@ -311,4 +266,65 @@ class lookandfeel(confStack):
 		self.saveChanges('cursor',{"size":size})
 		self.accesshelper.setCursorSize(size)
 	#def _setCursorSize(self):
+
+	def writeConfig(self):
+		self.saveChanges('background',self.imgFile)
+		self.optionChanged=[]
+		self.refresh=True
+		cursorTheme=""
+		size=""
+		scheme=""
+		plasmaTheme=""
+		for cmbDesc in self.widgets.keys():
+			cmb=self.widgets.get(cmbDesc,"")
+			if isinstance(cmb,QComboBox):
+				theme=cmb.currentText()
+				theme=theme.split("(")[0].strip()
+				if cmbDesc=="theme":
+					plasmaTheme=theme
+					self._setTheme(theme)
+				if cmbDesc=="scheme":
+					scheme=theme
+					self._setScheme(theme)
+				if cmbDesc=="cursor":
+					cursorTheme=theme
+				if cmbDesc=="cursorSize":
+					size=cmb.currentText()
+				if cmbDesc=="background":
+					idx=cmb.currentIndex()
+					if idx>0:
+						color=cmb.currentText()
+						colorList=["black","red","blue","green","yellow","white"]
+						for i18color in colorList:
+							if i18n.get(i18color.upper(),"")==color:
+								qcolor=QtGui.QColor(i18color)
+								
+						#icon=cmb.itemIcon(idx)
+						#px=QtGui.QPixmap(self.bkgIconSize,self.bkgIconSize)
+						#img=px.toImage()
+						#pixel=img.pixel(1,1)
+						self.saveChanges('bkgColor',color)
+						self.saveChanges('bkg',"color")
+						if qcolor:
+							self.accesshelper.setBackgroundColor(qcolor)
+						bkg=color
+					else:
+						self.saveChanges('bkg',"image")
+						self.accesshelper.setBackgroundImg(self.imgFile)
+						bkg=self.imgFile
+		#Ensure size is applied before theme change
+		self._setCursorSize(size)
+		self._setCursor(cursorTheme)
+		self._writeFileChanges(scheme,plasmaTheme,cursorTheme,size,bkg)
+	#def writeConfig
+
+	def _writeFileChanges(self,scheme,theme,cursor,cursorSize,bkg):
+		with open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'a') as f:
+			f.write("<b>{}</b>\n".format(i18n.get("CONFIG")))
+			f.write("{0}->{1}\n".format(i18n.get("THEME"),theme))
+			f.write("{0}->{1}\n".format(i18n.get("SCHEME"),scheme))
+			f.write("{0}->{1}\n".format(i18n.get("CURSORTHEME"),cursor))
+			f.write("{0}->{1}\n".format(i18n.get("CURSORSIZE"),cursorSize))
+			f.write("{0}->{1}\n".format(i18n.get("BACKIMG"),bkg))
+	#def _writeFileChanges(self):
 

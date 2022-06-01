@@ -12,7 +12,7 @@ _ = gettext.gettext
 QString=type("")
 
 i18n={
-	"CONFIG":_("Configuration"),
+	"CONFIG":"profiles",
 	"DESCRIPTION":_("Manage profiles"),
 	"MENUDESCRIPTION":_("Load and save custom profiles"),
 	"TOOLTIP":_("Use profile templates for quick configuration"),
@@ -168,8 +168,8 @@ class profiles(confStack):
 		f=open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'w')
 		f.close()
 		self.optionChanged=[]
-		cursor=QtGui.QCursor(Qt.PointingHandCursor)
 		self._applyProfileSettings()
+		cursor=QtGui.QCursor(Qt.PointingHandCursor)
 		self.setCursor(cursor)
 	#def loadProfile(self,*args):
 
@@ -221,8 +221,4 @@ class profiles(confStack):
 				self.showMsg("{}".format(i18n.get("SNAPSHOT_SYSTEM")))
 			else:
 				self.showMsg("{}".format(i18n.get("SNAPSHOT_USER")))
-		f=open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'w')
-		f.close()
-		self.optionChanged=[]
-		self.updateScreen()
-		
+

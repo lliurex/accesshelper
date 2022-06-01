@@ -7,7 +7,7 @@ from PySide2 import QtGui
 from PySide2.QtCore import Qt
 from appconfig.appConfigStack import appConfigStack as confStack
 from . import libaccesshelper
-from . import libhotkeys
+from appconfig import appconfigControls
 import subprocess
 import tempfile
 import gettext
@@ -15,7 +15,7 @@ _ = gettext.gettext
 QString=type("")
 
 i18n={
-	"CONFIG":_("Configuration"),
+	"CONFIG":_("Settings"),
 	"DESCRIPTION":_("Manage application"),
 	"MENUDESCRIPTION":_("Configure some options"),
 	"TOOLTIP":_("Set config level, default template.."),
@@ -24,8 +24,11 @@ i18n={
 	"AUTOSTARTERROR":_("Autostart could not be disabled"),
 	"ENABLEDOCK":_("Enabled accessibilty dock with hotkey"),
 	"DISABLEDOCK":_("Disabled accessibilty dock"),
-	"VOICESPEED":_("Voice speed when reading"),
-	"VOICEPITCH":_("Voice pitch")
+	"CONFIGLEVEL":_("Use config"),
+	"PROFILE":_("Startup profile"),
+	"NONE":_("Disabled"),
+	"STARTDOCK":_("Autostart dock"),
+	"DOCKHK":_("Hotkey for dock")
 	}
 
 class settings(confStack):
@@ -98,7 +101,7 @@ class settings(confStack):
 		(mainHk,hkData,hkSetting,hkSection)=self.accesshelper.getHotkey("accessdock.desktop")
 		if mainHk=="":
 			mainHk="Ctrl+Space"
-		self.btn_dockHk=libhotkeys.QHotkeyButton(mainHk)
+		self.btn_dockHk=appconfigControls.QHotkeyButton(mainHk)
 		self.btn_dockHk.hotkeyAssigned.connect(self._testHotkey)
 		box.addWidget(self.btn_dockHk,4,1,1,1,Qt.AlignTop)
 		self.widgets.update({self.btn_dockHk:'dockHk'})
@@ -191,9 +194,49 @@ class settings(confStack):
 		pass
 	#def _updateConfig
 
+	def _setAutostart(self,profile):
+		if profile:
+			cmd="/usr/share/accesshelper/accesshelp.py --set {} init".format(profile)
+			self.accesshelper.generateAutostartDesktop(cmd,self.profilerAuto)
+			self.showMsg("{} {}".format(i18n.get("AUTOSTART"),os.environ.get("USER")))
+	#def _setAutostart
+
+	def _removeAutostart(self,profile):
+		self.accesshelper.removeAutostartDesktop(self.profilerAuto)
+		self.showMsg("{} {}".format(i18n.get("DISABLEAUTOSTART"),os.environ.get("USER")))
+	#def _removeAutostart
+
+	def _setAutostartDock(self):
+		self.accesshelper.generateAutostartDesktop("/usr/share/accesshelper/accessdock.py","accessdock.desktop")
+		btnHk="Ctrl+Space"
+		for widget in self.widgets.keys():
+			if isinstance(widget,appconfigControls.QHotkeyButton):
+				btnHk=widget.text()
+				break
+		hotkey=btnHk
+		desc="{0},{0},show accessdock".format(hotkey)
+		data=[("_launch",desc),("_k_friendly_name","accessdock")]
+		config={'kglobalshortcutsrc':{'accessdock.desktop':data}}
+		self.accesshelper.setPlasmaConfig(config)
+		self.showMsg("{0} {1}".format(i18n.get("ENABLEDOCK"),hotkey))
+
+	def _removeAutostartDock(self):
+		self.accesshelper.removeAutostartDesktop("accessdock.desktop")
+		hotkey=""
+		desc="{0},{0},show accessdock".format(hotkey)
+		data=[("_launch",""),("_k_friendly_name","")]
+		config={'kglobalshortcutsrc':{'accessdock.desktop':data}}
+		self.accesshelper.setPlasmaConfig(config)
+		self.showMsg("{}".format(i18n.get("DISABLEDOCK")))
+	#def _removeAutostart
+
 	def writeConfig(self):
 		startWdg=None
 		profile=''
+		startdock=""
+		startprofile=""
+		dockhotkey=""
+		configlevel=""
 		config=self.getConfig()
 		for widget,desc in self.widgets.items():
 			if desc=="startup":
@@ -202,6 +245,9 @@ class settings(confStack):
 				dockWdg=widget
 			if desc=="dockHk":
 				dockHk=widget
+				dockhotkey=dockHk.text()
+				if dockhotkey=="":
+					dockhotkey="Ctrl+Space"
 			if isinstance(widget,QCheckBox):
 				value=widget.isChecked()
 				if value:
@@ -224,85 +270,30 @@ class settings(confStack):
 						profile=value
 			self.saveChanges(desc,value)
 		if startWdg:
-			if startWdg.isChecked():
+			startprofile=startWdg.isChecked()
+			if startprofile:
 				self._setAutostart(profile)
 			else:
 				self._removeAutostart(profile)
 		if dockWdg:
-			if dockWdg.isChecked():
+			startdock=dockWdg.isChecked()
+			if startdock: 
 				self._setAutostartDock()
 				self.saveChanges("dockHk",dockHk.text(),level="user")
 			else:
 				self._removeAutostartDock()
 				self.saveChanges("dockHk","",level="user")
-		f=open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'w')
-		f.close()
-		self.btn_ok.setEnabled(True)
-		self.btn_cancel.setEnabled(True)
-		self.changes=""
-		self.refresh=True
+		self._writeFileChanges(configlevel,profile,startprofile,startdock,dockhotkey)
 	#def writeConfig
-
-	def _setAutostart(self,profile):
-		if profile:
-			tmpHdl,tmpF=tempfile.mkstemp()
-			tmpf=open(tmpF,'w')
-			fprof=os.path.join("/usr/share/accesshelper/helper/",self.profilerAuto)
-			with open(fprof,"r") as f:
-				lines=f.readlines()
-				for line in lines:
-					if line.startswith("Exec="):
-						profile="{} init".format(profile)
-						line=line.replace("%u",profile)
-					tmpf.write(line)
-			tmpf.close()
-			destPath=os.path.join(os.environ.get("HOME"),".config/autostart/",self.profilerAuto)
-			if os.path.isdir(os.path.dirname(destPath))==False:
-				os.makedirs(os.path.dirname(destPath))
-			shutil.copy(tmpF,destPath)
-			self.showMsg("{} {}".format(i18n.get("AUTOSTART"),os.environ.get("USER")))
-	#def _setAutostart
-
-	def _removeAutostart(self,profile):
-		autoFiles=self._getAutostartFile(self.profilerAuto)
-		if os.path.isfile(autoFiles.get('user',''))==True:
-			try:
-				os.remove(autoFiles['user'])
-				self.showMsg("{} {}".format(i18n.get("DISABLEAUTOSTART"),os.environ.get("USER")))
-			except:
-				self.showMsg(i18n.get("AUTOSTARTERROR"))
-	#def _removeAutostart
-
-	def _setAutostartDock(self):
-		destPath=os.path.join(os.environ.get("HOME"),".config/autostart/accessdock.desktop")
-		if os.path.isdir(os.path.dirname(destPath))==False:
-			os.makedirs(os.path.dirname(destPath))
-		tmpF="/usr/share/applications/accessdock.desktop"
-		shutil.copy(tmpF,destPath)
-		btnHk="Ctrl+Space"
-		for widget in self.widgets.keys():
-			if isinstance(widget,libhotkeys.QHotkeyButton):
-				btnHk=widget.text()
-				break
-		hotkey=btnHk
-		desc="{0},{0},show accessdock".format(hotkey)
-		data=[("_launch",desc),("_k_friendly_name","accessdock")]
-		config={'kglobalshortcutsrc':{'accessdock.desktop':data}}
-		self.accesshelper.setPlasmaConfig(config)
-		self.showMsg("{0} {1}".format(i18n.get("ENABLEDOCK"),hotkey))
-
-	def _removeAutostartDock(self):
-		autoFiles=self._getAutostartFile(self.dockAuto)
-		hotkey=""
-		desc="{0},{0},show accessdock".format(hotkey)
-		data=[("_launch",""),("_k_friendly_name","")]
-		config={'kglobalshortcutsrc':{'accessdock.desktop':data}}
-		self.accesshelper.setPlasmaConfig(config)
-		if os.path.isfile(autoFiles.get('user',''))==True:
-			try:
-				os.remove(autoFiles.get('user'))
-				self.showMsg("{}".format(i18n.get("DISABLEDOCK")))
-			except:
-				self.showMsg(i18n.get("AUTOSTARTERROR"))
-	#def _removeAutostart
-
+		
+	def _writeFileChanges(self,configlevel,profile,startprofile,startdock,dockhotkey):
+		with open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'a') as f:
+			f.write("<b>{}</b>\n".format(i18n.get("CONFIG")))
+			f.write("{0}->{1}\n".format(i18n.get("CONFIGLEVEL"),configlevel))
+			if startprofile:
+				f.write("{0}->{1}\n".format(i18n.get("PROFILE"),profile))
+			else:
+				f.write("{0}->{1}\n".format(i18n.get("PROFILE"),i18n.get("NONE")))
+			f.write("{0}->{1}\n".format(i18n.get("STARTDOCK"),i18n.get(str(startdock).upper())))
+			f.write("{0}->{1}\n".format(i18n.get("DOCKHK"),dockhotkey))
+	#def _writeFileChanges(self):

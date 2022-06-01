@@ -13,6 +13,7 @@ class functionHelperClass():
 		self.dbg=True
 		self.dictFileData={}
 		self._initValues()
+		self.tmpDir="/tmp/.accesstmp"
 
 	def _initValues(self):
 		plugins=[("invertEnabled",""),("invertWindow",""),("magnifierEnabled",""),("lookingglassEnabled",""),("trackmouseEnabled",""),("zoomEnabled",""),("snaphelperEnabled",""),("mouseclickEnabled","")]
@@ -142,10 +143,17 @@ class functionHelperClass():
 		return(assigned)
 	#def getSettingForHotkey
 				
-	def setKdeConfigSetting(self,group,key,value,kfile="kaccessrc"):
+	def setKdeConfigSetting(self,group,key,value,kfile="kaccessrc",tmpDir=''):
 		#kfile=kaccessrc
 		#_debug("Writing value {} from {} -> {}".format(key,kfile,value))
-		kfilePath=os.path.join(os.environ['HOME'],".config",kfile)
+		if tmpDir!='':
+			if tmpDir.startswith("/tmp/.accesshelper")==False:
+				tmpDir=os.path.join("/tmp/.accesshelper",tmpDir)
+			if os.path.isdir(tmpDir)==False:
+				os.makedirs(tmpDir)
+			kfilePath=os.path.join(tmpDir,kfile)
+		else:
+			kfilePath=os.path.join(os.environ['HOME'],".config",kfile)
 		if os.path.isfile(kfile)==False and kfile.endswith(".profile"):
 			kfilePath=os.path.join(os.environ['HOME'],".local/share/konsole/",kfile)
 		if len(value):
@@ -161,8 +169,8 @@ class functionHelperClass():
 		return(ret)
 	#def setKdeConfigSetting
 
-	def setPlasmaConfig(self,config,wrkFile=''):
-		self._debug("Config: {}".format(config))
+	def setPlasmaConfig(self,config,tmpDir=''):
+		self._debug("ConfDir: {0} Config: {1}".format(tmpDir,config))
 		for kfile,sections in config.items():
 			for section,data in sections.items():
 				self._debug("Section {}".format(section))
@@ -172,11 +180,16 @@ class functionHelperClass():
 						if desc=="":
 							continue
 						self._debug("Setting {} -> {}".format(desc,value))
-						self.setKdeConfigSetting(section,desc,value,kfile)
+						self.setKdeConfigSetting(section,desc,value,kfile,tmpDir=tmpDir)
 					except Exception as e:
 						print("Error on setting {}".format(setting))
 						print(e)
 	#def setPlasmaConfig
+
+	def consolidatePlasmaConfig(self):
+		self._debug("Consolidating plasma config")
+		self._loadPlasmaConfigFromFolder(self.tmpDir)
+	#def consolidatePlasmaConfig(self):
 
 	def takeSnapshot(self,profilePath,appconfrc=''):
 		self._debug("Take snapshot {} {}".format(profilePath,appconfrc))
@@ -219,6 +232,7 @@ class functionHelperClass():
 		self._debug("Copying {0}->{1}".format(tmpFile,destPath))
 		self._copyTarProfile(tmpFile,destPath)
 		os.remove(tmpFile)
+		return(os.path.join(destPath,os.path.basename(tmpFile)))
 	#def take_snapshot
 
 	def _copyTarProfile(self,orig,dest):
@@ -262,12 +276,7 @@ class functionHelperClass():
 			tmpFolder=tempfile.mkdtemp()
 			tarProfile.extractall(path=tmpFolder)
 			plasmaPath=os.path.join(tmpFolder,"plasma")
-			if os.path.isdir(plasmaPath)==True:
-				config=self.getPlasmaConfig(sourceFolder=plasmaPath)
-				for kfile,sections in config.items():
-					for section,data in sections.items():
-						for (desc,value) in data:
-							self.setKdeConfigSetting(section,desc,value,kfile)
+			self._loadPlasmaConfigFromFolder(plasmaPath)
 			confPath=os.path.join(tmpFolder,"appconfig","accesshelper.json")
 			if os.path.isfile(confPath)==True:
 				usrFolder=os.path.join(os.environ.get('HOME'),".config/accesshelper")
@@ -289,11 +298,20 @@ class functionHelperClass():
 				if os.path.isdir(autostartFolder)==False:
 					os.makedirs(autostartFolder)
 				for f in os.listdir(desktopPath):
-					desktopPath=os.path.join(desktopPath,f)
-					self._debug("Cp {} {}".format(desktopPath,autostartFolder))
-					shutil.copy(desktopPath,autostartFolder)
+					desktopFile=os.path.join(desktopPath,f)
+					self._debug("Cp {} {}".format(desktopFile,autostartFolder))
+					shutil.copy(desktopFile,autostartFolder)
 		return(sw)
 	#def restore_snapshot
+
+	def _loadPlasmaConfigFromFolder(self,folder):
+		if os.path.isdir(folder)==True:
+			config=self.getPlasmaConfig(sourceFolder=folder)
+			for kfile,sections in config.items():
+				for section,data in sections.items():
+					for (desc,value) in data:
+						self.setKdeConfigSetting(section,desc,value,kfile)
+	#def _loadPlasmaConfigFromFolder
 
 	def getPointerImage(self,theme):
 		icon=os.path.join("/usr/share/icons",theme,"cursors","left_ptr")
@@ -334,12 +352,31 @@ class accesshelper():
 	def __init__(self):
 		self.dbg=True
 		self.functionHelper=functionHelperClass()
+		self.tmpDir=self.functionHelper.tmpDir
 	#def __init__
 
 	def _debug(self,msg):
 		if self.dbg:
 			print("libaccess: {}".format(msg))
 	#def _debug
+
+	def removeTmpDir(self):
+		if os.path.isdir(self.tmpDir):
+			shutil.rmtree(self.tmpDir)
+			os.makedirs(self.tmpDir)
+	#def removeTmpDir
+
+	def generateChangesFile(self,window,changesDict):
+		if os.path.isdir(self.tmpDir)==False:
+			os.makedirs(self.tmpDir)
+		destPath=os.path.join(self.tmpDir,window)
+		if os.path.isdir(destPath):
+			shutil.rmtree(destPath)
+		os.makedirs(destPath)
+		destFile=os.path.join(destPath,"{}.json".format(window))
+		with open(destFile,"w") as f:
+			f.writelines(changesDict)	
+	#def generateChangesFile
 
 	def getMonitors(self,*args):
 		return(self.functionHelper._getMonitors(*args))
@@ -405,29 +442,31 @@ class accesshelper():
 		brightness=1
 		xgamma=["xgamma","-screen","0","-rgamma","{0:.2f}".format(xred),"-ggamma","{0:.2f}".format(xgreen),"-bgamma","{0:.2f}".format(xblue)]
 		cmd=subprocess.run(xgamma,capture_output=True,encoding="utf8")
-		self._generateAutostartDesktop(xgamma)
+		self.generateAutostartDesktop(xgamma,"accesshelper_rgbFilter.desktop")
 		return(red,green,blue)
 	#def setRGBFilter
 
-	def _generateAutostartDesktop(self,cmd):
+	def generateAutostartDesktop(self,cmd,fname):
 		desktop=[]
+		if isinstance(cmd,list):
+			cmd=" ".join(cmd)
 		desktop.append("[Desktop Entry]")
 		desktop.append("Encoding=UTF-8")
 		desktop.append("Type=Application")
-		desktop.append("Name=rgb_filter")
+		desktop.append("Name={}".format(fname.replace(".desktop","")))
 		desktop.append("Comment=Apply rgb filters")
-		desktop.append("Exec={}".format(" ".join(cmd)))
+		desktop.append("Exec={}".format(cmd))
 		desktop.append("StartupNotify=false")
 		desktop.append("Terminal=false")
 		desktop.append("Hidden=false")
 		home=os.environ.get("HOME")
 		if home:
-			wrkFile=os.path.join(home,".config","autostart","accesshelper_rgbFilter.desktop")
+			wrkFile=os.path.join(home,".config","autostart",fname)
 			if os.path.isdir(os.path.dirname(wrkFile))==False:
 				os.makedirs(os.path.dirname(wrkFile))
 			with open(wrkFile,"w") as f:
 				f.write("\n".join(desktop))
-	#def _generateAutostartDesktop
+	#def generateAutostartDesktop
 
 
 	def getCursors(self):
@@ -478,7 +517,7 @@ class accesshelper():
 		return (availableThemes)
 	#def getThemes
 
-	def setCursor(self,theme="default"):
+	def setCursor(self,theme="default",size="32"):
 		if theme=="default":
 			theme=self._getCursorTheme()
 		err=0
@@ -488,6 +527,16 @@ class accesshelper():
 			print(e)
 			err=1
 		os.environ["XCURSOR_THEME"]=theme
+		if (isinstance(size,str))==False:
+			size=str(size)
+		self.setCursorSize(size)
+		try:
+			cmd=["/usr/share/accesshelper/helper/setcursortheme",theme,size]
+			subprocess.run(cmd,stdout=subprocess.PIPE)
+		except Exception as e:
+			print(e)
+			err=2
+			
 		return(err)
 	#def setCursor
 
@@ -694,6 +743,54 @@ class accesshelper():
 
 	def getSettingForHotkey(self,*args):
 		return(self.functionHelper.getSettingForHotkey(*args))
+
+	def setMozillaFirefoxFonts(self,size):
+		size+=7 #Firefox font size is smallest.
+		mozillaDir=os.path.join(os.environ.get('HOME',''),".mozilla/firefox")
+		for mozillaF in os.listdir(mozillaDir):
+			self._debug("Reading MOZILLA {}".format(mozillaF))
+			fPath=os.path.join(mozillaDir,mozillaF)
+			if os.path.isdir(fPath):
+				self._debug("Reading DIR {}".format(mozillaF))
+				if "." in mozillaF:
+					self._debug("Reading DIR {}".format(mozillaF))
+					prefs=os.path.join(mozillaDir,mozillaF,"prefs.js")
+					if os.path.isfile(prefs):
+						with open(prefs,'r') as f:
+							lines=f.readlines()
+						newLines=[]
+						for line in lines:
+							if line.startswith('user_pref("font.minimum-size.x-unicode"'):
+								continue
+							elif line.startswith('user_pref("font.minimum-size.x-western"'):
+								continue
+							newLines.append(line)
+						line='user_pref("font.minimum-size.x-western", {});\n'.format(size)
+						newLines.append(line)
+						line='user_pref("font.minimum-size.x-unicode", {});\n'.format(size)
+						newLines.append(line)
+						self._debug("Writting MOZILLA {}".format(mozillaF))
+						with open(os.path.join(mozillaDir,mozillaF,"prefs.js"),'w') as f:
+							f.writelines(newLines)
+	#def setMozillaFirefoxFonts
+
+	def setGtkFonts(self,font):
+		fontArray=font.split(',')
+		gtkFont="{0}, {1} {2}".format(fontArray[0],fontArray[-1],fontArray[1])
+		gtkDirs=[os.path.join("/home",os.environ.get('USER',''),".config/gtk-3.0"),os.path.join("/home",os.environ.get('USER',''),".config/gtk-4.0")]
+		for gtkDir in gtkDirs:
+			fcontent=[]
+			if os.path.isfile(os.path.join(gtkDir,"settings.ini"))==True:
+				with  open(os.path.join(gtkDir,"settings.ini"),"r") as f:
+					for line in f.readlines():
+						if line.startswith("gtk-font-name")==False:
+							fcontent.append(line)
+			fcontent.append("gtk-font-name={}\n".format(gtkFont))
+			with  open(os.path.join(gtkDir,"settings.ini"),"w") as f:
+				try:
+					f.writelines(fcontent)
+				except Exception as e:
+					self._debug("error saving gtk fonts")
 
 	def applyChanges(self):
 		cmd=["qdbus","org.kde.KWin","/KWin","org.kde.KWin.reconfigure"]

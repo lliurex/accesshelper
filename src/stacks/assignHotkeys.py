@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 from . import libaccesshelper
-from . import libhotkeys
+from appconfig import appconfigControls
 import os
 from PySide2.QtWidgets import QApplication, QLabel, QPushButton,QGridLayout,QTableWidget,QHeaderView
 from PySide2 import QtGui
@@ -28,9 +28,9 @@ class delButton(QLabel):
 
 
 i18n={
+	"CONFIG":_("Hotkeys"),
 	"HOTKEYS":_("Keyboard Shortcuts"),
 	"ACCESSIBILITY":_("hotkeys options"),
-	"CONFIG":_("Configuration"),
 	"DESCRIPTION":_("Hotkeys configuration"),
 	"MENUDESCRIPTION":_("Set hotkeys for launch applications"),
 	"TOOLTIP":_("From here you can set hotkeys for launch apps"),
@@ -126,7 +126,7 @@ class assignHotkeys(confStack):
 					if len(data)>1:
 						desc=data[-1]
 					lbl=QLabel(desc)
-					btn=libhotkeys.QHotkeyButton(data[0])
+					btn=appconfigControls.QHotkeyButton(data[0])
 					btn.hotkeyAssigned.connect(self._testHotkey)
 					self.tblGrid.setCellWidget(row,0,lbl)
 					self.tblGrid.setCellWidget(row,1,btn)
@@ -143,7 +143,7 @@ class assignHotkeys(confStack):
 			name=desktop.replace("[","").replace("]","").replace(".desktop","")
 			hk=info.get("_launch","").split(",")[0]
 			lbl=QLabel(name)
-			btn=libhotkeys.QHotkeyButton(text=hk)
+			btn=appconfigControls.QHotkeyButton(text=hk)
 			btn.hotkeyAssigned.connect(self._testHotkey)
 			btnDel=delButton(row)
 			btnDel.clicked.connect(self._deleteHotkey)
@@ -229,7 +229,19 @@ class assignHotkeys(confStack):
 		self.saveChanges('hotkeys',hotkeys,'user')
 		self.refresh=True
 		self.optionChanged=[]
-		f=open("/tmp/accesshelper_{}".format(os.environ.get('USER')),'w')
-		f.close()
-		self.updateScreen()
-		return
+		self._writeFileChanges()
+
+	def _writeFileChanges(self):
+		hotkeys=self.config.get('hotkeys',{})
+		with open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'a') as f:
+			f.write("<b>{}</b>\n".format(i18n.get("CONFIG")))
+			for kfile,sections in self.plasmaConfig.items():
+				for section,settings in sections.items():
+					for setting in settings:
+						arrayDesc=setting[1].split(",")
+						f.write("{0}->{1}\n".format(arrayDesc[-1],setting[1]))
+			for key,launchable in hotkeys.items():
+				hotkey=launchable['_launch'].split(",")
+				f.write("{0}->{1}\n".format(launchable['_k_friendly_name'],hotkey[0]))
+
+	#def _writeFileChanges(self):

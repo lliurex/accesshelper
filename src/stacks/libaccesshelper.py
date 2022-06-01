@@ -818,7 +818,7 @@ class accesshelper():
 
 	def setMozillaFirefoxFonts(self,size):
 		size+=7 #Firefox font size is smallest.
-		for prefs in self.functionhelper._getMozillaSettingsFiles():
+		for prefs in self.functionHelper._getMozillaSettingsFiles():
 			with open(prefs,'r') as f:
 				lines=f.readlines()
 			newLines=[]
@@ -841,7 +841,7 @@ class accesshelper():
 		fontArray=font.split(',')
 		gtkFont="{0}, {1} {2}".format(fontArray[0],fontArray[-1],fontArray[1])
 		gtkDirs=[os.path.join("/home",os.environ.get('USER',''),".config/gtk-3.0"),os.path.join("/home",os.environ.get('USER',''),".config/gtk-4.0")]
-		for gtkFile in self.functionhelper._getGtkSettingsFiles():
+		for gtkFile in self.functionHelper._getGtkSettingsFiles():
 			fcontent=[]
 			if os.path.isfile(gtkFile)==True:
 				with  open(gtkFile,"r") as f:

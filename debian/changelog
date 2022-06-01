@@ -1,7 +1,8 @@
-accesshelper (0.7.3.6.1) focal; urgency=medium
+accesshelper (0.7.3.6.2) focal; urgency=medium
 
   * Show list with changes before apply
   * Adjust cursor size from accessdock
+  * Profiles breaks compatibility with <0.7.3.6.2
 
  -- Juanma1980 <juanma1980@gmail.com>  Wed, 01 Jun 2022 11:17:59 +0200
 

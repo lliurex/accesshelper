@@ -3,6 +3,10 @@ Upstream-Name: accesshelper
 Upstream-Contact: juanma1980@disroot.org
 Source: https://github.com/lliurex/accesshelper
 
+Files: helper/setcursortheme
+Copyright:  Copyright (c) 2016 Scott Zeid <https://s.zeid.me/>.
+License: GPL-2
+
 Files: *
 Copyright: 2021 LliureX Team
 License: GPL-3

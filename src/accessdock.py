@@ -45,17 +45,14 @@ class accessdock(QWidget):
 
 	def _chkDockRunning(self):
 		ps=list(psutil.process_iter())
-		pid=os.getpid()
 		count=0
 		for p in ps:
 			if "accessdock" in str(p.name):
 				count+=1
 				if count>1:
-					self._debug("Accessdock is running as pid {}".format(pid))
+					self._debug("Accessdock is running as pid {}".format(p.pid))
 					os.kill(p.pid,signal.SIGKILL)
-
 					sys.exit(0)
-				pid=p.pid
 	#def _chkDockRunning
 
 	def _loadConfig(self):
@@ -121,7 +118,7 @@ class accessdock(QWidget):
 	def _renderGui(self):
 		#self.setWindowFlags(Qt.X11BypassWindowManagerHint)
 		self.setWindowModality(Qt.WindowModal)
-		self.setWindowFlags(Qt.NoDropShadowWindowHint|Qt.WindowStaysOnTopHint|Qt.FramelessWindowHint)
+		self.setWindowFlags(Qt.NoDropShadowWindowHint|Qt.WindowStaysOnTopHint|Qt.FramelessWindowHint|Qt.Tool)
 		layout=QGridLayout()
 		frame=QFrame()
 		frame.setFrameShape(QFrame.Panel)
@@ -180,7 +177,7 @@ class accessdock(QWidget):
 	def execute(self,*args,**kwargs):
 		if isinstance(args,tuple):
 			if args[0].lower()=="hide":
-				self.close()
+				sys.exit(0)
 			elif args[0].lower()=="color":
 				alphaDlg=alpha(alpha)
 				alphaDlg.move(self.coordx,self.coordy)

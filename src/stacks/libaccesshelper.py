@@ -517,7 +517,7 @@ class accesshelper():
 		return (availableThemes)
 	#def getThemes
 
-	def setCursor(self,theme="default"):
+	def setCursor(self,theme="default",size="32"):
 		if theme=="default":
 			theme=self._getCursorTheme()
 		err=0
@@ -527,6 +527,16 @@ class accesshelper():
 			print(e)
 			err=1
 		os.environ["XCURSOR_THEME"]=theme
+		if (isinstance(size,str))==False:
+			size=str(size)
+		self.setCursorSize(size)
+		try:
+			cmd=["/usr/share/accesshelper/helper/setcursortheme",theme,size]
+			subprocess.run(cmd,stdout=subprocess.PIPE)
+		except Exception as e:
+			print(e)
+			err=2
+			
 		return(err)
 	#def setCursor
 

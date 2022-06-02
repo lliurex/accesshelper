@@ -61,12 +61,23 @@
 
 
 import argparse
-import os
+import os,signal
 import sys
 import time
+import subprocess
 
 from ctypes import *
 
+pidFile="/tmp/.setcursor"
+if os.path.isfile(pidFile):
+ with open(pidFile,"r") as f:
+  fpid=f.read()
+ try:
+  os.kill(int(fpid),signal.SIGKILL)
+ except:
+  pass
+with open(pidFile,"w") as f:
+ f.write(str(os.getpid())) 
 
 l_X11 = cdll.LoadLibrary("libX11.so")
 t_XID = c_ulong
@@ -130,6 +141,14 @@ def main(argv):
   print >> sys.stderr, error % "could not open X display"
   return 1
  
+ cmd=["qdbus","org.kde.klauncher5","/KLauncher","org.kde.KLauncher.setLaunchEnv","XCURSOR_SIZE","{}".format(args.size)]
+ subprocess.call(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+ cmd=["qdbus","org.kde.klauncher5","/KLauncher","org.kde.KLauncher.setLaunchEnv","XCURSOR_THEME","{}".format(args.theme)]
+ subprocess.call(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+ cmd=["qdbus","org.kde.klauncher5","/KLauncher","org.kde.KLauncher.setLaunchEnv","GTK_RC_FILES","{}".format("/etc/gtk/gtkrc:/home/juanma/.gtkrc:/home/juanma/.config/gtkrc")]
+ subprocess.call(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+ cmd=["qdbus","org.kde.klauncher5","/KLauncher","org.kde.KLauncher.setLaunchEnv","GTK2_RC_FILES","{}".format("/etc/gtk-2.0/gtkrc:/home/juanma/.gtkrc-2.0:/home/juanma/.config/gtkrc-2.0")]
+ subprocess.call(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
  while True:
   set_cursor_theme(display, args.theme, args.size)
   if args.repeat:

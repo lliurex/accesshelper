@@ -158,8 +158,13 @@ def main(argv):
 
 
 def load_images(display, name, theme, size):
+ print(type(name))
+ print(type(theme))
+ print(type(size))
  images = XcursorLibraryLoadImages(name, theme, size)
  if images:
+  print(images)
+  print(type(images))
   return images
 
 

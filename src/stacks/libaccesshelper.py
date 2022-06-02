@@ -5,6 +5,7 @@ import tempfile
 import shutil
 from collections import OrderedDict
 from PySide2.QtGui import QIcon,QPixmap
+from multiprocessing import Process
 import dbus
 import json
 
@@ -604,13 +605,28 @@ class accesshelper():
 				size=str(size)
 			self.setCursorSize(size)
 			try:
-				cmd=["/usr/share/accesshelper/helper/setcursortheme",theme,size]
-				subprocess.run(cmd,stdout=subprocess.PIPE)
+				p=Process(target=self._runSetCursorApp,args=(theme,size,))
+				p.start()
+				p.join()
 			except Exception as e:
 				print(e)
 				err=2
+		try:
+			cmd=["qdbus","org.kde.klauncher5","/KLauncher","org.kde.KLauncher.setLaunchEnv","XCURSOR_THEME",theme]
+			subprocess.run(cmd,stdout=subprocess.PIPE)
+			cmd=["qdbus","org.kde.klauncher5","/KLauncher","org.kde.KLauncher.setLaunchEnv","XCURSOR_SIZE",size]
+			subprocess.run(cmd,stdout=subprocess.PIPE)
+		except Exception as e:
+			print(e)
+			err=3
 		return(err)
 	#def setCursor
+
+	def _runSetCursorApp(self,theme,size):
+		if os.fork()!=0:
+			return
+		cmd=["/usr/share/accesshelper/helper/setcursortheme","-r","1",theme,size]
+		subprocess.run(cmd,stdout=subprocess.PIPE)
 
 	def setCursorSize(self,size):
 		self._debug("Sizing to: {}".format(size))
@@ -814,10 +830,9 @@ class accesshelper():
 
 	def getSettingForHotkey(self,*args):
 		return(self.functionHelper.getSettingForHotkey(*args))
-
+	#def getSettingForHotkey(self,*args):
 
 	def setMozillaFirefoxFonts(self,size):
-		size+=7 #Firefox font size is smallest.
 		for prefs in self.functionHelper._getMozillaSettingsFiles():
 			with open(prefs,'r') as f:
 				lines=f.readlines()
@@ -854,6 +869,7 @@ class accesshelper():
 					f.writelines(fcontent)
 				except Exception as e:
 					self._debug("error saving gtk fonts")
+	#def setGtkFonts
 
 	def applyChanges(self):
 		cmd=["qdbus","org.kde.KWin","/KWin","org.kde.KWin.reconfigure"]

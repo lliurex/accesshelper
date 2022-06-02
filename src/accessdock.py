@@ -48,11 +48,9 @@ class accessdock(QWidget):
 		count=0
 		for p in ps:
 			if "accessdock" in str(p.name):
-				count+=1
-				if count>1:
-					self._debug("Accessdock is running as pid {}".format(p.pid))
+				self._debug("Accessdock is running as pid {}".format(p.pid))
+				if p.pid!=os.getpid():
 					os.kill(p.pid,signal.SIGKILL)
-					sys.exit(0)
 	#def _chkDockRunning
 
 	def _loadConfig(self):
@@ -302,6 +300,7 @@ class accessdock(QWidget):
 		dlg.setWindowModality(Qt.WindowModal)
 		dlg.setWindowFlags(Qt.NoDropShadowWindowHint|Qt.WindowStaysOnTopHint|Qt.FramelessWindowHint)
 		change=dlg.exec()
+		self.hide()
 		if change:
 			if str(setting)=="font":
 				qfont=lblTest.font()
@@ -316,13 +315,12 @@ class accessdock(QWidget):
 				self._debug("Default cursor theme {}".format(themeDesc))
 				#self.accesshelper.setCursorSize(lblTest.pixmap().size().width())
 				self.accesshelper.setCursor(themeDesc,lblTest.pixmap().size().width())
-			self.hide()
-			self.accesshelper.applyChanges()
-			self.show()
+		#	self.accesshelper.applyChanges()
 		else:
 			font=self.font()
 			self.fontSize=font
 			lblTest.setFont(font)
+		self.show()
 
 	def _saveFont(self,qfont):
 		font=qfont.toString()

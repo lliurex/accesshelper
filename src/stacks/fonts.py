@@ -151,7 +151,9 @@ class fonts(confStack):
 		size=qfont.pointSize()
 		minSize=size-2
 		self._debug("FONT: {}".format(size))
-		self.saveChanges('fonts','{}'.format(font))
+		self.saveChanges('font','{}'.format(font))
+		self.saveChanges('fontSize','{}'.format(size))
+		self.saveChanges('mozillaFontSize','{}'.format(size+7))
 		fontFixed="Hack"
 		fixed="{0},{1},-1,5,50,0,0,0,0,0".format(fontFixed,size)
 		if size>8:
@@ -163,7 +165,7 @@ class fonts(confStack):
 		self.accesshelper.setKdeConfigSetting("General","smallestReadableFont",minFont,"kdeglobals")
 		self.accesshelper.setKdeConfigSetting("General","toolBarFont",font,"kdeglobals")
 		self.accesshelper.setKdeConfigSetting("Appearance","Font",fixed,"Lliurex.profile")
-		self.accesshelper.setMozillaFirefoxFonts(size)
+		self.accesshelper.setMozillaFirefoxFonts(size+7)
 		self.accesshelper.setGtkFonts(font)
 		self._writeFileChanges(font)
 	#def writeConfig

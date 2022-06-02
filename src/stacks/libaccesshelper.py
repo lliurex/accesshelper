@@ -814,10 +814,9 @@ class accesshelper():
 
 	def getSettingForHotkey(self,*args):
 		return(self.functionHelper.getSettingForHotkey(*args))
-
+	#def getSettingForHotkey(self,*args):
 
 	def setMozillaFirefoxFonts(self,size):
-		size+=7 #Firefox font size is smallest.
 		for prefs in self.functionHelper._getMozillaSettingsFiles():
 			with open(prefs,'r') as f:
 				lines=f.readlines()
@@ -854,6 +853,7 @@ class accesshelper():
 					f.writelines(fcontent)
 				except Exception as e:
 					self._debug("error saving gtk fonts")
+	#def setGtkFonts
 
 	def applyChanges(self):
 		cmd=["qdbus","org.kde.KWin","/KWin","org.kde.KWin.reconfigure"]

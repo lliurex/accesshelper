@@ -252,10 +252,10 @@ class lookandfeel(confStack):
 
 	#def _setScheme
 
-	def _setCursor(self,themeDesc):
+	def _setCursor(self,themeDesc,size):
 		theme=self.cursorDesc.get(themeDesc,themeDesc)
 		self._debug("Set cursor theme: {} was {}".format(theme,themeDesc))
-		self.accesshelper.setCursor(theme)
+		self.accesshelper.setCursor(theme,size)
 	#def _setCursor
 
 	def _setCursorSize(self,size):
@@ -304,8 +304,8 @@ class lookandfeel(confStack):
 						self.accesshelper.setBackgroundImg(self.imgFile)
 						bkg=self.imgFile
 		#Ensure size is applied before theme change
-		self._setCursorSize(size)
-		self._setCursor(cursorTheme)
+		#self._setCursorSize(size)
+		self._setCursor(cursorTheme,size)
 		self._writeFileChanges(scheme,plasmaTheme,cursorTheme,size,bkg)
 	#def writeConfig
 

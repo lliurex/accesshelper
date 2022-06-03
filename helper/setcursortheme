@@ -141,14 +141,23 @@ def main(argv):
   print >> sys.stderr, error % "could not open X display"
   return 1
  
+ home=os.environ.get('HOME')
+ cmd=["xrdb","-merge",os.path.join(home,".Xdefaults")]
+ subprocess.call(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
  cmd=["qdbus","org.kde.klauncher5","/KLauncher","org.kde.KLauncher.setLaunchEnv","XCURSOR_SIZE","{}".format(args.size)]
  subprocess.call(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
  cmd=["qdbus","org.kde.klauncher5","/KLauncher","org.kde.KLauncher.setLaunchEnv","XCURSOR_THEME","{}".format(args.theme)]
  subprocess.call(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
- cmd=["qdbus","org.kde.klauncher5","/KLauncher","org.kde.KLauncher.setLaunchEnv","GTK_RC_FILES","{}".format("/etc/gtk/gtkrc:/home/juanma/.gtkrc:/home/juanma/.config/gtkrc")]
+ gtkFiles="/etc/gtk/gtkrc:{0}/.gtkrc:{0}/.config/gtkrc".format(home)
+ cmd=["qdbus","org.kde.klauncher5","/KLauncher","org.kde.KLauncher.setLaunchEnv","GTK_RC_FILES","{}".format(gtkFiles)]
  subprocess.call(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
- cmd=["qdbus","org.kde.klauncher5","/KLauncher","org.kde.KLauncher.setLaunchEnv","GTK2_RC_FILES","{}".format("/etc/gtk-2.0/gtkrc:/home/juanma/.gtkrc-2.0:/home/juanma/.config/gtkrc-2.0")]
+ #cmd=["qdbus","org.kde.klauncher5","/KLauncher","org.kde.KLauncher.setLaunchEnv","GTK_RC_FILES","{}".format("/etc/gtk/gtkrc:/home/juanma/.gtkrc:/home/juanma/.config/gtkrc")]
+ #subprocess.call(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+ gtk2Files="/etc/gtk-2.0/gtkrc:{0}/.gtkrc-2.0:{0}/.config/gtkrc-2.0".format(home)
+ cmd=["qdbus","org.kde.klauncher5","/KLauncher","org.kde.KLauncher.setLaunchEnv","GTK2_RC_FILES","{}".format(gtk2Files)]
  subprocess.call(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+ #cmd=["qdbus","org.kde.klauncher5","/KLauncher","org.kde.KLauncher.setLaunchEnv","GTK2_RC_FILES","{}".format("/etc/gtk-2.0/gtkrc:/home/juanma/.gtkrc-2.0:/home/juanma/.config/gtkrc-2.0")]
+ #subprocess.call(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
  while True:
   set_cursor_theme(display, args.theme, args.size)
   if args.repeat:
@@ -158,13 +167,8 @@ def main(argv):
 
 
 def load_images(display, name, theme, size):
- print(type(name))
- print(type(theme))
- print(type(size))
  images = XcursorLibraryLoadImages(name, theme, size)
  if images:
-  print(images)
-  print(type(images))
   return images
 
 

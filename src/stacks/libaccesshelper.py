@@ -374,8 +374,35 @@ class functionHelperClass():
 							sourceFile=os.path.join(sourceFolder,gtkFile)
 							self._debug("Cp {} {}".format(sourceFile,destFolder))
 							shutil.copy(sourceFile,destFolder)
+			self._setNewConfig()
 		return(sw)
 	#def restore_snapshot
+
+	def _setNewConfig(self):
+		usrConfig=os.path.join(os.environ.get('HOME'),".config/accesshelper/accesshelper.json")
+		if os.path.isfile(usrConfig):
+			with open(usrConfig,'r') as f:
+				content=f.readlines()
+			bkg=''
+			img=''
+			color=''
+			for line in content:
+				fline=line.strip()
+				if fline.startswith("\"bkg\":"):
+					bkg=fline.split(" ")[-1].replace("\"","").replace(",","").replace("\n","")
+				if fline.startswith('\"bkgColor\":'):
+					color=fline.split(" ")[-1].replace("\"","").replace(",","").replace("\n","")
+				if fline.startswith('\"background\":'):
+					img=fline.split(" ")[-1].replace("\"","").replace(",","").replace("\n","")
+			if bkg=="color":
+				if color:
+					qcolor=QtGui.QColor(color)
+					self.setBackgroundColor(qcolor)
+			elif bkg=="image":
+				if img:
+					self.setBackgroundImg(img)
+	#def _setNewConfig
+					
 
 	def _loadPlasmaConfigFromFolder(self,folder):
 		if os.path.isdir(folder)==True:
@@ -420,6 +447,46 @@ class functionHelperClass():
 		return(qicon,sizes)
 	#def getPointerImage
 
+	def setBackgroundColor(self,qcolor):
+		(r,g,b,alpha)=qcolor.getRgbF()
+		r=int(r*255)
+		g=int(g*255)
+		b=int(b*255)
+		color="{0},{1},{2}".format(r,g,b)
+		plugin='org.kde.color'
+		jscript = """
+		var allDesktops = desktops();
+		print (allDesktops);
+		for (i=0;i<allDesktops.length;i++) {
+			d = allDesktops[i];
+			d.wallpaperPlugin = "%s";
+			d.currentConfigGroup = Array("Wallpaper", "%s", "General");
+			d.writeConfig("Color", "%s")
+		}
+		"""
+		bus = dbus.SessionBus()
+		plasma = dbus.Interface(bus.get_object(
+			'org.kde.plasmashell', '/PlasmaShell'), dbus_interface='org.kde.PlasmaShell')
+		plasma.evaluateScript(jscript % (plugin, plugin, color))
+	#def setBackgroundColor
+
+	def setBackgroundImg(self,imgFile):
+		plugin='org.kde.image'
+		jscript = """
+		var allDesktops = desktops();
+		print (allDesktops);
+		for (i=0;i<allDesktops.length;i++) {
+			d = allDesktops[i];
+			d.wallpaperPlugin = "%s";
+			d.currentConfigGroup = Array("Wallpaper", "%s", "General");
+			d.writeConfig("Image", "%s")
+		}
+		"""
+		bus = dbus.SessionBus()
+		plasma = dbus.Interface(bus.get_object(
+			'org.kde.plasmashell', '/PlasmaShell'), dbus_interface='org.kde.PlasmaShell')
+		plasma.evaluateScript(jscript % (plugin, plugin, imgFile))
+	#def setBackgroundImg
 
 class accesshelper():
 	def __init__(self):
@@ -673,45 +740,12 @@ class accesshelper():
 		return(self.functionHelper.cssStyle(*args))
 	#def cssStyle
 
-	def setBackgroundColor(self,qcolor):
-		(r,g,b,alpha)=qcolor.getRgbF()
-		r=int(r*255)
-		g=int(g*255)
-		b=int(b*255)
-		color="{0},{1},{2}".format(r,g,b)
-		plugin='org.kde.color'
-		jscript = """
-		var allDesktops = desktops();
-		print (allDesktops);
-		for (i=0;i<allDesktops.length;i++) {
-			d = allDesktops[i];
-			d.wallpaperPlugin = "%s";
-			d.currentConfigGroup = Array("Wallpaper", "%s", "General");
-			d.writeConfig("Color", "%s")
-		}
-		"""
-		bus = dbus.SessionBus()
-		plasma = dbus.Interface(bus.get_object(
-			'org.kde.plasmashell', '/PlasmaShell'), dbus_interface='org.kde.PlasmaShell')
-		plasma.evaluateScript(jscript % (plugin, plugin, color))
+	def setBackgroundColor(self,*args):
+		return(self.functionHelper.setBackgroundColor(*args))
 	#def setBackgroundColor
 
-	def setBackgroundImg(self,imgFile):
-		plugin='org.kde.image'
-		jscript = """
-		var allDesktops = desktops();
-		print (allDesktops);
-		for (i=0;i<allDesktops.length;i++) {
-			d = allDesktops[i];
-			d.wallpaperPlugin = "%s";
-			d.currentConfigGroup = Array("Wallpaper", "%s", "General");
-			d.writeConfig("Image", "%s")
-		}
-		"""
-		bus = dbus.SessionBus()
-		plasma = dbus.Interface(bus.get_object(
-			'org.kde.plasmashell', '/PlasmaShell'), dbus_interface='org.kde.PlasmaShell')
-		plasma.evaluateScript(jscript % (plugin, plugin, imgFile))
+	def setBackgroundImg(self,*args):
+		return(self.functionHelper.setBackgroundImg(*args))
 	#def setBackgroundImg
 
 	def getBackgroundImg(self):

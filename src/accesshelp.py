@@ -89,6 +89,15 @@ def setProfile(profilePath):
 
 def _restartSession(*args):
 	QApplication.quit()
+#	if os.path.isfile("/tmp/.set_scheme"):
+#		scheme=""
+#		with open("/tmp/.set_scheme","r") as f:
+#			scheme=f.read()
+#		if scheme:
+#			accesshelper.setScheme(scheme)
+#		os.remove("/tmp/.set_scheme")
+	if os.path.isfile(configChanged)==False:
+		sys.exit(0)
 	accesshelper.restartSession()
 #def _restartSession
 
@@ -103,19 +112,14 @@ def showDialog(*args):
 	def _restoreConfig():
 		cursor=QtGui.QCursor(Qt.WaitCursor)
 		dlgClose.setCursor(cursor)
+		home=os.environ.get('HOME')
 		accesshelper.restoreSnapshot(profilePath)
+		thematizer=os.path.join(home,".config/autostart/accesshelper_thematizer.desktop")
+		if os.path.isfile(thematizer):
+			os.remove(thematizer)
 		QApplication.quit()
 		subprocess.Popen(["/usr/share/accesshelper/accesshelp.py"])
 	#def _restoreConfig(self):
-	if os.path.isfile("/tmp/.set_scheme"):
-		scheme=""
-		with open("/tmp/.set_scheme","r") as f:
-			scheme=f.read()
-		if scheme:
-			accesshelper.setScheme(scheme)
-		os.remove("/tmp/.set_scheme")
-	if os.path.isfile(configChanged)==False:
-		sys.exit(0)
 	changes=_readChanges()
 	os.remove(configChanged)
 	msg=""

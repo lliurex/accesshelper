@@ -1,0 +1,4 @@
+[Desktop Entry]
+Type=Application
+Name=accesHelper thematizer
+Exec=/usr/share/accesshelper/thematizer.sh "" ""

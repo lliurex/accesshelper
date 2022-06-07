@@ -121,7 +121,8 @@ def showDialog(*args):
 		subprocess.Popen(["/usr/share/accesshelper/accesshelp.py"])
 	#def _restoreConfig(self):
 	changes=_readChanges()
-	os.remove(configChanged)
+	if os.path.isfile(configChanged):
+		os.remove(configChanged)
 	msg=""
 	msgTitle=MSG_LOGOUT
 	#dlgClose=QMessageBox(QMessageBox.Warning,msgTitle,msg)

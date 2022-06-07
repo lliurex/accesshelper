@@ -120,6 +120,23 @@ class lookandfeel(confStack):
 		if config.get("bkg","")=="color":
 			selectedColor=config.get("bkgColor","")
 		theme=""
+		#Check if lookandfeel has been configured before
+		home=os.environ.get('HOME')
+		thematizer=os.path.join(home,".config/autostart/accesshelper_thematizer.desktop")
+		nextTheme=""
+		nextScheme=""
+		content=[]
+		if os.path.isfile(thematizer):
+			with open(thematizer,'r') as f:
+				content=f.readlines()
+			for line in content:
+				if line.startswith("Exec="):
+					array=line.split(" ")
+					if len(array)>1:
+						nextTheme=array[1].replace("\n","")
+					if len(array)>2:
+						nextScheme=array[2].replace("\n","")
+					break
 		for value in self.plasmaConfig.get("kdeglobals",{}).get("General",[]):
 			if value[0]=="Name":
 				theme=value[1]
@@ -145,6 +162,7 @@ class lookandfeel(confStack):
 						themes=self._getCursorList()
 					if cmbDesc=="background":
 						themes=self._fillBackgroundCmb()
+
 					for theme in themes:
 						themeDesc=theme.split("(")[0].replace("(","").rstrip(" ")
 						if cmb.findText(themeDesc)==-1:
@@ -169,11 +187,16 @@ class lookandfeel(confStack):
 								cmb.addItem(icon,themeDesc)
 							else:
 								cmb.addItem(themeDesc)
-						if "(" in theme and ("plasma" in theme.lower() or "actual" in theme.lower()):
+
+						if cmbDesc=="theme" and nextTheme!="":
+							cmb.setCurrentText(nextTheme)
+						elif cmbDesc=="scheme" and nextScheme!="":
+							cmb.setCurrentText(nextScheme)
+						elif "(" in theme and ("plasma" in theme.lower() or "actual" in theme.lower()):
 							cmb.setCurrentText(themeDesc)
 			if selectedColor!="":
 				cmb=self.widgets.get("background",QComboBox())
-				cmb.setCurrentText(selectedColor)
+				cmb.setCurrentText(i18n.get(selectedColor.upper(),selectedColor))
 	#def _udpate_screen
 
 	def updateCursorIcons(self):
@@ -328,7 +351,7 @@ class lookandfeel(confStack):
 						for i18color in colorList:
 							if i18n.get(i18color.upper(),"")==color:
 								qcolor=QtGui.QColor(i18color)
-						self.saveChanges('bkgColor',color)
+						self.saveChanges('bkgColor',i18color)
 						self.saveChanges('bkg',"color")
 						if qcolor:
 							self.accesshelper.setBackgroundColor(qcolor)

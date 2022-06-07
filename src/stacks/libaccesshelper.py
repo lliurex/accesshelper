@@ -386,6 +386,8 @@ class functionHelperClass():
 			bkg=''
 			img=''
 			color=''
+			cursor=''
+			size=''
 			for line in content:
 				fline=line.strip()
 				if fline.startswith("\"bkg\":"):
@@ -394,6 +396,10 @@ class functionHelperClass():
 					color=fline.split(" ")[-1].replace("\"","").replace(",","").replace("\n","")
 				if fline.startswith('\"background\":'):
 					img=fline.split(" ")[-1].replace("\"","").replace(",","").replace("\n","")
+				if fline.startswith('\"cursor\":'):
+					cursor=fline.split(" ")[-1].replace("\"","").replace(",","").replace("\n","")
+				if fline.startswith('\"cursorSize\":'):
+					size=fline.split(" ")[-1].replace("\"","").replace(",","").replace("\n","")
 			if bkg=="color":
 				if color:
 					qcolor=QtGui.QColor(color)
@@ -401,6 +407,8 @@ class functionHelperClass():
 			elif bkg=="image":
 				if img:
 					self.setBackgroundImg(img)
+			if cursor and size:
+				self._runSetCursorApp(cursor,size)
 	#def _setNewConfig
 					
 
@@ -487,6 +495,13 @@ class functionHelperClass():
 			'org.kde.plasmashell', '/PlasmaShell'), dbus_interface='org.kde.PlasmaShell')
 		plasma.evaluateScript(jscript % (plugin, plugin, imgFile))
 	#def setBackgroundImg
+
+	def _runSetCursorApp(self,theme,size):
+		if os.fork()!=0:
+			return
+		cmd=["/usr/share/accesshelper/helper/setcursortheme","-r","1",theme,size]
+		subprocess.run(cmd,stdout=subprocess.PIPE)
+	#def _runSetCursorApp
 
 class accesshelper():
 	def __init__(self):
@@ -689,11 +704,9 @@ class accesshelper():
 		return(err)
 	#def setCursor
 
-	def _runSetCursorApp(self,theme,size):
-		if os.fork()!=0:
-			return
-		cmd=["/usr/share/accesshelper/helper/setcursortheme","-r","1",theme,size]
-		subprocess.run(cmd,stdout=subprocess.PIPE)
+	def _runSetCursorApp(self,*args):
+		self.functionHelper._runSetCursorApp(*args)
+	#def _runSetCursorApp
 
 	def setCursorSize(self,size):
 		self._debug("Sizing to: {}".format(size))

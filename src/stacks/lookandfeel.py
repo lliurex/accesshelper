@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 from . import libaccesshelper
 import sys
-import os
+import os,shutil
 import tempfile
 import subprocess
 from PySide2.QtWidgets import QApplication, QLabel, QWidget, QGridLayout,QComboBox,QCheckBox,QToolTip
@@ -241,16 +241,50 @@ class lookandfeel(confStack):
 	#def _getCursorList
 
 	def _setTheme(self,theme):
-		self.accesshelper.setTheme(theme)
+		#self.accesshelper.setTheme(theme)
+		self._setThemeSchemeLauncher(theme=theme)
 	#def _setTheme
 
 	def _setScheme(self,scheme):
 		print("Setting scheme to {}".format(scheme))
-		with open("/tmp/.set_scheme","w") as f:
-			f.write(scheme)
+#		with open("/tmp/.set_scheme","w") as f:
+#			f.write(scheme)
+		self._setThemeSchemeLauncher(scheme=scheme)
 		#Apply scheme change on exit
 
 	#def _setScheme
+
+	def _setThemeSchemeLauncher(self,theme="",scheme=""):
+		home=os.environ.get('HOME')
+		if home:
+			autostart=os.path.join(home,".config/autostart")
+			if os.path.isdir(autostart)==False:
+				os.makedirs(autostart)
+			desktop="accesshelper_thematizer.desktop"
+			source=os.path.join("/usr/share/accesshelper/helper/",desktop)
+			destpath=os.path.join(autostart,desktop)
+			content=[]
+			newcontent=[]
+			if os.path.isfile(destpath):
+				with open(destpath,'r') as f:
+					content=f.readlines()
+			elif os.path.isfile(source):
+				with open(source,'r') as f:
+					content=f.readlines()
+			for line in content:
+				newline=line
+				if line.startswith("Exec="):
+					array=line.split(" ")
+					if theme:
+						array[1]=theme
+					if scheme:
+						array[2]=scheme
+					newline=" ".join(array)
+				newcontent.append(newline)
+			with open(destpath,'w') as f:
+				f.writelines(newcontent)
+				f.write("\n")
+	#def _setThemeSchemeLauncher
 
 	def _setCursor(self,themeDesc,size):
 		theme=self.cursorDesc.get(themeDesc,themeDesc)

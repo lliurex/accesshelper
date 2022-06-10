@@ -59,12 +59,6 @@ class alpha(confStack):
 				chld.hide()
 				break
 		cont=0
-		for chld in dlgColor.findChildren(QWidget):
-			if "qwidget" in str(chld).lower():
-				if cont==1:
-					chld.setVisible(False)
-					break
-				cont+=1
 		row,col=(0,0)
 		self.box.addWidget(dlgColor)
 		self.widgets={}

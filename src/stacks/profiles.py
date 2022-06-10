@@ -78,7 +78,7 @@ class profiles(confStack):
 	#def _load_screen
 
 	def _importProfile(self):
-		dlg = QFileDialog()
+		dlg = QFileDialog(directory=os.environ.get('HOME'))
 		dlg.setFileMode(QFileDialog.AnyFile)
 		dlg.setNameFilters(["Tar files (*.tar)"])
 		dlg.selectNameFilter("Tar files (*.tar)")
@@ -102,12 +102,13 @@ class profiles(confStack):
 		nameProfile=self.profilesPath.get(name,'')
 		if nameProfile=='':
 			name="{}.tar".format(name)
-			name=self.profilesPath.get(name,'')
+			defName=os.path.join(os.environ.get('HOME',name))
+			sourceName=self.profilesPath.get(name,'')
 		if name:
-			dlg = QFileDialog.getSaveFileName(self, i18n.get("EXPORT"),"{}".format(name))
+			dlg = QFileDialog.getSaveFileName(self, i18n.get("EXPORT"),"{}".format(defName))
 			f=dlg[0]
 			if f:
-				self.accesshelper.importExportSnapshot(name,f)
+				self.accesshelper.importExportSnapshot(sourceName,f)
 	#def _exportProfile
 
 	def _updateText(self,*args):

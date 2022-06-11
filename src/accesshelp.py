@@ -88,7 +88,7 @@ def setProfile(profilePath):
 #def setProfile
 
 def _restartSession(*args):
-	QApplication.quit()
+#	QApplication.quit()
 #	if os.path.isfile("/tmp/.set_scheme"):
 #		scheme=""
 #		with open("/tmp/.set_scheme","r") as f:
@@ -96,9 +96,10 @@ def _restartSession(*args):
 #		if scheme:
 #			accesshelper.setScheme(scheme)
 #		os.remove("/tmp/.set_scheme")
-	if os.path.isfile(configChanged)==False:
-		sys.exit(0)
+#	if os.path.isfile(configChanged)==False:
 	accesshelper.restartSession()
+	QApplication.quit()
+	sys.exit(0)
 #def _restartSession
 
 def _readChanges():
@@ -121,7 +122,8 @@ def showDialog(*args):
 		subprocess.Popen(["/usr/share/accesshelper/accesshelp.py"])
 	#def _restoreConfig(self):
 	changes=_readChanges()
-	os.remove(configChanged)
+	if os.path.isfile(configChanged):
+		os.remove(configChanged)
 	msg=""
 	msgTitle=MSG_LOGOUT
 	#dlgClose=QMessageBox(QMessageBox.Warning,msgTitle,msg)

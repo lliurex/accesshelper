@@ -894,8 +894,8 @@ class accesshelper():
 			newLines.append(line)
 			line='user_pref("font.minimum-size.x-unicode", {});\n'.format(size)
 			newLines.append(line)
-			self._debug("Writting MOZILLA {}".format(mozillaF))
-			with open(os.path.join(mozillaDir,mozillaF,"prefs.js"),'w') as f:
+			self._debug("Writting MOZILLA {}".format(prefs))
+			with open(os.path.join(prefs),'w') as f:
 				f.writelines(newLines)
 	#def setMozillaFirefoxFonts
 

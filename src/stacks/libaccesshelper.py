@@ -930,6 +930,7 @@ class accesshelper():
 	#def applyChanges
 
 	def restartSession(self):
-		cmd=["qdbus","org.kde.ksmserver","/KSMServer","logout","1","3","3"]
+		cmd=["qdbus","org.kde.ksmserver","/KSMServer","org.kde.KSMServerInterface.logout","1","3","3"]
+		#cmd=["qdbus","org.kde.Shutdown","/Shutdown","org.kde.Shutdown.logout"]
 		subprocess.run(cmd)
 	#def restartSession

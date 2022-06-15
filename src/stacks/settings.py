@@ -196,7 +196,7 @@ class settings(confStack):
 
 	def _setAutostart(self,profile):
 		if profile:
-			cmd="/usr/share/accesshelper/accesshelp.py --set {} init".format(profile)
+			cmd="/usr/share/accesshelper/accesshelp.py --set {}".format(profile)
 			self.accesshelper.generateAutostartDesktop(cmd,self.profilerAuto)
 			self.showMsg("{} {}".format(i18n.get("AUTOSTART"),os.environ.get("USER")))
 	#def _setAutostart

@@ -33,7 +33,7 @@ i18n={
 	"EXPORT":_("Files exported to"),
 	"SPANISHMAN":_("Spanish man"),
 	"SPANISHWOMAN":_("Spanish woman"),
-	"VALENCIANWOMAN":_("Valencian")
+	"VALENCIANWOMAN":_("Catalan woman")
 	}
 
 class playSignal(QObject):
@@ -112,7 +112,13 @@ class screenreader(confStack):
 		self.widgets.update({cmbSynt:"synt"})
 		self.box.addWidget(cmbSynt,3,1,1,1)
 		lblFiles=QLabel(i18n.get("FILES"))
-		self.box.addWidget(lblFiles,4,0,1,2,Qt.AlignLeft)
+		self.box.addWidget(lblFiles,4,0,1,1,Qt.AlignLeft)
+		btnReload=QPushButton()
+		refreshIcon=QtGui.QIcon.fromTheme("view-refresh")
+		btnReload.setIcon(refreshIcon)
+		btnReload.setIconSize(QSize(24,24))
+		btnReload.clicked.connect(self.updateScreen)
+		self.box.addWidget(btnReload,4,1,1,1,Qt.AlignRight)
 		tblFiles=QTableWidget()
 		tblFiles.verticalHeader().setVisible(False)
 		self.widgets.update({tblFiles:"files"})

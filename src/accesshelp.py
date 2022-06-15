@@ -122,6 +122,8 @@ def showDialog(*args):
 		subprocess.Popen(["/usr/share/accesshelper/accesshelp.py"])
 	#def _restoreConfig(self):
 	changes=_readChanges()
+	if changes.strip()=="":
+		sys.exit(0)
 	if os.path.isfile(configChanged):
 		os.remove(configChanged)
 	msg=""

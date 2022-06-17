@@ -118,12 +118,12 @@ def showDialog(*args):
 		thematizer=os.path.join(home,".config/autostart/accesshelper_thematizer.desktop")
 		if os.path.isfile(thematizer):
 			os.remove(thematizer)
-		QApplication.quit()
+		_exit(False)
 		subprocess.Popen(["/usr/share/accesshelper/accesshelp.py"])
 	#def _restoreConfig(self):
 	changes=_readChanges()
 	if changes.strip()=="":
-		sys.exit(0)
+		_exit(True)
 	if os.path.isfile(configChanged):
 		os.remove(configChanged)
 	msg=""
@@ -136,7 +136,7 @@ def showDialog(*args):
 	btnOk=QPushButton(TXT_ACCEPT)
 	btnOk.clicked.connect(_restartSession)
 	btnIgnore=QPushButton(TXT_IGNORE)
-	btnIgnore.clicked.connect(sys.exit)
+	btnIgnore.clicked.connect(_exit)
 	btnDiscard=QPushButton(TXT_UNDO)
 	btnDiscard.clicked.connect(_restoreConfig)
 	#scrLabel.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
@@ -150,6 +150,13 @@ def showDialog(*args):
 	res=dlgClose.exec_()
 #def showDialog
 
+def _exit(quit=True):
+	tmpDir="/tmp/.accesshelper"
+	if os.path.isdir(tmpDir):
+		shutil.rmtree(tmpDir)
+	QApplication.quit()
+	if quit:
+		sys.exit(0)
 
 def _isAutostartEnabled():
 	sysConf='/usr/share/accesshelper/accesshelper.json'
@@ -180,7 +187,7 @@ def _isAutostartEnabled():
 if len(sys.argv)==1:
 	configChanged="/tmp/.accesshelper_{}".format(os.environ.get('USER'))
 	#Take snapshot with current config
-	tmpDir="/tmp/.accesshelper"
+	tmpDir="/tmp/.accesshelper__{}".format(os.environ.get('USER'))
 	if os.path.isdir(tmpDir):
 		shutil.rmtree(tmpDir)
 	os.makedirs(tmpDir)

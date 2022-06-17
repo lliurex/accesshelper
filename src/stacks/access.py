@@ -140,8 +140,8 @@ class access(confStack):
 			return
 		data=item.data(Qt.UserRole)
 		(kfile,section,setting,value)=data.split("~")
-		if value=="":
-			value="false"
+#		if value=="":
+#			value="false"
 		settings=self.plasmaConfig[kfile][section]
 		if btn and chk:
 			btn.setEnabled(chk.isChecked())
@@ -221,6 +221,15 @@ class access(confStack):
 
 	def _addHotkeyButton(self,name,row,chk):
 		(mainHk,hkData,hkSetting,hkSection)=self.accesshelper.getHotkey(name)
+		if (mainHk=="" or mainHk=="none"):
+			if name=="invertEnabled":
+				mainHk="Meta+Ctrl+I"
+			elif name=="invertWindow":
+				mainHk="Meta+Ctrl+U"
+			elif name=="trackmouseEnabled":
+				mainHk="Meta+/"
+			elif name=="mouseclickEnabled":
+				mainHk="Meta+*"
 		item=QTableWidgetItem()
 		itemData="{0}".format(hkSetting)
 		item.setData(Qt.UserRole,itemData)

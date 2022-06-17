@@ -125,6 +125,18 @@ class assignHotkeys(confStack):
 					desc=i18n.get(name,name)
 					if len(data)>1:
 						desc=data[-1]
+					if (data[0].strip()=="" or data[0]=="none"):
+						if name=="ShowDesktopGrid":
+							data[0]="Ctrl+F8"
+						elif name=="Invert":
+							data[0]="Meta+Ctrl+I"
+						elif name=="InvertWindow":
+							data[0]="Meta+Ctrl+U"
+						elif name=="TrackMouse":
+							data[0]="Meta+/"
+						elif name=="ToggleMouseClickd":
+							data[0]="Meta+*"
+
 					lbl=QLabel(desc)
 					btn=appconfigControls.QHotkeyButton(data[0])
 					btn.hotkeyAssigned.connect(self._testHotkey)

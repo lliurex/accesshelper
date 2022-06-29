@@ -2,7 +2,7 @@
 from . import libaccesshelper
 from appconfig import appconfigControls
 import os
-from PySide2.QtWidgets import QApplication, QLabel, QPushButton,QGridLayout,QTableWidget,QHeaderView,QPixMap
+from PySide2.QtWidgets import QApplication, QLabel, QPushButton,QGridLayout,QTableWidget,QHeaderView
 from PySide2 import QtGui
 from PySide2.QtCore import Qt,Signal,QSize
 from appconfig.appConfigStack import appConfigStack as confStack
@@ -18,7 +18,7 @@ class delButton(QLabel):
 		QLabel.__init__(self, parent)
 		self.text=QLabel("")
 		lay=QHboxLayout()
-		self.icon=QPixMap()
+		self.icon=QtGui.QPixMap()
 		lay.addWidget(self.text)
 		self.installEventFilter(self)
 		icon=QtGui.QIcon.fromTheme("edit-delete")

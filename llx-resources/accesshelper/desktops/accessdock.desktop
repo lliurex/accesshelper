@@ -10,5 +10,5 @@ Exec=/usr/share/accesshelper/accessdock.py
 Terminal=false
 Type=Application
 Icon=accessdock
-Categories=KDE;Qt;Utility;X-Lliurex;X-Utilities;
+Categories=KDE;Qt;Utility;X-Lliurex;Accessibility;
 TryExec=/usr/share/accesshelper/accessdock.py

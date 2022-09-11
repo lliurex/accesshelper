@@ -164,12 +164,12 @@ class lookandfeel(confStack):
 						themes=self._fillBackgroundCmb()
 
 					for theme in themes:
-						themeDesc=theme.split("(")[0].replace("(","").rstrip(" ")
+						#themeDesc=theme.split("(")[0].replace("(","").rstrip(" ")
+						themeDesc=theme.split("[")[0]
 						if cmb.findText(themeDesc)==-1:
 							if cmbDesc=="cursor":
 								#i18n could translate the description, real name needed
-								cursorTheme=theme.split("(")[1].replace("(","").replace(")","")
-								cursorTheme=cursorTheme.split(" ")[0]
+								cursorTheme=theme.split("[")[1].split(" ")[0].replace("]","")
 								icon,sizes=self._getPointerImage(cursorTheme)
 								if icon:
 									cmb.addItem(icon,themeDesc)

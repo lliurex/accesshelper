@@ -84,7 +84,7 @@ msgstr "Carregant perfil"
 
 #: ../src/accesshelp.py:33
 msgid "Changes will only apply after session restart"
-msgstr "Els canvis s'aplicarán desrpés de tancar la sessió"
+msgstr "Els canvis s'aplicarán després de tancar la sessió"
 
 #: ../src/accesshelp.py:34
 msgid "Logout"

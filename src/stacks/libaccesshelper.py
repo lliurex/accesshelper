@@ -810,7 +810,7 @@ class accesshelper():
 		themes=self.getCursors()
 		theme="default"
 		for available in themes:
-			if ("current") in available:
+			if ("(") in available:
 				theme=available.split("(")[1].replace("(","").replace(")","")
 				theme=theme.split(" ")[0]
 				break

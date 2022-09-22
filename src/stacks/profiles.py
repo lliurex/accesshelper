@@ -74,7 +74,6 @@ class profiles(confStack):
 		self.lst_profiles.currentRowChanged.connect(self._updateText)
 		btn_load.clicked.connect(self.loadProfile)
 		btn_save.clicked.connect(self.writeConfig)
-		self.updateScreen()
 	#def _load_screen
 
 	def _importProfile(self):

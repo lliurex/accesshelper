@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 import sys
 import os,shutil
-from PySide2.QtWidgets import QApplication,QLineEdit, QLabel, QWidget, QPushButton,QGridLayout,QLineEdit,QHBoxLayout,QListWidget,QFileDialog
+from PySide2.QtWidgets import QApplication,QLineEdit, QLabel, QWidget, QPushButton,QGridLayout,QLineEdit,QHBoxLayout,QListWidget,QFileDialog,QMessageBox
 from PySide2 import QtGui
 from PySide2.QtCore import Qt,QSignalMapper
 from appconfig.appConfigStack import appConfigStack as confStack
@@ -18,8 +18,12 @@ i18n={
 	"TOOLTIP":_("Use profile templates for quick configuration"),
 	"SAVE":_("Save profile"),
 	"LOAD":_("Load profile"),
+	"REMOVE":_("Remove"),
+	"DLG_REMOVE_TITLE":_("Confirm remove"),
+	"DLG_REMOVE_TEXT":_("Remove profile"),
 	"ERRORPERMS":_("Permission denied"),
 	"ERRORDEFAULT":_("Default profiles could not be modified"),
+	"ERRORREMOVE":_("Insuficient permissions for remove"),
 	"SNAPSHOT_SYSTEM":_("Profile added to system's profiles"),
 	"SNAPSHOT_USER":_("Profile added to user's profiles"),
 	"RESTORESNAP":_("Profile loaded"),
@@ -59,21 +63,24 @@ class profiles(confStack):
 		self.refresh=True
 		self.box.addWidget(self.lst_profiles,0,0,1,3)
 		btn_load=QPushButton(i18n.get("LOAD"))
-		self.box.addWidget(btn_load,1,0,1,2)
+		self.box.addWidget(btn_load,1,0,1,1)
+		btn_remove=QPushButton(i18n.get("REMOVE"))
+		self.box.addWidget(btn_remove,1,1,1,1)
 		btn_import=QPushButton(i18n.get("IMPORT"))
-		btn_import.clicked.connect(self._importProfile)
 		self.box.addWidget(btn_import,1,2,1,1)
 		self.inp_name=QLineEdit()
 		self.box.addWidget(self.inp_name,2,0,1,1)
 		btn_save=QPushButton(i18n.get("SAVE"))
 		self.box.addWidget(btn_save,2,1,1,1,Qt.Alignment(1))
 		btn_export=QPushButton(i18n.get("EXPORT"))
-		btn_export.clicked.connect(self._exportProfile)
 		self.box.addWidget(btn_export,2,2,1,1)
 
 		self.lst_profiles.currentRowChanged.connect(self._updateText)
 		btn_load.clicked.connect(self.loadProfile)
+		btn_import.clicked.connect(self._importProfile)
+		btn_remove.clicked.connect(self._removeProfile)
 		btn_save.clicked.connect(self.writeConfig)
+		btn_export.clicked.connect(self._exportProfile)
 	#def _load_screen
 
 	def _importProfile(self):
@@ -171,6 +178,34 @@ class profiles(confStack):
 		self._applyProfileSettings()
 		cursor=QtGui.QCursor(Qt.PointingHandCursor)
 		self.setCursor(cursor)
+	#def loadProfile(self,*args):
+
+	def _removeProfile(self,*args):
+		self._debug("Removing profile")
+		cursor=QtGui.QCursor(Qt.WaitCursor)
+		self.setCursor(cursor)
+		name=self.inp_name.text()
+		name=os.path.basename(name)
+		if len(name)>20:
+			name=name[0:19]
+		name="{}.tar".format(name)
+		sw=False
+		pfile=self.profilesPath.get(name,'')
+		if pfile and os.path.isfile(pfile):
+			dlg=QMessageBox(self)
+			dlg.setWindowTitle(i18n.get("DLG_REMOVE_TITLE"))
+			dlg.setText("{} {}?".format(i18n.get("DLG_REMOVE_TEXT"),self.inp_name.text()))
+			dlg.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+			dlg.setIcon(QMessageBox.Question)
+			button = dlg.exec()
+			if button == QMessageBox.Yes:
+				try:
+					os.remove(pfile)
+				except:
+					self.showMsg("{} {}".format(i18n.get("ERRORREMOVE"),self.inp_name.text()))
+		cursor=QtGui.QCursor(Qt.PointingHandCursor)
+		self.setCursor(cursor)
+		self.updateScreen()
 	#def loadProfile(self,*args):
 
 	def _applyProfileSettings(self):

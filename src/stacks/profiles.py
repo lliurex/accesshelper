@@ -222,4 +222,5 @@ class profiles(confStack):
 				self.showMsg("{}".format(i18n.get("SNAPSHOT_SYSTEM")))
 			else:
 				self.showMsg("{}".format(i18n.get("SNAPSHOT_USER")))
+		self.updateScreen()
 

@@ -150,16 +150,17 @@ class functionHelperClass():
 	def _getMozillaSettingsFiles(self):
 		mozillaFiles=[]
 		mozillaDir=os.path.join(os.environ.get('HOME',''),".mozilla/firefox")
-		for mozillaF in os.listdir(mozillaDir):
-			self._debug("Reading MOZILLA {}".format(mozillaF))
-			fPath=os.path.join(mozillaDir,mozillaF)
-			if os.path.isdir(fPath):
-				self._debug("Reading DIR {}".format(mozillaF))
-				if "." in mozillaF:
+		if os.path.isdir(mozillaDir)==True:
+			for mozillaF in os.listdir(mozillaDir):
+				self._debug("Reading MOZILLA {}".format(mozillaF))
+				fPath=os.path.join(mozillaDir,mozillaF)
+				if os.path.isdir(fPath):
 					self._debug("Reading DIR {}".format(mozillaF))
-					prefs=os.path.join(mozillaDir,mozillaF,"prefs.js")
-					if os.path.isfile(prefs):
-						mozillaFiles.append(prefs)
+					if "." in mozillaF:
+						self._debug("Reading DIR {}".format(mozillaF))
+						prefs=os.path.join(mozillaDir,mozillaF,"prefs.js")
+						if os.path.isfile(prefs):
+							mozillaFiles.append(prefs)
 		return mozillaFiles
 	#def _getMozillaSettingsFiles
 

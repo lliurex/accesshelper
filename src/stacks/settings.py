@@ -19,6 +19,13 @@ i18n={
 	"DESCRIPTION":_("Manage application"),
 	"MENUDESCRIPTION":_("Configure some options"),
 	"TOOLTIP":_("Set config level, default template.."),
+	"USERCONF":_("The config will be applied per user"),
+	"SYSCONF":_("The config will be applied to all users"),
+	"N4DCONF":_("The config will be applied to all users and clients"),
+	"LBLCONF":_("Choose the config level that should use the app"),
+	"LBLSETTINGS":_("Session settings"),
+	"LOADTPL":_("Load template on start"),
+	"ENABLEDOCK":_("Enable accesshelper dock"),
 	"AUTOSTART":_("Autostart enabled for user"),
 	"DISABLEAUTOSTART":_("Autostart disabled for user"),
 	"AUTOSTARTERROR":_("Autostart could not be disabled"),
@@ -28,7 +35,8 @@ i18n={
 	"PROFILE":_("Startup profile"),
 	"NONE":_("Disabled"),
 	"STARTDOCK":_("Autostart dock"),
-	"DOCKHK":_("Hotkey for dock")
+	"DOCKHK":_("Hotkey for dock"),
+	"GRUBBEEP":_("Beep when machine starts")
 	}
 
 class settings(confStack):
@@ -48,18 +56,6 @@ class settings(confStack):
 		self.profilerAuto="accesshelper_profiler.desktop"
 		self.dockAuto="accessdock.desktop"
 		self.optionChanged=[]
-		self.keymap={}
-		for key,value in vars(Qt).items():
-			if isinstance(value, Qt.Key):
-				self.keymap[value]=key.partition('_')[2]
-		self.modmap={
-					Qt.ControlModifier: self.keymap[Qt.Key_Control],
-					Qt.AltModifier: self.keymap[Qt.Key_Alt],
-					Qt.ShiftModifier: self.keymap[Qt.Key_Shift],
-					Qt.MetaModifier: self.keymap[Qt.Key_Meta],
-					Qt.GroupSwitchModifier: self.keymap[Qt.Key_AltGr],
-					Qt.KeypadModifier: self.keymap[Qt.Key_NumLock]
-					}
 		self.accesshelper=libaccesshelper.accesshelper()
 	#def __init__
 
@@ -67,15 +63,15 @@ class settings(confStack):
 		def _change_osh():
 			idx=self.cmb_level.currentIndex()
 			if idx==0:
-				lbl_help.setText(_("The config will be applied per user"))
+				lbl_help.setText(i18n.get("USERCONF"))
 			elif idx==1:
-				lbl_help.setText(_("The config will be applied to all users"))
+				lbl_help.setText(i18n.get("SYSCONF"))
 			elif idx==2:
-				lbl_help.setText(_("The config will be applied to all users and clients"))
+				lbl_help.setText(i18n.get("N4DCONF"))
 			self.fakeUpdate()
 		self.installEventFilter(self)
 		box=QGridLayout()
-		lbl_txt=QLabel(_("Choose the config level that should use the app"))
+		lbl_txt=QLabel(i18n.get("LBLCONF"))
 		box.addWidget(lbl_txt,0,0,1,1)
 		self.cmb_level=QComboBox()
 		self.cmb_level.addItem(_("User"))
@@ -88,14 +84,14 @@ class settings(confStack):
 		lbl_help=QLabel("")
 		lbl_help.setAlignment(Qt.AlignTop)
 		box.addWidget(lbl_help,1,0,1,2,Qt.AlignTop|Qt.AlignCenter)
-		box.addWidget(QLabel(_("Session settings")),2,0,1,2,Qt.AlignTop)
-		chk_template=QCheckBox(_("Load template on start"))
+		box.addWidget(QLabel(i18n.get("LBLSETTINGS")),2,0,1,2,Qt.AlignTop)
+		chk_template=QCheckBox(i18n.get("LOADTPL"))
 		box.addWidget(chk_template,3,0,1,1,Qt.AlignTop)
 		self.widgets.update({chk_template:'startup'})
 		cmb_template=QComboBox()
 		self.widgets.update({cmb_template:'profile'})
 		box.addWidget(cmb_template,3,1,1,1,Qt.AlignTop)
-		chk_dock=QCheckBox(_("Enable accesshelper dock"))
+		chk_dock=QCheckBox(i18n.get("ENABLEDOCK"))
 		box.addWidget(chk_dock,4,0,1,1,Qt.AlignTop)
 		self.widgets.update({chk_dock:'dock'})
 		(mainHk,hkData,hkSetting,hkSection)=self.accesshelper.getHotkey("accessdock.desktop")
@@ -105,8 +101,11 @@ class settings(confStack):
 		self.btn_dockHk.hotkeyAssigned.connect(self._testHotkey)
 		box.addWidget(self.btn_dockHk,4,1,1,1,Qt.AlignTop)
 		self.widgets.update({self.btn_dockHk:'dockHk'})
+		chk_grub=QCheckBox(i18n.get("GRUBBEEP"))
+		box.addWidget(chk_grub,5,0,1,1,Qt.AlignTop)
+		self.widgets.update({chk_grub:'grubBeep'})
 		box.setRowStretch(0,1)
-		for i in range (1,4):
+		for i in range (1,5):
 			box.setRowStretch(i,0)
 		box.setRowStretch(i+1,2)
 		for wrkDir in self.wrkDirs:
@@ -188,6 +187,9 @@ class settings(confStack):
 				widget.setCurrentIndex(idx)
 			elif desc=="dock":
 				widget.setChecked(dock)
+			elif desc=="grubBeep":
+				if config[level].get("grubBeep","")=="true":
+					widget.setChecked(True)
 	#def _udpate_screen
 
 	def _updateConfig(self,key):
@@ -230,6 +232,10 @@ class settings(confStack):
 		self.showMsg("{}".format(i18n.get("DISABLEDOCK")))
 	#def _removeAutostart
 
+	def _setGrubBeep(self,value):
+		self.accesshelper.setGrubBeep(value)
+	#def _setGrubBeep
+
 	def writeConfig(self):
 		startWdg=None
 		profile=''
@@ -250,6 +256,9 @@ class settings(confStack):
 					dockhotkey="Ctrl+Space"
 			if isinstance(widget,QCheckBox):
 				value=widget.isChecked()
+				if desc=="grubBeep":
+					if config[self.level].get("grubBeep","")!=str(value).lower():
+						self._setGrubBeep(value)
 				if value:
 					value="true"
 				else:

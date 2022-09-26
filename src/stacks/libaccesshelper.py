@@ -410,8 +410,7 @@ class functionHelperClass():
 					self.setBackgroundImg(img)
 			if cursor and size:
 				self._runSetCursorApp(cursor,size)
-	#def _setNewConfig
-					
+	#def _setNewConfig					
 
 	def _loadPlasmaConfigFromFolder(self,folder):
 		if os.path.isdir(folder)==True:
@@ -918,6 +917,24 @@ class accesshelper():
 				except Exception as e:
 					self._debug("error saving gtk fonts")
 	#def setGtkFonts
+
+	def setGrubBeep(self,state):
+		sw=True
+		if state==True:
+			state="enable"
+		else:
+			state="disable"
+		cmd=["pkexec","/usr/share/accesshelper/helper/enableGrubBeep.sh",state]
+		try:
+			pk=subprocess.run(cmd)
+			if pk.returncode!=0:
+				sw=False
+		except Exception as e:
+			self._debug(e)
+			self._debug("Permission denied")
+			sw=False
+		return sw
+	#def setGrubBeep
 
 	def applyChanges(self):
 		cmd=["qdbus","org.kde.KWin","/KWin","org.kde.KWin.reconfigure"]

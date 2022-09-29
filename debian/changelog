@@ -1,6 +1,7 @@
 accesshelper (0.7.6) lliurex22; urgency=medium
 
   * BugFix release
+  * Add option for grub beep
 
  -- Juanma1980 <juanma1980@gmail.com>  Fri, 17 Jun 2022 09:30:37 +0200
 

@@ -1,16 +1,14 @@
 #!/usr/bin/python3
 from . import libaccesshelper
-import sys
+from appconfig import appconfigControls
 import os
-from PySide2.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QGridLayout,QLineEdit,QComboBox,QRadioButton,QListWidget,QGroupBox,QCompleter,QListWidgetItem
+from PySide2.QtWidgets import QLabel, QPushButton,QGridLayout,QLineEdit,QRadioButton,QListWidget,QGroupBox,QCompleter,QListWidgetItem
 from PySide2 import QtGui
-from PySide2.QtCore import Qt,Signal,QSignalMapper,QProcess,QEvent,QSize
+from PySide2.QtCore import Qt
 from app2menu import App2Menu
 from appconfig.appConfigStack import appConfigStack as confStack
 import gettext
 _ = gettext.gettext
-import json
-import subprocess
 QString=type("")
 
 i18n={
@@ -25,11 +23,11 @@ i18n={
 	"TYPEACT":_("Desktop action"),
 	"LBLCMD":_("Command"),
 	"BTNTXT":_("Assign"),
-	"PRESSKEY":_("Press a key or key-combination for the shortcut")
+	"PRESSKEY":_("Press a key or key-combination for the shortcut"),
+	"HKASSIGNED":_("already assigned to action")
 	}
 
 class addHotkey(confStack):
-	keybind_signal=Signal("PyObject")
 	def __init_stack__(self):
 		self.dbg=False
 		self._debug("addhotkeys load")
@@ -38,7 +36,7 @@ class addHotkey(confStack):
 		self.description=i18n.get('DESCRIPTION')
 		self.icon=('input-keyboard')
 		self.tooltip=i18n.get('TOOLTIP')
-		self.index=17
+		self.index=19
 		self.visible=False
 		self.enabled=True
 		self.changed=[]
@@ -46,23 +44,10 @@ class addHotkey(confStack):
 		self.plasmaConfig={}
 		self.wrkFiles=["kglobalshortcutsrc"]
 		self.optionChanged=[]
-		self.keymap={}
-		for key,value in vars(Qt).items():
-			if isinstance(value, Qt.Key):
-				self.keymap[value]=key.partition('_')[2]
-		self.modmap={
-					Qt.ControlModifier: self.keymap[Qt.Key_Control],
-					Qt.AltModifier: self.keymap[Qt.Key_Alt],
-					Qt.ShiftModifier: self.keymap[Qt.Key_Shift],
-					Qt.MetaModifier: self.keymap[Qt.Key_Meta],
-					Qt.GroupSwitchModifier: self.keymap[Qt.Key_AltGr],
-					Qt.KeypadModifier: self.keymap[Qt.Key_NumLock]
-					}
 		self.accesshelper=libaccesshelper.accesshelper()
 	#def __init__
 
 	def _load_screen(self):
-		self.installEventFilter(self)
 		self.box=QGridLayout()
 		self.setLayout(self.box)
 		self.widgets={}
@@ -84,8 +69,8 @@ class addHotkey(confStack):
 		#layOption.addWidget(opt2,0,1)
 		grpOptions.setLayout(layOption)
 		#self.box.addWidget(grpOptions,0,0,1,3)
-		self.btnHk=QPushButton(i18n.get("BTNTXT"))
-		self.btnHk.clicked.connect(self._grab_alt_keys)
+		self.btnHk=appconfigControls.QHotkeyButton(i18n.get("BTNTXT"))
+		self.btnHk.hotkeyAssigned.connect(self._testHotkey)
 		self.box.addWidget(self.btnHk,1,0,3,1)
 		self.inpSearch=QLineEdit()
 		self.inpSearch.setPlaceholderText(_("Search"))
@@ -109,6 +94,9 @@ class addHotkey(confStack):
 		self.lblPress.setFont(font)
 		self.lblPress.setVisible(False)
 		self.box.addWidget(self.lblPress,0,0,2,3)
+		self.btn_cancel.setText(i18n.get("CANCEL","Cancel"))
+		self.btn_cancel.clicked.connect(self._exit)
+		self.btn_cancel.setEnabled(True)
 		#self.updateScreen()
 	#def _load_screen
 
@@ -120,59 +108,6 @@ class addHotkey(confStack):
 
 	def _addHotkey(self,*args):
 		pass
-
-	def _grab_alt_keys(self,*args):
-		self.lblPress.show()
-		self.showMsg(i18n.get("PRESSKEY"))
-		self.btnHk.setText("")
-		self.grabKeyboard()
-		self.keybind_signal.connect(self._set_config_key)
-	#def _grab_alt_keys
-
-	def _set_config_key(self,keypress):
-		keypress=keypress.replace("Control","Ctrl")
-		self.btnHk.setText(keypress)
-		desc=self.widgetsText.get(self.btnHk)
-		plasmaConfig=self.plasmaConfig.copy()
-		for kfile in self.wrkFiles:
-			for section,data in plasmaConfig.get(kfile,{}).items():
-				dataTmp=[]
-				for setting,value in data:
-					if setting==desc:
-						valueArray=value.split(",")
-						valueArray[0]=keypress
-						valueArray[1]=keypress
-						value=",".join(valueArray)
-					dataTmp.append((setting,value))
-				self.plasmaConfig[kfile][section]=dataTmp
-		#if keypress!=self.keytext:
-		#	self.changes=True
-		#	self.setChanged(self.btn_conf)
-		self.lblPress.hide()
-		self.btn_ok.setEnabled(True)
-		self.btn_cancel.setEnabled(True)
-	#def _set_config_key
-
-	def eventFilter(self,source,event):
-		sw_mod=False
-		keypressed=[]
-		if (event.type()==QEvent.KeyPress):
-			for modifier,text in self.modmap.items():
-				if event.modifiers() & modifier:
-					sw_mod=True
-					keypressed.append(text)
-			key=self.keymap.get(event.key(),event.text())
-			if key not in keypressed:
-				if sw_mod==True:
-					sw_mod=False
-				keypressed.append(key)
-			if sw_mod==False:
-				self.keybind_signal.emit("+".join(keypressed))
-		if (event.type()==QEvent.KeyRelease):
-			self.releaseKeyboard()
-
-		return False
-	#def eventFilter
 
 	def updateScreen(self,*args):
 		if args:
@@ -191,7 +126,7 @@ class addHotkey(confStack):
 						self.inpCmd.setEnabled(False)
 						self.lblCmd.setEnabled(False)
 						self._loadActs()
-		pass
+		self.btn_cancel.setEnabled(True)
 	#def _udpate_screen
 
 	def _loadApps(self,*args):
@@ -233,15 +168,21 @@ class addHotkey(confStack):
 	def _updateConfig(self,name):
 		pass
 
+	def _testHotkey(self,hotkey):
+		if not hotkey.get("action","")=="":
+			try:
+				self.showMsg("{0} {1} {2}".format(hotkey.get("hotkey"),i18n.get("HKASSIGNED"),hotkey.get("action")))
+			except:
+				pass
+			self.btnHk.revertHotkey()
+		self.btn_ok.setEnabled(True)
+		self.btn_cancel.setEnabled(True)
+	#def _testHotkey
+
 	def writeConfig(self):
 		#functionHelper.setPlasmaConfig(self.plasmaConfig)
 		self.refresh=True
 		txt=self.btnHk.text()
-		if txt==i18n.get("BTNTXT") or txt=="":
-			self.changes=False
-			self.optionChanged=[]
-			self.stack.gotoStack(idx=4,parms="")
-			return
 		config=self.getConfig(self.level).get(self.level,{})
 		hotkeys=config.get('hotkeys',{})
 		name=self.lstOptions.currentItem().text()
@@ -258,4 +199,9 @@ class addHotkey(confStack):
 		self.optionChanged=[]
 		f=open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'w')
 		f.close()
+		self.stack.gotoStack(idx=4,parms="")
+
+	def _exit(self):
+		self.changes=False
+		self.optionChanged=[]
 		self.stack.gotoStack(idx=4,parms="")

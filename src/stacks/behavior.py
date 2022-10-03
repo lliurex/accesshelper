@@ -11,7 +11,7 @@ _ = gettext.gettext
 QString=type("")
 
 i18n={
-	"CONFIG":_("Configuration"),
+	"CONFIG":_("behavior"),
 	"DESCRIPTION":_("Desktop behavior"),
 	"MENUDESCRIPTION":_("Configure how desktop works"),
 	"TOOLTIP":_("Set many options related with desktop behavior"),

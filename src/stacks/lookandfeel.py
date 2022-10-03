@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 from . import libaccesshelper
 import sys
-import os
+import os,shutil
 import tempfile
 import subprocess
 from PySide2.QtWidgets import QApplication, QLabel, QWidget, QGridLayout,QComboBox,QCheckBox,QToolTip
@@ -16,7 +16,7 @@ QString=type("")
 
 i18n={
 	"ACCESSIBILITY":_("Look&Feel options"),
-	"CONFIG":_("Configuration"),
+	"CONFIG":_("Look&Feel"),
 	"DESCRIPTION":_("Look&Feel configuration"),
 	"MENUDESCRIPTION":_("Modify appearence settings"),
 	"TOOLTIP":_("Set theme, color scheme or pointers"),
@@ -24,9 +24,11 @@ i18n={
 	"SCHEME":_("Color scheme"),
 	"COLORS":_("Theme colors"),
 	"BACKGROUND":_("Background color"),
+	"BACKIMG":_("Desktop background"),
 	"CURRENTBKG":_("Current background"),
 	"CURSORTHEME":_("Cursor theme"),
 	"CURSORSIZE":_("Cursor size"),
+	"CURSORTHEME":_("Cursor theme"),
 	"WHITE":_("White"),
 	"RED":_("Red"),
 	"BLUE":_("Blue"),
@@ -54,6 +56,8 @@ class lookandfeel(confStack):
 		self.blockSettings={}
 		self.wantSettings={"kdeglobals":["General"]}
 		self.optionChanged=[]
+		self.imgFile=""
+		self.bkgIconSize=96
 		self.cursorDesc={}
 		self.accesshelper=libaccesshelper.accesshelper()
 	#def __init__
@@ -65,8 +69,10 @@ class lookandfeel(confStack):
 		sigmap_run=QSignalMapper(self)
 		sigmap_run.mapped[QString].connect(self._updateConfig)
 		self.widgets={}
-		config=self.config.get(self.level,{})
 		self.config=self.getConfig()
+		config=self.config.get(self.level,{})
+		if config.get("background"):
+			self.imgFile=config.get("background")
 
 		self.box.addWidget(QLabel(i18n.get("THEME")),0,0,1,1)
 		cmbTheme=QComboBox()
@@ -80,6 +86,7 @@ class lookandfeel(confStack):
 
 		self.box.addWidget(QLabel(i18n.get("BACKGROUND")),2,0,1,1)
 		cmbBackground=QComboBox()
+		cmbBackground.setIconSize(QSize(self.bkgIconSize,self.bkgIconSize))
 		self.widgets.update({'background':cmbBackground})
 		self.box.addWidget(cmbBackground,2,1,1,1)
 
@@ -101,10 +108,6 @@ class lookandfeel(confStack):
 		cmbCursorSize.addItem("112")
 		cmbCursorSize.addItem("128")
 		cmbCursorSize.currentTextChanged.connect(self.updateCursorIcons)
-
-		self.updateScreen()
-		self.updateCursorIcons()
-		#self.changes=False
 	#def _load_screen
 
 	def updateScreen(self):
@@ -112,7 +115,28 @@ class lookandfeel(confStack):
 			plasmaConfig=self.accesshelper.getPlasmaConfig(wrkFile)
 			self.plasmaConfig.update(plasmaConfig)
 		self.config=self.getConfig()
+		config=self.config.get(self.level,{})
+		selectedColor=""
+		if config.get("bkg","")=="color":
+			selectedColor=config.get("bkgColor","")
 		theme=""
+		#Check if lookandfeel has been configured before
+		home=os.environ.get('HOME')
+		thematizer=os.path.join(home,".config/autostart/accesshelper_thematizer.desktop")
+		nextTheme=""
+		nextScheme=""
+		content=[]
+		if os.path.isfile(thematizer):
+			with open(thematizer,'r') as f:
+				content=f.readlines()
+			for line in content:
+				if line.startswith("Exec="):
+					array=line.split(" ")
+					if len(array)>1:
+						nextTheme=array[1].replace("\n","")
+					if len(array)>2:
+						nextScheme=array[2].replace("\n","")
+					break
 		for value in self.plasmaConfig.get("kdeglobals",{}).get("General",[]):
 			if value[0]=="Name":
 				theme=value[1]
@@ -138,13 +162,14 @@ class lookandfeel(confStack):
 						themes=self._getCursorList()
 					if cmbDesc=="background":
 						themes=self._fillBackgroundCmb()
+
 					for theme in themes:
-						themeDesc=theme.split("(")[0].replace("(","").rstrip(" ")
+						#themeDesc=theme.split("(")[0].replace("(","").rstrip(" ")
+						themeDesc=theme.split("[")[0]
 						if cmb.findText(themeDesc)==-1:
 							if cmbDesc=="cursor":
 								#i18n could translate the description, real name needed
-								cursorTheme=theme.split("(")[1].replace("(","").replace(")","")
-								cursorTheme=cursorTheme.split(" ")[0]
+								cursorTheme=theme.split("[")[1].split(" ")[0].replace("]","")
 								icon,sizes=self._getPointerImage(cursorTheme)
 								if icon:
 									cmb.addItem(icon,themeDesc)
@@ -152,12 +177,26 @@ class lookandfeel(confStack):
 									cmb.addItem(themeDesc)
 								self.cursorDesc[themeDesc]=cursorTheme
 							elif cmbDesc=="background":
-								cmb.addItem(themeDesc)
+								color=theme.split("(")[1].replace("(","").replace(")","")
+								px=QtGui.QPixmap(self.bkgIconSize,self.bkgIconSize)
+								if os.path.isfile(color):
+									px.load(color)
+								elif color:
+									px.fill(QtGui.QColor(color))
+								icon=QtGui.QIcon(px)
+								cmb.addItem(icon,themeDesc)
 							else:
 								cmb.addItem(themeDesc)
-						if "(" in theme and ("plasma" in theme.lower() or "actual" in theme.lower()):
+
+						if cmbDesc=="theme" and nextTheme!="":
+							cmb.setCurrentText(nextTheme)
+						elif cmbDesc=="scheme" and nextScheme!="":
+							cmb.setCurrentText(nextScheme)
+						elif "(" in theme and ("plasma" in theme.lower() or "actual" in theme.lower()):
 							cmb.setCurrentText(themeDesc)
-		config=self.config.get(self.level,{})
+			if selectedColor!="":
+				cmb=self.widgets.get("background",QComboBox())
+				cmb.setCurrentText(i18n.get(selectedColor.upper(),selectedColor))
 	#def _udpate_screen
 
 	def updateCursorIcons(self):
@@ -187,10 +226,18 @@ class lookandfeel(confStack):
 	#def updateCursorSizes
 
 	def _fillBackgroundCmb(self):
-		colors=[i18n.get("CURRENTBKG","Current background")]
-		for i in (i18n.get("BLACK","black"),i18n.get("RED","red"),i18n.get("BLUE","blue"),i18n.get("GREEN","green"),\
-					i18n.get("YELLOW","yellow"),i18n.get("WHITE","white")):
-			colors.append(i)
+		if self.imgFile=="":
+			imgFile=self.accesshelper.getBackgroundImg()
+			self.imgFile=imgFile
+		else:
+			imgFile=self.imgFile
+		if imgFile=="":
+			imgFile="white"
+		colors=["{0} ({1})".format(i18n.get("CURRENTBKG","Current background"),imgFile)]
+		colorList=["black","red","blue","green","yellow","white"]
+		for color in colorList:
+			desc=i18n.get(color.upper(),color)
+			colors.append("{0} ({1})".format(desc,color))
 		return(colors)
 		
 	def _getPointerImage(self,theme):
@@ -201,33 +248,6 @@ class lookandfeel(confStack):
 		#	if key in self.kwinMethods:
 		#		self._exeKwinMethod(key) 
 	
-	def writeConfig(self):
-		#self.saveChanges('fonts',{"size":size})
-		self.optionChanged=[]
-		self.refresh=True
-		cursorTheme=""
-		size=""
-		for cmbDesc in self.widgets.keys():
-			cmb=self.widgets.get(cmbDesc,"")
-			if isinstance(cmb,QComboBox):
-				theme=cmb.currentText()
-				theme=theme.split("(")[0].strip()
-				if cmbDesc=="theme":
-					self._setTheme(theme)
-				if cmbDesc=="scheme":
-					self._setScheme(theme)
-				if cmbDesc=="cursor":
-					cursorTheme=theme
-				if cmbDesc=="cursorSize":
-					size=cmb.currentText()
-		#Ensure size is applied before theme change
-		self._setCursorSize(size)
-		self._setCursor(cursorTheme)
-		f=open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'w')
-		f.close()
-		#Close and open window
-	#def writeConfig
-
 	def _getThemeList(self):
 		availableThemes=self.accesshelper.getThemes()
 		return (availableThemes)
@@ -244,25 +264,117 @@ class lookandfeel(confStack):
 	#def _getCursorList
 
 	def _setTheme(self,theme):
-		self.accesshelper.setTheme(theme)
+		#self.accesshelper.setTheme(theme)
+		self._setThemeSchemeLauncher(theme=theme)
 	#def _setTheme
 
 	def _setScheme(self,scheme):
 		print("Setting scheme to {}".format(scheme))
-		with open("/tmp/.set_scheme","w") as f:
-			f.write(scheme)
+#		with open("/tmp/.set_scheme","w") as f:
+#			f.write(scheme)
+		self._setThemeSchemeLauncher(scheme=scheme)
 		#Apply scheme change on exit
 
 	#def _setScheme
 
-	def _setCursor(self,themeDesc):
+	def _setThemeSchemeLauncher(self,theme="",scheme=""):
+		home=os.environ.get('HOME')
+		if home:
+			autostart=os.path.join(home,".config/autostart")
+			if os.path.isdir(autostart)==False:
+				os.makedirs(autostart)
+			desktop="accesshelper_thematizer.desktop"
+			source=os.path.join("/usr/share/accesshelper/helper/",desktop)
+			destpath=os.path.join(autostart,desktop)
+			content=[]
+			newcontent=[]
+			if os.path.isfile(destpath):
+				with open(destpath,'r') as f:
+					content=f.readlines()
+			elif os.path.isfile(source):
+				with open(source,'r') as f:
+					content=f.readlines()
+			for line in content:
+				newline=line
+				if line.startswith("Exec="):
+					array=line.split(" ")
+					if theme:
+						array[1]=theme
+					if scheme:
+						array[2]=scheme
+					newline=" ".join(array)
+				newcontent.append(newline)
+			with open(destpath,'w') as f:
+				f.writelines(newcontent)
+				f.write("\n")
+	#def _setThemeSchemeLauncher
+
+	def _setCursor(self,themeDesc,size):
 		theme=self.cursorDesc.get(themeDesc,themeDesc)
 		self._debug("Set cursor theme: {} was {}".format(theme,themeDesc))
-		self.accesshelper.setCursor(theme)
+		self.accesshelper.setCursor(theme,size)
 	#def _setCursor
 
 	def _setCursorSize(self,size):
 		self.saveChanges('cursor',{"size":size})
 		self.accesshelper.setCursorSize(size)
 	#def _setCursorSize(self):
+
+	def writeConfig(self):
+		self.saveChanges('background',self.imgFile)
+		self.optionChanged=[]
+		self.refresh=True
+		cursorTheme=""
+		size=""
+		scheme=""
+		plasmaTheme=""
+		for cmbDesc in self.widgets.keys():
+			cmb=self.widgets.get(cmbDesc,"")
+			if isinstance(cmb,QComboBox):
+				theme=cmb.currentText()
+				theme=theme.split("(")[0].strip()
+				if cmbDesc=="theme":
+					plasmaTheme=theme
+					self._setTheme(theme)
+				if cmbDesc=="scheme":
+					scheme=theme
+					self._setScheme(theme)
+				if cmbDesc=="cursor":
+					cursorTheme=theme
+				if cmbDesc=="cursorSize":
+					size=cmb.currentText()
+				if cmbDesc=="background":
+					idx=cmb.currentIndex()
+					if idx>0:
+						color=cmb.currentText()
+						colorList=["black","red","blue","green","yellow","white"]
+						for i18color in colorList:
+							if i18n.get(i18color.upper(),"")==color:
+								qcolor=QtGui.QColor(i18color)
+						self.saveChanges('bkgColor',i18color)
+						self.saveChanges('bkg',"color")
+						if qcolor:
+							self.accesshelper.setBackgroundColor(qcolor)
+						bkg=color
+					else:
+						self.saveChanges('bkg',"image")
+						self.accesshelper.setBackgroundImg(self.imgFile)
+						bkg=self.imgFile
+		#Ensure size is applied before theme change
+		#self._setCursorSize(size)
+		self.saveChanges('cursor',cursorTheme)
+		self.saveChanges('cursorSize',size)
+		self._setCursor(cursorTheme,size)
+		self._writeFileChanges(scheme,plasmaTheme,cursorTheme,size,bkg)
+	#def writeConfig
+
+	def _writeFileChanges(self,scheme,theme,cursor,cursorSize,bkg):
+		with open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'a') as f:
+			f.write("<b>{}</b>\n".format(i18n.get("CONFIG")))
+			f.write("{0}->{1}\n".format(i18n.get("THEME"),theme))
+			f.write("{0}->{1}\n".format(i18n.get("SCHEME"),scheme))
+			f.write("{0}->{1}\n".format(i18n.get("CURSORTHEME"),cursor))
+			f.write("{0}->{1}\n".format(i18n.get("CURSORSIZE"),cursorSize))
+			f.write("{0}->{1}\n".format(i18n.get("BACKIMG"),bkg))
+	#def _writeFileChanges(self):
 

@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 import sys
 import subprocess
-import os
+import os,shutil
 import json
-from PySide2.QtWidgets import QApplication,QMessageBox,QGridLayout,QLabel,QPushButton
+from PySide2.QtWidgets import QApplication,QDialog,QGridLayout,QLabel,QPushButton,QLayout,QSizePolicy
 from PySide2.QtCore import Qt
+from PySide2 import QtGui
 from appconfig.appConfigScreen import appConfigScreen as appConfig
 from stacks import libaccesshelper
+from appconfig import appconfigControls
 import gettext
 import time
 _ = gettext.gettext
@@ -15,6 +17,9 @@ gettext.textdomain('access_helper')
 
 wrkDirList=["/usr/share/accesshelper/profiles","/usr/share/accesshelper/default",os.path.join(os.environ.get("HOME",''),".config/accesshelper/profiles")]
 accesshelper=libaccesshelper.accesshelper()
+accesshelper.removeTmpDir()
+profilePath=""
+dlgClose=""
 
 HLP_USAGE=_("usage: accesshelper [--set profile]|[--list]")
 HLP_NOARGS=_("With no args launch accesshelper GUI")
@@ -25,11 +30,15 @@ ERR_NOPROFILE=_("There's no profiles at")
 ERR_LOADPROFILE=_("Error loading")
 ERR_SETPROFILE=_("Must select one from:")
 MSG_LOADPROFILE=_("Loading profile")
-MSG_REBOOT=_("It's recommended to logout from session now\nin order of avoid inconsistencies")
+MSG_REBOOT=_("Changes will only apply after session restart")
 MSG_LOGOUT=_("Logout")
+MSG_CHANGES=_("Options selected:")
 MSG_LATER=_("Later")
 MSG_AUTOSTARTDISABLED=_("Profile not loaded: Autostart is disabled")
 MSG_PROFILELOADED=_("Profile loaded")
+TXT_ACCEPT=_("Close Session")
+TXT_IGNORE=_("Ignore")
+TXT_UNDO=_("Undo")
 
 def showHelp():
 	print(HLP_USAGE)
@@ -79,38 +88,75 @@ def setProfile(profilePath):
 #def setProfile
 
 def _restartSession(*args):
+#	QApplication.quit()
+#	if os.path.isfile("/tmp/.set_scheme"):
+#		scheme=""
+#		with open("/tmp/.set_scheme","r") as f:
+#			scheme=f.read()
+#		if scheme:
+#			accesshelper.setScheme(scheme)
+#		os.remove("/tmp/.set_scheme")
+#	if os.path.isfile(configChanged)==False:
+	accesshelper.restartSession()
 	QApplication.quit()
-	accesshelper.applyChanges()
+	sys.exit(0)
 #def _restartSession
 
+def _readChanges():
+	changes=""
+	if os.path.isfile(configChanged):
+		with open(configChanged,"r") as f:
+			changes=f.read()
+	return(changes)
+
 def showDialog(*args):
-	if os.path.isfile("/tmp/.set_scheme"):
-		scheme=""
-		with open("/tmp/.set_scheme","r") as f:
-			scheme=f.read()
-		if scheme:
-			accesshelper.setScheme(scheme)
-		os.remove("/tmp/.set_scheme")
-	if os.path.isfile(configChanged)==False:
-		return
-	os.remove(configChanged)
-	msg=MSG_REBOOT
+	def _restoreConfig():
+		cursor=QtGui.QCursor(Qt.WaitCursor)
+		dlgClose.setCursor(cursor)
+		home=os.environ.get('HOME')
+		accesshelper.restoreSnapshot(profilePath)
+		thematizer=os.path.join(home,".config/autostart/accesshelper_thematizer.desktop")
+		if os.path.isfile(thematizer):
+			os.remove(thematizer)
+		_exit(False)
+		subprocess.Popen(["/usr/share/accesshelper/accesshelp.py"])
+	#def _restoreConfig(self):
+	changes=_readChanges()
+	if changes.strip()=="":
+		_exit(True)
+	if os.path.isfile(configChanged):
+		os.remove(configChanged)
+	msg=""
 	msgTitle=MSG_LOGOUT
-	dlgClose=QMessageBox(QMessageBox.Warning,msgTitle,msg)
-	dlgClose.setStandardButtons(QMessageBox.Ok|QMessageBox.Ignore)
-	layout=QGridLayout()
-	lbl=QLabel()
-	layout.addWidget(lbl,0,0,1,2)
-	btnRestart=QPushButton(MSG_LOGOUT)
-	btnRestart.clicked.connect(_restartSession)
-	layout.addWidget(btnRestart,1,0,1,1,Qt.AlignCenter)
-	btnLater=QPushButton(MSG_LATER)
-	btnLater.clicked.connect(QApplication.quit)
-	#layout.addWidget(btnLater,1,1,1,1,Qt.AlignCenter)
-	dlgClose.setLayout(layout)
-	if dlgClose.exec()==QMessageBox.Ok:
-		_restartSession()
+	#dlgClose=QMessageBox(QMessageBox.Warning,msgTitle,msg)
+	dlgClose=QDialog()
+	lay=QGridLayout()
+	text="{0}<br>{1}<br>".format(MSG_CHANGES,changes.replace("\n","<br>"))
+	scrLabel=appconfigControls.QScrollLabel(text)
+	btnOk=QPushButton(TXT_ACCEPT)
+	btnOk.clicked.connect(_restartSession)
+	btnIgnore=QPushButton(TXT_IGNORE)
+	btnIgnore.clicked.connect(_exit)
+	btnDiscard=QPushButton(TXT_UNDO)
+	btnDiscard.clicked.connect(_restoreConfig)
+	#scrLabel.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+	scrLabel.adjustWidth(config.sizeHint().width()/2)
+	lay.addWidget(scrLabel,0,0,1,3)
+	lay.addWidget(QLabel(MSG_REBOOT),1,0,1,3)
+	lay.addWidget(btnOk,2,0,1,1)
+	lay.addWidget(btnIgnore,2,1,1,1)
+	lay.addWidget(btnDiscard,2,2,1,2)
+	dlgClose.setLayout(lay)
+	res=dlgClose.exec_()
 #def showDialog
+
+def _exit(quit=True):
+	tmpDir="/tmp/.accesshelper"
+	if os.path.isdir(tmpDir):
+		shutil.rmtree(tmpDir)
+	QApplication.quit()
+	if quit:
+		sys.exit(0)
 
 def _isAutostartEnabled():
 	sysConf='/usr/share/accesshelper/accesshelper.json'
@@ -140,10 +186,18 @@ def _isAutostartEnabled():
 
 if len(sys.argv)==1:
 	configChanged="/tmp/.accesshelper_{}".format(os.environ.get('USER'))
+	#Take snapshot with current config
+	tmpDir="/tmp/.accesshelper__{}".format(os.environ.get('USER'))
+	if os.path.isdir(tmpDir):
+		shutil.rmtree(tmpDir)
+	os.makedirs(tmpDir)
+	profilePath=accesshelper.takeSnapshot(tmpDir)
 	if os.path.isfile(configChanged):
 		os.remove(configChanged)
 	app=QApplication(["AccessHelper"])
 	app.aboutToQuit.connect(showDialog)
+	#app.setQuitOnLastWindowClosed(False)
+	#app.lastWindowClosed.connect(showDialog)
 	config=appConfig("Access Helper",{'app':app})
 	config.setWindowTitle("Access Helper")
 	config.setRsrcPath("/usr/share/accesshelper/rsrc")

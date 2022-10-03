@@ -14,5 +14,5 @@ Name[ca_ES.UTF-8@valencia]=Access Helper
 Name[ca_ES@valencia]=Access Helper
 Name[ca]=Access Helper
 Name[es]=Access Helper
-Categories=KDE;Qt;Utility;X-Lliurex;X-Utilities;
+Categories=KDE;Qt;X-Lliurex;Utility;Accessibility
 TryExec=/usr/bin/accesshelper

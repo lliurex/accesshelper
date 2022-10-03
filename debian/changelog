@@ -1,3 +1,9 @@
+accesshelper (0.6.6) focal-updates; urgency=medium
+
+  * Allow delete profiles
+
+ -- Juanma1980 <juanma1980@gmail.com>  Mon, 03 Oct 2022 12:16:12 +0200
+
 accesshelper (0.6.5.2) focal; urgency=medium
 
   * Accessdocker supports TTS from images (no real tts, some limitations)

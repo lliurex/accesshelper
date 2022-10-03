@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-01 17:17+0200\n"
+"POT-Creation-Date: 2022-10-03 12:10+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,27 +17,27 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../src/accessdock.py:154
+#: ../src/accessdock.py:152
 msgid "Hide"
 msgstr ""
 
-#: ../src/accessdock.py:158
+#: ../src/accessdock.py:156
 msgid "Configure"
 msgstr ""
 
-#: ../src/accessdock.py:162
+#: ../src/accessdock.py:160
 msgid "Read screen"
 msgstr ""
 
-#: ../src/accessdock.py:166
+#: ../src/accessdock.py:164
 msgid "Pointer"
 msgstr ""
 
-#: ../src/accessdock.py:170
+#: ../src/accessdock.py:168
 msgid "Filter"
 msgstr ""
 
-#: ../src/accessdock.py:174
+#: ../src/accessdock.py:172
 msgid "Keyboard"
 msgstr ""
 
@@ -99,7 +99,7 @@ msgstr ""
 msgid "Profile not loaded: Autostart is disabled"
 msgstr ""
 
-#: ../src/accesshelp.py:38 ../src/stacks/profiles.py:25
+#: ../src/accesshelp.py:38 ../src/stacks/profiles.py:29
 msgid "Profile loaded"
 msgstr ""
 
@@ -181,7 +181,7 @@ msgid "Track pointer"
 msgstr ""
 
 #: ../src/stacks/access.py:29 ../src/stacks/addHotkey.py:27
-#: ../src/stacks/assignHotkeys.py:46
+#: ../src/stacks/assignHotkeys.py:50
 msgid "already assigned to action"
 msgstr ""
 
@@ -189,7 +189,7 @@ msgstr ""
 msgid "Track click"
 msgstr ""
 
-#: ../src/stacks/access.py:31 ../src/stacks/settings.py:29
+#: ../src/stacks/access.py:31 ../src/stacks/settings.py:36
 msgid "Disabled"
 msgstr ""
 
@@ -213,11 +213,11 @@ msgstr ""
 msgid "ToggleMouseClick"
 msgstr ""
 
-#: ../src/stacks/addHotkey.py:15 ../src/stacks/assignHotkeys.py:32
+#: ../src/stacks/addHotkey.py:15 ../src/stacks/assignHotkeys.py:36
 msgid "Keyboard Shortcuts"
 msgstr ""
 
-#: ../src/stacks/addHotkey.py:16 ../src/stacks/assignHotkeys.py:33
+#: ../src/stacks/addHotkey.py:16 ../src/stacks/assignHotkeys.py:37
 msgid "hotkeys options"
 msgstr ""
 
@@ -293,59 +293,59 @@ msgstr ""
 msgid "Set color filter: "
 msgstr ""
 
-#: ../src/stacks/assignHotkeys.py:31
+#: ../src/stacks/assignHotkeys.py:35
 msgid "Hotkeys"
 msgstr ""
 
-#: ../src/stacks/assignHotkeys.py:34
+#: ../src/stacks/assignHotkeys.py:38
 msgid "Hotkeys configuration"
 msgstr ""
 
-#: ../src/stacks/assignHotkeys.py:35
+#: ../src/stacks/assignHotkeys.py:39
 msgid "Set hotkeys for launch applications"
 msgstr ""
 
-#: ../src/stacks/assignHotkeys.py:36
+#: ../src/stacks/assignHotkeys.py:40
 msgid "From here you can set hotkeys for launch apps"
 msgstr ""
 
-#: ../src/stacks/assignHotkeys.py:37
+#: ../src/stacks/assignHotkeys.py:41
 msgid "Go to next window"
 msgstr ""
 
-#: ../src/stacks/assignHotkeys.py:38
+#: ../src/stacks/assignHotkeys.py:42
 msgid "Go to previous window"
 msgstr ""
 
-#: ../src/stacks/assignHotkeys.py:39
+#: ../src/stacks/assignHotkeys.py:43
 msgid "Close window"
 msgstr ""
 
-#: ../src/stacks/assignHotkeys.py:40
+#: ../src/stacks/assignHotkeys.py:44
 msgid "Open launch menu"
 msgstr ""
 
-#: ../src/stacks/assignHotkeys.py:41
+#: ../src/stacks/assignHotkeys.py:45
 msgid "Show desktop"
 msgstr ""
 
-#: ../src/stacks/assignHotkeys.py:42
+#: ../src/stacks/assignHotkeys.py:46
 msgid "Invert colours"
 msgstr ""
 
-#: ../src/stacks/assignHotkeys.py:43
+#: ../src/stacks/assignHotkeys.py:47
 msgid "Invert window colours"
 msgstr ""
 
-#: ../src/stacks/assignHotkeys.py:44
+#: ../src/stacks/assignHotkeys.py:48
 msgid "Show mouse click"
 msgstr ""
 
-#: ../src/stacks/assignHotkeys.py:45
+#: ../src/stacks/assignHotkeys.py:49
 msgid "Show mouse pointer"
 msgstr ""
 
-#: ../src/stacks/assignHotkeys.py:83
+#: ../src/stacks/assignHotkeys.py:87
 msgid "Add new"
 msgstr ""
 
@@ -523,30 +523,46 @@ msgid "Load profile"
 msgstr ""
 
 #: ../src/stacks/profiles.py:21
-msgid "Permission denied"
+msgid "Remove"
 msgstr ""
 
 #: ../src/stacks/profiles.py:22
-msgid "Default profiles could not be modified"
+msgid "Confirm remove"
 msgstr ""
 
 #: ../src/stacks/profiles.py:23
-msgid "Profile added to system's profiles"
+msgid "Remove profile"
 msgstr ""
 
 #: ../src/stacks/profiles.py:24
-msgid "Profile added to user's profiles"
+msgid "Permission denied"
+msgstr ""
+
+#: ../src/stacks/profiles.py:25
+msgid "Default profiles could not be modified"
 msgstr ""
 
 #: ../src/stacks/profiles.py:26
-msgid "Import profile"
+msgid "Insuficient permissions for remove"
 msgstr ""
 
 #: ../src/stacks/profiles.py:27
-msgid "Export profile"
+msgid "Profile added to system's profiles"
 msgstr ""
 
 #: ../src/stacks/profiles.py:28
+msgid "Profile added to user's profiles"
+msgstr ""
+
+#: ../src/stacks/profiles.py:30
+msgid "Import profile"
+msgstr ""
+
+#: ../src/stacks/profiles.py:31
+msgid "Export profile"
+msgstr ""
+
+#: ../src/stacks/profiles.py:32
 msgid "An error ocurred"
 msgstr ""
 
@@ -623,7 +639,7 @@ msgid "Spanish woman"
 msgstr ""
 
 #: ../src/stacks/screenreader.py:36
-msgid "Valencian"
+msgid "Catalan woman"
 msgstr ""
 
 #: ../src/stacks/settings.py:18
@@ -643,77 +659,81 @@ msgid "Set config level, default template.."
 msgstr ""
 
 #: ../src/stacks/settings.py:22
-msgid "Autostart enabled for user"
-msgstr ""
-
-#: ../src/stacks/settings.py:23
-msgid "Autostart disabled for user"
-msgstr ""
-
-#: ../src/stacks/settings.py:24
-msgid "Autostart could not be disabled"
-msgstr ""
-
-#: ../src/stacks/settings.py:25
-msgid "Enabled accessibilty dock with hotkey"
-msgstr ""
-
-#: ../src/stacks/settings.py:26
-msgid "Disabled accessibilty dock"
-msgstr ""
-
-#: ../src/stacks/settings.py:27
-msgid "Use config"
-msgstr ""
-
-#: ../src/stacks/settings.py:28
-msgid "Startup profile"
-msgstr ""
-
-#: ../src/stacks/settings.py:30
-msgid "Autostart dock"
-msgstr ""
-
-#: ../src/stacks/settings.py:31
-msgid "Hotkey for dock"
-msgstr ""
-
-#: ../src/stacks/settings.py:70
 msgid "The config will be applied per user"
 msgstr ""
 
-#: ../src/stacks/settings.py:72
+#: ../src/stacks/settings.py:23
 msgid "The config will be applied to all users"
 msgstr ""
 
-#: ../src/stacks/settings.py:74
+#: ../src/stacks/settings.py:24
 msgid "The config will be applied to all users and clients"
 msgstr ""
 
-#: ../src/stacks/settings.py:78
+#: ../src/stacks/settings.py:25
 msgid "Choose the config level that should use the app"
 msgstr ""
 
-#: ../src/stacks/settings.py:81
-msgid "User"
-msgstr ""
-
-#: ../src/stacks/settings.py:82
-msgid "System"
-msgstr ""
-
-#: ../src/stacks/settings.py:83
-msgid "N4d"
-msgstr ""
-
-#: ../src/stacks/settings.py:91
+#: ../src/stacks/settings.py:26
 msgid "Session settings"
 msgstr ""
 
-#: ../src/stacks/settings.py:92
+#: ../src/stacks/settings.py:27
 msgid "Load template on start"
 msgstr ""
 
-#: ../src/stacks/settings.py:98
+#: ../src/stacks/settings.py:28
 msgid "Enable accesshelper dock"
+msgstr ""
+
+#: ../src/stacks/settings.py:29
+msgid "Autostart enabled for user"
+msgstr ""
+
+#: ../src/stacks/settings.py:30
+msgid "Autostart disabled for user"
+msgstr ""
+
+#: ../src/stacks/settings.py:31
+msgid "Autostart could not be disabled"
+msgstr ""
+
+#: ../src/stacks/settings.py:32
+msgid "Enabled accessibilty dock with hotkey"
+msgstr ""
+
+#: ../src/stacks/settings.py:33
+msgid "Disabled accessibilty dock"
+msgstr ""
+
+#: ../src/stacks/settings.py:34
+msgid "Use config"
+msgstr ""
+
+#: ../src/stacks/settings.py:35
+msgid "Startup profile"
+msgstr ""
+
+#: ../src/stacks/settings.py:37
+msgid "Autostart dock"
+msgstr ""
+
+#: ../src/stacks/settings.py:38
+msgid "Hotkey for dock"
+msgstr ""
+
+#: ../src/stacks/settings.py:39
+msgid "Beep when machine starts"
+msgstr ""
+
+#: ../src/stacks/settings.py:77
+msgid "User"
+msgstr ""
+
+#: ../src/stacks/settings.py:78
+msgid "System"
+msgstr ""
+
+#: ../src/stacks/settings.py:79
+msgid "N4d"
 msgstr ""

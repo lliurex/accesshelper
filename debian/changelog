@@ -1,0 +1,66 @@
+accesshelper (0.6.6) focal-updates; urgency=medium
+
+  * Allow delete profiles
+
+ -- Juanma1980 <juanma1980@gmail.com>  Mon, 03 Oct 2022 12:16:12 +0200
+
+accesshelper (0.6.5.2) focal; urgency=medium
+
+  * Accessdocker supports TTS from images (no real tts, some limitations)
+  * Same config file for accessdocker and accesshelper
+  * Multiple bug fixes
+  * WIP on real TTS
+  * WIP on pointer lookandfeel hotswap
+
+ -- Juanma1980 <juanma1980@gmail.com>  Tue, 29 Mar 2022 13:07:52 +0200
+
+accesshelper (0.5.3.4) focal; urgency=medium
+
+  * Implement helper as loadable module
+  * Functionality provided by helper module
+  * Accessdocker alpha release
+
+ -- Juanma1980 <juanma1980@gmail.com>  Thu, 17 Mar 2022 12:59:23 +0100
+
+accesshelper (0.4.7.4) focal; urgency=medium
+
+  * Implemented cursor preview
+  * Fix add new hotkeys
+  * Fix apply button status
+  * Color screen filter use plasma config
+  * Reload config instead of restart session 
+  * Accessibility options disable related hotkeys
+
+ -- Juanma1980 <juanma1980@gmail.com>  Fri, 11 Feb 2022 14:06:59 +0100
+
+accesshelper (0.4.3) focal; urgency=medium
+
+  * Theme and cursor settings
+  * Reworked font config
+  * Disabled behavior stack
+  * Minor bugfixes
+  * Add depends on accesshelper-data
+  * Add rgb filter options for screen
+
+ -- Juanma1980 <juanma1980@gmail.com>  Mon, 07 Feb 2022 11:34:51 +0100
+
+accesshelper (0.3.2) focal; urgency=medium
+
+  * Bugfix release
+
+ -- Juanma1980 <juanma1980@gmail.com>  Tue, 21 Dec 2021 12:51:21 +0100
+
+accesshelper (0.2.5.4) focal; urgency=medium
+
+  * Shortcut management
+  * Add change resolution 
+
+ -- Juanma1980 <juanma1980@gmail.com>  Wed, 15 Dec 2021 16:10:05 +0100
+
+accesshelper (0.1.1) focal; urgency=medium
+
+  * Beta release.
+  *Almost all works
+
+ -- Juanma1980 <juanma1980@gmail.com>  Fri, 10 Dec 2021 18:24:34 +0100
+

@@ -1,10 +1,33 @@
-accesshelper (0.6.6) focal-updates; urgency=medium
+accesshelper (0.7.7) lliurex22; urgency=medium
 
-  * Allow delete profiles
+  * BugFix release
+  * Add option for grub beep
+  * Remove profiles
 
- -- Juanma1980 <juanma1980@gmail.com>  Mon, 03 Oct 2022 12:16:12 +0200
+ -- Juanma1980 <juanma1980@gmail.com>  Fri, 17 Jun 2022 09:30:37 +0200
 
-accesshelper (0.6.5.2) focal; urgency=medium
+accesshelper (0.7.3.6.12) focal; urgency=medium
+
+  * Show list with changes before apply
+  * Adjust cursor size from accessdock
+  * Profiles breaks compatibility with <0.7.3.6.2
+
+ -- Juanma1980 <juanma1980@gmail.com>  Wed, 01 Jun 2022 11:17:59 +0200
+
+accesshelper (0.7.3.5.13) focal; urgency=medium
+
+  * TTS uses festival engine
+  * WIP on festival settings
+  * Manager for text/sounds generated from TTS engine
+  * Add setting for background plain color
+  * Play/Stop recordings from reader through QtMultimedia
+  * Preliminar support for catalan voices
+  * Option for export generated records/transcriptions
+  * Bugfixes
+
+ -- Juanma1980 <juanma1980@gmail.com>  Fri, 13 May 2022 17:02:45 +0200
+
+accesshelper (0.6.5.3) focal; urgency=medium
 
   * Accessdocker supports TTS from images (no real tts, some limitations)
   * Same config file for accessdocker and accesshelper

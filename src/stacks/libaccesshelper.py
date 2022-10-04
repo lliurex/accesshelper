@@ -11,7 +11,7 @@ import json
 
 class functionHelperClass():
 	def __init__(self):
-		self.dbg=True
+		self.dbg=False
 		self.dictFileData={}
 		self._initValues()
 		self.tmpDir="/tmp/.accesstmp"

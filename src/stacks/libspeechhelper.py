@@ -13,7 +13,7 @@ import string
 
 class speechhelper():
 	def __init__(self):
-		self.dbg=True
+		self.dbg=False
 		self.libfestival="/usr/share/accesshelper/stacks/libfestival.py"
 		self.confDir=os.path.join(os.environ.get('HOME','/tmp'),".config/accesshelper")
 		self.txtDir=os.path.join(self.confDir,"tts/txt")

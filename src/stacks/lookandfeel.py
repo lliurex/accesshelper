@@ -354,11 +354,13 @@ class lookandfeel(confStack):
 				if cmbDesc=="background":
 					idx=cmb.currentIndex()
 					if idx>0:
-						color=cmb.currentText()
+						qcolor=""
+						color=cmb.currentText().strip()
 						colorList=["black","red","blue","green","yellow","white"]
 						for i18color in colorList:
 							if i18n.get(i18color.upper(),"")==color:
 								qcolor=QtGui.QColor(i18color)
+								break
 						self.saveChanges('bkgColor',i18color)
 						self.saveChanges('bkg',"color")
 						if qcolor:

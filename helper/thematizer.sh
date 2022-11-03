@@ -6,13 +6,13 @@ SCHEME=$2
 if [ "x$THEME" != "x" ]
 then
 	#applytheme
-	plasma-apply-desktoptheme theme
+	plasma-apply-desktoptheme $THEME
 fi
 
 if [ "x$SCHEME" != "x" ]
 then
 	#applyscheme
-	plasma-apply-colorscheme scheme
+	plasma-apply-colorscheme $SCHEME
 fi
 
 rm $HOME/.config/autostart/accesshelper_thematizer.desktop

@@ -20,7 +20,7 @@ QInt=type(0)
 class accessdock(QWidget):
 	def __init__(self,*args,**kwargs):
 		super().__init__()
-		self.dbg=False
+		self.dbg=True
 		self._chkDockRunning()
 		self.menu=App2Menu.app2menu()
 		self.confFile="accesshelper.json"
@@ -177,6 +177,7 @@ class accessdock(QWidget):
 			if args[0].lower()=="hide":
 				sys.exit(0)
 			elif args[0].lower()=="color":
+			#######DIALOG CLOSING WTF????########
 				alphaDlg=alpha(alpha)
 				alphaDlg.move(self.coordx,self.coordy)
 				alphaDlg._load_screen()

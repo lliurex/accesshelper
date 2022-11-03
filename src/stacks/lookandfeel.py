@@ -126,17 +126,25 @@ class lookandfeel(confStack):
 		nextTheme=""
 		nextScheme=""
 		content=[]
+		fixExec=False
 		if os.path.isfile(thematizer):
 			with open(thematizer,'r') as f:
 				content=f.readlines()
 			for line in content:
 				if line.startswith("Exec="):
+					if line.startswith("Exec=/usr/share/accesshelper/thematizer.sh"):
+						fixExec=True
 					array=line.split(" ")
 					if len(array)>1:
 						nextTheme=array[1].replace("\n","")
 					if len(array)>2:
 						nextScheme=array[2].replace("\n","")
 					break
+		#Fix bad path in thematizer autostart. Delete it.
+		if fixExec and len(content)>0:
+			if os.path.isfile(thematizer):
+				os.remove(thematizer)
+				nextScheme=""
 		for value in self.plasmaConfig.get("kdeglobals",{}).get("General",[]):
 			if value[0]=="Name":
 				theme=value[1]
@@ -177,7 +185,7 @@ class lookandfeel(confStack):
 									cmb.addItem(themeDesc)
 								self.cursorDesc[themeDesc]=cursorTheme
 							elif cmbDesc=="background":
-								color=theme.split("(")[1].replace("(","").replace(")","")
+								color=theme.split("[")[1].replace("[","").replace("]","")
 								px=QtGui.QPixmap(self.bkgIconSize,self.bkgIconSize)
 								if os.path.isfile(color):
 									px.load(color)
@@ -192,7 +200,7 @@ class lookandfeel(confStack):
 							cmb.setCurrentText(nextTheme)
 						elif cmbDesc=="scheme" and nextScheme!="":
 							cmb.setCurrentText(nextScheme)
-						elif "(" in theme and ("plasma" in theme.lower() or "actual" in theme.lower()):
+						elif "(" in theme:
 							cmb.setCurrentText(themeDesc)
 			if selectedColor!="":
 				cmb=self.widgets.get("background",QComboBox())
@@ -233,11 +241,11 @@ class lookandfeel(confStack):
 			imgFile=self.imgFile
 		if imgFile=="":
 			imgFile="white"
-		colors=["{0} ({1})".format(i18n.get("CURRENTBKG","Current background"),imgFile)]
+		colors=["{0} [{1}]".format(i18n.get("CURRENTBKG","Current background"),imgFile)]
 		colorList=["black","red","blue","green","yellow","white"]
 		for color in colorList:
 			desc=i18n.get(color.upper(),color)
-			colors.append("{0} ({1})".format(desc,color))
+			colors.append("{0} [{1}]".format(desc,color))
 		return(colors)
 		
 	def _getPointerImage(self,theme):

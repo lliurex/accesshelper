@@ -20,7 +20,7 @@ QInt=type(0)
 class accessdock(QWidget):
 	def __init__(self,*args,**kwargs):
 		super().__init__()
-		self.dbg=True
+		self.dbg=False
 		self._chkDockRunning()
 		self.menu=App2Menu.app2menu()
 		self.confFile="accesshelper.json"
@@ -199,7 +199,9 @@ class accessdock(QWidget):
 				subprocess.run(["accesshelper"])
 				btn=self.widgets.get("font_size")
 				self._loadConfig()
-				font=self.fonts.split(",")[1]
+				font=12
+				if isinstance(font,str)==True:
+					font=self.fonts.split(",")[1]
 				btn.setText("{}px\nFont".format(font))
 				self.show()
 	#def execute
@@ -308,7 +310,7 @@ class accessdock(QWidget):
 			else:
 				themes=self.accesshelper.getCursors()
 				for theme in themes:
-					if "(" in theme and ("plasma" in theme.lower() or "actual" in theme.lower()):
+					if "(" in theme:
 						themeDesc=theme
 						break
 				themeDesc=themeDesc.split("(")[0].replace("(","").rstrip(" ")

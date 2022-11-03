@@ -275,6 +275,7 @@ class access(confStack):
 	def _setZoomOptionsEnabled(self,*args):
 		chk=self.tblGrid.cellWidget(self.zoomRow,0)
 		item=None
+		anychk=False
 		for i in range(self.zoomRow+1,self.zoomRow+4):
 			opt=self.tblGrid.cellWidget(i,1)
 			if item==None:
@@ -285,6 +286,11 @@ class access(confStack):
 				opt.setEnabled(chk.isChecked())
 				if chk.isChecked()==False:
 					self._disableZoomOptions(settings)
+				if opt.isChecked()==True:
+					anychk=True
+		if (anychk==False) and (chk.isChecked()==True):
+			opt=self.tblGrid.cellWidget(self.zoomRow+1,1)
+			opt.setChecked(True)
 		self.btn_cancel.setEnabled(True)
 		self.btn_ok.setEnabled(True)
 	#def _setZoomOptionsEnabled

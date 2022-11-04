@@ -124,9 +124,8 @@ class speechhelper():
 		currentDate=datetime.now()
 		fileName="{}.txt".format(currentDate.strftime("%Y%m%d_%H%M%S"))
 		txtFile=os.path.join(self.txtDir,fileName)
-		if self.dbg:
-			with open(txtFile,"w") as f:
-				f.write("\"{}\"".format(txt))
+		with open(txtFile,"w") as f:
+			f.write("\"{}\"".format(txt))
 		self._debug("Generating with Strech {}".format(self.stretch))
 		self.readFile(txtFile,currentDate)
 	#def _invokeReader

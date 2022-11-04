@@ -29,6 +29,7 @@ i18n={
 	"RESTORESNAP":_("Profile loaded"),
 	"IMPORT":_("Import profile"),
 	"EXPORT":_("Export profile"),
+	"PROFILE":_("Profile"),
 	"RESTOREERROR":_("An error ocurred")
 	}
 
@@ -172,8 +173,6 @@ class profiles(confStack):
 		else:
 			self.showMsg(i18n.get("RESTOREERROR"))
 		self.refresh=True
-		f=open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'w')
-		f.close()
 		self.optionChanged=[]
 		self._applyProfileSettings()
 		cursor=QtGui.QCursor(Qt.PointingHandCursor)
@@ -217,6 +216,7 @@ class profiles(confStack):
 		if self.config.get('dock','false')=='false':
 			self.accesshelper.removeAutostartDesktop("accessdock.desktop")
 		self.accesshelper.setOnboardConfig()
+		self._writeFileChanges()
 	#def _applyProfileSettings
 
 	def _updateConfig(self,key):
@@ -258,3 +258,11 @@ class profiles(confStack):
 				self.showMsg("{}".format(i18n.get("SNAPSHOT_USER")))
 		self.updateScreen()
 
+	def _writeFileChanges(self):
+		with open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'a') as f:
+			f.write("<b>{}</b>\n".format(i18n.get("CONFIG")))
+			profile=self.config.get("profile","")
+			if profile!="":
+				f.write("{0}->{1}\n".format(i18n.get("PROFILE"),profile))
+
+	#def _writeFileChanges(self):

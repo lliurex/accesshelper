@@ -17,8 +17,8 @@ class delButton(QLabel):
 	def __init__(self,row=0,parent=None):
 		QLabel.__init__(self, parent)
 		self.text=QLabel("")
-		lay=QHboxLayout()
-		self.icon=QtGui.QPixMap()
+		lay=QGridLayout()
+		self.icon=QtGui.QPixmap()
 		lay.addWidget(self.text)
 		self.installEventFilter(self)
 		icon=QtGui.QIcon.fromTheme("edit-delete")

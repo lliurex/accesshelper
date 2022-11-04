@@ -11,7 +11,7 @@ import json
 
 class functionHelperClass():
 	def __init__(self):
-		self.dbg=True
+		self.dbg=False
 		self.dictFileData={}
 		self._initValues()
 		self.tmpDir="/tmp/.accesstmp"
@@ -505,7 +505,7 @@ class functionHelperClass():
 
 class accesshelper():
 	def __init__(self):
-		self.dbg=True
+		self.dbg=False
 		self.functionHelper=functionHelperClass()
 		self.tmpDir=self.functionHelper.tmpDir
 	#def __init__

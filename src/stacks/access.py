@@ -310,9 +310,11 @@ class access(confStack):
 				if isinstance(btn,appconfigControls.QHotkeyButton):
 					if (chk.isChecked()):
 						hotkey=btn.text()
-						item=self.tblGrid.item(i,1)
-						setting=item.data(Qt.UserRole)
-						self._setPlasmaHotkeysFromTable(setting,hotkey)
+					else:
+						hotkey=""
+					item=self.tblGrid.item(i,1)
+					setting=item.data(Qt.UserRole)
+					self._setPlasmaHotkeysFromTable(setting,hotkey)
 	#def updateHotkeysFromTable
 
 	def _setPlasmaHotkeysFromTable(self,desc,hotkey):
@@ -335,6 +337,22 @@ class access(confStack):
 
 	def writeConfig(self):
 		self.updateDataFromTable()
+		print(self.plasmaConfig)
+		#InvertWindow needso InvertScreen enabled
+		plugins=self.plasmaConfig.get("kwinrc",{}).get("Plugins",[])
+		newList={}
+		swChange=False
+		for plugin in plugins:
+			newList[plugin[0]]=plugin[1]
+		if newList.get("invertWindow","false")=="true" and newList["invertEnabled"]!="true":
+			newList["invertEnabled"]="true"
+			swChange=True
+		if swChange:
+			plugins=[]
+			for key,item in newList.items():
+				plugins.append((key,item))
+			self.plasmaConfig["kwinrc"]["Plugins"]=plugins
+
 		self.accesshelper.setPlasmaConfig(self.plasmaConfig)
 		self.optionChanged=[]
 		self.refresh=True

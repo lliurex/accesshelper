@@ -505,7 +505,7 @@ class functionHelperClass():
 
 class accesshelper():
 	def __init__(self):
-		self.dbg=True
+		self.dbg=False
 		self.functionHelper=functionHelperClass()
 		self.tmpDir=self.functionHelper.tmpDir
 	#def __init__
@@ -676,12 +676,15 @@ class accesshelper():
 		if theme=="default":
 			theme=self._getCursorTheme()
 		err=0
+		if ("[") in theme:
+			theme=theme.split("[")[1].replace("[","").replace("]","")
 		try:
 			subprocess.run(["plasma-apply-cursortheme",theme],stdout=subprocess.PIPE)
 		except Exception as e:
 			print(e)
 			err=1
 		os.environ["XCURSOR_THEME"]=theme
+		print("Set theme: {}".format(theme))
 		if size!="":
 			if (isinstance(size,str))==False:
 				size=str(size)
@@ -808,12 +811,13 @@ class accesshelper():
 	
 	def _getCursorTheme(self):
 		themes=self.getCursors()
-		theme="default"
+		theme="Adwaita"
 		for available in themes:
 			if ("(") in available:
-				theme=available.split("(")[1].replace("(","").replace(")","")
+				theme=available.split("[")[1].replace("[","").replace("]","")
 				theme=theme.split(" ")[0]
 				break
+		print(theme)
 		return(theme)
 	#def _getCursorTheme
 
@@ -939,9 +943,9 @@ class accesshelper():
 	def applyChanges(self):
 		cmd=["qdbus","org.kde.KWin","/KWin","org.kde.KWin.reconfigure"]
 		subprocess.run(cmd)
-		cmd=["kquitapp5","kglobalaccel"]
+		cmd=["kquitapp5","kglobalaccel5"]
 		subprocess.run(cmd)
-		cmd=["kstart5","kglobalaccel"]
+		cmd=["kstart5","kglobalaccel5"]
 		subprocess.run(cmd)
 		cmd=["plasmashell","--replace"]
 		subprocess.Popen(cmd)

@@ -90,6 +90,8 @@ class alpha(confStack):
 	#def _updateConfig
 	
 	def writeConfig(self):
+		if self.config==None:
+			self.config=self.getConfig()
 		qalpha=self.widgets.get("alpha").currentColor()
 		(red,green,blue)=self.accesshelper.setRGBFilter(qalpha)
 		self.plasmaConfig['kgammarc']['ConfigFile']=[("use","kgammarc")]
@@ -103,13 +105,14 @@ class alpha(confStack):
 				values.append((desc,"{0:.2f}".format(red)))
 			elif desc=='ggamma':
 				values.append((desc,"{0:.2f}".format(green)))
-		self.plasmaConfig['kgammarc']['Screen 0']=values
-		self.accesshelper.setPlasmaConfig(self.plasmaConfig)
-		self.saveChanges("alpha",qalpha.getRgb())
-		self.optionChanged=[]
-		self.refresh=True
-		self.btn_cancel.setEnabled(True)
-		self._writeFileChanges(qalpha)
+		if self.appConfig:
+			self.plasmaConfig['kgammarc']['Screen 0']=values
+			self.accesshelper.setPlasmaConfig(self.plasmaConfig)
+			self.saveChanges("alpha",qalpha.getRgb())
+			self.optionChanged=[]
+			self.refresh=True
+			self.btn_cancel.setEnabled(True)
+			self._writeFileChanges(qalpha)
 	#def writeConfig
 
 	def _reset_screen(self,*args):
@@ -117,7 +120,8 @@ class alpha(confStack):
 		self.btn_ok.setEnabled(False)
 		self.btn_cancel.setEnabled(True)
 		self.optionChanged=[]
-		self.saveChanges('alpha',[])
+		if self.appConfig:
+			self.saveChanges('alpha',[])
 		dlgColor=self.widgets.get('alpha')
 		dlgColor.setCurrentColor("white")
 		self.changes=False

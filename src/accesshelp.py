@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import sys
 import subprocess
-import os,shutil
+import os,shutil,psutil
 import json
 from PySide2.QtWidgets import QApplication,QDialog,QGridLayout,QLabel,QPushButton,QLayout,QSizePolicy
 from PySide2.QtCore import Qt
@@ -184,7 +184,19 @@ def _isAutostartEnabled():
 #### MAIN ####
 ##############
 
+def _chkAppRunning():
+	ps=list(psutil.process_iter())
+	count=0
+	for p in ps:
+		print(p.name)
+		if "accesshelp" in str(p.name):
+			self._debug("Accesshelp is running as pid {}".format(p.pid))
+			if p.pid!=os.getpid():
+				os.kill(p.pid,signal.SIGKILL)
+#def _chkAppRunning
+
 if len(sys.argv)==1:
+	_chkAppRunning()
 	configChanged="/tmp/.accesshelper_{}".format(os.environ.get('USER'))
 	#Take snapshot with current config
 	tmpDir="/tmp/.accesshelper__{}".format(os.environ.get('USER'))

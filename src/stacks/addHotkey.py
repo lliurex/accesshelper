@@ -197,11 +197,27 @@ class addHotkey(confStack):
 		self.accesshelper.setKdeConfigSetting(desktop,"_launch",launch,self.wrkFiles[0])
 		self.saveChanges("hotkeys",hotkeys)
 		self.optionChanged=[]
-		f=open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'w')
-		f.close()
-		self.stack.gotoStack(idx=4,parms="")
+		self._writeFileChanges(hotkeys)
+		self._exit()
+	#def writeConfig
 
 	def _exit(self):
 		self.changes=False
 		self.optionChanged=[]
 		self.stack.gotoStack(idx=4,parms="")
+	#def _exit
+
+	def _writeFileChanges(self,hotkeys):
+		#hotkeys=self.config.get('hotkeys',{})
+		with open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'a') as f:
+			f.write("<b>{}</b>\n".format(i18n.get("CONFIG")))
+			for kfile,sections in self.plasmaConfig.items():
+				for section,settings in sections.items():
+					for setting in settings:
+						arrayDesc=setting[1].split(",")
+						f.write("{0}->{1}\n".format(arrayDesc[-1],setting[1]))
+			for key,launchable in hotkeys.items():
+				hotkey=launchable['_launch'].split(",")
+				f.write("{0}->{1}\n".format(launchable['_k_friendly_name'],hotkey[0]))
+
+	#def _writeFileChanges(self):

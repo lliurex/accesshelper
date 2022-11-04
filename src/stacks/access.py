@@ -275,6 +275,7 @@ class access(confStack):
 	def _setZoomOptionsEnabled(self,*args):
 		chk=self.tblGrid.cellWidget(self.zoomRow,0)
 		item=None
+		anychk=False
 		for i in range(self.zoomRow+1,self.zoomRow+4):
 			opt=self.tblGrid.cellWidget(i,1)
 			if item==None:
@@ -285,6 +286,11 @@ class access(confStack):
 				opt.setEnabled(chk.isChecked())
 				if chk.isChecked()==False:
 					self._disableZoomOptions(settings)
+				if opt.isChecked()==True:
+					anychk=True
+		if (anychk==False) and (chk.isChecked()==True):
+			opt=self.tblGrid.cellWidget(self.zoomRow+1,1)
+			opt.setChecked(True)
 		self.btn_cancel.setEnabled(True)
 		self.btn_ok.setEnabled(True)
 	#def _setZoomOptionsEnabled
@@ -304,9 +310,11 @@ class access(confStack):
 				if isinstance(btn,appconfigControls.QHotkeyButton):
 					if (chk.isChecked()):
 						hotkey=btn.text()
-						item=self.tblGrid.item(i,1)
-						setting=item.data(Qt.UserRole)
-						self._setPlasmaHotkeysFromTable(setting,hotkey)
+					else:
+						hotkey=""
+					item=self.tblGrid.item(i,1)
+					setting=item.data(Qt.UserRole)
+					self._setPlasmaHotkeysFromTable(setting,hotkey)
 	#def updateHotkeysFromTable
 
 	def _setPlasmaHotkeysFromTable(self,desc,hotkey):
@@ -329,6 +337,22 @@ class access(confStack):
 
 	def writeConfig(self):
 		self.updateDataFromTable()
+		print(self.plasmaConfig)
+		#InvertWindow needso InvertScreen enabled
+		plugins=self.plasmaConfig.get("kwinrc",{}).get("Plugins",[])
+		newList={}
+		swChange=False
+		for plugin in plugins:
+			newList[plugin[0]]=plugin[1]
+		if newList.get("invertWindow","false")=="true" and newList["invertEnabled"]!="true":
+			newList["invertEnabled"]="true"
+			swChange=True
+		if swChange:
+			plugins=[]
+			for key,item in newList.items():
+				plugins.append((key,item))
+			self.plasmaConfig["kwinrc"]["Plugins"]=plugins
+
 		self.accesshelper.setPlasmaConfig(self.plasmaConfig)
 		self.optionChanged=[]
 		self.refresh=True

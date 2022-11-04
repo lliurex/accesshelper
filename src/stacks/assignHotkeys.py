@@ -17,8 +17,8 @@ class delButton(QLabel):
 	def __init__(self,row=0,parent=None):
 		QLabel.__init__(self, parent)
 		self.text=QLabel("")
-		lay=QHboxLayout()
-		self.icon=QtGui.QPixMap()
+		lay=QGridLayout()
+		self.icon=QtGui.QPixmap()
 		lay.addWidget(self.text)
 		self.installEventFilter(self)
 		icon=QtGui.QIcon.fromTheme("edit-delete")
@@ -52,7 +52,7 @@ i18n={
 
 class assignHotkeys(confStack):
 	def __init_stack__(self):
-		self.dbg=False
+		self.dbg=True
 		self._debug("hotkeys load")
 		self.menu_description=i18n.get('MENUDESCRIPTION')
 		self.description=i18n.get('DESCRIPTION')
@@ -222,15 +222,11 @@ class assignHotkeys(confStack):
 		add=True
 		for app,value in self.config.get('hotkeys',{}).items():
 			if app=="[{}.desktop]".format(desc):
-				if hotkey=="":
-					add=False
-				else:
-					hotkeyLine=value.get('_launch','')
-					hotkeyArray=hotkeyLine.split(",")
-					hotkeyArray[0]=hotkey
-					hotkeyArray[1]=hotkey
-					value.update({'_launch':",".join(hotkeyArray)})
-			if add:
+				hotkeyLine=value.get('_launch','')
+				hotkeyArray=hotkeyLine.split(",")
+				hotkeyArray[0]=hotkey
+				hotkeyArray[1]=hotkey
+				value.update({'_launch':",".join(hotkeyArray)})
 				newHotkeys.update({app:value})
 		self.config.update({'hotkeys':newHotkeys})
 	#def _getPlasmaHotkeysFromTable

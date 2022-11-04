@@ -177,6 +177,7 @@ class accessdock(QWidget):
 			if args[0].lower()=="hide":
 				sys.exit(0)
 			elif args[0].lower()=="color":
+			#######DIALOG CLOSING WTF????########
 				alphaDlg=alpha(alpha)
 				alphaDlg.move(self.coordx,self.coordy)
 				alphaDlg._load_screen()
@@ -199,7 +200,9 @@ class accessdock(QWidget):
 				subprocess.run(["accesshelper"])
 				btn=self.widgets.get("font_size")
 				self._loadConfig()
-				font=self.fonts.split(",")[1]
+				font=12
+				if isinstance(font,str)==True:
+					font=self.fonts.split(",")[1]
 				btn.setText("{}px\nFont".format(font))
 				self.show()
 	#def execute
@@ -308,7 +311,7 @@ class accessdock(QWidget):
 			else:
 				themes=self.accesshelper.getCursors()
 				for theme in themes:
-					if "(" in theme and ("plasma" in theme.lower() or "actual" in theme.lower()):
+					if "(" in theme:
 						themeDesc=theme
 						break
 				themeDesc=themeDesc.split("(")[0].replace("(","").rstrip(" ")

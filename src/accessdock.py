@@ -12,7 +12,7 @@ import subprocess
 import string
 from app2menu import App2Menu
 import gettext
-gettext.textdomain('accesshelper')
+gettext.textdomain('access_helper')
 _ = gettext.gettext
 QString=type("")
 QInt=type(0)

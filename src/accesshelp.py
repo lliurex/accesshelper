@@ -11,6 +11,8 @@ from stacks import libaccesshelper
 from appconfig import appconfigControls
 import gettext
 import time
+import notify2
+
 _ = gettext.gettext
 gettext.textdomain('access_helper')
 
@@ -188,11 +190,15 @@ def _chkAppRunning():
 	ps=list(psutil.process_iter())
 	count=0
 	for p in ps:
-		print(p.name)
-		if "accesshelp" in str(p.name):
-			self._debug("Accesshelp is running as pid {}".format(p.pid))
-			if p.pid!=os.getpid():
-				os.kill(p.pid,signal.SIGKILL)
+		name=" ".join(p.cmdline())
+		if " /usr/bin/accesshelper" in name and "python" in name:
+			title=_("Accesshelper running")
+			notify2.init(title)
+			msg=_("Can't execute another instance of Accesshelp")# is running as pid {}".format(p.pid))
+			notice=notify2.Notification(msg)
+			notice.show()
+			QApplication.quit()
+			sys.exit(0)
 #def _chkAppRunning
 
 if len(sys.argv)==1:

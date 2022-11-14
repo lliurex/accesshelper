@@ -159,6 +159,7 @@ class access(confStack):
 		self.plasmaConfig[kfile][section]=settings
 		self.btn_cancel.setEnabled(True)
 		self.btn_ok.setEnabled(True)
+		self.changes=True
 	#def _updateButtons(self):
 
 	def _disableZoomOptions(self,settings):

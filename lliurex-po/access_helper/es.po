@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-03 12:10+0200\n"
-"PO-Revision-Date: 2022-10-03 12:12+0200\n"
+"POT-Creation-Date: 2022-11-14 12:41+0100\n"
+"PO-Revision-Date: 2022-11-14 12:43+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es\n"
@@ -44,7 +44,7 @@ msgstr "Teclado"
 
 #: ../src/accesshelp.py:24
 msgid "usage: accesshelper [--set profile]|[--list]"
-msgstr "Uso: accesshelper [--set perfil]|[--list]"
+msgstr "uso: accesshelper [--set perfil]|[--list]"
 
 #: ../src/accesshelp.py:25
 msgid "With no args launch accesshelper GUI"
@@ -294,7 +294,7 @@ msgstr "Por defecto"
 
 #: ../src/stacks/alpha.py:23
 msgid "Set color filter: "
-msgstr "Filtro de color:"
+msgstr "Filtro de color: "
 
 #: ../src/stacks/assignHotkeys.py:35
 msgid "Hotkeys"
@@ -354,7 +354,7 @@ msgstr "Añadir"
 
 #: ../src/stacks/behavior.py:14
 msgid "behavior"
-msgstr "Comportamiento"
+msgstr "comportamiento"
 
 #: ../src/stacks/behavior.py:15
 msgid "Desktop behavior"
@@ -566,6 +566,10 @@ msgid "Export profile"
 msgstr "Exportar"
 
 #: ../src/stacks/profiles.py:32
+msgid "Profile"
+msgstr "Perfil"
+
+#: ../src/stacks/profiles.py:33
 msgid "An error ocurred"
 msgstr "Ocurrió un error"
 
@@ -703,7 +707,7 @@ msgstr "No se pudo desactivar el autoinicio"
 
 #: ../src/stacks/settings.py:32
 msgid "Enabled accessibilty dock with hotkey"
-msgstr "Barra de accesibilidad disponible usando atajo "
+msgstr "Barra de accesibilidad disponible usando atajo"
 
 #: ../src/stacks/settings.py:33
 msgid "Disabled accessibilty dock"

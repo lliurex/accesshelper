@@ -27,7 +27,7 @@ i18n={
 
 class fonts(confStack):
 	def __init_stack__(self):
-		self.dbg=False
+		self.dbg=True
 		self._debug("fonts load")
 		self.menu_description=i18n.get('MENUDESCRIPTION')
 		self.description=i18n.get('DESCRIPTION')
@@ -47,12 +47,15 @@ class fonts(confStack):
 		self.btn_cancel.setVisible(False)
 	#def __init__
 
-	def _load_screen(self):
-		self.box=QGridLayout()
-		self.setLayout(self.box)
+	def _readKdeConfig(self):
 		for wrkFile in self.wrkFiles:
 			plasmaConfig=self.accesshelper.getPlasmaConfig(wrkFile)
 			self.plasmaConfig.update(plasmaConfig)
+
+	def _load_screen(self):
+		self.box=QGridLayout()
+		self.setLayout(self.box)
+		self._readKdeConfig()
 		kdevalues=self.plasmaConfig.get('kdeglobals',{}).get('General',[])
 		font=''
 		for value in kdevalues:
@@ -84,6 +87,7 @@ class fonts(confStack):
 
 	def updateScreen(self):
 		self.config=self.getConfig()
+		self._readKdeConfig()
 		kdevalues=self.plasmaConfig.get('kdeglobals',{}).get('General',[])
 		for value in kdevalues:
 			if isinstance(value,tuple):
@@ -95,11 +99,13 @@ class fonts(confStack):
 		dlgFont.setCurrentFont(font)
 		#fix listview selections
 		try:
+			family=font.split(",")[0]
 			style=font.split(",")[-1]
 			size=font.split(",")[1]
 		except:
-			style=""
-			size=""
+			style="Regular"
+			size="12"
+			family="Noto Sans"
 		for chld in dlgFont.findChildren(QListView):
 			sw_alpha=True
 			model=chld.model()
@@ -109,6 +115,9 @@ class fonts(confStack):
 				for row in range(model.rowCount()):
 					index=model.index(row,0)
 					data=model.data(index)
+					if data==family:
+						chld.setCurrentIndex(index)
+						break
 					if data==style:
 						chld.setCurrentIndex(index)
 						break

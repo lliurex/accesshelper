@@ -64,7 +64,7 @@ def listProfiles():
 			flist.sort()
 			if len(flist)>0:
 				for f in flist:
-					if f not in add:
+					if f not in add and f.endswith(".tar"):
 						print("* {}".format(f.rstrip(".tar")))
 						add.append(f)
 			else:
@@ -84,6 +84,7 @@ def setProfile(profilePath):
 	if wrkFile:
 		print("{0} {1}".format(MSG_LOADPROFILE,wrkFile))
 		sw=accesshelper.restoreSnapshot(wrkFile)
+		accesshelper.applyChanges()
 	else:
 		print("{0} {1}".format(ERR_LOADPROFILE,profilePath))
 	return(sw)

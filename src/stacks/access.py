@@ -12,7 +12,7 @@ _ = gettext.gettext
 i18n={
 	"CONFIG":_("Accessibility"),
 	"ACCESSIBILITY":_("Accessibility options"),
-	"DESCRIPTION":_("Accessibility configuration"),
+	"DESCRIPTION":_("Accessibility"),
 	"MENUDESCRIPTION":_("Set accesibility options"),
 	"TOOLTIP":_("From here you can activate/deactivate accessibility aids"),
 	"INVERTENABLED":_("Invert screen colors"),

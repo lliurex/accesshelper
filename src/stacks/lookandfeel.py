@@ -17,7 +17,7 @@ QString=type("")
 i18n={
 	"ACCESSIBILITY":_("Look&Feel options"),
 	"CONFIG":_("Look&Feel"),
-	"DESCRIPTION":_("Look&Feel configuration"),
+	"DESCRIPTION":_("Look&Feel"),
 	"MENUDESCRIPTION":_("Modify appearence settings"),
 	"TOOLTIP":_("Set theme, color scheme or pointers"),
 	"THEME":_("Desktop theme"),

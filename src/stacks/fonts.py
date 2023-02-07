@@ -15,7 +15,7 @@ QString=type("")
 i18n={
 	"ACCESSIBILITY":_("Font options"),
 	"CONFIG":_("Fonts"),
-	"DESCRIPTION":_("Font configuration"),
+	"DESCRIPTION":_("Fonts"),
 	"MENUDESCRIPTION":_("Modify system fonts"),
 	"TOOLTIP":_("Customize the system fonts"),
 	"FONTSIZE":_("Font size"),

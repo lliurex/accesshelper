@@ -35,7 +35,7 @@ i18n={
 	"CONFIG":_("Hotkeys"),
 	"HOTKEYS":_("Keyboard Shortcuts"),
 	"ACCESSIBILITY":_("hotkeys options"),
-	"DESCRIPTION":_("Hotkeys configuration"),
+	"DESCRIPTION":_("Keyboard Hotkeys"),
 	"MENUDESCRIPTION":_("Set hotkeys for launch applications"),
 	"TOOLTIP":_("From here you can set hotkeys for launch apps"),
 	"NEXTWINDOW":_("Go to next window"),

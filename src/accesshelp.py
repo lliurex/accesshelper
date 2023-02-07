@@ -216,9 +216,9 @@ if len(sys.argv)==1:
 	if os.path.isfile(configChanged):
 		os.remove(configChanged)
 	app=QApplication(["AccessHelper"])
-	app.aboutToQuit.connect(showDialog)
-	#app.setQuitOnLastWindowClosed(False)
-	#app.lastWindowClosed.connect(showDialog)
+	#app.aboutToQuit.connect(showDialog)
+	app.setQuitOnLastWindowClosed(False)
+	app.lastWindowClosed.connect(showDialog)
 	config=appConfig("Access Helper",{'app':app})
 	config.setWindowTitle("Access Helper")
 	config.setRsrcPath("/usr/share/accesshelper/rsrc")

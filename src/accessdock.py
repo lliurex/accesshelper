@@ -25,7 +25,7 @@ class accessdock(QWidget):
 		self.menu=App2Menu.app2menu()
 		self.confFile="accesshelper.json"
 		self.confDir="/usr/share/accesshelper/"
-		self.fastSettings={"color":"color","font_size":"","pointer_size":"","read":"","osk":"","config":"","hide":""}
+		self.fastSettings={"color":"color","font_size":"","pointer_size":"","read":"","capture":"","osk":"","config":"","hide":""}
 		self.widgets={}
 		self.accesshelper=libaccesshelper.accesshelper()
 		self.speech=speech.speechhelper()
@@ -37,6 +37,10 @@ class accessdock(QWidget):
 		self._renderGui()
 		self.fontSize=""
 	#def __init__
+
+	def closeEvent(self, event):
+		sys.exit(0)
+	#def closeEvent(self, event):
 
 	def _debug(self,msg):
 		if self.dbg:
@@ -147,37 +151,49 @@ class accessdock(QWidget):
 	def _assignButton(self,setting,btn):
 		if setting=="font_size":
 			btn.setText("{:.0f}px\nFont".format(self.font().pointSizeF()))
+			btn.setToolTip(_("Set font size"))
 		elif setting=="hide":
 			icn=QIcon.fromTheme("view-hidden")
 			btn.setText(_("Hide"))
+			btn.setToolTip(_("Close accessdock"))
 			btn.setIcon(icn)
 		elif setting=="config":
 			icn=QIcon.fromTheme("preferences")
 			btn.setText(_("Configure"))
+			btn.setToolTip(_("Launch accesshelper"))
 			btn.setIcon(icn)
 		elif setting=="read":
 			icn=QIcon.fromTheme("audio-ready")
 			btn.setText(_("Read screen"))
+			btn.setToolTip(_("Read text or image from clipboard"))
+			btn.setIcon(icn)
+		elif setting=="capture":
+			icn=QIcon.fromTheme("desktop")
+			btn.setText(_("Capture"))
+			btn.setToolTip(_("Try to read screen content from screenshot"))
 			btn.setIcon(icn)
 		elif setting=="pointer_size":
 			icn=QIcon.fromTheme("pointer")
 			btn.setText(_("Pointer"))
+			btn.setToolTip(_("Set mouse pointer size"))
 			btn.setIcon(icn)
 		elif setting=="color":
 			icn=QIcon.fromTheme("preferences-desktop-screensaver")
 			btn.setText(_("Filter"))
+			btn.setToolTip(_("Apply a color filter"))
 			btn.setIcon(icn)
 		elif setting=="osk":
 			icn=QIcon.fromTheme("input-keyboard")
 			btn.setText(_("Keyboard"))
+			btn.setToolTip(_("Show/Hide on-screen keyboard"))
 			btn.setIcon(icn)
+	#def _assignButton
 
 	def execute(self,*args,**kwargs):
 		if isinstance(args,tuple):
 			if args[0].lower()=="hide":
 				sys.exit(0)
 			elif args[0].lower()=="color":
-			#######DIALOG CLOSING WTF????########
 				alphaDlg=alpha(alpha)
 				alphaDlg.move(self.coordx,self.coordy)
 				alphaDlg._load_screen()
@@ -193,6 +209,8 @@ class accessdock(QWidget):
 				self._fontCursorSize("pointer")
 			elif args[0].lower()=="read":
 				self._readScreen()
+			elif args[0].lower()=="capture":
+				self._takeScreen()
 			elif args[0].lower()=="osk":
 				self._showOsk()
 			elif args[0].lower()=="config":
@@ -346,7 +364,13 @@ class accessdock(QWidget):
 
 	def _readScreen(self,*args):
 		self.hide()
-		self.speech.readScreen()
+		self.speech.readScreen(onlyClipboard=True)
+		self.show()
+	#def _readScreen
+
+	def _takeScreen(self,*args):
+		self.hide()
+		self.speech.readScreen(onlyScreen=True)
 		self.show()
 	#def _readScreen
 

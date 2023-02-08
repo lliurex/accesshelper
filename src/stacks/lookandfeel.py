@@ -26,9 +26,9 @@ i18n={
 	"BACKGROUND":_("Background color"),
 	"BACKIMG":_("Desktop background"),
 	"CURRENTBKG":_("Current background"),
-	"CURSORTHEME":_("Cursor theme"),
 	"CURSORSIZE":_("Cursor size"),
 	"CURSORTHEME":_("Cursor theme"),
+	"SCALE":_("Scale factor"),
 	"WHITE":_("White"),
 	"RED":_("Red"),
 	"BLUE":_("Blue"),
@@ -54,7 +54,7 @@ class lookandfeel(confStack):
 		self.plasmaConfig={}
 		self.wrkFiles=["kdeglobals","kcmimputrc"]
 		self.blockSettings={}
-		self.wantSettings={"kdeglobals":["General"]}
+		self.wantSettings={"kdeglobals":["General","KScreen"]}
 		self.optionChanged=[]
 		self.imgFile=""
 		self.bkgIconSize=96
@@ -90,16 +90,26 @@ class lookandfeel(confStack):
 		self.widgets.update({'background':cmbBackground})
 		self.box.addWidget(cmbBackground,2,1,1,1)
 
-		self.box.addWidget(QLabel(i18n.get("CURSORTHEME")),3,0,1,1)
+		self.box.addWidget(QLabel(i18n.get("SCALE")),3,0,1,1)
+		cmbScale=QComboBox()
+		self.widgets.update({'scale':cmbScale})
+		cmbScale.addItem("100%")
+		cmbScale.addItem("125%")
+		cmbScale.addItem("150%")
+		cmbScale.addItem("175%")
+		cmbScale.addItem("200%")
+		self.box.addWidget(cmbScale,3,1,1,1)
+
+		self.box.addWidget(QLabel(i18n.get("CURSORTHEME")),4,0,1,1)
 		cmbCursor=QComboBox()
 		self.widgets.update({'cursor':cmbCursor})
 		cmbCursor.currentIndexChanged.connect(self.updateCursorSizes)
-		self.box.addWidget(cmbCursor,3,1,1,1)
+		self.box.addWidget(cmbCursor,4,1,1,1)
 
-		self.box.addWidget(QLabel(i18n.get("CURSORSIZE")),4,0,1,1)
+		self.box.addWidget(QLabel(i18n.get("CURSORSIZE")),5,0,1,1)
 		cmbCursorSize=QComboBox()
 		self.widgets.update({'cursorSize':cmbCursorSize})
-		self.box.addWidget(cmbCursorSize,4,1,1,1)
+		self.box.addWidget(cmbCursorSize,5,1,1,1)
 		cmbCursorSize.addItem("32")
 		cmbCursorSize.addItem("48")
 		cmbCursorSize.addItem("64")
@@ -193,7 +203,7 @@ class lookandfeel(confStack):
 									px.fill(QtGui.QColor(color))
 								icon=QtGui.QIcon(px)
 								cmb.addItem(icon,themeDesc)
-							else:
+							elif cmbDesc!="scale":
 								cmb.addItem(themeDesc)
 
 						if cmbDesc=="theme" and nextTheme!="":

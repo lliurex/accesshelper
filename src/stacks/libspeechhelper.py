@@ -84,7 +84,7 @@ class speechhelper():
 			self._invokeReader(txt)
 			self.clipboard.clear()
 			self.clipboard.clear(self.clipboard.Selection)
-	#def _readScreen
+	#def readScreen
 
 	def _getClipboardText(self):
 		txt=self.clipboard.text(self.clipboard.Selection)
@@ -129,6 +129,7 @@ class speechhelper():
 		currentDate=datetime.now()
 		fileName="{}.txt".format(currentDate.strftime("%Y%m%d_%H%M%S"))
 		txtFile=os.path.join(self.txtDir,fileName)
+		txt=txt.replace("\"","\'")
 		with open(txtFile,"w") as f:
 			f.write("\"{}\"".format(txt))
 		self._debug("Generating with Strech {}".format(self.stretch))

@@ -389,18 +389,24 @@ class functionHelperClass():
 			color=''
 			cursor=''
 			size=''
+			scale=''
+			xscale=''
 			for line in content:
 				fline=line.strip()
 				if fline.startswith("\"bkg\":"):
 					bkg=fline.split(" ")[-1].replace("\"","").replace(",","").replace("\n","")
-				if fline.startswith('\"bkgColor\":'):
+				elif fline.startswith('\"bkgColor\":'):
 					color=fline.split(" ")[-1].replace("\"","").replace(",","").replace("\n","")
-				if fline.startswith('\"background\":'):
+				elif fline.startswith('\"background\":'):
 					img=fline.split(" ")[-1].replace("\"","").replace(",","").replace("\n","")
-				if fline.startswith('\"cursor\":'):
+				elif fline.startswith('\"cursor\":'):
 					cursor=fline.split(" ")[-1].replace("\"","").replace(",","").replace("\n","")
-				if fline.startswith('\"cursorSize\":'):
+				elif fline.startswith('\"cursorSize\":'):
 					size=fline.split(" ")[-1].replace("\"","").replace(",","").replace("\n","")
+				elif fline.startswith('\"scale\":'):
+					scale=fline.split(" ")[-1].replace("\"","").replace(",","").replace("\n","")
+				elif fline.startswith('\"xscale\":'):
+					xscale=fline.split(" ")[-1].replace("\"","").replace(",","").replace("\n","")
 			if bkg=="color":
 				if color:
 					qcolor=QtGui.QColor(color)
@@ -410,6 +416,15 @@ class functionHelperClass():
 					self.setBackgroundImg(img)
 			if cursor and size:
 				self._runSetCursorApp(cursor,size)
+			if scale:
+				print("Restore scale")
+				self.setScaleFactor(float(scale)/100)
+			if xscale:
+				print("Restore xscale")
+				if xscale=="100":
+					self.removeAutostartDesktop("accesshelper_Xscale.desktop")
+				else:
+					self.setXscale(float(xscale/100))
 	#def _setNewConfig					
 
 	def _loadPlasmaConfigFromFolder(self,folder):
@@ -503,6 +518,63 @@ class functionHelperClass():
 		subprocess.run(cmd,stdout=subprocess.PIPE)
 	#def _runSetCursorApp
 
+	def setScaleFactor(self,scaleFactor,plasma=True,xrand=False):
+		cmd=["xrandr","--listmonitors"]
+		output=subprocess.run(cmd,capture_output=True,text=True)
+		monitors=[]
+		for line in output.stdout.split("\n"):
+			if len(line.split(" "))>=4:
+				monitors.append("{0}={1}".format(line.split(" ")[-1],scaleFactor))
+		if xrand==True:
+			for monitor in monitors:
+				f=round(1-((scaleFactor-1)/3),2)
+				output=monitor.split("=")[0]
+				cmd=["xrandr","--output",output,"--scale","{}x{}".format(f,f)]
+				print("Exe {}".format(cmd))
+				try:
+					subprocess.run(cmd)
+				except Exception as e:
+					print(" ".join(cmd))
+					print(e)
+		if plasma==True:
+			if monitors:
+				screenScaleFactors="{};".format(";".join(monitors))
+				self.setKdeConfigSetting("KScreen","ScreenScaleFactors",screenScaleFactors,"kdeglobals")
+			if scaleFactor==1:
+				scaleFactor=""
+			self.setKdeConfigSetting("KScreen","ScaleFactor",str(scaleFactor),"kdeglobals")
+	#def setScaleFactor
+
+	def removeAutostartDesktop(self,desktop):
+		home=os.environ.get("HOME")
+		if home:
+			wrkFile=os.path.join(home,".config","autostart",desktop)
+			if os.path.isfile(wrkFile):
+				os.remove(wrkFile)
+	#def _removeAutostartDesktop
+
+	def generateAutostartDesktop(self,cmd,fname):
+		desktop=[]
+		if isinstance(cmd,list):
+			cmd=" ".join(cmd)
+		desktop.append("[Desktop Entry]")
+		desktop.append("Encoding=UTF-8")
+		desktop.append("Type=Application")
+		desktop.append("Name={}".format(fname.replace(".desktop","")))
+		desktop.append("Comment=Apply rgb filters")
+		desktop.append("Exec={}".format(cmd))
+		desktop.append("StartupNotify=false")
+		desktop.append("Terminal=false")
+		desktop.append("Hidden=false")
+		home=os.environ.get("HOME")
+		if home:
+			wrkFile=os.path.join(home,".config","autostart",fname)
+			if os.path.isdir(os.path.dirname(wrkFile))==False:
+				os.makedirs(os.path.dirname(wrkFile))
+			with open(wrkFile,"w") as f:
+				f.write("\n".join(desktop))
+	#def generateAutostartDesktop
+
 class accesshelper():
 	def __init__(self):
 		self.dbg=False
@@ -560,6 +632,7 @@ class accesshelper():
 
 	def removeXscale(self):
 		self.removeAutostartDesktop("accesshelper_Xscale.desktop")
+	#def removeXscale
 
 	def removeAutostartDesktop(self,desktop):
 		home=os.environ.get("HOME")
@@ -956,33 +1029,8 @@ class accesshelper():
 			sw=False
 		return sw
 	#def setGrubBeep
-
-	def setScaleFactor(self,scaleFactor,plasma=True,xrand=False):
-		cmd=["xrandr","--listmonitors"]
-		output=subprocess.run(cmd,capture_output=True,text=True)
-		monitors=[]
-		for line in output.stdout.split("\n"):
-			if len(line.split(" "))>=4:
-				monitors.append("{0}={1}".format(line.split(" ")[-1],scaleFactor))
-		if xrand==True:
-			for monitor in monitors:
-				f=round(1-((scaleFactor-1)/3),2)
-				output=monitor.split("=")[0]
-				cmd=["xrandr","--output",output,"--scale","{}x{}".format(f,f)]
-				print("Exe {}".format(cmd))
-				try:
-					subprocess.run(cmd)
-				except Exception as e:
-					print(" ".join(cmd))
-					print(e)
-		if plasma==True:
-			if monitors:
-				screenScaleFactors="{};".format(";".join(monitors))
-				self.setKdeConfigSetting("KScreen","ScreenScaleFactors",screenScaleFactors,"kdeglobals")
-			if scaleFactor==1:
-				scaleFactor=""
-			self.setKdeConfigSetting("KScreen","ScaleFactor",str(scaleFactor),"kdeglobals")
-	#def setScaleFactor
+	def setScaleFactor(self,*args,**kwargs):
+		return(self.functionHelper.setScaleFactor(*args,**kwargs))
 
 	def applyChanges(self):
 		cmd=["qdbus","org.kde.KWin","/KWin","org.kde.KWin.reconfigure"]

@@ -155,7 +155,12 @@ class accessdock(QWidget):
 		#	btn.setToolTip(_("Set font size"))
 		if setting=="scale":
 			icn=QIcon.fromTheme("zoom-in")
-			btn.setText(_("Scale"))
+			scaleFactor=self.accesshelper.getKdeConfigSetting("KScreen","ScaleFactor","kdeglobals")
+			scale="100%"
+			if isinstance(scaleFactor,str):
+				if len(scaleFactor)>0:
+					scale="{}%".format(str(int(float(scaleFactor)*100)))
+			btn.setText(_("Scale {}").format(scale))
 			btn.setToolTip(_("Set screen scale"))
 			btn.setIcon(icn)
 		elif setting=="hide":
@@ -262,8 +267,9 @@ class accessdock(QWidget):
 		if change:
 			factor=cmbScale.currentText()
 			factor=factor.replace("%","")
-			scaleFactor=int(factor)/100
+			scaleFactor=int(factor)/200
 			self.accesshelper.setScaleFactor(scaleFactor,plasma=False,xrand=True)
+			self.accesshelper.applyChanges()
 	#def _setScale
 
 	def _fontCursorSize(self,setting):

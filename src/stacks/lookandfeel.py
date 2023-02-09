@@ -171,6 +171,18 @@ class lookandfeel(confStack):
 					if cmb.findText(cursorSize)==-1 and isinstance(cursorSize,int):
 						cmb.insertItem(0,cursorSize)
 					cmb.setCurrentText(cursorSize)
+				if cmbDesc=="scale":
+					cmb.addItem("100%")
+					cmb.addItem("125%")
+					cmb.addItem("150%")
+					cmb.addItem("175%")
+					cmb.addItem("200%")
+					scaleFactor=self.accesshelper.getKdeConfigSetting("KScreen","ScaleFactor","kdeglobals")
+					scale="100%"
+					if isinstance(scaleFactor,str):
+						if len(scaleFactor)>0:
+							scale="{}%".format(str(int(float(scaleFactor)*100)))
+					cmb.setCurrentText(scale)
 				else:
 					if cmbDesc=="theme":
 						themes=self._getThemeList()
@@ -178,8 +190,6 @@ class lookandfeel(confStack):
 						themes=self._getSchemeList()
 					if cmbDesc=="cursor":
 						themes=self._getCursorList()
-					if cmbDesc=="scale":
-						themes=self._getScales()
 					if cmbDesc=="background":
 						themes=self._fillBackgroundCmb()
 
@@ -205,7 +215,7 @@ class lookandfeel(confStack):
 									px.fill(QtGui.QColor(color))
 								icon=QtGui.QIcon(px)
 								cmb.addItem(icon,themeDesc)
-							elif cmbDesc!="scale":
+							else:
 								cmb.addItem(themeDesc)
 
 						if cmbDesc=="theme" and nextTheme!="":

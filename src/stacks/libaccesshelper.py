@@ -642,7 +642,7 @@ class accesshelper():
 				os.remove(wrkFile)
 	#def _removeAutostartDesktop
 
-	def setRGBFilter(self,alpha):
+	def setRGBFilter(self,alpha,onlyset=False):
 		def getRgbCompatValue(color):
 			(top,color)=color
 			c=round((color*top)/255,2)
@@ -673,7 +673,8 @@ class accesshelper():
 		brightness=1
 		xgamma=["xgamma","-screen","0","-rgamma","{0:.2f}".format(xred),"-ggamma","{0:.2f}".format(xgreen),"-bgamma","{0:.2f}".format(xblue)]
 		cmd=subprocess.run(xgamma,capture_output=True,encoding="utf8")
-		self.generateAutostartDesktop(xgamma,"accesshelper_rgbFilter.desktop")
+		if onlyset==False:
+			self.generateAutostartDesktop(xgamma,"accesshelper_rgbFilter.desktop")
 		return(red,green,blue)
 	#def setRGBFilter
 

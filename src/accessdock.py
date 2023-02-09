@@ -196,12 +196,17 @@ class accessdock(QWidget):
 			btn.setIcon(icn)
 	#def _assignButton
 
+	def closeEvent(self,event):
+		event.ignore()
+	#def closeEvent(self,event):
+
 	def execute(self,*args,**kwargs):
 		if isinstance(args,tuple):
 			if args[0].lower()=="hide":
 				sys.exit(0)
 			elif args[0].lower()=="color":
 				alphaDlg=alpha(alpha)
+				alphaDlg.embebbed=True
 				alphaDlg.move(self.coordx,self.coordy)
 				alphaDlg._load_screen()
 				alphaDlg.btn_ok.clicked.connect(alphaDlg.close)
@@ -228,9 +233,11 @@ class accessdock(QWidget):
 				btn=self.widgets.get("font_size")
 				self._loadConfig()
 				font=12
-				if isinstance(font,str)==True:
+				if isinstance(self.fonts,str)==True:
 					font=self.fonts.split(",")[1]
 				btn.setText("{}px\nFont".format(font))
+				btn=self.widgets.get("scale")
+				btn.setText("{}%\nScale".format(self.xscale))
 				self.show()
 	#def execute
 

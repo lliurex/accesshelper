@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-09 12:50+0100\n"
-"PO-Revision-Date: 2023-02-09 12:59+0100\n"
+"POT-Creation-Date: 2023-02-09 16:12+0100\n"
+"PO-Revision-Date: 2023-02-09 16:13+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ca\n"
@@ -18,81 +18,81 @@ msgstr ""
 "X-Generator: Poedit 2.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../src/accessdock.py:155
+#: ../src/accessdock.py:156
 msgid "Set font size"
 msgstr "Tamany de les lletres"
 
-#: ../src/accessdock.py:163
+#: ../src/accessdock.py:159
 msgid ""
-"{}\n"
+"{}%\n"
 "Scale"
 msgstr ""
-"{}\n"
+"{}%\n"
 "Ampliació"
 
-#: ../src/accessdock.py:164
+#: ../src/accessdock.py:160
 msgid "Set screen scale"
 msgstr "Ajusta la ampliació de l'entorn"
 
-#: ../src/accessdock.py:168
+#: ../src/accessdock.py:164
 msgid "Hide"
 msgstr "Amaga"
 
-#: ../src/accessdock.py:169
+#: ../src/accessdock.py:165
 msgid "Close accessdock"
 msgstr "Tancar"
 
-#: ../src/accessdock.py:173 ../src/stacks/settings.py:18
+#: ../src/accessdock.py:169 ../src/stacks/settings.py:18
 msgid "Settings"
 msgstr "Ajustos"
 
-#: ../src/accessdock.py:174
+#: ../src/accessdock.py:170
 msgid "Launch accesshelper"
 msgstr "Obri accesshelper"
 
-#: ../src/accessdock.py:178
+#: ../src/accessdock.py:174
 msgid "Read screen"
 msgstr "Llegir"
 
-#: ../src/accessdock.py:179
+#: ../src/accessdock.py:175
 msgid "Read text or image from clipboard"
 msgstr "Llig text o una imatge (ocr) desde el porta-retalls"
 
-#: ../src/accessdock.py:183
+#: ../src/accessdock.py:179
 msgid "Capture"
 msgstr "Capturar"
 
-#: ../src/accessdock.py:184
+#: ../src/accessdock.py:180
 msgid "Try to read screen content from screenshot"
 msgstr "Intenta llegir el contingut de la pantalla"
 
-#: ../src/accessdock.py:188
+#: ../src/accessdock.py:184
 msgid "Pointer"
 msgstr "Punter"
 
-#: ../src/accessdock.py:189
+#: ../src/accessdock.py:185
 msgid "Set mouse pointer size"
 msgstr "Ajusta el tamany del punter"
 
-#: ../src/accessdock.py:193
+#: ../src/accessdock.py:189
 msgid "Filter"
 msgstr "Filtre"
 
-#: ../src/accessdock.py:194
+#: ../src/accessdock.py:190
 msgid "Apply a color filter"
 msgstr "Aplica un filtre de color"
 
-#: ../src/accessdock.py:198
+#: ../src/accessdock.py:194
 msgid "Keyboard"
 msgstr "Teclat"
 
-#: ../src/accessdock.py:199
+#: ../src/accessdock.py:195
 msgid "Show/Hide on-screen keyboard"
 msgstr "Mostra/amaga el teclat virtual"
 
 #: ../src/accesshelp.py:26
 msgid "usage: accesshelper [--set profile]|[--list]"
-msgstr "Ús: accesshelper [--set perfil]|[--list]"
+msgstr "ús: accesshelper [--set perfil]|[--list]"
 
 #: ../src/accesshelp.py:27
 msgid "With no args launch accesshelper GUI"

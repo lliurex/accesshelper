@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-09 12:50+0100\n"
+"POT-Creation-Date: 2023-02-09 16:12+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,73 +17,73 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../src/accessdock.py:155
+#: ../src/accessdock.py:156
 msgid "Set font size"
 msgstr ""
 
-#: ../src/accessdock.py:163
+#: ../src/accessdock.py:159
 msgid ""
-"{}\n"
+"{}%\n"
 "Scale"
 msgstr ""
 
-#: ../src/accessdock.py:164
+#: ../src/accessdock.py:160
 msgid "Set screen scale"
 msgstr ""
 
-#: ../src/accessdock.py:168
+#: ../src/accessdock.py:164
 msgid "Hide"
 msgstr ""
 
-#: ../src/accessdock.py:169
+#: ../src/accessdock.py:165
 msgid "Close accessdock"
 msgstr ""
 
-#: ../src/accessdock.py:173 ../src/stacks/settings.py:18
+#: ../src/accessdock.py:169 ../src/stacks/settings.py:18
 msgid "Settings"
 msgstr ""
 
-#: ../src/accessdock.py:174
+#: ../src/accessdock.py:170
 msgid "Launch accesshelper"
 msgstr ""
 
-#: ../src/accessdock.py:178
+#: ../src/accessdock.py:174
 msgid "Read screen"
 msgstr ""
 
-#: ../src/accessdock.py:179
+#: ../src/accessdock.py:175
 msgid "Read text or image from clipboard"
 msgstr ""
 
-#: ../src/accessdock.py:183
+#: ../src/accessdock.py:179
 msgid "Capture"
 msgstr ""
 
-#: ../src/accessdock.py:184
+#: ../src/accessdock.py:180
 msgid "Try to read screen content from screenshot"
 msgstr ""
 
-#: ../src/accessdock.py:188
+#: ../src/accessdock.py:184
 msgid "Pointer"
 msgstr ""
 
-#: ../src/accessdock.py:189
+#: ../src/accessdock.py:185
 msgid "Set mouse pointer size"
 msgstr ""
 
-#: ../src/accessdock.py:193
+#: ../src/accessdock.py:189
 msgid "Filter"
 msgstr ""
 
-#: ../src/accessdock.py:194
+#: ../src/accessdock.py:190
 msgid "Apply a color filter"
 msgstr ""
 
-#: ../src/accessdock.py:198
+#: ../src/accessdock.py:194
 msgid "Keyboard"
 msgstr ""
 
-#: ../src/accessdock.py:199
+#: ../src/accessdock.py:195
 msgid "Show/Hide on-screen keyboard"
 msgstr ""
 

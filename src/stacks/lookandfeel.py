@@ -93,11 +93,6 @@ class lookandfeel(confStack):
 		self.box.addWidget(QLabel(i18n.get("SCALE")),3,0,1,1)
 		cmbScale=QComboBox()
 		self.widgets.update({'scale':cmbScale})
-		cmbScale.addItem("100%")
-		cmbScale.addItem("125%")
-		cmbScale.addItem("150%")
-		cmbScale.addItem("175%")
-		cmbScale.addItem("200%")
 		self.box.addWidget(cmbScale,3,1,1,1)
 
 		self.box.addWidget(QLabel(i18n.get("CURSORTHEME")),4,0,1,1)
@@ -215,7 +210,7 @@ class lookandfeel(confStack):
 									px.fill(QtGui.QColor(color))
 								icon=QtGui.QIcon(px)
 								cmb.addItem(icon,themeDesc)
-							else:
+							elif cmbDesc!="cursorSize":
 								cmb.addItem(themeDesc)
 
 						if cmbDesc=="theme" and nextTheme!="":
@@ -354,7 +349,7 @@ class lookandfeel(confStack):
 	#def _setCursorSize(self):
 
 	def _setScale(self,scaleFactor):
-		self.accesshelper.setScaleFactor(scaleFactor,xrand=True)
+		self.accesshelper.setScaleFactor(scaleFactor,xrand=False)
 
 	def writeConfig(self):
 		self.saveChanges('background',self.imgFile)

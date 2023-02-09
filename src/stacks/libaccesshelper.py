@@ -940,6 +940,33 @@ class accesshelper():
 		return sw
 	#def setGrubBeep
 
+	def setScaleFactor(self,scaleFactor,plasma=True,xrand=False):
+		cmd=["xrandr","--listmonitors"]
+		output=subprocess.run(cmd,capture_output=True,text=True)
+		monitors=[]
+		for line in output.stdout.split("\n"):
+			if len(line.split(" "))>=4:
+				monitors.append("{0}={1}".format(line.split(" ")[-1],scaleFactor))
+		if xrand==True:
+			for monitor in monitors:
+				f=1-(scaleFactor-1)
+				output=monitor.split("=")[0]
+				cmd=["xrandr","--output",output,"--scale","{}x{}".format(scaleFactor,scaleFactor)]
+				print("Exe {}".format(cmd))
+				try:
+					subprocess.run(cmd)
+				except Exception as e:
+					print(" ".join(cmd))
+					print(e)
+		if plasma==True:
+			if monitors:
+				screenScaleFactors="{};".format(";".join(monitors))
+				self.setKdeConfigSetting("KScreen","ScreenScaleFactors",screenScaleFactors,"kdeglobals")
+			if scaleFactor==1:
+				scaleFactor=""
+			self.setKdeConfigSetting("KScreen","ScaleFactor",str(scaleFactor),"kdeglobals")
+	#def setScaleFactor
+
 	def applyChanges(self):
 		cmd=["qdbus","org.kde.KWin","/KWin","org.kde.KWin.reconfigure"]
 		subprocess.run(cmd)

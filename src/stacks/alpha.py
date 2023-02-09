@@ -15,7 +15,7 @@ QString=type("")
 
 i18n={
 	"CONFIG":_("Color"),
-	"DESCRIPTION":_("Color filter configuration"),
+	"DESCRIPTION":_("Color filter"),
 	"MENUDESCRIPTION":_("Modify screen color levels"),
 	"TOOLTIP":_("Set color filter for the screen"),
 	"FILTER":_("Color filter"),

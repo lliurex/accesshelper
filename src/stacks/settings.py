@@ -126,6 +126,7 @@ class settings(confStack):
 			except:
 				pass
 			self.btn_dockHk.revertHotkey()
+		self.force_change=True
 		self.btn_ok.setEnabled(True)
 		self.btn_cancel.setEnabled(True)
 	#def _testHotkey
@@ -258,7 +259,8 @@ class settings(confStack):
 				value=widget.isChecked()
 				if desc=="grubBeep":
 					if config[self.level].get("grubBeep","")!=str(value).lower():
-						self._setGrubBeep(value)
+						if config[self.level].get("grubBeep","")=="" and value!=False:
+							self._setGrubBeep(value)
 				if value:
 					value="true"
 				else:

@@ -13,7 +13,7 @@ import string
 
 class speechhelper():
 	def __init__(self):
-		self.dbg=False
+		self.dbg=True
 		self.libfestival="/usr/share/accesshelper/stacks/libfestival.py"
 		self.confDir=os.path.join(os.environ.get('HOME','/tmp'),".config/accesshelper")
 		self.txtDir=os.path.join(self.confDir,"tts/txt")
@@ -58,12 +58,14 @@ class speechhelper():
 			self.player="tts"
 	#def setVoice
 
-	def readScreen(self,*args):
-		txt=self._getClipboardText()
+	def readScreen(self,*args,onlyClipboard=False,onlyScreen=False):
+		txt=""
+		if onlyScreen==False:
+			txt=self._getClipboardText()
 		if not txt:
-			img=self._getImgForOCR()
-			if img:
-				imgPIL=None
+			img=self._getImgForOCR(onlyClipboard,onlyScreen)
+			imgPIL=None
+			if os.path.isfile(img):
 				img=self._processImg(img)
 				try:
 					imgPIL = Image.open(img)
@@ -82,7 +84,7 @@ class speechhelper():
 			self._invokeReader(txt)
 			self.clipboard.clear()
 			self.clipboard.clear(self.clipboard.Selection)
-	#def _readScreen
+	#def readScreen
 
 	def _getClipboardText(self):
 		txt=self.clipboard.text(self.clipboard.Selection)
@@ -103,18 +105,21 @@ class speechhelper():
 		return(buffer)
 	#def _getClipboardImg
 
-	def _getImgForOCR(self):
+	def _getImgForOCR(self,onlyClipboard=False,onlyScreen=False):
 		outImg="/tmp/out.png"
-		img=self.clipboard.image()
+		img=None
+		if onlyScreen==False:
+			img=self.clipboard.image()
 		if img:
 			self._debug("Reading clipboard IMG")
 			img.save(outImg, "PNG")
 		else:
-			img=self.clipboard.pixmap()
+			if onlyScreen==False:
+				img=self.clipboard.pixmap()
 			if img:
 				self._debug("Reading clipboard PXM")
 				img.save(outImg, "PNG")
-			else:
+			elif onlyClipboard==False:
 				self._debug("Taking Screenshot")
 				subprocess.run(["spectacle","-a","-e","-b","-c","-o",outImg])
 		return(outImg)
@@ -124,6 +129,7 @@ class speechhelper():
 		currentDate=datetime.now()
 		fileName="{}.txt".format(currentDate.strftime("%Y%m%d_%H%M%S"))
 		txtFile=os.path.join(self.txtDir,fileName)
+		txt=txt.replace("\"","\'")
 		with open(txtFile,"w") as f:
 			f.write("\"{}\"".format(txt))
 		self._debug("Generating with Strech {}".format(self.stretch))

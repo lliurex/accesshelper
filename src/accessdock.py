@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 import os,sys,io,psutil,shutil,signal
-from PySide2.QtWidgets import QApplication,QMessageBox,QGridLayout,QLabel,QToolButton,QWidget,QFrame,QDialog,QPushButton
+from PySide2.QtWidgets import QApplication,QMessageBox,QGridLayout,QLabel,QToolButton,QWidget,QFrame,QDialog,QPushButton,QComboBox
 from PySide2.QtCore import Qt,QSignalMapper,QByteArray,QSize,QBuffer
 from PySide2.QtGui import QIcon,QPixmap,QCursor
 from stacks import libaccesshelper
@@ -25,7 +25,8 @@ class accessdock(QWidget):
 		self.menu=App2Menu.app2menu()
 		self.confFile="accesshelper.json"
 		self.confDir="/usr/share/accesshelper/"
-		self.fastSettings={"color":"color","font_size":"","pointer_size":"","read":"","osk":"","config":"","hide":""}
+		#self.fastSettings={"color":"color","scale":"","read":"","capture":"","osk":"","config":"","hide":""}
+		self.fastSettings={"color":"color","scale":"","font_size":"","pointer_size":"","read":"","capture":"","osk":"","config":"","hide":""}
 		self.widgets={}
 		self.accesshelper=libaccesshelper.accesshelper()
 		self.speech=speech.speechhelper()
@@ -37,6 +38,10 @@ class accessdock(QWidget):
 		self._renderGui()
 		self.fontSize=""
 	#def __init__
+
+	def closeEvent(self, event):
+		sys.exit(0)
+	#def closeEvent(self, event):
 
 	def _debug(self,msg):
 		if self.dbg:
@@ -147,37 +152,59 @@ class accessdock(QWidget):
 	def _assignButton(self,setting,btn):
 		if setting=="font_size":
 			btn.setText("{:.0f}px\nFont".format(self.font().pointSizeF()))
+			btn.setToolTip(_("Set font size"))
+		if setting=="scale":
+			#icn=QIcon.fromTheme("zoom-in")
+			scaleFactor=self.accesshelper.getKdeConfigSetting("KScreen","ScaleFactor","kdeglobals")
+			scale="100%"
+			if isinstance(scaleFactor,str):
+				if len(scaleFactor)>0:
+					scale="{}%".format(str(int(float(scaleFactor)*100)))
+			btn.setText(_("{}\nScale").format(scale))
+			btn.setToolTip(_("Set screen scale"))
+			#btn.setIcon(icn)
 		elif setting=="hide":
 			icn=QIcon.fromTheme("view-hidden")
 			btn.setText(_("Hide"))
+			btn.setToolTip(_("Close accessdock"))
 			btn.setIcon(icn)
 		elif setting=="config":
 			icn=QIcon.fromTheme("preferences")
-			btn.setText(_("Configure"))
+			btn.setText(_("Settings"))
+			btn.setToolTip(_("Launch accesshelper"))
 			btn.setIcon(icn)
 		elif setting=="read":
 			icn=QIcon.fromTheme("audio-ready")
 			btn.setText(_("Read screen"))
+			btn.setToolTip(_("Read text or image from clipboard"))
+			btn.setIcon(icn)
+		elif setting=="capture":
+			icn=QIcon.fromTheme("desktop")
+			btn.setText(_("Capture"))
+			btn.setToolTip(_("Try to read screen content from screenshot"))
 			btn.setIcon(icn)
 		elif setting=="pointer_size":
 			icn=QIcon.fromTheme("pointer")
 			btn.setText(_("Pointer"))
+			btn.setToolTip(_("Set mouse pointer size"))
 			btn.setIcon(icn)
 		elif setting=="color":
 			icn=QIcon.fromTheme("preferences-desktop-screensaver")
 			btn.setText(_("Filter"))
+			btn.setToolTip(_("Apply a color filter"))
 			btn.setIcon(icn)
 		elif setting=="osk":
 			icn=QIcon.fromTheme("input-keyboard")
 			btn.setText(_("Keyboard"))
+			btn.setToolTip(_("Show/Hide on-screen keyboard"))
 			btn.setIcon(icn)
+	#def _assignButton
 
 	def execute(self,*args,**kwargs):
 		if isinstance(args,tuple):
 			if args[0].lower()=="hide":
 				sys.exit(0)
 			elif args[0].lower()=="color":
-			#######DIALOG CLOSING WTF????########
 				alphaDlg=alpha(alpha)
 				alphaDlg.move(self.coordx,self.coordy)
 				alphaDlg._load_screen()
@@ -193,8 +220,12 @@ class accessdock(QWidget):
 				self._fontCursorSize("pointer")
 			elif args[0].lower()=="read":
 				self._readScreen()
+			elif args[0].lower()=="capture":
+				self._takeScreen()
 			elif args[0].lower()=="osk":
 				self._showOsk()
+			elif args[0].lower()=="scale":
+				self._setScale()
 			elif args[0].lower()=="config":
 				self.hide()
 				subprocess.run(["accesshelper"])
@@ -206,6 +237,47 @@ class accessdock(QWidget):
 				btn.setText("{}px\nFont".format(font))
 				self.show()
 	#def execute
+
+	def _setScale(self):
+		dlg=QDialog()
+		lay=QGridLayout()
+		dlg.setLayout(lay)
+		frame=QFrame()
+		frame.setFrameShape(QFrame.Panel)
+		lay.addWidget(frame)
+		lay2 = QGridLayout(frame)
+		cmbScale=QComboBox()
+		cmbScale.addItem("100%")
+		cmbScale.addItem("125%")
+		cmbScale.addItem("150%")
+		cmbScale.addItem("175%")
+		cmbScale.addItem("200%")
+		scaleFactor=self.accesshelper.getKdeConfigSetting("KScreen","ScaleFactor","kdeglobals")
+		scale="100%"
+		if isinstance(scaleFactor,str):
+			if len(scaleFactor)>0:
+				scale="{}%".format(str(int(float(scaleFactor)*100)))
+		cmbScale.setCurrentText(scale)
+		lay2.addWidget(cmbScale,0,0,1,1)
+		btnCancel=QPushButton("Cancel")
+		btnCancel.clicked.connect(dlg.close)
+		lay2.addWidget(btnCancel,2,0,1,1)
+		btnOk=QPushButton("Apply")
+		btnOk.clicked.connect(dlg.accept)
+		lay2.addWidget(btnOk,2,1,1,1)
+		dlg.move(self.coordx,self.coordy)
+		dlg.setWindowModality(Qt.WindowModal)
+		dlg.setWindowFlags(Qt.NoDropShadowWindowHint|Qt.WindowStaysOnTopHint|Qt.FramelessWindowHint)
+		change=dlg.exec()
+		self.hide()
+		if change:
+			factor=cmbScale.currentText()
+			factor=factor.replace("%","")
+			scaleFactor=int(factor)/100
+			self.accesshelper.setScaleFactor(scaleFactor,plasma=False,xrand=True)
+			#self.accesshelper.applyChanges()
+		self.show()
+	#def _setScale
 
 	def _fontCursorSize(self,setting):
 		def moreFontSize(*args):
@@ -346,7 +418,13 @@ class accessdock(QWidget):
 
 	def _readScreen(self,*args):
 		self.hide()
-		self.speech.readScreen()
+		self.speech.readScreen(onlyClipboard=True)
+		self.show()
+	#def _readScreen
+
+	def _takeScreen(self,*args):
+		self.hide()
+		self.speech.readScreen(onlyScreen=True)
 		self.show()
 	#def _readScreen
 

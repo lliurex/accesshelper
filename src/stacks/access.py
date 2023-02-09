@@ -12,7 +12,7 @@ _ = gettext.gettext
 i18n={
 	"CONFIG":_("Accessibility"),
 	"ACCESSIBILITY":_("Accessibility options"),
-	"DESCRIPTION":_("Accessibility configuration"),
+	"DESCRIPTION":_("Accessibility"),
 	"MENUDESCRIPTION":_("Set accesibility options"),
 	"TOOLTIP":_("From here you can activate/deactivate accessibility aids"),
 	"INVERTENABLED":_("Invert screen colors"),
@@ -55,7 +55,7 @@ actionHk={
 	}
 class access(confStack):
 	def __init_stack__(self):
-		self.dbg=False
+		self.dbg=True
 		self._debug("access Load")
 		self.menu_description=i18n.get('MENUDESCRIPTION')
 		self.description=i18n.get('DESCRIPTION')
@@ -125,8 +125,8 @@ class access(confStack):
 		self.btn_cancel.setEnabled(True)
 	#def _testHotkey
 
-	def _updateButtons(self):
-		row=self.tblGrid.currentRow()
+	def _updateButtons(self,inc=0):
+		row=self.tblGrid.currentRow()+inc
 		self._debug("Setting state for row {}".format(row))
 		btn=self.tblGrid.cellWidget(row,1)
 		chk=self.tblGrid.cellWidget(row,0)
@@ -284,14 +284,16 @@ class access(confStack):
 				(kfile,section,setting,data)=item.data(Qt.UserRole).split("~")
 				settings=self.plasmaConfig[kfile][section]
 			if opt:
-				opt.setEnabled(chk.isChecked())
 				if chk.isChecked()==False:
 					self._disableZoomOptions(settings)
-				if opt.isChecked()==True:
+				if opt.isChecked()==True:# and opt.isEnabled():
 					anychk=True
-		if (anychk==False) and (chk.isChecked()==True):
+				opt.setEnabled(chk.isChecked())
+		if (anychk==False) and (chk.isChecked()==True) and opt!=None:
 			opt=self.tblGrid.cellWidget(self.zoomRow+1,1)
 			opt.setChecked(True)
+			row=self.tblGrid.rowCount()
+			self._updateButtons(inc=1)
 		self.btn_cancel.setEnabled(True)
 		self.btn_ok.setEnabled(True)
 	#def _setZoomOptionsEnabled
@@ -316,6 +318,11 @@ class access(confStack):
 					item=self.tblGrid.item(i,1)
 					setting=item.data(Qt.UserRole)
 					self._setPlasmaHotkeysFromTable(setting,hotkey)
+			else:
+				btn=self.tblGrid.cellWidget(i,1)
+				if isinstance(btn,QRadioButton):
+					if btn.isChecked():
+						pass
 	#def updateHotkeysFromTable
 
 	def _setPlasmaHotkeysFromTable(self,desc,hotkey):
@@ -338,7 +345,6 @@ class access(confStack):
 
 	def writeConfig(self):
 		self.updateDataFromTable()
-		print(self.plasmaConfig)
 		#InvertWindow needso InvertScreen enabled
 		plugins=self.plasmaConfig.get("kwinrc",{}).get("Plugins",[])
 		newList={}

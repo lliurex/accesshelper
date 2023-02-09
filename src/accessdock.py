@@ -82,6 +82,7 @@ class accessdock(QWidget):
 			self.voice=config.get("voice","JuntaDeAndalucia_es_pa_diphone")
 			self.speech.setVoice(self.voice)
 			self._setKdeHotkey(hotkey)
+			self.xscale=config.get("xscale","100")
 		home=os.environ.get("HOME")
 		onboard="/usr/share/accesshelper/onboard.dconf"
 		if os.path.isfile(os.path.join(home,".config/accesshelper/onboard.dconf"))==False:
@@ -155,12 +156,7 @@ class accessdock(QWidget):
 			btn.setToolTip(_("Set font size"))
 		if setting=="scale":
 			#icn=QIcon.fromTheme("zoom-in")
-			scaleFactor=self.accesshelper.getKdeConfigSetting("KScreen","ScaleFactor","kdeglobals")
-			scale="100%"
-			if isinstance(scaleFactor,str):
-				if len(scaleFactor)>0:
-					scale="{}%".format(str(int(float(scaleFactor)*100)))
-			btn.setText(_("{}\nScale").format(scale))
+			btn.setText(_("{}%\nScale").format(self.xscale))
 			btn.setToolTip(_("Set screen scale"))
 			#btn.setIcon(icn)
 		elif setting=="hide":
@@ -252,12 +248,7 @@ class accessdock(QWidget):
 		cmbScale.addItem("150%")
 		cmbScale.addItem("175%")
 		cmbScale.addItem("200%")
-		scaleFactor=self.accesshelper.getKdeConfigSetting("KScreen","ScaleFactor","kdeglobals")
-		scale="100%"
-		if isinstance(scaleFactor,str):
-			if len(scaleFactor)>0:
-				scale="{}%".format(str(int(float(scaleFactor)*100)))
-		cmbScale.setCurrentText(scale)
+		cmbScale.setCurrentText("{}%".format(self.xscale))
 		lay2.addWidget(cmbScale,0,0,1,1)
 		btnCancel=QPushButton("Cancel")
 		btnCancel.clicked.connect(dlg.close)

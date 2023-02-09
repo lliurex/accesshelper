@@ -558,6 +558,9 @@ class accesshelper():
 		self.removeAutostartDesktop("accesshelper_rgbFilter.desktop")
 	#def resetRGBFilter
 
+	def removeXscale(self):
+		self.removeAutostartDesktop("accesshelper_Xscale.desktop")
+
 	def removeAutostartDesktop(self,desktop):
 		home=os.environ.get("HOME")
 		if home:
@@ -600,6 +603,20 @@ class accesshelper():
 		self.generateAutostartDesktop(xgamma,"accesshelper_rgbFilter.desktop")
 		return(red,green,blue)
 	#def setRGBFilter
+
+	def setXscale(self,xscale):
+		cmd=["xrandr","--listmonitors"]
+		output=subprocess.run(cmd,capture_output=True,text=True)
+		monitors=[]
+		for line in output.stdout.split("\n"):
+			if len(line.split(" "))>=4:
+				monitors.append("{0}".format(line.split(" ")[-1]))
+		cmd=[]
+		for output in monitors:
+			f=round(1-(((int(xscale)/100)-1)/3),2)
+			cmd.append("xrandr --output {0} --scale {1}x{1}".format(output,f))
+		self.generateAutostartDesktop("&&".join(cmd),"accesshelper_Xscale.desktop")
+	#def setXscale(self,xscale):
 
 	def generateAutostartDesktop(self,cmd,fname):
 		desktop=[]

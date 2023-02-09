@@ -28,7 +28,8 @@ i18n={
 	"CURRENTBKG":_("Current background"),
 	"CURSORSIZE":_("Cursor size"),
 	"CURSORTHEME":_("Cursor theme"),
-	"SCALE":_("Scale factor"),
+	"SCALE":_("Widget size"),
+	"XSCALE":_("Scale factor"),
 	"WHITE":_("White"),
 	"RED":_("Red"),
 	"BLUE":_("Blue"),
@@ -95,16 +96,21 @@ class lookandfeel(confStack):
 		self.widgets.update({'scale':cmbScale})
 		self.box.addWidget(cmbScale,3,1,1,1)
 
-		self.box.addWidget(QLabel(i18n.get("CURSORTHEME")),4,0,1,1)
+		self.box.addWidget(QLabel(i18n.get("XSCALE")),4,0,1,1)
+		cmbXscale=QComboBox()
+		self.widgets.update({'xscale':cmbXscale})
+		self.box.addWidget(cmbXscale,4,1,1,1)
+
+		self.box.addWidget(QLabel(i18n.get("CURSORTHEME")),5,0,1,1)
 		cmbCursor=QComboBox()
 		self.widgets.update({'cursor':cmbCursor})
 		cmbCursor.currentIndexChanged.connect(self.updateCursorSizes)
-		self.box.addWidget(cmbCursor,4,1,1,1)
+		self.box.addWidget(cmbCursor,5,1,1,1)
 
-		self.box.addWidget(QLabel(i18n.get("CURSORSIZE")),5,0,1,1)
+		self.box.addWidget(QLabel(i18n.get("CURSORSIZE")),6,0,1,1)
 		cmbCursorSize=QComboBox()
 		self.widgets.update({'cursorSize':cmbCursorSize})
-		self.box.addWidget(cmbCursorSize,5,1,1,1)
+		self.box.addWidget(cmbCursorSize,6,1,1,1)
 		cmbCursorSize.addItem("32")
 		cmbCursorSize.addItem("48")
 		cmbCursorSize.addItem("64")
@@ -112,7 +118,6 @@ class lookandfeel(confStack):
 		cmbCursorSize.addItem("96")
 		cmbCursorSize.addItem("112")
 		cmbCursorSize.addItem("128")
-		cmbCursorSize.currentTextChanged.connect(self.updateCursorIcons)
 	#def _load_screen
 
 	def updateScreen(self):
@@ -166,18 +171,21 @@ class lookandfeel(confStack):
 					if cmb.findText(cursorSize)==-1 and isinstance(cursorSize,int):
 						cmb.insertItem(0,cursorSize)
 					cmb.setCurrentText(cursorSize)
-				if cmbDesc=="scale":
+				elif cmbDesc=="scale" or cmbDesc=="xscale":
 					cmb.addItem("100%")
 					cmb.addItem("125%")
 					cmb.addItem("150%")
 					cmb.addItem("175%")
 					cmb.addItem("200%")
-					scaleFactor=self.accesshelper.getKdeConfigSetting("KScreen","ScaleFactor","kdeglobals")
 					scale="100%"
-					if isinstance(scaleFactor,str):
-						if len(scaleFactor)>0:
-							scale="{}%".format(str(int(float(scaleFactor)*100)))
-					cmb.setCurrentText(scale)
+					if cmbDesc=="scale":
+						scaleFactor=self.accesshelper.getKdeConfigSetting("KScreen","ScaleFactor","kdeglobals")
+						if isinstance(scaleFactor,str):
+							if len(scaleFactor)>0:
+								scale="{}%".format(str(int(float(scaleFactor)*100)))
+						cmb.setCurrentText(scale)
+					else:
+						cmb.setCurrentText("{}%".format(config.get("xscale","100")))
 				else:
 					if cmbDesc=="theme":
 						themes=self._getThemeList()
@@ -378,6 +386,12 @@ class lookandfeel(confStack):
 					scale=cmb.currentText().replace("%","")
 					scaleFactor=round(float(scale)/100,2)
 					self._setScale(scaleFactor)
+				if cmbDesc=="xscale":
+					xscale=cmb.currentText().replace("%","")
+					if xscale=="100":
+						self.accesshelper.removeXscale()
+					else:
+						self.accesshelper.setXscale(xscale)
 				if cmbDesc=="background":
 					idx=cmb.currentIndex()
 					if idx>0:
@@ -402,6 +416,7 @@ class lookandfeel(confStack):
 		self.saveChanges('cursor',cursorTheme)
 		self.saveChanges('cursorSize',size)
 		self.saveChanges('scale',scale)
+		self.saveChanges('xscale',xscale)
 		self._setCursor(cursorTheme,size)
 		self._writeFileChanges(scheme,plasmaTheme,cursorTheme,size,bkg,scale)
 	#def writeConfig

@@ -74,10 +74,15 @@ if os.path.isfile(pidFile):
   fpid=f.read()
  try:
   os.kill(int(fpid),signal.SIGKILL)
- except:
+ except Exception as e:
+  print(e)
   pass
 with open(pidFile,"w") as f:
  f.write(str(os.getpid())) 
+try:
+ os.chmod(pidFile,0o666)
+except:
+ pass
 
 l_X11 = cdll.LoadLibrary("libX11.so")
 t_XID = c_ulong

@@ -951,7 +951,7 @@ class accesshelper():
 			for monitor in monitors:
 				f=1-(scaleFactor-1)
 				output=monitor.split("=")[0]
-				cmd=["xrandr","--output",output,"--scale","{}x{}".format(scaleFactor,scaleFactor)]
+				cmd=["xrandr","--output",output,"--scale","{}x{}".format(f,f)]
 				print("Exe {}".format(cmd))
 				try:
 					subprocess.run(cmd)

@@ -252,6 +252,12 @@ class accessdock(QWidget):
 		cmbScale.addItem("150%")
 		cmbScale.addItem("175%")
 		cmbScale.addItem("200%")
+		scaleFactor=self.accesshelper.getKdeConfigSetting("KScreen","ScaleFactor","kdeglobals")
+		scale="100%"
+		if isinstance(scaleFactor,str):
+			if len(scaleFactor)>0:
+				scale="{}%".format(str(int(float(scaleFactor)*100)))
+		cmbScale.setCurrentText(scale)
 		lay2.addWidget(cmbScale,0,0,1,1)
 		btnCancel=QPushButton("Cancel")
 		btnCancel.clicked.connect(dlg.close)
@@ -267,9 +273,9 @@ class accessdock(QWidget):
 		if change:
 			factor=cmbScale.currentText()
 			factor=factor.replace("%","")
-			scaleFactor=int(factor)/200
+			scaleFactor=int(factor)/100
 			self.accesshelper.setScaleFactor(scaleFactor,plasma=False,xrand=True)
-			self.accesshelper.applyChanges()
+			#self.accesshelper.applyChanges()
 	#def _setScale
 
 	def _fontCursorSize(self,setting):

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 "Sets the X cursor theme, either once or at a regular interval."
@@ -167,7 +167,9 @@ def main(argv):
 
 
 def load_images(display, name, theme, size):
- images = XcursorLibraryLoadImages(name, theme, size)
+ print(name)
+ print(name.encode())
+ images = XcursorLibraryLoadImages(name.encode(), theme.encode(), size)
  if images:
   return images
 
@@ -175,7 +177,7 @@ def load_images(display, name, theme, size):
 def load_cursor(display, name, images):
  cursor = XcursorImagesLoadCursor(display, images)
  #XcursorImagesDestroy(images)
- XFixesSetCursorName(display, cursor, name)
+ XFixesSetCursorName(display, cursor, name.encode())
  return cursor
 
 
@@ -189,7 +191,7 @@ def set_cursor_theme(display, theme, size):
     cursor.images = False
   if cursor.images:
    cursor_xid = load_cursor(display, cursor.name, cursor.images)
-   XFixesChangeCursorByName(display, cursor_xid, cursor.name)
+   XFixesChangeCursorByName(display, cursor_xid, cursor.name.encode())
    XFreeCursor(display, cursor_xid)
 
 
@@ -247,7 +249,7 @@ pirate
  
  cursor_list = [i for i in cursor_list_file.strip().replace("#", "\n#").splitlines()
                 if i and not i.startswith("#")]
- for i in xrange(len(cursor_list)):
+ for i in range(len(cursor_list)):
   if " " in cursor_list[i]:
    name, alternative = cursor_list[i].split(" ", 2)
   else:

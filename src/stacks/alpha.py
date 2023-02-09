@@ -39,6 +39,7 @@ class alpha(confStack):
 		self.wrkFiles=["kgammarc"]
 		self.blockSettings={}
 		self.optionChanged=[]
+		self.embebbed=False
 		self.accesshelper=libaccesshelper.accesshelper()
 	#def __init__
 
@@ -93,26 +94,29 @@ class alpha(confStack):
 		if self.config==None:
 			self.config=self.getConfig()
 		qalpha=self.widgets.get("alpha").currentColor()
-		(red,green,blue)=self.accesshelper.setRGBFilter(qalpha)
-		self.plasmaConfig['kgammarc']['ConfigFile']=[("use","kgammarc")]
-		self.plasmaConfig['kgammarc']['SyncBox']=[("sync","yes")]
-		values=[]
-		for gamma in self.plasmaConfig['kgammarc']['Screen 0']:
-			(desc,value)=gamma
-			if desc=='bgamma':
-				values.append((desc,"{0:.2f}".format(blue)))
-			elif desc=='rgamma':
-				values.append((desc,"{0:.2f}".format(red)))
-			elif desc=='ggamma':
-				values.append((desc,"{0:.2f}".format(green)))
-		if self.appConfig:
-			self.plasmaConfig['kgammarc']['Screen 0']=values
-			self.accesshelper.setPlasmaConfig(self.plasmaConfig)
-			self.saveChanges("alpha",qalpha.getRgb())
-			self.optionChanged=[]
-			self.refresh=True
-			self.btn_cancel.setEnabled(True)
-			self._writeFileChanges(qalpha)
+		print(self.embebbed)
+		(red,green,blue)=self.accesshelper.setRGBFilter(qalpha,self.embebbed)
+		if self.embebbed==False:
+			(red,green,blue)=self.accesshelper.setRGBFilter(qalpha)
+			self.plasmaConfig['kgammarc']['ConfigFile']=[("use","kgammarc")]
+			self.plasmaConfig['kgammarc']['SyncBox']=[("sync","yes")]
+			values=[]
+			for gamma in self.plasmaConfig['kgammarc']['Screen 0']:
+				(desc,value)=gamma
+				if desc=='bgamma':
+					values.append((desc,"{0:.2f}".format(blue)))
+				elif desc=='rgamma':
+					values.append((desc,"{0:.2f}".format(red)))
+				elif desc=='ggamma':
+					values.append((desc,"{0:.2f}".format(green)))
+			if self.appConfig:
+				self.plasmaConfig['kgammarc']['Screen 0']=values
+				self.accesshelper.setPlasmaConfig(self.plasmaConfig)
+				self.saveChanges("alpha",qalpha.getRgb())
+				self.optionChanged=[]
+				self.refresh=True
+				self.btn_cancel.setEnabled(True)
+				self._writeFileChanges(qalpha)
 	#def writeConfig
 
 	def _reset_screen(self,*args):

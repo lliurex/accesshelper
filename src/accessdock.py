@@ -266,6 +266,8 @@ class accessdock(QWidget):
 			factor=factor.replace("%","")
 			scaleFactor=int(factor)/100
 			self.accesshelper.setScaleFactor(scaleFactor,plasma=False,xrand=True)
+			self.xscale=factor
+			self.widgets["scale"].setText("{}%\nScale".format(self.xscale))
 			#self.accesshelper.applyChanges()
 		self.show()
 	#def _setScale

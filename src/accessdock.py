@@ -25,8 +25,8 @@ class accessdock(QWidget):
 		self.menu=App2Menu.app2menu()
 		self.confFile="accesshelper.json"
 		self.confDir="/usr/share/accesshelper/"
-		self.fastSettings={"color":"color","scale":"","read":"","capture":"","osk":"","config":"","hide":""}
-		#self.fastSettings={"color":"color","font_size":"","pointer_size":"","read":"","capture":"","osk":"","config":"","hide":""}
+		#self.fastSettings={"color":"color","scale":"","read":"","capture":"","osk":"","config":"","hide":""}
+		self.fastSettings={"color":"color","scale":"","font_size":"","pointer_size":"","read":"","capture":"","osk":"","config":"","hide":""}
 		self.widgets={}
 		self.accesshelper=libaccesshelper.accesshelper()
 		self.speech=speech.speechhelper()
@@ -150,19 +150,19 @@ class accessdock(QWidget):
 	#def _renderGui
 
 	def _assignButton(self,setting,btn):
-		#if setting=="font_size":
-		#	btn.setText("{:.0f}px\nFont".format(self.font().pointSizeF()))
-		#	btn.setToolTip(_("Set font size"))
+		if setting=="font_size":
+			btn.setText("{:.0f}px\nFont".format(self.font().pointSizeF()))
+			btn.setToolTip(_("Set font size"))
 		if setting=="scale":
-			icn=QIcon.fromTheme("zoom-in")
+			#icn=QIcon.fromTheme("zoom-in")
 			scaleFactor=self.accesshelper.getKdeConfigSetting("KScreen","ScaleFactor","kdeglobals")
 			scale="100%"
 			if isinstance(scaleFactor,str):
 				if len(scaleFactor)>0:
 					scale="{}%".format(str(int(float(scaleFactor)*100)))
-			btn.setText(_("Scale {}").format(scale))
+			btn.setText(_("{}\nScale").format(scale))
 			btn.setToolTip(_("Set screen scale"))
-			btn.setIcon(icn)
+			#btn.setIcon(icn)
 		elif setting=="hide":
 			icn=QIcon.fromTheme("view-hidden")
 			btn.setText(_("Hide"))
@@ -276,6 +276,7 @@ class accessdock(QWidget):
 			scaleFactor=int(factor)/100
 			self.accesshelper.setScaleFactor(scaleFactor,plasma=False,xrand=True)
 			#self.accesshelper.applyChanges()
+		self.show()
 	#def _setScale
 
 	def _fontCursorSize(self,setting):

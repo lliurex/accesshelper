@@ -430,5 +430,6 @@ class lookandfeel(confStack):
 			f.write("{0}->{1}\n".format(i18n.get("CURSORSIZE"),cursorSize))
 			f.write("{0}->{1}\n".format(i18n.get("BACKIMG"),bkg))
 			f.write("{0}->{1}\n".format(i18n.get("SCALE"),scale))
+			f.write("{0}->{1}\n".format(i18n.get("XSCALE"),xscale))
 	#def _writeFileChanges(self):
 

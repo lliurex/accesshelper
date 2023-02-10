@@ -497,16 +497,16 @@ class accessdock(QWidget):
 		self.widgets["read"].setIcon(self.readIcn)
 		self.speaker.btn=self.widgets["capture"]
 		self.speaker.icn=self.widgets["capture"].icon()
-		self.hide()
 		if self.speaker.play==True:
 			self.speaker.stop()
 			self.widgets["capture"].setIcon(self.captureIcn)
 		else:
+			self.hide()
 			self.speaker.clipboard=False
 			self.widgets["capture"].setIcon(self.cancelIcn)
 			self.speaker.start()
-		time.sleep(2)
-		self.show()
+			time.sleep(2)
+			self.show()
 	#def _readScreen
 
 	def _showOsk(self):

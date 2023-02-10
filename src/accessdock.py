@@ -131,8 +131,6 @@ class accessdock(QWidget):
 		col=0
 		sigmap_run=QSignalMapper(self)
 		sigmap_run.mapped[QString].connect(self.execute)
-		maxw=0
-		maxh=0
 		for setting,value in self.fastSettings.items():
 			#lbl=QLabel(setting.replace("_"," ").capitalize())
 			#layout2.addWidget(lbl,0,col,1,1)
@@ -146,6 +144,12 @@ class accessdock(QWidget):
 			layout2.addWidget(btn,0,col,1,1,Qt.AlignLeft)
 			self.widgets[setting]=btn
 			col+=1
+		sizes=[]
+		for desc,btn in self.widgets.items():
+			sizes.append(btn.sizeHint().width())
+		sizes.sort()
+		for desc,btn in self.widgets.items():
+			btn.setMinimumWidth(int(sizes[-2]))
 		self.setLayout(layout)
 		self.move(self.coordx,self.coordy)
 	#def _renderGui

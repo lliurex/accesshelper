@@ -134,6 +134,6 @@ class alpha(confStack):
 
 	def _writeFileChanges(self,qalpha):
 		with open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'a') as f:
-			f.write("<b>{}<b>\n".format(i18n.get("CONFIG")))
+			f.write("<b>{}</b>\n".format(i18n.get("CONFIG")))
 			f.write("{0}->{1}\n".format(i18n.get("FILTER"),qalpha.getRgb()))
 	#def _writeFileChanges(self):

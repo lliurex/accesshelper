@@ -62,7 +62,7 @@ class speechhelper():
 		txt=""
 		if onlyScreen==False:
 			txt=self._getClipboardText()
-		if not txt:
+		if not txt and onlyClipboard==False:
 			img=self._getImgForOCR(onlyClipboard,onlyScreen)
 			imgPIL=None
 			if os.path.isfile(img):
@@ -80,10 +80,12 @@ class speechhelper():
 			if imgPIL:
 				txt=self._readImg(imgPIL)
 				self.clipboard.clear()
+		prc=0
 		if txt:
-			self._invokeReader(txt)
+			prc=self._invokeReader(txt)
 			self.clipboard.clear()
 			self.clipboard.clear(self.clipboard.Selection)
+		return(prc)
 	#def readScreen
 
 	def _getClipboardText(self):
@@ -133,14 +135,19 @@ class speechhelper():
 		with open(txtFile,"w") as f:
 			f.write("\"{}\"".format(txt))
 		self._debug("Generating with Strech {}".format(self.stretch))
-		self.readFile(txtFile,currentDate)
+		prc=self.readFile(txtFile,currentDate)
+		return(prc)
 	#def _invokeReader
 
 	def readFile(self,txt,currentDate):
 		if isinstance(currentDate,str)==False:
 			currentDate=currentDate.strftime("%Y%m%d_%H%M%S")
-		print("Date type {}".format(type(currentDate)))
-		subprocess.run(["python3",self.libfestival,txt,str(self.stretch),self.voice,currentDate,self.player])
+		self._debug("Date type {}".format(type(currentDate)))
+		try:
+			prc=subprocess.Popen(["python3",self.libfestival,txt,str(self.stretch),self.voice,currentDate,self.player])
+		except:
+			print("Aborted")
+		return(prc)
 
 	def _spellCheck(self,txt):
 		spell=SpellChecker(language='es')

@@ -417,10 +417,8 @@ class functionHelperClass():
 			if cursor and size:
 				self._runSetCursorApp(cursor,size)
 			if scale:
-				print("Restore scale")
 				self.setScaleFactor(float(scale)/100)
 			if xscale:
-				print("Restore xscale")
 				if xscale=="100":
 					self.removeAutostartDesktop("accesshelper_Xscale.desktop")
 				else:
@@ -688,8 +686,9 @@ class accesshelper():
 		cmd=[]
 		for output in monitors:
 			f=round(1-(((int(xscale)/100)-1)/3),2)
+			cmd.append("sleep 5")
 			cmd.append("xrandr --output {0} --scale {1}x{1}".format(output,f))
-		self.generateAutostartDesktop("&&".join(cmd),"accesshelper_Xscale.desktop")
+		self.generateAutostartDesktop(" && ".join(cmd),"accesshelper_Xscale.desktop")
 	#def setXscale(self,xscale):
 
 	def generateAutostartDesktop(self,cmd,fname):

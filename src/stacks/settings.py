@@ -108,11 +108,7 @@ class settings(confStack):
 		for i in range (1,5):
 			box.setRowStretch(i,0)
 		box.setRowStretch(i+1,2)
-		for wrkDir in self.wrkDirs:
-			if os.path.isdir(wrkDir):
-				for f in os.listdir(wrkDir):
-					cmb_template.addItem("{}".format(f))
-		cmb_template.setCurrentText("default")
+#		cmb_template.setCurrentText("default")
 		self.setLayout(box)
 		_change_osh()
 		return(self)
@@ -173,6 +169,11 @@ class settings(confStack):
 			if desc=="startup":
 				widget.setChecked(startup)
 			elif desc=="profile":
+				widget.clear()
+				for wrkDir in self.wrkDirs:
+					if os.path.isdir(wrkDir):
+						for f in os.listdir(wrkDir):
+							widget.addItem("{}".format(f))
 				widget.setCurrentText(profile)
 			elif desc=="speed":
 				widget.setCurrentText(speed)
@@ -200,12 +201,12 @@ class settings(confStack):
 	def _setAutostart(self,profile):
 		if profile:
 			cmd="/usr/share/accesshelper/accesshelp.py --set {}".format(profile)
-			self.accesshelper.generateAutostartDesktop(cmd,self.profilerAuto)
+			self.accesshelper.generateAutostartDesktop(cmd,self.profilerAuto,"plasma-workspace/shutdown")
 			self.showMsg("{} {}".format(i18n.get("AUTOSTART"),os.environ.get("USER")))
 	#def _setAutostart
 
 	def _removeAutostart(self,profile):
-		self.accesshelper.removeAutostartDesktop(self.profilerAuto)
+		self.accesshelper.removeAutostartDesktop(self.profilerAuto,"plasma-workspace/shutdown")
 		self.showMsg("{} {}".format(i18n.get("DISABLEAUTOSTART"),os.environ.get("USER")))
 	#def _removeAutostart
 

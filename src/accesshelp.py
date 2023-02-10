@@ -84,7 +84,7 @@ def setProfile(profilePath):
 	if wrkFile:
 		print("{0} {1}".format(MSG_LOADPROFILE,wrkFile))
 		sw=accesshelper.restoreSnapshot(wrkFile)
-		accesshelper.applyChanges()
+		#accesshelper.applyChanges()
 	else:
 		print("{0} {1}".format(ERR_LOADPROFILE,profilePath))
 	return(sw)

@@ -285,7 +285,7 @@ class accessdock(QWidget):
 			self.widgets["scale"].setText("{}%\nScale".format(self.xscale))
 			try:
 				with open("/tmp/.xscale","w") as f:
-					f.write(xscale)
+					f.write(self.xscale)
 				os.chmod("/tmp/.xscale",0o666)
 			except:
 				pass

@@ -83,6 +83,10 @@ class accessdock(QWidget):
 			self.speech.setVoice(self.voice)
 			self._setKdeHotkey(hotkey)
 			self.xscale=config.get("xscale","100")
+			if os.path.isfile("/tmp/.xscale"):
+				with open("/tmp/.xscale","r") as f:
+					x=f.read()
+				self.xscale=x
 		home=os.environ.get("HOME")
 		onboard="/usr/share/accesshelper/onboard.dconf"
 		if os.path.isfile(os.path.join(home,".config/accesshelper/onboard.dconf"))==False:
@@ -279,6 +283,12 @@ class accessdock(QWidget):
 			self.accesshelper.setScaleFactor(scaleFactor,plasma=False,xrand=True)
 			self.xscale=factor
 			self.widgets["scale"].setText("{}%\nScale".format(self.xscale))
+			try:
+				with open("/tmp/.xscale","w") as f:
+					f.write(xscale)
+				os.chmod("/tmp/.xscale",0o666)
+			except:
+				pass
 			#self.accesshelper.applyChanges()
 		self.show()
 	#def _setScale
@@ -467,10 +477,9 @@ if os.path.isfile("/tmp/.accessdock.pid"):
 	if kill:
 		try:
 			os.kill(pid,signal.SIGUSR1)
+			sys.exit(0)
 		except:
 			kill=False
-	if kill:
-		sys.exit(0)
 
 with open("/tmp/.accessdock.pid","w") as f:
 	f.write("{}".format(os.getpid()))

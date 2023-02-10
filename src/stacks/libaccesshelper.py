@@ -543,34 +543,45 @@ class functionHelperClass():
 			self.setKdeConfigSetting("KScreen","ScaleFactor",str(scaleFactor),"kdeglobals")
 	#def setScaleFactor
 
-	def removeAutostartDesktop(self,desktop):
+	def removeAutostartDesktop(self,desktop,folder="autostart"):
 		home=os.environ.get("HOME")
 		if home:
-			wrkFile=os.path.join(home,".config","autostart",desktop)
+			if "shutdown" in folder:
+				desktop=desktop.replace(".desktop",".sh")
+			wrkFile=os.path.join(home,".config",folder,desktop)
 			if os.path.isfile(wrkFile):
 				os.remove(wrkFile)
 	#def _removeAutostartDesktop
 
-	def generateAutostartDesktop(self,cmd,fname):
+	def generateAutostartDesktop(self,cmd,fname,folder="autostart"):
 		desktop=[]
-		if isinstance(cmd,list):
-			cmd=" ".join(cmd)
-		desktop.append("[Desktop Entry]")
-		desktop.append("Encoding=UTF-8")
-		desktop.append("Type=Application")
-		desktop.append("Name={}".format(fname.replace(".desktop","")))
-		desktop.append("Comment=Apply rgb filters")
-		desktop.append("Exec={}".format(cmd))
-		desktop.append("StartupNotify=false")
-		desktop.append("Terminal=false")
-		desktop.append("Hidden=false")
+		if "shutdown" in folder:
+			if isinstance(cmd,list):
+				cmd=" ".join(cmd)
+			cmd="#!/bin/bash\n{}".format(cmd)
+			fname=fname.replace(".desktop",".sh")
+			desktop=cmd.split("\n")
+		else:
+			if isinstance(cmd,list):
+				cmd=" ".join(cmd)
+			desktop.append("[Desktop Entry]")
+			desktop.append("Encoding=UTF-8")
+			desktop.append("Type=Application")
+			desktop.append("Name={}".format(fname.replace(".desktop","")))
+			desktop.append("Comment=Apply rgb filters")
+			desktop.append("Exec={}".format(cmd))
+			desktop.append("StartupNotify=false")
+			desktop.append("Terminal=false")
+			desktop.append("Hidden=false")
 		home=os.environ.get("HOME")
 		if home:
-			wrkFile=os.path.join(home,".config","autostart",fname)
+			wrkFile=os.path.join(home,".config",folder,fname)
 			if os.path.isdir(os.path.dirname(wrkFile))==False:
 				os.makedirs(os.path.dirname(wrkFile))
 			with open(wrkFile,"w") as f:
 				f.write("\n".join(desktop))
+			if "shutdown" in folder:
+				os.chmod(wrkFile,0o755)
 	#def generateAutostartDesktop
 
 class accesshelper():
@@ -632,12 +643,8 @@ class accesshelper():
 		self.removeAutostartDesktop("accesshelper_Xscale.desktop")
 	#def removeXscale
 
-	def removeAutostartDesktop(self,desktop):
-		home=os.environ.get("HOME")
-		if home:
-			wrkFile=os.path.join(home,".config","autostart",desktop)
-			if os.path.isfile(wrkFile):
-				os.remove(wrkFile)
+	def removeAutostartDesktop(self,desktop,folder="autostart"):
+		self.functionHelper.removeAutostartDesktop(desktop,folder)
 	#def _removeAutostartDesktop
 
 	def setRGBFilter(self,alpha,onlyset=False):
@@ -691,28 +698,9 @@ class accesshelper():
 		self.generateAutostartDesktop(" && ".join(cmd),"accesshelper_Xscale.desktop")
 	#def setXscale(self,xscale):
 
-	def generateAutostartDesktop(self,cmd,fname):
-		desktop=[]
-		if isinstance(cmd,list):
-			cmd=" ".join(cmd)
-		desktop.append("[Desktop Entry]")
-		desktop.append("Encoding=UTF-8")
-		desktop.append("Type=Application")
-		desktop.append("Name={}".format(fname.replace(".desktop","")))
-		desktop.append("Comment=Apply rgb filters")
-		desktop.append("Exec={}".format(cmd))
-		desktop.append("StartupNotify=false")
-		desktop.append("Terminal=false")
-		desktop.append("Hidden=false")
-		home=os.environ.get("HOME")
-		if home:
-			wrkFile=os.path.join(home,".config","autostart",fname)
-			if os.path.isdir(os.path.dirname(wrkFile))==False:
-				os.makedirs(os.path.dirname(wrkFile))
-			with open(wrkFile,"w") as f:
-				f.write("\n".join(desktop))
+	def generateAutostartDesktop(self,cmd,fname,folder="autostart"):
+		self.functionHelper.generateAutostartDesktop(cmd,fname,folder)
 	#def generateAutostartDesktop
-
 
 	def getCursors(self):
 		availableThemes=[]

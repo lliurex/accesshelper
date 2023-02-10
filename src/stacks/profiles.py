@@ -168,7 +168,7 @@ class profiles(confStack):
 		if self.profilesPath.get(name,''):
 			sw=self.accesshelper.restoreSnapshot(self.profilesPath.get(name))
 		if sw:
-			self.saveChanges('profile',name,level='user')
+			#self.saveChanges('profile',name,level='user')
 			self.showMsg(i18n.get("RESTORESNAP"))
 		else:
 			self.showMsg(i18n.get("RESTOREERROR"))

@@ -108,11 +108,7 @@ class settings(confStack):
 		for i in range (1,5):
 			box.setRowStretch(i,0)
 		box.setRowStretch(i+1,2)
-		for wrkDir in self.wrkDirs:
-			if os.path.isdir(wrkDir):
-				for f in os.listdir(wrkDir):
-					cmb_template.addItem("{}".format(f))
-		cmb_template.setCurrentText("default")
+#		cmb_template.setCurrentText("default")
 		self.setLayout(box)
 		_change_osh()
 		return(self)
@@ -173,6 +169,11 @@ class settings(confStack):
 			if desc=="startup":
 				widget.setChecked(startup)
 			elif desc=="profile":
+				widget.clear()
+				for wrkDir in self.wrkDirs:
+					if os.path.isdir(wrkDir):
+						for f in os.listdir(wrkDir):
+							widget.addItem("{}".format(f))
 				widget.setCurrentText(profile)
 			elif desc=="speed":
 				widget.setCurrentText(speed)

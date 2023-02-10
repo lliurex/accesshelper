@@ -418,10 +418,10 @@ class lookandfeel(confStack):
 		self.saveChanges('scale',scale)
 		self.saveChanges('xscale',xscale)
 		self._setCursor(cursorTheme,size)
-		self._writeFileChanges(scheme,plasmaTheme,cursorTheme,size,bkg,scale)
+		self._writeFileChanges(scheme,plasmaTheme,cursorTheme,size,bkg,scale,xscale)
 	#def writeConfig
 
-	def _writeFileChanges(self,scheme,theme,cursor,cursorSize,bkg,scale):
+	def _writeFileChanges(self,scheme,theme,cursor,cursorSize,bkg,scale,xscale):
 		with open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'a') as f:
 			f.write("<b>{}</b>\n".format(i18n.get("CONFIG")))
 			f.write("{0}->{1}\n".format(i18n.get("THEME"),theme))

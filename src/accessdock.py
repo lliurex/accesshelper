@@ -1,7 +1,7 @@
 #!/usr/bin/python3
-import os,sys,io,psutil,shutil,signal
+import os,sys,io,psutil,shutil,signal,time
 from PySide2.QtWidgets import QApplication,QMessageBox,QGridLayout,QLabel,QToolButton,QWidget,QFrame,QDialog,QPushButton,QComboBox
-from PySide2.QtCore import Qt,QSignalMapper,QByteArray,QSize,QBuffer
+from PySide2.QtCore import Qt,QSignalMapper,QSize,QThread
 from PySide2.QtGui import QIcon,QPixmap,QCursor
 from stacks import libaccesshelper
 from stacks import libspeechhelper as speech
@@ -16,6 +16,46 @@ gettext.textdomain('access_helper')
 _ = gettext.gettext
 QString=type("")
 QInt=type(0)
+
+class speaker(QThread):
+	def __init__(self,parent,speech):
+		QThread.__init__(self, parent)
+		self.parent=parent
+		self.clipboard=True
+		self.play=False
+		self.prc=0
+		self.speech=speech
+		self.btn=None
+		self.icn=None
+	
+	def run(self):
+		#self.parent.hide()
+		self.play=True
+		if self.btn:
+			self.btn.setEnabled(False)
+		if self.clipboard==True:
+			self.prc=self.speech.readScreen(onlyClipboard=True)
+		else:
+			self.prc=self.speech.readScreen(onlyScreen=True)
+		if self.btn:
+			self.btn.setEnabled(True)
+		if isinstance(self.prc,int)==False:
+			self.prc.communicate()
+		#self.parent.show()
+		self.play=False
+		if self.btn:
+			self.btn.setEnabled(True)
+			if self.icn:
+				self.btn.setIcon(self.icn)
+	
+	def stop(self):
+		if isinstance(self.prc,int)==False:
+			os.kill(self.prc.pid,signal.SIGINT)
+			self.prc.communicate()
+		self.wait()
+		self.play=False
+		if self.btn:
+			self.btn.setEnabled(True)
 
 class accessdock(QWidget):
 	def __init__(self,*args,**kwargs):
@@ -34,6 +74,10 @@ class accessdock(QWidget):
 		self.coordy=0
 		self.rate=0
 		self.pitch=50
+		self.readIcn=""
+		self.captureIcn=""
+		self.cancelIcn=QIcon.fromTheme("media-playback-stop")
+		self.speaker=speaker(self,self.speech)
 		self._loadConfig()
 		self._renderGui()
 		self.fontSize=""
@@ -183,11 +227,13 @@ class accessdock(QWidget):
 			btn.setIcon(icn)
 		elif setting=="read":
 			icn=QIcon.fromTheme("audio-ready")
+			self.readIcn=icn
 			btn.setText(_("Read screen"))
 			btn.setToolTip(_("Read text or image from clipboard"))
 			btn.setIcon(icn)
 		elif setting=="capture":
 			icn=QIcon.fromTheme("desktop")
+			self.captureIcn=icn
 			btn.setText(_("Capture"))
 			btn.setToolTip(_("Try to read screen content from screenshot"))
 			btn.setIcon(icn)
@@ -234,7 +280,7 @@ class accessdock(QWidget):
 			elif args[0].lower()=="read":
 				self._readScreen()
 			elif args[0].lower()=="capture":
-				self._takeScreen()
+				self._captureScreen()
 			elif args[0].lower()=="osk":
 				self._showOsk()
 			elif args[0].lower()=="scale":
@@ -435,14 +481,31 @@ class accessdock(QWidget):
 		self.widgets["font_size"].setText("{:.0f}px\nFont".format(size))
 
 	def _readScreen(self,*args):
-		self.hide()
-		self.speech.readScreen(onlyClipboard=True)
-		self.show()
+		self.widgets["capture"].setIcon(self.captureIcn)
+		self.speaker.btn=self.widgets["read"]
+		self.speaker.icn=self.widgets["read"].icon()
+		if self.speaker.play==True:
+			self.speaker.stop()
+			self.widgets["read"].setIcon(self.readIcn)
+		else:
+			self.speaker.clipboard=True
+			self.widgets["read"].setIcon(self.cancelIcn)
+			self.speaker.start()
 	#def _readScreen
 
-	def _takeScreen(self,*args):
+	def _captureScreen(self,*args):
+		self.widgets["read"].setIcon(self.readIcn)
+		self.speaker.btn=self.widgets["capture"]
+		self.speaker.icn=self.widgets["capture"].icon()
 		self.hide()
-		self.speech.readScreen(onlyScreen=True)
+		if self.speaker.play==True:
+			self.speaker.stop()
+			self.widgets["capture"].setIcon(self.captureIcn)
+		else:
+			self.speaker.clipboard=False
+			self.widgets["capture"].setIcon(self.cancelIcn)
+			self.speaker.start()
+		time.sleep(2)
 		self.show()
 	#def _readScreen
 

@@ -535,6 +535,7 @@ class functionHelperClass():
 					print(" ".join(cmd))
 					print(e)
 		if plasma==True:
+			print("Setting scale factor...")
 			if monitors:
 				screenScaleFactors="{};".format(";".join(monitors))
 				self.setKdeConfigSetting("KScreen","ScreenScaleFactors",screenScaleFactors,"kdeglobals")

@@ -4,7 +4,7 @@ import tarfile
 import tempfile
 import shutil
 from collections import OrderedDict
-from PySide2.QtGui import QIcon,QPixmap
+from PySide2.QtGui import QIcon,QPixmap,QColor
 from multiprocessing import Process
 import dbus
 import json
@@ -248,7 +248,7 @@ class functionHelperClass():
 		#autoshutdown
 		desktopShutdownPath=os.path.join(tmpFolder,".config/plasma-workspace/shutdown")
 		os.makedirs(desktopShutdownPath)
-		autoshutdownPath=os.path.join(home,".config","")
+		autoshutdownPath=os.path.join(home,".config",".config/plasma-workspace/shutdown")
 		#mozilla
 		mozillaPath=os.path.join(tmpFolder,".mozilla")
 		os.makedirs(mozillaPath)
@@ -427,7 +427,7 @@ class functionHelperClass():
 					xscale=fline.split(" ")[-1].replace("\"","").replace(",","").replace("\n","")
 			if bkg=="color":
 				if color:
-					qcolor=QtGui.QColor(color)
+					qcolor=QColor(color)
 					self.setBackgroundColor(qcolor)
 			elif bkg=="image":
 				if img:

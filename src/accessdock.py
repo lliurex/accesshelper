@@ -255,10 +255,11 @@ class accessdock(QWidget):
 	#def _assignButton
 
 	def closeEvent(self,event):
-		with open("/tmp/fury","w") as f:
-			f.write("{}".format(event))
-			
-		event.ignore()
+		print(event.spontaneous())
+		if event.spontaneous()==False:
+			event.ignore()
+		else:
+			sys.exit(0)
 	#def closeEvent(self,event):
 
 	def execute(self,*args,**kwargs):

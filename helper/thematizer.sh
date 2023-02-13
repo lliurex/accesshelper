@@ -1,6 +1,6 @@
 #!/bin/bash
 #Copyright 2021 Team LliureX
-#Simple script to copy profiles to app dir
+#Simple script to apply plasma themes/schemes 
 THEME=$1
 SCHEME=$2
 if [ "x$THEME" != "x" ]

@@ -504,9 +504,12 @@ class functionHelperClass():
 		}
 		"""
 		bus = dbus.SessionBus()
-		plasma = dbus.Interface(bus.get_object(
-			'org.kde.plasmashell', '/PlasmaShell'), dbus_interface='org.kde.PlasmaShell')
-		plasma.evaluateScript(jscript % (plugin, plugin, imgFile))
+		try:
+			plasma = dbus.Interface(bus.get_object(
+				'org.kde.plasmashell', '/PlasmaShell'), dbus_interface='org.kde.PlasmaShell')
+			plasma.evaluateScript(jscript % (plugin, plugin, imgFile))
+		except:
+			print("plasmashell not running")
 	#def setBackgroundImg
 
 	def _runSetCursorApp(self,theme,size):

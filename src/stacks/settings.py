@@ -202,11 +202,13 @@ class settings(confStack):
 		if profile:
 			cmd="/usr/share/accesshelper/accesshelp.py --set {}".format(profile)
 			self.accesshelper.generateAutostartDesktop(cmd,self.profilerAuto,"plasma-workspace/shutdown")
+			self.accesshelper.generateAutostartDesktop(cmd,self.profilerAuto)
 			self.showMsg("{} {}".format(i18n.get("AUTOSTART"),os.environ.get("USER")))
 	#def _setAutostart
 
 	def _removeAutostart(self,profile):
 		self.accesshelper.removeAutostartDesktop(self.profilerAuto,"plasma-workspace/shutdown")
+		self.accesshelper.removeAutostartDesktop(self.profilerAuto)
 		self.showMsg("{} {}".format(i18n.get("DISABLEAUTOSTART"),os.environ.get("USER")))
 	#def _removeAutostart
 

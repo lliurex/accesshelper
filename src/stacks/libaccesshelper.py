@@ -242,9 +242,13 @@ class functionHelperClass():
 		onboard=os.path.join(os.path.dirname(appconfrc),"onboard.dconf")
 		os.makedirs(configPath)
 		#autostart
-		desktopPath=os.path.join(tmpFolder,".config/autostart")
-		os.makedirs(desktopPath)
+		desktopStartPath=os.path.join(tmpFolder,".config/autostart")
+		os.makedirs(desktopStartPath)
 		autostartPath=os.path.join(home,".config","autostart")
+		#autoshutdown
+		desktopShutdownPath=os.path.join(tmpFolder,".config/plasma-workspace/shutdown")
+		os.makedirs(desktopShutdownPath)
+		autoshutdownPath=os.path.join(home,".config","")
 		#mozilla
 		mozillaPath=os.path.join(tmpFolder,".mozilla")
 		os.makedirs(mozillaPath)
@@ -262,11 +266,15 @@ class functionHelperClass():
 			shutil.copy(appconfrc,configPath)
 		if os.path.isfile(onboard):
 			shutil.copy(onboard,configPath)
-		if os.path.isdir(autostartPath):
-			for f in os.listdir(autostartPath):
-				if f.startswith("access"):
-					autostart=os.path.join(autostartPath,f)
-					shutil.copy(autostart,desktopPath)
+		for auto in [autostartPath,autoshutdownPath]:
+			if os.path.isdir(auto):
+				for f in os.listdir(auto):
+					if f.startswith("access"):
+						autostart=os.path.join(auto,f)
+						if auto==autostartPath:
+							shutil.copy(autostart,desktopStartPath)
+						else:
+							shutil.copy(autostart,desktopShutdownPath)
 		mozillaFiles=self._getMozillaSettingsFiles()
 		for mozillaFile in mozillaFiles:
 			destdir=os.path.basename(os.path.dirname(mozillaFile))
@@ -342,6 +350,16 @@ class functionHelperClass():
 				for confFile in os.listdir(confPath):
 					sourceFile=os.path.join(confPath,confFile)
 					self._debug("Cp {} {}".format(sourceFile,usrFolder))
+					#Modify profile value.
+					newContent=[]
+					with open(sourceFile,"r") as f:
+						fcontents=f.readlines()
+						for fline in fcontents:
+							if "profile" in fline:
+								fline="    \"profile\":\"{}\",\n".format(os.path.basename(profileTar))
+							newContent.append(fline)
+					with open(sourceFile,"w") as f:
+						f.writelines(newContent)
 					shutil.copy(sourceFile,usrFolder)
 				data=self.getPlasmaConfig()
 			desktopPath=os.path.join(tmpFolder,".config/autostart")

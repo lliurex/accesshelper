@@ -144,6 +144,10 @@ class settings(confStack):
 		autostartFiles={}
 		if os.path.isfile(os.path.join(os.environ.get('HOME'),".config/autostart/","{}".format(f))):
 			autostartFiles['user']=os.path.join(os.environ.get('HOME'),".config/autostart/","{}".format(f))
+
+			autostartFiles['enabled']=True
+		elif os.path.isfile(os.path.join(os.environ.get('HOME'),".config/plasma-workspace/shutdown","{}".format(str(f).replace(".desktop",".sh")))):
+			autostartFiles['user']=os.path.join(os.environ.get('HOME'),".config/plasma-workspace/shutdown","{}".format(str(f).replace(".desktop",".sh")))
 			autostartFiles['enabled']=True
 		if os.path.isfile(os.path.join("/etc/xdg/autostart/","{}".format(f))):
 			autostartFiles['system']=os.path.join("/etc/xdg/autostart/","{}".format(f))

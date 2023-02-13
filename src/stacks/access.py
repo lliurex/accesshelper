@@ -28,6 +28,7 @@ i18n={
 	"TRACKMOUSEENABLED":_("Track pointer"),
 	"HKASSIGNED":_("already assigned to action"),
 	"MOUSECLICKENABLED":_("Track click"),
+	"AUTOSTARTENABLED":_("Disable load profile on startup or changes will not apply on restart"),
 	"FALSE":_("Disabled"),
 	"TRUE":_("Enabled")
 	}
@@ -72,6 +73,7 @@ class access(confStack):
 		self.wantSettings={}
 		self.optionChanged=[]
 		self.chkbtn={}
+		self.startup="false"
 		self.zoomRow=0
 		self.accesshelper=libaccesshelper.accesshelper()
 	#def __init__
@@ -125,9 +127,9 @@ class access(confStack):
 		self.btn_cancel.setEnabled(True)
 	#def _testHotkey
 
-	def _updateButtons(self,inc=0):
+	def _updateButtons(self,*args,inc=0):
 		row=self.tblGrid.currentRow()+inc
-		self._debug("Setting state for row {}".format(row))
+		self._debug("Setting state for row {} {}".format(row,inc))
 		btn=self.tblGrid.cellWidget(row,1)
 		chk=self.tblGrid.cellWidget(row,0)
 		newValue="false"
@@ -182,6 +184,11 @@ class access(confStack):
 		self.tblGrid.clear()
 		self.tblGrid.setRowCount(0)
 		self.chkbtn={}
+		self.force=True
+		config=self.getConfig()
+		self.startup=config.get(self.level,{}).get("startup","false")
+		if self.startup=="true":
+			self.showMsg(i18n.get("AUTOSTARTENABLED"))
 		for wrkFile in self.wrkFiles:
 			plasmaConfig=self.accesshelper.getPlasmaConfig(wrkFile)
 			self.plasmaConfig.update(plasmaConfig)
@@ -281,8 +288,9 @@ class access(confStack):
 			opt=self.tblGrid.cellWidget(i,1)
 			if item==None:
 				item=self.tblGrid.item(i,0)
-				(kfile,section,setting,data)=item.data(Qt.UserRole).split("~")
-				settings=self.plasmaConfig[kfile][section]
+				if item:
+					(kfile,section,setting,data)=item.data(Qt.UserRole).split("~")
+					settings=self.plasmaConfig[kfile][section]
 			if opt:
 				if chk.isChecked()==False:
 					self._disableZoomOptions(settings)
@@ -344,6 +352,9 @@ class access(confStack):
 	#def _getPlasmaHotkeysFromTable
 
 	def writeConfig(self):
+		if self.startup=="true":
+			self.showMsg(i18n.get("AUTOSTARTENABLED"))
+			return
 		self.updateDataFromTable()
 		#InvertWindow needso InvertScreen enabled
 		plugins=self.plasmaConfig.get("kwinrc",{}).get("Plugins",[])

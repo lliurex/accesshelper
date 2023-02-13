@@ -150,9 +150,8 @@ class lookandfeel(confStack):
 					if len(array)>2:
 						nextScheme=array[2].replace("\n","")
 					break
-		#Fix bad path in thematizer autostart. Delete it.
-		if fixExec and len(content)>0:
-			if os.path.isfile(thematizer):
+			#Fix bad path in thematizer autostart. Delete it.
+			if fixExec and len(content)>0:
 				os.remove(thematizer)
 				nextScheme=""
 		for value in self.plasmaConfig.get("kdeglobals",{}).get("General",[]):

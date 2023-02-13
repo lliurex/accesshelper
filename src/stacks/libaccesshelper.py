@@ -369,6 +369,16 @@ class functionHelperClass():
 					os.makedirs(autostartFolder)
 				for f in os.listdir(desktopPath):
 					desktopFile=os.path.join(desktopPath,f)
+					#Modify profile value.
+					newContent=[]
+					with open(desktopFile,"r") as f:
+						fcontents=f.readlines()
+						for fline in fcontents:
+							if "--set" in fline and fline.strip().startswith("Exec="):
+								fline="Exec=/usr/share/accesshelper/acceshelp.py --set {}\n".format(os.path.basename(profileTar))
+							newContent.append(fline)
+					with open(desktopFile,"w") as f:
+						f.writelines(newContent)
 					self._debug("Cp {} {}".format(desktopFile,autostartFolder))
 					shutil.copy(desktopFile,autostartFolder)
 			mozillaPath=os.path.join(tmpFolder,".mozilla")

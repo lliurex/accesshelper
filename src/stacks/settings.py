@@ -303,7 +303,7 @@ class settings(confStack):
 				self.saveChanges("dockHk","",level="user")
 		self._writeFileChanges(configlevel,profile,startprofile,startdock,dockhotkey)
 	#def writeConfig
-		
+
 	def _writeFileChanges(self,configlevel,profile,startprofile,startdock,dockhotkey):
 		with open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'a') as f:
 			f.write("<b>{}</b>\n".format(i18n.get("CONFIG")))

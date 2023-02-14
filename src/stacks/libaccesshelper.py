@@ -106,6 +106,7 @@ class functionHelperClass():
 		hksetting=self.settingsHotkeys.get(setting,"")
 		sc=self.getPlasmaConfig(wrkFile="kglobalshortcutsrc")
 		if hksetting:
+			sw=False
 			for kfile,sections in sc.items():
 				for section,settings in sections.items():
 					hksection=section
@@ -115,10 +116,11 @@ class functionHelperClass():
 							data=data.split(",")
 							hk=data[0]
 							data=",".join(data)
+							sw=True
 							break
-					if hk!="":
+					if sw==True:
 						break
-				if hk!="":
+				if sw==True:
 					break
 		else:
 			for kfile,sections in sc.items():
@@ -417,8 +419,8 @@ class functionHelperClass():
 			color=''
 			cursor=''
 			size=''
-			scale=''
-			xscale=''
+			scale='100'
+			xscale='100'
 			for line in content:
 				fline=line.strip()
 				if fline.startswith("\"bkg\":"):
@@ -559,14 +561,13 @@ class functionHelperClass():
 				f=round(1-((scaleFactor-1)/3),2)
 				output=monitor.split("=")[0]
 				cmd=["xrandr","--output",output,"--scale","{}x{}".format(f,f)]
-				print("Exe {}".format(cmd))
 				try:
 					subprocess.run(cmd)
 				except Exception as e:
 					print(" ".join(cmd))
 					print(e)
 		if plasma==True:
-			print("Setting scale factor...")
+			self._debug("Setting plasma scale factor...")
 			if monitors:
 				screenScaleFactors="{};".format(";".join(monitors))
 				self.setKdeConfigSetting("KScreen","ScreenScaleFactors",screenScaleFactors,"kdeglobals")

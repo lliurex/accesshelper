@@ -112,7 +112,6 @@ class access(confStack):
 		self.tblGrid.setSelectionBehavior(self.tblGrid.SelectRows)
 		self.tblGrid.setSelectionMode(self.tblGrid.SingleSelection)
 		self.box.addWidget(self.tblGrid)
-		self.refresh=True
 	#def _load_screen
 
 	def _testHotkey(self,hotkey):

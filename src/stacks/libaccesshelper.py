@@ -354,12 +354,17 @@ class functionHelperClass():
 					self._debug("Cp {} {}".format(sourceFile,usrFolder))
 					#Modify profile value.
 					newContent=[]
+					profileLine="    \"profile\":\"{}\",\n".format(os.path.basename(profileTar))
+					swProfile=False
 					with open(sourceFile,"r") as f:
 						fcontents=f.readlines()
 						for fline in fcontents:
 							if "profile" in fline:
-								fline="    \"profile\":\"{}\",\n".format(os.path.basename(profileTar))
+								swProfile=True
+								fline=profileLine
 							newContent.append(fline)
+					if swProfile==False:
+						newContent.append(profileLine)
 					with open(sourceFile,"w") as f:
 						f.writelines(newContent)
 					shutil.copy(sourceFile,usrFolder)

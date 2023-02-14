@@ -413,7 +413,8 @@ class functionHelperClass():
 		usrConfig=os.path.join(os.environ.get('HOME'),".config/accesshelper/accesshelper.json")
 		if os.path.isfile(usrConfig):
 			with open(usrConfig,'r') as f:
-				content=f.readlines()
+				content=f.read()
+			jcontent=json.loads(content)
 			bkg=''
 			img=''
 			color=''
@@ -421,22 +422,25 @@ class functionHelperClass():
 			size=''
 			scale='100'
 			xscale='100'
-			for line in content:
-				fline=line.strip()
-				if fline.startswith("\"bkg\":"):
-					bkg=fline.split(" ")[-1].replace("\"","").replace(",","").replace("\n","")
-				elif fline.startswith('\"bkgColor\":'):
-					color=fline.split(" ")[-1].replace("\"","").replace(",","").replace("\n","")
-				elif fline.startswith('\"background\":'):
-					img=fline.split(" ")[-1].replace("\"","").replace(",","").replace("\n","")
-				elif fline.startswith('\"cursor\":'):
-					cursor=fline.split(" ")[-1].replace("\"","").replace(",","").replace("\n","")
-				elif fline.startswith('\"cursorSize\":'):
-					size=fline.split(" ")[-1].replace("\"","").replace(",","").replace("\n","")
-				elif fline.startswith('\"scale\":'):
-					scale=fline.split(" ")[-1].replace("\"","").replace(",","").replace("\n","")
-				elif fline.startswith('\"xscale\":'):
-					xscale=fline.split(" ")[-1].replace("\"","").replace(",","").replace("\n","")
+			alpha=[]
+			for key,data in jcontent.items():
+				fline=""
+				if key=="bkg":
+					bkg=data
+				elif key=="bkgColor":
+					color=data
+				elif key=="background":
+					img=data
+				elif key=="cursor":
+					cursor=data
+				elif key=="cursorSize":
+					size=data
+				elif key=="scale":
+					scale=data
+				elif key=="xscale":
+					xscale=data
+				elif key=="alpha" and isinstance(data,list) and len(data)==4:
+					alpha=QColor(data[0],data[1],data[2],data[3])
 			if bkg=="color":
 				if color:
 					qcolor=QColor(color)
@@ -448,11 +452,13 @@ class functionHelperClass():
 				self._runSetCursorApp(cursor,size)
 			if scale:
 				self.setScaleFactor(float(scale)/100)
+			self.removeAutostartDesktop("accesshelper_Xscale.desktop")
 			if xscale:
-				if xscale=="100":
-					self.removeAutostartDesktop("accesshelper_Xscale.desktop")
-				else:
+				if xscale!="100":
 					self.setXscale(float(xscale/100))
+			self.removeRGBFilter()
+			if isinstance(alpha,QColor):
+				self.setRGBFilter(alpha)
 	#def _setNewConfig					
 
 	def _loadPlasmaConfigFromFolder(self,folder):
@@ -543,10 +549,8 @@ class functionHelperClass():
 	#def setBackgroundImg
 
 	def _runSetCursorApp(self,theme,size):
-		if os.fork()!=0:
-			return
 		cmd=["/usr/share/accesshelper/helper/setcursortheme","-r","1",theme,size]
-		subprocess.run(cmd,stdout=subprocess.PIPE)
+		subprocess.Popen(cmd,stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 	#def _runSetCursorApp
 
 	def setScaleFactor(self,scaleFactor,plasma=True,xrand=False):
@@ -617,6 +621,53 @@ class functionHelperClass():
 				os.chmod(wrkFile,0o755)
 	#def generateAutostartDesktop
 
+	def removeRGBFilter(self):
+		for monitor in self._getMonitors():
+			xrand=["xrandr","--output",monitor,"--gamma","1:1:1","--brightness","1"]
+		xgamma=["xgamma","-screen","0","-rgamma","1","-ggamma","1","-bgamma","1"]
+		cmd=subprocess.run(xgamma,capture_output=True,encoding="utf8")
+		values=[("ggamma","1.00"),("bgamma","1.00"),("rgamma","1.00")]
+		plasmaConfig={'kgammarc':{'Screen 0':values}}
+		self.setPlasmaConfig(plasmaConfig)
+		self.removeAutostartDesktop("accesshelper_rgbFilter.desktop")
+	#def resetRGBFilter
+
+	def setRGBFilter(self,alpha,onlyset=False):
+		def getRgbCompatValue(color):
+			(top,color)=color
+			c=round((color*top)/255,2)
+			return c
+		def adjustCompatValue(color):
+			(multiplier,c,minValue)=color
+			while (c*100)%multiplier!=0 and c!=0:
+				c=round(c+0.01,2)
+			if c<=minValue:
+				c=minValue
+			return c
+		#xgamma uses 0.1-10 scale. Values>4 are too bright and values<0.5 too dark
+		maxXgamma=3.5
+		minXgamma=0.5
+		#kgamma uses 0.40-3.5 scale. 
+		maxKgamma=3.5
+		minKgamma=0.4
+		(xred,xblue,xgreen)=map(getRgbCompatValue,[(maxXgamma,alpha.red()),(maxXgamma,alpha.blue()),(maxXgamma,alpha.green())])
+		(red,blue,green)=map(getRgbCompatValue,[(maxKgamma,alpha.red()),(maxKgamma,alpha.blue()),(maxKgamma,alpha.green())])
+		if red+blue+green>(maxKgamma*(2-(maxKgamma*0.10))): #maxKGamma*2=at least two channel very high, plus a 10% margin
+			red-=1
+			green-=1
+			blue-=1
+		multiplier=1
+		(xred,xblue,xgreen)=map(adjustCompatValue,[[multiplier,minXgamma,xred],[multiplier,minXgamma,xblue],[multiplier,minXgamma,xgreen]])
+		multiplier=5
+		(red,blue,green)=map(adjustCompatValue,[[multiplier,minKgamma,red],[multiplier,minKgamma,blue],[multiplier,minKgamma,green]])
+		brightness=1
+		xgamma=["xgamma","-screen","0","-rgamma","{0:.2f}".format(xred),"-ggamma","{0:.2f}".format(xgreen),"-bgamma","{0:.2f}".format(xblue)]
+		cmd=subprocess.run(xgamma,capture_output=True,encoding="utf8")
+		if onlyset==False:
+			self.generateAutostartDesktop(xgamma,"accesshelper_rgbFilter.desktop")
+		return(red,green,blue)
+	#def setRGBFilter
+
 class accesshelper():
 	def __init__(self):
 		self.dbg=False
@@ -662,14 +713,7 @@ class accesshelper():
 	#def setOnboardConfig
 
 	def removeRGBFilter(self):
-		for monitor in self.getMonitors():
-			xrand=["xrandr","--output",monitor,"--gamma","1:1:1","--brightness","1"]
-		xgamma=["xgamma","-screen","0","-rgamma","1","-ggamma","1","-bgamma","1"]
-		cmd=subprocess.run(xgamma,capture_output=True,encoding="utf8")
-		values=[("ggamma","1.00"),("bgamma","1.00"),("rgamma","1.00")]
-		plasmaConfig={'kgammarc':{'Screen 0':values}}
-		self.setPlasmaConfig(plasmaConfig)
-		self.removeAutostartDesktop("accesshelper_rgbFilter.desktop")
+		self.functionHelper.removeRGBFilter()
 	#def resetRGBFilter
 
 	def removeXscale(self):
@@ -680,40 +724,8 @@ class accesshelper():
 		self.functionHelper.removeAutostartDesktop(desktop,folder)
 	#def _removeAutostartDesktop
 
-	def setRGBFilter(self,alpha,onlyset=False):
-		def getRgbCompatValue(color):
-			(top,color)=color
-			c=round((color*top)/255,2)
-			return c
-		def adjustCompatValue(color):
-			(multiplier,c,minValue)=color
-			while (c*100)%multiplier!=0 and c!=0:
-				c=round(c+0.01,2)
-			if c<=minValue:
-				c=minValue
-			return c
-		#xgamma uses 0.1-10 scale. Values>4 are too bright and values<0.5 too dark
-		maxXgamma=3.5
-		minXgamma=0.5
-		#kgamma uses 0.40-3.5 scale. 
-		maxKgamma=3.5
-		minKgamma=0.4
-		(xred,xblue,xgreen)=map(getRgbCompatValue,[(maxXgamma,alpha.red()),(maxXgamma,alpha.blue()),(maxXgamma,alpha.green())])
-		(red,blue,green)=map(getRgbCompatValue,[(maxKgamma,alpha.red()),(maxKgamma,alpha.blue()),(maxKgamma,alpha.green())])
-		if red+blue+green>(maxKgamma*(2-(maxKgamma*0.10))): #maxKGamma*2=at least two channel very high, plus a 10% margin
-			red-=1
-			green-=1
-			blue-=1
-		multiplier=1
-		(xred,xblue,xgreen)=map(adjustCompatValue,[[multiplier,minXgamma,xred],[multiplier,minXgamma,xblue],[multiplier,minXgamma,xgreen]])
-		multiplier=5
-		(red,blue,green)=map(adjustCompatValue,[[multiplier,minKgamma,red],[multiplier,minKgamma,blue],[multiplier,minKgamma,green]])
-		brightness=1
-		xgamma=["xgamma","-screen","0","-rgamma","{0:.2f}".format(xred),"-ggamma","{0:.2f}".format(xgreen),"-bgamma","{0:.2f}".format(xblue)]
-		cmd=subprocess.run(xgamma,capture_output=True,encoding="utf8")
-		if onlyset==False:
-			self.generateAutostartDesktop(xgamma,"accesshelper_rgbFilter.desktop")
-		return(red,green,blue)
+	def setRGBFilter(self,*args,**kwargs):
+		return(self.functionHelper.setRGBFilter(*args,**kwargs))
 	#def setRGBFilter
 
 	def setXscale(self,xscale):

@@ -72,7 +72,7 @@ def listProfiles():
 	sys.exit(0)
 #def listProfiles
 
-def setProfile(profilePath):
+def setProfile(profilePath,applyChanges=False):
 	sw=False
 	wrkFile=""
 	for wrkDir in wrkDirList:
@@ -84,7 +84,8 @@ def setProfile(profilePath):
 	if wrkFile:
 		print("{0} {1}".format(MSG_LOADPROFILE,wrkFile))
 		sw=accesshelper.restoreSnapshot(wrkFile)
-		#accesshelper.applyChanges()
+		if applyChanges==True:
+			accesshelper.applyChanges()
 	else:
 		print("{0} {1}".format(ERR_LOADPROFILE,profilePath))
 	return(sw)
@@ -232,18 +233,22 @@ if len(sys.argv)==1:
 	app.exec_()
 else:
 	if sys.argv[1].lower()=="--set":
+		applyChanges=False
 		if len(sys.argv)<3:
 			print("{}".format(ERR_SETPROFILE))
 			listProfiles()
 		if len(sys.argv)==4:
+			applyChanges=False
 			if sys.argv[3]=='init':
 				if _isAutostartEnabled()==True:
 					print("{}".format(MSG_AUTOSTARTDISABLED))
 					sys.exit(1)
+			elif sys.argv[3]=="apply":
+				applyChanges=True
 		tpl=sys.argv[2]
 		if tpl.endswith(".tar")==False:
 			tpl="{}.tar".format(tpl)
-		if setProfile(tpl)==False:
+		if setProfile(tpl,applyChanges)==False:
 			showHelp()
 		else:
 			print("{}".format(MSG_PROFILELOADED))
@@ -251,4 +256,6 @@ else:
 		listProfiles()
 	else:
 		showHelp()
+	QApplication.quit()
+	sys.exit(0)
 

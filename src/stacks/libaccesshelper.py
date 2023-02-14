@@ -353,6 +353,7 @@ class functionHelperClass():
 					sourceFile=os.path.join(confPath,confFile)
 					self._debug("Cp {} {}".format(sourceFile,usrFolder))
 					#Modify profile value.
+					jcontents={}
 					with open(sourceFile,"r") as f:
 						fcontents=f.read()
 					try:

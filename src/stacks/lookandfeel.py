@@ -300,11 +300,12 @@ class lookandfeel(confStack):
 
 	def _setTheme(self,theme):
 		#self.accesshelper.setTheme(theme)
+		self._debug("Setting theme to {}".format(theme))
 		self._setThemeSchemeLauncher(theme=theme)
 	#def _setTheme
 
 	def _setScheme(self,scheme):
-		print("Setting scheme to {}".format(scheme))
+		self._debug("Setting scheme to {}".format(scheme))
 #		with open("/tmp/.set_scheme","w") as f:
 #			f.write(scheme)
 		self._setThemeSchemeLauncher(scheme=scheme)
@@ -323,9 +324,15 @@ class lookandfeel(confStack):
 			destpath=os.path.join(autostart,desktop)
 			content=[]
 			newcontent=[]
-			if os.path.isfile(source):
-				with open(source,'r') as f:
+			if os.path.isfile(destpath):
+				with open(destpath,'r') as f:
 					content=f.readlines()
+				if "".join(content).strip()=="":
+					content=[]
+			if content==[]:
+				if os.path.isfile(source):
+					with open(source,'r') as f:
+						content=f.readlines()
 			for line in content:
 				newline=line
 				if line.startswith("Exec="):

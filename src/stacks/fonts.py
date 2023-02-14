@@ -82,7 +82,7 @@ class fonts(confStack):
 		self.widgets.update({"font":dlgFont})
 		self.config=self.getConfig()
 		config=self.config.get(self.level,{})
-		self.updateScreen()
+		#self.updateScreen()
 	#def _load_screen
 
 	def updateScreen(self):

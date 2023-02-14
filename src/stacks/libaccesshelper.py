@@ -359,9 +359,9 @@ class functionHelperClass():
 					try:
 						jcontents=json.loads(fcontents)
 					except:
-						jcontents["profile"]=="{}".format(os.path.basename(profileTar))
-					if jcontents["profile"]!="{}".format(os.path.basename(profileTar)):
-						jcontents["profile"]="{}".format(os.path.basename(profileTar))
+						jcontents.update({"profile":"{}".format(os.path.basename(profileTar))})
+					if jcontents.get("profile","")!="{}".format(os.path.basename(profileTar)):
+						jcontents.update({"profile":"{}".format(os.path.basename(profileTar))})
 						with open(sourceFile,"w") as f:
 							json.dump(jcontents,f,indent=6)
 					shutil.copy(sourceFile,usrFolder)

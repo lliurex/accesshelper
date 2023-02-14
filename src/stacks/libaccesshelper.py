@@ -414,9 +414,18 @@ class functionHelperClass():
 	def _setNewConfig(self):
 		usrConfig=os.path.join(os.environ.get('HOME'),".config/accesshelper/accesshelper.json")
 		if os.path.isfile(usrConfig):
+			jcontent={}
 			with open(usrConfig,'r') as f:
 				content=f.read()
-			jcontent=json.loads(content)
+			try:
+				jcontent=json.loads(content)
+			except:
+				fcontent=content.split("}")
+				fcontent="}".join(fcontent[:-1])+"}"
+				try:
+					jcontent=json.loads(fcontent)
+				except:
+					print(fcontent)
 			bkg=''
 			img=''
 			color=''
@@ -457,7 +466,7 @@ class functionHelperClass():
 			self.removeAutostartDesktop("accesshelper_Xscale.desktop")
 			if xscale:
 				if xscale!="100":
-					self.setXscale(float(xscale/100))
+					self.setXscale(float(xscale)/100)
 			self.removeRGBFilter()
 			if isinstance(alpha,QColor):
 				self.setRGBFilter(alpha)
@@ -670,6 +679,21 @@ class functionHelperClass():
 		return(red,green,blue)
 	#def setRGBFilter
 
+	def setXscale(self,xscale):
+		cmd=["xrandr","--listmonitors"]
+		output=subprocess.run(cmd,capture_output=True,text=True)
+		monitors=[]
+		for line in output.stdout.split("\n"):
+			if len(line.split(" "))>=4:
+				monitors.append("{0}".format(line.split(" ")[-1]))
+		cmd=[]
+		for output in monitors:
+			f=round(1-(((int(xscale)/100)-1)/3),2)
+			cmd.append("sleep 5")
+			cmd.append("xrandr --output {0} --scale {1}x{1}".format(output,f))
+		self.generateAutostartDesktop(" && ".join(cmd),"accesshelper_Xscale.desktop")
+	#def setXscale(self,xscale):
+
 class accesshelper():
 	def __init__(self):
 		self.dbg=False
@@ -730,19 +754,8 @@ class accesshelper():
 		return(self.functionHelper.setRGBFilter(*args,**kwargs))
 	#def setRGBFilter
 
-	def setXscale(self,xscale):
-		cmd=["xrandr","--listmonitors"]
-		output=subprocess.run(cmd,capture_output=True,text=True)
-		monitors=[]
-		for line in output.stdout.split("\n"):
-			if len(line.split(" "))>=4:
-				monitors.append("{0}".format(line.split(" ")[-1]))
-		cmd=[]
-		for output in monitors:
-			f=round(1-(((int(xscale)/100)-1)/3),2)
-			cmd.append("sleep 5")
-			cmd.append("xrandr --output {0} --scale {1}x{1}".format(output,f))
-		self.generateAutostartDesktop(" && ".join(cmd),"accesshelper_Xscale.desktop")
+	def setXscale(self,*args):
+		self.functionHelper.setXscale(*args)
 	#def setXscale(self,xscale):
 
 	def generateAutostartDesktop(self,cmd,fname,folder="autostart"):

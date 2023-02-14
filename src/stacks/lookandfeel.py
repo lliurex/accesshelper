@@ -323,10 +323,7 @@ class lookandfeel(confStack):
 			destpath=os.path.join(autostart,desktop)
 			content=[]
 			newcontent=[]
-			if os.path.isfile(destpath):
-				with open(destpath,'r') as f:
-					content=f.readlines()
-			elif os.path.isfile(source):
+			if os.path.isfile(source):
 				with open(source,'r') as f:
 					content=f.readlines()
 			for line in content:

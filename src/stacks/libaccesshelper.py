@@ -353,20 +353,16 @@ class functionHelperClass():
 					sourceFile=os.path.join(confPath,confFile)
 					self._debug("Cp {} {}".format(sourceFile,usrFolder))
 					#Modify profile value.
-					newContent=[]
-					profileLine="    \"profile\":\"{}\",\n".format(os.path.basename(profileTar))
-					swProfile=False
 					with open(sourceFile,"r") as f:
-						fcontents=f.readlines()
-						for fline in fcontents:
-							if "profile" in fline:
-								swProfile=True
-								fline=profileLine
-							newContent.append(fline)
-					if swProfile==False:
-						newContent.append(profileLine)
-					with open(sourceFile,"w") as f:
-						f.writelines(newContent)
+						fcontents=f.read()
+					try:
+						jcontents=json.loads(fcontents)
+					except:
+						jcontents["profile"]=="{}".format(os.path.basename(profileTar))
+					if jcontents["profile"]!="{}".format(os.path.basename(profileTar)):
+						jcontents["profile"]="{}".format(os.path.basename(profileTar))
+						with open(sourceFile,"w") as f:
+							json.dump(jcontents,f,indent=6)
 					shutil.copy(sourceFile,usrFolder)
 				data=self.getPlasmaConfig()
 			desktopPath=os.path.join(tmpFolder,".config/autostart")

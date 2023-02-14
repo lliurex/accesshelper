@@ -417,8 +417,8 @@ class functionHelperClass():
 			color=''
 			cursor=''
 			size=''
-			scale=''
-			xscale=''
+			scale='100'
+			xscale='100'
 			for line in content:
 				fline=line.strip()
 				if fline.startswith("\"bkg\":"):

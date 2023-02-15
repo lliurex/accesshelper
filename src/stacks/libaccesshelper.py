@@ -477,7 +477,7 @@ class functionHelperClass():
 			self.removeAutostartDesktop("accesshelper_Xscale.desktop")
 			if xscale:
 				if xscale!="100":
-					self.setXscale(float(xscale)/100)
+					self.setXscale(xscale)
 			self.removeRGBFilter()
 			if isinstance(alpha,QColor):
 				self.setRGBFilter(alpha)

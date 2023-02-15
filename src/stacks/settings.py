@@ -111,7 +111,6 @@ class settings(confStack):
 #		cmb_template.setCurrentText("default")
 		self.setLayout(box)
 		_change_osh()
-		return(self)
 	#def _load_screen
 
 	def _testHotkey(self,hotkey):
@@ -156,6 +155,7 @@ class settings(confStack):
 	#def _getAutostartFile
 
 	def updateScreen(self,level=None):
+		self.refresh=True
 		config=self.getConfig(level)
 		level=self.level
 		profile=''

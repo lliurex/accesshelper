@@ -183,11 +183,9 @@ class access(confStack):
 		self.tblGrid.clear()
 		self.tblGrid.setRowCount(0)
 		self.chkbtn={}
-		self.force=True
+		self.refresh=True
 		config=self.getConfig()
 		self.startup=config.get(self.level,{}).get("startup","false")
-		if self.startup=="true":
-			self.showMsg(i18n.get("AUTOSTARTENABLED"))
 		for wrkFile in self.wrkFiles:
 			plasmaConfig=self.accesshelper.getPlasmaConfig(wrkFile)
 			self.plasmaConfig.update(plasmaConfig)

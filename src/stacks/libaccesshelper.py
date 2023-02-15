@@ -1077,8 +1077,10 @@ class accesshelper():
 			sw=False
 		return sw
 	#def setGrubBeep
+
 	def setScaleFactor(self,*args,**kwargs):
 		return(self.functionHelper.setScaleFactor(*args,**kwargs))
+	#def setScaleFactor
 
 	def applyChanges(self):
 		cmd=["qdbus","org.kde.KWin","/KWin","org.kde.KWin.reconfigure"]

@@ -339,6 +339,7 @@ class functionHelperClass():
 	def restoreSnapshot(self,profileTar):
 		sw=self._checkSnapshot(profileTar)
 		if sw:
+			self.removeAutostartDesktop("accesshelper_rgbFilter.desktop")
 			tarProfile=tarfile.open(profileTar,'r')
 			tmpFolder=tempfile.mkdtemp()
 			tarProfile.extractall(path=tmpFolder)
@@ -360,6 +361,7 @@ class functionHelperClass():
 						jcontents=json.loads(fcontents)
 					except:
 						jcontents.update({"profile":"{}".format(os.path.basename(profileTar))})
+					jcontents.update({"startup":"false"})
 					if jcontents.get("profile","")!="{}".format(os.path.basename(profileTar)):
 						jcontents.update({"profile":"{}".format(os.path.basename(profileTar))})
 						with open(sourceFile,"w") as f:
@@ -369,8 +371,17 @@ class functionHelperClass():
 			desktopPath=os.path.join(tmpFolder,".config/autostart")
 			if os.path.isdir(desktopPath)==True:
 				autostartFolder=os.path.join(os.environ.get('HOME'),".config","autostart")
+				autoshutdownFolder=os.path.join(os.environ.get('HOME'),".config","plasma-workspace/shutdown")
 				if os.path.isdir(autostartFolder)==False:
 					os.makedirs(autostartFolder)
+				if os.path.isdir(autoshutdownFolder)==False:
+					os.makedirs(autoshutdownFolder)
+				for f in os.listdir(autostartFolder):
+					if f.startswith("accesshelper_"):
+						os.remove(os.path.join(autostartFolder,f))
+				for f in os.listdir(autoshutdownFolder):
+					if f.startswith("accesshelper_"):
+						os.remove(os.path.join(autoshutdownFolder,f))
 				for f in os.listdir(desktopPath):
 					desktopFile=os.path.join(desktopPath,f)
 					#Modify profile value.
@@ -460,7 +471,7 @@ class functionHelperClass():
 				if img:
 					self.setBackgroundImg(img)
 			if cursor and size:
-				self._runSetCursorApp(cursor,size)
+				self.setCursor(cursor,size)
 			if scale:
 				self.setScaleFactor(float(scale)/100)
 			self.removeAutostartDesktop("accesshelper_Xscale.desktop")
@@ -694,6 +705,73 @@ class functionHelperClass():
 		self.generateAutostartDesktop(" && ".join(cmd),"accesshelper_Xscale.desktop")
 	#def setXscale(self,xscale):
 
+	def setCursorSize(self,size):
+		self._debug("Sizing to: {}".format(size))
+		self.setKdeConfigSetting("Mouse","cursorSize","{}".format(size),"kcminputrc")
+		xdefault=os.path.join(os.environ.get("HOME"),".Xdefaults")
+		xcursor="Xcursor.size: {}\n".format(size)
+		fcontents=[]
+		if os.path.isfile(xdefault):
+			with open(xdefault,"r") as f:
+				fcontents=f.readlines()
+		newContent=[]
+		for line in fcontents:
+			if line.startswith("Xcursor.size:")==False:
+				line=line.strip()
+				newContent.append("{}\n".format(line))
+		newContent.append(xcursor)
+		with open(xdefault,"w") as f:
+			f.writelines(newContent)
+		cmd=["xrdb","-merge",xdefault]
+		subprocess.run(cmd)
+	#def setCursorSize
+
+	def setCursor(self,theme="default",size=""):
+		if theme=="default":
+			theme=self.getCursorTheme()
+		err=0
+		if ("[") in theme:
+			theme=theme.split("[")[1].replace("[","").replace("]","")
+		try:
+			subprocess.run(["plasma-apply-cursortheme",theme],stdout=subprocess.PIPE)
+		except Exception as e:
+			print(e)
+			err=1
+		os.environ["XCURSOR_THEME"]=theme
+		print("Set theme: {}".format(theme))
+		if size!="":
+			if (isinstance(size,str))==False:
+				size=str(size)
+			self.setCursorSize(size)
+			try:
+				p=Process(target=self._runSetCursorApp,args=(theme,size,))
+				p.start()
+				p.join()
+			except Exception as e:
+				print(e)
+				err=2
+		try:
+			cmd=["qdbus","org.kde.klauncher5","/KLauncher","org.kde.KLauncher.setLaunchEnv","XCURSOR_THEME",theme]
+			subprocess.run(cmd,stdout=subprocess.PIPE)
+			cmd=["qdbus","org.kde.klauncher5","/KLauncher","org.kde.KLauncher.setLaunchEnv","XCURSOR_SIZE",size]
+			subprocess.run(cmd,stdout=subprocess.PIPE)
+		except Exception as e:
+			print(e)
+			err=3
+		return(err)
+	#def setCursor
+
+	def getCursorTheme(self):
+		themes=self.getCursors()
+		theme="Adwaita"
+		for available in themes:
+			if ("(") in available:
+				theme=available.split("[")[1].replace("[","").replace("]","")
+				theme=theme.split(" ")[0]
+				break
+		return(theme)
+	#def getCursorTheme
+
 class accesshelper():
 	def __init__(self):
 		self.dbg=False
@@ -810,64 +888,16 @@ class accesshelper():
 		return (availableThemes)
 	#def getThemes
 
-	def setCursor(self,theme="default",size=""):
-		if theme=="default":
-			theme=self._getCursorTheme()
-		err=0
-		if ("[") in theme:
-			theme=theme.split("[")[1].replace("[","").replace("]","")
-		try:
-			subprocess.run(["plasma-apply-cursortheme",theme],stdout=subprocess.PIPE)
-		except Exception as e:
-			print(e)
-			err=1
-		os.environ["XCURSOR_THEME"]=theme
-		print("Set theme: {}".format(theme))
-		if size!="":
-			if (isinstance(size,str))==False:
-				size=str(size)
-			self.setCursorSize(size)
-			try:
-				p=Process(target=self._runSetCursorApp,args=(theme,size,))
-				p.start()
-				p.join()
-			except Exception as e:
-				print(e)
-				err=2
-		try:
-			cmd=["qdbus","org.kde.klauncher5","/KLauncher","org.kde.KLauncher.setLaunchEnv","XCURSOR_THEME",theme]
-			subprocess.run(cmd,stdout=subprocess.PIPE)
-			cmd=["qdbus","org.kde.klauncher5","/KLauncher","org.kde.KLauncher.setLaunchEnv","XCURSOR_SIZE",size]
-			subprocess.run(cmd,stdout=subprocess.PIPE)
-		except Exception as e:
-			print(e)
-			err=3
-		return(err)
+	def setCursor(self,*args):
+		self.functionHelper.setCursor(*args)
 	#def setCursor
 
 	def _runSetCursorApp(self,*args):
 		self.functionHelper._runSetCursorApp(*args)
 	#def _runSetCursorApp
 
-	def setCursorSize(self,size):
-		self._debug("Sizing to: {}".format(size))
-		self.setKdeConfigSetting("Mouse","cursorSize","{}".format(size),"kcminputrc")
-		xdefault=os.path.join(os.environ.get("HOME"),".Xdefaults")
-		xcursor="Xcursor.size: {}\n".format(size)
-		fcontents=[]
-		if os.path.isfile(xdefault):
-			with open(xdefault,"r") as f:
-				fcontents=f.readlines()
-		newContent=[]
-		for line in fcontents:
-			if line.startswith("Xcursor.size:")==False:
-				line=line.strip()
-				newContent.append("{}\n".format(line))
-		newContent.append(xcursor)
-		with open(xdefault,"w") as f:
-			f.writelines(newContent)
-		cmd=["xrdb","-merge",xdefault]
-		subprocess.run(cmd)
+	def setCursorSize(self,*args):
+		self.functionHelper.setCursorSize(*args)
 	#def setCursorSize
 
 	def setScheme(self,scheme):
@@ -948,15 +978,7 @@ class accesshelper():
 	#def importExportSnapshot
 	
 	def _getCursorTheme(self):
-		themes=self.getCursors()
-		theme="Adwaita"
-		for available in themes:
-			if ("(") in available:
-				theme=available.split("[")[1].replace("[","").replace("]","")
-				theme=theme.split(" ")[0]
-				break
-		print(theme)
-		return(theme)
+		return(self.functionHelper.getCursorTheme())
 	#def _getCursorTheme
 
 	def getPointerImage(self,*args,theme="default"):

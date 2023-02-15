@@ -336,38 +336,16 @@ class functionHelperClass():
 		self._debug("{0} {1}".format(profileTar,sw))
 		return(sw)
 
-	def restoreSnapshot(self,profileTar):
+	def restoreSnapshot(self,profileTar,merge=False):
 		sw=self._checkSnapshot(profileTar)
 		if sw:
-			self.removeAutostartDesktop("accesshelper_rgbFilter.desktop")
 			tarProfile=tarfile.open(profileTar,'r')
 			tmpFolder=tempfile.mkdtemp()
 			tarProfile.extractall(path=tmpFolder)
 			basePath=os.path.join(tmpFolder,".config")
 			self._loadPlasmaConfigFromFolder(basePath)
 			confPath=os.path.join(tmpFolder,".config/accesshelper")
-			if os.path.isdir(confPath)==True:
-				usrFolder=os.path.join(os.environ.get('HOME'),".config/accesshelper")
-				if os.path.isdir(usrFolder)==False:
-					os.makedirs(usrFolder)
-				for confFile in os.listdir(confPath):
-					sourceFile=os.path.join(confPath,confFile)
-					self._debug("Cp {} {}".format(sourceFile,usrFolder))
-					#Modify profile value.
-					jcontents={}
-					with open(sourceFile,"r") as f:
-						fcontents=f.read()
-					try:
-						jcontents=json.loads(fcontents)
-					except:
-						jcontents.update({"profile":"{}".format(os.path.basename(profileTar))})
-					jcontents.update({"startup":"false"})
-					if jcontents.get("profile","")!="{}".format(os.path.basename(profileTar)):
-						jcontents.update({"profile":"{}".format(os.path.basename(profileTar))})
-						with open(sourceFile,"w") as f:
-							json.dump(jcontents,f,indent=6)
-					shutil.copy(sourceFile,usrFolder)
-				data=self.getPlasmaConfig()
+			jcontents={}
 			desktopPath=os.path.join(tmpFolder,".config/autostart")
 			if os.path.isdir(desktopPath)==True:
 				autostartFolder=os.path.join(os.environ.get('HOME'),".config","autostart")
@@ -376,26 +354,40 @@ class functionHelperClass():
 					os.makedirs(autostartFolder)
 				if os.path.isdir(autoshutdownFolder)==False:
 					os.makedirs(autoshutdownFolder)
-				for f in os.listdir(autostartFolder):
-					if f.startswith("accesshelper_"):
-						os.remove(os.path.join(autostartFolder,f))
-				for f in os.listdir(autoshutdownFolder):
-					if f.startswith("accesshelper_"):
-						os.remove(os.path.join(autoshutdownFolder,f))
+				#Clean operations
+				self.cleanHome(autostartFolder,autoshutdownFolder)
 				for f in os.listdir(desktopPath):
+					if "profiler" in f:
+						continue
 					desktopFile=os.path.join(desktopPath,f)
-					#Modify profile value.
-					newContent=[]
-					with open(desktopFile,"r") as f:
-						fcontents=f.readlines()
-						for fline in fcontents:
-							if "--set" in fline and fline.strip().startswith("Exec="):
-								fline="Exec=/usr/share/accesshelper/acceshelp.py --set {}\n".format(os.path.basename(profileTar))
-							newContent.append(fline)
-					with open(desktopFile,"w") as f:
-						f.writelines(newContent)
-					self._debug("Cp {} {}".format(desktopFile,autostartFolder))
 					shutil.copy(desktopFile,autostartFolder)
+			if os.path.isdir(confPath)==True:
+				usrFolder=os.path.join(os.environ.get('HOME'),".config/accesshelper")
+				if os.path.isdir(usrFolder)==False:
+					os.makedirs(usrFolder)
+				for confFile in os.listdir(confPath):
+					sourceFile=os.path.join(confPath,confFile)
+					self._debug("Cp {} {}".format(sourceFile,usrFolder))
+					#Modify profile value.
+					with open(sourceFile,"r") as f:
+						fcontents=f.read()
+					try:
+						jcontents=json.loads(fcontents)
+					except:
+						jcontents.update({"profile":"{}".format(os.path.basename(profileTar))})
+					(profile,startup)=self._getOldProfile(profileTar,usrFolder)
+					jcontents.update({"startup":startup})
+					jcontents.update({"profile":profile})
+					if startup=="true":
+						cmd="/usr/share/accesshelper/accesshelp.py --set {}".format(profile)
+						self.generateAutostartDesktop(cmd,"accesshelper_profiler.desktop","plasma-workspace/shutdown")
+						#Apply changes on startup
+						cmd="{} apply".format(cmd)
+						self.generateAutostartDesktop(cmd,"accesshelper_profiler.desktop")
+					with open(sourceFile,"w") as f:
+						json.dump(jcontents,f,indent=4)
+					shutil.copy(sourceFile,usrFolder)
+				data=self.getPlasmaConfig()
 			mozillaPath=os.path.join(tmpFolder,".mozilla")
 			if os.path.isdir(mozillaPath)==True:
 				mozillaFolder=os.path.join(os.environ.get('HOME'),".mozilla/firefox")
@@ -421,6 +413,30 @@ class functionHelperClass():
 			self._setNewConfig()
 		return(sw)
 	#def restore_snapshot
+
+	def cleanHome(self,autostartFolder,autoshutdownFolder):
+		self.removeAutostartDesktop("accesshelper_rgbFilter.desktop")
+		for f in os.listdir(autostartFolder):
+			if f.startswith("accesshelper_"):
+				os.remove(os.path.join(autostartFolder,f))
+		for f in os.listdir(autoshutdownFolder):
+			if f.startswith("accesshelper_"):
+				os.remove(os.path.join(autoshutdownFolder,f))
+	#def cleanHome
+
+	def _getOldProfile(self,profileTar,usrFolder):
+		profile=profileTar
+		startup="false"
+		oldconf=os.path.join(usrFolder,"accesshelper.json")
+		if os.path.isfile(oldconf)==True:
+			with open(oldconf,"r") as f:
+				foldcontents=f.read()
+			joldcontents=json.loads(foldcontents)
+			if joldcontents.get("startup","")=="true":
+				startup="true"
+				profile=joldcontents.get("profile",profileTar)
+		return(profile,startup)
+	#def mergeHome
 
 	def _setNewConfig(self):
 		usrConfig=os.path.join(os.environ.get('HOME'),".config/accesshelper/accesshelper.json")
@@ -813,7 +829,11 @@ class accesshelper():
 			cmd=["cat",wrkFile]
 			cat=subprocess.Popen(cmd,stdout=subprocess.PIPE)
 			cmd=["dconf","load","/org/onboard/"]
-			dconf=subprocess.run(cmd,stdin=cat.stdout)
+			try:
+				dconf=subprocess.run(cmd,stdin=cat.stdout)
+			except:
+				pass
+			cat.communicate()
 	#def setOnboardConfig
 
 	def removeRGBFilter(self):

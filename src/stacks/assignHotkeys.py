@@ -88,7 +88,6 @@ class assignHotkeys(confStack):
 		btn_add.clicked.connect(self._addHotkey)
 		self.box.addWidget(btn_add,1,0,1,1)
 		self._debug("LOAD SCREEN FINISHED")
-		#self.updateScreen()
 	#def _load_screen
 
 	def _addHotkey(self,*args):

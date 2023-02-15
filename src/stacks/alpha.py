@@ -74,6 +74,7 @@ class alpha(confStack):
 	#def _enableDefault
 
 	def updateScreen(self):
+		self.refresh=True
 		self.config=self.getConfig()
 		config=self.config.get(self.level,{})
 		alpha=config.get('alpha',[])
@@ -94,7 +95,6 @@ class alpha(confStack):
 		if self.config==None:
 			self.config=self.getConfig()
 		qalpha=self.widgets.get("alpha").currentColor()
-		print(self.embebbed)
 		(red,green,blue)=self.accesshelper.setRGBFilter(qalpha,self.embebbed)
 		if self.embebbed==False:
 			(red,green,blue)=self.accesshelper.setRGBFilter(qalpha)

@@ -45,6 +45,7 @@ class behavior(confStack):
 		self.wantSettings={"kwinrc":["FocusPolicy"]}
 		self.blockSettings={"kdeglobals":["General"]}
 		self.optionChanged=[]
+		self.startup="false"
 		self.accesshelper=libaccesshelper.accesshelper()
 	#def __init__
 
@@ -92,6 +93,9 @@ class behavior(confStack):
 	#def _load_screen
 
 	def updateScreen(self):
+		self.refresh=True
+		config=self.getConfig()
+		self.startup=config.get(self.level,{}).get("startup","false")
 		for wrkFile in self.wrkFiles:
 			plasmaConfig=self.accesshelper.getPlasmaConfig(wrkFile)
 			self.plasmaConfig.update(plasmaConfig)
@@ -121,6 +125,9 @@ class behavior(confStack):
 		pass
 
 	def writeConfig(self):
+		if self.startup=="true":
+			self.showMsg(i18n.get("AUTOSTARTENABLED"))
+			return
 		plasmaConfig=self.plasmaConfig.copy()
 		for kfile in self.wrkFiles:
 			for section,data in plasmaConfig.get(kfile,{}).items():

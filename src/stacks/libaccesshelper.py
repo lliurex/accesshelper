@@ -1143,6 +1143,10 @@ class accesshelper():
 		return(self.functionHelper.setScaleFactor(*args,**kwargs))
 	#def setScaleFactor
 
+	def setNewConfig(self,*args):
+		self.functionHelper.setNewConfig()
+	#def setNewConfig(self,*args):
+
 	def applyChanges(self):
 		self.functionHelper.setNewConfig()
 		cmd=["qdbus","org.kde.KWin","/KWin","org.kde.KWin.reconfigure"]

@@ -434,7 +434,8 @@ class functionHelperClass():
 			joldcontents=json.loads(foldcontents)
 			if joldcontents.get("startup","")=="true":
 				startup="true"
-				profile=joldcontents.get("autoprofile","profile")
+				profile=joldcontents.get("profile","")
+				profile=joldcontents.get("autoprofile",profile)
 		profile=os.path.basename(profile).replace(".tar","")
 		return(profile,startup)
 	#def mergeHome

@@ -164,8 +164,8 @@ class settings(confStack):
 		self.refresh=True
 		config=self.getConfig(level)
 		level=self.level
-		profile=''
-		profile=config.get(level,{}).get('autoprofile','profile')
+		profile=config.get(level,{}).get('profile',"")
+		profile=config.get(level,{}).get('autoprofile',profile)
 		speed=config.get(level,{}).get('speed','1x')
 		pitch=config.get(level,{}).get('pitch','50')
 		startup=False

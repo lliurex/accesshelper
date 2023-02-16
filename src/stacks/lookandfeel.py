@@ -133,27 +133,17 @@ class lookandfeel(confStack):
 		#Check if lookandfeel has been configured before
 		home=os.environ.get('HOME')
 		thematizer=os.path.join(home,".config/autostart/accesshelper_thematizer.desktop")
-		nextTheme=""
-		nextScheme=""
 		content=[]
 		fixExec=False
 		if os.path.isfile(thematizer):
 			with open(thematizer,'r') as f:
 				content=f.readlines()
+			#Fix bad path in thematizer autostart. Delete it.
 			for line in content:
 				if line.startswith("Exec="):
 					if line.startswith("Exec=/usr/share/accesshelper/thematizer.sh"):
-						fixExec=True
-					array=line.split(" ")
-					if len(array)>1:
-						nextTheme=array[1].replace("\n","")
-					if len(array)>2:
-						nextScheme=array[2].replace("\n","")
+						os.remove(thematizer)
 					break
-			#Fix bad path in thematizer autostart. Delete it.
-			if fixExec and len(content)>0:
-				os.remove(thematizer)
-				nextScheme=""
 		for value in self.plasmaConfig.get("kdeglobals",{}).get("General",[]):
 			if value[0]=="Name":
 				theme=value[1]
@@ -218,14 +208,14 @@ class lookandfeel(confStack):
 								icon=QtGui.QIcon(px)
 								cmb.addItem(icon,themeDesc)
 							elif cmbDesc!="cursorSize":
-								cmb.addItem(themeDesc)
+								arrayThemeDesc=themeDesc.split("(")
+								cmb.addItem(arrayThemeDesc[0].strip())
 
-						if cmbDesc=="theme" and nextTheme!="":
-							cmb.setCurrentText(nextTheme)
-						elif cmbDesc=="scheme" and nextScheme!="":
-							cmb.setCurrentText(nextScheme)
-						elif "(" in theme:
-							cmb.setCurrentText(themeDesc)
+					if cmbDesc=="theme" and config.get("theme","")!="":
+						cmb.setCurrentText(config.get("theme"))
+					if cmbDesc=="scheme" and config.get("scheme","")!="":
+						cmb.setCurrentText(config.get("scheme"))
+
 			if selectedColor!="":
 				cmb=self.widgets.get("background",QComboBox())
 				cmb.setCurrentText(i18n.get(selectedColor.upper(),selectedColor))
@@ -377,10 +367,10 @@ class lookandfeel(confStack):
 				theme=theme.split("(")[0].strip()
 				if cmbDesc=="theme":
 					plasmaTheme=theme
-					self._setTheme(theme)
+		#			self._setTheme(theme)
 				if cmbDesc=="scheme":
 					scheme=theme
-					self._setScheme(theme)
+		#			self._setScheme(theme)
 				if cmbDesc=="cursor":
 					cursorTheme=theme
 				if cmbDesc=="cursorSize":
@@ -422,7 +412,7 @@ class lookandfeel(confStack):
 		self.saveChanges('cursorSize',size)
 		self.saveChanges('scale',scale)
 		self.saveChanges('xscale',xscale)
-		self._setCursor(cursorTheme,size)
+		#self._setCursor(cursorTheme,size)
 		self._writeFileChanges(scheme,plasmaTheme,cursorTheme,size,bkg,scale,xscale)
 	#def writeConfig
 

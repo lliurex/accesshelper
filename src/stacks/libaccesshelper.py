@@ -803,6 +803,22 @@ class functionHelperClass():
 		return(theme)
 	#def getCursorTheme
 
+	def getCursors(self):
+		availableThemes=[]
+		themes=""
+		try:
+			themes=subprocess.run(["plasma-apply-cursortheme","--list-themes"],stdout=subprocess.PIPE)
+		except Exception as e:
+			print(e)
+		if themes:
+			out=themes.stdout.decode()
+			for line in out.split("\n"):
+				theme=line.strip()
+				if theme.startswith("*"):
+					availableThemes.append(theme.replace("*","").strip())
+		return(availableThemes)
+	#def getCursors
+
 class accesshelper():
 	def __init__(self):
 		self.dbg=False
@@ -880,19 +896,7 @@ class accesshelper():
 	#def generateAutostartDesktop
 
 	def getCursors(self):
-		availableThemes=[]
-		themes=""
-		try:
-			themes=subprocess.run(["plasma-apply-cursortheme","--list-themes"],stdout=subprocess.PIPE)
-		except Exception as e:
-			print(e)
-		if themes:
-			out=themes.stdout.decode()
-			for line in out.split("\n"):
-				theme=line.strip()
-				if theme.startswith("*"):
-					availableThemes.append(theme.replace("*","").strip())
-		return(availableThemes)
+		return(self.functionHelper.getCursors())
 	#def getCursors
 
 	def getSchemes(self):

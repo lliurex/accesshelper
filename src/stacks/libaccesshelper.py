@@ -455,6 +455,8 @@ class functionHelperClass():
 					print(fcontent)
 			bkg=''
 			img=''
+			theme=''
+			scheme=''
 			color=''
 			cursor=''
 			size=''
@@ -473,6 +475,10 @@ class functionHelperClass():
 					cursor=data
 				elif key=="cursorSize":
 					size=data
+				elif key=="theme":
+					theme=data
+				elif key=="scheme":
+					scheme=data
 				elif key=="scale":
 					scale=data
 				elif key=="xscale":
@@ -497,6 +503,10 @@ class functionHelperClass():
 			self.removeRGBFilter()
 			if isinstance(alpha,QColor):
 				self.setRGBFilter(alpha)
+			if theme!="":
+				subprocess.run(["plasma-apply-desktoptheme",theme],stdout=subprocess.PIPE)
+			if scheme!="":
+				subprocess.run(["plasma-apply-colorscheme",scheme],stdout=subprocess.PIPE)
 	#def _setNewConfig					
 
 	def _loadPlasmaConfigFromFolder(self,folder):
@@ -511,11 +521,9 @@ class functionHelperClass():
 	def getPointerImage(self,theme):
 		icon=os.path.join("/usr/share/icons",theme,"cursors","left_ptr")
 		self._debug("Extracting imgs for icon {}".format(icon))
-		if os.path.isfile(icon)==False:
-			icon=os.path.join(os.environ.get("HOME",""),".icons",theme,"cursors","left_ptr")
 		qicon=""
 		sizes=[]
-		if os.path.isfile(icon):
+		if os.path.isfile(icon)==True:
 			tmpDir=tempfile.TemporaryDirectory()
 			cmd=["xcur2png","-q","-c","-","-d",tmpDir.name,icon]
 			try:
@@ -742,17 +750,18 @@ class functionHelperClass():
 		subprocess.run(cmd)
 	#def setCursorSize
 
-	def setCursor(self,theme="default",size=""):
+	def setCursor(self,theme="default",size="",applyChanges=False):
 		if theme=="default":
 			theme=self.getCursorTheme()
 		err=0
 		if ("[") in theme:
 			theme=theme.split("[")[1].replace("[","").replace("]","")
-		try:
-			subprocess.run(["plasma-apply-cursortheme",theme],stdout=subprocess.PIPE)
-		except Exception as e:
-			print(e)
-			err=1
+		if applyChanges==True:
+			try:
+				subprocess.run(["plasma-apply-cursortheme",theme],stdout=subprocess.PIPE)
+			except Exception as e:
+				print(e)
+				err=1
 		os.environ["XCURSOR_THEME"]=theme
 		print("Set theme: {}".format(theme))
 		if size!="":

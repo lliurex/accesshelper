@@ -32,8 +32,14 @@ i18n={
 	"ENABLEDOCK":_("Enabled accessibilty dock with hotkey"),
 	"DISABLEDOCK":_("Disabled accessibilty dock"),
 	"CONFIGLEVEL":_("Use config"),
+	"USER":_("User"),
+	"SYSTEM":_("System"),
+	"N4D":"N4d",
 	"PROFILE":_("Startup profile"),
+	"STARTPROFILE":_("Autoload profile"),
 	"NONE":_("Disabled"),
+	"FALSE":_("Disabled"),
+	"TRUE":_("Enabled"),
 	"STARTDOCK":_("Autostart dock"),
 	"DOCKHK":_("Hotkey for dock"),
 	"GRUBBEEP":_("Beep when machine starts")
@@ -89,7 +95,7 @@ class settings(confStack):
 		box.addWidget(chk_template,3,0,1,1,Qt.AlignTop)
 		self.widgets.update({chk_template:'startup'})
 		cmb_template=QComboBox()
-		self.widgets.update({cmb_template:'profile'})
+		self.widgets.update({cmb_template:'autoprofile'})
 		box.addWidget(cmb_template,3,1,1,1,Qt.AlignTop)
 		chk_dock=QCheckBox(i18n.get("ENABLEDOCK"))
 		box.addWidget(chk_dock,4,0,1,1,Qt.AlignTop)
@@ -159,10 +165,9 @@ class settings(confStack):
 		config=self.getConfig(level)
 		level=self.level
 		profile=''
-		if level in config.keys():
-			profile=config[level].get('profile','')
-			speed=config[level].get('speed','1x')
-			pitch=config[level].get('pitch','50')
+		profile=config.get(level,{}).get('autoprofile','profile')
+		speed=config.get(level,{}).get('speed','1x')
+		pitch=config.get(level,{}).get('pitch','50')
 		startup=False
 		if self._getAutostartFile(self.profilerAuto).get('enabled'):
 			startup=True
@@ -172,12 +177,12 @@ class settings(confStack):
 		for widget,desc in self.widgets.items():
 			if desc=="startup":
 				widget.setChecked(startup)
-			elif desc=="profile":
+			elif desc=="autoprofile":
 				widget.clear()
 				for wrkDir in self.wrkDirs:
 					if os.path.isdir(wrkDir):
 						for f in os.listdir(wrkDir):
-							widget.addItem("{}".format(f))
+							widget.addItem("{}".format(f.replace(".tar","")))
 				widget.setCurrentText(profile)
 			elif desc=="speed":
 				widget.setCurrentText(speed)
@@ -283,16 +288,18 @@ class settings(confStack):
 						value="system"
 					elif value==2:
 						value="n4d"
+					configlevel=value
 					self.saveChanges(desc,value,level="user")
 				else:
 					value=widget.currentText()
-					if desc=="profile":
+					if desc=="autoprofile":
 						profile=value
 			self.saveChanges(desc,value)
 		if startWdg:
 			startprofile=startWdg.isChecked()
 			if startprofile:
 				self._setAutostart(profile)
+				self.saveChanges("autoprofile",profile)
 			else:
 				self._removeAutostart(profile)
 		if dockWdg:
@@ -303,17 +310,18 @@ class settings(confStack):
 			else:
 				self._removeAutostartDock()
 				self.saveChanges("dockHk","",level="user")
+				startdock=False
 		self._writeFileChanges(configlevel,profile,startprofile,startdock,dockhotkey)
 	#def writeConfig
 
 	def _writeFileChanges(self,configlevel,profile,startprofile,startdock,dockhotkey):
 		with open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'a') as f:
 			f.write("<b>{}</b>\n".format(i18n.get("CONFIG")))
-			f.write("{0}->{1}\n".format(i18n.get("CONFIGLEVEL"),configlevel))
+			f.write("{0}->{1}\n".format(i18n.get("CONFIGLEVEL"),i18n.get(configlevel.upper())))
 			if startprofile:
-				f.write("{0}->{1}\n".format(i18n.get("PROFILE"),profile))
+				f.write("{0}->{1}\n".format(i18n.get("STARTPROFILE"),profile.replace(".tar","")))
 			else:
-				f.write("{0}->{1}\n".format(i18n.get("PROFILE"),i18n.get("NONE")))
+				f.write("{0}->{1}\n".format(i18n.get("STARTPROFILE"),i18n.get(str(startprofile).upper())))
 			f.write("{0}->{1}\n".format(i18n.get("STARTDOCK"),i18n.get(str(startdock).upper())))
 			f.write("{0}->{1}\n".format(i18n.get("DOCKHK"),dockhotkey))
 	#def _writeFileChanges(self):

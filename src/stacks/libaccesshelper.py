@@ -440,6 +440,9 @@ class functionHelperClass():
 		return(profile,startup)
 	#def mergeHome
 
+	def setNewConfig(self):
+		self._setNewConfig()
+
 	def _setNewConfig(self):
 		usrConfig=os.path.join(os.environ.get('HOME'),".config/accesshelper/accesshelper.json")
 		if os.path.isfile(usrConfig):
@@ -1136,6 +1139,7 @@ class accesshelper():
 	#def setScaleFactor
 
 	def applyChanges(self):
+		self.functionHelper.setNewConfig()
 		cmd=["qdbus","org.kde.KWin","/KWin","org.kde.KWin.reconfigure"]
 		subprocess.run(cmd)
 		cmd=["kquitapp5","kglobalaccel5"]

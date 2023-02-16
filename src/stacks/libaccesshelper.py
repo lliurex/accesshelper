@@ -292,7 +292,6 @@ class functionHelperClass():
 		(osHdl,tmpFile)=tempfile.mkstemp()
 		oldCwd=os.getcwd()
 		os.chdir(tmpFolder)
-		sw=True
 		with tarfile.open(tmpFile,"w") as tarFile:
 			for f in os.listdir(tmpFolder):
 				tarFile.add(os.path.basename(f))
@@ -333,6 +332,8 @@ class functionHelperClass():
 		sw=False
 		if os.path.isfile(profileTar):
 			sw=tarfile.is_tarfile(profileTar)
+		if sw==False:
+			print("Error: {} is not a valid tar".format(profileTar))
 		self._debug("{0} {1}".format(profileTar,sw))
 		return(sw)
 
@@ -841,13 +842,17 @@ class accesshelper():
 		wrkFile=os.path.join(home,".config/accesshelper","onboard.dconf")
 		if os.path.isfile(wrkFile):
 			cmd=["cat",wrkFile]
-			cat=subprocess.Popen(cmd,stdout=subprocess.PIPE)
-			cmd=["dconf","load","/org/onboard/"]
 			try:
-				dconf=subprocess.run(cmd,stdin=cat.stdout)
+				cat=subprocess.Popen(cmd,stdout=subprocess.PIPE)
 			except:
-				pass
-			cat.communicate()
+				cat=None
+			if cat!=None:
+				cmd=["dconf","load","/org/onboard/"]
+				try:
+					dconf=subprocess.run(cmd,stdin=cat.stdout)
+				except Exception as e:
+					print(e)
+				cat.communicate()
 	#def setOnboardConfig
 
 	def removeRGBFilter(self):

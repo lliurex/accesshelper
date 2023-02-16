@@ -2,6 +2,7 @@
 import subprocess,os
 import tarfile
 import tempfile
+import time
 import shutil
 from collections import OrderedDict
 from PySide2.QtGui import QIcon,QPixmap,QColor
@@ -574,9 +575,12 @@ class functionHelperClass():
 		}
 		"""
 		bus = dbus.SessionBus()
-		plasma = dbus.Interface(bus.get_object(
+		try:
+			plasma = dbus.Interface(bus.get_object(
 			'org.kde.plasmashell', '/PlasmaShell'), dbus_interface='org.kde.PlasmaShell')
-		plasma.evaluateScript(jscript % (plugin, plugin, color))
+			plasma.evaluateScript(jscript % (plugin, plugin, color))
+		except:
+			print("Plasma dbus error")
 	#def setBackgroundColor
 
 	def setBackgroundImg(self,imgFile):
@@ -803,6 +807,22 @@ class functionHelperClass():
 		return(theme)
 	#def getCursorTheme
 
+	def getCursors(self):
+		availableThemes=[]
+		themes=""
+		try:
+			themes=subprocess.run(["plasma-apply-cursortheme","--list-themes"],stdout=subprocess.PIPE)
+		except Exception as e:
+			print(e)
+		if themes:
+			out=themes.stdout.decode()
+			for line in out.split("\n"):
+				theme=line.strip()
+				if theme.startswith("*"):
+					availableThemes.append(theme.replace("*","").strip())
+		return(availableThemes)
+	#def getCursors
+
 class accesshelper():
 	def __init__(self):
 		self.dbg=False
@@ -880,19 +900,7 @@ class accesshelper():
 	#def generateAutostartDesktop
 
 	def getCursors(self):
-		availableThemes=[]
-		themes=""
-		try:
-			themes=subprocess.run(["plasma-apply-cursortheme","--list-themes"],stdout=subprocess.PIPE)
-		except Exception as e:
-			print(e)
-		if themes:
-			out=themes.stdout.decode()
-			for line in out.split("\n"):
-				theme=line.strip()
-				if theme.startswith("*"):
-					availableThemes.append(theme.replace("*","").strip())
-		return(availableThemes)
+		return(self.functionHelper.getCursors())
 	#def getCursors
 
 	def getSchemes(self):
@@ -1147,8 +1155,11 @@ class accesshelper():
 		self.functionHelper.setNewConfig()
 	#def setNewConfig(self,*args):
 
-	def applyChanges(self):
-		self.functionHelper.setNewConfig()
+	def applyChanges(self,setconf=True):
+		if setconf:
+			self.functionHelper.setNewConfig()
+		cmd=["kwin","--replace"]
+		subprocess.Popen(cmd)
 		cmd=["qdbus","org.kde.KWin","/KWin","org.kde.KWin.reconfigure"]
 		subprocess.run(cmd)
 		cmd=["kquitapp5","kglobalaccel5"]
@@ -1157,8 +1168,14 @@ class accesshelper():
 		subprocess.run(cmd)
 		cmd=["plasmashell","--replace"]
 		subprocess.Popen(cmd)
-	#def applyChanges
-
+		time.sleep(10)
+		cmd=["pidof","plasmashell"]
+		p=subprocess.run(cmd)
+		if p.returncode!=0:
+			cmd=["plasmashell","--replace"]
+			subprocess.Popen(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+	#def _applyChangeswaitForPlasma
+		
 	def restartSession(self):
 		cmd=["qdbus","org.kde.ksmserver","/KSMServer","org.kde.KSMServerInterface.logout","1","3","3"]
 		#cmd=["qdbus","org.kde.Shutdown","/Shutdown","org.kde.Shutdown.logout"]

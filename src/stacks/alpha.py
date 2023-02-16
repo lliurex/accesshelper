@@ -75,8 +75,12 @@ class alpha(confStack):
 
 	def updateScreen(self):
 		self.refresh=True
-		self.config=self.getConfig()
-		config=self.config.get(self.level,{})
+		try:
+			self.config=self.getConfig()
+		except:
+			self.config={}
+		finally:
+			config=self.config.get(self.level,{})
 		alpha=config.get('alpha',[])
 		dlgColor=self.widgets.get('alpha')
 		if len(alpha)==4:

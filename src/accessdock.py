@@ -256,7 +256,7 @@ class accessdock(QWidget):
 
 	def closeEvent(self,event):
 		print(event.spontaneous())
-		if event.spontaneous()==False:
+		if event.spontaneous()==True:
 			event.ignore()
 		else:
 			sys.exit(0)
@@ -274,6 +274,7 @@ class accessdock(QWidget):
 				alphaDlg.btn_ok.clicked.connect(alphaDlg.close)
 				alphaDlg.btn_cancel.clicked.connect(alphaDlg.close)
 				alphaDlg.btn_cancel.setShortcut("Esc")
+				alphaDlg.btn_cancel.setEnabled(True)
 				alphaDlg.setWindowModality(Qt.WindowModal)
 				alphaDlg.setWindowFlags(Qt.NoDropShadowWindowHint|Qt.WindowStaysOnTopHint|Qt.FramelessWindowHint)
 				alphaDlg.show()
@@ -458,7 +459,7 @@ class accessdock(QWidget):
 				self._debug("Default cursor theme {}".format(themeDesc))
 				#self.accesshelper.setCursorSize(lblTest.pixmap().size().width())
 				self.accesshelper.setCursor(themeDesc,lblTest.pixmap().size().width())
-			self.accesshelper.applyChanges()
+			self.accesshelper.applyChanges(setconf=False)
 		else:
 			font=self.font()
 			self.fontSize=font

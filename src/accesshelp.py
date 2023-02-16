@@ -55,24 +55,29 @@ def showHelp():
 #def showHelp():
 
 def listProfiles():
-	add=[]
+	for pr in _getProfilesList():
+		print("* {}".format(pr))
+	sys.exit(0)
+#def listProfiles
+
+def _getProfilesList():
+	profiles=[]
 	for wrkDir in wrkDirList:
 		if os.path.isdir(wrkDir):
 			flist=[]
 			try:
 				flist=os.listdir(wrkDir)
 			except: 
-				print("{0} {1}".format(wrkDir,ERR_WRKDIR))
+				profiles.append("{0} {1}".format(wrkDir,ERR_WRKDIR))
 			flist.sort()
 			if len(flist)>0:
 				for f in flist:
-					if f not in add and f.endswith(".tar"):
-						print("* {}".format(f.rstrip(".tar")))
-						add.append(f)
+					if f not in profiles and f.endswith(".tar"):
+						profiles.append(f.replace(".tar",""))
 			else:
-				print("{0} {1}".format(ERR_NOPROFILE,wrkDir))
-	sys.exit(0)
-#def listProfiles
+				profiles.append("{0} {1}".format(ERR_NOPROFILE,wrkDir))
+	return(profiles)
+#def _getProfileList
 
 def setProfile(profilePath,applyChanges=False):
 	sw=False
@@ -122,6 +127,18 @@ def _getStartup():
 	return(sw)
 #def _getStartup
 
+def _chkProfileChange(*args):
+	sw=False
+	listData=args[0].split()
+	profiles=_getProfilesList()
+	for l in listData:
+		if "->" in l:
+			setting=l.split("->")[-1]
+			if setting.strip() in profiles:
+				sw=True
+	return(sw)
+#def _chkProfileChange
+
 def showDialog(*args):
 	def _restoreConfig():
 		cursor=QtGui.QCursor(Qt.WaitCursor)
@@ -134,32 +151,41 @@ def showDialog(*args):
 		_exit(False)
 		subprocess.Popen(["/usr/share/accesshelper/accesshelp.py"])
 
-	startup=_getStartup()
 	changes=_readChanges()
 	if changes.strip()=="":
 		_exit(True)
 	if os.path.isfile(configChanged):
 		os.remove(configChanged)
+	startup=_getStartup()
+	chProfile=_chkProfileChange(changes)
 	msg=""
 	msgTitle=MSG_LOGOUT
 	dlgClose=QDialog()
 	lay=QGridLayout()
 	if startup==True:
 		changes=_("<p><strong>Startup is enabled. Changes will not apply.\nAccesshelper will try to apply as many changes as possible for current session.\n(expect inconsistencies)</strong></p>")+changes
+	elif chProfile==True:
+		changes=_("<p><strong>A profile has been loaded.\nAccesshelper will try to apply as many changes as possible for current session but a session restart is required in order to apply all changes.</strong></p>")+changes
 	text="{0}<br>{1}<br>".format(MSG_CHANGES,changes.replace("\n","<br>"))
 	scrLabel=appconfigControls.QScrollLabel(text)
-	if startup==False:
-		btnOk=QPushButton(TXT_ACCEPT)
-		btnOk.clicked.connect(_restartSession)
-		msgReboot=MSG_REBOOT
-	else:
-		btnOk=QPushButton(TXT_APPLY)
-		btnOk.clicked.connect(_applyChanges)
-		msgReboot=MSG_APPLY
+	btnOk=QPushButton(TXT_ACCEPT)
+	btnOk.clicked.connect(_restartSession)
+	msgReboot=MSG_REBOOT
 	btnIgnore=QPushButton(TXT_IGNORE)
 	btnIgnore.clicked.connect(_exit)
 	btnDiscard=QPushButton(TXT_UNDO)
 	btnDiscard.clicked.connect(_restoreConfig)
+	if startup==True:
+		btnOk=QPushButton(TXT_APPLY)
+		btnOk.clicked.connect(_applyChanges)
+		msgReboot=MSG_APPLY
+	elif chProfile==True:
+		btnOk=QPushButton(TXT_APPLY)
+		btnOk.clicked.connect(_applyChanges)
+		msgReboot=MSG_APPLY
+		btnIgnore=QPushButton(TXT_ACCEPT)
+		btnIgnore.clicked.connect(_restartSession)
+		msgReboot=MSG_APPLY
 	scrLabel.adjustWidth(config.sizeHint().width()/2)
 	lay.addWidget(scrLabel,0,0,1,3)
 	lay.addWidget(QLabel(msgReboot),1,0,1,3)

@@ -127,6 +127,9 @@ class profiles(confStack):
 	#def _updateText
 
 	def updateScreen(self):
+		config=self.getConfig(self.level)
+		profile=config.get(self.level,{}).get("profile","")
+		currentProfile=None
 		self.profilesPath={}
 		self.lst_profiles.clear()
 		wrkUserDir=os.path.join(os.environ['HOME'],".config","accesshelper","profiles")
@@ -140,10 +143,13 @@ class profiles(confStack):
 					if len(f)>50:
 						f=f[0:49]
 					if f not in self.profilesPath.keys():
-						self.lst_profiles.addItem(f.replace(".tar",""))
+						desc=f.replace(".tar","")
+						self.lst_profiles.addItem(desc)
 						add.append(f)
 						self.profilesPath.update({f:os.path.join(wrkDir,f)})
 						item=self.lst_profiles.item(self.lst_profiles.count()-1)
+						if desc==profile:
+							currentProfile=item
 						font=item.font()
 						font.setStretch(120)
 						if wrkDir==self.wrkDir or wrkDir==self.defaultDir:
@@ -153,6 +159,8 @@ class profiles(confStack):
 						#	if font.pointSize()<14:
 						#		font.setPointSize(14)
 						item.setFont(font)
+			if currentProfile:
+				self.lst_profiles.setCurrentItem(currentProfile)
 	#def _udpate_screen
 
 	def loadProfile(self,*args):
@@ -160,6 +168,7 @@ class profiles(confStack):
 		cursor=QtGui.QCursor(Qt.WaitCursor)
 		self.setCursor(cursor)
 		name=self.inp_name.text()
+		profile=name
 		name=os.path.basename(name)
 		if len(name)>20:
 			name=name[0:19]
@@ -168,8 +177,8 @@ class profiles(confStack):
 		if self.profilesPath.get(name,''):
 			sw=self.accesshelper.restoreSnapshot(self.profilesPath.get(name))
 		if sw:
-			#self.saveChanges('profile',name,level='user')
-			self.showMsg(i18n.get("RESTORESNAP"))
+			self.saveChanges("profile",profile)
+			self.showMsg("{0} {1}".format(i18n.get("RESTORESNAP"),profile))
 		else:
 			self.showMsg(i18n.get("RESTOREERROR"))
 		self.refresh=True
@@ -208,6 +217,7 @@ class profiles(confStack):
 	#def loadProfile(self,*args):
 
 	def _applyProfileSettings(self):
+		self.refresh=True
 		self.config=self.getConfig("user",{}).get("user",{})
 		if self.config.get('alpha',[])==[]:
 			self.accesshelper.removeAutostartDesktop("accesshelper_rgbFilter.desktop")
@@ -264,5 +274,4 @@ class profiles(confStack):
 			profile=self.config.get("profile","")
 			if profile!="":
 				f.write("{0}->{1}\n".format(i18n.get("PROFILE"),profile))
-
 	#def _writeFileChanges(self):

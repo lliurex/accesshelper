@@ -377,7 +377,7 @@ class functionHelperClass():
 						jcontents.update({"profile":"{}".format(os.path.basename(profileTar))})
 					(profile,startup)=self._getOldProfile(profileTar,usrFolder)
 					jcontents.update({"startup":startup})
-					jcontents.update({"profile":profile})
+					jcontents.update({"autoprofile":profile})
 					if startup=="true":
 						cmd="/usr/share/accesshelper/accesshelp.py --set {}".format(profile)
 						self.generateAutostartDesktop(cmd,"accesshelper_profiler.desktop","plasma-workspace/shutdown")
@@ -434,7 +434,8 @@ class functionHelperClass():
 			joldcontents=json.loads(foldcontents)
 			if joldcontents.get("startup","")=="true":
 				startup="true"
-				profile=joldcontents.get("profile",profileTar)
+				profile=joldcontents.get("autoprofile","profile")
+		profile=os.path.basename(profile).replace(".tar","")
 		return(profile,startup)
 	#def mergeHome
 
@@ -493,7 +494,7 @@ class functionHelperClass():
 				if img:
 					self.setBackgroundImg(img)
 			if cursor and size:
-				self.setCursor(cursor,size)
+				self.setCursor(cursor,size,applyChanges=True)
 			if scale:
 				self.setScaleFactor(float(scale)/100)
 			self.removeAutostartDesktop("accesshelper_Xscale.desktop")

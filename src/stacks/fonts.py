@@ -82,7 +82,6 @@ class fonts(confStack):
 		self.widgets.update({"font":dlgFont})
 		self.config=self.getConfig()
 		config=self.config.get(self.level,{})
-		#self.updateScreen()
 	#def _load_screen
 
 	def updateScreen(self):
@@ -121,37 +120,14 @@ class fonts(confStack):
 					if data==style:
 						chld.setCurrentIndex(index)
 						break
-					elif data.isalpha==False:
-						sw_alpha=False
-						break
-				if sw_alpha==False:
-					break
-		for chld in dlgFont.findChildren(QListView):
-			model=chld.model()
-			if size.isdigit():
-				sw_num=True
-				for row in range(model.rowCount()):
-					index=model.index(row,0)
-					data=model.data(index)
 					if data==size:
 						chld.setCurrentIndex(index)
-						break
-					elif data.isdigit==False:
-						sw_num=False
-						break
-				if sw_num==False:
-					break
-			chld.scrollTo(chld.currentIndex())
+			chld.scrollTo(chld.currentIndex(),chld.PositionAtTop)
 		for chld in dlgFont.findChildren(QComboBox):
 			chld.setCurrentIndex(1)
 		config=self.config.get(self.level,{})
 	#def _udpate_screen
 
-	def _updateConfig(self,key):
-		return
-		#	if key in self.kwinMethods:
-		#		self._exeKwinMethod(key) 
-	
 	def writeConfig(self):
 		wdg=self.widgets.get("font")
 		qfont=wdg.currentFont()

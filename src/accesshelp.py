@@ -99,6 +99,7 @@ def setProfile(profilePath,applyChanges=False):
 #def setProfile
 
 def _restartSession(*args):
+	accesshelper.setNewConfig()
 	accesshelper.restartSession()
 	QApplication.quit()
 	sys.exit(0)

@@ -416,6 +416,8 @@ class lookandfeel(confStack):
 						bkg=self.imgFile
 		#Ensure size is applied before theme change
 		#self._setCursorSize(size)
+		self.saveChanges('theme',plasmaTheme)
+		self.saveChanges('scheme',scheme)
 		self.saveChanges('cursor',cursorTheme)
 		self.saveChanges('cursorSize',size)
 		self.saveChanges('scale',scale)

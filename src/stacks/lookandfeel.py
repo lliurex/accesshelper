@@ -206,7 +206,7 @@ class lookandfeel(confStack):
 								elif color:
 									px.fill(QtGui.QColor(color))
 								icon=QtGui.QIcon(px)
-								cmb.addItem(icon,themeDesc)
+								cmb.addItem(icon,themeDesc.strip())
 							elif cmbDesc!="cursorSize":
 								arrayThemeDesc=themeDesc.split("(")
 								cmb.addItem(arrayThemeDesc[0].strip())
@@ -216,9 +216,9 @@ class lookandfeel(confStack):
 					if cmbDesc=="scheme" and config.get("scheme","")!="":
 						cmb.setCurrentText(config.get("scheme"))
 
-			if selectedColor!="":
-				cmb=self.widgets.get("background",QComboBox())
-				cmb.setCurrentText(i18n.get(selectedColor.upper(),selectedColor))
+		if selectedColor!="":
+			cmb=self.widgets.get("background",QComboBox())
+			cmb.setCurrentText(i18n.get(selectedColor.upper(),selectedColor))
 	#def _udpate_screen
 
 	def updateCursorIcons(self):

@@ -170,8 +170,6 @@ class profiles(confStack):
 		name=self.inp_name.text()
 		profile=name
 		name=os.path.basename(name)
-		if len(name)>20:
-			name=name[0:19]
 		name="{}.tar".format(name)
 		sw=False
 		if self.profilesPath.get(name,''):
@@ -250,15 +248,14 @@ class profiles(confStack):
 				return
 		profilePath=self.profilesPath.get(name,'')
 		if profilePath=='':
-			if self.level=='user':
-				profilePath=os.path.join(os.environ.get('HOME'),".config/accesshelper/profiles","{}".format(name))
-			else:
+			if self.level=='system':
 				profilePath=os.path.join(self.wrkDir,"{}".format(name))
-		if self.level=='user':
-			appconfrc=os.path.join(os.environ.get('HOME'),".config/accesshelper/accesshelper.json")
-		else:
+			else:
+				profilePath=os.path.join(os.environ.get('HOME'),".config/accesshelper/profiles","{}".format(name))
+		if self.level=='system':
 			appconfrc=os.path.join(os.path.dirname(self.wrkDir),"accesshelper.json")
-			
+		else:
+			appconfrc=os.path.join(os.environ.get('HOME'),".config/accesshelper/accesshelper.json")
 		if self.accesshelper.takeSnapshot(profilePath,appconfrc)==False:
 			self.showMsg("{}: {}".format(i18n.get("ERRORPERMS"),profilePath))
 		else:

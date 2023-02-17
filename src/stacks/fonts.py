@@ -149,6 +149,7 @@ class fonts(confStack):
 		self.accesshelper.setKdeConfigSetting("General","menuFont",font,"kdeglobals")
 		self.accesshelper.setKdeConfigSetting("General","smallestReadableFont",minFont,"kdeglobals")
 		self.accesshelper.setKdeConfigSetting("General","toolBarFont",font,"kdeglobals")
+		self.accesshelper.setKdeConfigSetting("WM","activeFont",font,"kdeglobals")
 		self.accesshelper.setKdeConfigSetting("Appearance","Font",fixed,"Lliurex.profile")
 		self.accesshelper.setMozillaFirefoxFonts(size+7)
 		self.accesshelper.setGtkFonts(font)

@@ -150,10 +150,14 @@ class functionHelperClass():
 		return(assigned)
 	#def getSettingForHotkey
 
-	def setHotkey(self,hotkey,desc,cmd):
-		desc="{0},{0},{1}".format(hotkey,desc)
-		data=[("_launch",desc),("_k_friendly_name",cmd)]
-		config={'kglobalshortcutsrc':{cmd:data}}
+	def setHotkey(self,hotkey,desc,name):
+		cmd=name.replace(".desktop","")
+		if desc=="":
+			data=""
+		else:
+			desc="{0},{0},{1}".format(hotkey,desc)
+			data=[("_launch",desc),("_k_friendly_name",cmd)]
+		config={'kglobalshortcutsrc':{name:data}}
 		self.setPlasmaConfig(config)
 	#def setHotkey
 				
@@ -526,8 +530,8 @@ class functionHelperClass():
 				subprocess.run(["plasma-apply-colorscheme",scheme],stdout=subprocess.PIPE)
 			if dockHk!="":
 				desc="{0},{0},show accessdock".format(dockHk)
-				cmd="accessdock"
-				self.setHotkey(dockHk,desc,cmd)
+				name="accessdock.desktop"
+				self.setHotkey(dockHk,desc,name)
 	#def _setNewConfig					
 
 	def _loadPlasmaConfigFromFolder(self,folder):

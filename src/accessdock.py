@@ -61,7 +61,8 @@ class accessdock(QWidget):
 	def __init__(self,*args,**kwargs):
 		super().__init__()
 		self.dbg=True
-		self._chkDockRunning()
+		if self._chkDockRunning()==True:
+			sys.exit(0)
 		self.menu=App2Menu.app2menu()
 		self.confFile="accesshelper.json"
 		self.confDir="/usr/share/accesshelper/"
@@ -92,14 +93,18 @@ class accessdock(QWidget):
 			print("dock: {}".format(msg))
 	#def _debug
 
-	def _chkDockRunning(self):
+	def _chkDockRunning(self,replace=True):
 		ps=list(psutil.process_iter())
+		running=False
 		count=0
 		for p in ps:
-			if "accessdock" in str(p.name):
+			cmd=" ".join(p.cmdline())
+			if "accessdock" in cmd and "python3" in cmd:
 				self._debug("Accessdock is running as pid {}".format(p.pid))
-				if p.pid!=os.getpid():
+				if int(p.pid)!=int(os.getpid()):
 					os.kill(p.pid,signal.SIGKILL)
+					running=True
+		return(running)
 	#def _chkDockRunning
 
 	def _loadConfig(self):
@@ -255,7 +260,6 @@ class accessdock(QWidget):
 	#def _assignButton
 
 	def closeEvent(self,event):
-		print(event.spontaneous())
 		if event.spontaneous()==True:
 			event.ignore()
 		else:
@@ -544,13 +548,15 @@ if os.path.isfile("/tmp/.accessdock.pid"):
 	kill=True
 	try:
 		pid=int(open("/tmp/.accessdock.pid").read())
-	except:
+	except Exception as e:
+		print(e)
 		kill=False
 	if kill:
 		try:
 			os.kill(pid,signal.SIGUSR1)
 			sys.exit(0)
-		except:
+		except Exception as e:
+			print(e)
 			kill=False
 
 with open("/tmp/.accessdock.pid","w") as f:

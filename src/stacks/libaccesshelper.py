@@ -149,6 +149,13 @@ class functionHelperClass():
 					break
 		return(assigned)
 	#def getSettingForHotkey
+
+	def setHotkey(self,hotkey,desc,cmd):
+		desc="{0},{0},{1}".format(hotkey,desc)
+		data=[("_launch",desc),("_k_friendly_name",cmd)]
+		config={'kglobalshortcutsrc':{cmd:data}}
+		self.setPlasmaConfig(config)
+	#def setHotkey
 				
 	def _getMozillaSettingsFiles(self):
 		mozillaFiles=[]
@@ -469,11 +476,14 @@ class functionHelperClass():
 			size=''
 			scale='100'
 			xscale='100'
+			dockHk=''
 			alpha=[]
 			for key,data in jcontent.items():
 				fline=""
 				if key=="bkg":
 					bkg=data
+				elif key=="dockHk":
+					dockHk=data
 				elif key=="bkgColor":
 					color=data
 				elif key=="background":
@@ -514,6 +524,10 @@ class functionHelperClass():
 				subprocess.run(["plasma-apply-desktoptheme",theme],stdout=subprocess.PIPE)
 			if scheme!="":
 				subprocess.run(["plasma-apply-colorscheme",scheme],stdout=subprocess.PIPE)
+			if dockHk!="":
+				desc="{0},{0},show accessdock".format(dockHk)
+				cmd="accessdock"
+				self.setHotkey(dockHk,desc,cmd)
 	#def _setNewConfig					
 
 	def _loadPlasmaConfigFromFolder(self,folder):

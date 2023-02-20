@@ -98,6 +98,7 @@ class settings(confStack):
 		self.widgets.update({cmb_template:'autoprofile'})
 		box.addWidget(cmb_template,3,1,1,1,Qt.AlignTop)
 		chk_dock=QCheckBox(i18n.get("ENABLEDOCK"))
+		chk_dock.stateChanged.connect(self._setEnabledHkbutton)
 		box.addWidget(chk_dock,4,0,1,1,Qt.AlignTop)
 		self.widgets.update({chk_dock:'dock'})
 		(mainHk,hkData,hkSetting,hkSection)=self.accesshelper.getHotkey("accessdock.desktop")
@@ -118,6 +119,14 @@ class settings(confStack):
 		self.setLayout(box)
 		_change_osh()
 	#def _load_screen
+
+	def _setEnabledHkbutton(self,*args):
+		if len(args)>0:
+			if args[0]==0:
+				self.btn_dockHk.setEnabled(False)
+			else:
+				self.btn_dockHk.setEnabled(True)
+	#def _setEnabledHkbutton
 
 	def _testHotkey(self,hotkey):
 		self._debug("Read Hotkey {} from {}".format(hotkey,self.btn_dockHk))
@@ -174,6 +183,8 @@ class settings(confStack):
 		dock=False
 		if self._getAutostartFile(self.dockAuto).get('enabled'):
 			dock=True
+		if dock==False:
+			self.btn_dockHk.setEnabled(False)
 		for widget,desc in self.widgets.items():
 			if desc=="startup":
 				widget.setChecked(startup)

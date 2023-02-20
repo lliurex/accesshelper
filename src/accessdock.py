@@ -130,7 +130,7 @@ class accessdock(QWidget):
 			self.rate=self.speech.setRate(float(speed))
 			self.voice=config.get("voice","JuntaDeAndalucia_es_pa_diphone")
 			self.speech.setVoice(self.voice)
-			self._setKdeHotkey(hotkey)
+			#self._setKdeHotkey(hotkey)
 			self.xscale=config.get("xscale","100")
 			if os.path.isfile("/tmp/.xscale"):
 				scale="0"
@@ -153,7 +153,6 @@ class accessdock(QWidget):
 			cmd=["dconf","dump","/org/onboard/"]
 			fout=open(os.path.join(home,".config/accesshelper/onboard.dconf"),"wb")
 			subprocess.run(cmd,stdout=fout)
-			
 	#def _loadConfig
 
 	def _readConfig(self):

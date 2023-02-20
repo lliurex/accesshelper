@@ -255,6 +255,8 @@ class settings(confStack):
 		data=[("_launch",""),("_k_friendly_name","")]
 		config={'kglobalshortcutsrc':{'accessdock.desktop':data}}
 		self.accesshelper.setPlasmaConfig(config)
+		config={'kglobalshortcutsrc':{'accessdock':data}}
+		self.accesshelper.setPlasmaConfig(config)
 		self.showMsg("{}".format(i18n.get("DISABLEDOCK")))
 	#def _removeAutostart
 

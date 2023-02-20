@@ -49,7 +49,6 @@ class lookandfeel(confStack):
 		self.tooltip=i18n.get('TOOLTIP')
 		self.index=2
 		self.enabled=True
-		self.defaultRepos={}
 		self.changed=[]
 		self.config={}
 		self.plasmaConfig={}
@@ -60,6 +59,8 @@ class lookandfeel(confStack):
 		self.imgFile=""
 		self.bkgIconSize=96
 		self.cursorDesc={}
+		self.cursorThemes={}
+		self.plasmaThemes={}
 		self.accesshelper=libaccesshelper.accesshelper()
 	#def __init__
 
@@ -130,20 +131,7 @@ class lookandfeel(confStack):
 		if config.get("bkg","")=="color":
 			selectedColor=config.get("bkgColor","")
 		theme=""
-		#Check if lookandfeel has been configured before
-		home=os.environ.get('HOME')
-		thematizer=os.path.join(home,".config/autostart/accesshelper_thematizer.desktop")
-		content=[]
-		fixExec=False
-		if os.path.isfile(thematizer):
-			with open(thematizer,'r') as f:
-				content=f.readlines()
-			#Fix bad path in thematizer autostart. Delete it.
-			for line in content:
-				if line.startswith("Exec="):
-					if line.startswith("Exec=/usr/share/accesshelper/thematizer.sh"):
-						os.remove(thematizer)
-					break
+		self._fixBadThemePath()
 		for value in self.plasmaConfig.get("kdeglobals",{}).get("General",[]):
 			if value[0]=="Name":
 				theme=value[1]
@@ -187,7 +175,7 @@ class lookandfeel(confStack):
 
 					for theme in themes:
 						#themeDesc=theme.split("(")[0].replace("(","").rstrip(" ")
-						themeDesc=theme.split("[")[0]
+						themeDesc=theme.split("[")[0].strip()
 						if cmb.findText(themeDesc)==-1:
 							if cmbDesc=="cursor":
 								#i18n could translate the description, real name needed
@@ -211,15 +199,38 @@ class lookandfeel(confStack):
 								arrayThemeDesc=themeDesc.split("(")
 								cmb.addItem(arrayThemeDesc[0].strip())
 
+					searchedTheme=config.get("theme","")
 					if cmbDesc=="theme" and config.get("theme","")!="":
 						cmb.setCurrentText(config.get("theme"))
-					if cmbDesc=="scheme" and config.get("scheme","")!="":
-						cmb.setCurrentText(config.get("scheme"))
+					elif cmbDesc=="cursor" and config.get("cursor","")!="":
+						searchedTheme=config.get("cursor")
+						for key,item in self.cursorDesc.items():
+							if searchedTheme==item:
+								cmb.setCurrentText(key)
+					elif cmbDesc=="scheme" and config.get("scheme","")!="":
+						cmb.setCurrentText(self.cursorDesc.get("scheme"))
 
 		if selectedColor!="":
 			cmb=self.widgets.get("background",QComboBox())
 			cmb.setCurrentText(i18n.get(selectedColor.upper(),selectedColor))
 	#def _udpate_screen
+
+	def _fixBadThemePath(self):
+		#Check if lookandfeel has been configured before
+		home=os.environ.get('HOME')
+		thematizer=os.path.join(home,".config/autostart/accesshelper_thematizer.desktop")
+		content=[]
+		fixExec=False
+		if os.path.isfile(thematizer):
+			with open(thematizer,'r') as f:
+				content=f.readlines()
+			#Fix bad path in thematizer autostart. Delete it.
+			for line in content:
+				if line.startswith("Exec="):
+					if line.startswith("Exec=/usr/share/accesshelper/thematizer.sh"):
+						os.remove(thematizer)
+					break
+	#def _fixBadThemePath(self):
 
 	def updateCursorIcons(self):
 		cmbSize=self.widgets.get("cursorSize")
@@ -408,7 +419,7 @@ class lookandfeel(confStack):
 		#self._setCursorSize(size)
 		self.saveChanges('theme',plasmaTheme)
 		self.saveChanges('scheme',scheme)
-		self.saveChanges('cursor',cursorTheme)
+		self.saveChanges('cursor',self.cursorDesc.get(cursorTheme,cursorTheme))
 		self.saveChanges('cursorSize',size)
 		self.saveChanges('scale',scale)
 		self.saveChanges('xscale',xscale)
@@ -421,7 +432,7 @@ class lookandfeel(confStack):
 			f.write("<b>{}</b>\n".format(i18n.get("CONFIG")))
 			f.write("{0}->{1}\n".format(i18n.get("THEME"),theme))
 			f.write("{0}->{1}\n".format(i18n.get("SCHEME"),scheme))
-			f.write("{0}->{1}\n".format(i18n.get("CURSORTHEME"),cursor))
+			f.write("{0}->{1}\n".format(i18n.get("CURSORTHEME"),self.cursorThemes.get(cursor,cursor)))
 			f.write("{0}->{1}\n".format(i18n.get("CURSORSIZE"),cursorSize))
 			f.write("{0}->{1}\n".format(i18n.get("BACKIMG"),bkg))
 			f.write("{0}->{1}\n".format(i18n.get("SCALE"),scale))

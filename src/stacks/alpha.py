@@ -15,7 +15,7 @@ QString=type("")
 
 i18n={
 	"CONFIG":_("Color"),
-	"DESCRIPTION":_("Color filter configuration"),
+	"DESCRIPTION":_("Color filter"),
 	"MENUDESCRIPTION":_("Modify screen color levels"),
 	"TOOLTIP":_("Set color filter for the screen"),
 	"FILTER":_("Color filter"),
@@ -39,6 +39,7 @@ class alpha(confStack):
 		self.wrkFiles=["kgammarc"]
 		self.blockSettings={}
 		self.optionChanged=[]
+		self.embebbed=False
 		self.accesshelper=libaccesshelper.accesshelper()
 	#def __init__
 
@@ -73,8 +74,13 @@ class alpha(confStack):
 	#def _enableDefault
 
 	def updateScreen(self):
-		self.config=self.getConfig()
-		config=self.config.get(self.level,{})
+		self.refresh=True
+		try:
+			self.config=self.getConfig()
+		except:
+			self.config={}
+		finally:
+			config=self.config.get(self.level,{})
 		alpha=config.get('alpha',[])
 		dlgColor=self.widgets.get('alpha')
 		if len(alpha)==4:
@@ -93,26 +99,28 @@ class alpha(confStack):
 		if self.config==None:
 			self.config=self.getConfig()
 		qalpha=self.widgets.get("alpha").currentColor()
-		(red,green,blue)=self.accesshelper.setRGBFilter(qalpha)
-		self.plasmaConfig['kgammarc']['ConfigFile']=[("use","kgammarc")]
-		self.plasmaConfig['kgammarc']['SyncBox']=[("sync","yes")]
-		values=[]
-		for gamma in self.plasmaConfig['kgammarc']['Screen 0']:
-			(desc,value)=gamma
-			if desc=='bgamma':
-				values.append((desc,"{0:.2f}".format(blue)))
-			elif desc=='rgamma':
-				values.append((desc,"{0:.2f}".format(red)))
-			elif desc=='ggamma':
-				values.append((desc,"{0:.2f}".format(green)))
-		if self.appConfig:
-			self.plasmaConfig['kgammarc']['Screen 0']=values
-			self.accesshelper.setPlasmaConfig(self.plasmaConfig)
-			self.saveChanges("alpha",qalpha.getRgb())
-			self.optionChanged=[]
-			self.refresh=True
-			self.btn_cancel.setEnabled(True)
-			self._writeFileChanges(qalpha)
+		(red,green,blue)=self.accesshelper.setRGBFilter(qalpha,self.embebbed)
+		if self.embebbed==False:
+			(red,green,blue)=self.accesshelper.setRGBFilter(qalpha)
+			self.plasmaConfig['kgammarc']['ConfigFile']=[("use","kgammarc")]
+			self.plasmaConfig['kgammarc']['SyncBox']=[("sync","yes")]
+			values=[]
+			for gamma in self.plasmaConfig['kgammarc']['Screen 0']:
+				(desc,value)=gamma
+				if desc=='bgamma':
+					values.append((desc,"{0:.2f}".format(blue)))
+				elif desc=='rgamma':
+					values.append((desc,"{0:.2f}".format(red)))
+				elif desc=='ggamma':
+					values.append((desc,"{0:.2f}".format(green)))
+			if self.appConfig:
+				self.plasmaConfig['kgammarc']['Screen 0']=values
+				self.accesshelper.setPlasmaConfig(self.plasmaConfig)
+				self.saveChanges("alpha",qalpha.getRgb())
+				self.optionChanged=[]
+				self.refresh=True
+				self.btn_cancel.setEnabled(True)
+				self._writeFileChanges(qalpha)
 	#def writeConfig
 
 	def _reset_screen(self,*args):
@@ -130,6 +138,6 @@ class alpha(confStack):
 
 	def _writeFileChanges(self,qalpha):
 		with open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'a') as f:
-			f.write("<b>{}<b>\n".format(i18n.get("CONFIG")))
+			f.write("<b>{}</b>\n".format(i18n.get("CONFIG")))
 			f.write("{0}->{1}\n".format(i18n.get("FILTER"),qalpha.getRgb()))
 	#def _writeFileChanges(self):

@@ -1,3 +1,7 @@
+accesshelper (0.8) focal; urgency=medium
+
+  * Add options for xrand scale and plasma scale
+
 accesshelper (0.7.7.4) lliurex22; urgency=medium
 
   * BugFix release

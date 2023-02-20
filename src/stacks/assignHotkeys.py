@@ -35,7 +35,7 @@ i18n={
 	"CONFIG":_("Hotkeys"),
 	"HOTKEYS":_("Keyboard Shortcuts"),
 	"ACCESSIBILITY":_("hotkeys options"),
-	"DESCRIPTION":_("Hotkeys configuration"),
+	"DESCRIPTION":_("Keyboard Hotkeys"),
 	"MENUDESCRIPTION":_("Set hotkeys for launch applications"),
 	"TOOLTIP":_("From here you can set hotkeys for launch apps"),
 	"NEXTWINDOW":_("Go to next window"),
@@ -88,7 +88,6 @@ class assignHotkeys(confStack):
 		btn_add.clicked.connect(self._addHotkey)
 		self.box.addWidget(btn_add,1,0,1,1)
 		self._debug("LOAD SCREEN FINISHED")
-		#self.updateScreen()
 	#def _load_screen
 
 	def _addHotkey(self,*args):

@@ -61,14 +61,9 @@ class addHotkey(confStack):
 		layOption.addWidget(opt,0,0)
 		opt1=QRadioButton(i18n.get("TYPECMD"))
 		opt1.toggled.connect(lambda: self.updateScreen(opt1))
-		#self.widgets.update({opt1:"TYPECMD"})
-		#layOption.addWidget(opt1,0,1)
 		opt2=QRadioButton(i18n.get("TYPEACT"))
 		opt2.toggled.connect(lambda: self.updateScreen(opt2))
-		#self.widgets.update({opt2:"TYPEACT"})
-		#layOption.addWidget(opt2,0,1)
 		grpOptions.setLayout(layOption)
-		#self.box.addWidget(grpOptions,0,0,1,3)
 		self.btnHk=appconfigControls.QHotkeyButton(i18n.get("BTNTXT"))
 		self.btnHk.hotkeyAssigned.connect(self._testHotkey)
 		self.box.addWidget(self.btnHk,1,0,3,1)
@@ -79,11 +74,9 @@ class addHotkey(confStack):
 		self.lstOptions=QListWidget()
 		self.box.addWidget(self.lstOptions,2,1,1,2)
 		self.lblCmd=QLabel(i18n.get("LBLCMD"))
-		#self.box.addWidget(self.lblCmd,3,1,1,1)
 		self.inpCmd=QLineEdit()
 		self.inpCmd.setEnabled(False)
 		self.lblCmd.setEnabled(False)
-		#self.box.addWidget(self.inpCmd,3,2,1,1)
 		opt.setChecked(True)
 		self.lblPress=QLabel(i18n.get("PRESSKEY"))
 		self.lblPress.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
@@ -97,7 +90,6 @@ class addHotkey(confStack):
 		self.btn_cancel.setText(i18n.get("CANCEL","Cancel"))
 		self.btn_cancel.clicked.connect(self._exit)
 		self.btn_cancel.setEnabled(True)
-		#self.updateScreen()
 	#def _load_screen
 
 	def _searchList(self,*args):
@@ -105,9 +97,7 @@ class addHotkey(confStack):
 		if items:
 			self.lstOptions.scrollToItem(items[0])
 			self.lstOptions.setCurrentItem(items[0])
-
-	def _addHotkey(self,*args):
-		pass
+	#def _searchList
 
 	def updateScreen(self,*args):
 		if args:
@@ -125,7 +115,6 @@ class addHotkey(confStack):
 					elif desc=="TYPEACT":
 						self.inpCmd.setEnabled(False)
 						self.lblCmd.setEnabled(False)
-						self._loadActs()
 		self.btn_cancel.setEnabled(True)
 	#def _udpate_screen
 
@@ -160,13 +149,6 @@ class addHotkey(confStack):
 				self.desktopDict[name]={'icon':icon,'desktop':desktop}
 		self.lstOptions.sortItems()
 	#def _loadApps
-
-	def _loadActs(self,*args):
-		pass
-	#def _loadActs
-
-	def _updateConfig(self,name):
-		pass
 
 	def _testHotkey(self,hotkey):
 		if not hotkey.get("action","")=="":

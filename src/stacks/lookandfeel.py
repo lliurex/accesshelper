@@ -17,7 +17,7 @@ QString=type("")
 i18n={
 	"ACCESSIBILITY":_("Look&Feel options"),
 	"CONFIG":_("Look&Feel"),
-	"DESCRIPTION":_("Look&Feel configuration"),
+	"DESCRIPTION":_("Look&Feel"),
 	"MENUDESCRIPTION":_("Modify appearence settings"),
 	"TOOLTIP":_("Set theme, color scheme or pointers"),
 	"THEME":_("Desktop theme"),
@@ -26,9 +26,10 @@ i18n={
 	"BACKGROUND":_("Background color"),
 	"BACKIMG":_("Desktop background"),
 	"CURRENTBKG":_("Current background"),
-	"CURSORTHEME":_("Cursor theme"),
 	"CURSORSIZE":_("Cursor size"),
 	"CURSORTHEME":_("Cursor theme"),
+	"SCALE":_("Widget size"),
+	"XSCALE":_("Scale factor"),
 	"WHITE":_("White"),
 	"RED":_("Red"),
 	"BLUE":_("Blue"),
@@ -54,7 +55,7 @@ class lookandfeel(confStack):
 		self.plasmaConfig={}
 		self.wrkFiles=["kdeglobals","kcmimputrc"]
 		self.blockSettings={}
-		self.wantSettings={"kdeglobals":["General"]}
+		self.wantSettings={"kdeglobals":["General","KScreen"]}
 		self.optionChanged=[]
 		self.imgFile=""
 		self.bkgIconSize=96
@@ -90,16 +91,26 @@ class lookandfeel(confStack):
 		self.widgets.update({'background':cmbBackground})
 		self.box.addWidget(cmbBackground,2,1,1,1)
 
-		self.box.addWidget(QLabel(i18n.get("CURSORTHEME")),3,0,1,1)
+		self.box.addWidget(QLabel(i18n.get("SCALE")),3,0,1,1)
+		cmbScale=QComboBox()
+		self.widgets.update({'scale':cmbScale})
+		self.box.addWidget(cmbScale,3,1,1,1)
+
+		self.box.addWidget(QLabel(i18n.get("XSCALE")),4,0,1,1)
+		cmbXscale=QComboBox()
+		self.widgets.update({'xscale':cmbXscale})
+		self.box.addWidget(cmbXscale,4,1,1,1)
+
+		self.box.addWidget(QLabel(i18n.get("CURSORTHEME")),5,0,1,1)
 		cmbCursor=QComboBox()
 		self.widgets.update({'cursor':cmbCursor})
 		cmbCursor.currentIndexChanged.connect(self.updateCursorSizes)
-		self.box.addWidget(cmbCursor,3,1,1,1)
+		self.box.addWidget(cmbCursor,5,1,1,1)
 
-		self.box.addWidget(QLabel(i18n.get("CURSORSIZE")),4,0,1,1)
+		self.box.addWidget(QLabel(i18n.get("CURSORSIZE")),6,0,1,1)
 		cmbCursorSize=QComboBox()
 		self.widgets.update({'cursorSize':cmbCursorSize})
-		self.box.addWidget(cmbCursorSize,4,1,1,1)
+		self.box.addWidget(cmbCursorSize,6,1,1,1)
 		cmbCursorSize.addItem("32")
 		cmbCursorSize.addItem("48")
 		cmbCursorSize.addItem("64")
@@ -107,7 +118,6 @@ class lookandfeel(confStack):
 		cmbCursorSize.addItem("96")
 		cmbCursorSize.addItem("112")
 		cmbCursorSize.addItem("128")
-		cmbCursorSize.currentTextChanged.connect(self.updateCursorIcons)
 	#def _load_screen
 
 	def updateScreen(self):
@@ -123,28 +133,17 @@ class lookandfeel(confStack):
 		#Check if lookandfeel has been configured before
 		home=os.environ.get('HOME')
 		thematizer=os.path.join(home,".config/autostart/accesshelper_thematizer.desktop")
-		nextTheme=""
-		nextScheme=""
 		content=[]
 		fixExec=False
 		if os.path.isfile(thematizer):
 			with open(thematizer,'r') as f:
 				content=f.readlines()
+			#Fix bad path in thematizer autostart. Delete it.
 			for line in content:
 				if line.startswith("Exec="):
 					if line.startswith("Exec=/usr/share/accesshelper/thematizer.sh"):
-						fixExec=True
-					array=line.split(" ")
-					if len(array)>1:
-						nextTheme=array[1].replace("\n","")
-					if len(array)>2:
-						nextScheme=array[2].replace("\n","")
+						os.remove(thematizer)
 					break
-		#Fix bad path in thematizer autostart. Delete it.
-		if fixExec and len(content)>0:
-			if os.path.isfile(thematizer):
-				os.remove(thematizer)
-				nextScheme=""
 		for value in self.plasmaConfig.get("kdeglobals",{}).get("General",[]):
 			if value[0]=="Name":
 				theme=value[1]
@@ -161,6 +160,21 @@ class lookandfeel(confStack):
 					if cmb.findText(cursorSize)==-1 and isinstance(cursorSize,int):
 						cmb.insertItem(0,cursorSize)
 					cmb.setCurrentText(cursorSize)
+				elif cmbDesc=="scale" or cmbDesc=="xscale":
+					cmb.addItem("100%")
+					cmb.addItem("125%")
+					cmb.addItem("150%")
+					cmb.addItem("175%")
+					cmb.addItem("200%")
+					scale="100%"
+					if cmbDesc=="scale":
+						scaleFactor=self.accesshelper.getKdeConfigSetting("KScreen","ScaleFactor","kdeglobals")
+						if isinstance(scaleFactor,str):
+							if len(scaleFactor)>0:
+								scale="{}%".format(str(int(float(scaleFactor)*100)))
+						cmb.setCurrentText(scale)
+					else:
+						cmb.setCurrentText("{}%".format(config.get("xscale","100")))
 				else:
 					if cmbDesc=="theme":
 						themes=self._getThemeList()
@@ -192,19 +206,19 @@ class lookandfeel(confStack):
 								elif color:
 									px.fill(QtGui.QColor(color))
 								icon=QtGui.QIcon(px)
-								cmb.addItem(icon,themeDesc)
-							else:
-								cmb.addItem(themeDesc)
+								cmb.addItem(icon,themeDesc.strip())
+							elif cmbDesc!="cursorSize":
+								arrayThemeDesc=themeDesc.split("(")
+								cmb.addItem(arrayThemeDesc[0].strip())
 
-						if cmbDesc=="theme" and nextTheme!="":
-							cmb.setCurrentText(nextTheme)
-						elif cmbDesc=="scheme" and nextScheme!="":
-							cmb.setCurrentText(nextScheme)
-						elif "(" in theme:
-							cmb.setCurrentText(themeDesc)
-			if selectedColor!="":
-				cmb=self.widgets.get("background",QComboBox())
-				cmb.setCurrentText(i18n.get(selectedColor.upper(),selectedColor))
+					if cmbDesc=="theme" and config.get("theme","")!="":
+						cmb.setCurrentText(config.get("theme"))
+					if cmbDesc=="scheme" and config.get("scheme","")!="":
+						cmb.setCurrentText(config.get("scheme"))
+
+		if selectedColor!="":
+			cmb=self.widgets.get("background",QComboBox())
+			cmb.setCurrentText(i18n.get(selectedColor.upper(),selectedColor))
 	#def _udpate_screen
 
 	def updateCursorIcons(self):
@@ -271,13 +285,17 @@ class lookandfeel(confStack):
 		return (availableThemes)
 	#def _getCursorList
 
+	def _getScales(self):
+		return(["100%","125%","150%","175%","200%"])
+
 	def _setTheme(self,theme):
 		#self.accesshelper.setTheme(theme)
+		self._debug("Setting theme to {}".format(theme))
 		self._setThemeSchemeLauncher(theme=theme)
 	#def _setTheme
 
 	def _setScheme(self,scheme):
-		print("Setting scheme to {}".format(scheme))
+		self._debug("Setting scheme to {}".format(scheme))
 #		with open("/tmp/.set_scheme","w") as f:
 #			f.write(scheme)
 		self._setThemeSchemeLauncher(scheme=scheme)
@@ -299,9 +317,12 @@ class lookandfeel(confStack):
 			if os.path.isfile(destpath):
 				with open(destpath,'r') as f:
 					content=f.readlines()
-			elif os.path.isfile(source):
-				with open(source,'r') as f:
-					content=f.readlines()
+				if "".join(content).strip()=="":
+					content=[]
+			if content==[]:
+				if os.path.isfile(source):
+					with open(source,'r') as f:
+						content=f.readlines()
 			for line in content:
 				newline=line
 				if line.startswith("Exec="):
@@ -328,6 +349,9 @@ class lookandfeel(confStack):
 		self.accesshelper.setCursorSize(size)
 	#def _setCursorSize(self):
 
+	def _setScale(self,scaleFactor):
+		self.accesshelper.setScaleFactor(scaleFactor,xrand=False)
+
 	def writeConfig(self):
 		self.saveChanges('background',self.imgFile)
 		self.optionChanged=[]
@@ -343,14 +367,24 @@ class lookandfeel(confStack):
 				theme=theme.split("(")[0].strip()
 				if cmbDesc=="theme":
 					plasmaTheme=theme
-					self._setTheme(theme)
+		#			self._setTheme(theme)
 				if cmbDesc=="scheme":
 					scheme=theme
-					self._setScheme(theme)
+		#			self._setScheme(theme)
 				if cmbDesc=="cursor":
 					cursorTheme=theme
 				if cmbDesc=="cursorSize":
 					size=cmb.currentText()
+				if cmbDesc=="scale":
+					scale=cmb.currentText().replace("%","")
+					scaleFactor=round(float(scale)/100,2)
+					self._setScale(scaleFactor)
+				if cmbDesc=="xscale":
+					xscale=cmb.currentText().replace("%","")
+					if xscale=="100":
+						self.accesshelper.removeXscale()
+					else:
+						self.accesshelper.setXscale(xscale)
 				if cmbDesc=="background":
 					idx=cmb.currentIndex()
 					if idx>0:
@@ -372,13 +406,17 @@ class lookandfeel(confStack):
 						bkg=self.imgFile
 		#Ensure size is applied before theme change
 		#self._setCursorSize(size)
+		self.saveChanges('theme',plasmaTheme)
+		self.saveChanges('scheme',scheme)
 		self.saveChanges('cursor',cursorTheme)
 		self.saveChanges('cursorSize',size)
-		self._setCursor(cursorTheme,size)
-		self._writeFileChanges(scheme,plasmaTheme,cursorTheme,size,bkg)
+		self.saveChanges('scale',scale)
+		self.saveChanges('xscale',xscale)
+		#self._setCursor(cursorTheme,size)
+		self._writeFileChanges(scheme,plasmaTheme,cursorTheme,size,bkg,scale,xscale)
 	#def writeConfig
 
-	def _writeFileChanges(self,scheme,theme,cursor,cursorSize,bkg):
+	def _writeFileChanges(self,scheme,theme,cursor,cursorSize,bkg,scale,xscale):
 		with open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'a') as f:
 			f.write("<b>{}</b>\n".format(i18n.get("CONFIG")))
 			f.write("{0}->{1}\n".format(i18n.get("THEME"),theme))
@@ -386,5 +424,7 @@ class lookandfeel(confStack):
 			f.write("{0}->{1}\n".format(i18n.get("CURSORTHEME"),cursor))
 			f.write("{0}->{1}\n".format(i18n.get("CURSORSIZE"),cursorSize))
 			f.write("{0}->{1}\n".format(i18n.get("BACKIMG"),bkg))
+			f.write("{0}->{1}\n".format(i18n.get("SCALE"),scale))
+			f.write("{0}->{1}\n".format(i18n.get("XSCALE"),xscale))
 	#def _writeFileChanges(self):
 

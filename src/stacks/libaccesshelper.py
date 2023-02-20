@@ -2,9 +2,10 @@
 import subprocess,os
 import tarfile
 import tempfile
+import time
 import shutil
 from collections import OrderedDict
-from PySide2.QtGui import QIcon,QPixmap
+from PySide2.QtGui import QIcon,QPixmap,QColor
 from multiprocessing import Process
 import dbus
 import json
@@ -106,6 +107,7 @@ class functionHelperClass():
 		hksetting=self.settingsHotkeys.get(setting,"")
 		sc=self.getPlasmaConfig(wrkFile="kglobalshortcutsrc")
 		if hksetting:
+			sw=False
 			for kfile,sections in sc.items():
 				for section,settings in sections.items():
 					hksection=section
@@ -115,10 +117,11 @@ class functionHelperClass():
 							data=data.split(",")
 							hk=data[0]
 							data=",".join(data)
+							sw=True
 							break
-					if hk!="":
+					if sw==True:
 						break
-				if hk!="":
+				if sw==True:
 					break
 		else:
 			for kfile,sections in sc.items():
@@ -242,9 +245,13 @@ class functionHelperClass():
 		onboard=os.path.join(os.path.dirname(appconfrc),"onboard.dconf")
 		os.makedirs(configPath)
 		#autostart
-		desktopPath=os.path.join(tmpFolder,".config/autostart")
-		os.makedirs(desktopPath)
+		desktopStartPath=os.path.join(tmpFolder,".config/autostart")
+		os.makedirs(desktopStartPath)
 		autostartPath=os.path.join(home,".config","autostart")
+		#autoshutdown
+		desktopShutdownPath=os.path.join(tmpFolder,".config/plasma-workspace/shutdown")
+		os.makedirs(desktopShutdownPath)
+		autoshutdownPath=os.path.join(home,".config",".config/plasma-workspace/shutdown")
 		#mozilla
 		mozillaPath=os.path.join(tmpFolder,".mozilla")
 		os.makedirs(mozillaPath)
@@ -262,11 +269,15 @@ class functionHelperClass():
 			shutil.copy(appconfrc,configPath)
 		if os.path.isfile(onboard):
 			shutil.copy(onboard,configPath)
-		if os.path.isdir(autostartPath):
-			for f in os.listdir(autostartPath):
-				if f.startswith("access"):
-					autostart=os.path.join(autostartPath,f)
-					shutil.copy(autostart,desktopPath)
+		for auto in [autostartPath,autoshutdownPath]:
+			if os.path.isdir(auto):
+				for f in os.listdir(auto):
+					if f.startswith("access"):
+						autostart=os.path.join(auto,f)
+						if auto==autostartPath:
+							shutil.copy(autostart,desktopStartPath)
+						else:
+							shutil.copy(autostart,desktopShutdownPath)
 		mozillaFiles=self._getMozillaSettingsFiles()
 		for mozillaFile in mozillaFiles:
 			destdir=os.path.basename(os.path.dirname(mozillaFile))
@@ -282,7 +293,6 @@ class functionHelperClass():
 		(osHdl,tmpFile)=tempfile.mkstemp()
 		oldCwd=os.getcwd()
 		os.chdir(tmpFolder)
-		sw=True
 		with tarfile.open(tmpFile,"w") as tarFile:
 			for f in os.listdir(tmpFolder):
 				tarFile.add(os.path.basename(f))
@@ -323,10 +333,12 @@ class functionHelperClass():
 		sw=False
 		if os.path.isfile(profileTar):
 			sw=tarfile.is_tarfile(profileTar)
+		if sw==False:
+			print("Error: {} is not a valid tar".format(profileTar))
 		self._debug("{0} {1}".format(profileTar,sw))
 		return(sw)
 
-	def restoreSnapshot(self,profileTar):
+	def restoreSnapshot(self,profileTar,merge=False):
 		sw=self._checkSnapshot(profileTar)
 		if sw:
 			tarProfile=tarfile.open(profileTar,'r')
@@ -335,6 +347,22 @@ class functionHelperClass():
 			basePath=os.path.join(tmpFolder,".config")
 			self._loadPlasmaConfigFromFolder(basePath)
 			confPath=os.path.join(tmpFolder,".config/accesshelper")
+			jcontents={}
+			desktopPath=os.path.join(tmpFolder,".config/autostart")
+			if os.path.isdir(desktopPath)==True:
+				autostartFolder=os.path.join(os.environ.get('HOME'),".config","autostart")
+				autoshutdownFolder=os.path.join(os.environ.get('HOME'),".config","plasma-workspace/shutdown")
+				if os.path.isdir(autostartFolder)==False:
+					os.makedirs(autostartFolder)
+				if os.path.isdir(autoshutdownFolder)==False:
+					os.makedirs(autoshutdownFolder)
+				#Clean operations
+				self.cleanHome(autostartFolder,autoshutdownFolder)
+				for f in os.listdir(desktopPath):
+					if "profiler" in f:
+						continue
+					desktopFile=os.path.join(desktopPath,f)
+					shutil.copy(desktopFile,autostartFolder)
 			if os.path.isdir(confPath)==True:
 				usrFolder=os.path.join(os.environ.get('HOME'),".config/accesshelper")
 				if os.path.isdir(usrFolder)==False:
@@ -342,17 +370,26 @@ class functionHelperClass():
 				for confFile in os.listdir(confPath):
 					sourceFile=os.path.join(confPath,confFile)
 					self._debug("Cp {} {}".format(sourceFile,usrFolder))
+					#Modify profile value.
+					with open(sourceFile,"r") as f:
+						fcontents=f.read()
+					try:
+						jcontents=json.loads(fcontents)
+					except:
+						jcontents.update({"profile":"{}".format(os.path.basename(profileTar))})
+					(profile,startup)=self._getOldProfile(profileTar,usrFolder)
+					jcontents.update({"startup":startup})
+					jcontents.update({"autoprofile":profile})
+					if startup=="true":
+						cmd="/usr/share/accesshelper/accesshelp.py --set {}".format(profile)
+						self.generateAutostartDesktop(cmd,"accesshelper_profiler.desktop","plasma-workspace/shutdown")
+						#Apply changes on startup
+						cmd="{} apply".format(cmd)
+						self.generateAutostartDesktop(cmd,"accesshelper_profiler.desktop")
+					with open(sourceFile,"w") as f:
+						json.dump(jcontents,f,indent=4)
 					shutil.copy(sourceFile,usrFolder)
 				data=self.getPlasmaConfig()
-			desktopPath=os.path.join(tmpFolder,".config/autostart")
-			if os.path.isdir(desktopPath)==True:
-				autostartFolder=os.path.join(os.environ.get('HOME'),".config","autostart")
-				if os.path.isdir(autostartFolder)==False:
-					os.makedirs(autostartFolder)
-				for f in os.listdir(desktopPath):
-					desktopFile=os.path.join(desktopPath,f)
-					self._debug("Cp {} {}".format(desktopFile,autostartFolder))
-					shutil.copy(desktopFile,autostartFolder)
 			mozillaPath=os.path.join(tmpFolder,".mozilla")
 			if os.path.isdir(mozillaPath)==True:
 				mozillaFolder=os.path.join(os.environ.get('HOME'),".mozilla/firefox")
@@ -379,37 +416,104 @@ class functionHelperClass():
 		return(sw)
 	#def restore_snapshot
 
+	def cleanHome(self,autostartFolder,autoshutdownFolder):
+		self.removeAutostartDesktop("accesshelper_rgbFilter.desktop")
+		for f in os.listdir(autostartFolder):
+			if f.startswith("accesshelper_"):
+				os.remove(os.path.join(autostartFolder,f))
+		for f in os.listdir(autoshutdownFolder):
+			if f.startswith("accesshelper_"):
+				os.remove(os.path.join(autoshutdownFolder,f))
+	#def cleanHome
+
+	def _getOldProfile(self,profileTar,usrFolder):
+		profile=profileTar
+		startup="false"
+		oldconf=os.path.join(usrFolder,"accesshelper.json")
+		if os.path.isfile(oldconf)==True:
+			with open(oldconf,"r") as f:
+				foldcontents=f.read()
+			joldcontents=json.loads(foldcontents)
+			if joldcontents.get("startup","")=="true":
+				startup="true"
+				profile=joldcontents.get("profile","")
+				profile=joldcontents.get("autoprofile",profile)
+		profile=os.path.basename(profile).replace(".tar","")
+		return(profile,startup)
+	#def mergeHome
+
+	def setNewConfig(self):
+		self._setNewConfig()
+
 	def _setNewConfig(self):
 		usrConfig=os.path.join(os.environ.get('HOME'),".config/accesshelper/accesshelper.json")
 		if os.path.isfile(usrConfig):
+			jcontent={}
 			with open(usrConfig,'r') as f:
-				content=f.readlines()
+				content=f.read()
+			try:
+				jcontent=json.loads(content)
+			except:
+				fcontent=content.split("}")
+				fcontent="}".join(fcontent[:-1])+"}"
+				try:
+					jcontent=json.loads(fcontent)
+				except:
+					print(fcontent)
 			bkg=''
 			img=''
+			theme=''
+			scheme=''
 			color=''
 			cursor=''
 			size=''
-			for line in content:
-				fline=line.strip()
-				if fline.startswith("\"bkg\":"):
-					bkg=fline.split(" ")[-1].replace("\"","").replace(",","").replace("\n","")
-				if fline.startswith('\"bkgColor\":'):
-					color=fline.split(" ")[-1].replace("\"","").replace(",","").replace("\n","")
-				if fline.startswith('\"background\":'):
-					img=fline.split(" ")[-1].replace("\"","").replace(",","").replace("\n","")
-				if fline.startswith('\"cursor\":'):
-					cursor=fline.split(" ")[-1].replace("\"","").replace(",","").replace("\n","")
-				if fline.startswith('\"cursorSize\":'):
-					size=fline.split(" ")[-1].replace("\"","").replace(",","").replace("\n","")
+			scale='100'
+			xscale='100'
+			alpha=[]
+			for key,data in jcontent.items():
+				fline=""
+				if key=="bkg":
+					bkg=data
+				elif key=="bkgColor":
+					color=data
+				elif key=="background":
+					img=data
+				elif key=="cursor":
+					cursor=data
+				elif key=="cursorSize":
+					size=data
+				elif key=="theme":
+					theme=data
+				elif key=="scheme":
+					scheme=data
+				elif key=="scale":
+					scale=data
+				elif key=="xscale":
+					xscale=data
+				elif key=="alpha" and isinstance(data,list) and len(data)==4:
+					alpha=QColor(data[0],data[1],data[2],data[3])
 			if bkg=="color":
 				if color:
-					qcolor=QtGui.QColor(color)
+					qcolor=QColor(color)
 					self.setBackgroundColor(qcolor)
 			elif bkg=="image":
 				if img:
 					self.setBackgroundImg(img)
 			if cursor and size:
-				self._runSetCursorApp(cursor,size)
+				self.setCursor(cursor,size,applyChanges=True)
+			if scale:
+				self.setScaleFactor(float(scale)/100)
+			self.removeAutostartDesktop("accesshelper_Xscale.desktop")
+			if xscale:
+				if xscale!="100":
+					self.setXscale(xscale)
+			self.removeRGBFilter()
+			if isinstance(alpha,QColor):
+				self.setRGBFilter(alpha)
+			if theme!="":
+				subprocess.run(["plasma-apply-desktoptheme",theme],stdout=subprocess.PIPE)
+			if scheme!="":
+				subprocess.run(["plasma-apply-colorscheme",scheme],stdout=subprocess.PIPE)
 	#def _setNewConfig					
 
 	def _loadPlasmaConfigFromFolder(self,folder):
@@ -424,11 +528,9 @@ class functionHelperClass():
 	def getPointerImage(self,theme):
 		icon=os.path.join("/usr/share/icons",theme,"cursors","left_ptr")
 		self._debug("Extracting imgs for icon {}".format(icon))
-		if os.path.isfile(icon)==False:
-			icon=os.path.join(os.environ.get("HOME",""),".icons",theme,"cursors","left_ptr")
 		qicon=""
 		sizes=[]
-		if os.path.isfile(icon):
+		if os.path.isfile(icon)==True:
 			tmpDir=tempfile.TemporaryDirectory()
 			cmd=["xcur2png","-q","-c","-","-d",tmpDir.name,icon]
 			try:
@@ -473,9 +575,12 @@ class functionHelperClass():
 		}
 		"""
 		bus = dbus.SessionBus()
-		plasma = dbus.Interface(bus.get_object(
+		try:
+			plasma = dbus.Interface(bus.get_object(
 			'org.kde.plasmashell', '/PlasmaShell'), dbus_interface='org.kde.PlasmaShell')
-		plasma.evaluateScript(jscript % (plugin, plugin, color))
+			plasma.evaluateScript(jscript % (plugin, plugin, color))
+		except:
+			print("Plasma dbus error")
 	#def setBackgroundColor
 
 	def setBackgroundImg(self,imgFile):
@@ -491,17 +596,232 @@ class functionHelperClass():
 		}
 		"""
 		bus = dbus.SessionBus()
-		plasma = dbus.Interface(bus.get_object(
-			'org.kde.plasmashell', '/PlasmaShell'), dbus_interface='org.kde.PlasmaShell')
-		plasma.evaluateScript(jscript % (plugin, plugin, imgFile))
+		try:
+			plasma = dbus.Interface(bus.get_object(
+				'org.kde.plasmashell', '/PlasmaShell'), dbus_interface='org.kde.PlasmaShell')
+			plasma.evaluateScript(jscript % (plugin, plugin, imgFile))
+		except:
+			print("plasmashell not running")
 	#def setBackgroundImg
 
 	def _runSetCursorApp(self,theme,size):
-		if os.fork()!=0:
-			return
 		cmd=["/usr/share/accesshelper/helper/setcursortheme","-r","1",theme,size]
-		subprocess.run(cmd,stdout=subprocess.PIPE)
+		subprocess.Popen(cmd,stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 	#def _runSetCursorApp
+
+	def setScaleFactor(self,scaleFactor,plasma=True,xrand=False):
+		cmd=["xrandr","--listmonitors"]
+		output=subprocess.run(cmd,capture_output=True,text=True)
+		monitors=[]
+		for line in output.stdout.split("\n"):
+			if len(line.split(" "))>=4:
+				monitors.append("{0}={1}".format(line.split(" ")[-1],scaleFactor))
+		if xrand==True:
+			for monitor in monitors:
+				f=round(1-((scaleFactor-1)/3),2)
+				output=monitor.split("=")[0]
+				cmd=["xrandr","--output",output,"--scale","{}x{}".format(f,f)]
+				try:
+					subprocess.run(cmd)
+				except Exception as e:
+					print(" ".join(cmd))
+					print(e)
+		if plasma==True:
+			self._debug("Setting plasma scale factor...")
+			if monitors:
+				screenScaleFactors="{};".format(";".join(monitors))
+				self.setKdeConfigSetting("KScreen","ScreenScaleFactors",screenScaleFactors,"kdeglobals")
+			if scaleFactor==1:
+				scaleFactor=""
+			self.setKdeConfigSetting("KScreen","ScaleFactor",str(scaleFactor),"kdeglobals")
+	#def setScaleFactor
+
+	def removeAutostartDesktop(self,desktop,folder="autostart"):
+		home=os.environ.get("HOME")
+		if home:
+			if "shutdown" in folder:
+				desktop=desktop.replace(".desktop",".sh")
+			wrkFile=os.path.join(home,".config",folder,desktop)
+			if os.path.isfile(wrkFile):
+				os.remove(wrkFile)
+	#def _removeAutostartDesktop
+
+	def generateAutostartDesktop(self,cmd,fname,folder="autostart"):
+		desktop=[]
+		if "shutdown" in folder:
+			if isinstance(cmd,list):
+				cmd=" ".join(cmd)
+			cmd="#!/bin/bash\n{}".format(cmd)
+			fname=fname.replace(".desktop",".sh")
+			desktop=cmd.split("\n")
+		else:
+			if isinstance(cmd,list):
+				cmd=" ".join(cmd)
+			desktop.append("[Desktop Entry]")
+			desktop.append("Encoding=UTF-8")
+			desktop.append("Type=Application")
+			desktop.append("Name={}".format(fname.replace(".desktop","")))
+			desktop.append("Comment=Apply rgb filters")
+			desktop.append("Exec={}".format(cmd))
+			desktop.append("StartupNotify=false")
+			desktop.append("Terminal=false")
+			desktop.append("Hidden=false")
+		home=os.environ.get("HOME")
+		if home:
+			wrkFile=os.path.join(home,".config",folder,fname)
+			if os.path.isdir(os.path.dirname(wrkFile))==False:
+				os.makedirs(os.path.dirname(wrkFile))
+			with open(wrkFile,"w") as f:
+				f.write("\n".join(desktop))
+			if "shutdown" in folder:
+				os.chmod(wrkFile,0o755)
+	#def generateAutostartDesktop
+
+	def removeRGBFilter(self):
+		for monitor in self._getMonitors():
+			xrand=["xrandr","--output",monitor,"--gamma","1:1:1","--brightness","1"]
+		xgamma=["xgamma","-screen","0","-rgamma","1","-ggamma","1","-bgamma","1"]
+		cmd=subprocess.run(xgamma,capture_output=True,encoding="utf8")
+		values=[("ggamma","1.00"),("bgamma","1.00"),("rgamma","1.00")]
+		plasmaConfig={'kgammarc':{'Screen 0':values}}
+		self.setPlasmaConfig(plasmaConfig)
+		self.removeAutostartDesktop("accesshelper_rgbFilter.desktop")
+	#def resetRGBFilter
+
+	def setRGBFilter(self,alpha,onlyset=False):
+		def getRgbCompatValue(color):
+			(top,color)=color
+			c=round((color*top)/255,2)
+			return c
+		def adjustCompatValue(color):
+			(multiplier,c,minValue)=color
+			while (c*100)%multiplier!=0 and c!=0:
+				c=round(c+0.01,2)
+			if c<=minValue:
+				c=minValue
+			return c
+		#xgamma uses 0.1-10 scale. Values>4 are too bright and values<0.5 too dark
+		maxXgamma=3.5
+		minXgamma=0.5
+		#kgamma uses 0.40-3.5 scale. 
+		maxKgamma=3.5
+		minKgamma=0.4
+		(xred,xblue,xgreen)=map(getRgbCompatValue,[(maxXgamma,alpha.red()),(maxXgamma,alpha.blue()),(maxXgamma,alpha.green())])
+		(red,blue,green)=map(getRgbCompatValue,[(maxKgamma,alpha.red()),(maxKgamma,alpha.blue()),(maxKgamma,alpha.green())])
+		if red+blue+green>(maxKgamma*(2-(maxKgamma*0.10))): #maxKGamma*2=at least two channel very high, plus a 10% margin
+			red-=1
+			green-=1
+			blue-=1
+		multiplier=1
+		(xred,xblue,xgreen)=map(adjustCompatValue,[[multiplier,minXgamma,xred],[multiplier,minXgamma,xblue],[multiplier,minXgamma,xgreen]])
+		multiplier=5
+		(red,blue,green)=map(adjustCompatValue,[[multiplier,minKgamma,red],[multiplier,minKgamma,blue],[multiplier,minKgamma,green]])
+		brightness=1
+		xgamma=["xgamma","-screen","0","-rgamma","{0:.2f}".format(xred),"-ggamma","{0:.2f}".format(xgreen),"-bgamma","{0:.2f}".format(xblue)]
+		cmd=subprocess.run(xgamma,capture_output=True,encoding="utf8")
+		if onlyset==False:
+			self.generateAutostartDesktop(xgamma,"accesshelper_rgbFilter.desktop")
+		return(red,green,blue)
+	#def setRGBFilter
+
+	def setXscale(self,xscale):
+		cmd=["xrandr","--listmonitors"]
+		output=subprocess.run(cmd,capture_output=True,text=True)
+		monitors=[]
+		for line in output.stdout.split("\n"):
+			if len(line.split(" "))>=4:
+				monitors.append("{0}".format(line.split(" ")[-1]))
+		cmd=[]
+		for output in monitors:
+			f=round(1-(((int(xscale)/100)-1)/3),2)
+			cmd.append("sleep 5")
+			cmd.append("xrandr --output {0} --scale {1}x{1}".format(output,f))
+		self.generateAutostartDesktop(" && ".join(cmd),"accesshelper_Xscale.desktop")
+	#def setXscale(self,xscale):
+
+	def setCursorSize(self,size):
+		self._debug("Sizing to: {}".format(size))
+		self.setKdeConfigSetting("Mouse","cursorSize","{}".format(size),"kcminputrc")
+		xdefault=os.path.join(os.environ.get("HOME"),".Xdefaults")
+		xcursor="Xcursor.size: {}\n".format(size)
+		fcontents=[]
+		if os.path.isfile(xdefault):
+			with open(xdefault,"r") as f:
+				fcontents=f.readlines()
+		newContent=[]
+		for line in fcontents:
+			if line.startswith("Xcursor.size:")==False:
+				line=line.strip()
+				newContent.append("{}\n".format(line))
+		newContent.append(xcursor)
+		with open(xdefault,"w") as f:
+			f.writelines(newContent)
+		cmd=["xrdb","-merge",xdefault]
+		subprocess.run(cmd)
+	#def setCursorSize
+
+	def setCursor(self,theme="default",size="",applyChanges=False):
+		if theme=="default":
+			theme=self.getCursorTheme()
+		err=0
+		if ("[") in theme:
+			theme=theme.split("[")[1].replace("[","").replace("]","")
+		if applyChanges==True:
+			try:
+				subprocess.run(["plasma-apply-cursortheme",theme],stdout=subprocess.PIPE)
+			except Exception as e:
+				print(e)
+				err=1
+		os.environ["XCURSOR_THEME"]=theme
+		print("Set theme: {}".format(theme))
+		if size!="":
+			if (isinstance(size,str))==False:
+				size=str(size)
+			self.setCursorSize(size)
+			try:
+				p=Process(target=self._runSetCursorApp,args=(theme,size,))
+				p.start()
+				p.join()
+			except Exception as e:
+				print(e)
+				err=2
+		try:
+			cmd=["qdbus","org.kde.klauncher5","/KLauncher","org.kde.KLauncher.setLaunchEnv","XCURSOR_THEME",theme]
+			subprocess.run(cmd,stdout=subprocess.PIPE)
+			cmd=["qdbus","org.kde.klauncher5","/KLauncher","org.kde.KLauncher.setLaunchEnv","XCURSOR_SIZE",size]
+			subprocess.run(cmd,stdout=subprocess.PIPE)
+		except Exception as e:
+			print(e)
+			err=3
+		return(err)
+	#def setCursor
+
+	def getCursorTheme(self):
+		themes=self.getCursors()
+		theme="Adwaita"
+		for available in themes:
+			if ("(") in available:
+				theme=available.split("[")[1].replace("[","").replace("]","")
+				theme=theme.split(" ")[0]
+				break
+		return(theme)
+	#def getCursorTheme
+
+	def getCursors(self):
+		availableThemes=[]
+		themes=""
+		try:
+			themes=subprocess.run(["plasma-apply-cursortheme","--list-themes"],stdout=subprocess.PIPE)
+		except Exception as e:
+			print(e)
+		if themes:
+			out=themes.stdout.decode()
+			for line in out.split("\n"):
+				theme=line.strip()
+				if theme.startswith("*"):
+					availableThemes.append(theme.replace("*","").strip())
+		return(availableThemes)
+	#def getCursors
 
 class accesshelper():
 	def __init__(self):
@@ -542,102 +862,45 @@ class accesshelper():
 		wrkFile=os.path.join(home,".config/accesshelper","onboard.dconf")
 		if os.path.isfile(wrkFile):
 			cmd=["cat",wrkFile]
-			cat=subprocess.Popen(cmd,stdout=subprocess.PIPE)
-			cmd=["dconf","load","/org/onboard/"]
-			dconf=subprocess.run(cmd,stdin=cat.stdout)
+			try:
+				cat=subprocess.Popen(cmd,stdout=subprocess.PIPE)
+			except:
+				cat=None
+			if cat!=None:
+				cmd=["dconf","load","/org/onboard/"]
+				try:
+					dconf=subprocess.run(cmd,stdin=cat.stdout)
+				except Exception as e:
+					print(e)
+				cat.communicate()
 	#def setOnboardConfig
 
 	def removeRGBFilter(self):
-		for monitor in self.getMonitors():
-			xrand=["xrandr","--output",monitor,"--gamma","1:1:1","--brightness","1"]
-		xgamma=["xgamma","-screen","0","-rgamma","1","-ggamma","1","-bgamma","1"]
-		cmd=subprocess.run(xgamma,capture_output=True,encoding="utf8")
-		values=[("ggamma","1.00"),("bgamma","1.00"),("rgamma","1.00")]
-		plasmaConfig={'kgammarc':{'Screen 0':values}}
-		self.setPlasmaConfig(plasmaConfig)
-		self.removeAutostartDesktop("accesshelper_rgbFilter.desktop")
+		self.functionHelper.removeRGBFilter()
 	#def resetRGBFilter
 
-	def removeAutostartDesktop(self,desktop):
-		home=os.environ.get("HOME")
-		if home:
-			wrkFile=os.path.join(home,".config","autostart",desktop)
-			if os.path.isfile(wrkFile):
-				os.remove(wrkFile)
+	def removeXscale(self):
+		self.removeAutostartDesktop("accesshelper_Xscale.desktop")
+	#def removeXscale
+
+	def removeAutostartDesktop(self,desktop,folder="autostart"):
+		self.functionHelper.removeAutostartDesktop(desktop,folder)
 	#def _removeAutostartDesktop
 
-	def setRGBFilter(self,alpha):
-		def getRgbCompatValue(color):
-			(top,color)=color
-			c=round((color*top)/255,2)
-			return c
-		def adjustCompatValue(color):
-			(multiplier,c,minValue)=color
-			while (c*100)%multiplier!=0 and c!=0:
-				c=round(c+0.01,2)
-			if c<=minValue:
-				c=minValue
-			return c
-		#xgamma uses 0.1-10 scale. Values>4 are too bright and values<0.5 too dark
-		maxXgamma=3.5
-		minXgamma=0.5
-		#kgamma uses 0.40-3.5 scale. 
-		maxKgamma=3.5
-		minKgamma=0.4
-		(xred,xblue,xgreen)=map(getRgbCompatValue,[(maxXgamma,alpha.red()),(maxXgamma,alpha.blue()),(maxXgamma,alpha.green())])
-		(red,blue,green)=map(getRgbCompatValue,[(maxKgamma,alpha.red()),(maxKgamma,alpha.blue()),(maxKgamma,alpha.green())])
-		if red+blue+green>(maxKgamma*(2-(maxKgamma*0.10))): #maxKGamma*2=at least two channel very high, plus a 10% margin
-			red-=1
-			green-=1
-			blue-=1
-		multiplier=1
-		(xred,xblue,xgreen)=map(adjustCompatValue,[[multiplier,minXgamma,xred],[multiplier,minXgamma,xblue],[multiplier,minXgamma,xgreen]])
-		multiplier=5
-		(red,blue,green)=map(adjustCompatValue,[[multiplier,minKgamma,red],[multiplier,minKgamma,blue],[multiplier,minKgamma,green]])
-		brightness=1
-		xgamma=["xgamma","-screen","0","-rgamma","{0:.2f}".format(xred),"-ggamma","{0:.2f}".format(xgreen),"-bgamma","{0:.2f}".format(xblue)]
-		cmd=subprocess.run(xgamma,capture_output=True,encoding="utf8")
-		self.generateAutostartDesktop(xgamma,"accesshelper_rgbFilter.desktop")
-		return(red,green,blue)
+	def setRGBFilter(self,*args,**kwargs):
+		return(self.functionHelper.setRGBFilter(*args,**kwargs))
 	#def setRGBFilter
 
-	def generateAutostartDesktop(self,cmd,fname):
-		desktop=[]
-		if isinstance(cmd,list):
-			cmd=" ".join(cmd)
-		desktop.append("[Desktop Entry]")
-		desktop.append("Encoding=UTF-8")
-		desktop.append("Type=Application")
-		desktop.append("Name={}".format(fname.replace(".desktop","")))
-		desktop.append("Comment=Apply rgb filters")
-		desktop.append("Exec={}".format(cmd))
-		desktop.append("StartupNotify=false")
-		desktop.append("Terminal=false")
-		desktop.append("Hidden=false")
-		home=os.environ.get("HOME")
-		if home:
-			wrkFile=os.path.join(home,".config","autostart",fname)
-			if os.path.isdir(os.path.dirname(wrkFile))==False:
-				os.makedirs(os.path.dirname(wrkFile))
-			with open(wrkFile,"w") as f:
-				f.write("\n".join(desktop))
+	def setXscale(self,*args):
+		self.functionHelper.setXscale(*args)
+	#def setXscale(self,xscale):
+
+	def generateAutostartDesktop(self,cmd,fname,folder="autostart"):
+		self.functionHelper.generateAutostartDesktop(cmd,fname,folder)
 	#def generateAutostartDesktop
 
-
 	def getCursors(self):
-		availableThemes=[]
-		themes=""
-		try:
-			themes=subprocess.run(["plasma-apply-cursortheme","--list-themes"],stdout=subprocess.PIPE)
-		except Exception as e:
-			print(e)
-		if themes:
-			out=themes.stdout.decode()
-			for line in out.split("\n"):
-				theme=line.strip()
-				if theme.startswith("*"):
-					availableThemes.append(theme.replace("*","").strip())
-		return(availableThemes)
+		return(self.functionHelper.getCursors())
 	#def getCursors
 
 	def getSchemes(self):
@@ -672,64 +935,16 @@ class accesshelper():
 		return (availableThemes)
 	#def getThemes
 
-	def setCursor(self,theme="default",size=""):
-		if theme=="default":
-			theme=self._getCursorTheme()
-		err=0
-		if ("[") in theme:
-			theme=theme.split("[")[1].replace("[","").replace("]","")
-		try:
-			subprocess.run(["plasma-apply-cursortheme",theme],stdout=subprocess.PIPE)
-		except Exception as e:
-			print(e)
-			err=1
-		os.environ["XCURSOR_THEME"]=theme
-		print("Set theme: {}".format(theme))
-		if size!="":
-			if (isinstance(size,str))==False:
-				size=str(size)
-			self.setCursorSize(size)
-			try:
-				p=Process(target=self._runSetCursorApp,args=(theme,size,))
-				p.start()
-				p.join()
-			except Exception as e:
-				print(e)
-				err=2
-		try:
-			cmd=["qdbus","org.kde.klauncher5","/KLauncher","org.kde.KLauncher.setLaunchEnv","XCURSOR_THEME",theme]
-			subprocess.run(cmd,stdout=subprocess.PIPE)
-			cmd=["qdbus","org.kde.klauncher5","/KLauncher","org.kde.KLauncher.setLaunchEnv","XCURSOR_SIZE",size]
-			subprocess.run(cmd,stdout=subprocess.PIPE)
-		except Exception as e:
-			print(e)
-			err=3
-		return(err)
+	def setCursor(self,*args):
+		self.functionHelper.setCursor(*args)
 	#def setCursor
 
 	def _runSetCursorApp(self,*args):
 		self.functionHelper._runSetCursorApp(*args)
 	#def _runSetCursorApp
 
-	def setCursorSize(self,size):
-		self._debug("Sizing to: {}".format(size))
-		self.setKdeConfigSetting("Mouse","cursorSize","{}".format(size),"kcminputrc")
-		xdefault=os.path.join(os.environ.get("HOME"),".Xdefaults")
-		xcursor="Xcursor.size: {}\n".format(size)
-		fcontents=[]
-		if os.path.isfile(xdefault):
-			with open(xdefault,"r") as f:
-				fcontents=f.readlines()
-		newContent=[]
-		for line in fcontents:
-			if line.startswith("Xcursor.size:")==False:
-				line=line.strip()
-				newContent.append("{}\n".format(line))
-		newContent.append(xcursor)
-		with open(xdefault,"w") as f:
-			f.writelines(newContent)
-		cmd=["xrdb","-merge",xdefault]
-		subprocess.run(cmd)
+	def setCursorSize(self,*args):
+		self.functionHelper.setCursorSize(*args)
 	#def setCursorSize
 
 	def setScheme(self,scheme):
@@ -810,15 +1025,7 @@ class accesshelper():
 	#def importExportSnapshot
 	
 	def _getCursorTheme(self):
-		themes=self.getCursors()
-		theme="Adwaita"
-		for available in themes:
-			if ("(") in available:
-				theme=available.split("[")[1].replace("[","").replace("]","")
-				theme=theme.split(" ")[0]
-				break
-		print(theme)
-		return(theme)
+		return(self.functionHelper.getCursorTheme())
 	#def _getCursorTheme
 
 	def getPointerImage(self,*args,theme="default"):
@@ -940,7 +1147,19 @@ class accesshelper():
 		return sw
 	#def setGrubBeep
 
-	def applyChanges(self):
+	def setScaleFactor(self,*args,**kwargs):
+		return(self.functionHelper.setScaleFactor(*args,**kwargs))
+	#def setScaleFactor
+
+	def setNewConfig(self,*args):
+		self.functionHelper.setNewConfig()
+	#def setNewConfig(self,*args):
+
+	def applyChanges(self,setconf=True):
+		if setconf:
+			self.functionHelper.setNewConfig()
+		cmd=["kwin","--replace"]
+		subprocess.Popen(cmd)
 		cmd=["qdbus","org.kde.KWin","/KWin","org.kde.KWin.reconfigure"]
 		subprocess.run(cmd)
 		cmd=["kquitapp5","kglobalaccel5"]
@@ -949,8 +1168,14 @@ class accesshelper():
 		subprocess.run(cmd)
 		cmd=["plasmashell","--replace"]
 		subprocess.Popen(cmd)
-	#def applyChanges
-
+		time.sleep(10)
+		cmd=["pidof","plasmashell"]
+		p=subprocess.run(cmd)
+		if p.returncode!=0:
+			cmd=["plasmashell","--replace"]
+			subprocess.Popen(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+	#def _applyChangeswaitForPlasma
+		
 	def restartSession(self):
 		cmd=["qdbus","org.kde.ksmserver","/KSMServer","org.kde.KSMServerInterface.logout","1","3","3"]
 		#cmd=["qdbus","org.kde.Shutdown","/Shutdown","org.kde.Shutdown.logout"]

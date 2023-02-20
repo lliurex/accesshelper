@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-03 12:10+0200\n"
-"PO-Revision-Date: 2022-10-03 12:15+0200\n"
+"POT-Creation-Date: 2023-02-09 16:12+0100\n"
+"PO-Revision-Date: 2023-02-09 16:13+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ca\n"
@@ -18,39 +18,87 @@ msgstr ""
 "X-Generator: Poedit 2.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../src/accessdock.py:152
+#: ../src/accessdock.py:156
+msgid "Set font size"
+msgstr "Tamany de les lletres"
+
+#: ../src/accessdock.py:159
+msgid ""
+"{}%\n"
+"Scale"
+msgstr ""
+"{}%\n"
+"Ampliació"
+
+#: ../src/accessdock.py:160
+msgid "Set screen scale"
+msgstr "Ajusta la ampliació de l'entorn"
+
+#: ../src/accessdock.py:164
 msgid "Hide"
 msgstr "Amaga"
 
-#: ../src/accessdock.py:156
-msgid "Configure"
-msgstr "Configuració"
+#: ../src/accessdock.py:165
+msgid "Close accessdock"
+msgstr "Tancar"
 
-#: ../src/accessdock.py:160
+#: ../src/accessdock.py:169 ../src/stacks/settings.py:18
+msgid "Settings"
+msgstr "Ajustos"
+
+#: ../src/accessdock.py:170
+msgid "Launch accesshelper"
+msgstr "Obri accesshelper"
+
+#: ../src/accessdock.py:174
 msgid "Read screen"
 msgstr "Llegir"
 
-#: ../src/accessdock.py:164
+#: ../src/accessdock.py:175
+msgid "Read text or image from clipboard"
+msgstr "Llig text o una imatge (ocr) desde el porta-retalls"
+
+#: ../src/accessdock.py:179
+msgid "Capture"
+msgstr "Capturar"
+
+#: ../src/accessdock.py:180
+msgid "Try to read screen content from screenshot"
+msgstr "Intenta llegir el contingut de la pantalla"
+
+#: ../src/accessdock.py:184
 msgid "Pointer"
 msgstr "Punter"
 
-#: ../src/accessdock.py:168
+#: ../src/accessdock.py:185
+msgid "Set mouse pointer size"
+msgstr "Ajusta el tamany del punter"
+
+#: ../src/accessdock.py:189
 msgid "Filter"
 msgstr "Filtre"
 
-#: ../src/accessdock.py:172
+#: ../src/accessdock.py:190
+msgid "Apply a color filter"
+msgstr "Aplica un filtre de color"
+
+#: ../src/accessdock.py:194
 msgid "Keyboard"
 msgstr "Teclat"
 
-#: ../src/accesshelp.py:24
-msgid "usage: accesshelper [--set profile]|[--list]"
-msgstr "Ús: accesshelper [--set perfil]|[--list]"
+#: ../src/accessdock.py:195
+msgid "Show/Hide on-screen keyboard"
+msgstr "Mostra/amaga el teclat virtual"
 
-#: ../src/accesshelp.py:25
+#: ../src/accesshelp.py:26
+msgid "usage: accesshelper [--set profile]|[--list]"
+msgstr "ús: accesshelper [--set perfil]|[--list]"
+
+#: ../src/accesshelp.py:27
 msgid "With no args launch accesshelper GUI"
 msgstr "Sense arguments executa la GUI de l'accesshelper"
 
-#: ../src/accesshelp.py:26
+#: ../src/accesshelp.py:28
 msgid ""
 "--set [profile]: Activate specified profile.\n"
 "\tCould be an absolute path or a profile from default profiles path"
@@ -58,77 +106,81 @@ msgstr ""
 "--set [perfil]: Activa el perfil indicat.\n"
 "\tPot ser una ruta absoluta a un fitxer o el nom d'un perfil"
 
-#: ../src/accesshelp.py:27
+#: ../src/accesshelp.py:29
 msgid "--list: List available profiles"
 msgstr "--list: Mostra els perfils"
 
-#: ../src/accesshelp.py:28
+#: ../src/accesshelp.py:30
 msgid "could not be accessed"
 msgstr "no existeix"
 
-#: ../src/accesshelp.py:29
+#: ../src/accesshelp.py:31
 msgid "There's no profiles at"
 msgstr "No hi han perfils a"
 
-#: ../src/accesshelp.py:30
+#: ../src/accesshelp.py:32
 msgid "Error loading"
 msgstr "Error carregant"
 
-#: ../src/accesshelp.py:31
+#: ../src/accesshelp.py:33
 msgid "Must select one from:"
 msgstr "Cal seleccionar un perfil de:"
 
-#: ../src/accesshelp.py:32
+#: ../src/accesshelp.py:34
 msgid "Loading profile"
 msgstr "Carregant perfil"
 
-#: ../src/accesshelp.py:33
+#: ../src/accesshelp.py:35
 msgid "Changes will only apply after session restart"
 msgstr "Els canvis s'aplicarán després de tancar la sessió"
 
-#: ../src/accesshelp.py:34
+#: ../src/accesshelp.py:36
 msgid "Logout"
 msgstr "Tancar"
 
-#: ../src/accesshelp.py:35
+#: ../src/accesshelp.py:37
 msgid "Options selected:"
 msgstr "Opcions a aplicar:"
 
-#: ../src/accesshelp.py:36
+#: ../src/accesshelp.py:38
 msgid "Later"
 msgstr "Després"
 
-#: ../src/accesshelp.py:37
+#: ../src/accesshelp.py:39
 msgid "Profile not loaded: Autostart is disabled"
 msgstr "Perfil no carregat: Autoinici desactivat"
 
-#: ../src/accesshelp.py:38 ../src/stacks/profiles.py:29
+#: ../src/accesshelp.py:40 ../src/stacks/profiles.py:29
 msgid "Profile loaded"
 msgstr "Perfil carregat"
 
-#: ../src/accesshelp.py:39
+#: ../src/accesshelp.py:41
 msgid "Close Session"
 msgstr "Tancar sessió"
 
-#: ../src/accesshelp.py:40
+#: ../src/accesshelp.py:42
 msgid "Ignore"
 msgstr "Ignorar"
 
-#: ../src/accesshelp.py:41
+#: ../src/accesshelp.py:43
 msgid "Undo"
 msgstr "Desfer"
 
-#: ../src/stacks/access.py:13
+#: ../src/accesshelp.py:198
+msgid "Accesshelper running"
+msgstr "Accesshelper en execució"
+
+#: ../src/accesshelp.py:200
+msgid "Can't execute another instance of Accesshelp"
+msgstr "No es pot llançar de nou"
+
+#: ../src/stacks/access.py:13 ../src/stacks/access.py:15
 msgid "Accessibility"
 msgstr "Accessibilitat"
 
 #: ../src/stacks/access.py:14
 msgid "Accessibility options"
 msgstr "Opcions d'accessibilitat"
-
-#: ../src/stacks/access.py:15
-msgid "Accessibility configuration"
-msgstr "Configuració d'accessibilitat"
 
 #: ../src/stacks/access.py:16
 msgid "Set accesibility options"
@@ -272,9 +324,9 @@ msgstr "Cerca"
 msgid "Color"
 msgstr "Color"
 
-#: ../src/stacks/alpha.py:18
-msgid "Color filter configuration"
-msgstr "Filtres de color"
+#: ../src/stacks/alpha.py:18 ../src/stacks/alpha.py:21
+msgid "Color filter"
+msgstr "Filtre"
 
 #: ../src/stacks/alpha.py:19
 msgid "Modify screen color levels"
@@ -283,10 +335,6 @@ msgstr "Modifica els nivells de color"
 #: ../src/stacks/alpha.py:20
 msgid "Set color filter for the screen"
 msgstr "Estableix un filre de color per a la pantalla"
-
-#: ../src/stacks/alpha.py:21
-msgid "Color filter"
-msgstr "Filtre"
 
 #: ../src/stacks/alpha.py:22
 msgid "By default"
@@ -301,8 +349,8 @@ msgid "Hotkeys"
 msgstr "Dreceres"
 
 #: ../src/stacks/assignHotkeys.py:38
-msgid "Hotkeys configuration"
-msgstr "Configuració de les dreseres"
+msgid "Keyboard Hotkeys"
+msgstr "Dreceres de teclat"
 
 #: ../src/stacks/assignHotkeys.py:39
 msgid "Set hotkeys for launch applications"
@@ -400,13 +448,9 @@ msgstr "Resolució de pantalla"
 msgid "Font options"
 msgstr "Opciones de lletra"
 
-#: ../src/stacks/fonts.py:17
+#: ../src/stacks/fonts.py:17 ../src/stacks/fonts.py:18
 msgid "Fonts"
 msgstr "Fonts"
-
-#: ../src/stacks/fonts.py:18
-msgid "Font configuration"
-msgstr "Configuració de les fonts"
 
 #: ../src/stacks/fonts.py:19
 msgid "Modify system fonts"
@@ -424,12 +468,11 @@ msgstr "Tamany de font"
 msgid "Font family"
 msgstr "Familia"
 
-#: ../src/stacks/fonts.py:23 ../src/stacks/lookandfeel.py:29
-#: ../src/stacks/lookandfeel.py:31
+#: ../src/stacks/fonts.py:23 ../src/stacks/lookandfeel.py:30
 msgid "Cursor theme"
 msgstr "Tema per al punter"
 
-#: ../src/stacks/fonts.py:24 ../src/stacks/lookandfeel.py:30
+#: ../src/stacks/fonts.py:24 ../src/stacks/lookandfeel.py:29
 msgid "Cursor size"
 msgstr "Tamany de punter"
 
@@ -441,13 +484,9 @@ msgstr "Font"
 msgid "Look&Feel options"
 msgstr "Opcions d'apariencia"
 
-#: ../src/stacks/lookandfeel.py:19
+#: ../src/stacks/lookandfeel.py:19 ../src/stacks/lookandfeel.py:20
 msgid "Look&Feel"
 msgstr "Apariencia"
-
-#: ../src/stacks/lookandfeel.py:20
-msgid "Look&Feel configuration"
-msgstr "Configuració de l'apariencia"
 
 #: ../src/stacks/lookandfeel.py:21
 msgid "Modify appearence settings"
@@ -481,27 +520,35 @@ msgstr "Fons de l'escriptori"
 msgid "Current background"
 msgstr "Imatge actual"
 
+#: ../src/stacks/lookandfeel.py:31
+msgid "Widget size"
+msgstr "Tamany dels elements"
+
 #: ../src/stacks/lookandfeel.py:32
+msgid "Scale factor"
+msgstr "Factor d'ampliació"
+
+#: ../src/stacks/lookandfeel.py:33
 msgid "White"
 msgstr "Blanc"
 
-#: ../src/stacks/lookandfeel.py:33
+#: ../src/stacks/lookandfeel.py:34
 msgid "Red"
 msgstr "Roig"
 
-#: ../src/stacks/lookandfeel.py:34
+#: ../src/stacks/lookandfeel.py:35
 msgid "Blue"
 msgstr "Blau"
 
-#: ../src/stacks/lookandfeel.py:35
+#: ../src/stacks/lookandfeel.py:36
 msgid "Green"
 msgstr "Verd"
 
-#: ../src/stacks/lookandfeel.py:36
+#: ../src/stacks/lookandfeel.py:37
 msgid "Yellow"
 msgstr "Groc"
 
-#: ../src/stacks/lookandfeel.py:37
+#: ../src/stacks/lookandfeel.py:38
 msgid "Black"
 msgstr "Negre"
 
@@ -566,6 +613,10 @@ msgid "Export profile"
 msgstr "Exportar"
 
 #: ../src/stacks/profiles.py:32
+msgid "Profile"
+msgstr "Perfil"
+
+#: ../src/stacks/profiles.py:33
 msgid "An error ocurred"
 msgstr "Ocorregué un error"
 
@@ -644,10 +695,6 @@ msgstr "Espanyol femení"
 #: ../src/stacks/screenreader.py:36
 msgid "Catalan woman"
 msgstr "Català femení"
-
-#: ../src/stacks/settings.py:18
-msgid "Settings"
-msgstr "Ajustos"
 
 #: ../src/stacks/settings.py:19
 msgid "Manage application"
@@ -740,6 +787,24 @@ msgstr "Sistema"
 #: ../src/stacks/settings.py:79
 msgid "N4d"
 msgstr "N4d"
+
+#~ msgid "Configure"
+#~ msgstr "Configuració"
+
+#~ msgid "Accessibility configuration"
+#~ msgstr "Configuració d'accessibilitat"
+
+#~ msgid "Color filter configuration"
+#~ msgstr "Filtres de color"
+
+#~ msgid "Hotkeys configuration"
+#~ msgstr "Configuració de les dreseres"
+
+#~ msgid "Font configuration"
+#~ msgstr "Configuració de les fonts"
+
+#~ msgid "Look&Feel configuration"
+#~ msgstr "Configuració de l'apariencia"
 
 #~ msgid "Valencian"
 #~ msgstr "Valencià"

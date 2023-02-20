@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-09 16:12+0100\n"
-"PO-Revision-Date: 2023-02-09 16:13+0100\n"
+"POT-Creation-Date: 2023-02-17 11:49+0100\n"
+"PO-Revision-Date: 2023-02-20 09:42+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ca\n"
@@ -18,11 +18,11 @@ msgstr ""
 "X-Generator: Poedit 2.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../src/accessdock.py:156
+#: ../src/accessdock.py:212
 msgid "Set font size"
 msgstr "Tamany de les lletres"
 
-#: ../src/accessdock.py:159
+#: ../src/accessdock.py:215
 msgid ""
 "{}%\n"
 "Scale"
@@ -30,63 +30,63 @@ msgstr ""
 "{}%\n"
 "Ampliació"
 
-#: ../src/accessdock.py:160
+#: ../src/accessdock.py:216
 msgid "Set screen scale"
 msgstr "Ajusta la ampliació de l'entorn"
 
-#: ../src/accessdock.py:164
+#: ../src/accessdock.py:220
 msgid "Hide"
 msgstr "Amaga"
 
-#: ../src/accessdock.py:165
+#: ../src/accessdock.py:221
 msgid "Close accessdock"
 msgstr "Tancar"
 
-#: ../src/accessdock.py:169 ../src/stacks/settings.py:18
+#: ../src/accessdock.py:225 ../src/stacks/settings.py:18
 msgid "Settings"
 msgstr "Ajustos"
 
-#: ../src/accessdock.py:170
+#: ../src/accessdock.py:226
 msgid "Launch accesshelper"
 msgstr "Obri accesshelper"
 
-#: ../src/accessdock.py:174
+#: ../src/accessdock.py:231
 msgid "Read screen"
 msgstr "Llegir"
 
-#: ../src/accessdock.py:175
+#: ../src/accessdock.py:232
 msgid "Read text or image from clipboard"
 msgstr "Llig text o una imatge (ocr) desde el porta-retalls"
 
-#: ../src/accessdock.py:179
+#: ../src/accessdock.py:237
 msgid "Capture"
 msgstr "Capturar"
 
-#: ../src/accessdock.py:180
+#: ../src/accessdock.py:238
 msgid "Try to read screen content from screenshot"
 msgstr "Intenta llegir el contingut de la pantalla"
 
-#: ../src/accessdock.py:184
+#: ../src/accessdock.py:242
 msgid "Pointer"
 msgstr "Punter"
 
-#: ../src/accessdock.py:185
+#: ../src/accessdock.py:243
 msgid "Set mouse pointer size"
 msgstr "Ajusta el tamany del punter"
 
-#: ../src/accessdock.py:189
+#: ../src/accessdock.py:247
 msgid "Filter"
 msgstr "Filtre"
 
-#: ../src/accessdock.py:190
+#: ../src/accessdock.py:248
 msgid "Apply a color filter"
 msgstr "Aplica un filtre de color"
 
-#: ../src/accessdock.py:194
+#: ../src/accessdock.py:252
 msgid "Keyboard"
 msgstr "Teclat"
 
-#: ../src/accessdock.py:195
+#: ../src/accessdock.py:253
 msgid "Show/Hide on-screen keyboard"
 msgstr "Mostra/amaga el teclat virtual"
 
@@ -135,42 +135,84 @@ msgid "Changes will only apply after session restart"
 msgstr "Els canvis s'aplicarán després de tancar la sessió"
 
 #: ../src/accesshelp.py:36
+msgid "Changes will be applied now"
+msgstr "S'aplicaran els canvis ara"
+
+#: ../src/accesshelp.py:37
 msgid "Logout"
 msgstr "Tancar"
 
-#: ../src/accesshelp.py:37
+#: ../src/accesshelp.py:38
 msgid "Options selected:"
 msgstr "Opcions a aplicar:"
 
-#: ../src/accesshelp.py:38
+#: ../src/accesshelp.py:39
 msgid "Later"
 msgstr "Després"
 
-#: ../src/accesshelp.py:39
+#: ../src/accesshelp.py:40
 msgid "Profile not loaded: Autostart is disabled"
 msgstr "Perfil no carregat: Autoinici desactivat"
 
-#: ../src/accesshelp.py:40 ../src/stacks/profiles.py:29
+#: ../src/accesshelp.py:41 ../src/stacks/profiles.py:29
 msgid "Profile loaded"
 msgstr "Perfil carregat"
 
-#: ../src/accesshelp.py:41
+#: ../src/accesshelp.py:42
 msgid "Close Session"
 msgstr "Tancar sessió"
 
-#: ../src/accesshelp.py:42
+#: ../src/accesshelp.py:43
+msgid "Apply"
+msgstr "Aplicar"
+
+#: ../src/accesshelp.py:44
 msgid "Ignore"
 msgstr "Ignorar"
 
-#: ../src/accesshelp.py:43
+#: ../src/accesshelp.py:45
 msgid "Undo"
 msgstr "Desfer"
 
-#: ../src/accesshelp.py:198
+#: ../src/accesshelp.py:46
+msgid "Autostart profile is enabled"
+msgstr "Es carregará el perfil a l'inici"
+
+#: ../src/accesshelp.py:47
+msgid ""
+"A profile has been loaded. All settings has been applied if possible. Expect "
+"inconsistencies."
+msgstr ""
+"S'ha carregat un perfil. S'ha tractat d'aplicar tota la configuració encara "
+"que certes inconsistencies son esperables."
+
+#: ../src/accesshelp.py:48
+msgid ""
+"Accesshelper will try to apply as many changes as possible for current "
+"session (expect inconsistencies)"
+msgstr ""
+"Accesshelper tractarà d'aplicar tots el canvis per a aquesta sesió (poden "
+"apareixer inconsistencies)"
+
+#: ../src/accesshelp.py:49
+msgid "All settings will be applied after a session restart"
+msgstr "Els canvis s'aplicarán després de tancar la sessió"
+
+#: ../src/accesshelp.py:50
+msgid ""
+"The changes will not be persistent.All settings will be restored to profile"
+msgstr ""
+"Els canvis no son persistents. A l'inici de sessió es restaurarà el perfil."
+
+#: ../src/accesshelp.py:51
+msgid "Close this window for ignoring that until a session restart"
+msgstr "Tancar la finestra per a ignorar els canvis i continuar"
+
+#: ../src/accesshelp.py:231
 msgid "Accesshelper running"
 msgstr "Accesshelper en execució"
 
-#: ../src/accesshelp.py:200
+#: ../src/accesshelp.py:233
 msgid "Can't execute another instance of Accesshelp"
 msgstr "No es pot llançar de nou"
 
@@ -198,24 +240,24 @@ msgstr "Inverteix colors"
 msgid "Invert windows colors"
 msgstr "Inverteix colors de la finestra"
 
-#: ../src/stacks/access.py:20 ../src/stacks/access.py:38
+#: ../src/stacks/access.py:20 ../src/stacks/access.py:39
 msgid "Show animation on click"
 msgstr "Posiciona el punter al fer clic"
 
-#: ../src/stacks/access.py:21 ../src/stacks/access.py:39
+#: ../src/stacks/access.py:21 ../src/stacks/access.py:40
 #: ../src/stacks/behavior.py:23
 msgid "Show a grid when moving windows"
 msgstr "Mostra una graella al moure finestres"
 
-#: ../src/stacks/access.py:22 ../src/stacks/access.py:40
+#: ../src/stacks/access.py:22 ../src/stacks/access.py:41
 msgid "Activate eyefish effect"
 msgstr "Activa ull de peix"
 
-#: ../src/stacks/access.py:23 ../src/stacks/access.py:41
+#: ../src/stacks/access.py:23 ../src/stacks/access.py:42
 msgid "Glass effect"
 msgstr "Activa lupa"
 
-#: ../src/stacks/access.py:24 ../src/stacks/access.py:42
+#: ../src/stacks/access.py:24 ../src/stacks/access.py:43
 msgid "Zoom effect"
 msgstr "Activa Zoom"
 
@@ -223,11 +265,11 @@ msgstr "Activa Zoom"
 msgid "Enable magnify effects"
 msgstr "Activar efectes d'ampliació"
 
-#: ../src/stacks/access.py:26 ../src/stacks/access.py:43
+#: ../src/stacks/access.py:26 ../src/stacks/access.py:44
 msgid "Acoustic system bell"
 msgstr "Campana de sistema audible"
 
-#: ../src/stacks/access.py:27 ../src/stacks/access.py:44
+#: ../src/stacks/access.py:27 ../src/stacks/access.py:45
 msgid "Visible bell"
 msgstr "Campana visible"
 
@@ -244,27 +286,34 @@ msgstr "assignat a"
 msgid "Track click"
 msgstr "Posiciona el punter al fer clic"
 
-#: ../src/stacks/access.py:31 ../src/stacks/settings.py:36
+#: ../src/stacks/access.py:31
+msgid "Disable load profile on startup or changes will not apply on restart"
+msgstr ""
+"Desactivar la carrega inicial de perfil o els canvis no s'aplicaran al "
+"reiniciar"
+
+#: ../src/stacks/access.py:32 ../src/stacks/settings.py:40
+#: ../src/stacks/settings.py:41
 msgid "Disabled"
 msgstr "Desactivat"
 
-#: ../src/stacks/access.py:32
+#: ../src/stacks/access.py:33 ../src/stacks/settings.py:42
 msgid "Enabled"
 msgstr "Activat"
 
-#: ../src/stacks/access.py:36
+#: ../src/stacks/access.py:37
 msgid "Invert"
 msgstr "Inverteix colors"
 
-#: ../src/stacks/access.py:37
+#: ../src/stacks/access.py:38
 msgid "InvertWindow"
 msgstr "Inverteix colors de la finestra"
 
-#: ../src/stacks/access.py:45
+#: ../src/stacks/access.py:46
 msgid "TrackMouse"
 msgstr "Posiciona el punter al moure'l"
 
-#: ../src/stacks/access.py:46
+#: ../src/stacks/access.py:47
 msgid "ToggleMouseClick"
 msgstr "Posiciona el punter al fer click"
 
@@ -316,7 +365,7 @@ msgstr "Assigna"
 msgid "Press a key or key-combination for the shortcut"
 msgstr "Prem una tecla o combinació per a la drecera"
 
-#: ../src/stacks/addHotkey.py:76
+#: ../src/stacks/addHotkey.py:71
 msgid "Search"
 msgstr "Cerca"
 
@@ -760,31 +809,35 @@ msgstr "Barra d'accesibilitat inhabilitada"
 msgid "Use config"
 msgstr "Usar configuració"
 
-#: ../src/stacks/settings.py:35
-msgid "Startup profile"
-msgstr "Perfil inicial"
-
-#: ../src/stacks/settings.py:37
-msgid "Autostart dock"
-msgstr "Autoinici del dock"
-
-#: ../src/stacks/settings.py:38
-msgid "Hotkey for dock"
-msgstr "Drecera per al dock"
-
-#: ../src/stacks/settings.py:39
-msgid "Beep when machine starts"
-msgstr "Pita al arrancar el sistema"
-
-#: ../src/stacks/settings.py:77
+#: ../src/stacks/settings.py:35 ../src/stacks/settings.py:83
 msgid "User"
 msgstr "Usuari"
 
-#: ../src/stacks/settings.py:78
+#: ../src/stacks/settings.py:36 ../src/stacks/settings.py:84
 msgid "System"
 msgstr "Sistema"
 
-#: ../src/stacks/settings.py:79
+#: ../src/stacks/settings.py:38
+msgid "Startup profile"
+msgstr "Perfil inicial"
+
+#: ../src/stacks/settings.py:39
+msgid "Autoload profile"
+msgstr "Carrega inicial de perfil"
+
+#: ../src/stacks/settings.py:43
+msgid "Autostart dock"
+msgstr "Autoinici del dock"
+
+#: ../src/stacks/settings.py:44
+msgid "Hotkey for dock"
+msgstr "Drecera per al dock"
+
+#: ../src/stacks/settings.py:45
+msgid "Beep when machine starts"
+msgstr "Pita al arrancar el sistema"
+
+#: ../src/stacks/settings.py:85
 msgid "N4d"
 msgstr "N4d"
 
@@ -847,5 +900,14 @@ msgstr "N4d"
 #~ msgid "Set resolution"
 #~ msgstr "Resolució"
 
-#~ msgid "Great A Tuin the turtle comes, swimming slowly through the interstellar gulf, hydrogen frost on his ponderous limbs, his huge and ancient shell pocked with meteor craters. Through sea-sized eyes that are crusted with rheum and asteroid dust He stares fixedly at the Destination."
-#~ msgstr "Arriba la tortuga Great A Tuin, nedant lentament a través del golf interestel·lar, amb gebre d'hidrogen a les seues pesades extremitats, la seua enorme i antiga closca plena de cràters de meteorits. A través d'ulls de la mida d'un mar coberts de pols d'asteroides i lleganyes, mira fixament el destí."
+#~ msgid ""
+#~ "Great A Tuin the turtle comes, swimming slowly through the interstellar "
+#~ "gulf, hydrogen frost on his ponderous limbs, his huge and ancient shell "
+#~ "pocked with meteor craters. Through sea-sized eyes that are crusted with "
+#~ "rheum and asteroid dust He stares fixedly at the Destination."
+#~ msgstr ""
+#~ "Arriba la tortuga Great A Tuin, nedant lentament a través del golf "
+#~ "interestel·lar, amb gebre d'hidrogen a les seues pesades extremitats, la "
+#~ "seua enorme i antiga closca plena de cràters de meteorits. A través "
+#~ "d'ulls de la mida d'un mar coberts de pols d'asteroides i lleganyes, mira "
+#~ "fixament el destí."

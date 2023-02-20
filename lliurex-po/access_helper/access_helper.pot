@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-09 16:12+0100\n"
+"POT-Creation-Date: 2023-02-17 11:49+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,73 +17,73 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../src/accessdock.py:156
+#: ../src/accessdock.py:212
 msgid "Set font size"
 msgstr ""
 
-#: ../src/accessdock.py:159
+#: ../src/accessdock.py:215
 msgid ""
 "{}%\n"
 "Scale"
 msgstr ""
 
-#: ../src/accessdock.py:160
+#: ../src/accessdock.py:216
 msgid "Set screen scale"
 msgstr ""
 
-#: ../src/accessdock.py:164
+#: ../src/accessdock.py:220
 msgid "Hide"
 msgstr ""
 
-#: ../src/accessdock.py:165
+#: ../src/accessdock.py:221
 msgid "Close accessdock"
 msgstr ""
 
-#: ../src/accessdock.py:169 ../src/stacks/settings.py:18
+#: ../src/accessdock.py:225 ../src/stacks/settings.py:18
 msgid "Settings"
 msgstr ""
 
-#: ../src/accessdock.py:170
+#: ../src/accessdock.py:226
 msgid "Launch accesshelper"
 msgstr ""
 
-#: ../src/accessdock.py:174
+#: ../src/accessdock.py:231
 msgid "Read screen"
 msgstr ""
 
-#: ../src/accessdock.py:175
+#: ../src/accessdock.py:232
 msgid "Read text or image from clipboard"
 msgstr ""
 
-#: ../src/accessdock.py:179
+#: ../src/accessdock.py:237
 msgid "Capture"
 msgstr ""
 
-#: ../src/accessdock.py:180
+#: ../src/accessdock.py:238
 msgid "Try to read screen content from screenshot"
 msgstr ""
 
-#: ../src/accessdock.py:184
+#: ../src/accessdock.py:242
 msgid "Pointer"
 msgstr ""
 
-#: ../src/accessdock.py:185
+#: ../src/accessdock.py:243
 msgid "Set mouse pointer size"
 msgstr ""
 
-#: ../src/accessdock.py:189
+#: ../src/accessdock.py:247
 msgid "Filter"
 msgstr ""
 
-#: ../src/accessdock.py:190
+#: ../src/accessdock.py:248
 msgid "Apply a color filter"
 msgstr ""
 
-#: ../src/accessdock.py:194
+#: ../src/accessdock.py:252
 msgid "Keyboard"
 msgstr ""
 
-#: ../src/accessdock.py:195
+#: ../src/accessdock.py:253
 msgid "Show/Hide on-screen keyboard"
 msgstr ""
 
@@ -130,42 +130,79 @@ msgid "Changes will only apply after session restart"
 msgstr ""
 
 #: ../src/accesshelp.py:36
-msgid "Logout"
+msgid "Changes will be applied now"
 msgstr ""
 
 #: ../src/accesshelp.py:37
-msgid "Options selected:"
+msgid "Logout"
 msgstr ""
 
 #: ../src/accesshelp.py:38
-msgid "Later"
+msgid "Options selected:"
 msgstr ""
 
 #: ../src/accesshelp.py:39
+msgid "Later"
+msgstr ""
+
+#: ../src/accesshelp.py:40
 msgid "Profile not loaded: Autostart is disabled"
 msgstr ""
 
-#: ../src/accesshelp.py:40 ../src/stacks/profiles.py:29
+#: ../src/accesshelp.py:41 ../src/stacks/profiles.py:29
 msgid "Profile loaded"
 msgstr ""
 
-#: ../src/accesshelp.py:41
+#: ../src/accesshelp.py:42
 msgid "Close Session"
 msgstr ""
 
-#: ../src/accesshelp.py:42
+#: ../src/accesshelp.py:43
+msgid "Apply"
+msgstr ""
+
+#: ../src/accesshelp.py:44
 msgid "Ignore"
 msgstr ""
 
-#: ../src/accesshelp.py:43
+#: ../src/accesshelp.py:45
 msgid "Undo"
 msgstr ""
 
-#: ../src/accesshelp.py:198
+#: ../src/accesshelp.py:46
+msgid "Autostart profile is enabled"
+msgstr ""
+
+#: ../src/accesshelp.py:47
+msgid ""
+"A profile has been loaded. All settings has been applied if possible. Expect "
+"inconsistencies."
+msgstr ""
+
+#: ../src/accesshelp.py:48
+msgid ""
+"Accesshelper will try to apply as many changes as possible for current "
+"session (expect inconsistencies)"
+msgstr ""
+
+#: ../src/accesshelp.py:49
+msgid "All settings will be applied after a session restart"
+msgstr ""
+
+#: ../src/accesshelp.py:50
+msgid ""
+"The changes will not be persistent.All settings will be restored to profile"
+msgstr ""
+
+#: ../src/accesshelp.py:51
+msgid "Close this window for ignoring that until a session restart"
+msgstr ""
+
+#: ../src/accesshelp.py:231
 msgid "Accesshelper running"
 msgstr ""
 
-#: ../src/accesshelp.py:200
+#: ../src/accesshelp.py:233
 msgid "Can't execute another instance of Accesshelp"
 msgstr ""
 
@@ -193,24 +230,24 @@ msgstr ""
 msgid "Invert windows colors"
 msgstr ""
 
-#: ../src/stacks/access.py:20 ../src/stacks/access.py:38
+#: ../src/stacks/access.py:20 ../src/stacks/access.py:39
 msgid "Show animation on click"
 msgstr ""
 
-#: ../src/stacks/access.py:21 ../src/stacks/access.py:39
+#: ../src/stacks/access.py:21 ../src/stacks/access.py:40
 #: ../src/stacks/behavior.py:23
 msgid "Show a grid when moving windows"
 msgstr ""
 
-#: ../src/stacks/access.py:22 ../src/stacks/access.py:40
+#: ../src/stacks/access.py:22 ../src/stacks/access.py:41
 msgid "Activate eyefish effect"
 msgstr ""
 
-#: ../src/stacks/access.py:23 ../src/stacks/access.py:41
+#: ../src/stacks/access.py:23 ../src/stacks/access.py:42
 msgid "Glass effect"
 msgstr ""
 
-#: ../src/stacks/access.py:24 ../src/stacks/access.py:42
+#: ../src/stacks/access.py:24 ../src/stacks/access.py:43
 msgid "Zoom effect"
 msgstr ""
 
@@ -218,11 +255,11 @@ msgstr ""
 msgid "Enable magnify effects"
 msgstr ""
 
-#: ../src/stacks/access.py:26 ../src/stacks/access.py:43
+#: ../src/stacks/access.py:26 ../src/stacks/access.py:44
 msgid "Acoustic system bell"
 msgstr ""
 
-#: ../src/stacks/access.py:27 ../src/stacks/access.py:44
+#: ../src/stacks/access.py:27 ../src/stacks/access.py:45
 msgid "Visible bell"
 msgstr ""
 
@@ -239,27 +276,32 @@ msgstr ""
 msgid "Track click"
 msgstr ""
 
-#: ../src/stacks/access.py:31 ../src/stacks/settings.py:36
+#: ../src/stacks/access.py:31
+msgid "Disable load profile on startup or changes will not apply on restart"
+msgstr ""
+
+#: ../src/stacks/access.py:32 ../src/stacks/settings.py:40
+#: ../src/stacks/settings.py:41
 msgid "Disabled"
 msgstr ""
 
-#: ../src/stacks/access.py:32
+#: ../src/stacks/access.py:33 ../src/stacks/settings.py:42
 msgid "Enabled"
 msgstr ""
 
-#: ../src/stacks/access.py:36
+#: ../src/stacks/access.py:37
 msgid "Invert"
 msgstr ""
 
-#: ../src/stacks/access.py:37
+#: ../src/stacks/access.py:38
 msgid "InvertWindow"
 msgstr ""
 
-#: ../src/stacks/access.py:45
+#: ../src/stacks/access.py:46
 msgid "TrackMouse"
 msgstr ""
 
-#: ../src/stacks/access.py:46
+#: ../src/stacks/access.py:47
 msgid "ToggleMouseClick"
 msgstr ""
 
@@ -311,7 +353,7 @@ msgstr ""
 msgid "Press a key or key-combination for the shortcut"
 msgstr ""
 
-#: ../src/stacks/addHotkey.py:76
+#: ../src/stacks/addHotkey.py:71
 msgid "Search"
 msgstr ""
 
@@ -755,30 +797,34 @@ msgstr ""
 msgid "Use config"
 msgstr ""
 
-#: ../src/stacks/settings.py:35
-msgid "Startup profile"
-msgstr ""
-
-#: ../src/stacks/settings.py:37
-msgid "Autostart dock"
-msgstr ""
-
-#: ../src/stacks/settings.py:38
-msgid "Hotkey for dock"
-msgstr ""
-
-#: ../src/stacks/settings.py:39
-msgid "Beep when machine starts"
-msgstr ""
-
-#: ../src/stacks/settings.py:77
+#: ../src/stacks/settings.py:35 ../src/stacks/settings.py:83
 msgid "User"
 msgstr ""
 
-#: ../src/stacks/settings.py:78
+#: ../src/stacks/settings.py:36 ../src/stacks/settings.py:84
 msgid "System"
 msgstr ""
 
-#: ../src/stacks/settings.py:79
+#: ../src/stacks/settings.py:38
+msgid "Startup profile"
+msgstr ""
+
+#: ../src/stacks/settings.py:39
+msgid "Autoload profile"
+msgstr ""
+
+#: ../src/stacks/settings.py:43
+msgid "Autostart dock"
+msgstr ""
+
+#: ../src/stacks/settings.py:44
+msgid "Hotkey for dock"
+msgstr ""
+
+#: ../src/stacks/settings.py:45
+msgid "Beep when machine starts"
+msgstr ""
+
+#: ../src/stacks/settings.py:85
 msgid "N4d"
 msgstr ""

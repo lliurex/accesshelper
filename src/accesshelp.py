@@ -43,6 +43,12 @@ TXT_ACCEPT=_("Close Session")
 TXT_APPLY=_("Apply")
 TXT_IGNORE=_("Ignore")
 TXT_UNDO=_("Undo")
+MSG_STARTUP=_("Autostart profile is enabled")
+MSG_PROFILE=_("A profile has been loaded. All settings has been applied if possible. Expect inconsistencies.")
+MSG_ONAPPLY=_("Accesshelper will try to apply as many changes as possible for current session (expect inconsistencies)")
+MSG_ONACCEPT=_("All settings will be applied after a session restart")
+MSG_ONSTARTUP=_("The changes will not be persistent.All settings will be restored to profile")
+MSG_CLOSEIGNORE=_("Close this window for ignoring that until a session restart")
 
 def showHelp():
 	print(HLP_USAGE)
@@ -122,10 +128,11 @@ def _readChanges():
 def _getStartup():
 	c=config.getConfig(config.level)
 	startup=c.get(config.level,{}).get("startup","false")
-	sw=False
+	profile=""
 	if startup.lower()=="true":
-		sw=True
-	return(sw)
+		profile=c.get(config.level,{}).get("profile","")
+		profile=c.get(config.level,{}).get("autoprofile",profile)
+	return(profile)
 #def _getStartup
 
 def _chkProfileChange(*args):
@@ -163,10 +170,13 @@ def showDialog(*args):
 	msgTitle=MSG_LOGOUT
 	dlgClose=QDialog()
 	lay=QGridLayout()
-	if startup==True:
-		changes=_("<p><strong>Startup is enabled. Changes will not apply.\nAccesshelper will try to apply as many changes as possible for current session.\n(expect inconsistencies)</strong></p>")+changes
+	changes="<strong>{}</strong><hr>".format(MSG_CLOSEIGNORE)+changes
+	if startup!="":
+		changes="<p><strong>{0}.\n{1}. {2} {3}.</strong></p>".format(MSG_STARTUP,MSG_ONAPPLY,MSG_ONSTARTUP,startup)+changes
 	elif chProfile==True:
-		changes=_("<p><strong>A profile has been loaded.\nAccesshelper will try to apply as many changes as possible for current session but a session restart is required in order to apply all changes.</strong></p>")+changes
+		changes="<p><strong>{0}.\n{1}.</strong></p>".format(MSG_PROFILE,MSG_ONACCEPT)+changes
+	else:
+		changes="<p><strong>{0}.\n{1}.</strong></p>".format(MSG_ONAPPLY,MSG_ONACCEPT)+changes
 	text="{0}<br>{1}<br>".format(MSG_CHANGES,changes.replace("\n","<br>"))
 	scrLabel=appconfigControls.QScrollLabel(text)
 	btnOk=QPushButton(TXT_ACCEPT)
@@ -180,7 +190,7 @@ def showDialog(*args):
 		btnOk=QPushButton(TXT_APPLY)
 		btnOk.clicked.connect(_applyChanges)
 		msgReboot=MSG_APPLY
-	elif chProfile==True:
+	else:#if chProfile==True:
 		btnOk=QPushButton(TXT_APPLY)
 		btnOk.clicked.connect(_applyChanges)
 		msgReboot=MSG_APPLY
@@ -259,7 +269,7 @@ else:
 		if len(sys.argv)==4:
 			applyChanges=False
 			if sys.argv[3]=='init':
-				if _getStartup()==True:
+				if _getStartup()!="":
 					print("{}".format(MSG_AUTOSTARTDISABLED))
 					sys.exit(1)
 			elif sys.argv[3]=="apply":

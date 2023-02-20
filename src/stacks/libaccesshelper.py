@@ -532,6 +532,9 @@ class functionHelperClass():
 				desc="{0},{0},show accessdock".format(dockHk)
 				name="accessdock.desktop"
 				self.setHotkey(dockHk,desc,name)
+				desc=""
+				name="accessdock"
+				self.setHotkey(dockHk,desc,name)
 	#def _setNewConfig					
 
 	def _loadPlasmaConfigFromFolder(self,folder):

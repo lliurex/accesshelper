@@ -1171,6 +1171,12 @@ class accesshelper():
 			self._debug(e)
 			self._debug("Permission denied")
 			sw=False
+		if sw:
+			if state=="enable":
+				config={"plasma_workspace.notifyrc":{"Event/startkde":[("Action","Sound")]}}
+			else:
+				config={"plasma_workspace.notifyrc":{"Event/startkde":[("Action","")]}}
+			self.setPlasmaConfig(config)
 		return sw
 	#def setGrubBeep
 

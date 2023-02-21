@@ -287,8 +287,7 @@ class settings(confStack):
 				value=widget.isChecked()
 				if desc=="grubBeep":
 					if config[self.level].get("grubBeep","")!=str(value).lower():
-						if config[self.level].get("grubBeep","")=="" and value!=False:
-							self._setGrubBeep(value)
+						self._setGrubBeep(value)
 					beep=value
 				if value:
 					value="true"

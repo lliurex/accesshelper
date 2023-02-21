@@ -486,6 +486,7 @@ class functionHelperClass():
 			scale='100'
 			xscale='100'
 			dockHk=''
+			grubBeep=False
 			alpha=[]
 			for key,data in jcontent.items():
 				fline=""
@@ -511,6 +512,9 @@ class functionHelperClass():
 					xscale=data
 				elif key=="alpha" and isinstance(data,list) and len(data)==4:
 					alpha=QColor(data[0],data[1],data[2],data[3])
+				elif key=="grubBeep":
+					if data=="true":
+						grubBeep=True
 			if bkg=="color":
 				if color:
 					qcolor=QColor(color)
@@ -541,6 +545,7 @@ class functionHelperClass():
 				desc="show accessdock"
 				name="accessdock.desktop"
 				self.setHotkey(dockHk,desc,name)
+			self.setGrubBeep(grubBeep,onlyPlasma=True)
 	#def _setNewConfig					
 
 	def _loadPlasmaConfigFromFolder(self,folder):
@@ -850,6 +855,31 @@ class functionHelperClass():
 		return(availableThemes)
 	#def getCursors
 
+	def setGrubBeep(self,state,onlyPlasma=False):
+		sw=True
+		if state==True:
+			state="enable"
+		else:
+			state="disable"
+		if onlyPlasma==False:
+			cmd=["pkexec","/usr/share/accesshelper/helper/enableGrubBeep.sh",state]
+			try:
+				pk=subprocess.run(cmd)
+				if pk.returncode!=0:
+					sw=False
+			except Exception as e:
+				self._debug(e)
+				self._debug("Permission denied")
+				sw=False
+		if sw:
+			if state=="enable":
+				config={"plasma_workspace.notifyrc":{"Event/startkde":[("Action","Sound")]}}
+			else:
+				config={"plasma_workspace.notifyrc":{"Event/startkde":[("Action","")]}}
+			self.setPlasmaConfig(config)
+		return sw
+	#def setGrubBeep
+
 class accesshelper():
 	def __init__(self):
 		self.dbg=False
@@ -1156,28 +1186,8 @@ class accesshelper():
 					self._debug("error saving gtk fonts")
 	#def setGtkFonts
 
-	def setGrubBeep(self,state):
-		sw=True
-		if state==True:
-			state="enable"
-		else:
-			state="disable"
-		cmd=["pkexec","/usr/share/accesshelper/helper/enableGrubBeep.sh",state]
-		try:
-			pk=subprocess.run(cmd)
-			if pk.returncode!=0:
-				sw=False
-		except Exception as e:
-			self._debug(e)
-			self._debug("Permission denied")
-			sw=False
-		if sw:
-			if state=="enable":
-				config={"plasma_workspace.notifyrc":{"Event/startkde":[("Action","Sound")]}}
-			else:
-				config={"plasma_workspace.notifyrc":{"Event/startkde":[("Action","")]}}
-			self.setPlasmaConfig(config)
-		return sw
+	def setGrubBeep(self,*args,**kwargs):
+		return(self.functionHelper.setGrubBeep(*args,**kwargs))
 	#def setGrubBeep
 
 	def setScaleFactor(self,*args,**kwargs):

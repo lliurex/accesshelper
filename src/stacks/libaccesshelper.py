@@ -206,12 +206,13 @@ class functionHelperClass():
 			cmd=["kwriteconfig5","--file",kfilePath,"--group",group,"--key",key,"{}".format(value)]
 		else:
 			cmd=["kwriteconfig5","--file",kfilePath,"--group",group,"--key",key,"--delete"]
+		self._debug("Write command: {}".format(" ".join(cmd)))
 		ret='false'
 		try:
-			ret=subprocess.check_output(cmd,universal_newlines=True).strip()
+			ret=subprocess.run(cmd,universal_newlines=True)
 		except Exception as e:
 			print(e)
-		#_debug("Write value: {}".format(ret))
+		self._debug("Write value: {}".format(ret))
 		return(ret)
 	#def setKdeConfigSetting
 
@@ -220,16 +221,18 @@ class functionHelperClass():
 		for kfile,sections in config.items():
 			for section,data in sections.items():
 				self._debug("Section {}".format(section))
+				self._debug("Data {}".format(data))
 				for setting in data:
 					try:
 						(desc,value)=setting
-						if desc=="":
-							continue
-						self._debug("Setting {} -> {}".format(desc,value))
-						self.setKdeConfigSetting(section,desc,value,kfile,tmpDir=tmpDir)
 					except Exception as e:
 						print("Error on setting {}".format(setting))
 						print(e)
+						desc=""
+					if desc=="":
+						continue
+					self._debug("Setting {0} -> {1}, Files: {2} {3}".format(desc,value,kfile,tmpDir))
+					self.setKdeConfigSetting(section,desc,value,kfile,tmpDir=tmpDir)
 	#def setPlasmaConfig
 
 	def consolidatePlasmaConfig(self):
@@ -392,9 +395,9 @@ class functionHelperClass():
 					jcontents.update({"startup":startup})
 					jcontents.update({"autoprofile":profile})
 					if startup=="true":
+						#Apply changes on startup/shutdown
 						cmd="/usr/share/accesshelper/accesshelp.py --set {}".format(profile)
 						self.generateAutostartDesktop(cmd,"accesshelper_profiler.desktop","plasma-workspace/shutdown")
-						#Apply changes on startup
 						cmd="{} apply".format(cmd)
 						self.generateAutostartDesktop(cmd,"accesshelper_profiler.desktop")
 					with open(sourceFile,"w") as f:
@@ -529,11 +532,12 @@ class functionHelperClass():
 			if scheme!="":
 				subprocess.run(["plasma-apply-colorscheme",scheme],stdout=subprocess.PIPE)
 			if dockHk!="":
-				desc="{0},{0},show accessdock".format(dockHk)
-				name="accessdock.desktop"
-				self.setHotkey(dockHk,desc,name)
+				self._debug("Set hotkey for dock: {}".format(dockHk))
 				desc=""
 				name="accessdock"
+				self.setHotkey(dockHk,desc,name)
+				desc="show accessdock"
+				name="accessdock.desktop"
 				self.setHotkey(dockHk,desc,name)
 	#def _setNewConfig					
 
@@ -1178,17 +1182,15 @@ class accesshelper():
 
 	def applyChanges(self,setconf=True):
 		if setconf:
-			self.functionHelper.setNewConfig()
-		cmd=["kwin","--replace"]
-		subprocess.Popen(cmd)
-		cmd=["qdbus","org.kde.KWin","/KWin","org.kde.KWin.reconfigure"]
-		subprocess.run(cmd)
-		cmd=["kquitapp5","kglobalaccel5"]
-		subprocess.run(cmd)
-		cmd=["kstart5","kglobalaccel5"]
-		subprocess.run(cmd)
+			self.setNewConfig()
 		cmd=["plasmashell","--replace"]
-		subprocess.Popen(cmd)
+		subprocess.Popen(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+		cmd=["kquitapp5","kglobalaccel5"]
+		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+		cmd=["kstart5","kglobalaccel5"]
+		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+		cmd=["qdbus","org.kde.KWin","/KWin","org.kde.KWin.reconfigure"]
+		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
 		time.sleep(10)
 		cmd=["pidof","plasmashell"]
 		p=subprocess.run(cmd)

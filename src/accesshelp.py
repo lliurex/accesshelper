@@ -112,7 +112,7 @@ def _restartSession(*args):
 #def _restartSession
 
 def _applyChanges(*args):
-	accesshelper.applyChanges()
+	accesshelper.applyChanges(setconf=True)
 	QApplication.quit()
 	sys.exit(0)
 #def _applyChanges

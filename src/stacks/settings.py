@@ -241,22 +241,21 @@ class settings(confStack):
 			if isinstance(widget,appconfigControls.QHotkeyButton):
 				btnHk=widget.text()
 				break
-		hotkey=btnHk
-		desc="{0},{0},show accessdock".format(hotkey)
-		data=[("_launch",desc),("_k_friendly_name","accessdock")]
-		config={'kglobalshortcutsrc':{'accessdock.desktop':data}}
-		self.accesshelper.setPlasmaConfig(config)
-		self.showMsg("{0} {1}".format(i18n.get("ENABLEDOCK"),hotkey))
+		#desc="{0},{0},show accessdock".format(hotkey)
+		#data=[("_launch",desc),("_k_friendly_name","accessdock")]
+		#config={'kglobalshortcutsrc':{'accessdock.desktop':data}}
+		#self.accesshelper.setPlasmaConfig(config)
+		self.showMsg("{0} {1}".format(i18n.get("ENABLEDOCK"),btnHk))
 
 	def _removeAutostartDock(self):
 		self.accesshelper.removeAutostartDesktop("accessdock.desktop")
-		hotkey=""
-		desc="{0},{0},show accessdock".format(hotkey)
-		data=[("_launch",""),("_k_friendly_name","")]
-		config={'kglobalshortcutsrc':{'accessdock.desktop':data}}
-		self.accesshelper.setPlasmaConfig(config)
-		config={'kglobalshortcutsrc':{'accessdock':data}}
-		self.accesshelper.setPlasmaConfig(config)
+		#hotkey=""
+		#desc="{0},{0},show accessdock".format(hotkey)
+		#data=[("_launch",""),("_k_friendly_name","")]
+		#config={'kglobalshortcutsrc':{'accessdock.desktop':data}}
+		#self.accesshelper.setPlasmaConfig(config)
+		#config={'kglobalshortcutsrc':{'accessdock':data}}
+		#self.accesshelper.setPlasmaConfig(config)
 		self.showMsg("{}".format(i18n.get("DISABLEDOCK")))
 	#def _removeAutostart
 

@@ -259,6 +259,7 @@ class accessdock(QWidget):
 	#def _assignButton
 
 	def closeEvent(self,event):
+		self.setEnabled(True)
 		if event.spontaneous()==True:
 			event.ignore()
 		else:
@@ -270,6 +271,7 @@ class accessdock(QWidget):
 			if args[0].lower()=="hide":
 				sys.exit(0)
 			elif args[0].lower()=="color":
+				self.setEnabled(False)
 				alphaDlg=alpha(alpha)
 				alphaDlg.embebbed=True
 				alphaDlg.move(self.coordx,self.coordy)
@@ -281,9 +283,13 @@ class accessdock(QWidget):
 				alphaDlg.setWindowModality(Qt.WindowModal)
 				alphaDlg.setWindowFlags(Qt.NoDropShadowWindowHint|Qt.WindowStaysOnTopHint|Qt.FramelessWindowHint)
 				alphaDlg.show()
+				cursor=QCursor(Qt.PointingHandCursor)
+				alphaDlg.setCursor(cursor)
 			elif args[0].lower()=="font_size":
+				self.setEnabled(False)
 				self._fontCursorSize("font")
 			elif args[0].lower()=="pointer_size":
+				self.setEnabled(False)
 				self._fontCursorSize("pointer")
 			elif args[0].lower()=="read":
 				self._readScreen()
@@ -292,6 +298,7 @@ class accessdock(QWidget):
 			elif args[0].lower()=="osk":
 				self._showOsk()
 			elif args[0].lower()=="scale":
+				self.setEnabled(False)
 				self._setScale()
 			elif args[0].lower()=="config":
 				self.hide()
@@ -305,6 +312,7 @@ class accessdock(QWidget):
 				btn=self.widgets.get("scale")
 				btn.setText("{}%\nScale".format(self.xscale))
 				self.show()
+		#self.setEnabled(True)
 	#def execute
 
 	def _setScale(self):
@@ -333,7 +341,6 @@ class accessdock(QWidget):
 		dlg.setWindowModality(Qt.WindowModal)
 		dlg.setWindowFlags(Qt.NoDropShadowWindowHint|Qt.WindowStaysOnTopHint|Qt.FramelessWindowHint)
 		change=dlg.exec()
-		self.hide()
 		if change:
 			factor=cmbScale.currentText()
 			factor=factor.replace("%","")
@@ -348,7 +355,7 @@ class accessdock(QWidget):
 			except:
 				pass
 			#self.accesshelper.applyChanges()
-		self.show()
+		self.setEnabled(True)
 	#def _setScale
 
 	def _fontCursorSize(self,setting):
@@ -447,7 +454,6 @@ class accessdock(QWidget):
 		dlg.setWindowModality(Qt.WindowModal)
 		dlg.setWindowFlags(Qt.NoDropShadowWindowHint|Qt.WindowStaysOnTopHint|Qt.FramelessWindowHint)
 		change=dlg.exec()
-		self.hide()
 		if change:
 			if str(setting)=="font":
 				qfont=lblTest.font()
@@ -467,7 +473,7 @@ class accessdock(QWidget):
 			font=self.font()
 			self.fontSize=font
 			lblTest.setFont(font)
-		self.show()
+		self.setEnabled(True)
 
 	def _saveFont(self,qfont):
 		font=qfont.toString()

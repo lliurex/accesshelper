@@ -157,6 +157,7 @@ class lookandfeel(confStack):
 						cmb.insertItem(0,cursorSize)
 					cmb.setCurrentText(cursorSize)
 				elif cmbDesc=="scale" or cmbDesc=="xscale":
+					cmb.clear()
 					cmb.addItem("100%")
 					cmb.addItem("125%")
 					cmb.addItem("150%")

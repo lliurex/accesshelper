@@ -204,6 +204,8 @@ class lookandfeel(confStack):
 						cmb.setCurrentText(config.get("theme"))
 					elif cmbDesc=="cursor" and config.get("cursor","")!="":
 						searchedTheme=config.get("cursor")
+						if "[" in searchedTheme:
+							searchedTheme=searchedTheme.split("[")[0].strip()
 						for key,item in self.cursorDesc.items():
 							if searchedTheme==item:
 								cmb.setCurrentText(key)

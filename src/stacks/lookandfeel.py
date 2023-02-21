@@ -277,17 +277,19 @@ class lookandfeel(confStack):
 	def _fillBackgroundCmb(self):
 		if self.imgFile=="":
 			imgFile=self.accesshelper.getBackgroundImg()
-			self.imgFile=imgFile
+			if imgFile=="":
+				imgFile="white"
+			else:
+				self.imgFile=imgFile
 		else:
 			imgFile=self.imgFile
-		if imgFile=="":
-			imgFile="white"
 		colors=["{0} [{1}]".format(i18n.get("CURRENTBKG","Current background"),imgFile)]
 		colorList=["black","red","blue","green","yellow","white"]
 		for color in colorList:
 			desc=i18n.get(color.upper(),color)
 			colors.append("{0} [{1}]".format(desc,color))
 		return(colors)
+	#def _fillBackgroundCmb
 		
 	def _getPointerImage(self,theme):
 		return(self.accesshelper.getPointerImage(theme=theme))
@@ -380,7 +382,6 @@ class lookandfeel(confStack):
 		self.accesshelper.setScaleFactor(scaleFactor,xrand=False)
 
 	def writeConfig(self):
-		self.saveChanges('background',self.imgFile)
 		self.optionChanged=[]
 		self.refresh=True
 		cursorTheme=""
@@ -430,7 +431,7 @@ class lookandfeel(confStack):
 						if qcolor:
 							self.accesshelper.setBackgroundColor(qcolor)
 						bkg=color
-					else:
+					elif self.imgFile:
 						self.saveChanges('bkg',"image")
 						self.accesshelper.setBackgroundImg(self.imgFile)
 						bkg=self.imgFile

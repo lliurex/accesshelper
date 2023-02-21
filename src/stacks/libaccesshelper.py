@@ -391,7 +391,8 @@ class functionHelperClass():
 						jcontents=json.loads(fcontents)
 					except:
 						jcontents.update({"profile":"{}".format(os.path.basename(profileTar))})
-					(profile,startup)=self._getOldProfile(profileTar,usrFolder)
+					(profile,oldConfig)=self._getOldProfile(profileTar,usrFolder)
+					startup=oldConfig.get("startup","false")
 					jcontents.update({"startup":startup})
 					jcontents.update({"autoprofile":profile})
 					if startup=="true":
@@ -444,6 +445,7 @@ class functionHelperClass():
 		profile=profileTar
 		startup="false"
 		oldconf=os.path.join(usrFolder,"accesshelper.json")
+		joldcontents={}
 		if os.path.isfile(oldconf)==True:
 			with open(oldconf,"r") as f:
 				foldcontents=f.read()
@@ -453,7 +455,7 @@ class functionHelperClass():
 				profile=joldcontents.get("profile","")
 				profile=joldcontents.get("autoprofile",profile)
 		profile=os.path.basename(profile).replace(".tar","")
-		return(profile,startup)
+		return(profile,joldcontents)
 	#def mergeHome
 
 	def setNewConfig(self):

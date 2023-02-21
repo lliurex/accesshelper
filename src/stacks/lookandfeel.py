@@ -37,6 +37,8 @@ i18n={
 	"GREEN":_("Green"),
 	"YELLOW":_("Yellow"),
 	"BLACK":_("Black"),
+	"TRUE":_("Enabled"),
+	"FALSE":_("Disabled"),
 	}
 
 class lookandfeel(confStack):
@@ -441,7 +443,7 @@ class lookandfeel(confStack):
 		self.saveChanges('scale',scale)
 		self.saveChanges('xscale',xscale)
 		#self._setCursor(cursorTheme,size)
-		self._writeFileChanges(scheme,plasmaTheme,cursorTheme,size,bkg,scale,xscale)
+		self._writeFileChanges(scheme,plasmaTheme,cursorTheme,size,bkg,scale,xscale,maximize)
 	#def writeConfig
 
 	def _writeFileChanges(self,scheme,theme,cursor,cursorSize,bkg,scale,xscale):
@@ -454,5 +456,7 @@ class lookandfeel(confStack):
 			f.write("{0}->{1}\n".format(i18n.get("BACKIMG"),bkg))
 			f.write("{0}->{1}\n".format(i18n.get("SCALE"),scale))
 			f.write("{0}->{1}\n".format(i18n.get("XSCALE"),xscale))
+			f.write("{0}->{1}\n".format(i18n.get("MAXIMIZE"),self.i18n.get(str(maximize).upper())))
+
 	#def _writeFileChanges(self):
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-17 11:49+0100\n"
+"POT-Creation-Date: 2023-02-21 15:49+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,73 +17,73 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../src/accessdock.py:212
+#: ../src/accessdock.py:216
 msgid "Set font size"
 msgstr ""
 
-#: ../src/accessdock.py:215
+#: ../src/accessdock.py:219
 msgid ""
 "{}%\n"
 "Scale"
 msgstr ""
 
-#: ../src/accessdock.py:216
+#: ../src/accessdock.py:220
 msgid "Set screen scale"
 msgstr ""
 
-#: ../src/accessdock.py:220
+#: ../src/accessdock.py:224
 msgid "Hide"
 msgstr ""
 
-#: ../src/accessdock.py:221
+#: ../src/accessdock.py:225
 msgid "Close accessdock"
 msgstr ""
 
-#: ../src/accessdock.py:225 ../src/stacks/settings.py:18
+#: ../src/accessdock.py:229 ../src/stacks/settings.py:18
 msgid "Settings"
 msgstr ""
 
-#: ../src/accessdock.py:226
+#: ../src/accessdock.py:230
 msgid "Launch accesshelper"
 msgstr ""
 
-#: ../src/accessdock.py:231
+#: ../src/accessdock.py:235
 msgid "Read screen"
 msgstr ""
 
-#: ../src/accessdock.py:232
+#: ../src/accessdock.py:236
 msgid "Read text or image from clipboard"
 msgstr ""
 
-#: ../src/accessdock.py:237
+#: ../src/accessdock.py:241
 msgid "Capture"
 msgstr ""
 
-#: ../src/accessdock.py:238
+#: ../src/accessdock.py:242
 msgid "Try to read screen content from screenshot"
 msgstr ""
 
-#: ../src/accessdock.py:242
+#: ../src/accessdock.py:246
 msgid "Pointer"
 msgstr ""
 
-#: ../src/accessdock.py:243
+#: ../src/accessdock.py:247
 msgid "Set mouse pointer size"
 msgstr ""
 
-#: ../src/accessdock.py:247
+#: ../src/accessdock.py:251
 msgid "Filter"
 msgstr ""
 
-#: ../src/accessdock.py:248
+#: ../src/accessdock.py:252
 msgid "Apply a color filter"
 msgstr ""
 
-#: ../src/accessdock.py:252
+#: ../src/accessdock.py:256
 msgid "Keyboard"
 msgstr ""
 
-#: ../src/accessdock.py:253
+#: ../src/accessdock.py:257
 msgid "Show/Hide on-screen keyboard"
 msgstr ""
 
@@ -280,12 +280,13 @@ msgstr ""
 msgid "Disable load profile on startup or changes will not apply on restart"
 msgstr ""
 
-#: ../src/stacks/access.py:32 ../src/stacks/settings.py:40
-#: ../src/stacks/settings.py:41
+#: ../src/stacks/access.py:32 ../src/stacks/lookandfeel.py:41
+#: ../src/stacks/settings.py:40 ../src/stacks/settings.py:41
 msgid "Disabled"
 msgstr ""
 
-#: ../src/stacks/access.py:33 ../src/stacks/settings.py:42
+#: ../src/stacks/access.py:33 ../src/stacks/lookandfeel.py:40
+#: ../src/stacks/settings.py:42
 msgid "Enabled"
 msgstr ""
 
@@ -566,26 +567,30 @@ msgid "Scale factor"
 msgstr ""
 
 #: ../src/stacks/lookandfeel.py:33
-msgid "White"
+msgid "Run apps maximized"
 msgstr ""
 
 #: ../src/stacks/lookandfeel.py:34
-msgid "Red"
+msgid "White"
 msgstr ""
 
 #: ../src/stacks/lookandfeel.py:35
-msgid "Blue"
+msgid "Red"
 msgstr ""
 
 #: ../src/stacks/lookandfeel.py:36
-msgid "Green"
+msgid "Blue"
 msgstr ""
 
 #: ../src/stacks/lookandfeel.py:37
-msgid "Yellow"
+msgid "Green"
 msgstr ""
 
 #: ../src/stacks/lookandfeel.py:38
+msgid "Yellow"
+msgstr ""
+
+#: ../src/stacks/lookandfeel.py:39
 msgid "Black"
 msgstr ""
 

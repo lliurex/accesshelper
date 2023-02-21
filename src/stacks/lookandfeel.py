@@ -446,7 +446,7 @@ class lookandfeel(confStack):
 		self._writeFileChanges(scheme,plasmaTheme,cursorTheme,size,bkg,scale,xscale,maximize)
 	#def writeConfig
 
-	def _writeFileChanges(self,scheme,theme,cursor,cursorSize,bkg,scale,xscale):
+	def _writeFileChanges(self,scheme,theme,cursor,cursorSize,bkg,scale,xscale,maximize):
 		with open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'a') as f:
 			f.write("<b>{}</b>\n".format(i18n.get("CONFIG")))
 			f.write("{0}->{1}\n".format(i18n.get("THEME"),theme))

@@ -1183,15 +1183,32 @@ class accesshelper():
 	def applyChanges(self,setconf=True):
 		if setconf:
 			self.setNewConfig()
+		cmd=["qdbus","org.kde.kded","/kded","unloadModule","powerdevil"]
+		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+		cmd=["qdbus","org.kde.keyboard","/modules/khotkeys","reread_configuration"]
+		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+		cmd=["qdbus","org.kde.kded","/kbuildsycoca","recreate"]
+		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+		cmd=["qdbus","org.kde.kded","/kded","reconfigure"]
+		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+		cmd=["qdbus","org.kde.plasma-desktop","/MainApplication","reparseConfiguration"]
+		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+		cmd=["qdbus","org.kde.kwin","/KWin","reconfigure"]
+		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+		cmd=["qdbus","org.kde.kded","/kded","loadModule","powerdevil"]
+		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+		print("Changes applied!")
+
+
 		cmd=["plasmashell","--replace"]
 		subprocess.Popen(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
-		cmd=["kquitapp5","kglobalaccel5"]
-		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
-		cmd=["kstart5","kglobalaccel5"]
-		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
-		cmd=["qdbus","org.kde.KWin","/KWin","org.kde.KWin.reconfigure"]
-		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
-		time.sleep(10)
+#		cmd=["kquitapp5","kglobalaccel5"]
+#		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+#		cmd=["kstart5","kglobalaccel5"]
+#		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+#		cmd=["qdbus","org.kde.KWin","/KWin","org.kde.KWin.reconfigure"]
+#		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+		time.sleep(5)
 		cmd=["pidof","plasmashell"]
 		p=subprocess.run(cmd)
 		if p.returncode!=0:

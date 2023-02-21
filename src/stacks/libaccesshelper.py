@@ -487,6 +487,7 @@ class functionHelperClass():
 			xscale='100'
 			dockHk=''
 			grubBeep=False
+			maximize=False
 			alpha=[]
 			for key,data in jcontent.items():
 				fline=""
@@ -512,6 +513,9 @@ class functionHelperClass():
 					xscale=data
 				elif key=="alpha" and isinstance(data,list) and len(data)==4:
 					alpha=QColor(data[0],data[1],data[2],data[3])
+				elif key=="maximize":
+					if data=="true":
+						maximize=True
 				elif key=="grubBeep":
 					if data=="true":
 						grubBeep=True
@@ -546,6 +550,12 @@ class functionHelperClass():
 				name="accessdock.desktop"
 				self.setHotkey(dockHk,desc,name)
 			self.setGrubBeep(grubBeep,onlyPlasma=True)
+			if maximize==True:
+				config={"kwinrc":{"Windows":[("Placement","Maximizing")]}}
+				self.setPlasmaConfig(config)
+			else:
+				config={"kwinrc":{"Windows":[("Placement","")]}}
+				self.setPlasmaConfig(config)
 	#def _setNewConfig					
 
 	def _loadPlasmaConfigFromFolder(self,folder):

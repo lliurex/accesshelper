@@ -30,6 +30,7 @@ i18n={
 	"CURSORTHEME":_("Cursor theme"),
 	"SCALE":_("Widget size"),
 	"XSCALE":_("Scale factor"),
+	"MAXIMIZE":_("Run apps maximized"),
 	"WHITE":_("White"),
 	"RED":_("Red"),
 	"BLUE":_("Blue"),
@@ -102,16 +103,21 @@ class lookandfeel(confStack):
 		self.widgets.update({'xscale':cmbXscale})
 		self.box.addWidget(cmbXscale,4,1,1,1)
 
-		self.box.addWidget(QLabel(i18n.get("CURSORTHEME")),5,0,1,1)
+		self.box.addWidget(QLabel(i18n.get("MAXIMIZE")),5,0,1,1)
+		chkMax=QCheckBox()
+		self.widgets.update({'chkmax':chkMax})
+		self.box.addWidget(chkMax,5,1,1,1)
+
+		self.box.addWidget(QLabel(i18n.get("CURSORTHEME")),6,0,1,1)
 		cmbCursor=QComboBox()
 		self.widgets.update({'cursor':cmbCursor})
 		cmbCursor.currentIndexChanged.connect(self.updateCursorSizes)
-		self.box.addWidget(cmbCursor,5,1,1,1)
+		self.box.addWidget(cmbCursor,6,1,1,1)
 
-		self.box.addWidget(QLabel(i18n.get("CURSORSIZE")),6,0,1,1)
+		self.box.addWidget(QLabel(i18n.get("CURSORSIZE")),7,0,1,1)
 		cmbCursorSize=QComboBox()
 		self.widgets.update({'cursorSize':cmbCursorSize})
-		self.box.addWidget(cmbCursorSize,6,1,1,1)
+		self.box.addWidget(cmbCursorSize,7,1,1,1)
 		cmbCursorSize.addItem("32")
 		cmbCursorSize.addItem("48")
 		cmbCursorSize.addItem("64")
@@ -211,6 +217,11 @@ class lookandfeel(confStack):
 								cmb.setCurrentText(key)
 					elif cmbDesc=="scheme" and config.get("scheme","")!="":
 						cmb.setCurrentText(self.cursorDesc.get("scheme"))
+			elif isinstance(cmb,QCheckBox):
+				if config.get("maximize","false")=="true":
+					cmb.setChecked(True)
+				else:
+					cmb.setChecked(False)
 
 		if selectedColor!="":
 			cmb=self.widgets.get("background",QComboBox())
@@ -373,6 +384,9 @@ class lookandfeel(confStack):
 		size=""
 		scheme=""
 		plasmaTheme=""
+		maximize="false"
+		if self.widgets.get("chkmax").checkState()==Qt.CheckState.Checked:
+			maximize="true"
 		for cmbDesc in self.widgets.keys():
 			cmb=self.widgets.get(cmbDesc,"")
 			if isinstance(cmb,QComboBox):
@@ -420,6 +434,7 @@ class lookandfeel(confStack):
 		#Ensure size is applied before theme change
 		#self._setCursorSize(size)
 		self.saveChanges('theme',plasmaTheme)
+		self.saveChanges('maximize',maximize)
 		self.saveChanges('scheme',scheme)
 		self.saveChanges('cursor',self.cursorDesc.get(cursorTheme,cursorTheme))
 		self.saveChanges('cursorSize',size)

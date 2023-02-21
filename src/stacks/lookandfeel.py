@@ -456,7 +456,7 @@ class lookandfeel(confStack):
 			f.write("{0}->{1}\n".format(i18n.get("BACKIMG"),bkg))
 			f.write("{0}->{1}\n".format(i18n.get("SCALE"),scale))
 			f.write("{0}->{1}\n".format(i18n.get("XSCALE"),xscale))
-			f.write("{0}->{1}\n".format(i18n.get("MAXIMIZE"),self.i18n.get(str(maximize).upper())))
+			f.write("{0}->{1}\n".format(i18n.get("MAXIMIZE"),i18n.get(str(maximize).upper())))
 
 	#def _writeFileChanges(self):
 

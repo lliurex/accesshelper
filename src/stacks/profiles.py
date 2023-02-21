@@ -142,7 +142,7 @@ class profiles(confStack):
 				for f in flist:
 					if len(f)>50:
 						f=f[0:49]
-					if f not in self.profilesPath.keys():
+					if f not in self.profilesPath.keys() and f.endswith(".tar"):
 						desc=f.replace(".tar","")
 						self.lst_profiles.addItem(desc)
 						add.append(f)

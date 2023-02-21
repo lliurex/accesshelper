@@ -193,7 +193,8 @@ class settings(confStack):
 				for wrkDir in self.wrkDirs:
 					if os.path.isdir(wrkDir):
 						for f in os.listdir(wrkDir):
-							widget.addItem("{}".format(f.replace(".tar","")))
+							if f.endswith(".tar"):
+								widget.addItem("{}".format(f.replace(".tar","")))
 				widget.setCurrentText(profile)
 			elif desc=="speed":
 				widget.setCurrentText(speed)
@@ -270,6 +271,7 @@ class settings(confStack):
 		startprofile=""
 		dockhotkey=""
 		configlevel=""
+		beep=False
 		config=self.getConfig()
 		for widget,desc in self.widgets.items():
 			if desc=="startup":
@@ -287,6 +289,7 @@ class settings(confStack):
 					if config[self.level].get("grubBeep","")!=str(value).lower():
 						if config[self.level].get("grubBeep","")=="" and value!=False:
 							self._setGrubBeep(value)
+					beep=value
 				if value:
 					value="true"
 				else:
@@ -323,10 +326,10 @@ class settings(confStack):
 				self._removeAutostartDock()
 				self.saveChanges("dockHk","",level="user")
 				startdock=False
-		self._writeFileChanges(configlevel,profile,startprofile,startdock,dockhotkey)
+		self._writeFileChanges(configlevel,profile,startprofile,startdock,dockhotkey,beep)
 	#def writeConfig
 
-	def _writeFileChanges(self,configlevel,profile,startprofile,startdock,dockhotkey):
+	def _writeFileChanges(self,configlevel,profile,startprofile,startdock,dockhotkey,beep):
 		with open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'a') as f:
 			f.write("<b>{}</b>\n".format(i18n.get("CONFIG")))
 			f.write("{0}->{1}\n".format(i18n.get("CONFIGLEVEL"),i18n.get(configlevel.upper())))
@@ -336,4 +339,5 @@ class settings(confStack):
 				f.write("{0}->{1}\n".format(i18n.get("STARTPROFILE"),i18n.get(str(startprofile).upper())))
 			f.write("{0}->{1}\n".format(i18n.get("STARTDOCK"),i18n.get(str(startdock).upper())))
 			f.write("{0}->{1}\n".format(i18n.get("DOCKHK"),dockhotkey))
+			f.write("{0}->{1}\n".format(i18n.get("GRUBBEEP"),i18n.get(str(beep).upper())))
 	#def _writeFileChanges(self):

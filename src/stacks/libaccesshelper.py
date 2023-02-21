@@ -874,8 +874,10 @@ class functionHelperClass():
 		if sw:
 			if state=="enable":
 				config={"plasma_workspace.notifyrc":{"Event/startkde":[("Action","Sound")]}}
+				config["plasma_workspace.notifyrc"].update({"Event/exitkde":[("Action","Sound")]})
 			else:
 				config={"plasma_workspace.notifyrc":{"Event/startkde":[("Action","")]}}
+				config["plasma_workspace.notifyrc"].update({"Event/exitkde":[("Action","")]})
 			self.setPlasmaConfig(config)
 		return sw
 	#def setGrubBeep

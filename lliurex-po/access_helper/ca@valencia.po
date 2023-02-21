@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-17 11:49+0100\n"
-"PO-Revision-Date: 2023-02-20 09:45+0100\n"
+"POT-Creation-Date: 2023-02-21 15:49+0100\n"
+"PO-Revision-Date: 2023-02-21 15:51+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ca\n"
@@ -18,11 +18,11 @@ msgstr ""
 "X-Generator: Poedit 2.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../src/accessdock.py:212
+#: ../src/accessdock.py:216
 msgid "Set font size"
 msgstr "Tamany de les lletres"
 
-#: ../src/accessdock.py:215
+#: ../src/accessdock.py:219
 msgid ""
 "{}%\n"
 "Scale"
@@ -30,63 +30,63 @@ msgstr ""
 "{}%\n"
 "Ampliació"
 
-#: ../src/accessdock.py:216
+#: ../src/accessdock.py:220
 msgid "Set screen scale"
 msgstr "Ajusta la ampliació de l'entorn"
 
-#: ../src/accessdock.py:220
+#: ../src/accessdock.py:224
 msgid "Hide"
 msgstr "Amaga"
 
-#: ../src/accessdock.py:221
+#: ../src/accessdock.py:225
 msgid "Close accessdock"
 msgstr "Tancar"
 
-#: ../src/accessdock.py:225 ../src/stacks/settings.py:18
+#: ../src/accessdock.py:229 ../src/stacks/settings.py:18
 msgid "Settings"
 msgstr "Ajustos"
 
-#: ../src/accessdock.py:226
+#: ../src/accessdock.py:230
 msgid "Launch accesshelper"
 msgstr "Obri accesshelper"
 
-#: ../src/accessdock.py:231
+#: ../src/accessdock.py:235
 msgid "Read screen"
 msgstr "Llegir"
 
-#: ../src/accessdock.py:232
+#: ../src/accessdock.py:236
 msgid "Read text or image from clipboard"
 msgstr "Llig text o una imatge (ocr) desde el porta-retalls"
 
-#: ../src/accessdock.py:237
+#: ../src/accessdock.py:241
 msgid "Capture"
 msgstr "Capturar"
 
-#: ../src/accessdock.py:238
+#: ../src/accessdock.py:242
 msgid "Try to read screen content from screenshot"
 msgstr "Intenta llegir el contingut de la pantalla"
 
-#: ../src/accessdock.py:242
+#: ../src/accessdock.py:246
 msgid "Pointer"
 msgstr "Punter"
 
-#: ../src/accessdock.py:243
+#: ../src/accessdock.py:247
 msgid "Set mouse pointer size"
 msgstr "Ajusta el tamany del punter"
 
-#: ../src/accessdock.py:247
+#: ../src/accessdock.py:251
 msgid "Filter"
 msgstr "Filtre"
 
-#: ../src/accessdock.py:248
+#: ../src/accessdock.py:252
 msgid "Apply a color filter"
 msgstr "Aplica un filtre de color"
 
-#: ../src/accessdock.py:252
+#: ../src/accessdock.py:256
 msgid "Keyboard"
 msgstr "Teclat"
 
-#: ../src/accessdock.py:253
+#: ../src/accessdock.py:257
 msgid "Show/Hide on-screen keyboard"
 msgstr "Mostra/amaga el teclat virtual"
 
@@ -202,7 +202,7 @@ msgstr "Els canvis s'aplicarán després de tancar la sessió"
 msgid ""
 "The changes will not be persistent.All settings will be restored to profile"
 msgstr ""
-"Els canvis no son persistents. A l'inici de sessió es restaurarà el perfil."
+"Els canvis no son persistents. A l'inici de sessió es restaurarà el perfil"
 
 #: ../src/accesshelp.py:51
 msgid "Close this window for ignoring that until a session restart"
@@ -292,12 +292,13 @@ msgstr ""
 "Desactivar la carrega inicial de perfil o els canvis no s'aplicaran al "
 "reiniciar"
 
-#: ../src/stacks/access.py:32 ../src/stacks/settings.py:40
-#: ../src/stacks/settings.py:41
+#: ../src/stacks/access.py:32 ../src/stacks/lookandfeel.py:41
+#: ../src/stacks/settings.py:40 ../src/stacks/settings.py:41
 msgid "Disabled"
 msgstr "Desactivat"
 
-#: ../src/stacks/access.py:33 ../src/stacks/settings.py:42
+#: ../src/stacks/access.py:33 ../src/stacks/lookandfeel.py:40
+#: ../src/stacks/settings.py:42
 msgid "Enabled"
 msgstr "Activat"
 
@@ -391,7 +392,7 @@ msgstr "Per defecte"
 
 #: ../src/stacks/alpha.py:23
 msgid "Set color filter: "
-msgstr "Aplica filtre:"
+msgstr "Aplica filtre: "
 
 #: ../src/stacks/assignHotkeys.py:35
 msgid "Hotkeys"
@@ -451,7 +452,7 @@ msgstr "Afegir"
 
 #: ../src/stacks/behavior.py:14
 msgid "behavior"
-msgstr "Comportament"
+msgstr "comportament"
 
 #: ../src/stacks/behavior.py:15
 msgid "Desktop behavior"
@@ -578,26 +579,30 @@ msgid "Scale factor"
 msgstr "Factor d'ampliació"
 
 #: ../src/stacks/lookandfeel.py:33
+msgid "Run apps maximized"
+msgstr "Maximitza per defecte"
+
+#: ../src/stacks/lookandfeel.py:34
 msgid "White"
 msgstr "Blanc"
 
-#: ../src/stacks/lookandfeel.py:34
+#: ../src/stacks/lookandfeel.py:35
 msgid "Red"
 msgstr "Roig"
 
-#: ../src/stacks/lookandfeel.py:35
+#: ../src/stacks/lookandfeel.py:36
 msgid "Blue"
 msgstr "Blau"
 
-#: ../src/stacks/lookandfeel.py:36
+#: ../src/stacks/lookandfeel.py:37
 msgid "Green"
 msgstr "Verd"
 
-#: ../src/stacks/lookandfeel.py:37
+#: ../src/stacks/lookandfeel.py:38
 msgid "Yellow"
 msgstr "Groc"
 
-#: ../src/stacks/lookandfeel.py:38
+#: ../src/stacks/lookandfeel.py:39
 msgid "Black"
 msgstr "Negre"
 
@@ -799,7 +804,7 @@ msgstr "No s'ha pogut desactivar l'autoinici"
 
 #: ../src/stacks/settings.py:32
 msgid "Enabled accessibilty dock with hotkey"
-msgstr "Barra d'accesibilitat disponible a la drecera "
+msgstr "Barra d'accesibilitat disponible a la drecera"
 
 #: ../src/stacks/settings.py:33
 msgid "Disabled accessibilty dock"

@@ -219,7 +219,7 @@ class lookandfeel(confStack):
 							if searchedTheme==item:
 								cmb.setCurrentText(key)
 					elif cmbDesc=="scheme" and config.get("scheme","")!="":
-						cmb.setCurrentText(self.cursorDesc.get("scheme"))
+						cmb.setCurrentText(config.get("scheme"))
 			elif isinstance(cmb,QCheckBox):
 				if config.get("maximize","false")=="true":
 					cmb.setChecked(True)

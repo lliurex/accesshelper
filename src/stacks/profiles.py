@@ -231,6 +231,14 @@ class profiles(confStack):
 		pass
 
 	def writeConfig(self,system=False):
+		dlg=QMessageBox(self)
+		dlg.setWindowTitle(i18n.get("SAVE"))
+		dlg.setText("{} {}?".format(i18n.get("SAVE"),self.inp_name.text()))
+		dlg.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+		dlg.setIcon(QMessageBox.Question)
+		button = dlg.exec()
+		if button == QMessageBox.No:
+			return
 		self._debug("Taking snapshot")
 		self.config=self.getConfig("system",{}).get("system",{})
 		self.level=self.config.get('config')

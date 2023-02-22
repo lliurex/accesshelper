@@ -4,7 +4,7 @@ import sys
 import os,shutil
 import tempfile
 import subprocess
-from PySide2.QtWidgets import QApplication, QLabel, QWidget, QGridLayout,QComboBox,QCheckBox,QToolTip
+from PySide2.QtWidgets import QApplication, QLabel, QWidget, QGridLayout,QComboBox,QCheckBox,QToolTip,QScrollArea
 from PySide2 import QtGui
 from PySide2.QtCore import Qt,QSignalMapper,QSize
 from appconfig.appConfigStack import appConfigStack as confStack
@@ -69,8 +69,13 @@ class lookandfeel(confStack):
 
 	def _load_screen(self):
 		self.box=QGridLayout()
+		box=QGridLayout()
+		wdg=QWidget()
+		wdg.setLayout(box)
 		self.setLayout(self.box)
 		row,col=(0,0)
+		scr=QScrollArea()
+		self.box.addWidget(scr)
 		sigmap_run=QSignalMapper(self)
 		sigmap_run.mapped[QString].connect(self._updateConfig)
 		self.widgets={}
@@ -79,47 +84,47 @@ class lookandfeel(confStack):
 		if config.get("background"):
 			self.imgFile=config.get("background")
 
-		self.box.addWidget(QLabel(i18n.get("THEME")),0,0,1,1)
+		box.addWidget(QLabel(i18n.get("THEME")),0,0,1,1)
 		cmbTheme=QComboBox()
 		self.widgets.update({'theme':cmbTheme})
-		self.box.addWidget(cmbTheme,0,1,1,1)
+		box.addWidget(cmbTheme,0,1,1,1)
 
-		self.box.addWidget(QLabel(i18n.get("SCHEME")),1,0,1,1)
+		box.addWidget(QLabel(i18n.get("SCHEME")),1,0,1,1)
 		cmbScheme=QComboBox()
 		self.widgets.update({'scheme':cmbScheme})
-		self.box.addWidget(cmbScheme,1,1,1,1)
+		box.addWidget(cmbScheme,1,1,1,1)
 
-		self.box.addWidget(QLabel(i18n.get("BACKGROUND")),2,0,1,1)
+		box.addWidget(QLabel(i18n.get("BACKGROUND")),2,0,1,1)
 		cmbBackground=QComboBox()
 		cmbBackground.setIconSize(QSize(self.bkgIconSize,self.bkgIconSize))
 		self.widgets.update({'background':cmbBackground})
-		self.box.addWidget(cmbBackground,2,1,1,1)
+		box.addWidget(cmbBackground,2,1,1,1)
 
-		self.box.addWidget(QLabel(i18n.get("SCALE")),3,0,1,1)
+		box.addWidget(QLabel(i18n.get("SCALE")),3,0,1,1)
 		cmbScale=QComboBox()
 		self.widgets.update({'scale':cmbScale})
-		self.box.addWidget(cmbScale,3,1,1,1)
+		box.addWidget(cmbScale,3,1,1,1)
 
-		self.box.addWidget(QLabel(i18n.get("XSCALE")),4,0,1,1)
+		box.addWidget(QLabel(i18n.get("XSCALE")),4,0,1,1)
 		cmbXscale=QComboBox()
 		self.widgets.update({'xscale':cmbXscale})
-		self.box.addWidget(cmbXscale,4,1,1,1)
+		box.addWidget(cmbXscale,4,1,1,1)
 
-		self.box.addWidget(QLabel(i18n.get("MAXIMIZE")),5,0,1,1)
+		box.addWidget(QLabel(i18n.get("MAXIMIZE")),5,0,1,1)
 		chkMax=QCheckBox()
 		self.widgets.update({'chkmax':chkMax})
-		self.box.addWidget(chkMax,5,1,1,1)
+		box.addWidget(chkMax,5,1,1,1)
 
-		self.box.addWidget(QLabel(i18n.get("CURSORTHEME")),6,0,1,1)
+		box.addWidget(QLabel(i18n.get("CURSORTHEME")),6,0,1,1)
 		cmbCursor=QComboBox()
 		self.widgets.update({'cursor':cmbCursor})
 		cmbCursor.currentIndexChanged.connect(self.updateCursorSizes)
-		self.box.addWidget(cmbCursor,6,1,1,1)
+		box.addWidget(cmbCursor,6,1,1,1)
 
-		self.box.addWidget(QLabel(i18n.get("CURSORSIZE")),7,0,1,1)
+		box.addWidget(QLabel(i18n.get("CURSORSIZE")),7,0,1,1)
 		cmbCursorSize=QComboBox()
 		self.widgets.update({'cursorSize':cmbCursorSize})
-		self.box.addWidget(cmbCursorSize,7,1,1,1)
+		box.addWidget(cmbCursorSize,7,1,1,1)
 		cmbCursorSize.addItem("32")
 		cmbCursorSize.addItem("48")
 		cmbCursorSize.addItem("64")
@@ -127,6 +132,8 @@ class lookandfeel(confStack):
 		cmbCursorSize.addItem("96")
 		cmbCursorSize.addItem("112")
 		cmbCursorSize.addItem("128")
+		scr.setWidget(wdg)
+		scr.setWidgetResizable(True)
 	#def _load_screen
 
 	def updateScreen(self):
@@ -277,17 +284,19 @@ class lookandfeel(confStack):
 	def _fillBackgroundCmb(self):
 		if self.imgFile=="":
 			imgFile=self.accesshelper.getBackgroundImg()
-			self.imgFile=imgFile
+			if imgFile=="":
+				imgFile="white"
+			else:
+				self.imgFile=imgFile
 		else:
 			imgFile=self.imgFile
-		if imgFile=="":
-			imgFile="white"
 		colors=["{0} [{1}]".format(i18n.get("CURRENTBKG","Current background"),imgFile)]
 		colorList=["black","red","blue","green","yellow","white"]
 		for color in colorList:
 			desc=i18n.get(color.upper(),color)
 			colors.append("{0} [{1}]".format(desc,color))
 		return(colors)
+	#def _fillBackgroundCmb
 		
 	def _getPointerImage(self,theme):
 		return(self.accesshelper.getPointerImage(theme=theme))
@@ -380,7 +389,6 @@ class lookandfeel(confStack):
 		self.accesshelper.setScaleFactor(scaleFactor,xrand=False)
 
 	def writeConfig(self):
-		self.saveChanges('background',self.imgFile)
 		self.optionChanged=[]
 		self.refresh=True
 		cursorTheme=""
@@ -430,7 +438,7 @@ class lookandfeel(confStack):
 						if qcolor:
 							self.accesshelper.setBackgroundColor(qcolor)
 						bkg=color
-					else:
+					elif self.imgFile:
 						self.saveChanges('bkg',"image")
 						self.accesshelper.setBackgroundImg(self.imgFile)
 						bkg=self.imgFile

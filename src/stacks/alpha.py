@@ -3,7 +3,7 @@ from . import libaccesshelper
 import sys
 import os
 import subprocess
-from PySide2.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QGridLayout,QLineEdit,QHBoxLayout,QComboBox,QCheckBox,QTabBar,QTabWidget,QTabBar,QTabWidget,QSlider,QToolTip,QListWidget,QColorDialog,QGroupBox,QListView,QFrame
+from PySide2.QtWidgets import QWidget, QPushButton,QGridLayout,QCheckBox,QScrollArea,QColorDialog,QGroupBox,QListView,QFrame
 from PySide2 import QtGui
 from PySide2.QtCore import Qt,QSignalMapper,QEvent
 from appconfig.appConfigStack import appConfigStack as confStack
@@ -40,6 +40,8 @@ class alpha(confStack):
 		self.blockSettings={}
 		self.optionChanged=[]
 		self.embebbed=False
+		self.scr=None
+		self.widgets={}
 		self.accesshelper=libaccesshelper.accesshelper()
 	#def __init__
 
@@ -50,24 +52,35 @@ class alpha(confStack):
 			plasmaConfig=self.accesshelper.getPlasmaConfig(wrkFile)
 			self.plasmaConfig.update(plasmaConfig)
 		kdevalues=self.plasmaConfig.get('kgammarc',{}).get('Screen 0',[])
-		dlgColor=QColorDialog()
-		#Embed in window
-		dlgColor.setWindowFlags(Qt.Widget)
-		dlgColor.setOptions(dlgColor.NoButtons)
-		#Customize widget
-		for chld in dlgColor.findChildren(QGroupBox):
-			for groupChld in chld.findChildren(QCheckBox):
-				chld.hide()
-				break
-		cont=0
-		row,col=(0,0)
-		self.box.addWidget(dlgColor)
+		dlgColor=self._QcolorWidget()	
+		scr=QScrollArea()
+		scr.setWidget(dlgColor)
+		scr.setWidgetResizable(True)
+		scr.setStyleSheet("""QScrollArea{background-color:rgba(155,155,155,0)}""")
+		self.box.addWidget(scr)
 		self.widgets={}
 		self.widgets.update({"alpha":dlgColor})
 		self.btn_cancel.setText(i18n.get("DEFAULT"))
 		self.btn_cancel.setEnabled(True)
 		#self.btn_ok.released.connect(self.updateScreen)
 	#def _load_screen
+
+	def _QcolorWidget(self):
+		wdg=QWidget()
+		lay=QGridLayout()
+		cwdg=QColorDialog()
+		lay.addWidget(cwdg)
+		wdg.setLayout(lay)
+		#Embed in window
+		cwdg.setWindowFlags(Qt.Widget)
+		cwdg.setOptions(cwdg.NoButtons)
+		#Customize widget
+		for chld in wdg.findChildren(QGroupBox):
+			for groupChld in chld.findChildren(QCheckBox):
+				chld.hide()
+				break
+		return(wdg)
+
 
 	def _enableDefault(self,*args):
 		self.btn_cancel.setEnabled(True)

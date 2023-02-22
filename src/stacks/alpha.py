@@ -52,14 +52,13 @@ class alpha(confStack):
 			plasmaConfig=self.accesshelper.getPlasmaConfig(wrkFile)
 			self.plasmaConfig.update(plasmaConfig)
 		kdevalues=self.plasmaConfig.get('kgammarc',{}).get('Screen 0',[])
-		dlgColor=self._QcolorWidget()	
+		(dlgColor,wdg)=self._QcolorWidget()	
 		scr=QScrollArea()
 		scr.setWidget(dlgColor)
 		scr.setWidgetResizable(True)
 		scr.setStyleSheet("""QScrollArea{background-color:rgba(155,155,155,0)}""")
 		self.box.addWidget(scr)
-		self.widgets={}
-		self.widgets.update({"alpha":dlgColor})
+		self.widgets.update({"alpha":wdg})
 		self.btn_cancel.setText(i18n.get("DEFAULT"))
 		self.btn_cancel.setEnabled(True)
 		#self.btn_ok.released.connect(self.updateScreen)
@@ -79,7 +78,7 @@ class alpha(confStack):
 			for groupChld in chld.findChildren(QCheckBox):
 				chld.hide()
 				break
-		return(wdg)
+		return(wdg,cwdg)
 
 
 	def _enableDefault(self,*args):

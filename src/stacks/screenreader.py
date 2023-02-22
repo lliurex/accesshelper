@@ -2,7 +2,7 @@
 import sys
 import os,signal
 import shutil
-from PySide2.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QGridLayout,QComboBox,QTableWidget,QHeaderView,QFileDialog
+from PySide2.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QGridLayout,QComboBox,QTableWidget,QHeaderView,QFileDialog,QScrollArea
 from PySide2 import QtGui
 from PySide2 import QtMultimedia
 from PySide2.QtCore import Qt,QSignalMapper,QSize,QThread,QObject,Signal,QUrl
@@ -86,43 +86,50 @@ class screenreader(confStack):
 	def _load_screen(self):
 		self.box=QGridLayout()
 		self.setLayout(self.box)
+		box=QGridLayout()
+		wdg=QWidget()
+		wdg.setLayout(box)
+		scr=QScrollArea()
+		self.box.addWidget(scr)
 		self.widgets={}
 		self.level='user'
 		self.config=self.getConfig(level=self.level)
 		config=self.config.get(self.level,{})
 		lblVoice=QLabel(i18n.get("VOICE"))
-		self.box.addWidget(lblVoice,0,0,1,1)
+		box.addWidget(lblVoice,0,0,1,1)
 		cmbVoice=QComboBox()
 		self.widgets.update({cmbVoice:"voice"})
-		self.box.addWidget(cmbVoice,0,1,1,1)
+		box.addWidget(cmbVoice,0,1,1,1)
 		lblSpeed=QLabel(i18n.get("SPEED"))
-		self.box.addWidget(lblSpeed,1,0,1,1)
+		box.addWidget(lblSpeed,1,0,1,1)
 		cmbSpeed=QComboBox()
 		self.widgets.update({cmbSpeed:"speed"})
-		self.box.addWidget(cmbSpeed,1,1,1,1)
+		box.addWidget(cmbSpeed,1,1,1,1)
 		lblPitch=QLabel(i18n.get("PITCH"))
-		self.box.addWidget(lblPitch,2,0,1,1)
+		box.addWidget(lblPitch,2,0,1,1)
 		cmbPitch=QComboBox()
 		cmbPitch.setEnabled(False)
 		self.widgets.update({cmbPitch:"pitch"})
-		self.box.addWidget(cmbPitch,2,1,1,1)
+		box.addWidget(cmbPitch,2,1,1,1)
 		lblSynt=QLabel(i18n.get("SYNT"))
-		self.box.addWidget(lblSynt,3,0,1,1)
+		box.addWidget(lblSynt,3,0,1,1)
 		cmbSynt=QComboBox()
 		self.widgets.update({cmbSynt:"synt"})
-		self.box.addWidget(cmbSynt,3,1,1,1)
+		box.addWidget(cmbSynt,3,1,1,1)
 		lblFiles=QLabel(i18n.get("FILES"))
-		self.box.addWidget(lblFiles,4,0,1,1,Qt.AlignLeft)
+		box.addWidget(lblFiles,4,0,1,1,Qt.AlignLeft)
 		btnReload=QPushButton()
 		refreshIcon=QtGui.QIcon.fromTheme("view-refresh")
 		btnReload.setIcon(refreshIcon)
 		btnReload.setIconSize(QSize(24,24))
 		btnReload.clicked.connect(self.updateScreen)
-		self.box.addWidget(btnReload,4,1,1,1,Qt.AlignRight)
+		box.addWidget(btnReload,4,1,1,1,Qt.AlignRight)
 		tblFiles=QTableWidget()
 		tblFiles.verticalHeader().setVisible(False)
 		self.widgets.update({tblFiles:"files"})
-		self.box.addWidget(tblFiles,5,0,1,2)
+		box.addWidget(tblFiles,5,0,1,2)
+		scr.setWidget(wdg)
+		scr.setWidgetResizable(True)
 	#def _load_screen
 
 	def updateScreen(self):

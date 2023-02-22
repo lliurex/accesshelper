@@ -89,7 +89,7 @@ class settings(confStack):
 		self.widgets.update({self.cmb_level:'config'})
 		lbl_help=QLabel("")
 		lbl_help.setAlignment(Qt.AlignTop)
-		box.addWidget(lbl_help,1,0,1,2,Qt.AlignTop|Qt.AlignCenter)
+		#box.addWidget(lbl_help,1,0,1,2,Qt.AlignTop|Qt.AlignCenter)
 		box.addWidget(QLabel(i18n.get("LBLSETTINGS")),2,0,1,2,Qt.AlignTop)
 		chk_template=QCheckBox(i18n.get("LOADTPL"))
 		box.addWidget(chk_template,3,0,1,1,Qt.AlignTop)

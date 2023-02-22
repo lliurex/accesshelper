@@ -9,6 +9,7 @@ from PySide2.QtGui import QIcon,QPixmap,QColor
 from multiprocessing import Process
 import dbus
 import json
+import random
 
 class functionHelperClass():
 	def __init__(self):
@@ -1058,6 +1059,14 @@ class accesshelper():
 					if line.startswith("Image=file://"):
 						img=line.replace("Image=file://","")
 						break
+					elif line.startswith("Image="):
+						imgFolder=line.replace("Image=","").strip()
+						imgFolder=os.path.join(imgFolder,"contents/images")
+						if os.path.isdir(imgFolder)==True:
+							lstf=os.listdir(imgFolder)
+							lstf.sort(reverse=True)
+							img=os.path.join(imgFolder,lstf[random.randrange(0,len(lstf)-1)])
+							break
 		return img.strip()
 	#def getBackgroundImg
 

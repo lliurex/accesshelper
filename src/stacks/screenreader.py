@@ -65,7 +65,7 @@ class playFile(QThread):
 
 class screenreader(confStack):
 	def __init_stack__(self):
-		self.dbg=True
+		self.dbg=False
 		self._debug("tts Load")
 		self.accesshelper=libaccesshelper.accesshelper()
 		self.speech=libspeechhelper.speechhelper()

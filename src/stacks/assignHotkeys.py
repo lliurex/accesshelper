@@ -208,7 +208,7 @@ class assignHotkeys(confStack):
 				if desc in value:
 					arraySetting=value.split(',')
 					arraySetting[0]=hotkey
-					arraySetting[1]=hotkey
+					arraySetting[1]="none"
 					value=",".join(arraySetting)
 				newSettings.append((description,value))
 			if 'kwin' in sections.keys():
@@ -224,7 +224,7 @@ class assignHotkeys(confStack):
 				hotkeyLine=value.get('_launch','')
 				hotkeyArray=hotkeyLine.split(",")
 				hotkeyArray[0]=hotkey
-				hotkeyArray[1]=hotkey
+				hotkeyArray[1]="none"
 				value.update({'_launch':",".join(hotkeyArray)})
 				newHotkeys.update({app:value})
 		self.config.update({'hotkeys':newHotkeys})

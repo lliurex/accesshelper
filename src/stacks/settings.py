@@ -286,7 +286,7 @@ class settings(confStack):
 			if isinstance(widget,QCheckBox):
 				value=widget.isChecked()
 				if desc=="grubBeep":
-					if config[self.level].get("grubBeep","")!=str(value).lower():
+					if config[self.level].get("grubBeep","false")!=str(value).lower():
 						self._setGrubBeep(value)
 					beep=value
 				if value:

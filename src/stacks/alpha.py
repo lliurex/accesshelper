@@ -80,10 +80,17 @@ class alpha(confStack):
 				break
 		return(wdg,cwdg)
 
-
 	def _enableDefault(self,*args):
 		self.btn_cancel.setEnabled(True)
 	#def _enableDefault
+
+	def setCurrentColor(self,rgba):
+		if isinstance(rgba,QtGui.QColor):
+			wdg=self.widgets.get('alpha')
+			print("W: {}".format(wdg))
+			if wdg:
+				wdg.setCurrentColor(rgba)
+	#def setCurrentColor
 
 	def updateScreen(self):
 		self.refresh=True

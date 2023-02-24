@@ -285,6 +285,10 @@ class accessdock(QWidget):
 				alphaDlg.show()
 				cursor=QCursor(Qt.PointingHandCursor)
 				alphaDlg.setCursor(cursor)
+				config=self._readConfig()
+				alpha=config.get('alpha',[])
+				if len(alpha)==4:
+					dlgColor.setCurrentColor(QtGui.QColor(alpha[0],alpha[1],alpha[2],alpha[3]))
 			elif args[0].lower()=="font_size":
 				self.setEnabled(False)
 				self._fontCursorSize("font")

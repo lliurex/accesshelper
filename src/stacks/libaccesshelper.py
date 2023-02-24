@@ -767,6 +767,7 @@ class functionHelperClass():
 		return(red,green,blue)
 	#def setRGBFilter
 
+
 	def setXscale(self,xscale):
 		cmd=["xrandr","--listmonitors"]
 		output=subprocess.run(cmd,capture_output=True,text=True)
@@ -1214,6 +1215,32 @@ class accesshelper():
 	def setScaleFactor(self,*args,**kwargs):
 		return(self.functionHelper.setScaleFactor(*args,**kwargs))
 	#def setScaleFactor
+
+	def currentRGBValues(self):
+		cmd=subprocess.run(["xgamma"],capture_output=True,encoding="utf8")
+		values=cmd.stderr.strip().split(" ")
+		rgba=[]
+		color=QColor()
+		for val in values:
+			if len(val)==0:
+				continue
+			val=val.replace(",","").replace("\n","")
+			fval=0
+			if isinstance(val,float):
+				fval=round((val*255)/3.5)
+			elif isinstance(val,str) and val[0].isdigit():
+				fval=round((float(val)*255)/3.5)
+			else:
+				continue
+			#<72 is too dark so discard
+			if fval<=73:
+				fval=0
+			rgba.append(fval)
+		rgba.append(1.0)
+		if len(rgba)==4:
+			color.setRgb(rgba[0],rgba[1],rgba[2],rgba[3])
+		return(color)
+	#def currentRGBValues
 
 	def setNewConfig(self,*args):
 		self.functionHelper.setNewConfig()

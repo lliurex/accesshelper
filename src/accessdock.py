@@ -2,7 +2,7 @@
 import os,sys,io,psutil,shutil,signal,time
 from PySide2.QtWidgets import QApplication,QMessageBox,QGridLayout,QLabel,QToolButton,QWidget,QFrame,QDialog,QPushButton,QComboBox
 from PySide2.QtCore import Qt,QSignalMapper,QSize,QThread
-from PySide2.QtGui import QIcon,QPixmap,QCursor
+from PySide2.QtGui import QIcon,QPixmap,QCursor,QColor
 from stacks import libaccesshelper
 from stacks import libspeechhelper as speech
 from appconfig.appConfigStack import appConfigStack as confStack
@@ -272,10 +272,16 @@ class accessdock(QWidget):
 				sys.exit(0)
 			elif args[0].lower()=="color":
 				self.setEnabled(False)
-				alphaDlg=alpha(alpha)
+				alphaDlg=alpha(self)
 				alphaDlg.embebbed=True
 				alphaDlg.move(self.coordx,self.coordy)
 				alphaDlg._load_screen()
+				config=self._readConfig()
+				currentRgb=self.accesshelper.currentRGBValues()
+				rgba=config.get('alpha',[])
+				if len(rgba)==4:
+					#alphaDlg.setCurrentColor(QColor(rgba[0],rgba[1],rgba[2],rgba[3]))
+					alphaDlg.setCurrentColor(currentRgb)
 				alphaDlg.btn_ok.clicked.connect(alphaDlg.close)
 				alphaDlg.btn_cancel.clicked.connect(alphaDlg.close)
 				alphaDlg.btn_cancel.setShortcut("Esc")
@@ -285,10 +291,6 @@ class accessdock(QWidget):
 				alphaDlg.show()
 				cursor=QCursor(Qt.PointingHandCursor)
 				alphaDlg.setCursor(cursor)
-				config=self._readConfig()
-				alpha=config.get('alpha',[])
-				if len(alpha)==4:
-					dlgColor.setCurrentColor(QtGui.QColor(alpha[0],alpha[1],alpha[2],alpha[3]))
 			elif args[0].lower()=="font_size":
 				self.setEnabled(False)
 				self._fontCursorSize("font")

@@ -537,7 +537,14 @@ class functionHelperClass():
 					self.setXscale(xscale)
 			self.removeRGBFilter()
 			if isinstance(alpha,QColor):
-				self.setRGBFilter(alpha)
+				config={'kgammarc':{'ConfigFile':[("use","kgammarc")],'SyncBox':[("sync","yes")]}}
+				(red,green,blue)=self.setRGBFilter(alpha)
+				values=[]
+				values.append(('bgamma',"{0:.2f}".format(blue)))
+				values.append(('rgamma',"{0:.2f}".format(red)))
+				values.append(('ggamma',"{0:.2f}".format(green)))
+				config['kgammarc'].update({'Screen 0':values})
+				self.setPlasmaConfig(config)
 			if theme!="":
 				subprocess.run(["plasma-apply-desktoptheme",theme],stdout=subprocess.PIPE)
 			if scheme!="":
@@ -1249,20 +1256,20 @@ class accesshelper():
 	def applyChanges(self,setconf=True):
 		if setconf:
 			self.setNewConfig()
-		cmd=["qdbus","org.kde.kded","/kded","unloadModule","powerdevil"]
-		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
-		cmd=["qdbus","org.kde.keyboard","/modules/khotkeys","reread_configuration"]
-		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
-		cmd=["qdbus","org.kde.kded","/kbuildsycoca","recreate"]
-		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
-		cmd=["qdbus","org.kde.kded","/kded","reconfigure"]
-		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
-		cmd=["qdbus","org.kde.plasma-desktop","/MainApplication","reparseConfiguration"]
-		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
-		cmd=["qdbus","org.kde.kwin","/KWin","reconfigure"]
-		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
-		cmd=["qdbus","org.kde.kded","/kded","loadModule","powerdevil"]
-		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+	#	cmd=["qdbus","org.kde.kded","/kded","unloadModule","powerdevil"]
+	#	subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+	#	cmd=["qdbus","org.kde.keyboard","/modules/khotkeys","reread_configuration"]
+	#	subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+	#	cmd=["qdbus","org.kde.kded","/kbuildsycoca","recreate"]
+	#	subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+	#	cmd=["qdbus","org.kde.kded","/kded","reconfigure"]
+	#	subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+	#	cmd=["qdbus","org.kde.plasma-desktop","/MainApplication","reparseConfiguration"]
+	#	subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+	#	cmd=["qdbus","org.kde.kwin","/KWin","reconfigure"]
+	#	subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+	#	cmd=["qdbus","org.kde.kded","/kded","loadModule","powerdevil"]
+	#	subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
 		print("Changes applied!")
 		#cmd=["kquitapp5","kglobalaccel5"]
 		cmd=["qdbus","org.kde.kglobalaccel","/MainApplication","quit"]
@@ -1271,8 +1278,8 @@ class accesshelper():
 		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
 		#cmd=["plasmashell"]
 		#subprocess.Popen(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
-		cmd=["qdbus","org.kde.plasmashell","/PlasmaShell","refreshCurrentShell"]
-		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+		#cmd=["qdbus","org.kde.plasmashell","/PlasmaShell","refreshCurrentShell"]
+		#subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
 		#cmd=["plasmashell","--replace"]
 		#subprocess.Popen(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
 #		cmd=["kquitapp5","kglobalaccel5"]

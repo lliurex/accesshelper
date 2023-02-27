@@ -118,9 +118,14 @@ class alpha(confStack):
 		if self.config==None:
 			self.config=self.getConfig()
 		qalpha=self.widgets.get("alpha").currentColor()
-		(red,green,blue)=self.accesshelper.setRGBFilter(qalpha,self.embebbed)
+		if (qalpha.red()+qalpha.blue()+qalpha.green()+qalpha.alpha())==255*4:
+			self.accesshelper.removeRGBFilter()
+			(red,green,blue)=(1.0,1.0,1.0)
+			qalpha=None
+		else:
+			(red,green,blue)=self.accesshelper.setRGBFilter(qalpha,self.embebbed)
 		if self.embebbed==False:
-			(red,green,blue)=self.accesshelper.setRGBFilter(qalpha)
+		#	(red,green,blue)=self.accesshelper.setRGBFilter(qalpha)
 			self.plasmaConfig['kgammarc']['ConfigFile']=[("use","kgammarc")]
 			self.plasmaConfig['kgammarc']['SyncBox']=[("sync","yes")]
 			values=[]
@@ -135,16 +140,20 @@ class alpha(confStack):
 			if self.appConfig:
 				self.plasmaConfig['kgammarc']['Screen 0']=values
 				self.accesshelper.setPlasmaConfig(self.plasmaConfig)
-				self.saveChanges("alpha",qalpha.getRgb())
+				if isinstance(qalpha,QtGui.QColor):
+					self.saveChanges("alpha",qalpha.getRgb())
+					self._writeFileChanges(qalpha.getRgb())
+				else:
+					self.saveChanges("alpha",[])
+					self._writeFileChanges([i18n.get("DEFAULT")])
 				self.optionChanged=[]
 				self.refresh=True
 				self.btn_cancel.setEnabled(True)
-				self._writeFileChanges(qalpha)
 	#def writeConfig
 
 	def _reset_screen(self,*args):
 		self.accesshelper.removeRGBFilter()
-		self.btn_ok.setEnabled(False)
+		self.btn_ok.setEnabled(True)
 		self.btn_cancel.setEnabled(True)
 		self.optionChanged=[]
 		if self.appConfig:
@@ -155,8 +164,8 @@ class alpha(confStack):
 		self.refresh=False
 	#def _reset_screen
 
-	def _writeFileChanges(self,qalpha):
+	def _writeFileChanges(self,filter):
 		with open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'a') as f:
 			f.write("<b>{}</b>\n".format(i18n.get("CONFIG")))
-			f.write("{0}->{1}\n".format(i18n.get("FILTER"),qalpha.getRgb()))
+			f.write("{0}->{1}\n".format(i18n.get("FILTER"),filter))
 	#def _writeFileChanges(self):

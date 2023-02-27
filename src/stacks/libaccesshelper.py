@@ -537,7 +537,14 @@ class functionHelperClass():
 					self.setXscale(xscale)
 			self.removeRGBFilter()
 			if isinstance(alpha,QColor):
-				self.setRGBFilter(alpha)
+				config={'kgammarc':{'ConfigFile':[("use","kgammarc")],'SyncBox':[("sync","yes")]}}
+				(red,green,blue)=self.setRGBFilter(alpha)
+				values=[]
+				values.append(('bgamma',"{0:.2f}".format(blue)))
+				values.append(('rgamma',"{0:.2f}".format(red)))
+				values.append(('ggamma',"{0:.2f}".format(green)))
+				config['kgammarc'].update({'Screen 0':values})
+				self.setPlasmaConfig(config)
 			if theme!="":
 				subprocess.run(["plasma-apply-desktoptheme",theme],stdout=subprocess.PIPE)
 			if scheme!="":
@@ -1269,10 +1276,10 @@ class accesshelper():
 		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
 		cmd=["kstart5","kglobalaccel5"]
 		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
-		#cmd=["plasmashell"]
-		#subprocess.Popen(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
 		cmd=["qdbus","org.kde.plasmashell","/PlasmaShell","refreshCurrentShell"]
 		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+		#cmd=["plasmashell"]
+		#subprocess.Popen(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
 		#cmd=["plasmashell","--replace"]
 		#subprocess.Popen(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
 #		cmd=["kquitapp5","kglobalaccel5"]

@@ -533,8 +533,8 @@ class functionHelperClass():
 				self.setScaleFactor(float(scale)/100)
 			self.removeAutostartDesktop("accesshelper_Xscale.desktop")
 			if xscale:
-				if xscale!="100":
-					self.setXscale(xscale)
+				if xscale.isdigit():
+					self.setXscale(xscale,applyChanges=True)
 			self.removeRGBFilter()
 			if isinstance(alpha,QColor):
 				config={'kgammarc':{'ConfigFile':[("use","kgammarc")],'SyncBox':[("sync","yes")]}}
@@ -775,7 +775,7 @@ class functionHelperClass():
 	#def setRGBFilter
 
 
-	def setXscale(self,xscale):
+	def setXscale(self,xscale,applyChanges=False):
 		cmd=["xrandr","--listmonitors"]
 		output=subprocess.run(cmd,capture_output=True,text=True)
 		monitors=[]
@@ -783,10 +783,13 @@ class functionHelperClass():
 			if len(line.split(" "))>=4:
 				monitors.append("{0}".format(line.split(" ")[-1]))
 		cmd=[]
+		cmd.append("sleep 5")
 		for output in monitors:
 			f=round(1-(((int(xscale)/100)-1)/3),2)
-			cmd.append("sleep 5")
-			cmd.append("xrandr --output {0} --scale {1}x{1}".format(output,f))
+			xrand="xrandr --output {0} --scale {1}x{1}".format(output,f)
+			cmd.append(xrand)
+			if applyChanges==True:
+				subprocess.run(xrand.split())
 		self.generateAutostartDesktop(" && ".join(cmd),"accesshelper_Xscale.desktop")
 	#def setXscale(self,xscale):
 

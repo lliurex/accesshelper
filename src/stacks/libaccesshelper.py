@@ -1252,8 +1252,12 @@ class accesshelper():
 		return(color)
 	#def currentRGBValues
 
+	def setHotkey(self,*args,**kwargs):
+		return(self.functionHelper.setHotkey(*args))
+	#def setHotkey
+
 	def setNewConfig(self,*args):
-		self.functionHelper.setNewConfig()
+		return(self.functionHelper.setNewConfig())
 	#def setNewConfig(self,*args):
 
 	def applyChanges(self,setconf=True):

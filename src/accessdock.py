@@ -123,7 +123,7 @@ class accessdock(QWidget):
 				cursorPosition =QCursor.pos()
 				self.coordx,self.coordy=cursorPosition.x(),cursorPosition.y()
 			speed=config.get("speed","1x")
-			self.fonts=config.get("fonts","")
+			self.fonts=config.get("font","")
 			self.pitch=config.get("pitch","50")
 			speed=speed.replace("x","")
 			#eSpeak min speed=80 max speed=390

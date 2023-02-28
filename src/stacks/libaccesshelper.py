@@ -71,18 +71,13 @@ class accesshelper():
 		self.removeAutostartDesktop("accesshelper_rgbFilter.desktop")
 	#def resetRGBFilter
 
-	def removeXscale(self):
-		self.removeAutostartDesktop("accesshelper_Xscale.desktop")
-	#def removeXscale
+	def currentRGBValues(self):
+		return(self.xHelper.currentRGBValue())
+	#def currentRGBValues
 
 	def removeAutostartDesktop(self,desktop,folder="autostart"):
 		self.functionHelper.removeAutostartDesktop(desktop,folder)
 	#def _removeAutostartDesktop
-
-	def setXscale(self,*args,**kwargs):
-		cmd=self.xHelper.setXscale(*args,**kwargs)
-		self.generateAutostartDesktop(cmd,"accesshelper_Xscale.desktop")
-	#def setXscale(self,xscale):
 
 	def generateAutostartDesktop(self,cmd,fname,folder="autostart"):
 		self.functionHelper.generateAutostartDesktop(cmd,fname,folder)
@@ -367,13 +362,18 @@ class accesshelper():
 		return()
 	#def setGrubBeep
 
+	def setXscale(self,*args,**kwargs):
+		cmd=self.xHelper.setScaleFactor(*args,**kwargs)
+		#self.generateAutostartDesktop(cmd,"accesshelper_Xscale.desktop")
+	#def setXscale(self,xscale):
+
+	def removeXscale(self):
+		self.removeAutostartDesktop("accesshelper_Xscale.desktop")
+	#def removeXscale
+
 	def setScaleFactor(self,*args,**kwargs):
 		self.plasmaHelper.setScaleFactor(*args,**kwargs)
 	#def setScaleFactor
-
-	def currentRGBValues(self):
-		return(self.xHelper.currentRGBValue())
-	#def currentRGBValues
 
 	def setHotkey(self,*args,**kwargs):
 		return(self.plasmaHelper.setHotkey(*args))

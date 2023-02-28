@@ -145,7 +145,8 @@ class accesshelper():
 	#def setTheme
 
 	def cssStyle(self,*args):
-		return(self.functionHelper.cssStyle(*args))
+		return
+		#return(self.functionHelper.cssStyle(*args))
 	#def cssStyle
 
 	def setBackgroundColor(self,*args):
@@ -291,7 +292,7 @@ class accesshelper():
 	def getPointerImage(self,*args,theme="default"):
 		if theme=="default":
 			theme=self._getCursorTheme()
-		return(self.functionHelper.getPointerImage(*args,theme))
+		return(self.xHelper.getPointerImage(*args,theme))
 	#def getPointerImage
 
 	def getPointerSize(self,*args):

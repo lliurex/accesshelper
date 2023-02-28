@@ -347,7 +347,6 @@ class access(confStack):
 	def writeConfig(self):
 		if self.startup=="true":
 			self.showMsg(i18n.get("AUTOSTARTENABLED"))
-			return
 		self.updateDataFromTable()
 		#InvertWindow needso InvertScreen enabled
 		plugins=self.plasmaConfig.get("kwinrc",{}).get("Plugins",[])

@@ -94,15 +94,31 @@ class assignHotkeys(confStack):
 		self.stack.gotoStack(idx=9,parms="")
 
 	def _deleteHotkey(self,btnDelete):
-		keypress=""
+		#Check if deleting or undoing
 		self.tblGrid.setCurrentCell(btnDelete.row,0)
-		self._debug("Delete event from {}".format(btnDelete))
+		app=self.tblGrid.cellWidget(self.tblGrid.currentRow(),0)
 		btn=self.tblGrid.cellWidget(self.tblGrid.currentRow(),1)
-		btn.setText("")
+		if app.isEnabled():
+			keypress=""
+			self._debug("Delete event from {}".format(btnDelete))
+			btn.setText("")
+			app.setEnabled(False)
+		else:
+			self._undoDelete(app,btn)
+		self.changes=True
 		self.btn_ok.setEnabled(True)
 		self.btn_cancel.setEnabled(True)
 		#self._set_config_key(keypress)
 	#def _deleteHotkey
+
+	def _undoDelete(self,app,btn):
+		for desktop,info in self.config.get('hotkeys',{}).items():
+			name=desktop.replace("[","").replace("]","").replace(".desktop","")
+			if app.text()==name:
+				app.setEnabled(True)
+				hk=info.get("_launch","").split(",")[0]
+				btn.setText(hk)
+				break
 
 	def updateScreen(self):
 		self.tblGrid.clear()

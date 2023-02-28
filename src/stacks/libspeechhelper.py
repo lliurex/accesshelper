@@ -3,6 +3,7 @@
 import os,shutil
 from spellchecker import SpellChecker
 from PySide2.QtGui import QClipboard
+from collections import OrderedDict
 import cv2
 import numpy as np
 import tesserocr
@@ -281,3 +282,38 @@ class speechhelper():
 		rotated = cv2.warpAffine(image, M, (w, h), flags=cv2.INTER_CUBIC, borderMode=cv2.BORDER_REPLICATE)
 		return rotated
 
+	def getFestivalVoices(self):
+		voices=[]
+		spanishFestival="/usr/share/festival/voices/spanish"
+		if os.path.isdir(spanishFestival):
+			for i in os.listdir(spanishFestival):
+				voices.append(i)
+		catalanFestival="/usr/share/festival/voices/catalan"
+		if os.path.isdir(catalanFestival):
+			for i in os.listdir(catalanFestival):
+				voices.append(i)
+		return(voices)
+
+	def getTtsFiles(self):
+		ttsDir=os.path.join(os.environ.get('HOME'),".config/accesshelper/tts")
+		allDict={}
+		if os.path.isdir(ttsDir)==True:
+			mp3Dir=os.path.join(ttsDir,"mp3")
+			txtDir=os.path.join(ttsDir,"txt")
+			txtDict={}
+			mp3Dict={}
+			for f in os.listdir(mp3Dir):
+				if f.endswith(".mp3") and "_" in f:
+					mp3Dict[f.replace(".mp3","")]=f
+			for f in os.listdir(txtDir):
+				if f.endswith(".txt") and "_" in f:
+					txtDict[f.replace(".txt","")]=f
+			for key,item in mp3Dict.items():
+				allDict[key]={"mp3":item}
+			for key,item in txtDict.items():
+				if allDict.get(key):
+					allDict[key].update({"txt":item})
+				else:
+					allDict[key]={"txt":item}
+		ordDict=OrderedDict(sorted(allDict.items(),reverse=True))
+		return(ordDict)

@@ -136,6 +136,7 @@ class plasmaHelperClass():
 			desc="{0},none,{1}".format(hotkey,desc)
 			data=[("_launch",desc),("_k_friendly_name",cmd)]
 		config={'kglobalshortcutsrc':{name:data}}
+		print(config)
 		self.setPlasmaConfig(config)
 	#def setHotkey
 				

@@ -254,6 +254,12 @@ class assignHotkeys(confStack):
 		self.accesshelper.setPlasmaConfig(self.plasmaConfig)
 		hotkeys=self.config.get('hotkeys',{})
 		self.saveChanges('hotkeys',hotkeys,'user')
+		for app,conf in hotkeys.items():
+			hk=conf.get("_launch","").split(",")[0]
+			desc=conf.get("_k_friendly_name","")
+			cmd=app.replace("[","")
+			cmd=cmd.replace("]","")
+			self.accesshelper.setHotkey(hk,desc,cmd)
 		self.refresh=True
 		self.optionChanged=[]
 		self._writeFileChanges()

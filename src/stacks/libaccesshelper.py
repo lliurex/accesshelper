@@ -984,6 +984,10 @@ class accesshelper():
 		return(self.functionHelper.getCursors())
 	#def getCursors
 
+	def getCursorTheme(self):
+		return(self.functionHelper.getCursorTheme())
+	#def getCursors
+
 	def getSchemes(self):
 		availableSchemes=[]
 		schemes=""

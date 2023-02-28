@@ -222,9 +222,19 @@ class lookandfeel(confStack):
 						searchedTheme=config.get("cursor")
 						if "[" in searchedTheme:
 							searchedTheme=searchedTheme.split("[")[0].strip()
+						sw=False
 						for key,item in self.cursorDesc.items():
 							if searchedTheme==item:
+								sw=True
 								cmb.setCurrentText(key)
+								break
+						if sw==False:
+							searchedTheme=self.accesshelper.getCursorTheme()
+							for key,item in self.cursorDesc.items():
+								if searchedTheme==item:
+									sw=True
+									cmb.setCurrentText(key)
+									break
 					elif cmbDesc=="scheme" and config.get("scheme","")!="":
 						cmb.setCurrentText(config.get("scheme"))
 			elif isinstance(cmb,QCheckBox):

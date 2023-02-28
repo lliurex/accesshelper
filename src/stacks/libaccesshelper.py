@@ -1020,6 +1020,14 @@ class accesshelper():
 		return (availableThemes)
 	#def getThemes
 
+	def getCurrentTheme(self):
+		current=""
+		for theme in self.getThemes():
+			if "(" in theme:
+				current=theme
+		return(current)
+	#def getCurrentTheme
+
 	def setCursor(self,*args):
 		self.functionHelper.setCursor(*args)
 	#def setCursor

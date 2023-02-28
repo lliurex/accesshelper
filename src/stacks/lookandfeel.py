@@ -214,9 +214,10 @@ class lookandfeel(confStack):
 							elif cmbDesc!="cursorSize":
 								arrayThemeDesc=themeDesc.split("(")
 								cmb.addItem(arrayThemeDesc[0].strip())
-
 					searchedTheme=config.get("theme","")
-					if cmbDesc=="theme" and config.get("theme","")!="":
+					if searchedTheme=="":
+						searchedTheme=self.accesshelper.getCurrentTheme()
+					if cmbDesc=="theme" and searchedTheme!="":
 						cmb.setCurrentText(config.get("theme"))
 					elif cmbDesc=="cursor" and config.get("cursor","")!="":
 						searchedTheme=config.get("cursor")

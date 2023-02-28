@@ -130,6 +130,7 @@ class plasmaHelperClass():
 
 	def setHotkey(self,hotkey,desc,name):
 		cmd=name.replace(".desktop","")
+		hotkey=hotkey.replace("Any","Space")
 		if desc=="":
 			data=""
 		else:
@@ -462,8 +463,6 @@ class plasmaHelperClass():
 	#def setStartBeep
 
 	def _setThemeSchemeLauncher(self,*args,theme="",scheme=""):
-		print(theme)
-		print(scheme)
 		home=os.environ.get('HOME')
 		if home:
 			autostart=os.path.join(home,".config/autostart")

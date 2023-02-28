@@ -473,9 +473,6 @@ class accesshelper():
 				subprocess.run(["plasma-apply-colorscheme",scheme],stdout=subprocess.PIPE)
 			if dockHk!="":
 				self._debug("Set hotkey for dock: {}".format(dockHk))
-				desc=""
-				name="accessdock"
-				self.setHotkey(dockHk,desc,name)
 				desc="show accessdock"
 				name="accessdock.desktop"
 				self.setHotkey(dockHk,desc,name)

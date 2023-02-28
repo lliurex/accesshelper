@@ -351,7 +351,7 @@ class accessdock(QWidget):
 			factor=cmbScale.currentText()
 			factor=factor.replace("%","")
 			scaleFactor=int(factor)/100
-			self.accesshelper.setScaleFactor(scaleFactor,plasma=False,xrand=True)
+			self.accesshelper.setXscale(scaleFactor,xrand=True)
 			self.xscale=factor
 			self.widgets["scale"].setText("{}%\nScale".format(self.xscale))
 			try:

@@ -422,12 +422,12 @@ class lookandfeel(confStack):
 								break
 						self.saveChanges('bkgColor',i18color)
 						self.saveChanges('bkg',"color")
-						if qcolor:
-							self.accesshelper.setBackgroundColor(qcolor)
+		#				if qcolor:
+		#					self.accesshelper.setBackgroundColor(qcolor)
 						bkg=color
 					elif self.imgFile:
 						self.saveChanges('bkg',"image")
-						self.accesshelper.setBackgroundImg(self.imgFile)
+		#				self.accesshelper.setBackgroundImg(self.imgFile)
 						bkg=self.imgFile
 		#Ensure size is applied before theme change
 		#self._setCursorSize(size)

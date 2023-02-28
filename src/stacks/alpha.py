@@ -87,7 +87,6 @@ class alpha(confStack):
 	def setCurrentColor(self,rgba):
 		if isinstance(rgba,QtGui.QColor):
 			wdg=self.widgets.get('alpha')
-			print("W: {}".format(wdg))
 			if wdg:
 				wdg.setCurrentColor(rgba)
 	#def setCurrentColor
@@ -125,30 +124,15 @@ class alpha(confStack):
 		else:
 			(red,green,blue)=self.accesshelper.setRGBFilter(qalpha,self.embebbed)
 		if self.embebbed==False:
-		#	(red,green,blue)=self.accesshelper.setRGBFilter(qalpha)
-			self.plasmaConfig['kgammarc']['ConfigFile']=[("use","kgammarc")]
-			self.plasmaConfig['kgammarc']['SyncBox']=[("sync","yes")]
-			values=[]
-			for gamma in self.plasmaConfig['kgammarc']['Screen 0']:
-				(desc,value)=gamma
-				if desc=='bgamma':
-					values.append((desc,"{0:.2f}".format(blue)))
-				elif desc=='rgamma':
-					values.append((desc,"{0:.2f}".format(red)))
-				elif desc=='ggamma':
-					values.append((desc,"{0:.2f}".format(green)))
-			if self.appConfig:
-				self.plasmaConfig['kgammarc']['Screen 0']=values
-				self.accesshelper.setPlasmaConfig(self.plasmaConfig)
-				if isinstance(qalpha,QtGui.QColor):
-					self.saveChanges("alpha",qalpha.getRgb())
-					self._writeFileChanges(qalpha.getRgb())
-				else:
-					self.saveChanges("alpha",[])
-					self._writeFileChanges([i18n.get("DEFAULT")])
-				self.optionChanged=[]
-				self.refresh=True
-				self.btn_cancel.setEnabled(True)
+			if isinstance(qalpha,QtGui.QColor):
+				self.saveChanges("alpha",qalpha.getRgb())
+				self._writeFileChanges(qalpha.getRgb())
+			else:
+				self.saveChanges("alpha",[])
+				self._writeFileChanges([i18n.get("DEFAULT")])
+			self.optionChanged=[]
+			self.refresh=True
+			self.btn_cancel.setEnabled(True)
 	#def writeConfig
 
 	def _reset_screen(self,*args):

@@ -63,7 +63,6 @@ class lookandfeel(confStack):
 		self.bkgIconSize=96
 		self.cursorDesc={}
 		self.cursorThemes={}
-		self.plasmaThemes={}
 		self.accesshelper=libaccesshelper.accesshelper()
 	#def __init__
 
@@ -151,92 +150,122 @@ class lookandfeel(confStack):
 			if value[0]=="Name":
 				theme=value[1]
 		for cmbDesc in self.widgets.keys():
-			cmb=self.widgets.get(cmbDesc,"")
-			if isinstance(cmb,QComboBox):
-				if cmbDesc=="cursorSize":
-					cursorSize=32
-					cursorSettings=self.plasmaConfig.get('kcminputrc',{}).get('Mouse',[])
-					for setting in cursorSettings:
-						if isinstance(setting,tuple):
-							if setting[0]=="cursorSize":
-								cursorSize=setting[1]
-					if cmb.findText(cursorSize)==-1 and isinstance(cursorSize,int):
-						cmb.insertItem(0,cursorSize)
-					cmb.setCurrentText(cursorSize)
-				elif cmbDesc=="scale" or cmbDesc=="xscale":
-					cmb.clear()
-					cmb.addItem("100%")
-					cmb.addItem("125%")
-					cmb.addItem("150%")
-					cmb.addItem("175%")
-					cmb.addItem("200%")
-					scale="100%"
-					if cmbDesc=="scale":
-						scaleFactor=self.accesshelper.getKdeConfigSetting("KScreen","ScaleFactor","kdeglobals")
-						if isinstance(scaleFactor,str):
-							if len(scaleFactor)>0:
-								scale="{}%".format(str(int(float(scaleFactor)*100)))
-						cmb.setCurrentText(scale)
-					else:
-						cmb.setCurrentText("{}%".format(config.get("xscale","100")))
-				else:
-					if cmbDesc=="theme":
-						themes=self._getThemeList()
-					if cmbDesc=="scheme":
-						themes=self._getSchemeList()
-					if cmbDesc=="cursor":
-						themes=self._getCursorList()
-					if cmbDesc=="background":
-						themes=self._fillBackgroundCmb()
-
-					for theme in themes:
-						#themeDesc=theme.split("(")[0].replace("(","").rstrip(" ")
-						themeDesc=theme.split("[")[0].strip()
-						if cmb.findText(themeDesc)==-1:
-							if cmbDesc=="cursor":
-								#i18n could translate the description, real name needed
-								cursorTheme=theme.split("[")[1].split(" ")[0].replace("]","")
-								icon,sizes=self._getPointerImage(cursorTheme)
-								if icon:
-									cmb.addItem(icon,themeDesc)
-								else:
-									cmb.addItem(themeDesc)
-								self.cursorDesc[themeDesc]=cursorTheme
-							elif cmbDesc=="background":
-								color=theme.split("[")[1].replace("[","").replace("]","")
-								px=QtGui.QPixmap(self.bkgIconSize,self.bkgIconSize)
-								if os.path.isfile(color):
-									px.load(color)
-								elif color:
-									px.fill(QtGui.QColor(color))
-								icon=QtGui.QIcon(px)
-								cmb.addItem(icon,themeDesc.strip())
-							elif cmbDesc!="cursorSize":
-								arrayThemeDesc=themeDesc.split("(")
-								cmb.addItem(arrayThemeDesc[0].strip())
-
-					searchedTheme=config.get("theme","")
-					if cmbDesc=="theme" and config.get("theme","")!="":
-						cmb.setCurrentText(config.get("theme"))
-					elif cmbDesc=="cursor" and config.get("cursor","")!="":
-						searchedTheme=config.get("cursor")
-						if "[" in searchedTheme:
-							searchedTheme=searchedTheme.split("[")[0].strip()
-						for key,item in self.cursorDesc.items():
-							if searchedTheme==item:
-								cmb.setCurrentText(key)
-					elif cmbDesc=="scheme" and config.get("scheme","")!="":
-						cmb.setCurrentText(config.get("scheme"))
-			elif isinstance(cmb,QCheckBox):
-				if config.get("maximize","false")=="true":
-					cmb.setChecked(True)
-				else:
-					cmb.setChecked(False)
+			self._populateData(cmbDesc,config)
 
 		if selectedColor!="":
 			cmb=self.widgets.get("background",QComboBox())
 			cmb.setCurrentText(i18n.get(selectedColor.upper(),selectedColor))
 	#def _udpate_screen
+
+	def _populateData(self,cmbDesc,config):
+		cmb=self.widgets.get(cmbDesc,"")
+		if isinstance(cmb,QComboBox):
+			if cmbDesc=="cursorSize":
+				self._loadCursorSize(cmb)
+			elif cmbDesc=="scale" or cmbDesc=="xscale":
+				self._loadScales(cmb,cmbDesc,config)
+			else:
+				if cmbDesc=="theme":
+					themes=self._getThemeList()
+				if cmbDesc=="scheme":
+					themes=self._getSchemeList()
+				if cmbDesc=="cursor":
+					themes=self._getCursorList()
+				if cmbDesc=="background":
+					themes=self._fillBackgroundCmb()
+
+				self._processThemeData(cmb,cmbDesc,themes)
+				self._setCurrentItem(cmb,cmbDesc,config)
+		elif isinstance(cmb,QCheckBox):
+			if config.get("maximize","false")=="true":
+				cmb.setChecked(True)
+			else:
+				cmb.setChecked(False)
+	#def _populateData
+
+	def _loadCursorSize(self,cmb):
+		cursorSize=32
+		cursorSettings=self.plasmaConfig.get('kcminputrc',{}).get('Mouse',[])
+		for setting in cursorSettings:
+			if isinstance(setting,tuple):
+				if setting[0]=="cursorSize":
+					cursorSize=setting[1]
+		if cmb.findText(cursorSize)==-1 and isinstance(cursorSize,int):
+			cmb.insertItem(0,cursorSize)
+		cmb.setCurrentText(cursorSize)
+	#def _loadCursorSize
+
+	def _loadScales(self,cmb,cmbDesc,config):
+		cmb.clear()
+		cmb.addItem("100%")
+		cmb.addItem("125%")
+		cmb.addItem("150%")
+		cmb.addItem("175%")
+		cmb.addItem("200%")
+		scale="100%"
+		if cmbDesc=="scale":
+			scaleFactor=self.accesshelper.getKdeConfigSetting("KScreen","ScaleFactor","kdeglobals")
+			if isinstance(scaleFactor,str):
+				if len(scaleFactor)>0:
+					scale="{}%".format(str(int(float(scaleFactor)*100)))
+			cmb.setCurrentText(scale)
+		else:
+			cmb.setCurrentText("{}%".format(config.get("xscale","100")))
+	#def _loadScales
+
+	def _processThemeData(self,cmb,cmbDesc,themes):
+		for theme in themes:
+			#themeDesc=theme.split("(")[0].replace("(","").rstrip(" ")
+			themeDesc=theme.split("[")[0].strip()
+			if cmb.findText(themeDesc)==-1:
+				if cmbDesc=="cursor":
+					#i18n could translate the description, real name needed
+					cursorTheme=theme.split("[")[1].split(" ")[0].replace("]","")
+					icon,sizes=self._getPointerImage(cursorTheme)
+					if icon:
+						cmb.addItem(icon,themeDesc)
+					else:
+						cmb.addItem(themeDesc)
+					self.cursorDesc[themeDesc]=cursorTheme
+				elif cmbDesc=="background":
+					color=theme.split("[")[1].replace("[","").replace("]","")
+					px=QtGui.QPixmap(self.bkgIconSize,self.bkgIconSize)
+					if os.path.isfile(color):
+						px.load(color)
+					elif color:
+						px.fill(QtGui.QColor(color))
+					icon=QtGui.QIcon(px)
+					cmb.addItem(icon,themeDesc.strip())
+				elif cmbDesc!="cursorSize":
+					arrayThemeDesc=themeDesc.split("(")
+					cmb.addItem(arrayThemeDesc[0].strip())
+	#def _processThemeData
+
+	def _setCurrentItem(self,cmb,cmbDesc,config):
+		searchedTheme=config.get("theme","")
+		if searchedTheme=="":
+			searchedTheme=self.accesshelper.getCurrentTheme()
+		if cmbDesc=="theme" and searchedTheme!="":
+			cmb.setCurrentText(config.get("theme"))
+		elif cmbDesc=="cursor" and config.get("cursor","")!="":
+			searchedTheme=config.get("cursor")
+			if "[" in searchedTheme:
+				searchedTheme=searchedTheme.split("[")[0].strip()
+			sw=False
+			for key,item in self.cursorDesc.items():
+				if searchedTheme==item:
+					sw=True
+					cmb.setCurrentText(key)
+					break
+			if sw==False:
+				searchedTheme=self.accesshelper.getCursorTheme()
+				for key,item in self.cursorDesc.items():
+					if searchedTheme==item:
+						sw=True
+						cmb.setCurrentText(key)
+						break
+		elif cmbDesc=="scheme" and config.get("scheme","")!="":
+			cmb.setCurrentText(config.get("scheme"))
 
 	def _fixBadThemePath(self):
 		#Check if lookandfeel has been configured before
@@ -325,54 +354,14 @@ class lookandfeel(confStack):
 		return(["100%","125%","150%","175%","200%"])
 
 	def _setTheme(self,theme):
-		#self.accesshelper.setTheme(theme)
 		self._debug("Setting theme to {}".format(theme))
-		self._setThemeSchemeLauncher(theme=theme)
+		self.accesshelper.setThemeSchemeLauncher(theme=theme)
 	#def _setTheme
 
 	def _setScheme(self,scheme):
 		self._debug("Setting scheme to {}".format(scheme))
-#		with open("/tmp/.set_scheme","w") as f:
-#			f.write(scheme)
-		self._setThemeSchemeLauncher(scheme=scheme)
-		#Apply scheme change on exit
-
+		self.accesshelper.setThemeSchemeLauncher(scheme=scheme)
 	#def _setScheme
-
-	def _setThemeSchemeLauncher(self,theme="",scheme=""):
-		home=os.environ.get('HOME')
-		if home:
-			autostart=os.path.join(home,".config/autostart")
-			if os.path.isdir(autostart)==False:
-				os.makedirs(autostart)
-			desktop="accesshelper_thematizer.desktop"
-			source=os.path.join("/usr/share/accesshelper/helper/",desktop)
-			destpath=os.path.join(autostart,desktop)
-			content=[]
-			newcontent=[]
-			if os.path.isfile(destpath):
-				with open(destpath,'r') as f:
-					content=f.readlines()
-				if "".join(content).strip()=="":
-					content=[]
-			if content==[]:
-				if os.path.isfile(source):
-					with open(source,'r') as f:
-						content=f.readlines()
-			for line in content:
-				newline=line
-				if line.startswith("Exec="):
-					array=line.split(" ")
-					if theme:
-						array[1]=theme
-					if scheme:
-						array[2]=scheme
-					newline=" ".join(array)
-				newcontent.append(newline)
-			with open(destpath,'w') as f:
-				f.writelines(newcontent)
-				f.write("\n")
-	#def _setThemeSchemeLauncher
 
 	def _setCursor(self,themeDesc,size):
 		theme=self.cursorDesc.get(themeDesc,themeDesc)
@@ -405,10 +394,8 @@ class lookandfeel(confStack):
 				theme=theme.split("(")[0].strip()
 				if cmbDesc=="theme":
 					plasmaTheme=theme
-		#			self._setTheme(theme)
 				if cmbDesc=="scheme":
 					scheme=theme
-		#			self._setScheme(theme)
 				if cmbDesc=="cursor":
 					cursorTheme=theme
 				if cmbDesc=="cursorSize":

@@ -16,7 +16,7 @@ QString=type("")
 
 i18n={
 	"CONFIG":_("Settings"),
-	"DESCRIPTION":_("Manage application"),
+	"DESCRIPTION":_("Configure"),
 	"MENUDESCRIPTION":_("Configure some options"),
 	"TOOLTIP":_("Set config level, default template.."),
 	"USERCONF":_("The config will be applied per user"),

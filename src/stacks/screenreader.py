@@ -156,7 +156,7 @@ class screenreader(confStack):
 				elif "_ca_ona" in voice:
 					select=i18n.get("VALENCIANWOMAN")
 				elif "_ca_pau" in voice:
-					select=i18n.get("VALENCIAMAN")
+					select=i18n.get("VALENCIANMAN")
 				else:
 					select=voice
 				self._debug("Getting installed voices")

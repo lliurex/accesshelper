@@ -174,7 +174,6 @@ class xHelperClass():
 
 	def setCursorSize(self,size):
 		self._debug("Sizing to: {}".format(size))
-		self.setKdeConfigSetting("Mouse","cursorSize","{}".format(size),"kcminputrc")
 		xdefault=os.path.join(os.environ.get("HOME"),".Xdefaults")
 		xcursor="Xcursor.size: {}\n".format(size)
 		fcontents=[]
@@ -199,12 +198,6 @@ class xHelperClass():
 		err=0
 		if ("[") in theme:
 			theme=theme.split("[")[1].replace("[","").replace("]","")
-		if applyChanges==True:
-			try:
-				subprocess.run(["plasma-apply-cursortheme",theme],stdout=subprocess.PIPE)
-			except Exception as e:
-				print(e)
-				err=1
 		os.environ["XCURSOR_THEME"]=theme
 		if size!="":
 			if (isinstance(size,str))==False:
@@ -217,14 +210,6 @@ class xHelperClass():
 			except Exception as e:
 				print(e)
 				err=2
-		try:
-			cmd=["qdbus","org.kde.klauncher5","/KLauncher","org.kde.KLauncher.setLaunchEnv","XCURSOR_THEME",theme]
-			subprocess.run(cmd,stdout=subprocess.PIPE)
-			cmd=["qdbus","org.kde.klauncher5","/KLauncher","org.kde.KLauncher.setLaunchEnv","XCURSOR_SIZE",size]
-			subprocess.run(cmd,stdout=subprocess.PIPE)
-		except Exception as e:
-			print(e)
-			err=3
 		return(err)
 	#def setCursor
 

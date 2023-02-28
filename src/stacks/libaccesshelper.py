@@ -113,6 +113,7 @@ class accesshelper():
 	#def getCurrentTheme
 
 	def setCursor(self,*args,**kwargs):
+		self.xHelper.setCursor(*args,**kwargs)
 		self.plasmaHelper.setCursor(*args,**kwargs)
 	#def setCursor
 
@@ -150,11 +151,11 @@ class accesshelper():
 	#def cssStyle
 
 	def setBackgroundColor(self,*args):
-		return(self.functionHelper.setBackgroundColor(*args))
+		return(self.plasmaHelper.setBackgroundColor(*args))
 	#def setBackgroundColor
 
 	def setBackgroundImg(self,*args):
-		return(self.functionHelper.setBackgroundImg(*args))
+		return(self.plasmaHelper.setBackgroundImg(*args))
 	#def setBackgroundImg
 
 	def getBackgroundImg(self):
@@ -286,7 +287,7 @@ class accesshelper():
 	#def importExportSnapshot
 	
 	def _getCursorTheme(self):
-		return(self.functionHelper.getCursorTheme())
+		return(self.plasmaHelper.getCursorTheme())
 	#def _getCursorTheme
 
 	def getPointerImage(self,*args,theme="default"):

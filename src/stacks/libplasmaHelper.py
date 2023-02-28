@@ -365,6 +365,7 @@ class plasmaHelperClass():
 			theme=theme.split("[")[1].replace("[","").replace("]","")
 		if applyChanges==True:
 			try:
+				print(theme)
 				subprocess.run(["plasma-apply-cursortheme",theme],stdout=subprocess.PIPE)
 			except Exception as e:
 				print(e)

@@ -153,6 +153,7 @@ class xHelperClass():
 		if len(rgba)==4:
 			color.setRgb(rgba[0],rgba[1],rgba[2],rgba[3])
 		return(color)
+	#def currentRGBValue
 
 	def setXscale(self,xscale,applyChanges=False):
 		cmd=["xrandr","--listmonitors"]

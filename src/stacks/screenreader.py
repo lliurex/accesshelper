@@ -33,7 +33,8 @@ i18n={
 	"EXPORT":_("Files exported to"),
 	"SPANISHMAN":_("Spanish man"),
 	"SPANISHWOMAN":_("Spanish woman"),
-	"VALENCIANWOMAN":_("Catalan woman")
+	"VALENCIANWOMAN":_("Catalan woman"),
+	"VALENCIANMAN":_("Catalan man")
 	}
 
 class playSignal(QObject):
@@ -152,16 +153,24 @@ class screenreader(confStack):
 					select=i18n.get("SPANISHMAN")
 				elif "_es_sf_" in voice:
 					select=i18n.get("SPANISHWOMAN")
-				elif "_ca_" in voice:
+				elif "_ca_ona" in voice:
 					select=i18n.get("VALENCIANWOMAN")
+				elif "_ca_pau" in voice:
+					select=i18n.get("VALENCIAMAN")
+				else:
+					select=voice
 				self._debug("Getting installed voices")
 				for i in self.accesshelper.getFestivalVoices():
 					if "_es_pa_" in i:
 						widget.addItem(i18n.get("SPANISHMAN"))
 					elif "_es_sf_" in i:
 						widget.addItem(i18n.get("SPANISHWOMAN"))
-					elif "_ca_":
+					elif "_ca_ona" in i:
 						widget.addItem(i18n.get("VALENCIANWOMAN"))
+					elif "_ca_pau" in i:
+						widget.addItem(i18n.get("VALENCIANMAN"))
+					else:
+						widget.addItem(voice)
 				widget.setCurrentText(select)
 			if desc=="speed":
 				self._debug("Setting speed values")
@@ -296,6 +305,8 @@ class screenreader(confStack):
 					value="JuntaDeAndalucia_es_sf_diphone"
 				elif value==i18n.get("VALENCIANWOMAN"):
 					value="upc_ca_ona_hts"
+				elif value==i18n.get("VALENCIANMAN"):
+					value="upc_ca_pau_hts"
 			if desc=="speed":
 				value=widget.currentText()
 				speed=value

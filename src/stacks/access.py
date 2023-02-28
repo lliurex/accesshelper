@@ -98,6 +98,7 @@ class access(confStack):
 			ordArray.extend(item)
 			
 		return(ordArray)
+	#def sortArraySettings(self,settings):
 
 	def _load_screen(self):
 		self.box=QGridLayout()
@@ -141,8 +142,6 @@ class access(confStack):
 			return
 		data=item.data(Qt.UserRole)
 		(kfile,section,setting,value)=data.split("~")
-#		if value=="":
-#			value="false"
 		settings=self.plasmaConfig[kfile][section]
 		if btn and chk:
 			btn.setEnabled(chk.isChecked())
@@ -174,9 +173,6 @@ class access(confStack):
 			settings.append((zsetting,"false"))
 			zoomItemData="{0}~{1}~{2}~{3}".format(zkfile,zsection,zsetting,"false")
 			zoomItem.setData(Qt.UserRole,zoomItemData)
-		#	zbtn.setAutoExclusive(False)
-		#	zbtn.setChecked(False)
-		#	zbtn.setAutoExclusive(True)
 		return(settings)
 
 	def updateScreen(self):
@@ -351,7 +347,6 @@ class access(confStack):
 	def writeConfig(self):
 		if self.startup=="true":
 			self.showMsg(i18n.get("AUTOSTARTENABLED"))
-			return
 		self.updateDataFromTable()
 		#InvertWindow needso InvertScreen enabled
 		plugins=self.plasmaConfig.get("kwinrc",{}).get("Plugins",[])

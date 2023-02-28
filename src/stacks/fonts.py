@@ -51,6 +51,7 @@ class fonts(confStack):
 		for wrkFile in self.wrkFiles:
 			plasmaConfig=self.accesshelper.getPlasmaConfig(wrkFile)
 			self.plasmaConfig.update(plasmaConfig)
+	 #def _readKdeConfig
 
 	def _load_screen(self):
 		self.box=QGridLayout()
@@ -67,7 +68,6 @@ class fonts(confStack):
 		#Embed in window
 		dlgFont.setWindowFlags(Qt.Widget)
 		dlgFont.setOptions(dlgFont.NoButtons)
-		#dlgFont.currentFontChanged.connect(self._dlgChange)
 		#Customize widget
 		for chld in dlgFont.findChildren(QGroupBox):
 			for groupChld in chld.findChildren(QCheckBox):
@@ -76,8 +76,6 @@ class fonts(confStack):
 
 		row,col=(0,0)
 		self.box.addWidget(dlgFont)
-		#sigmap_run=QSignalMapper(self)
-		#sigmap_run.mapped[QString].connect(self._updateConfig)
 		self.widgets={}
 		self.widgets.update({"font":dlgFont})
 		self.config=self.getConfig()

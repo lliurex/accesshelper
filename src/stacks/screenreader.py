@@ -156,7 +156,7 @@ class screenreader(confStack):
 				elif "_ca_ona" in voice:
 					select=i18n.get("VALENCIANWOMAN")
 				elif "_ca_pau" in voice:
-					select=i18n.get("VALENCIAMAN")
+					select=i18n.get("VALENCIANMAN")
 				else:
 					select=voice
 				self._debug("Getting installed voices")
@@ -217,33 +217,40 @@ class screenreader(confStack):
 			lbl=QLabel("{}_{}".format(dateKey,timeKey))
 			widget.setCellWidget(row,0,lbl)
 			btn=""
+			extension=""
 			if files.get("mp3",None):
-				btn=QPushButton(mp3Icon,"")
-				widget.setCellWidget(row,1,btn)
-				relFile=key
-				sigmap_run.setMapping(btn,"{}.mp3".format(key))
-				self.mp3BtnDict.update({"{}.mp3".format(key):btn})
-				btn.clicked.connect(sigmap_run.map)
-				btn.setIconSize(iconSize)
-				btn.setFixedSize(btnSize)
+				extension=".mp3"
+				col=1
+				icon=mp3Icon
+				btn=self._newBtn(icon,extension,key,iconSize,btnSize,sigmap_run,widget)
+				widget.setCellWidget(row,col,btn)
 			if files.get("txt",None):
-				btn=QPushButton(txtIcon,"")
-				widget.setCellWidget(row,2,btn)
-				sigmap_run.setMapping(btn,"{}.txt".format(key))
-				btn.clicked.connect(sigmap_run.map)
-				btn.setIconSize(iconSize)
-				btn.setFixedSize(btnSize)
+				extension=".txt"
+				col=2
+				icon=txtIcon
+				btn=self._newBtn(icon,extension,key,iconSize,btnSize,sigmap_run,widget)
+				widget.setCellWidget(row,col,btn)
 			if btn:
-				btn=QPushButton(saveIcon,"")
-				widget.setCellWidget(row,3,btn)
-				sigmap_run.setMapping(btn,"{}".format(key))
-				btn.clicked.connect(sigmap_run.map)
-				btn.setIconSize(iconSize)
-				btn.setFixedSize(btnSize)
+				extension=""
+				col=3
+				icon=saveIcon
+				btn=self._newBtn(icon,extension,key,iconSize,btnSize,sigmap_run,widget)
+				widget.setCellWidget(row,col,btn)
 		widget.resizeColumnsToContents()
 		widget.resizeRowsToContents()
 		widget.horizontalHeader().setSectionResizeMode(0,QHeaderView.Stretch)
 	#def _populateFileList
+
+	def _newBtn(self,icon,extension,key,iconSize,btnSize,sigmap_run,widget):
+		btn=QPushButton(icon,"")
+		self.mp3BtnDict.update({"{}{}".format(key,extension):btn})
+		btn.setIconSize(iconSize)
+		btn.setFixedSize(btnSize)
+		setmap="{0}{1}".format(key,extension)
+		sigmap_run.setMapping(btn,setmap)
+		btn.clicked.connect(sigmap_run.map)
+		return(btn)
+	#def _newBtn
 
 	def _processTtsFile(self,ttsFile):
 		confDir=os.path.join(os.environ.get('HOME','/tmp'),".config/accesshelper/tts")

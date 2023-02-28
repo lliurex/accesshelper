@@ -242,6 +242,7 @@ class settings(confStack):
 			if isinstance(widget,appconfigControls.QHotkeyButton):
 				btnHk=widget.text()
 				break
+		btnHk.replace("Any","Space")
 		self.accesshelper.setHotkey(btnHk,"show accessdock","accessdock")
 		self.showMsg("{0} {1}".format(i18n.get("ENABLEDOCK"),btnHk))
 

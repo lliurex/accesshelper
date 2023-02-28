@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-28 06:47+0100\n"
+"POT-Creation-Date: 2023-02-28 10:33+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -736,6 +736,10 @@ msgstr ""
 
 #: ../src/stacks/screenreader.py:36
 msgid "Catalan woman"
+msgstr ""
+
+#: ../src/stacks/screenreader.py:37
+msgid "Catalan man"
 msgstr ""
 
 #: ../src/stacks/settings.py:19

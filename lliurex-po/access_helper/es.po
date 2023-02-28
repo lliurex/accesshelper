@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-21 15:49+0100\n"
-"PO-Revision-Date: 2023-02-21 15:50+0100\n"
+"POT-Creation-Date: 2023-02-28 06:47+0100\n"
+"PO-Revision-Date: 2023-02-28 06:49+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es\n"
@@ -750,8 +750,8 @@ msgid "Catalan woman"
 msgstr "Catalán femenino"
 
 #: ../src/stacks/settings.py:19
-msgid "Manage application"
-msgstr "Configuración"
+msgid "Configure"
+msgstr "Configurar"
 
 #: ../src/stacks/settings.py:20
 msgid "Configure some options"
@@ -845,8 +845,8 @@ msgstr "Pitar en el arranque del sistema"
 msgid "N4d"
 msgstr "N4d"
 
-#~ msgid "Configure"
-#~ msgstr "Configurar"
+#~ msgid "Manage application"
+#~ msgstr "Configuración"
 
 #~ msgid "Accessibility configuration"
 #~ msgstr "Configuración de accesibilidad"

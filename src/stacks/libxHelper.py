@@ -78,7 +78,7 @@ class xHelperClass():
 				monitors.append("{0}={1}".format(line.split(" ")[-1],scaleFactor))
 		if xrand==True:
 			for monitor in monitors:
-				f=round(1-((scaleFactor-1)/3),2)
+				f=round(1-((float(scaleFactor)-1)/3),2)
 				output=monitor.split("=")[0]
 				cmd=["xrandr","--output",output,"--scale","{}x{}".format(f,f)]
 				try:

@@ -16,6 +16,8 @@ gettext.textdomain('access_helper')
 _ = gettext.gettext
 QString=type("")
 QInt=type(0)
+CANCEL=_("Cancel")
+APPLY=_("Apply")
 
 class speaker(QThread):
 	def __init__(self,parent,speech):
@@ -252,8 +254,9 @@ class accessdock(QWidget):
 	#def _assignButton
 
 	def closeEvent(self,event):
+		print(event.type())
 		self.setEnabled(True)
-		if event.spontaneous()==False:
+		if event.spontaneous()==True:
 			event.ignore()
 		else:
 			sys.exit(0)
@@ -330,10 +333,10 @@ class accessdock(QWidget):
 		cmbScale.addItem("200%")
 		cmbScale.setCurrentText("{}%".format(self.xscale))
 		lay2.addWidget(cmbScale,0,0,1,1)
-		btnCancel=QPushButton("Cancel")
+		btnCancel=QPushButton(CANCEL)
 		btnCancel.clicked.connect(dlg.close)
 		lay2.addWidget(btnCancel,2,0,1,1)
-		btnOk=QPushButton("Apply")
+		btnOk=QPushButton(APPLY)
 		btnOk.clicked.connect(dlg.accept)
 		lay2.addWidget(btnOk,2,1,1,1)
 		dlg.move(self.coordx,self.coordy)
@@ -437,10 +440,10 @@ class accessdock(QWidget):
 			lblTest=QLabel()
 			lblTest.setPixmap(pixmap)
 		lay2.addWidget(lblTest,0,1,2,1,Qt.AlignCenter)
-		btnCancel=QPushButton("Cancel")
+		btnCancel=QPushButton(CANCEL)
 		btnCancel.clicked.connect(dlg.close)
 		lay2.addWidget(btnCancel,2,0,1,1)
-		btnOk=QPushButton("Apply")
+		btnOk=QPushButton(APPLY)
 		btnOk.clicked.connect(dlg.accept)
 		lay2.addWidget(btnOk,2,1,1,1)
 		dlg.move(self.coordx,self.coordy)

@@ -24,6 +24,17 @@ i18n={
 	"CURSORSIZE":_("Cursor size"),
 	"SETFONT":_("Font")
 	}
+class _QFontDialog(QFontDialog):
+	def __init__(self,font=None,parent=None):
+		QFontDialog.__init__(self, parent)
+		if font:
+			self.setFont(font)
+		self.installEventFilter(self)
+
+	def eventFilter(self, source,event):
+		#Block all
+		return True
+#class _QFontDialog
 
 class fonts(confStack):
 	def __init_stack__(self):
@@ -64,7 +75,7 @@ class fonts(confStack):
 				if value[0]=='font':
 					font=value[1]
 					break
-		dlgFont=QFontDialog(font)
+		dlgFont=_QFontDialog(font)
 		#Embed in window
 		dlgFont.setWindowFlags(Qt.Widget)
 		dlgFont.setOptions(dlgFont.NoButtons)
@@ -81,6 +92,13 @@ class fonts(confStack):
 		self.config=self.getConfig()
 		config=self.config.get(self.level,{})
 	#def _load_screen
+
+	def _noClose(self,*args,**kwargs):
+		print("PPPP")
+		print(args,kwargs)
+		args=()
+		return(False)
+	#def _noClos
 
 	def updateScreen(self):
 		self.config=self.getConfig()

@@ -76,17 +76,42 @@ class xHelperClass():
 		for line in output.stdout.split("\n"):
 			if len(line.split(" "))>=4:
 				monitors.append("{0}={1}".format(line.split(" ")[-1],scaleFactor))
+		cmd=[]
 		if xrand==True:
 			for monitor in monitors:
 				f=round(1-((float(scaleFactor)-1)/3),2)
 				output=monitor.split("=")[0]
+				#Sometimes xrand fails if scaling from!=1 so force it
+				cmd=["xrandr","--output",output,"--scale","{}x{}".format(1,1)]
+				subprocess.run(cmd)
 				cmd=["xrandr","--output",output,"--scale","{}x{}".format(f,f)]
 				try:
 					subprocess.run(cmd)
 				except Exception as e:
 					print(" ".join(cmd))
 					print(e)
+		return(" ".join(cmd))
 	#def setScaleFactor
+	
+	def getScaleFactor(self):
+		cmd=["xrandr"]
+		out=subprocess.run(cmd,capture_output=True,universal_newlines=True)
+		pres=""
+		fscale=100
+		for line in out.stdout.split("\n"):
+			if "connected primary" in line:
+				pres=line.split()[3].split("+")[0]
+			if pres:
+				if "*" in line:
+					cres=line.strip().split()[0]
+					xpres=float(pres.split("x")[0])
+					xcres=float(cres.split("x")[0])
+					fscale=xpres/xcres
+					fscale=round(100+((1-fscale)*300))+1
+					break
+		fscale=5*(int(fscale/5))
+		return(fscale)
+	#def getScaleFactor
 
 	def removeRGBFilter(self):
 		for monitor in self._getMonitors():
@@ -154,24 +179,6 @@ class xHelperClass():
 			color.setRgb(rgba[0],rgba[1],rgba[2],rgba[3])
 		return(color)
 	#def currentRGBValue
-
-	def setXscale(self,xscale,applyChanges=False):
-		cmd=["xrandr","--listmonitors"]
-		output=subprocess.run(cmd,capture_output=True,text=True)
-		monitors=[]
-		for line in output.stdout.split("\n"):
-			if len(line.split(" "))>=4:
-				monitors.append("{0}".format(line.split(" ")[-1]))
-		cmd=[]
-		cmd.append("sleep 5")
-		for output in monitors:
-			f=round(1-(((int(xscale)/100)-1)/3),2)
-			xrand="xrandr --output {0} --scale {1}x{1}".format(output,f)
-			cmd.append(xrand)
-			if applyChanges==True:
-				subprocess.run(xrand.split())
-		return(" && ".join(cmd))
-	#def setXscale(self,xscale):
 
 	def setCursorSize(self,size):
 		self._debug("Sizing to: {}".format(size))

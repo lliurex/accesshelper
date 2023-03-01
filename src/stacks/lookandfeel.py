@@ -374,9 +374,6 @@ class lookandfeel(confStack):
 		self.accesshelper.setCursorSize(size)
 	#def _setCursorSize(self):
 
-	def _setScale(self,scaleFactor):
-		self.accesshelper.setScaleFactor(scaleFactor,xrand=False)
-
 	def writeConfig(self):
 		self.optionChanged=[]
 		self.refresh=True
@@ -403,13 +400,13 @@ class lookandfeel(confStack):
 				if cmbDesc=="scale":
 					scale=cmb.currentText().replace("%","")
 					scaleFactor=round(float(scale)/100,2)
-					self._setScale(scaleFactor)
+					self.accesshelper.setScaleFactor(scaleFactor,xrand=False)
 				if cmbDesc=="xscale":
 					xscale=cmb.currentText().replace("%","")
 					if xscale=="100":
 						self.accesshelper.removeXscale()
 					else:
-						self.accesshelper.setXscale(xscale)
+						self.accesshelper.setXscale(xscale,autostart=True)
 				if cmbDesc=="background":
 					idx=cmb.currentIndex()
 					if idx>0:

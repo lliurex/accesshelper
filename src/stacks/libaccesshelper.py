@@ -362,10 +362,16 @@ class accesshelper():
 		return()
 	#def setGrubBeep
 
-	def setXscale(self,*args,**kwargs):
+	def setXscale(self,*args,autostart=False,**kwargs):
 		cmd=self.xHelper.setScaleFactor(*args,**kwargs)
-		#self.generateAutostartDesktop(cmd,"accesshelper_Xscale.desktop")
+		if autostart:
+			cmd="sleep 5 && {}".format(cmd)
+			self.generateAutostartDesktop(cmd,"accesshelper_Xscale.desktop")
 	#def setXscale(self,xscale):
+
+	def getXscale(self):
+		return(self.xHelper.getScaleFactor())
+	#def getXscale
 
 	def removeXscale(self):
 		self.removeAutostartDesktop("accesshelper_Xscale.desktop")
@@ -413,7 +419,6 @@ class accesshelper():
 			maximize=False
 			alpha=[]
 			for key,data in jcontent.items():
-				fline=""
 				if key=="bkg":
 					bkg=data
 				elif key=="dockHk":
@@ -456,7 +461,10 @@ class accesshelper():
 			self.removeAutostartDesktop("accesshelper_Xscale.desktop")
 			if xscale:
 				if xscale.isdigit():
-					self.setXscale(xscale,xrand=True)
+					xscale=float(xscale)
+					if xscale>9:
+						xscale=xscale/100
+					self.setXscale(xscale,autostart=True,xrand=True)
 			self.removeRGBFilter()
 			if isinstance(alpha,QColor):
 				config={'kgammarc':{'ConfigFile':[("use","kgammarc")],'SyncBox':[("sync","yes")]}}

@@ -131,15 +131,8 @@ class accessdock(QWidget):
 			self.voice=config.get("voice","JuntaDeAndalucia_es_pa_diphone")
 			self.speech.setVoice(self.voice)
 			#self._setKdeHotkey(hotkey)
-			self.xscale=config.get("xscale","100")
-			if os.path.isfile("/tmp/.xscale"):
-				scale="0"
-				with open("/tmp/.xscale","r") as f:
-					scaleid=f.read()
-					scale=scaleid.split("=")[0]
-					sessionid=scaleid.split("=")[-1].strip()
-				if len(scale)==3 and str(sessionid)==str(os.environ.get("XDG_SESSION_ID","")):
-					self.xscale=scale
+			#self.xscale=config.get("xscale","100")
+			self.xscale=self.accesshelper.getXscale()
 		home=os.environ.get("HOME")
 		onboard="/usr/share/accesshelper/onboard.dconf"
 		if os.path.isfile(os.path.join(home,".config/accesshelper/onboard.dconf"))==False:
@@ -354,12 +347,6 @@ class accessdock(QWidget):
 			self.accesshelper.setXscale(scaleFactor,xrand=True)
 			self.xscale=factor
 			self.widgets["scale"].setText("{}%\nScale".format(self.xscale))
-			try:
-				with open("/tmp/.xscale","w") as f:
-					f.write("{1}={0}".format(os.environ.get("XDG_SESSION_ID",1),self.xscale))
-				os.chmod("/tmp/.xscale",0o666)
-			except:
-				pass
 			#self.accesshelper.applyChanges()
 		self.setEnabled(True)
 	#def _setScale

@@ -253,7 +253,7 @@ class accessdock(QWidget):
 
 	def closeEvent(self,event):
 		self.setEnabled(True)
-		if event.spontaneous()==True:
+		if event.spontaneous()==False:
 			event.ignore()
 		else:
 			sys.exit(0)

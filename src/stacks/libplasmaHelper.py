@@ -137,7 +137,6 @@ class plasmaHelperClass():
 			desc="{0},none,{1}".format(hotkey,desc)
 			data=[("_launch",desc),("_k_friendly_name",cmd)]
 		config={'kglobalshortcutsrc':{name:data}}
-		print(config)
 		self.setPlasmaConfig(config)
 	#def setHotkey
 				
@@ -367,13 +366,12 @@ class plasmaHelperClass():
 			theme=theme.split("[")[1].replace("[","").replace("]","")
 		if applyChanges==True:
 			try:
-				print(theme)
 				subprocess.run(["plasma-apply-cursortheme",theme],stdout=subprocess.PIPE)
 			except Exception as e:
 				print(e)
 				err=1
 		os.environ["XCURSOR_THEME"]=theme
-		print("Set theme: {}".format(theme))
+		self._debug("Set theme: {}".format(theme))
 		if size!="":
 			if (isinstance(size,str))==False:
 				size=str(size)

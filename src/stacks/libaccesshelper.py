@@ -413,7 +413,6 @@ class accesshelper():
 			maximize=False
 			alpha=[]
 			for key,data in jcontent.items():
-				fline=""
 				if key=="bkg":
 					bkg=data
 				elif key=="dockHk":
@@ -456,7 +455,10 @@ class accesshelper():
 			self.removeAutostartDesktop("accesshelper_Xscale.desktop")
 			if xscale:
 				if xscale.isdigit():
-					self.setXscale(xscale,applyChanges=True)
+					xscale=float(xscale)
+					if xscale>9:
+						xscale=xscale/100
+					self.setXscale(xscale,xrand=True)
 			self.removeRGBFilter()
 			if isinstance(alpha,QColor):
 				config={'kgammarc':{'ConfigFile':[("use","kgammarc")],'SyncBox':[("sync","yes")]}}

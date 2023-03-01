@@ -23,6 +23,18 @@ i18n={
 	"OPTIONCOLOR":_("Set color filter: ")
 	}
 
+class _QColorWidget(QColorDialog):
+	def __init__(self,color=None,parent=None):
+		QColorDialog.__init__(self, parent)
+		if color:
+			self.setColor(color)
+		self.installEventFilter(self)
+
+	def eventFilter(self, source,event):
+		#Block all
+		return True
+#class _QColorDialog
+
 class alpha(confStack):
 	def __init_stack__(self):
 		self.dbg=False
@@ -67,7 +79,7 @@ class alpha(confStack):
 	def _QcolorWidget(self):
 		wdg=QWidget()
 		lay=QGridLayout()
-		cwdg=QColorDialog()
+		cwdg=_QColorWidget()
 		lay.addWidget(cwdg)
 		wdg.setLayout(lay)
 		#Embed in window

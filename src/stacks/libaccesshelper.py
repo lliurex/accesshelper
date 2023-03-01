@@ -386,7 +386,6 @@ class accesshelper():
 	#def setHotkey
 
 	def setThemeSchemeLauncher(self,*args,**kwargs):
-		print("HELLO")
 		return(self.plasmaHelper.setThemeSchemeLauncher(*args,**kwargs))
 	#def setThemeSchemeLauncher
 

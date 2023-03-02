@@ -184,14 +184,29 @@ class lookandfeel(confStack):
 	#def _populateData
 
 	def _loadCursorSize(self,cmb):
+		cmbT=self.widgets.get("cursor","")
+		cmb.clear()
+		theme=cmbT.currentText()
+		theme=self.cursorDesc.get(theme,theme)
+		img=self.accesshelper.getPointerImage(theme=theme)
+		qsizes=img[1]
+		sizes=[]
+		for qsize in qsizes:
+			if isinstance(qsize,QSize):
+				if qsize.width() not in sizes:
+					cmb.addItem(str(qsize.width()))
+			else:
+				if qsize not in sizes:
+					if cmb.findText(qsize)==-1:
+						cmb.addItem(qsize)
 		cursorSize=32
 		cursorSettings=self.plasmaConfig.get('kcminputrc',{}).get('Mouse',[])
 		for setting in cursorSettings:
 			if isinstance(setting,tuple):
 				if setting[0]=="cursorSize":
 					cursorSize=setting[1]
-		if cmb.findText(cursorSize)==-1 and isinstance(cursorSize,int):
-			cmb.insertItem(0,cursorSize)
+	#	if cmb.findText(cursorSize)==-1 and isinstance(cursorSize,int):
+	#		cmb.insertItem(0,cursorSize)
 		cmb.setCurrentText(cursorSize)
 	#def _loadCursorSize
 
@@ -294,20 +309,22 @@ class lookandfeel(confStack):
 	#def updateSizes
 
 	def updateCursorSizes(self):
-		cmbSize=self.widgets.get("cursorSize")
-		cmbCursors=self.widgets.get("cursor")
-		icon=cmbCursors.itemIcon(cmbCursors.currentIndex())
-		maxw=0
-		for size in icon.availableSizes():
-			if size.width()>maxw:
-				maxw=size.width()
-		for idx in range(0,cmbSize.count()):
-			size=cmbSize.itemText(idx)
-			if maxw<int(size) and int(size)>32:	
-				cmbSize.model().item(idx).setEnabled(False)
-			else:
-				cmbSize.model().item(idx).setEnabled(True)
-				cmbSize.setCurrentIndex(idx)
+		cmb=self.widgets.get("cursorSize")
+		self._loadCursorSize(cmb)
+		#cmbSize=self.widgets.get("cursorSize")
+		#cmbCursors=self.widgets.get("cursor")
+		#icon=cmbCursors.itemIcon(cmbCursors.currentIndex())
+		#maxw=0
+		#for size in icon.availableSizes():
+		#	if size.width()>maxw:
+		#		maxw=size.width()
+		#for idx in range(0,cmbSize.count()):
+		#	size=cmbSize.itemText(idx)
+		#	if maxw<int(size) and int(size)>32:	
+		#		cmbSize.model().item(idx).setEnabled(False)
+		#	else:
+		#		cmbSize.model().item(idx).setEnabled(True)
+		#		cmbSize.setCurrentIndex(idx)
 	#def updateCursorSizes
 
 	def _fillBackgroundCmb(self):

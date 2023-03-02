@@ -361,26 +361,28 @@ class plasmaHelperClass():
 	def setCursor(self,theme="default",size="",applyChanges=False):
 		if theme=="default":
 			theme=self.getCursorTheme()
+		if (isinstance(size,str))==False:
+			size=str(size)
 		err=0
 		if ("[") in theme:
 			theme=theme.split("[")[1].replace("[","").replace("]","")
 		if applyChanges==True:
+			env=os.environ
+			env.update({"XCURSOR_SIZE":size})
 			try:
-				subprocess.run(["plasma-apply-cursortheme",theme],stdout=subprocess.PIPE)
+				subprocess.run(["plasma-apply-cursortheme",theme],stdout=subprocess.PIPE,env=env)
 			except Exception as e:
 				print(e)
 				err=1
 			os.environ["XCURSOR_THEME"]=theme
 			self._debug("Set theme: {}".format(theme))
 			if size!="":
-				if (isinstance(size,str))==False:
-					size=str(size)
 				self.setCursorSize(size)
 			try:
 				cmd=["qdbus","org.kde.klauncher5","/KLauncher","org.kde.KLauncher.setLaunchEnv","XCURSOR_THEME",theme]
-				subprocess.run(cmd,stdout=subprocess.PIPE)
+				subprocess.run(cmd,stdout=subprocess.PIPE,env=env)
 				cmd=["qdbus","org.kde.klauncher5","/KLauncher","org.kde.KLauncher.setLaunchEnv","XCURSOR_SIZE",size]
-				subprocess.run(cmd,stdout=subprocess.PIPE)
+				subprocess.run(cmd,stdout=subprocess.PIPE,env=env)
 			except Exception as e:
 				print(e)
 				err=3

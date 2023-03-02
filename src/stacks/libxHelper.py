@@ -186,8 +186,12 @@ class xHelperClass():
 	#def setCursor
 
 	def _runSetCursorApp(self,theme,size):
+		env=os.environ
+		if env.get("XCURSOR_SIZE","")!="":
+			env.pop("XCURSOR_SIZE")
 		cmd=["/usr/share/accesshelper/helper/setcursortheme","-r","1",theme,size]
-		subprocess.Popen(cmd,stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+		#cmd=["/usr/share/accesshelper/helper/setcursortheme",theme,size]
+		subprocess.Popen(cmd,stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,env=env)
 	#def _runSetCursorApp
 
 	def getCursorTheme(self):

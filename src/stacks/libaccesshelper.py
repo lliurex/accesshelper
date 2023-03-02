@@ -494,37 +494,40 @@ class accesshelper():
 	#def setNewConfig(self,*args):
 
 	def applyChanges(self,setconf=True):
+		env=os.environ
+		if env.get("XCURSOR_SIZE","")!="":
+			env.pop("XCURSOR_SIZE")
 		if setconf:
 			self.setNewConfig()
-		cmd=["kquitapp5","plasmashell"]
-		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
-		cmd=["qdbus","org.kde.kded","/kded","unloadModule","powerdevil"]
-		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
-		cmd=["qdbus","org.kde.keyboard","/modules/khotkeys","reread_configuration"]
-		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
-		cmd=["qdbus","org.kde.kded","/kbuildsycoca","recreate"]
-		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
-		cmd=["qdbus","org.kde.kded","/kded","reconfigure"]
-		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
-		cmd=["qdbus","org.kde.plasma-desktop","/MainApplication","reparseConfiguration"]
-		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
-		cmd=["qdbus","org.kde.kwin","/KWin","reconfigure"]
-		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
 		cmd=["killall","kwin_x11"]
-		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,env=env)
+		cmd=["kquitapp5","plasmashell"]
+		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,env=env)
+		cmd=["qdbus","org.kde.kded","/kded","unloadModule","powerdevil"]
+		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,env=env)
+		cmd=["qdbus","org.kde.keyboard","/modules/khotkeys","reread_configuration"]
+		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,env=env)
+		cmd=["qdbus","org.kde.kded","/kbuildsycoca","recreate"]
+		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,env=env)
+		cmd=["qdbus","org.kde.kded","/kded","reconfigure"]
+		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,env=env)
+		cmd=["qdbus","org.kde.plasma-desktop","/MainApplication","reparseConfiguration"]
+		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,env=env)
 		cmd=["qdbus","org.kde.kded","/kded","loadModule","powerdevil"]
-		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,env=env)
 		#cmd=["kquitapp5","kglobalaccel5"]
 		cmd=["qdbus","org.kde.kglobalaccel","/MainApplication","quit"]
-		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,env=env)
 		cmd=["kstart5","kglobalaccel5"]
-		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,env=env)
 		#cmd=["qdbus","org.kde.plasmashell","/PlasmaShell","refreshCurrentShell"]
 		#subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
 		cmd=["kstart5","plasmashell"]
-		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,env=env)
+		cmd=["qdbus","org.kde.plasmashell","/PlasmaShell","refreshCurrentShell"]
+		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,env=env)
 		cmd=["kstart5","kwin_x11"]
-		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,env=env)
 		print("Changes applied!")
 		#cmd=["plasmashell"]
 		#subprocess.Popen(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)

@@ -49,6 +49,7 @@ MSG_ONAPPLY=_("Accesshelper will try to apply as many changes as possible for cu
 MSG_ONACCEPT=_("All settings will be applied after a session restart")
 MSG_ONSTARTUP=_("The changes will not be persistent.All settings will be restored to profile")
 MSG_CLOSEIGNORE=_("Close this window for ignoring that until a session restart")
+MSG_APPLYCHANGES=_("Changes applied")
 
 def showHelp():
 	print(HLP_USAGE)
@@ -113,6 +114,10 @@ def _restartSession(*args):
 
 def _applyChanges(*args):
 	accesshelper.applyChanges(setconf=True)
+	title=_("Accesshelper")
+	notify2.init(title)
+	notice=notify2.Notification(MSG_APPLYCHANGES)
+	notice.show()
 	QApplication.quit()
 	sys.exit(0)
 #def _applyChanges

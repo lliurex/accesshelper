@@ -204,6 +204,7 @@ class accesshelper():
 	#def setKdeConfigSetting
 
 	def takeSnapshot(self,*args,**kwargs):
+		self.functionHelper.dictFileData=self.plasmaHelper.dictFileData
 		return(self.functionHelper.takeSnapshot(*args,**kwargs))
 	#def takeSnapshot
 

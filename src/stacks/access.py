@@ -336,10 +336,7 @@ class access(confStack):
 			for setting in settings:
 				(description,value)=setting
 				if description==desc:
-					arraySetting=value.split(',')
-					arraySetting[0]=hotkey
-					arraySetting[1]=hotkey
-					value=",".join(arraySetting)
+					value="{0},{0},{1}".format(hotkey,desc)
 				newSettings.append((description,value))
 		self.plasmaConfig["kglobalshortcutsrc"]["kwin"]=newSettings
 	#def _getPlasmaHotkeysFromTable

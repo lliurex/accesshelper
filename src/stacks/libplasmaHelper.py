@@ -370,20 +370,20 @@ class plasmaHelperClass():
 			except Exception as e:
 				print(e)
 				err=1
-		os.environ["XCURSOR_THEME"]=theme
-		self._debug("Set theme: {}".format(theme))
-		if size!="":
-			if (isinstance(size,str))==False:
-				size=str(size)
-			self.setCursorSize(size)
-		try:
-			cmd=["qdbus","org.kde.klauncher5","/KLauncher","org.kde.KLauncher.setLaunchEnv","XCURSOR_THEME",theme]
-			subprocess.run(cmd,stdout=subprocess.PIPE)
-			cmd=["qdbus","org.kde.klauncher5","/KLauncher","org.kde.KLauncher.setLaunchEnv","XCURSOR_SIZE",size]
-			subprocess.run(cmd,stdout=subprocess.PIPE)
-		except Exception as e:
-			print(e)
-			err=3
+			os.environ["XCURSOR_THEME"]=theme
+			self._debug("Set theme: {}".format(theme))
+			if size!="":
+				if (isinstance(size,str))==False:
+					size=str(size)
+				self.setCursorSize(size)
+			try:
+				cmd=["qdbus","org.kde.klauncher5","/KLauncher","org.kde.KLauncher.setLaunchEnv","XCURSOR_THEME",theme]
+				subprocess.run(cmd,stdout=subprocess.PIPE)
+				cmd=["qdbus","org.kde.klauncher5","/KLauncher","org.kde.KLauncher.setLaunchEnv","XCURSOR_SIZE",size]
+				subprocess.run(cmd,stdout=subprocess.PIPE)
+			except Exception as e:
+				print(e)
+				err=3
 		return(err)
 	#def setCursor
 

@@ -496,6 +496,8 @@ class accesshelper():
 	def applyChanges(self,setconf=True):
 		if setconf:
 			self.setNewConfig()
+		cmd=["killall","kwin_x11"]
+		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
 		cmd=["kquitapp5","plasmashell"]
 		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
 		cmd=["qdbus","org.kde.kded","/kded","unloadModule","powerdevil"]
@@ -508,10 +510,6 @@ class accesshelper():
 		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
 		cmd=["qdbus","org.kde.plasma-desktop","/MainApplication","reparseConfiguration"]
 		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
-		cmd=["qdbus","org.kde.kwin","/KWin","reconfigure"]
-		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
-		cmd=["killall","kwin_x11"]
-		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
 		cmd=["qdbus","org.kde.kded","/kded","loadModule","powerdevil"]
 		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
 		#cmd=["kquitapp5","kglobalaccel5"]
@@ -522,6 +520,8 @@ class accesshelper():
 		#cmd=["qdbus","org.kde.plasmashell","/PlasmaShell","refreshCurrentShell"]
 		#subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
 		cmd=["kstart5","plasmashell"]
+		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+		cmd=["qdbus","org.kde.kwin","/KWin","reconfigure"]
 		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
 		cmd=["kstart5","kwin_x11"]
 		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)

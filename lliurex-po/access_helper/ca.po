@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-28 10:33+0100\n"
-"PO-Revision-Date: 2023-02-28 10:34+0100\n"
+"POT-Creation-Date: 2023-03-02 16:44+0100\n"
+"PO-Revision-Date: 2023-03-02 16:46+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ca\n"
@@ -18,11 +18,19 @@ msgstr ""
 "X-Generator: Poedit 2.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../src/accessdock.py:216
+#: ../src/accessdock.py:19
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: ../src/accessdock.py:20 ../src/accesshelp.py:43
+msgid "Apply"
+msgstr "Aplicar"
+
+#: ../src/accessdock.py:211
 msgid "Set font size"
 msgstr "Tamany de les lletres"
 
-#: ../src/accessdock.py:219
+#: ../src/accessdock.py:214
 msgid ""
 "{}%\n"
 "Scale"
@@ -30,63 +38,63 @@ msgstr ""
 "{}%\n"
 "Ampliació"
 
-#: ../src/accessdock.py:220
+#: ../src/accessdock.py:215
 msgid "Set screen scale"
 msgstr "Ajusta la ampliació de l'entorn"
 
-#: ../src/accessdock.py:224
+#: ../src/accessdock.py:219
 msgid "Hide"
 msgstr "Amaga"
 
-#: ../src/accessdock.py:225
+#: ../src/accessdock.py:220
 msgid "Close accessdock"
 msgstr "Tancar"
 
-#: ../src/accessdock.py:229 ../src/stacks/settings.py:18
+#: ../src/accessdock.py:224 ../src/stacks/settings.py:18
 msgid "Settings"
 msgstr "Ajustos"
 
-#: ../src/accessdock.py:230
+#: ../src/accessdock.py:225
 msgid "Launch accesshelper"
 msgstr "Obri accesshelper"
 
-#: ../src/accessdock.py:235
+#: ../src/accessdock.py:230
 msgid "Read screen"
 msgstr "Llegir"
 
-#: ../src/accessdock.py:236
+#: ../src/accessdock.py:231
 msgid "Read text or image from clipboard"
 msgstr "Llig text o una imatge (ocr) desde el porta-retalls"
 
-#: ../src/accessdock.py:241
+#: ../src/accessdock.py:236
 msgid "Capture"
 msgstr "Capturar"
 
-#: ../src/accessdock.py:242
+#: ../src/accessdock.py:237
 msgid "Try to read screen content from screenshot"
 msgstr "Intenta llegir el contingut de la pantalla"
 
-#: ../src/accessdock.py:246
+#: ../src/accessdock.py:241
 msgid "Pointer"
 msgstr "Punter"
 
-#: ../src/accessdock.py:247
+#: ../src/accessdock.py:242
 msgid "Set mouse pointer size"
 msgstr "Ajusta el tamany del punter"
 
-#: ../src/accessdock.py:251
+#: ../src/accessdock.py:246
 msgid "Filter"
 msgstr "Filtre"
 
-#: ../src/accessdock.py:252
+#: ../src/accessdock.py:247
 msgid "Apply a color filter"
 msgstr "Aplica un filtre de color"
 
-#: ../src/accessdock.py:256
+#: ../src/accessdock.py:251
 msgid "Keyboard"
 msgstr "Teclat"
 
-#: ../src/accessdock.py:257
+#: ../src/accessdock.py:252
 msgid "Show/Hide on-screen keyboard"
 msgstr "Mostra/amaga el teclat virtual"
 
@@ -162,10 +170,6 @@ msgstr "Perfil carregat"
 msgid "Close Session"
 msgstr "Tancar sessió"
 
-#: ../src/accesshelp.py:43
-msgid "Apply"
-msgstr "Aplicar"
-
 #: ../src/accesshelp.py:44
 msgid "Ignore"
 msgstr "Ignorar"
@@ -208,11 +212,19 @@ msgstr ""
 msgid "Close this window for ignoring that until a session restart"
 msgstr "Tancar la finestra per a ignorar els canvis i continuar"
 
-#: ../src/accesshelp.py:231
+#: ../src/accesshelp.py:52
+msgid "Changes applied"
+msgstr "Canvis aplicats"
+
+#: ../src/accesshelp.py:117
+msgid "Accesshelper"
+msgstr "Accesshelper"
+
+#: ../src/accesshelp.py:239
 msgid "Accesshelper running"
 msgstr "Accesshelper en execució"
 
-#: ../src/accesshelp.py:233
+#: ../src/accesshelp.py:241
 msgid "Can't execute another instance of Accesshelp"
 msgstr "No es pot llançar de nou"
 

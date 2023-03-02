@@ -524,6 +524,8 @@ class plasmaHelperClass():
 		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,env=env)
 		cmd=["kstart5","kglobalaccel5"]
 		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,env=env)
+		cmd=["qdbus","org.kde.plasmashell","/PlasmaShell","refreshCurrentShell"]
+		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
 		cmd=["kstart5","kwin_x11"]
 		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,env=env)
 		print("Changes applied!")

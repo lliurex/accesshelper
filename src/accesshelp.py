@@ -116,8 +116,11 @@ def _applyChanges(*args):
 	accesshelper.applyChanges(setconf=True)
 	title=_("Accesshelper")
 	notify2.init(title)
-	notice=notify2.Notification(MSG_APPLYCHANGES)
-	notice.show()
+	notice=notify2.Notification("*{}*".format(MSG_APPLYCHANGES))
+	try:
+		notice.show()
+	except:
+		pass
 	QApplication.quit()
 	sys.exit(0)
 #def _applyChanges

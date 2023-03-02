@@ -39,6 +39,15 @@ class plasmaHelperClass():
 			print("libhelper: {}".format(msg))
 	#def _debug
 
+	def _getEnv(self,values={}):
+		env=os.environ
+		if len(values)>0 and isinstance(values,dict):
+			env.update(values)
+		elif env.get("XCURSOR_SIZE","")!="":
+			env.pop("XCURSOR_SIZE")
+		return(env)
+	#def _getEnv
+
 	def getPlasmaConfig(self,wrkFile='',sourceFolder=''):
 		if sourceFolder:
 			self._debug("Reading kfiles from {}".format(sourceFolder))
@@ -367,8 +376,7 @@ class plasmaHelperClass():
 		if ("[") in theme:
 			theme=theme.split("[")[1].replace("[","").replace("]","")
 		if applyChanges==True:
-			env=os.environ
-			env.update({"XCURSOR_SIZE":size})
+			env=self._getEnv({"XCURSOR_SIZE":size})
 			try:
 				subprocess.run(["plasma-apply-cursortheme",theme],stdout=subprocess.PIPE,env=env)
 			except Exception as e:
@@ -496,3 +504,30 @@ class plasmaHelperClass():
 				f.writelines(newcontent)
 				f.write("\n")
 	#def _setThemeSchemeLauncher
+
+	def applyChanges(self,setconf):
+		env=self._getEnv()
+		if setconf:
+			self.setNewConfig()
+		cmd=["killall","kwin_x11"]
+		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,env=env)
+		cmd=["qdbus","org.kde.kded","/kded","unloadModule","powerdevil"]
+		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,env=env)
+		cmd=["qdbus","org.kde.keyboard","/modules/khotkeys","reread_configuration"]
+		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,env=env)
+		cmd=["qdbus","org.kde.kded","/kbuildsycoca","recreate"]
+		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,env=env)
+		cmd=["qdbus","org.kde.kded","/kded","reconfigure"]
+		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,env=env)
+		cmd=["qdbus","org.kde.plasma-desktop","/MainApplication","reparseConfiguration"]
+		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,env=env)
+		cmd=["qdbus","org.kde.kded","/kded","loadModule","powerdevil"]
+		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,env=env)
+		cmd=["qdbus","org.kde.kglobalaccel","/MainApplication","quit"]
+		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,env=env)
+		cmd=["kstart5","kglobalaccel5"]
+		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,env=env)
+		cmd=["kstart5","kwin_x11"]
+		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,env=env)
+		print("Changes applied!")
+

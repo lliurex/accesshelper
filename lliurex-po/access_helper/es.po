@@ -1,0 +1,933 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-03-02 16:44+0100\n"
+"PO-Revision-Date: 2023-03-02 16:45+0100\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.3\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: ../src/accessdock.py:19
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: ../src/accessdock.py:20 ../src/accesshelp.py:43
+msgid "Apply"
+msgstr "Aplicar"
+
+#: ../src/accessdock.py:211
+msgid "Set font size"
+msgstr "Ajusta tamaño de la letra"
+
+#: ../src/accessdock.py:214
+msgid ""
+"{}%\n"
+"Scale"
+msgstr ""
+"{}%\n"
+"Aumento"
+
+#: ../src/accessdock.py:215
+msgid "Set screen scale"
+msgstr "Ajusta la ampliación del entorno"
+
+#: ../src/accessdock.py:219
+msgid "Hide"
+msgstr "Ocultar"
+
+#: ../src/accessdock.py:220
+msgid "Close accessdock"
+msgstr "Cerrar"
+
+#: ../src/accessdock.py:224 ../src/stacks/settings.py:18
+msgid "Settings"
+msgstr "Ajustes"
+
+#: ../src/accessdock.py:225
+msgid "Launch accesshelper"
+msgstr "Ejecuta accesshelper"
+
+#: ../src/accessdock.py:230
+msgid "Read screen"
+msgstr "Leer"
+
+#: ../src/accessdock.py:231
+msgid "Read text or image from clipboard"
+msgstr "Lee un texto o una imagen (ocr) desde el portapapeles"
+
+#: ../src/accessdock.py:236
+msgid "Capture"
+msgstr "Captura"
+
+#: ../src/accessdock.py:237
+msgid "Try to read screen content from screenshot"
+msgstr "Intenta leer el contenido de la pantalla"
+
+#: ../src/accessdock.py:241
+msgid "Pointer"
+msgstr "Puntero"
+
+#: ../src/accessdock.py:242
+msgid "Set mouse pointer size"
+msgstr "Tamaño del puntero"
+
+#: ../src/accessdock.py:246
+msgid "Filter"
+msgstr "Filtro"
+
+#: ../src/accessdock.py:247
+msgid "Apply a color filter"
+msgstr "Aplica un filtro de color a la pantalla"
+
+#: ../src/accessdock.py:251
+msgid "Keyboard"
+msgstr "Teclado"
+
+#: ../src/accessdock.py:252
+msgid "Show/Hide on-screen keyboard"
+msgstr "Muestra/esconde el teclado virtual"
+
+#: ../src/accesshelp.py:26
+msgid "usage: accesshelper [--set profile]|[--list]"
+msgstr "uso: accesshelper [--set perfil]|[--list]"
+
+#: ../src/accesshelp.py:27
+msgid "With no args launch accesshelper GUI"
+msgstr "Sin argumentos ejecuta la GUI de accesshelper"
+
+#: ../src/accesshelp.py:28
+msgid ""
+"--set [profile]: Activate specified profile.\n"
+"\tCould be an absolute path or a profile from default profiles path"
+msgstr ""
+"--set [perfil]: Activa el perfil indicado.\n"
+"\tPuede ser una ruta completa a un fichero o el nombre de un perfil"
+
+#: ../src/accesshelp.py:29
+msgid "--list: List available profiles"
+msgstr "--list: Lista los perfiles"
+
+#: ../src/accesshelp.py:30
+msgid "could not be accessed"
+msgstr "no existe"
+
+#: ../src/accesshelp.py:31
+msgid "There's no profiles at"
+msgstr "No se encuentan perfiles en"
+
+#: ../src/accesshelp.py:32
+msgid "Error loading"
+msgstr "No se puede cargar"
+
+#: ../src/accesshelp.py:33
+msgid "Must select one from:"
+msgstr "Debe seleccionarse uno de:"
+
+#: ../src/accesshelp.py:34
+msgid "Loading profile"
+msgstr "Cargando perfil"
+
+#: ../src/accesshelp.py:35
+msgid "Changes will only apply after session restart"
+msgstr "Los cambios se aplicarán después de reiniciar la sesión"
+
+#: ../src/accesshelp.py:36
+msgid "Changes will be applied now"
+msgstr "Los cambios se aplicarán ahora"
+
+#: ../src/accesshelp.py:37
+msgid "Logout"
+msgstr "Terminar"
+
+#: ../src/accesshelp.py:38
+msgid "Options selected:"
+msgstr "Resumen de opciones:"
+
+#: ../src/accesshelp.py:39
+msgid "Later"
+msgstr "Más tarde"
+
+#: ../src/accesshelp.py:40
+msgid "Profile not loaded: Autostart is disabled"
+msgstr "Perfil no cargado: El autoinicio esta desactivado"
+
+#: ../src/accesshelp.py:41 ../src/stacks/profiles.py:29
+msgid "Profile loaded"
+msgstr "Perfil cargado"
+
+#: ../src/accesshelp.py:42
+msgid "Close Session"
+msgstr "Cerrar sesión"
+
+#: ../src/accesshelp.py:44
+msgid "Ignore"
+msgstr "Ignorar"
+
+#: ../src/accesshelp.py:45
+msgid "Undo"
+msgstr "Deshacer"
+
+#: ../src/accesshelp.py:46
+msgid "Autostart profile is enabled"
+msgstr "Se ha activado la carga inicial de perfil"
+
+#: ../src/accesshelp.py:47
+msgid ""
+"A profile has been loaded. All settings has been applied if possible. Expect "
+"inconsistencies."
+msgstr ""
+"Se ha cargado un perfil. Se han intentado aplicar todos los cambios. Pueden "
+"existir inconsistencias."
+
+#: ../src/accesshelp.py:48
+msgid ""
+"Accesshelper will try to apply as many changes as possible for current "
+"session (expect inconsistencies)"
+msgstr ""
+"Accesshelper tratará de aplicar tantos cambios como sean posible para esta "
+"sesión (pueden aparecer inconsistencias)"
+
+#: ../src/accesshelp.py:49
+msgid "All settings will be applied after a session restart"
+msgstr "Los cambios se aplicarán después de reiniciar la sesión"
+
+#: ../src/accesshelp.py:50
+msgid ""
+"The changes will not be persistent.All settings will be restored to profile"
+msgstr ""
+"Los cambios no serán permanentes. La configuración sera restaurada el perfil"
+
+#: ../src/accesshelp.py:51
+msgid "Close this window for ignoring that until a session restart"
+msgstr "Cerrar esta ventana para ignorar esto hasta reiniciar la sesión"
+
+#: ../src/accesshelp.py:52
+msgid "Changes applied"
+msgstr "Cambios aplicados"
+
+#: ../src/accesshelp.py:117
+msgid "Accesshelper"
+msgstr "Accesshelper"
+
+#: ../src/accesshelp.py:239
+msgid "Accesshelper running"
+msgstr "Accesshelper en ejecución"
+
+#: ../src/accesshelp.py:241
+msgid "Can't execute another instance of Accesshelp"
+msgstr "No se puede ejecutar otra instancia"
+
+#: ../src/stacks/access.py:13 ../src/stacks/access.py:15
+msgid "Accessibility"
+msgstr "Accesibilidad"
+
+#: ../src/stacks/access.py:14
+msgid "Accessibility options"
+msgstr "Opciones de ccesibilidad"
+
+#: ../src/stacks/access.py:16
+msgid "Set accesibility options"
+msgstr "Gestiona las opciones de accesibilidad"
+
+#: ../src/stacks/access.py:17
+msgid "From here you can activate/deactivate accessibility aids"
+msgstr "Desde aquí puedes activar/desactivar las ayudas visuales"
+
+#: ../src/stacks/access.py:18
+msgid "Invert screen colors"
+msgstr "Invertir colores"
+
+#: ../src/stacks/access.py:19
+msgid "Invert windows colors"
+msgstr "Invertir colores de ventana"
+
+#: ../src/stacks/access.py:20 ../src/stacks/access.py:39
+msgid "Show animation on click"
+msgstr "Mostrar animación al clicar"
+
+#: ../src/stacks/access.py:21 ../src/stacks/access.py:40
+#: ../src/stacks/behavior.py:23
+msgid "Show a grid when moving windows"
+msgstr "Mostrar rejilla al mover una ventana"
+
+#: ../src/stacks/access.py:22 ../src/stacks/access.py:41
+msgid "Activate eyefish effect"
+msgstr "Efecto ojo de pez"
+
+#: ../src/stacks/access.py:23 ../src/stacks/access.py:42
+msgid "Glass effect"
+msgstr "Efecto lupa"
+
+#: ../src/stacks/access.py:24 ../src/stacks/access.py:43
+msgid "Zoom effect"
+msgstr "Efecto Zoom"
+
+#: ../src/stacks/access.py:25
+msgid "Enable magnify effects"
+msgstr "Activar efectos de ampliación"
+
+#: ../src/stacks/access.py:26 ../src/stacks/access.py:44
+msgid "Acoustic system bell"
+msgstr "Campana de sistema audible"
+
+#: ../src/stacks/access.py:27 ../src/stacks/access.py:45
+msgid "Visible bell"
+msgstr "Campana de sistema visible"
+
+#: ../src/stacks/access.py:28
+msgid "Track pointer"
+msgstr "Localizar ratón al moverlo"
+
+#: ../src/stacks/access.py:29 ../src/stacks/addHotkey.py:27
+#: ../src/stacks/assignHotkeys.py:50
+msgid "already assigned to action"
+msgstr "asignado a"
+
+#: ../src/stacks/access.py:30
+msgid "Track click"
+msgstr "Localizar ratón al pulsar"
+
+#: ../src/stacks/access.py:31
+msgid "Disable load profile on startup or changes will not apply on restart"
+msgstr ""
+"Desactivar la carga inicial de perfil o los cambios se perderán al reiniciar"
+
+#: ../src/stacks/access.py:32 ../src/stacks/lookandfeel.py:41
+#: ../src/stacks/settings.py:40 ../src/stacks/settings.py:41
+msgid "Disabled"
+msgstr "Desactivado"
+
+#: ../src/stacks/access.py:33 ../src/stacks/lookandfeel.py:40
+#: ../src/stacks/settings.py:42
+msgid "Enabled"
+msgstr "Activado"
+
+#: ../src/stacks/access.py:37
+msgid "Invert"
+msgstr "Invertir colores"
+
+#: ../src/stacks/access.py:38
+msgid "InvertWindow"
+msgstr "Invertir colores de ventana"
+
+#: ../src/stacks/access.py:46
+msgid "TrackMouse"
+msgstr "Señalar posición al mover ratón"
+
+#: ../src/stacks/access.py:47
+msgid "ToggleMouseClick"
+msgstr "Señalar posición al pulsar el ratón"
+
+#: ../src/stacks/addHotkey.py:15 ../src/stacks/assignHotkeys.py:36
+msgid "Keyboard Shortcuts"
+msgstr "Atajos de teclado"
+
+#: ../src/stacks/addHotkey.py:16 ../src/stacks/assignHotkeys.py:37
+msgid "hotkeys options"
+msgstr "opciones de atajos"
+
+#: ../src/stacks/addHotkey.py:17
+msgid "Configuration"
+msgstr "Configuración"
+
+#: ../src/stacks/addHotkey.py:18
+msgid "Add hotkey"
+msgstr "Añadir atajo"
+
+#: ../src/stacks/addHotkey.py:19
+msgid "Add a hotkey for an application, command or action"
+msgstr "Asocia combinaciones de teclas con aplicaciones"
+
+#: ../src/stacks/addHotkey.py:20
+msgid "Assign actions to keys"
+msgstr "Asigna acciones a atajos"
+
+#: ../src/stacks/addHotkey.py:21
+msgid "Application from system"
+msgstr "Aplicación del sistema"
+
+#: ../src/stacks/addHotkey.py:22
+msgid "Command-line order"
+msgstr "Orden de línea de comandos"
+
+#: ../src/stacks/addHotkey.py:23
+msgid "Desktop action"
+msgstr "Acción del escritorio"
+
+#: ../src/stacks/addHotkey.py:24
+msgid "Command"
+msgstr "Comando"
+
+#: ../src/stacks/addHotkey.py:25
+msgid "Assign"
+msgstr "Asignar"
+
+#: ../src/stacks/addHotkey.py:26
+msgid "Press a key or key-combination for the shortcut"
+msgstr "Pulsa una tecla o combincación de ellas para el atajo"
+
+#: ../src/stacks/addHotkey.py:71
+msgid "Search"
+msgstr "Buscar"
+
+#: ../src/stacks/alpha.py:17
+msgid "Color"
+msgstr "Color"
+
+#: ../src/stacks/alpha.py:18 ../src/stacks/alpha.py:21
+msgid "Color filter"
+msgstr "Filtro"
+
+#: ../src/stacks/alpha.py:19
+msgid "Modify screen color levels"
+msgstr "Modifica los niveles de color"
+
+#: ../src/stacks/alpha.py:20
+msgid "Set color filter for the screen"
+msgstr "Establecer filtros de colores para la pantalla"
+
+#: ../src/stacks/alpha.py:22
+msgid "By default"
+msgstr "Por defecto"
+
+#: ../src/stacks/alpha.py:23
+msgid "Set color filter: "
+msgstr "Filtro de color: "
+
+#: ../src/stacks/assignHotkeys.py:35
+msgid "Hotkeys"
+msgstr "Atajos"
+
+#: ../src/stacks/assignHotkeys.py:38
+msgid "Keyboard Hotkeys"
+msgstr "Atajos de teclado"
+
+#: ../src/stacks/assignHotkeys.py:39
+msgid "Set hotkeys for launch applications"
+msgstr "Asocia combinaciones de teclas con aplicaciones"
+
+#: ../src/stacks/assignHotkeys.py:40
+msgid "From here you can set hotkeys for launch apps"
+msgstr "Permite asociar pulsaciones de tecla a diferentes acciones del sistema"
+
+#: ../src/stacks/assignHotkeys.py:41
+msgid "Go to next window"
+msgstr "Siguiente ventana"
+
+#: ../src/stacks/assignHotkeys.py:42
+msgid "Go to previous window"
+msgstr "Ventana anterior"
+
+#: ../src/stacks/assignHotkeys.py:43
+msgid "Close window"
+msgstr "Cerrar ventana"
+
+#: ../src/stacks/assignHotkeys.py:44
+msgid "Open launch menu"
+msgstr "Abrir lanzador de aplicaciones"
+
+#: ../src/stacks/assignHotkeys.py:45
+msgid "Show desktop"
+msgstr "Mostrar escritorio"
+
+#: ../src/stacks/assignHotkeys.py:46
+msgid "Invert colours"
+msgstr "Invertir colores"
+
+#: ../src/stacks/assignHotkeys.py:47
+msgid "Invert window colours"
+msgstr "Invertir colores de ventana"
+
+#: ../src/stacks/assignHotkeys.py:48
+msgid "Show mouse click"
+msgstr "Mostrar animación al clicar"
+
+#: ../src/stacks/assignHotkeys.py:49
+msgid "Show mouse pointer"
+msgstr "Localizar el puntero"
+
+#: ../src/stacks/assignHotkeys.py:87
+msgid "Add new"
+msgstr "Añadir"
+
+#: ../src/stacks/behavior.py:14
+msgid "behavior"
+msgstr "comportamiento"
+
+#: ../src/stacks/behavior.py:15
+msgid "Desktop behavior"
+msgstr "Comportamiento del escritoro"
+
+#: ../src/stacks/behavior.py:16
+msgid "Configure how desktop works"
+msgstr "Configura como se comporta el escritorio"
+
+#: ../src/stacks/behavior.py:17
+msgid "Set many options related with desktop behavior"
+msgstr "Diferentes opciones relacionadas con el comportamiento"
+
+#: ../src/stacks/behavior.py:18
+msgid "Click to focus"
+msgstr "Pulsar para enfocar"
+
+#: ../src/stacks/behavior.py:19 ../src/stacks/behavior.py:26
+msgid "Focus follows pointer"
+msgstr "El foco sigue al ratón"
+
+#: ../src/stacks/behavior.py:20
+msgid "Only one click for open elements"
+msgstr "Un click abre los elementos"
+
+#: ../src/stacks/behavior.py:21
+msgid "Click on scrollbar moves to position"
+msgstr "Click en la barra mueve a la posición"
+
+#: ../src/stacks/behavior.py:22
+msgid "Scrollbar sliding mode"
+msgstr "Modo de deslizamiento de la barra"
+
+#: ../src/stacks/behavior.py:24
+msgid "Actions on top left screen corner"
+msgstr "Actiones en la esquina superior izquierda"
+
+#: ../src/stacks/behavior.py:25
+msgid "Set screen resolution"
+msgstr "Resolución de pantalla"
+
+#: ../src/stacks/fonts.py:16
+msgid "Font options"
+msgstr "Opciones de letra"
+
+#: ../src/stacks/fonts.py:17 ../src/stacks/fonts.py:18
+msgid "Fonts"
+msgstr "Fuentes"
+
+#: ../src/stacks/fonts.py:19
+msgid "Modify system fonts"
+msgstr "Modifica los tipos de letra"
+
+#: ../src/stacks/fonts.py:20
+msgid "Customize the system fonts"
+msgstr "Personalizar las fuentes"
+
+#: ../src/stacks/fonts.py:21
+msgid "Font size"
+msgstr "Tamaño de fuente"
+
+#: ../src/stacks/fonts.py:22
+msgid "Font family"
+msgstr "Familia"
+
+#: ../src/stacks/fonts.py:23 ../src/stacks/lookandfeel.py:30
+msgid "Cursor theme"
+msgstr "Tema del cursor"
+
+#: ../src/stacks/fonts.py:24 ../src/stacks/lookandfeel.py:29
+msgid "Cursor size"
+msgstr "Tamaño del cursor"
+
+#: ../src/stacks/fonts.py:25
+msgid "Font"
+msgstr "Fuent"
+
+#: ../src/stacks/lookandfeel.py:18
+msgid "Look&Feel options"
+msgstr "Opciones de apariencia"
+
+#: ../src/stacks/lookandfeel.py:19 ../src/stacks/lookandfeel.py:20
+msgid "Look&Feel"
+msgstr "Apariencia visual"
+
+#: ../src/stacks/lookandfeel.py:21
+msgid "Modify appearence settings"
+msgstr "Modifica la apariencia del sistema"
+
+#: ../src/stacks/lookandfeel.py:22
+msgid "Set theme, color scheme or pointers"
+msgstr "Selecciona tema, esquema de color o punteros"
+
+#: ../src/stacks/lookandfeel.py:23
+msgid "Desktop theme"
+msgstr "Tema del escritorio"
+
+#: ../src/stacks/lookandfeel.py:24
+msgid "Color scheme"
+msgstr "Esquema de color"
+
+#: ../src/stacks/lookandfeel.py:25
+msgid "Theme colors"
+msgstr "Colores del tema"
+
+#: ../src/stacks/lookandfeel.py:26
+msgid "Background color"
+msgstr "Color del escritorio"
+
+#: ../src/stacks/lookandfeel.py:27
+msgid "Desktop background"
+msgstr "Fondo del escritorio"
+
+#: ../src/stacks/lookandfeel.py:28
+msgid "Current background"
+msgstr "Imagen actual"
+
+#: ../src/stacks/lookandfeel.py:31
+msgid "Widget size"
+msgstr "Tamaño de los elementos"
+
+#: ../src/stacks/lookandfeel.py:32
+msgid "Scale factor"
+msgstr "Factor de ampliación"
+
+#: ../src/stacks/lookandfeel.py:33
+msgid "Run apps maximized"
+msgstr "Maximiza por defecto"
+
+#: ../src/stacks/lookandfeel.py:34
+msgid "White"
+msgstr "Blanco"
+
+#: ../src/stacks/lookandfeel.py:35
+msgid "Red"
+msgstr "Rojo"
+
+#: ../src/stacks/lookandfeel.py:36
+msgid "Blue"
+msgstr "Azul"
+
+#: ../src/stacks/lookandfeel.py:37
+msgid "Green"
+msgstr "Verde"
+
+#: ../src/stacks/lookandfeel.py:38
+msgid "Yellow"
+msgstr "Amarillo"
+
+#: ../src/stacks/lookandfeel.py:39
+msgid "Black"
+msgstr "Negro"
+
+#: ../src/stacks/profiles.py:16
+msgid "Manage profiles"
+msgstr "Gestionar perfiles"
+
+#: ../src/stacks/profiles.py:17
+msgid "Load and save custom profiles"
+msgstr "Carga y guarda perfiles"
+
+#: ../src/stacks/profiles.py:18
+msgid "Use profile templates for quick configuration"
+msgstr "Usa las plantillas para configurarlo todo al momento"
+
+#: ../src/stacks/profiles.py:19
+msgid "Save profile"
+msgstr "Guardar"
+
+#: ../src/stacks/profiles.py:20
+msgid "Load profile"
+msgstr "Cargar"
+
+#: ../src/stacks/profiles.py:21
+msgid "Remove"
+msgstr "Eliminar"
+
+#: ../src/stacks/profiles.py:22
+msgid "Confirm remove"
+msgstr "Confirmación"
+
+#: ../src/stacks/profiles.py:23
+msgid "Remove profile"
+msgstr "Eliminar"
+
+#: ../src/stacks/profiles.py:24
+msgid "Permission denied"
+msgstr "Permiso denegado"
+
+#: ../src/stacks/profiles.py:25
+msgid "Default profiles could not be modified"
+msgstr "Los perfiles por defecto no son modificables"
+
+#: ../src/stacks/profiles.py:26
+msgid "Insuficient permissions for remove"
+msgstr "Usuario sin permiso"
+
+#: ../src/stacks/profiles.py:27
+msgid "Profile added to system's profiles"
+msgstr "Perfil añadido al sistema"
+
+#: ../src/stacks/profiles.py:28
+msgid "Profile added to user's profiles"
+msgstr "Perfil añadido al usuario"
+
+#: ../src/stacks/profiles.py:30
+msgid "Import profile"
+msgstr "Importar"
+
+#: ../src/stacks/profiles.py:31
+msgid "Export profile"
+msgstr "Exportar"
+
+#: ../src/stacks/profiles.py:32
+msgid "Profile"
+msgstr "Perfil"
+
+#: ../src/stacks/profiles.py:33
+msgid "An error ocurred"
+msgstr "Ocurrió un error"
+
+#: ../src/stacks/screenreader.py:18
+msgid "Screen reader"
+msgstr "Lector de pantalla"
+
+#: ../src/stacks/screenreader.py:19
+msgid "TTS settings"
+msgstr "Configuración de TTS"
+
+#: ../src/stacks/screenreader.py:20
+msgid "Text-To-Speech related options"
+msgstr "Opciones relacionadas con sintetizador"
+
+#: ../src/stacks/screenreader.py:21
+msgid "Some options related with TTS"
+msgstr "Algunas opciones para configurar el sintetizador"
+
+#: ../src/stacks/screenreader.py:22
+msgid "Voice"
+msgstr "Voz"
+
+#: ../src/stacks/screenreader.py:23
+msgid "Use synthesizer"
+msgstr "Usar sintetizador"
+
+#: ../src/stacks/screenreader.py:24
+msgid "Pitch"
+msgstr "Tono"
+
+#: ../src/stacks/screenreader.py:25
+msgid "Speed"
+msgstr "Velocidad"
+
+#: ../src/stacks/screenreader.py:26
+msgid "Recorded file list"
+msgstr "Ficheros generados"
+
+#: ../src/stacks/screenreader.py:27
+msgid "Use internal TTS"
+msgstr "Usa sintetizador"
+
+#: ../src/stacks/screenreader.py:28
+msgid "Use VLC player"
+msgstr "Usa VLC"
+
+#: ../src/stacks/screenreader.py:29
+msgid "File"
+msgstr "Fichero"
+
+#: ../src/stacks/screenreader.py:30
+msgid "Mp3"
+msgstr "Mp3"
+
+#: ../src/stacks/screenreader.py:31
+msgid "Save"
+msgstr "Guardar"
+
+#: ../src/stacks/screenreader.py:32
+msgid "Text"
+msgstr "Texto"
+
+#: ../src/stacks/screenreader.py:33
+msgid "Files exported to"
+msgstr "Ficheros exportados a"
+
+#: ../src/stacks/screenreader.py:34
+msgid "Spanish man"
+msgstr "Español masculino"
+
+#: ../src/stacks/screenreader.py:35
+msgid "Spanish woman"
+msgstr "Español femenino"
+
+#: ../src/stacks/screenreader.py:36
+msgid "Catalan woman"
+msgstr "Catalán femenino"
+
+#: ../src/stacks/screenreader.py:37
+msgid "Catalan man"
+msgstr "Catalán masculino"
+
+#: ../src/stacks/settings.py:19
+msgid "Configure"
+msgstr "Configurar"
+
+#: ../src/stacks/settings.py:20
+msgid "Configure some options"
+msgstr "Opciones de configuración"
+
+#: ../src/stacks/settings.py:21
+msgid "Set config level, default template.."
+msgstr "Elige la plantilla por defecto, arranque al inicio..."
+
+#: ../src/stacks/settings.py:22
+msgid "The config will be applied per user"
+msgstr "La configuracion se aplicara a cada usuario"
+
+#: ../src/stacks/settings.py:23
+msgid "The config will be applied to all users"
+msgstr "La configuración se aplicará a todos los usuarios"
+
+#: ../src/stacks/settings.py:24
+msgid "The config will be applied to all users and clients"
+msgstr "La configuración se aplicará a todos los usuarios y clientes"
+
+#: ../src/stacks/settings.py:25
+msgid "Choose the config level that should use the app"
+msgstr "Elige el nivel de configuración"
+
+#: ../src/stacks/settings.py:26
+msgid "Session settings"
+msgstr "Opciones de sesión"
+
+#: ../src/stacks/settings.py:27
+msgid "Load template on start"
+msgstr "Cargar plantilla al incio"
+
+#: ../src/stacks/settings.py:28
+msgid "Enable accesshelper dock"
+msgstr "Activar barra de accesibilidad"
+
+#: ../src/stacks/settings.py:29
+msgid "Autostart enabled for user"
+msgstr "Autoinicio activado para el usuario"
+
+#: ../src/stacks/settings.py:30
+msgid "Autostart disabled for user"
+msgstr "Autoinicio desactivado para el usuario"
+
+#: ../src/stacks/settings.py:31
+msgid "Autostart could not be disabled"
+msgstr "No se pudo desactivar el autoinicio"
+
+#: ../src/stacks/settings.py:32
+msgid "Enabled accessibilty dock with hotkey"
+msgstr "Barra de accesibilidad disponible usando atajo"
+
+#: ../src/stacks/settings.py:33
+msgid "Disabled accessibilty dock"
+msgstr "Barra de accesibilidad desactivada"
+
+#: ../src/stacks/settings.py:34
+msgid "Use config"
+msgstr "Usar configuración"
+
+#: ../src/stacks/settings.py:35 ../src/stacks/settings.py:83
+msgid "User"
+msgstr "Usuario/a"
+
+#: ../src/stacks/settings.py:36 ../src/stacks/settings.py:84
+msgid "System"
+msgstr "Sistema"
+
+#: ../src/stacks/settings.py:38
+msgid "Startup profile"
+msgstr "Plantilla inicial"
+
+#: ../src/stacks/settings.py:39
+msgid "Autoload profile"
+msgstr "Cargar perfil al inicio"
+
+#: ../src/stacks/settings.py:43
+msgid "Autostart dock"
+msgstr "Autoinicio del dock"
+
+#: ../src/stacks/settings.py:44
+msgid "Hotkey for dock"
+msgstr "Atajo para el dock"
+
+#: ../src/stacks/settings.py:45
+msgid "Beep when machine starts"
+msgstr "Pitar en el arranque del sistema"
+
+#: ../src/stacks/settings.py:85
+msgid "N4d"
+msgstr "N4d"
+
+#~ msgid "Manage application"
+#~ msgstr "Configuración"
+
+#~ msgid "Accessibility configuration"
+#~ msgstr "Configuración de accesibilidad"
+
+#~ msgid "Color filter configuration"
+#~ msgstr "Filtros de color"
+
+#~ msgid "Hotkeys configuration"
+#~ msgstr "Configuración de atajos"
+
+#~ msgid "Font configuration"
+#~ msgstr "Configuración de fuentes"
+
+#~ msgid "Look&Feel configuration"
+#~ msgstr "Configuración de la apariencia visual"
+
+#~ msgid "Valencian"
+#~ msgstr "Valenciano femenino"
+
+#~ msgid ""
+#~ "It's recommended to logout from session now\n"
+#~ "in order of avoid inconsistencies"
+#~ msgstr "Se recomienda terminar la sesión para evitar inconsistencias"
+
+#~ msgid "Cursor"
+#~ msgstr "Cursor"
+
+#~ msgid "Visual Aids"
+#~ msgstr "Ayudas visuales"
+
+#~ msgid "Screen Options"
+#~ msgstr "Opciones de pantalla"
+
+#~ msgid "Enable high contrast palette"
+#~ msgstr "Paleta de alto contraste"
+
+#~ msgid "Set the policy focus"
+#~ msgstr "Política de foco"
+
+#~ msgid "Hotkey for restarting Orca"
+#~ msgstr "Atajo para reinicio de Orca"
+
+#~ msgid "Import Orca settings"
+#~ msgstr "Importar configuración de Orca"
+
+#~ msgid "Voice speed when reading"
+#~ msgstr "Velocidad de voz al leer"
+
+#~ msgid "Ctrl+Space"
+#~ msgstr "Ctrl+Espacio"
+
+#~ msgid "Enabled accessibilty dock. Press ctrl+space to show"
+#~ msgstr "Barra de accesibilidad activa. Pulsar CTRL+Espacio para mostrar"
+
+#~ msgid "Set resolution"
+#~ msgstr "Resolución"
+
+#~ msgid ""
+#~ "Great A Tuin the turtle comes, swimming slowly through the interstellar "
+#~ "gulf, hydrogen frost on his ponderous limbs, his huge and ancient shell "
+#~ "pocked with meteor craters. Through sea-sized eyes that are crusted with "
+#~ "rheum and asteroid dust He stares fixedly at the Destination."
+#~ msgstr ""
+#~ "La Gran Tortuga A'Tuin se acerca, nadando lentamente por el golfo "
+#~ "interestelar, con los pesados miembros llenos de hidrógeno congelado, la "
+#~ "enorme y viejísima concha llena de cráteres de meteoros. Con unos ojos "
+#~ "del tamaño de mares, encostrados de lágrimas reumáticas y polvo de "
+#~ "asteroides, Él contempla fijamente el Destino."

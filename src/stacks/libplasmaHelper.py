@@ -39,6 +39,15 @@ class plasmaHelperClass():
 			print("libhelper: {}".format(msg))
 	#def _debug
 
+	def _getEnv(self,values={}):
+		env=os.environ
+		if len(values)>0 and isinstance(values,dict):
+			env.update(values)
+		elif env.get("XCURSOR_SIZE","")!="":
+			env.pop("XCURSOR_SIZE")
+		return(env)
+	#def _getEnv
+
 	def getPlasmaConfig(self,wrkFile='',sourceFolder=''):
 		if sourceFolder:
 			self._debug("Reading kfiles from {}".format(sourceFolder))
@@ -342,13 +351,13 @@ class plasmaHelperClass():
 	#def resetRGBFilter
 
 	def setRGBFilter(self,red,green,blue,onlyset=False):
-		plasmaConfig={}
-		plasmaConfig['kgammarc']={'ConfigFile':[("use","kgammarc")]}
-		plasmaConfig['kgammarc'].update({'SyncBox':[("sync","yes")]})
 		values=[]
+		plasmaConfig={}
 		values.append(("bgamma","{0:.2f}".format(blue)))
 		values.append(("rgamma","{0:.2f}".format(red)))
 		values.append(("ggamma","{0:.2f}".format(green)))
+		plasmaConfig['kgammarc']={'ConfigFile':[("use","kgammarc")]}
+		plasmaConfig['kgammarc'].update({'SyncBox':[("sync","yes")]})
 		plasmaConfig['kgammarc'].update({'Screen 0':values})
 		self.setPlasmaConfig(plasmaConfig)
 	#def setRGBFilter
@@ -361,26 +370,26 @@ class plasmaHelperClass():
 	def setCursor(self,theme="default",size="",applyChanges=False):
 		if theme=="default":
 			theme=self.getCursorTheme()
+		if (isinstance(size,str))==False:
+			size=str(size)
 		err=0
 		if ("[") in theme:
 			theme=theme.split("[")[1].replace("[","").replace("]","")
 		if applyChanges==True:
+			self._debug("Set theme: {}".format(theme))
+			env=self._getEnv({"XCURSOR_SIZE":size,"XCURSOR_THEME":theme})
+			if size!="":
+				self.setCursorSize(size)
 			try:
-				subprocess.run(["plasma-apply-cursortheme",theme],stdout=subprocess.PIPE)
+				subprocess.run(["plasma-apply-cursortheme",theme],stdout=subprocess.PIPE,env=env)
 			except Exception as e:
 				print(e)
 				err=1
-			os.environ["XCURSOR_THEME"]=theme
-			self._debug("Set theme: {}".format(theme))
-			if size!="":
-				if (isinstance(size,str))==False:
-					size=str(size)
-				self.setCursorSize(size)
 			try:
 				cmd=["qdbus","org.kde.klauncher5","/KLauncher","org.kde.KLauncher.setLaunchEnv","XCURSOR_THEME",theme]
-				subprocess.run(cmd,stdout=subprocess.PIPE)
+				subprocess.run(cmd,stdout=subprocess.PIPE,env=env)
 				cmd=["qdbus","org.kde.klauncher5","/KLauncher","org.kde.KLauncher.setLaunchEnv","XCURSOR_SIZE",size]
-				subprocess.run(cmd,stdout=subprocess.PIPE)
+				subprocess.run(cmd,stdout=subprocess.PIPE,env=env)
 			except Exception as e:
 				print(e)
 				err=3
@@ -494,3 +503,28 @@ class plasmaHelperClass():
 				f.writelines(newcontent)
 				f.write("\n")
 	#def _setThemeSchemeLauncher
+
+	def applyChanges(self):
+		env=self._getEnv()
+		cmd=["killall","kwin_x11"]
+		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,env=env)
+		cmd=["qdbus","org.kde.kded","/kded","unloadModule","powerdevil"]
+		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,env=env)
+		cmd=["qdbus","org.kde.keyboard","/modules/khotkeys","reread_configuration"]
+		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,env=env)
+		cmd=["qdbus","org.kde.kded","/kbuildsycoca","recreate"]
+		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,env=env)
+		cmd=["qdbus","org.kde.kded","/kded","reconfigure"]
+		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,env=env)
+		cmd=["qdbus","org.kde.plasma-desktop","/MainApplication","reparseConfiguration"]
+		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,env=env)
+		cmd=["qdbus","org.kde.kded","/kded","loadModule","powerdevil"]
+		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,env=env)
+		cmd=["qdbus","org.kde.kglobalaccel","/MainApplication","quit"]
+		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,env=env)
+		cmd=["kstart5","kglobalaccel5"]
+		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,env=env)
+		cmd=["kstart5","kwin_x11"]
+		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,env=env)
+		print("Changes applied!")
+

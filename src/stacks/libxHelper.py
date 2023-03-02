@@ -229,13 +229,28 @@ class xHelperClass():
 		if os.path.isfile(icon)==True:
 			tmpDir=tempfile.TemporaryDirectory()
 			cmd=["xcur2png","-q","-c","-","-d",tmpDir.name,icon]
+			sizes=[]
+			proc=None
 			try:
-				subprocess.run(cmd,stdout=subprocess.PIPE)
+				proc=subprocess.run(cmd,capture_output=True,universal_newlines=True)
 			except Exception as e:
 				print("{}".format(e))
+			if proc:
+				stdout=proc.stdout
+				for line in stdout.split("\n"):
+					aline=line.strip()
+					if len(aline)==0:
+						continue
+					if aline[0].isdigit():
+						size=line.split()[0]
+						sizes.append(size)
+				
 			maxw=0
 			img=""
 			pixmap=""
+			add=True
+			if len(sizes)>0:
+				add=False
 			for i in os.listdir(tmpDir.name):
 				pixmap=os.path.join(tmpDir.name,i)
 				qpixmap=QPixmap(pixmap)
@@ -243,7 +258,8 @@ class xHelperClass():
 				if size.width()>maxw:
 					maxw=size.width()
 					img=qpixmap
-				sizes.append(size)
+				if add==True:
+					sizes.append(size)
 
 			if img=="" and pixmap!="":
 				img=pixmap

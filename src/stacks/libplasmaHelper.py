@@ -351,13 +351,13 @@ class plasmaHelperClass():
 	#def resetRGBFilter
 
 	def setRGBFilter(self,red,green,blue,onlyset=False):
-		plasmaConfig={}
-		plasmaConfig['kgammarc']={'ConfigFile':[("use","kgammarc")]}
-		plasmaConfig['kgammarc'].update({'SyncBox':[("sync","yes")]})
 		values=[]
+		plasmaConfig={}
 		values.append(("bgamma","{0:.2f}".format(blue)))
 		values.append(("rgamma","{0:.2f}".format(red)))
 		values.append(("ggamma","{0:.2f}".format(green)))
+		plasmaConfig['kgammarc']={'ConfigFile':[("use","kgammarc")]}
+		plasmaConfig['kgammarc'].update({'SyncBox':[("sync","yes")]})
 		plasmaConfig['kgammarc'].update({'Screen 0':values})
 		self.setPlasmaConfig(plasmaConfig)
 	#def setRGBFilter
@@ -376,14 +376,13 @@ class plasmaHelperClass():
 		if ("[") in theme:
 			theme=theme.split("[")[1].replace("[","").replace("]","")
 		if applyChanges==True:
-			env=self._getEnv({"XCURSOR_SIZE":size})
+			self._debug("Set theme: {}".format(theme))
+			env=self._getEnv({"XCURSOR_SIZE":size,"XCURSOR_THEME":theme})
 			try:
 				subprocess.run(["plasma-apply-cursortheme",theme],stdout=subprocess.PIPE,env=env)
 			except Exception as e:
 				print(e)
 				err=1
-			os.environ["XCURSOR_THEME"]=theme
-			self._debug("Set theme: {}".format(theme))
 			if size!="":
 				self.setCursorSize(size)
 			try:

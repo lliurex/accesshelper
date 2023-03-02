@@ -254,7 +254,6 @@ class accessdock(QWidget):
 	#def _assignButton
 
 	def closeEvent(self,event):
-		print(event.type())
 		self.setEnabled(True)
 		if event.spontaneous()==True:
 			event.ignore()
@@ -433,8 +432,12 @@ class accessdock(QWidget):
 			qsizes=img[1]
 			sizes=[]
 			for qsize in qsizes:
-				if qsize.width() not in sizes:
-					sizes.append(qsize.width())
+				if isinstance(qsize,QSize):
+					if qsize.width() not in sizes:
+						sizes.append(qsize.width())
+				else:
+					if int(qsize) not in sizes:
+						sizes.append(int(qsize))
 			sizes.sort()
 			pixmap=img[0].pixmap(QSize(ptSize,ptSize))
 			lblTest=QLabel()
@@ -461,7 +464,7 @@ class accessdock(QWidget):
 						themeDesc=theme
 						break
 				themeDesc=themeDesc.split("(")[0].replace("(","").rstrip(" ")
-				self._debug("Default cursor theme {}".format(themeDesc))
+				self._debug("Default cursor theme {} size {}".format(themeDesc,lblTest.pixmap().size().width()))
 				#self.accesshelper.setCursorSize(lblTest.pixmap().size().width())
 				self.accesshelper.setCursor(themeDesc,lblTest.pixmap().size().width(),applyChanges=True)
 			self.accesshelper.applyChanges(setconf=False)

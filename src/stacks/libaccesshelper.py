@@ -496,6 +496,10 @@ class accesshelper():
 	def applyChanges(self,setconf=True):
 		if setconf:
 			self.setNewConfig()
+		cmd=["killall","kwin_x11"]
+		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+		cmd=["kquitapp5","plasmashell"]
+		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
 		cmd=["qdbus","org.kde.kded","/kded","unloadModule","powerdevil"]
 		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
 		cmd=["qdbus","org.kde.keyboard","/modules/khotkeys","reread_configuration"]
@@ -506,18 +510,22 @@ class accesshelper():
 		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
 		cmd=["qdbus","org.kde.plasma-desktop","/MainApplication","reparseConfiguration"]
 		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
-		cmd=["qdbus","org.kde.kwin","/KWin","reconfigure"]
-		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
 		cmd=["qdbus","org.kde.kded","/kded","loadModule","powerdevil"]
 		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
-		print("Changes applied!")
 		#cmd=["kquitapp5","kglobalaccel5"]
 		cmd=["qdbus","org.kde.kglobalaccel","/MainApplication","quit"]
 		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
 		cmd=["kstart5","kglobalaccel5"]
 		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
-		cmd=["qdbus","org.kde.plasmashell","/PlasmaShell","refreshCurrentShell"]
+		#cmd=["qdbus","org.kde.plasmashell","/PlasmaShell","refreshCurrentShell"]
+		#subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+		cmd=["kstart5","plasmashell"]
 		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+		cmd=["qdbus","org.kde.kwin","/KWin","reconfigure"]
+		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+		cmd=["kstart5","kwin_x11"]
+		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+		print("Changes applied!")
 		#cmd=["plasmashell"]
 		#subprocess.Popen(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
 		#cmd=["plasmashell","--replace"]

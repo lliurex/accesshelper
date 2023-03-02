@@ -33,42 +33,6 @@ class xHelperClass():
 		return(monitors)
 	#def _getMonitors
 
-	def getPointerImage(self,theme):
-		icon=os.path.join("/usr/share/icons",theme,"cursors","left_ptr")
-		self._debug("Extracting imgs for icon {}".format(icon))
-		qicon=""
-		sizes=[]
-		if os.path.isfile(icon)==True:
-			tmpDir=tempfile.TemporaryDirectory()
-			cmd=["xcur2png","-q","-c","-","-d",tmpDir.name,icon]
-			try:
-				subprocess.run(cmd,stdout=subprocess.PIPE)
-			except Exception as e:
-				print("{}".format(e))
-			maxw=0
-			img=""
-			pixmap=""
-			for i in os.listdir(tmpDir.name):
-				pixmap=os.path.join(tmpDir.name,i)
-				qpixmap=QPixmap(pixmap)
-				size=qpixmap.size()
-				if size.width()>maxw:
-					maxw=size.width()
-					img=qpixmap
-				sizes.append(size)
-
-			if img=="" and pixmap!="":
-				img=pixmap
-			qicon=QIcon(img)
-			tmpDir.cleanup()
-		return(qicon,sizes)
-	#def getPointerImage
-
-	def _runSetCursorApp(self,theme,size):
-		cmd=["/usr/share/accesshelper/helper/setcursortheme","-r","1",theme,size]
-		subprocess.Popen(cmd,stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-	#def _runSetCursorApp
-
 	def setScaleFactor(self,scaleFactor,plasma=True,xrand=False):
 		cmd=["xrandr","--listmonitors"]
 		output=subprocess.run(cmd,capture_output=True,text=True)
@@ -221,6 +185,11 @@ class xHelperClass():
 		return(err)
 	#def setCursor
 
+	def _runSetCursorApp(self,theme,size):
+		cmd=["/usr/share/accesshelper/helper/setcursortheme","-r","1",theme,size]
+		subprocess.Popen(cmd,stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+	#def _runSetCursorApp
+
 	def getCursorTheme(self):
 		themes=self.getCursors()
 		theme="Adwaita"
@@ -247,6 +216,37 @@ class xHelperClass():
 					availableThemes.append(theme.replace("*","").strip())
 		return(availableThemes)
 	#def getCursors
+
+	def getPointerImage(self,theme):
+		icon=os.path.join("/usr/share/icons",theme,"cursors","left_ptr")
+		self._debug("Extracting imgs for icon {}".format(icon))
+		qicon=""
+		sizes=[]
+		if os.path.isfile(icon)==True:
+			tmpDir=tempfile.TemporaryDirectory()
+			cmd=["xcur2png","-q","-c","-","-d",tmpDir.name,icon]
+			try:
+				subprocess.run(cmd,stdout=subprocess.PIPE)
+			except Exception as e:
+				print("{}".format(e))
+			maxw=0
+			img=""
+			pixmap=""
+			for i in os.listdir(tmpDir.name):
+				pixmap=os.path.join(tmpDir.name,i)
+				qpixmap=QPixmap(pixmap)
+				size=qpixmap.size()
+				if size.width()>maxw:
+					maxw=size.width()
+					img=qpixmap
+				sizes.append(size)
+
+			if img=="" and pixmap!="":
+				img=pixmap
+			qicon=QIcon(img)
+			tmpDir.cleanup()
+		return(qicon,sizes)
+	#def getPointerImage
 
 	def setGrubBeep(self,state,onlyPlasma=False):
 		sw=True

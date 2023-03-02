@@ -378,13 +378,13 @@ class plasmaHelperClass():
 		if applyChanges==True:
 			self._debug("Set theme: {}".format(theme))
 			env=self._getEnv({"XCURSOR_SIZE":size,"XCURSOR_THEME":theme})
+			if size!="":
+				self.setCursorSize(size)
 			try:
 				subprocess.run(["plasma-apply-cursortheme",theme],stdout=subprocess.PIPE,env=env)
 			except Exception as e:
 				print(e)
 				err=1
-			if size!="":
-				self.setCursorSize(size)
 			try:
 				cmd=["qdbus","org.kde.klauncher5","/KLauncher","org.kde.KLauncher.setLaunchEnv","XCURSOR_THEME",theme]
 				subprocess.run(cmd,stdout=subprocess.PIPE,env=env)
@@ -504,10 +504,8 @@ class plasmaHelperClass():
 				f.write("\n")
 	#def _setThemeSchemeLauncher
 
-	def applyChanges(self,setconf):
+	def applyChanges(self):
 		env=self._getEnv()
-		if setconf:
-			self.setNewConfig()
 		cmd=["killall","kwin_x11"]
 		subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,env=env)
 		cmd=["qdbus","org.kde.kded","/kded","unloadModule","powerdevil"]

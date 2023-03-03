@@ -435,11 +435,11 @@ class lookandfeel(confStack):
 							if i18n.get(i18color.upper(),"")==color:
 								qcolor=QtGui.QColor(i18color)
 								break
+						bkg=color
 						self.saveChanges('bkgColor',i18color)
 						self.saveChanges('bkg',"color")
 		#				if qcolor:
 		#					self.accesshelper.setBackgroundColor(qcolor)
-						bkg=color
 					elif self.imgFile:
 						self.saveChanges('bkg',"image")
 		#				self.accesshelper.setBackgroundImg(self.imgFile)

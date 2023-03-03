@@ -367,7 +367,7 @@ class plasmaHelperClass():
 		self.setKdeConfigSetting("Mouse","cursorSize","{}".format(size),"kcminputrc")
 	#def setCursorSize
 
-	def setCursor(self,theme="default",size="",applyChanges=False):
+	def setCursor(self,theme="default",size="",applyChanges=False,commitChanges=True):
 		if theme=="default":
 			theme=self.getCursorTheme()
 		if (isinstance(size,str))==False:
@@ -375,11 +375,12 @@ class plasmaHelperClass():
 		err=0
 		if ("[") in theme:
 			theme=theme.split("[")[1].replace("[","").replace("]","")
+		if commitChanges==True:
+			if size!="":
+				self.setCursorSize(size)
 		if applyChanges==True:
 			self._debug("Set theme: {}".format(theme))
 			env=self._getEnv({"XCURSOR_SIZE":size,"XCURSOR_THEME":theme})
-			if size!="":
-				self.setCursorSize(size)
 			try:
 				subprocess.run(["plasma-apply-cursortheme",theme],stdout=subprocess.PIPE,env=env)
 			except Exception as e:

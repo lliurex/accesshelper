@@ -209,7 +209,6 @@ class accessdock(QWidget):
 		btn=self.widgets.get("font_size")
 		if btn:
 			btn.setText("{:.0f}px\nFont".format(self.font().pointSizeF()))
-			print(self.font().toString())
 	def _assignButton(self,setting,btn):
 		if setting=="font_size":
 			btn.setText("{:.0f}px\nFont".format(self.font().pointSizeF()))

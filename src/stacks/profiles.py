@@ -180,6 +180,7 @@ class profiles(confStack):
 		else:
 			self.showMsg(i18n.get("RESTOREERROR"))
 		self.refresh=True
+		self.changes=True
 		self.optionChanged=[]
 		self._applyProfileSettings()
 		cursor=QtGui.QCursor(Qt.PointingHandCursor)

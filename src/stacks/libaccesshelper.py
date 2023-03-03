@@ -174,12 +174,15 @@ class accesshelper():
 						break
 					elif line.startswith("Image="):
 						imgFolder=line.replace("Image=","").strip()
-						imgFolder=os.path.join(imgFolder,"contents/images")
-						if os.path.isdir(imgFolder)==True:
-							lstf=os.listdir(imgFolder)
-							lstf.sort(reverse=True)
-							img=os.path.join(imgFolder,lstf[random.randrange(0,len(lstf)-1)])
-							break
+						if os.path.isfile(imgFolder):
+							img=imgFolder
+						else:
+							imgFolder=os.path.join(imgFolder,"contents/images")
+							if os.path.isdir(imgFolder)==True:
+								lstf=os.listdir(imgFolder)
+								lstf.sort(reverse=True)
+								img=os.path.join(imgFolder,lstf[random.randrange(0,len(lstf)-1)])
+								break
 		return img.strip()
 	#def getBackgroundImg
 

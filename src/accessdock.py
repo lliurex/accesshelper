@@ -466,7 +466,7 @@ class accessdock(QWidget):
 				themeDesc=themeDesc.split("(")[0].replace("(","").rstrip(" ")
 				self._debug("Default cursor theme {} size {}".format(themeDesc,lblTest.pixmap().size().width()))
 				#self.accesshelper.setCursorSize(lblTest.pixmap().size().width())
-				self.accesshelper.setCursor(themeDesc,lblTest.pixmap().size().width(),applyChanges=True)
+				self.accesshelper.setCursor(themeDesc,lblTest.pixmap().size().width(),applyChanges=True,commitChanges=False)
 			self.accesshelper.applyChanges(setconf=False)
 		else:
 			font=self.font()

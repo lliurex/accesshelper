@@ -164,7 +164,7 @@ class xHelperClass():
 		subprocess.run(cmd)
 	#def setCursorSize
 
-	def setCursor(self,theme="default",size="",applyChanges=False):
+	def setCursor(self,theme="default",size="",applyChanges=False,**kwargs):
 		if theme=="default":
 			theme=self.getCursorTheme()
 		err=0

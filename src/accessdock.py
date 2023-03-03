@@ -457,10 +457,14 @@ class accessdock(QWidget):
 		dlg.setWindowModality(Qt.WindowModal)
 		dlg.setWindowFlags(Qt.NoDropShadowWindowHint|Qt.WindowStaysOnTopHint|Qt.FramelessWindowHint)
 		change=dlg.exec()
+
 		if change:
+			fixed=""
+			font=""
+			minFont=""
 			if str(setting)=="font":
 				qfont=lblTest.font()
-				self._saveFont(qfont)
+				(fixed,font,minFont)=self._saveFont(qfont)
 			else:
 				themes=self.accesshelper.getCursors()
 				for theme in themes:
@@ -472,11 +476,14 @@ class accessdock(QWidget):
 				#self.accesshelper.setCursorSize(lblTest.pixmap().size().width())
 				self.accesshelper.setCursor(themeDesc,lblTest.pixmap().size().width(),applyChanges=True,commitChanges=False)
 			self.accesshelper.applyChanges(setconf=False)
+			if len(fixed+font+minFont)>0:
+				self._restoreFont(fixed,font,minFont)
 		else:
 			font=self.font()
 			self.fontSize=font
 			lblTest.setFont(font)
 		self.setEnabled(True)
+	#def _fontCursorSize
 
 	def _saveFont(self,qfont):
 		font=qfont.toString()
@@ -489,13 +496,39 @@ class accessdock(QWidget):
 		if size>8:
 			qfont.setPointSize(size-2)
 			minFont=qfont.toString()
+		oldfixed=self.accesshelper.getKdeConfigSetting("General","fixed","kdeglobals")
 		self.accesshelper.setKdeConfigSetting("General","fixed",fixed,"kdeglobals")
+		oldfont=self.accesshelper.getKdeConfigSetting("General","font","kdeglobals")
 		self.accesshelper.setKdeConfigSetting("General","font",font,"kdeglobals")
 		self.accesshelper.setKdeConfigSetting("General","menuFont",font,"kdeglobals")
+		oldminFont=self.accesshelper.getKdeConfigSetting("General","smallestReadableFont","kdeglobals")
 		self.accesshelper.setKdeConfigSetting("General","smallestReadableFont",minFont,"kdeglobals")
 		self.accesshelper.setKdeConfigSetting("General","toolBarFont",font,"kdeglobals")
 		self.accesshelper.setKdeConfigSetting("Appearance","Font",fixed,"Lliurex.profile")
 		self.widgets["font_size"].setText("{:.0f}px\nFont".format(size))
+		return(oldfixed,oldfont,oldminFont)
+	#def _saveFont
+
+	def _restoreFont(self,fixed,font,minFont):
+		cmd=[]
+		cmd.append("kwriteconfig5 --key fixed --group General --file kdeglobals {}".format(fixed))
+		#self.accesshelper.setKdeConfigSetting("General","fixed",fixed,"kdeglobals")
+		cmd.append("kwriteconfig5 --key font --group General --file kdeglobals {}".format(font))
+		#self.accesshelper.setKdeConfigSetting("General","font",font,"kdeglobals")
+		cmd.append("kwriteconfig5 --key menuFont --group General --file kdeglobals {}".format(font))
+		#self.accesshelper.setKdeConfigSetting("General","menuFont",font,"kdeglobals")
+		cmd.append("kwriteconfig5 --key smallestReadableFont --group General --file kdeglobals {}".format(minFont))
+		#self.accesshelper.setKdeConfigSetting("General","smallestReadableFont",minFont,"kdeglobals")
+		cmd.append("kwriteconfig5 --key toolBarFont --group General --file kdeglobals {}".format(font))
+		#self.accesshelper.setKdeConfigSetting("General","toolBarFont",font,"kdeglobals")
+		cmd.append("kwriteconfig5 --key Font --group Appearance --file Lliurex.profile {}".format(fixed))
+		#self.accesshelper.setKdeConfigSetting("Appearance","Font",fixed,"Lliurex.profile")
+		cmd.append("rm $(realpath $0)")
+		restorecmd=" && ".join(cmd)
+		restorefonts=os.path.join(os.environ.get("HOME"),".config/plasma-workspace/shutdown/restorefont.sh")
+		if os.path.isfile(restorefonts)==False:
+			self.accesshelper.generateAutostartDesktop(restorecmd,"restorefont.sh","plasma-workspace/shutdown")
+	#def _restoreFont
 
 	def _readScreen(self,*args):
 		self.widgets["capture"].setIcon(self.captureIcn)

@@ -29,6 +29,8 @@ class _QFontDialog(QFontDialog):
 		QFontDialog.__init__(self, parent)
 		if font:
 			self.setFont(font)
+		else:
+			self.setFont(self.font())
 		self.installEventFilter(self)
 
 	def eventFilter(self, source,event):
@@ -94,8 +96,6 @@ class fonts(confStack):
 	#def _load_screen
 
 	def _noClose(self,*args,**kwargs):
-		print("PPPP")
-		print(args,kwargs)
 		args=()
 		return(False)
 	#def _noClos
@@ -109,6 +109,8 @@ class fonts(confStack):
 				if value[0]=='font':
 					font=value[1]
 					break
+		if font=="":
+			font=self.font().toString()
 		qfont=QtGui.QFont(font)
 		dlgFont=self.widgets.get('font')
 		dlgFont.setCurrentFont(font)

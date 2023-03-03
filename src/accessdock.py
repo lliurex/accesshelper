@@ -205,6 +205,11 @@ class accessdock(QWidget):
 		self.move(self.coordx,self.coordy)
 	#def _renderGui
 
+	def fixFontSize(self):
+		btn=self.widgets.get("font_size")
+		if btn:
+			btn.setText("{:.0f}px\nFont".format(self.font().pointSizeF()))
+			print(self.font().toString())
 	def _assignButton(self,setting,btn):
 		if setting=="font_size":
 			btn.setText("{:.0f}px\nFont".format(self.font().pointSizeF()))
@@ -569,4 +574,5 @@ with open("/tmp/.accessdock.pid","w") as f:
 app=QApplication(["AccessDock"])
 dock=accessdock()
 dock.show()
+dock.fixFontSize()
 app.exec_()

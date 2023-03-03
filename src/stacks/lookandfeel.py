@@ -139,6 +139,7 @@ class lookandfeel(confStack):
 		for wrkFile in self.wrkFiles:
 			plasmaConfig=self.accesshelper.getPlasmaConfig(wrkFile)
 			self.plasmaConfig.update(plasmaConfig)
+		self.changes=True
 		self.config=self.getConfig()
 		config=self.config.get(self.level,{})
 		selectedColor=""

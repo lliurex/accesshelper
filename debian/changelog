@@ -1,6 +1,14 @@
-accesshelper (0.8) focal; urgency=medium
+accesshelper (0.8.1) focal; urgency=medium
 
   * Add options for xrand scale and plasma scale
+  * Add maximize when opening 
+  * Enable plasma startup sound
+  * Try to apply as many changes as possible
+  * Close dialog offers apply, reboot and dismiss.
+  * Diferentiate between read clipboard and read screenshot
+  * Accessdock only sets temporary settings
+  * Accesshelp doesn't apply by default any setting but color screen filter
+  * Other minor changes and bugfixes
 
 accesshelper (0.7.7.4) lliurex22; urgency=medium
 
@@ -8,7 +16,7 @@ accesshelper (0.7.7.4) lliurex22; urgency=medium
   * Add option for grub beep
   * Remove profiles
 
- -- Juanma1980 <juanma1980@gmail.com>  Fri, 17 Jun 2022 09:30:37 +0200
+ --   
 
 accesshelper (0.7.3.6.12) focal; urgency=medium
 

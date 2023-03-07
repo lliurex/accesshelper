@@ -75,8 +75,6 @@ class lookandfeel(confStack):
 		row,col=(0,0)
 		scr=QScrollArea()
 		self.box.addWidget(scr)
-		sigmap_run=QSignalMapper(self)
-		sigmap_run.mapped[QString].connect(self._updateConfig)
 		self.widgets={}
 		self.config=self.getConfig()
 		config=self.config.get(self.level,{})
@@ -206,8 +204,6 @@ class lookandfeel(confStack):
 			if isinstance(setting,tuple):
 				if setting[0]=="cursorSize":
 					cursorSize=setting[1]
-	#	if cmb.findText(cursorSize)==-1 and isinstance(cursorSize,int):
-	#		cmb.insertItem(0,cursorSize)
 		cmb.setCurrentText(cursorSize)
 	#def _loadCursorSize
 
@@ -282,6 +278,7 @@ class lookandfeel(confStack):
 						break
 		elif cmbDesc=="scheme" and config.get("scheme","")!="":
 			cmb.setCurrentText(config.get("scheme"))
+	#def _setCurrentItem
 
 	def _fixBadThemePath(self):
 		#Check if lookandfeel has been configured before
@@ -312,21 +309,7 @@ class lookandfeel(confStack):
 	def updateCursorSizes(self):
 		cmb=self.widgets.get("cursorSize")
 		self._loadCursorSize(cmb)
-		#cmbSize=self.widgets.get("cursorSize")
-		#cmbCursors=self.widgets.get("cursor")
-		#icon=cmbCursors.itemIcon(cmbCursors.currentIndex())
-		#maxw=0
-		#for size in icon.availableSizes():
-		#	if size.width()>maxw:
-		#		maxw=size.width()
-		#for idx in range(0,cmbSize.count()):
-		#	size=cmbSize.itemText(idx)
-		#	if maxw<int(size) and int(size)>32:	
-		#		cmbSize.model().item(idx).setEnabled(False)
-		#	else:
-		#		cmbSize.model().item(idx).setEnabled(True)
-		#		cmbSize.setCurrentIndex(idx)
-	#def updateCursorSizes
+	#def updateCursorSizes(self):
 
 	def _fillBackgroundCmb(self):
 		if self.imgFile=="":
@@ -347,12 +330,8 @@ class lookandfeel(confStack):
 		
 	def _getPointerImage(self,theme):
 		return(self.accesshelper.getPointerImage(theme=theme))
+	#def _getPointerImage(self,theme):
 
-	def _updateConfig(self,key):
-		return
-		#	if key in self.kwinMethods:
-		#		self._exeKwinMethod(key) 
-	
 	def _getThemeList(self):
 		availableThemes=self.accesshelper.getThemes()
 		return (availableThemes)
@@ -370,6 +349,7 @@ class lookandfeel(confStack):
 
 	def _getScales(self):
 		return(["100%","125%","150%","175%","200%"])
+	#def _getScales
 
 	def _setTheme(self,theme):
 		self._debug("Setting theme to {}".format(theme))
@@ -438,14 +418,9 @@ class lookandfeel(confStack):
 						bkg=color
 						self.saveChanges('bkgColor',i18color)
 						self.saveChanges('bkg',"color")
-		#				if qcolor:
-		#					self.accesshelper.setBackgroundColor(qcolor)
 					elif self.imgFile:
 						self.saveChanges('bkg',"image")
-		#				self.accesshelper.setBackgroundImg(self.imgFile)
-						bkg=self.imgFile
-		#Ensure size is applied before theme change
-		#self._setCursorSize(size)
+						self.saveChanges('bkg',self.imgFile)
 		self.saveChanges('theme',plasmaTheme)
 		self.saveChanges('maximize',maximize)
 		self.saveChanges('scheme',scheme)
@@ -453,7 +428,6 @@ class lookandfeel(confStack):
 		self.saveChanges('cursorSize',size)
 		self.saveChanges('scale',scale)
 		self.saveChanges('xscale',xscale)
-		#self._setCursor(cursorTheme,size)
 		self._writeFileChanges(scheme,plasmaTheme,cursorTheme,size,bkg,scale,xscale,maximize)
 	#def writeConfig
 

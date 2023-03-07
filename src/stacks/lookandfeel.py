@@ -441,6 +441,9 @@ class lookandfeel(confStack):
 			f.write("{0}->{1}\n".format(i18n.get("SCHEME"),scheme))
 			f.write("{0}->{1}\n".format(i18n.get("CURSORTHEME"),self.cursorThemes.get(cursor,cursor)))
 			f.write("{0}->{1}\n".format(i18n.get("CURSORSIZE"),cursorSize))
+			if os.path.isfile(bkg):
+				if len(bkg)>50:
+					bkg="{0}...{1}".format(os.path.dirname(bkg)[0:30],os.path.basename(bkg))
 			f.write("{0}->{1}\n".format(i18n.get("BACKIMG"),bkg))
 			f.write("{0}->{1}\n".format(i18n.get("SCALE"),scale))
 			f.write("{0}->{1}\n".format(i18n.get("XSCALE"),xscale))

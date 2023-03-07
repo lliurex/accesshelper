@@ -45,7 +45,10 @@ i18n={
 	"SHOWDESKTOP":_("Show desktop"),
 	"Invert":_("Invert colours"),
 	"InvertWindow":_("Invert window colours"),
+	"ShowDesktopGrid":_("Show grid when moving windows"),
 	"ToggleMouseClick":_("Show mouse click"),
+	"view_zoom_in":_("Zoom in"),
+	"view_zoom_out":_("Zoom out"),
 	"TrackMouse":_("Show mouse pointer"),
 	"HKASSIGNED":_("already assigned to action")
 	}
@@ -130,6 +133,14 @@ class assignHotkeys(confStack):
 		self._debug("UPDATE SCREEN FINISHED")
 	#def _update_screen
 
+	def _getDescFromi18(self,i18desc):
+		desc=i18desc	
+		for key,item in i18n.items():
+			if item.lower().strip()==i18desc.lower().strip():
+				desc=key
+				break
+		return desc
+
 	def _loadPlasmaHotkeys(self):
 		for wrkFile in self.wrkFiles:
 			plasmaConfig=self.accesshelper.getPlasmaConfig(wrkFile)
@@ -142,7 +153,7 @@ class assignHotkeys(confStack):
 					(name,data)=setting
 					data=data.split(",")
 					desc=i18n.get(name,name)
-					if len(data)>1:
+					if len(data)>1 and desc==name:
 						desc=data[-1]
 					if (data[0].strip()=="" or data[0]=="none"):
 						if name=="ShowDesktopGrid":
@@ -205,6 +216,7 @@ class assignHotkeys(confStack):
 		plasmaConfig=self.plasmaConfig.copy()
 		for i in range(self.tblGrid.rowCount()):
 			desc=self.tblGrid.cellWidget(i,0).text()
+			desc=self._getDescFromi18(desc)
 			self._debug("Search for {} Row {} lastKdeRow {}".format(desc,i,self.lastKdeRow))
 			hotkey=self.tblGrid.cellWidget(i,1).text()
 			if i<self.lastKdeRow:
@@ -219,6 +231,7 @@ class assignHotkeys(confStack):
 		for kfile,sections in self.plasmaConfig.items():
 			settings=sections.get('kwin',[])
 			newSettings=[]
+			find=False
 			for setting in settings:
 				(description,value)=setting
 				if desc in value:
@@ -244,7 +257,7 @@ class assignHotkeys(confStack):
 				value.update({'_launch':",".join(hotkeyArray)})
 				newHotkeys.update({app:value})
 		self.config.update({'hotkeys':newHotkeys})
-	#def _getPlasmaHotkeysFromTable
+	#def _getConfigHotkeysFromTable
 
 	def writeConfig(self):
 		self.changes=True #Forces data refresh
@@ -272,7 +285,7 @@ class assignHotkeys(confStack):
 				for section,settings in sections.items():
 					for setting in settings:
 						arrayDesc=setting[1].split(",")
-						f.write("{0}->{1}\n".format(arrayDesc[-1],setting[1]))
+						f.write("{0}->{1}\n".format(i18n.get(arrayDesc[-1],arrayDesc[-1]),setting[1]))
 			for key,launchable in hotkeys.items():
 				hotkey=launchable['_launch'].split(",")
 				f.write("{0}->{1}\n".format(launchable['_k_friendly_name'],hotkey[0]))

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-02 16:44+0100\n"
-"PO-Revision-Date: 2023-03-02 16:45+0100\n"
+"POT-Creation-Date: 2023-03-07 07:07+0100\n"
+"PO-Revision-Date: 2023-03-07 07:08+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es\n"
@@ -26,11 +26,11 @@ msgstr "Cancelar"
 msgid "Apply"
 msgstr "Aplicar"
 
-#: ../src/accessdock.py:211
+#: ../src/accessdock.py:215
 msgid "Set font size"
 msgstr "Ajusta tamaño de la letra"
 
-#: ../src/accessdock.py:214
+#: ../src/accessdock.py:218
 msgid ""
 "{}%\n"
 "Scale"
@@ -38,63 +38,63 @@ msgstr ""
 "{}%\n"
 "Aumento"
 
-#: ../src/accessdock.py:215
+#: ../src/accessdock.py:219
 msgid "Set screen scale"
 msgstr "Ajusta la ampliación del entorno"
 
-#: ../src/accessdock.py:219
+#: ../src/accessdock.py:223
 msgid "Hide"
 msgstr "Ocultar"
 
-#: ../src/accessdock.py:220
+#: ../src/accessdock.py:224
 msgid "Close accessdock"
 msgstr "Cerrar"
 
-#: ../src/accessdock.py:224 ../src/stacks/settings.py:18
+#: ../src/accessdock.py:228 ../src/stacks/settings.py:18
 msgid "Settings"
 msgstr "Ajustes"
 
-#: ../src/accessdock.py:225
+#: ../src/accessdock.py:229
 msgid "Launch accesshelper"
 msgstr "Ejecuta accesshelper"
 
-#: ../src/accessdock.py:230
+#: ../src/accessdock.py:234
 msgid "Read screen"
 msgstr "Leer"
 
-#: ../src/accessdock.py:231
+#: ../src/accessdock.py:235
 msgid "Read text or image from clipboard"
 msgstr "Lee un texto o una imagen (ocr) desde el portapapeles"
 
-#: ../src/accessdock.py:236
+#: ../src/accessdock.py:240
 msgid "Capture"
 msgstr "Captura"
 
-#: ../src/accessdock.py:237
+#: ../src/accessdock.py:241
 msgid "Try to read screen content from screenshot"
 msgstr "Intenta leer el contenido de la pantalla"
 
-#: ../src/accessdock.py:241
+#: ../src/accessdock.py:245
 msgid "Pointer"
 msgstr "Puntero"
 
-#: ../src/accessdock.py:242
+#: ../src/accessdock.py:246
 msgid "Set mouse pointer size"
 msgstr "Tamaño del puntero"
 
-#: ../src/accessdock.py:246
+#: ../src/accessdock.py:250
 msgid "Filter"
 msgstr "Filtro"
 
-#: ../src/accessdock.py:247
+#: ../src/accessdock.py:251
 msgid "Apply a color filter"
 msgstr "Aplica un filtro de color a la pantalla"
 
-#: ../src/accessdock.py:251
+#: ../src/accessdock.py:255
 msgid "Keyboard"
 msgstr "Teclado"
 
-#: ../src/accessdock.py:252
+#: ../src/accessdock.py:256
 msgid "Show/Hide on-screen keyboard"
 msgstr "Muestra/esconde el teclado virtual"
 
@@ -290,7 +290,7 @@ msgid "Track pointer"
 msgstr "Localizar ratón al moverlo"
 
 #: ../src/stacks/access.py:29 ../src/stacks/addHotkey.py:27
-#: ../src/stacks/assignHotkeys.py:50
+#: ../src/stacks/assignHotkeys.py:53
 msgid "already assigned to action"
 msgstr "asignado a"
 
@@ -450,14 +450,26 @@ msgid "Invert window colours"
 msgstr "Invertir colores de ventana"
 
 #: ../src/stacks/assignHotkeys.py:48
+msgid "Show grid when moving windows"
+msgstr "Mostrar rejilla al mover una ventana"
+
+#: ../src/stacks/assignHotkeys.py:49
 msgid "Show mouse click"
 msgstr "Mostrar animación al clicar"
 
-#: ../src/stacks/assignHotkeys.py:49
+#: ../src/stacks/assignHotkeys.py:50
+msgid "Zoom in"
+msgstr "Acercar Zoom"
+
+#: ../src/stacks/assignHotkeys.py:51
+msgid "Zoom out"
+msgstr "Alejar zoom"
+
+#: ../src/stacks/assignHotkeys.py:52
 msgid "Show mouse pointer"
 msgstr "Localizar el puntero"
 
-#: ../src/stacks/assignHotkeys.py:87
+#: ../src/stacks/assignHotkeys.py:90
 msgid "Add new"
 msgstr "Añadir"
 

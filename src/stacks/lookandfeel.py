@@ -143,6 +143,10 @@ class lookandfeel(confStack):
 		selectedColor=""
 		if config.get("bkg","")=="color":
 			selectedColor=config.get("bkgColor","")
+		else:
+			if config.get("background","")=="":
+				selectedColor=config.get("bkgColor","")
+				config["bkg"]="color"
 		theme=""
 		self._fixBadThemePath()
 		for value in self.plasmaConfig.get("kdeglobals",{}).get("General",[]):
@@ -150,7 +154,6 @@ class lookandfeel(confStack):
 				theme=value[1]
 		for cmbDesc in self.widgets.keys():
 			self._populateData(cmbDesc,config)
-
 		if selectedColor!="":
 			cmb=self.widgets.get("background",QComboBox())
 			cmb.setCurrentText(i18n.get(selectedColor.upper(),selectedColor))
@@ -420,7 +423,7 @@ class lookandfeel(confStack):
 						self.saveChanges('bkg',"color")
 					elif self.imgFile:
 						self.saveChanges('bkg',"image")
-						self.saveChanges('bkg',self.imgFile)
+						self.saveChanges('background',self.imgFile)
 		self.saveChanges('theme',plasmaTheme)
 		self.saveChanges('maximize',maximize)
 		self.saveChanges('scheme',scheme)

@@ -93,8 +93,18 @@ class assignHotkeys(confStack):
 		self._debug("LOAD SCREEN FINISHED")
 	#def _load_screen
 
+	def _getDescFromi18(self,i18desc):
+		desc=i18desc	
+		for key,item in i18n.items():
+			if item.lower().strip()==i18desc.lower().strip():
+				desc=key
+				break
+		return desc
+	#def _getDescFromi18
+
 	def _addHotkey(self,*args):
 		self.stack.gotoStack(idx=9,parms="")
+	#def _addHotkey
 
 	def _deleteHotkey(self,btnDelete):
 		#Check if deleting or undoing
@@ -122,6 +132,7 @@ class assignHotkeys(confStack):
 				hk=info.get("_launch","").split(",")[0]
 				btn.setText(hk)
 				break
+	#def _undoDelete
 
 	def updateScreen(self):
 		self.tblGrid.clear()
@@ -132,14 +143,6 @@ class assignHotkeys(confStack):
 		self.tblGrid.resizeColumnToContents(1)
 		self._debug("UPDATE SCREEN FINISHED")
 	#def _update_screen
-
-	def _getDescFromi18(self,i18desc):
-		desc=i18desc	
-		for key,item in i18n.items():
-			if item.lower().strip()==i18desc.lower().strip():
-				desc=key
-				break
-		return desc
 
 	def _loadPlasmaHotkeys(self):
 		for wrkFile in self.wrkFiles:
@@ -169,6 +172,8 @@ class assignHotkeys(confStack):
 
 					lbl=QLabel(desc)
 					btn=appconfigControls.QHotkeyButton(data[0])
+					if data[0]=="none":
+						btn.setText("")
 					btn.hotkeyAssigned.connect(self._testHotkey)
 					self.tblGrid.setCellWidget(row,0,lbl)
 					self.tblGrid.setCellWidget(row,1,btn)
@@ -209,9 +214,6 @@ class assignHotkeys(confStack):
 		self.btn_cancel.setEnabled(True)
 	#def _testHotkey
 
-	def _updateConfig(self,name):
-		pass
-
 	def _updateHotkeysFromTable(self):
 		plasmaConfig=self.plasmaConfig.copy()
 		for i in range(self.tblGrid.rowCount()):
@@ -231,7 +233,6 @@ class assignHotkeys(confStack):
 		for kfile,sections in self.plasmaConfig.items():
 			settings=sections.get('kwin',[])
 			newSettings=[]
-			find=False
 			for setting in settings:
 				(description,value)=setting
 				if desc in value:
@@ -247,7 +248,6 @@ class assignHotkeys(confStack):
 
 	def _getConfigHotkeysFromTable(self,desc,hotkey):
 		newHotkeys={}
-		add=True
 		for app,value in self.config.get('hotkeys',{}).items():
 			if app=="[{}.desktop]".format(desc):
 				hotkeyLine=value.get('_launch','')
@@ -276,6 +276,7 @@ class assignHotkeys(confStack):
 		self.refresh=True
 		self.optionChanged=[]
 		self._writeFileChanges()
+	#def writeConfig
 
 	def _writeFileChanges(self):
 		hotkeys=self.config.get('hotkeys',{})

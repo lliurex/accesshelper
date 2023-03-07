@@ -383,6 +383,7 @@ class lookandfeel(confStack):
 		scheme=""
 		plasmaTheme=""
 		maximize="false"
+		bkg=self.imgFile
 		if self.widgets.get("chkmax").checkState()==Qt.CheckState.Checked:
 			maximize="true"
 		for cmbDesc in self.widgets.keys():

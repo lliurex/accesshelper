@@ -87,7 +87,6 @@ class addHotkey(confStack):
 		self.lblPress.setFont(font)
 		self.lblPress.setVisible(False)
 		self.box.addWidget(self.lblPress,0,0,2,3)
-		self.btn_cancel.setText(i18n.get("CANCEL","Cancel"))
 		self.btn_cancel.clicked.connect(self._exit)
 		self.btn_cancel.setEnabled(True)
 	#def _load_screen
@@ -100,6 +99,7 @@ class addHotkey(confStack):
 	#def _searchList
 
 	def updateScreen(self,*args):
+		self.btnHk.setText(i18n.get("BTNTXT"))
 		if args:
 			if isinstance(args[0],QRadioButton):
 				if args[0].isChecked():

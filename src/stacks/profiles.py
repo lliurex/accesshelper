@@ -276,7 +276,7 @@ class profiles(confStack):
 
 	def _writeFileChanges(self):
 		with open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'a') as f:
-			f.write("<b>{}</b>\n".format(i18n.get("CONFIG")))
+			f.write("<b>{}</b>\n".format(i18n.get("DESCRIPTION")))
 			profile=self.config.get("profile","")
 			if profile!="":
 				f.write("{0}->{1}\n".format(i18n.get("PROFILE"),profile))

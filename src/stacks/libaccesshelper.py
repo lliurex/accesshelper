@@ -256,7 +256,7 @@ class accesshelper():
 					jcontents.update({"autoprofile":profile})
 					if startup=="true":
 						#Apply changes on startup/shutdown
-						cmd="/usr/share/accesshelper/accesshelp.py --set {}".format(profile)
+						cmd="/usr/share/accesshelper/accesshelp.py --set {} apply".format(profile)
 						self.generateAutostartDesktop(cmd,"accesshelper_profiler.desktop","plasma-workspace/shutdown")
 						cmd="{} apply".format(cmd)
 						self.generateAutostartDesktop(cmd,"accesshelper_profiler.desktop")
@@ -286,7 +286,8 @@ class accesshelper():
 							sourceFile=os.path.join(sourceFolder,gtkFile)
 							self._debug("Cp {} {}".format(sourceFile,destFolder))
 							shutil.copy(sourceFile,destFolder)
-			self.setNewConfig()
+			self.setOnboardConfig()
+			#self.setNewConfig()
 		return(sw)
 	#def restoreSnapshot
 

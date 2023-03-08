@@ -182,7 +182,9 @@ class profiles(confStack):
 		self.refresh=True
 		self.changes=True
 		self.optionChanged=[]
-		self._applyProfileSettings()
+		#self._applyProfileSettings()
+		self.config=self.getConfig("user",{}).get("user",{})
+		self._writeFileChanges()
 		cursor=QtGui.QCursor(Qt.PointingHandCursor)
 		self.setCursor(cursor)
 	#def loadProfile(self,*args):

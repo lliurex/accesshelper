@@ -27,8 +27,12 @@ class delButton(QLabel):
 		self.row=row
 	def setIconSize(self,*args):
 		pass
+	def setIcon(self,icon):
+		self.setPixmap(icon.pixmap(48,48))
+		self.setIconSize(QSize(48,48))
 	def mousePressEvent(self, ev):
 		self.clicked.emit(self)
+#class delButton
 
 
 i18n={
@@ -116,8 +120,13 @@ class assignHotkeys(confStack):
 			self._debug("Delete event from {}".format(btnDelete))
 			btn.setText("")
 			app.setEnabled(False)
+			icon=QtGui.QIcon.fromTheme("edit-undo")
+			btnDelete.setIcon(icon)
+			btn.setEnabled(False)
 		else:
 			self._undoDelete(app,btn)
+			icon=QtGui.QIcon.fromTheme("edit-delete")
+			btnDelete.setIcon(icon)
 		self.changes=True
 		self.btn_ok.setEnabled(True)
 		self.btn_cancel.setEnabled(True)
@@ -129,6 +138,7 @@ class assignHotkeys(confStack):
 			name=desktop.replace("[","").replace("]","").replace(".desktop","")
 			if app.text()==name:
 				app.setEnabled(True)
+				btn.setEnabled(True)
 				hk=info.get("_launch","").split(",")[0]
 				btn.setText(hk)
 				break
@@ -247,14 +257,19 @@ class assignHotkeys(confStack):
 	#def _getPlasmaHotkeysFromTable
 
 	def _getConfigHotkeysFromTable(self,desc,hotkey):
-		newHotkeys={}
+		newHotkeys=self.config.get("hotkeys",{}).copy()
 		for app,value in self.config.get('hotkeys',{}).items():
 			if app=="[{}.desktop]".format(desc):
-				hotkeyLine=value.get('_launch','')
-				hotkeyArray=hotkeyLine.split(",")
-				hotkeyArray[0]=hotkey
-				hotkeyArray[1]="none"
-				value.update({'_launch':",".join(hotkeyArray)})
+				if len(hotkey)>0 and str(hotkey).lower()!="none":
+					hotkeyLine=value.get('_launch','')
+					hotkeyArray=hotkeyLine.split(",")
+					hotkeyArray[0]=hotkey
+					hotkeyArray[1]="none"
+					value.update({'_launch':",".join(hotkeyArray)})
+					newHotkeys.update({app:value})
+				else:
+					newHotkeys.pop(app)
+			else:
 				newHotkeys.update({app:value})
 		self.config.update({'hotkeys':newHotkeys})
 	#def _getConfigHotkeysFromTable

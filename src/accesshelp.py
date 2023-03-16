@@ -25,7 +25,7 @@ dlgClose=""
 
 HLP_USAGE=_("usage: accesshelper [--set profile]|[--list]")
 HLP_NOARGS=_("With no args launch accesshelper GUI")
-HLP_SET=_("--set [profile]: Activate specified profile.\n\tCould be an absolute path or a profile from default profiles path")
+HLP_SET=_("--set <profile> [apply]: Activate specified profile.\n\tCould be an absolute path or a profile from default profiles path\n\tIf \"apply\" is passed as arg then apply as many changes as possible.")
 HLP_LIST=_("--list: List available profiles")
 ERR_WRKDIR=_("could not be accessed")
 ERR_NOPROFILE=_("There's no profiles at")
@@ -272,6 +272,7 @@ else:
 	if sys.argv[1].lower()=="--set":
 		applyChanges=False
 		if len(sys.argv)<3:
+			print("{}".format(" --set <profile> [apply]"))
 			print("{}".format(ERR_SETPROFILE))
 			listProfiles()
 		if len(sys.argv)==4:

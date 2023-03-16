@@ -223,73 +223,86 @@ class accesshelper():
 			jcontents={}
 			desktopPath=os.path.join(tmpFolder,".config/autostart")
 			if os.path.isdir(desktopPath)==True:
-				autostartFolder=os.path.join(os.environ.get('HOME'),".config","autostart")
-				autoshutdownFolder=os.path.join(os.environ.get('HOME'),".config","plasma-workspace/shutdown")
-				if os.path.isdir(autostartFolder)==False:
-					os.makedirs(autostartFolder)
-				if os.path.isdir(autoshutdownFolder)==False:
-					os.makedirs(autoshutdownFolder)
-				#Clean operations
-				self.functionHelper.cleanHome(autostartFolder,autoshutdownFolder)
-				for f in os.listdir(desktopPath):
-					if "profiler" in f:
-						continue
-					desktopFile=os.path.join(desktopPath,f)
-					shutil.copy(desktopFile,autostartFolder)
+				self._initFiles(desktopPath)
 			if os.path.isdir(confPath)==True:
-				usrFolder=os.path.join(os.environ.get('HOME'),".config/accesshelper")
-				if os.path.isdir(usrFolder)==False:
-					os.makedirs(usrFolder)
-				for confFile in os.listdir(confPath):
-					sourceFile=os.path.join(confPath,confFile)
-					self._debug("Cp {} {}".format(sourceFile,usrFolder))
-					#Modify profile value.
-					with open(sourceFile,"r") as f:
-						fcontents=f.read()
-					try:
-						jcontents=json.loads(fcontents)
-					except:
-						jcontents.update({"profile":"{}".format(os.path.basename(profileTar))})
-					(profile,oldConfig)=self.functionHelper._getOldProfile(profileTar,usrFolder)
-					startup=oldConfig.get("startup","false")
-					jcontents.update({"startup":startup})
-					jcontents.update({"autoprofile":profile})
-					if startup=="true":
-						#Apply changes on startup/shutdown
-						cmd="/usr/share/accesshelper/accesshelp.py --set {} apply".format(profile)
-						self.generateAutostartDesktop(cmd,"accesshelper_profiler.desktop","plasma-workspace/shutdown")
-						cmd="{} apply".format(cmd)
-						self.generateAutostartDesktop(cmd,"accesshelper_profiler.desktop")
-					with open(sourceFile,"w") as f:
-						json.dump(jcontents,f,indent=4)
-					shutil.copy(sourceFile,usrFolder)
-				data=self.getPlasmaConfig()
+				self._initProfiles(confPath,profileTar)
 			mozillaPath=os.path.join(tmpFolder,".mozilla")
 			if os.path.isdir(mozillaPath)==True:
-				mozillaFolder=os.path.join(os.environ.get('HOME'),".mozilla/firefox")
-				for folder in os.listdir(mozillaPath):
-					sourceFolder=os.path.join(mozillaPath,folder)
-					destFolder=os.path.join(mozillaFolder,folder)
-					if os.path.isdir(destFolder)==True:
-						for mozillaFile in os.listdir(os.path.join(mozillaPath,folder)):
-							sourceFile=os.path.join(sourceFolder,mozillaFile)
-							self._debug("Cp {} {}".format(sourceFile,destFolder))
-							shutil.copy(sourceFile,destFolder)
+				self._initMozilla(mozillaPath)
 			if os.path.isdir(basePath):
-				for folder in os.listdir(basePath):
-					if folder.startswith('gtk') and os.path.isdir(os.path.join(basePath,folder)):
-						destFolder=os.path.join(os.environ.get('HOME'),".config",folder)
-						if os.path.isdir(destFolder)==False:
-							os.makedirs(destFolder)
-						sourceFolder=os.path.join(basePath,folder)
-						for gtkFile in os.listdir(sourceFolder):
-							sourceFile=os.path.join(sourceFolder,gtkFile)
-							self._debug("Cp {} {}".format(sourceFile,destFolder))
-							shutil.copy(sourceFile,destFolder)
+				self._initConfig(basePath)
 			self.setOnboardConfig()
-			#self.setNewConfig()
 		return(sw)
 	#def restoreSnapshot
+
+	def _initFiles(self,desktopPath):
+		autostartFolder=os.path.join(os.environ.get('HOME'),".config","autostart")
+		autoshutdownFolder=os.path.join(os.environ.get('HOME'),".config","plasma-workspace/shutdown")
+		if os.path.isdir(autostartFolder)==False:
+			os.makedirs(autostartFolder)
+		if os.path.isdir(autoshutdownFolder)==False:
+			os.makedirs(autoshutdownFolder)
+		#Clean operations
+		self.functionHelper.cleanHome(autostartFolder,autoshutdownFolder)
+		for f in os.listdir(desktopPath):
+			if "profiler" in f:
+				continue
+			desktopFile=os.path.join(desktopPath,f)
+			shutil.copy(desktopFile,autostartFolder)
+	#def _initFiles
+
+	def _initProfiles(self,confPath,profileTar):
+		usrFolder=os.path.join(os.environ.get('HOME'),".config/accesshelper")
+		if os.path.isdir(usrFolder)==False:
+			os.makedirs(usrFolder)
+		for confFile in os.listdir(confPath):
+			sourceFile=os.path.join(confPath,confFile)
+			self._debug("Cp {} {}".format(sourceFile,usrFolder))
+			#Modify profile value.
+			with open(sourceFile,"r") as f:
+				fcontents=f.read()
+			try:
+				jcontents=json.loads(fcontents)
+			except:
+				jcontents.update({"profile":"{}".format(os.path.basename(profileTar))})
+			(profile,oldConfig)=self.functionHelper._getOldProfile(profileTar,usrFolder)
+			startup=oldConfig.get("startup","false")
+			jcontents.update({"startup":startup,"autoprofile":profile})
+			if startup=="true":
+				#Apply changes on startup/shutdown
+				cmd="/usr/share/accesshelper/accesshelp.py --set {} apply".format(profile)
+				self.generateAutostartDesktop(cmd,"accesshelper_profiler.desktop","plasma-workspace/shutdown")
+				cmd="{} apply".format(cmd)
+				self.generateAutostartDesktop(cmd,"accesshelper_profiler.desktop")
+			with open(sourceFile,"w") as f:
+				json.dump(jcontents,f,indent=4)
+			shutil.copy(sourceFile,usrFolder)
+	#def _initProfiles
+
+	def _initMozilla(self,mozillaPath):
+		mozillaFolder=os.path.join(os.environ.get('HOME'),".mozilla/firefox")
+		for folder in os.listdir(mozillaPath):
+			sourceFolder=os.path.join(mozillaPath,folder)
+			destFolder=os.path.join(mozillaFolder,folder)
+			if os.path.isdir(destFolder)==True:
+				for mozillaFile in os.listdir(os.path.join(mozillaPath,folder)):
+					sourceFile=os.path.join(sourceFolder,mozillaFile)
+					self._debug("Cp {} {}".format(sourceFile,destFolder))
+					shutil.copy(sourceFile,destFolder)
+	#def _initMozilla
+
+	def _initConfig(self,basePath):
+		for folder in os.listdir(basePath):
+			if folder.startswith('gtk') and os.path.isdir(os.path.join(basePath,folder)):
+				destFolder=os.path.join(os.environ.get('HOME'),".config",folder)
+				if os.path.isdir(destFolder)==False:
+					os.makedirs(destFolder)
+				sourceFolder=os.path.join(basePath,folder)
+				for gtkFile in os.listdir(sourceFolder):
+					sourceFile=os.path.join(sourceFolder,gtkFile)
+					self._debug("Cp {} {}".format(sourceFile,destFolder))
+					shutil.copy(sourceFile,destFolder)
+	#def _initConfig
 
 	def importExportSnapshot(self,*args,**kwargs):
 		return(self.functionHelper.importExportSnapshot(*args,**kwargs))
@@ -403,11 +416,10 @@ class accesshelper():
 		return(self.plasmaHelper.setThemeSchemeLauncher(*args,**kwargs))
 	#def setThemeSchemeLauncher
 
-	def setNewConfig(self,*args):
-		env=self._getEnv()
+	def _readConfig(self):
+		jcontent={}
 		usrConfig=os.path.join(os.environ.get('HOME'),".config/accesshelper/accesshelper.json")
 		if os.path.isfile(usrConfig):
-			jcontent={}
 			with open(usrConfig,'r') as f:
 				content=f.read()
 			try:
@@ -419,94 +431,84 @@ class accesshelper():
 					jcontent=json.loads(fcontent)
 				except:
 					print(fcontent)
-			bkg=''
-			img=''
-			theme=''
-			scheme=''
-			color=''
-			cursor=''
-			size=''
-			scale='100'
-			xscale='100'
-			dockHk=''
+		return(jcontent)
+	#def _readConfig
+
+	def setNewConfig(self,*args):
+		env=self._getEnv()
+		jcontent=self._readConfig()
+		if len(jcontent)>0:
+			self._applySettingBkg(jcontent)
+			self._applySettingDockHK(jcontent)
+			if jcontent.get("cursor","")!="" or jcontent.get("cursorSize","")!="":
+				self.setCursor(jcontent.get("cursor",""),jcontent.get("cursorSize",""),applyChanges=True)
+			self._applySettingScale(jcontent)
+			self._applySettingRGB(jcontent)
+			if jcontent.get("theme","")!="":
+				subprocess.run(["plasma-apply-desktoptheme",jcontent["theme"]],stdout=subprocess.PIPE,env=env)
+			if jcontent.get("scheme","")!="":
+				subprocess.run(["plasma-apply-colorscheme",jcontent["scheme"]],stdout=subprocess.PIPE,env=env)
 			grubBeep=False
-			maximize=False
-			alpha=[]
-			for key,data in jcontent.items():
-				if key=="bkg":
-					bkg=data
-				elif key=="dockHk":
-					dockHk=data
-				elif key=="bkgColor":
-					color=data
-				elif key=="background":
-					img=data
-				elif key=="cursor":
-					cursor=data
-				elif key=="cursorSize":
-					size=data
-				elif key=="theme":
-					theme=data
-				elif key=="scheme":
-					scheme=data
-				elif key=="scale":
-					scale=data
-				elif key=="xscale":
-					xscale=data
-				elif key=="alpha" and isinstance(data,list) and len(data)==4:
-					alpha=QColor(data[0],data[1],data[2],data[3])
-				elif key=="maximize":
-					if data=="true":
-						maximize=True
-				elif key=="grubBeep":
-					if data=="true":
-						grubBeep=True
-			if bkg=="color":
-				if color:
-					qcolor=QColor(color)
-					self.setBackgroundColor(qcolor)
-			elif bkg=="image":
-				if img:
-					self.setBackgroundImg(img)
-			if cursor and size:
-				self.setCursor(cursor,size,applyChanges=True)
-			if scale:
-				self.setScaleFactor(float(scale)/100)
-			self.removeAutostartDesktop("accesshelper_Xscale.desktop")
-			if xscale:
-				if xscale.isdigit():
-					xscale=float(xscale)
-					if xscale>9:
-						xscale=xscale/100
-					self.setXscale(xscale,autostart=True,xrand=True)
-			self.removeRGBFilter()
-			if isinstance(alpha,QColor):
-				config={'kgammarc':{'ConfigFile':[("use","kgammarc")],'SyncBox':[("sync","yes")]}}
-				(red,green,blue)=self.setRGBFilter(alpha)
-				values=[]
-				values.append(('bgamma',"{0:.2f}".format(blue)))
-				values.append(('rgamma',"{0:.2f}".format(red)))
-				values.append(('ggamma',"{0:.2f}".format(green)))
-				config['kgammarc'].update({'Screen 0':values})
-				self.setPlasmaConfig(config)
-			if theme!="":
-				subprocess.run(["plasma-apply-desktoptheme",theme],stdout=subprocess.PIPE,env=env)
-			if scheme!="":
-				subprocess.run(["plasma-apply-colorscheme",scheme],stdout=subprocess.PIPE,env=env)
-			if dockHk!="":
-				self._debug("Set hotkey for dock: {}".format(dockHk))
-				desc="show accessdock"
-				name="accessdock.desktop"
-				self.setHotkey(dockHk,desc,name)
+			if jcontent.get("grubBeep","")=="true":
+				grubBeep=True
 			self.plasmaHelper.setStartBeep(grubBeep)
-			if maximize==True:
-				config={"kwinrc":{"Windows":[("Placement","Maximizing")]}}
-				self.setPlasmaConfig(config)
-			else:
-				config={"kwinrc":{"Windows":[("Placement","")]}}
-				self.setPlasmaConfig(config)
+			maximize=""
+			if jcontent.get("maximize","")=="true":
+				maximize="Maximizing"
+			config={"kwinrc":{"Windows":[("Placement",maximize)]}}
+			self.setPlasmaConfig(config)
 		return()
 	#def setNewConfig(self,*args):
+
+	def _applySettingBkg(self,jcontent):
+			if jcontent.get("bkg","")=="color":
+				color=jcontent.get("bkgColor","")
+				if color!="":
+					qcolor=QColor(color)
+					self.setBackgroundColor(qcolor)
+			elif jcontent.get("bkg","")=="image":
+				img=jcontent.get("background","")
+				if img!="":
+					self.setBackgroundImg(img)
+	#def _applySettingBkg
+
+	def _applySettingDockHK(self,jcontent):
+		if isinstance(jcontent.get("dockHK",None),str):
+			self._debug("Set hotkey for dock: {}".format(jcontent["dockHK"]))
+			desc="show accessdock"
+			name="accessdock.desktop"
+			self.setHotkey(dockHk,desc,name)
+	#def _applySettingDockHK
+
+	def _applySettingScale(self,jcontent):
+		if jcontent.get("scale","")!="":
+			self.setScaleFactor(float(jcontent.get("scale"))/100)
+		self.removeAutostartDesktop("accesshelper_Xscale.desktop")
+		xscale=jcontent.get("xscale","")
+		if xscale !="":
+			if xscale.isdigit():
+				xscale=float(xscale)
+				if xscale>9:
+					xscale=xscale/100
+				self.setXscale(xscale,autostart=True,xrand=True)
+	#def _applySettingScale
+
+	def _applySettingRGB(self,jcontent):
+		self.removeRGBFilter()
+		jalpha=jcontent.get("alpha","")
+		alpha=""
+		if isinstance(jalpha,list) and len(jalpha)==4:
+			alpha=QColor(data[0],data[1],data[2],data[3])
+		if isinstance(alpha,QColor):
+			config={'kgammarc':{'ConfigFile':[("use","kgammarc")],'SyncBox':[("sync","yes")]}}
+			(red,green,blue)=self.setRGBFilter(alpha)
+			values=[]
+			values.append(('bgamma',"{0:.2f}".format(blue)))
+			values.append(('rgamma',"{0:.2f}".format(red)))
+			values.append(('ggamma',"{0:.2f}".format(green)))
+			config['kgammarc'].update({'Screen 0':values})
+			self.setPlasmaConfig(config)
+	#def _applySettingRGB
 
 	def applyChanges(self,setconf=True):
 		if setconf:
@@ -518,4 +520,4 @@ class accesshelper():
 		cmd=["qdbus","org.kde.ksmserver","/KSMServer","org.kde.KSMServerInterface.logout","1","3","3"]
 		#cmd=["qdbus","org.kde.Shutdown","/Shutdown","org.kde.Shutdown.logout"]
 		subprocess.run(cmd)
-	#def restartSession2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c2317fe66cd19ef8c
+	#def restartSession

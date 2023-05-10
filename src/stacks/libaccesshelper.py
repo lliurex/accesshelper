@@ -104,6 +104,14 @@ class accesshelper():
 		return(self.plasmaHelper.getSchemes())
 	#def getSchemes
 
+	def getCurrentScheme(self):
+		current=""
+		for scheme in self.getSchemes():
+			if "(" in scheme:
+				current=scheme.split("(")[0].strip()
+		return(current)
+	#def getCurrentTheme
+
 	def getThemes(self):
 		return(self.plasmaHelper.getThemes())
 	#def getThemes
@@ -112,7 +120,7 @@ class accesshelper():
 		current=""
 		for theme in self.getThemes():
 			if "(" in theme:
-				current=theme
+				current=theme.split("(")[0].strip()
 		return(current)
 	#def getCurrentTheme
 

@@ -257,13 +257,20 @@ class lookandfeel(confStack):
 	#def _processThemeData
 
 	def _setCurrentItem(self,cmb,cmbDesc,config):
-		searchedTheme=config.get("theme","")
-		if searchedTheme=="":
-			searchedTheme=self.accesshelper.getCurrentTheme()
-		if cmbDesc=="theme" and searchedTheme!="":
+		#searchedTheme=config.get("theme","")
+		#if searchedTheme=="":
+		searchedTheme=self.accesshelper.getCurrentTheme()
+		searchedScheme=self.accesshelper.getCurrentScheme()
+		searchedCursor=self.accesshelper.getCursorTheme()
+		if cmbDesc=="theme" and config.get("theme","")!="":
 			cmb.setCurrentText(config.get("theme"))
-		elif cmbDesc=="cursor" and config.get("cursor","")!="":
-			searchedTheme=config.get("cursor")
+		elif cmbDesc=="theme" and searchedTheme!="":
+			cmb.setCurrentText(searchedTheme)
+		elif cmbDesc=="cursor":
+			if config.get("cursor","")!="":
+				searchedTheme=config.get("cursor")
+			elif searchedCursor!="":
+				searchedTheme=searchedCursor
 			if "[" in searchedTheme:
 				searchedTheme=searchedTheme.split("[")[0].strip()
 			sw=False
@@ -281,6 +288,8 @@ class lookandfeel(confStack):
 						break
 		elif cmbDesc=="scheme" and config.get("scheme","")!="":
 			cmb.setCurrentText(config.get("scheme"))
+		elif cmbDesc=="scheme" and searchedScheme!="":
+			cmb.setCurrentText(searchedScheme)
 	#def _setCurrentItem
 
 	def _fixBadThemePath(self):

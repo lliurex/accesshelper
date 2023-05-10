@@ -481,11 +481,11 @@ class accesshelper():
 	#def _applySettingBkg
 
 	def _applySettingDockHK(self,jcontent):
-		if isinstance(jcontent.get("dockHK",None),str):
-			self._debug("Set hotkey for dock: {}".format(jcontent["dockHK"]))
+		if isinstance(jcontent.get("dockHk",None),str):
+			self._debug("Set hotkey for dock: {}".format(jcontent["dockHk"]))
 			desc="show accessdock"
 			name="accessdock.desktop"
-			self.setHotkey(dockHk,desc,name)
+			self.setHotkey(jcontent["dockHk"],desc,name)
 	#def _applySettingDockHK
 
 	def _applySettingScale(self,jcontent):

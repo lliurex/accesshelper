@@ -86,10 +86,6 @@ class accessdock(QWidget):
 		self.fontSize=""
 	#def __init__
 
-	def closeEvent(self, event):
-		sys.exit(0)
-	#def closeEvent(self, event):
-
 	def _debug(self,msg):
 		if self.dbg:
 			print("dock: {}".format(msg))
@@ -258,10 +254,12 @@ class accessdock(QWidget):
 	#def _assignButton
 
 	def closeEvent(self,event):
-		self.setEnabled(True)
-		if event.spontaneous()==True:
+		print(event)
+		if self.isEnabled()==False:
 			event.ignore()
+			self.setEnabled(True)
 		else:
+			print(event)
 			sys.exit(0)
 	#def closeEvent(self,event):
 
@@ -354,7 +352,6 @@ class accessdock(QWidget):
 			self.xscale=factor
 			self.widgets["scale"].setText("{}%\nScale".format(self.xscale))
 			#self.accesshelper.applyChanges()
-		self.setEnabled(True)
 	#def _setScale
 
 	def _fontCursorSize(self,setting):
@@ -482,7 +479,6 @@ class accessdock(QWidget):
 			font=self.font()
 			self.fontSize=font
 			lblTest.setFont(font)
-		self.setEnabled(True)
 	#def _fontCursorSize
 
 	def _saveFont(self,qfont):

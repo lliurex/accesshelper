@@ -64,13 +64,14 @@ class accesshelper():
 		return(self.functionHelper.setOnboardConfig())
 	#def setOnboardConfig
 
-	def setRGBFilter(self,*args,**kwargs):
+	def setRGBFilter(self,*args,kde=True,**kwargs):
 		(xgamma,red,green,blue)=self.xHelper.setRGBFilter(*args,**kwargs)
 		if len(args)==2:
 			if isinstance(args[-1],bool):
 				if args[-1]==False:
 					self.generateAutostartDesktop(xgamma,"accesshelper_rgbFilter.desktop")
-		self.plasmaHelper.setRGBFilter(red,green,blue)
+		if kde==True:
+			self.plasmaHelper.setRGBFilter(red,green,blue)
 		return(red,green,blue)
 	#def setRGBFilter
 

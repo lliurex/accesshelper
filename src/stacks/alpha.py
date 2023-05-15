@@ -134,7 +134,7 @@ class alpha(confStack):
 			(red,green,blue)=(1.0,1.0,1.0)
 			qalpha=None
 		else:
-			(red,green,blue)=self.accesshelper.setRGBFilter(qalpha,self.embebbed)
+			(red,green,blue)=self.accesshelper.setRGBFilter(qalpha,self.embebbed,kde=not(self.embebbed))
 		if self.embebbed==False:
 			if isinstance(qalpha,QtGui.QColor):
 				self.saveChanges("alpha",qalpha.getRgb())

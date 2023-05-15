@@ -254,12 +254,10 @@ class accessdock(QWidget):
 	#def _assignButton
 
 	def closeEvent(self,event):
-		print(event)
 		if self.isEnabled()==False:
 			event.ignore()
 			self.setEnabled(True)
 		else:
-			print(event)
 			sys.exit(0)
 	#def closeEvent(self,event):
 
@@ -461,7 +459,7 @@ class accessdock(QWidget):
 			minFont=""
 			if str(setting)=="font":
 				qfont=lblTest.font()
-				(fixed,font,minFont)=self._saveFont(qfont)
+				(fixed,font,general,minFont)=self._saveFont(qfont)
 			else:
 				themes=self.accesshelper.getCursors()
 				for theme in themes:
@@ -474,7 +472,7 @@ class accessdock(QWidget):
 				self.accesshelper.setCursor(themeDesc,lblTest.pixmap().size().width(),applyChanges=True,commitChanges=False)
 			self.accesshelper.applyChanges(setconf=False)
 			if len(fixed+font+minFont)>0:
-				self._restoreFont(fixed,font,minFont)
+				self._restoreFont()
 		else:
 			font=self.font()
 			self.fontSize=font
@@ -482,8 +480,26 @@ class accessdock(QWidget):
 	#def _fontCursorSize
 
 	def _saveFont(self,qfont):
-		font=qfont.toString()
+		oldSize=self.widgets["font_size"].text()
 		self.setFont(qfont)
+		size=qfont.pointSize()
+		oldfixed=self.accesshelper.getKdeConfigSetting("General","fixed","kdeglobals")
+		oldfont=self.accesshelper.getKdeConfigSetting("General","font","kdeglobals")
+		oldminFont=self.accesshelper.getKdeConfigSetting("General","smallestReadableFont","kdeglobals")
+		self._writeFonts(qfont)
+		if len(oldfont.split(','))<=2:
+			oldgeneral=oldfont
+			oldfont="{0},{1},-1,5,50,0,0,0,0,0".format(oldfont,oldSize)
+		else:
+			oldgeneral=oldfont.split(",")[:2]
+			oldgeneral[-1]="{}px".format(oldgeneral[-1])
+			oldgeneral=",".join(oldgeneral)
+		self.widgets["font_size"].setText("{:.0f}px\nFont".format(size))
+		return(oldfixed,oldfont,oldgeneral,oldminFont)
+	#def _saveFont
+
+	def _writeFonts(self,qfont):
+		font=qfont.toString()
 		minfont=font
 		size=qfont.pointSize()
 		minSize=size-2
@@ -492,24 +508,24 @@ class accessdock(QWidget):
 		if size>8:
 			qfont.setPointSize(size-2)
 			minFont=qfont.toString()
-		oldfixed=self.accesshelper.getKdeConfigSetting("General","fixed","kdeglobals")
 		self.accesshelper.setKdeConfigSetting("General","fixed",fixed,"kdeglobals")
-		oldfont=self.accesshelper.getKdeConfigSetting("General","font","kdeglobals")
 		self.accesshelper.setKdeConfigSetting("General","font",font,"kdeglobals")
 		self.accesshelper.setKdeConfigSetting("General","menuFont",font,"kdeglobals")
-		oldminFont=self.accesshelper.getKdeConfigSetting("General","smallestReadableFont","kdeglobals")
 		self.accesshelper.setKdeConfigSetting("General","smallestReadableFont",minFont,"kdeglobals")
 		self.accesshelper.setKdeConfigSetting("General","toolBarFont",font,"kdeglobals")
 		self.accesshelper.setKdeConfigSetting("Appearance","Font",fixed,"Lliurex.profile")
-		if len(oldfont.split(','))<=1:
-			oldSize=self.widgets["font_size"].text()
-			oldfont="{0},{1},-1,5,50,0,0,0,0,0".format(oldfont,oldSize)
-		self.widgets["font_size"].setText("{:.0f}px\nFont".format(size))
-		return(oldfixed,oldfont,oldminFont)
-	#def _saveFont
 
-	def _restoreFont(self,fixed,font,minFont):
-		print("RESTORE FONT {}".format(font))
+	def _restoreFont(self,*args):
+		font=self.accesshelper.getKdeConfigSetting("WM","activeFont","kdeglobals")
+		#font=qfont.toString()
+		minfont=font.split(",")
+		if int(minfont[1])>9:
+			minfont[1]=str(int(minfont[1])-2)
+		minfont=",".join(minfont)
+		size=int(font.split(",")[1])
+		minSize=size-2
+		fontFixed="Hack"
+		fixed="{0},{1},-1,5,50,0,0,0,0,0".format(fontFixed,size)
 		cmd=[]
 		cmd.append("kwriteconfig5 --key fixed --group General --file kdeglobals {}".format(fixed))
 		#self.accesshelper.setKdeConfigSetting("General","fixed",fixed,"kdeglobals")
@@ -517,7 +533,7 @@ class accessdock(QWidget):
 		#self.accesshelper.setKdeConfigSetting("General","font",font,"kdeglobals")
 		cmd.append("kwriteconfig5 --key menuFont --group General --file kdeglobals {}".format(font))
 		#self.accesshelper.setKdeConfigSetting("General","menuFont",font,"kdeglobals")
-		cmd.append("kwriteconfig5 --key smallestReadableFont --group General --file kdeglobals {}".format(minFont))
+		cmd.append("kwriteconfig5 --key smallestReadableFont --group General --file kdeglobals {}".format(minfont))
 		#self.accesshelper.setKdeConfigSetting("General","smallestReadableFont",minFont,"kdeglobals")
 		cmd.append("kwriteconfig5 --key toolBarFont --group General --file kdeglobals {}".format(font))
 		#self.accesshelper.setKdeConfigSetting("General","toolBarFont",font,"kdeglobals")

@@ -295,7 +295,10 @@ class plasmaHelperClass():
 			if len(line.split(" "))>=4:
 				monitors.append("{0}".format(line.split(" ")[-1]))
 		if monitors:
-			screenScaleFactors="{};".format(";".join(monitors))
+			monitorsScale=[]
+			for monitor in monitors:
+				monitorsScale.append("{0}={1}".format(monitor,scaleFactor))
+			screenScaleFactors="{};".format(";".join(monitorsScale))
 			self.setKdeConfigSetting("KScreen","ScreenScaleFactors",screenScaleFactors,"kdeglobals")
 		if scaleFactor==1:
 			scaleFactor=""

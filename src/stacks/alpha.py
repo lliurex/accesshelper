@@ -130,7 +130,7 @@ class alpha(confStack):
 			self.config=self.getConfig()
 		qalpha=self.widgets.get("alpha").currentColor()
 		if (qalpha.red()+qalpha.blue()+qalpha.green()+qalpha.alpha())==255*4:
-			self.accesshelper.removeRGBFilter()
+			self.accesshelper.removeRGBFilter(kde=not(self.embebbed))
 			(red,green,blue)=(1.0,1.0,1.0)
 			qalpha=None
 		else:
@@ -148,7 +148,7 @@ class alpha(confStack):
 	#def writeConfig
 
 	def _reset_screen(self,*args):
-		self.accesshelper.removeRGBFilter()
+		self.accesshelper.removeRGBFilter(kde=not(self.embebbed))
 		self.btn_ok.setEnabled(True)
 		self.btn_cancel.setEnabled(True)
 		self.optionChanged=[]

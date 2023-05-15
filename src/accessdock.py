@@ -501,11 +501,15 @@ class accessdock(QWidget):
 		self.accesshelper.setKdeConfigSetting("General","smallestReadableFont",minFont,"kdeglobals")
 		self.accesshelper.setKdeConfigSetting("General","toolBarFont",font,"kdeglobals")
 		self.accesshelper.setKdeConfigSetting("Appearance","Font",fixed,"Lliurex.profile")
+		if len(oldfont.split(','))<=1:
+			oldSize=self.widgets["font_size"].text()
+			oldfont="{0},{1},-1,5,50,0,0,0,0,0".format(oldfont,oldSize)
 		self.widgets["font_size"].setText("{:.0f}px\nFont".format(size))
 		return(oldfixed,oldfont,oldminFont)
 	#def _saveFont
 
 	def _restoreFont(self,fixed,font,minFont):
+		print("RESTORE FONT {}".format(font))
 		cmd=[]
 		cmd.append("kwriteconfig5 --key fixed --group General --file kdeglobals {}".format(fixed))
 		#self.accesshelper.setKdeConfigSetting("General","fixed",fixed,"kdeglobals")

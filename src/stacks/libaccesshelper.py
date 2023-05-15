@@ -70,15 +70,19 @@ class accesshelper():
 			if isinstance(args[-1],bool):
 				if args[-1]==False:
 					self.generateAutostartDesktop(xgamma,"accesshelper_rgbFilter.desktop")
+		print("---")
+		print(kde)
+		print("---")
 		if kde==True:
 			self.plasmaHelper.setRGBFilter(red,green,blue)
 		return(red,green,blue)
 	#def setRGBFilter
 
-	def removeRGBFilter(self):
+	def removeRGBFilter(self,kde=True):
 		self.xHelper.removeRGBFilter()
-		self.plasmaHelper.removeRGBFilter()
-		self.removeAutostartDesktop("accesshelper_rgbFilter.desktop")
+		if kde==True:
+			self.plasmaHelper.removeRGBFilter()
+			self.removeAutostartDesktop("accesshelper_rgbFilter.desktop")
 	#def resetRGBFilter
 
 	def currentRGBValues(self):
@@ -507,7 +511,7 @@ class accesshelper():
 		jalpha=jcontent.get("alpha","")
 		alpha=""
 		if isinstance(jalpha,list) and len(jalpha)==4:
-			alpha=QColor(data[0],data[1],data[2],data[3])
+			alpha=QColor(jalpha[0],jalpha[1],jalpha[2],jalpha[3])
 		if isinstance(alpha,QColor):
 			config={'kgammarc':{'ConfigFile':[("use","kgammarc")],'SyncBox':[("sync","yes")]}}
 			(red,green,blue)=self.setRGBFilter(alpha)

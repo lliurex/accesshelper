@@ -8,7 +8,9 @@ accesshelper (0.8.2) focal; urgency=medium
   * Diferentiate between read clipboard and read screenshot
   * Accessdock only sets temporary settings
   * Accesshelp doesn't apply by default any setting but color screen filter
-  * Other minor changes and bugfixes
+  * Other minor changes & bugfixes
+
+ -- Juanma1980 <juanma1980@gmail.com>  Mon, 15 May 2023 11:36:02 +0200
 
 accesshelper (0.7.7.4) lliurex22; urgency=medium
 
@@ -16,7 +18,7 @@ accesshelper (0.7.7.4) lliurex22; urgency=medium
   * Add option for grub beep
   * Remove profiles
 
- --   
+ -- Juanma1980 <juanma1980@gmail.com>  Wed, 03 Jun 2022 15:37:19 +0200
 
 accesshelper (0.7.3.6.12) focal; urgency=medium
 

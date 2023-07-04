@@ -66,7 +66,7 @@ class plasmaHelperClass():
 					key,value=setting
 					value=self.getKdeConfigSetting(group,key,kfile,sourceFolder)
 					settingData.append((key,value))
-					self._debug("Wrting {0}->{1}".format(key,value))
+					self._debug("Reading {0}->{1}".format(key,value))
 				data[kfile].update({group:settingData})
 		return (data)
 	#def getPlasmaConfig
@@ -76,8 +76,10 @@ class plasmaHelperClass():
 			sourceFolder=os.path.join(os.environ.get('HOME',"/usr/share/acccessibility"),".config")
 		kPath=os.path.join(sourceFolder,kfile)
 		value=""
+		self._debug("Read {0}->{1} from {2}".format(key,group,kfile))
 		if os.path.isfile(kPath):
 			cmd=["kreadconfig5","--file",kPath,"--group",group,"--key",key]
+			self._debug(" ".join(cmd))
 			try:
 				value=subprocess.check_output(cmd,universal_newlines=True).strip()
 			except Exception as e:

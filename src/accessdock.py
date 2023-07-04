@@ -460,6 +460,9 @@ class accessdock(QWidget):
 			if str(setting)=="font":
 				qfont=lblTest.font()
 				(fixed,font,general,minFont)=self._saveFont(qfont)
+				self.accesshelper.applyChanges(setconf=False)
+				if len(fixed+font+minFont)>0:
+					self._restoreFont()
 			else:
 				themes=self.accesshelper.getCursors()
 				for theme in themes:
@@ -470,9 +473,7 @@ class accessdock(QWidget):
 				self._debug("Default cursor theme {} size {}".format(themeDesc,lblTest.pixmap().size().width()))
 				#self.accesshelper.setCursorSize(lblTest.pixmap().size().width())
 				self.accesshelper.setCursor(themeDesc,lblTest.pixmap().size().width(),applyChanges=True,commitChanges=False)
-			self.accesshelper.applyChanges(setconf=False)
-			if len(fixed+font+minFont)>0:
-				self._restoreFont()
+				self.accesshelper.applyChanges(setconf=False)
 		else:
 			font=self.font()
 			self.fontSize=font
@@ -517,10 +518,15 @@ class accessdock(QWidget):
 
 	def _restoreFont(self,*args):
 		font=self.accesshelper.getKdeConfigSetting("WM","activeFont","kdeglobals")
+		if len(font)<10:
+			font=self.accesshelper.getKdeConfigSetting("general","font","kdeglobals")
+		if len(font)<10:
+			font="Noto Sans,12,-1,0,50,0,0,0,0,0"
 		#font=qfont.toString()
 		minfont=font.split(",")
-		if int(minfont[1])>9:
-			minfont[1]=str(int(minfont[1])-2)
+		if isinstance(minfont,list):
+			if int(minfont[1])>9:
+				minfont[1]=str(int(minfont[1])-2)
 		minfont=",".join(minfont)
 		size=int(font.split(",")[1])
 		minSize=size-2

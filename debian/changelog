@@ -1,4 +1,4 @@
-accesshelper (0.8.2.1) focal; urgency=medium
+accesshelper (0.8.2.2) focal; urgency=medium
 
   * Add options for xrand scale and plasma scale
   * Add maximize when opening 

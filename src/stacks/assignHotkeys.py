@@ -220,6 +220,7 @@ class assignHotkeys(confStack):
 				pass
 			btn=self.tblGrid.cellWidget(self.tblGrid.currentRow(),1)
 			btn.revertHotkey()
+		self.changes=True
 		self.btn_ok.setEnabled(True)
 		self.btn_cancel.setEnabled(True)
 	#def _testHotkey

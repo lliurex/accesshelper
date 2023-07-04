@@ -116,7 +116,7 @@ def _applyChanges(*args):
 	accesshelper.applyChanges(setconf=True)
 	title=_("Accesshelper")
 	notify2.init(title)
-	notice=notify2.Notification("*{}*".format(MSG_APPLYCHANGES))
+	notice=notify2.Notification("{}".format(MSG_APPLYCHANGES))
 	try:
 		notice.show()
 	except:
@@ -127,9 +127,19 @@ def _applyChanges(*args):
 
 def _readChanges():
 	changes=""
+	lchanges=[]
+	info={}
 	if os.path.isfile(configChanged):
 		with open(configChanged,"r") as f:
-			changes=f.read()
+			lchanges=f.readlines()
+	for change in lchanges:
+		if change.startswith("<b>"):
+			section=change
+			info[section]=[]
+		info[section].append(change)
+	for section,changelist in info.items():
+		for line in changelist:
+			changes+="{}".format(line)
 	return(changes)
 #def _readChanges
 

@@ -1,3 +1,12 @@
+accesshelper (0.9.0) focal; urgency=medium
+
+  * Last RC
+  * Don't duplicate info
+  * Use system font as backup value for activefont
+  * if mouse size is unknown use 24 as default value
+
+ -- Juanma1980 <juanma1980@gmail.com>  Tue, 04 Jul 2023 09:13:39 +0200
+
 accesshelper (0.8.2.2) focal; urgency=medium
 
   * Add options for xrand scale and plasma scale

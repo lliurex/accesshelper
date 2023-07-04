@@ -177,7 +177,7 @@ class assignHotkeys(confStack):
 							data[0]="Meta+Ctrl+U"
 						elif name=="TrackMouse":
 							data[0]="Meta+/"
-						elif name=="ToggleMouseClickd":
+						elif name=="ToggleMouseClick":
 							data[0]="Meta+*"
 
 					lbl=QLabel(desc)

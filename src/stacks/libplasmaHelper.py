@@ -95,18 +95,17 @@ class plasmaHelperClass():
 		name=""
 		self._debug("Hotkey for {}".format(setting))
 		hksetting=self.settingsHotkeys.get(setting,"")
-		sc=self.getPlasmaConfig(wrkFile="kglobalshortcutsrc")
+		plasmaconfig=self.getPlasmaConfig(wrkFile="kglobalshortcutsrc")
 		if hksetting:
 			sw=False
-			for kfile,sections in sc.items():
+			for kfile,sections in plasmaconfig.items():
 				for section,settings in sections.items():
 					hksection=section
 					for setting in settings:
 						(name,data)=setting
 						if name.lower()==hksetting.lower():
-							data=data.split(",")
-							hk=data[0]
-							data=",".join(data)
+							ldata=data.split(",")
+							hk=ldata[0].strip()
 							sw=True
 							break
 					if sw==True:
@@ -114,14 +113,13 @@ class plasmaHelperClass():
 				if sw==True:
 					break
 		else:
-			for kfile,sections in sc.items():
+			for kfile,sections in plasmaconfig.items():
 				if setting.lower() in sections.keys():
 					(name,data)=sections[setting][0]
 					if name.lower()=="_launch":
-						data=data.split(",")
-						hk=data[0]
+						ldata=data.split(",")
+						hk=ldata[0].strip()
 						hksection=setting
-						data=",".join(data)
 		return(hk,data,name,hksection)
 	#def getHotkey
 

@@ -372,7 +372,10 @@ class access(confStack):
 			for kfile,sections in self.plasmaConfig.items():
 				for section,settings in sections.items():
 					for setting in settings:
-						value=i18n.get(setting[1].upper())
+						if setting[1]!="":
+							value=i18n.get(setting[1].upper(),i18n.get("FALSE"))
+						else:
+							value=i18n.get("FALSE")
 						desc=i18n.get(setting[0].upper(),"")
 						if desc!="":
 							f.write("{0}->{1}\n".format(desc,value))

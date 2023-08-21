@@ -215,7 +215,7 @@ class profiles(confStack):
 		cursor=QtGui.QCursor(Qt.PointingHandCursor)
 		self.setCursor(cursor)
 		self.updateScreen()
-	#def loadProfile(self,*args):
+	#def removeProfile(self,*args):
 
 	def _applyProfileSettings(self):
 		self.refresh=True

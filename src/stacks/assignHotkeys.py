@@ -106,7 +106,11 @@ class assignHotkeys(confStack):
 	#def _getDescFromi18
 
 	def _addHotkey(self,*args):
-		self.stack.gotoStack(idx=9,parms="")
+		cursor=QtGui.QCursor(Qt.WaitCursor)
+		oldCursor=self.cursor()
+		self.setCursor(cursor)
+		self.stack.gotoStack(idx=9,parms=True)
+		self.setCursor(oldCursor)
 	#def _addHotkey
 
 	def _deleteHotkey(self,btnDelete):

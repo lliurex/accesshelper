@@ -89,7 +89,7 @@ class behavior(confStack):
 						row+=1
 						col=0
 
-		self.updateScreen()
+		#self.updateScreen()
 	#def _load_screen
 
 	def updateScreen(self):

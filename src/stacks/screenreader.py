@@ -278,9 +278,7 @@ class screenreader(confStack):
 
 	def _playFile(self,ttsFile,btn):
 		if btn in self.playing:
-			#self.playThread.stopPlay()
 			self.playThread.stopPlay()
-			self.playing.pop(self.playing.index(btn))
 		elif len(self.playing)==0:
 			self.playing.append(btn)
 			self.playThread=playFile(ttsFile)
@@ -291,6 +289,8 @@ class screenreader(confStack):
 	#def _playFile
 
 	def _stopPlay(self,btn):
+		if btn in self.playing:
+			self.playing.pop(self.playing.index(btn))
 		mp3Icon=QtGui.QIcon.fromTheme("media-playback-start")
 		btn.setIcon(mp3Icon)
 	#def _stopPlay

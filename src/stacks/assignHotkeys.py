@@ -91,10 +91,9 @@ class assignHotkeys(confStack):
 		self.tblGrid.setSelectionBehavior(self.tblGrid.SelectRows)
 		self.tblGrid.setSelectionMode(self.tblGrid.SingleSelection)
 		self.box.addWidget(self.tblGrid,0,0,1,1)
-		btn_add=QPushButton(_("Add new"))
-		btn_add.clicked.connect(self._addHotkey)
-		self.box.addWidget(btn_add,1,0,1,1)
-		self._debug("LOAD SCREEN FINISHED")
+		self.btn_add=QPushButton(_("Add new"))
+		self.btn_add.clicked.connect(self._addHotkey)
+		self.box.addWidget(self.btn_add,1,0,1,1)
 	#def _load_screen
 
 	def _getDescFromi18(self,i18desc):
@@ -107,7 +106,11 @@ class assignHotkeys(confStack):
 	#def _getDescFromi18
 
 	def _addHotkey(self,*args):
-		self.stack.gotoStack(idx=9,parms="")
+		cursor=QtGui.QCursor(Qt.WaitCursor)
+		oldCursor=self.cursor()
+		self.setCursor(cursor)
+		self.stack.gotoStack(idx=9,parms=True)
+		self.setCursor(oldCursor)
 	#def _addHotkey
 
 	def _deleteHotkey(self,btnDelete):
@@ -151,7 +154,6 @@ class assignHotkeys(confStack):
 		self.lastKdeRow=self.tblGrid.rowCount()
 		self._loadAccessHotkeys()
 		self.tblGrid.resizeColumnToContents(1)
-		self._debug("UPDATE SCREEN FINISHED")
 	#def _update_screen
 
 	def _loadPlasmaHotkeys(self):

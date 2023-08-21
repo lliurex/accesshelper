@@ -56,13 +56,10 @@ class addHotkey(confStack):
 		grpOptions=QGroupBox()
 		layOption=QGridLayout()
 		opt=QRadioButton(i18n.get("TYPEAPP"))
-		opt.toggled.connect(lambda: self.updateScreen(opt))
 		self.widgets.update({opt:"TYPEAPP"})
 		layOption.addWidget(opt,0,0)
 		opt1=QRadioButton(i18n.get("TYPECMD"))
-		opt1.toggled.connect(lambda: self.updateScreen(opt1))
 		opt2=QRadioButton(i18n.get("TYPEACT"))
-		opt2.toggled.connect(lambda: self.updateScreen(opt2))
 		grpOptions.setLayout(layOption)
 		self.btnHk=appconfigControls.QHotkeyButton(i18n.get("BTNTXT"))
 		self.btnHk.hotkeyAssigned.connect(self._testHotkey)
@@ -89,6 +86,9 @@ class addHotkey(confStack):
 		self.box.addWidget(self.lblPress,0,0,2,3)
 		self.btn_cancel.clicked.connect(self._exit)
 		self.btn_cancel.setEnabled(True)
+		opt.toggled.connect(lambda: self.updateScreen(opt))
+		opt1.toggled.connect(lambda: self.updateScreen(opt1))
+		opt2.toggled.connect(lambda: self.updateScreen(opt2))
 	#def _load_screen
 
 	def _searchList(self,*args):
@@ -117,6 +117,11 @@ class addHotkey(confStack):
 						self.lblCmd.setEnabled(False)
 		self.btn_cancel.setEnabled(True)
 	#def _udpate_screen
+
+	def setParms(self,*args):
+		if self.lstOptions.count()<=0:
+			self.lstOptions.clear()
+			self._loadApps()
 
 	def _loadApps(self,*args):
 		completer=QCompleter()

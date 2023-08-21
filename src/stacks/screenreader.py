@@ -160,17 +160,20 @@ class screenreader(confStack):
 				else:
 					select=voice
 				self._debug("Getting installed voices")
-				for i in self.accesshelper.getFestivalVoices():
-					if "_es_pa_" in i:
-						widget.addItem(i18n.get("SPANISHMAN"))
-					elif "_es_sf_" in i:
-						widget.addItem(i18n.get("SPANISHWOMAN"))
-					elif "_ca_ona" in i:
-						widget.addItem(i18n.get("VALENCIANWOMAN"))
-					elif "_ca_pau" in i:
-						widget.addItem(i18n.get("VALENCIANMAN"))
-					else:
-						widget.addItem(voice)
+				for lang,voices in self.accesshelper.getFestivalVoices().items():
+					for voice in voices:
+						if "_es_pa_" in voice:
+							widget.addItem(i18n.get("SPANISHMAN"))
+						elif "_es_sf_" in voice:
+							widget.addItem(i18n.get("SPANISHWOMAN"))
+						elif "_ca_ona" in voice:
+							widget.addItem(i18n.get("VALENCIANWOMAN"))
+						elif "_ca_pau" in voice:
+							widget.addItem(i18n.get("VALENCIANMAN"))
+						else:
+							widget.addItem("{} ({})".format(voice,lang))
+							if select==voice:
+								select="{} ({})".format(voice,lang)
 				widget.setCurrentText(select)
 			if desc=="speed":
 				self._debug("Setting speed values")
@@ -275,9 +278,7 @@ class screenreader(confStack):
 
 	def _playFile(self,ttsFile,btn):
 		if btn in self.playing:
-			#self.playThread.stopPlay()
 			self.playThread.stopPlay()
-			self.playing.pop(self.playing.index(btn))
 		elif len(self.playing)==0:
 			self.playing.append(btn)
 			self.playThread=playFile(ttsFile)
@@ -288,6 +289,8 @@ class screenreader(confStack):
 	#def _playFile
 
 	def _stopPlay(self,btn):
+		if btn in self.playing:
+			self.playing.pop(self.playing.index(btn))
 		mp3Icon=QtGui.QIcon.fromTheme("media-playback-start")
 		btn.setIcon(mp3Icon)
 	#def _stopPlay
@@ -314,6 +317,8 @@ class screenreader(confStack):
 					value="upc_ca_ona_hts"
 				elif value==i18n.get("VALENCIANMAN"):
 					value="upc_ca_pau_hts"
+				else:
+					value=value.split("(")[0].strip()
 			if desc=="speed":
 				value=widget.currentText()
 				speed=value

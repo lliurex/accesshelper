@@ -283,16 +283,13 @@ class speechhelper():
 		return rotated
 
 	def getFestivalVoices(self):
-		voices=[]
-		spanishFestival="/usr/share/festival/voices/spanish"
-		if os.path.isdir(spanishFestival):
-			for i in os.listdir(spanishFestival):
-				voices.append(i)
-		catalanFestival="/usr/share/festival/voices/catalan"
-		if os.path.isdir(catalanFestival):
-			for i in os.listdir(catalanFestival):
-				voices.append(i)
+		voices={}
+		voicesFolder="/usr/share/festival/voices/"
+		if os.path.isdir(voicesFolder):
+			for lang in os.listdir(voicesFolder):
+				voices[lang]=os.listdir(os.path.join(voicesFolder,lang))
 		return(voices)
+	#def getFestivalVoices
 
 	def getTtsFiles(self):
 		ttsDir=os.path.join(os.environ.get('HOME'),".config/accesshelper/tts")

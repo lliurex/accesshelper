@@ -14,7 +14,7 @@ QString=type("")
 i18n={
 	"HOTKEYS":_("Keyboard Shortcuts"),
 	"ACCESSIBILITY":_("hotkeys options"),
-	"CONFIG":_("Configuration"),
+	"CONFIG":_("Hotkeys"),
 	"DESCRIPTION":_("Add hotkey"),
 	"MENUDESCRIPTION":_("Add a hotkey for an application, command or action"),
 	"TOOLTIP":_("Assign actions to keys"),
@@ -52,7 +52,6 @@ class addHotkey(confStack):
 		self.setLayout(self.box)
 		self.widgets={}
 		self.widgetsText={}
-		self.refresh=True
 		grpOptions=QGroupBox()
 		layOption=QGridLayout()
 		opt=QRadioButton(i18n.get("TYPEAPP"))
@@ -115,13 +114,15 @@ class addHotkey(confStack):
 					elif desc=="TYPEACT":
 						self.inpCmd.setEnabled(False)
 						self.lblCmd.setEnabled(False)
-		self.btn_cancel.setEnabled(True)
 	#def _udpate_screen
 
 	def setParms(self,*args):
+		self.force_change=True
 		if self.lstOptions.count()<=0:
 			self.lstOptions.clear()
 			self._loadApps()
+		self.setChanged(False)
+	#def setParms
 
 	def _loadApps(self,*args):
 		completer=QCompleter()
@@ -191,7 +192,7 @@ class addHotkey(confStack):
 	def _exit(self):
 		self.changes=False
 		self.optionChanged=[]
-		self.stack.gotoStack(idx=4,parms="")
+		self.stack.gotoStack(idx=4,parms="1")
 	#def _exit
 
 	def _writeFileChanges(self,hotkeys):

@@ -110,6 +110,8 @@ class assignHotkeys(confStack):
 		oldCursor=self.cursor()
 		self.setCursor(cursor)
 		self.stack.gotoStack(idx=9,parms=True)
+		self.force_change=True
+		self.setChanged(False)
 		self.setCursor(oldCursor)
 	#def _addHotkey
 
@@ -130,7 +132,6 @@ class assignHotkeys(confStack):
 			self._undoDelete(app,btn)
 			icon=QtGui.QIcon.fromTheme("edit-delete")
 			btnDelete.setIcon(icon)
-		self.changes=True
 		self.btn_ok.setEnabled(True)
 		self.btn_cancel.setEnabled(True)
 		#self._set_config_key(keypress)
@@ -155,6 +156,10 @@ class assignHotkeys(confStack):
 		self._loadAccessHotkeys()
 		self.tblGrid.resizeColumnToContents(1)
 	#def _update_screen
+
+	def setParms(self,*args):
+		self.optionChanged=[]
+		self.updateScreen()
 
 	def _loadPlasmaHotkeys(self):
 		for wrkFile in self.wrkFiles:
@@ -193,9 +198,9 @@ class assignHotkeys(confStack):
 	#def _loadPlasmaHotkeys
 
 	def _loadAccessHotkeys(self):
-		self.changes=True #Forces data refresh
+		self.setChanged(True)
 		self.config=self.getConfig().get(self.level)
-		self.changes=False
+		self.setChanged(False)
 		for desktop,info in self.config.get('hotkeys',{}).items():
 			row=self.tblGrid.rowCount()
 			self.tblGrid.setRowCount(row+1) 
@@ -222,7 +227,6 @@ class assignHotkeys(confStack):
 				pass
 			btn=self.tblGrid.cellWidget(self.tblGrid.currentRow(),1)
 			btn.revertHotkey()
-		self.changes=True
 		self.btn_ok.setEnabled(True)
 		self.btn_cancel.setEnabled(True)
 	#def _testHotkey
@@ -237,7 +241,7 @@ class assignHotkeys(confStack):
 			if i<self.lastKdeRow:
 				self._getPlasmaHotkeysFromTable(desc,hotkey)
 			else:
-				self._debug("Config Value")
+				self._debug("Config Value {} -> {}".format(desc,hotkey))
 				self._getConfigHotkeysFromTable(desc,hotkey)
 	#def _updateHotkeysFromTable
 
@@ -261,39 +265,38 @@ class assignHotkeys(confStack):
 
 	def _getConfigHotkeysFromTable(self,desc,hotkey):
 		newHotkeys=self.config.get("hotkeys",{}).copy()
-		for app,value in self.config.get('hotkeys',{}).items():
-			if app=="[{}.desktop]".format(desc):
-				if len(hotkey)>0 and str(hotkey).lower()!="none":
-					hotkeyLine=value.get('_launch','')
-					hotkeyArray=hotkeyLine.split(",")
-					hotkeyArray[0]=hotkey
-					hotkeyArray[1]="none"
-					value.update({'_launch':",".join(hotkeyArray)})
-					newHotkeys.update({app:value})
-				else:
-					newHotkeys.pop(app)
+		if "[{}.desktop]".format(desc) in self.config.get('hotkeys',{}).keys() or len(self.config.get('hotkeys',{}))==0:
+			#Don't delete if empty
+			if len(hotkey)<=0 or str(hotkey).lower()=="none":
+				value={'_launch':"",'_k_friendly_name':desc}
 			else:
-				newHotkeys.update({app:value})
+				friendly_name=newHotkeys.get("[{}.desktop]".format(desc),{}).get('_k_friendly_name',desc)
+				value={'_launch':"{},none".format(hotkey),'_k_friendly_name':friendly_name}
+			newHotkeys.update({"[{}.desktop]".format(desc):value})
 		self.config.update({'hotkeys':newHotkeys})
 	#def _getConfigHotkeysFromTable
 
 	def writeConfig(self):
-		self.changes=True #Forces data refresh
-		self.config=self.getConfig().get(self.level)
-		self.changes=False
+		#self.config=self.getConfig().get(self.level)
 		self._updateHotkeysFromTable()
 		self.accesshelper.setPlasmaConfig(self.plasmaConfig)
 		hotkeys=self.config.get('hotkeys',{})
-		self.saveChanges('hotkeys',hotkeys,'user')
 		for app,conf in hotkeys.items():
 			hk=conf.get("_launch","").split(",")[0]
-			desc=conf.get("_k_friendly_name","")
+			desc=conf.get("_k_friendly_name",app)
 			cmd=app.replace("[","")
 			cmd=cmd.replace("]","")
+			self._debug("HK {} for c:{} d:{}".format(hk,cmd,desc))
 			self.accesshelper.setHotkey(hk,desc,cmd)
+		dictHk=hotkeys.copy()
+		for hk,data in hotkeys.items():
+			if len(data.get("_launch",""))==0:
+				dictHk.pop(hk)
+		self.saveChanges('hotkeys',dictHk,'user')
 		self.refresh=True
 		self.optionChanged=[]
 		self._writeFileChanges()
+		self.updateScreen()
 	#def writeConfig
 
 	def _writeFileChanges(self):
@@ -306,7 +309,8 @@ class assignHotkeys(confStack):
 						arrayDesc=setting[1].split(",")
 						f.write("{0}->{1}\n".format(i18n.get(arrayDesc[-1],arrayDesc[-1]),setting[1]))
 			for key,launchable in hotkeys.items():
-				hotkey=launchable['_launch'].split(",")
-				f.write("{0}->{1}\n".format(launchable['_k_friendly_name'],hotkey[0]))
+				friendly=launchable.get('_k_friendly_name',key)
+				hotkey=launchable.get('_launch',"").split(",")
+				f.write("{0}->{1}\n".format(friendly,hotkey[0]))
 
 	#def _writeFileChanges(self):

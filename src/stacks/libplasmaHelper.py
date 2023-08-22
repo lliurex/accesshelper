@@ -37,7 +37,7 @@ class plasmaHelperClass():
 
 	def _debug(self,msg):
 		if self.dbg:
-			print("libhelper: {}".format(msg))
+			print("plasmahelper: {}".format(msg))
 	#def _debug
 
 	def _getEnv(self,values={}):
@@ -143,6 +143,8 @@ class plasmaHelperClass():
 		hotkey=hotkey.replace("Any","Space")
 		if desc=="":
 			data=""
+		elif hotkey=="":
+			data=[("_launch",""),("_k_friendly_name","")]
 		else:
 			desc="{0},none,{1}".format(hotkey,desc)
 			data=[("_launch",desc),("_k_friendly_name",cmd)]

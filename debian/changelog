@@ -6,6 +6,7 @@ accesshelper (0.9.1) focal; urgency=medium
   * Force stop after playing records
   * if mouse size is unknown use 24 as default value
   * Improve startup
+  * Improve hotkey management
 
  -- Juanma1980 <juanma1980@gmail.com>  Tue, 04 Jul 2023 09:13:39 +0200
 

@@ -70,9 +70,6 @@ class accesshelper():
 			if isinstance(args[-1],bool):
 				if args[-1]==False:
 					self.generateAutostartDesktop(xgamma,"accesshelper_rgbFilter.desktop")
-		print("---")
-		print(kde)
-		print("---")
 		if kde==True:
 			self.plasmaHelper.setRGBFilter(red,green,blue)
 		return(red,green,blue)

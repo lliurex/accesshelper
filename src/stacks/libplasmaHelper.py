@@ -13,7 +13,7 @@ import random
 
 class plasmaHelperClass():
 	def __init__(self):
-		self.dbg=False
+		self.dbg=True
 		self.dictFileData={}
 		self._initValues()
 		self.tmpDir="/tmp/.accesstmp"
@@ -31,7 +31,7 @@ class plasmaHelperClass():
 		mouse=[("cursorSize","")]
 		general=[("Name",""),("fixed",""),("font",""),("menuFont",""),("smallestReadableFont",""),("toolBarFont","")]
 		wm=[("activeFont","")]
-		self.dictFileData={"kaccesrc":{"Bell":bell},"kwinrc":{"Plugins":plugins,"Windows":windows},"kdeglobals":{"KDE":kde,"General":general,"WM":wm},"kglobalshortcutsrc":{"kwin":hotkeys_kwin,"accessdock.desktop":hotkeys_dock},"kcminputrc":{"Mouse":mouse},"kgammarc":{"ConfigFile":kgammaConfig,"Screen 0":kgammaValues,"SyncBox":kgammaSync}}
+		self.dictFileData={"kaccessrc":{"Bell":bell},"kwinrc":{"Plugins":plugins,"Windows":windows},"kdeglobals":{"KDE":kde,"General":general,"WM":wm},"kglobalshortcutsrc":{"kwin":hotkeys_kwin,"accessdock.desktop":hotkeys_dock},"kcminputrc":{"Mouse":mouse},"kgammarc":{"ConfigFile":kgammaConfig,"Screen 0":kgammaValues,"SyncBox":kgammaSync}}
 		self.settingsHotkeys={"invertWindow":"InvertWindow","invertEnabled":"Invert","trackmouseEnabled":"TrackMouse","mouseclickEnabled":"ToggleMouseClick","view_zoom_in":"","view_zoom_out":""}
 	#def _initValues
 
@@ -64,9 +64,9 @@ class plasmaHelperClass():
 				settingData=[]
 				for setting in settings:
 					key,value=setting
-					value=self.getKdeConfigSetting(group,key,kfile,sourceFolder)
-					settingData.append((key,value))
 					self._debug("Reading {0}->{1}".format(key,value))
+					value=self.getKdeConfigSetting(group,key,kfile,sourceFolder).split("=")[-1].strip()
+					settingData.append((key,value))
 				data[kfile].update({group:settingData})
 		return (data)
 	#def getPlasmaConfig
@@ -78,12 +78,22 @@ class plasmaHelperClass():
 		value=""
 		self._debug("Read {0}->{1} from {2}".format(key,group,kfile))
 		if os.path.isfile(kPath):
-			cmd=["kreadconfig5","--file",kPath,"--group",group,"--key",key]
-			self._debug(" ".join(cmd))
-			try:
-				value=subprocess.check_output(cmd,universal_newlines=True).strip()
-			except Exception as e:
-				print(e)
+			with open(kPath,"r") as f:
+				fcontent=f.readlines()
+			fdict={}
+			rkey=""
+			for line in fcontent:
+				if line.strip().lower()=="[{}]".format(group.lower()):
+					fdict[group]=[]
+					continue
+				if group in fdict.keys():
+					if line.strip().lower().startswith("["):
+						break
+					fdict[group].append(line.strip())
+			values=fdict.get(group,[])
+			for val in values:
+				if val.split("=")[0].lower()==key.lower():
+					value=val
 		self._debug("Read value: {}".format(value))
 		return(value)
 	#def getKdeConfigSetting
@@ -96,6 +106,7 @@ class plasmaHelperClass():
 		self._debug("Hotkey for {}".format(setting))
 		hksetting=self.settingsHotkeys.get(setting,"")
 		plasmaconfig=self.getPlasmaConfig(wrkFile="kglobalshortcutsrc")
+		return(hk,data,name,hksection)
 		if hksetting:
 			sw=False
 			for kfile,sections in plasmaconfig.items():

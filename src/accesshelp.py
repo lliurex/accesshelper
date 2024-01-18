@@ -254,7 +254,6 @@ def _chkAppRunning():
 		QApplication.quit()
 		sys.exit(0)
 #def _chkAppRunning
-
 if len(sys.argv)==1:
 	_chkAppRunning()
 	configChanged="/tmp/.accesshelper_{}".format(os.environ.get('USER'))

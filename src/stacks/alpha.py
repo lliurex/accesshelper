@@ -60,9 +60,6 @@ class alpha(confStack):
 	def _load_screen(self):
 		self.box=QGridLayout()
 		self.setLayout(self.box)
-		for wrkFile in self.wrkFiles:
-			plasmaConfig=self.accesshelper.getPlasmaConfig(wrkFile)
-			self.plasmaConfig.update(plasmaConfig)
 		kdevalues=self.plasmaConfig.get('kgammarc',{}).get('Screen 0',[])
 		(dlgColor,wdg)=self._QcolorWidget()	
 		scr=QScrollArea()
@@ -104,6 +101,9 @@ class alpha(confStack):
 	#def setCurrentColor
 
 	def updateScreen(self):
+		for wrkFile in self.wrkFiles:
+			plasmaConfig=self.accesshelper.getPlasmaConfig(wrkFile)
+			self.plasmaConfig.update(plasmaConfig)
 		self.refresh=True
 		try:
 			self.config=self.getConfig()

@@ -7,7 +7,8 @@ from PySide2 import QtGui
 from PySide2.QtCore import Qt
 from appconfig.appConfigStack import appConfigStack as confStack
 from . import libaccesshelper
-from appconfig import appconfigControls
+#from appconfig import appconfigControls
+import QtExtendedWidgets
 import subprocess
 import tempfile
 import gettext
@@ -101,10 +102,7 @@ class settings(confStack):
 		chk_dock.stateChanged.connect(self._setEnabledHkbutton)
 		box.addWidget(chk_dock,4,0,1,1,Qt.AlignTop)
 		self.widgets.update({chk_dock:'dock'})
-		(mainHk,hkData,hkSetting,hkSection)=self.accesshelper.getHotkey("accessdock.desktop")
-		if mainHk=="":
-			mainHk="Ctrl+Space"
-		self.btn_dockHk=appconfigControls.QHotkeyButton(mainHk)
+		self.btn_dockHk=QtExtendedWidgets.QHotkeyButton("")
 		self.btn_dockHk.hotkeyAssigned.connect(self._testHotkey)
 		box.addWidget(self.btn_dockHk,4,1,1,1,Qt.AlignTop)
 		self.widgets.update({self.btn_dockHk:'dockHk'})
@@ -185,6 +183,10 @@ class settings(confStack):
 			dock=True
 		if dock==False:
 			self.btn_dockHk.setEnabled(False)
+		(mainHk,hkData,hkSetting,hkSection)=self.accesshelper.getHotkey("accessdock.desktop")
+		if mainHk=="":
+			mainHk="Ctrl+Space"
+		self.btn_dockHk.setText(mainHk)
 		for widget,desc in self.widgets.items():
 			if desc=="startup":
 				widget.setChecked(startup)
@@ -239,7 +241,7 @@ class settings(confStack):
 		self.accesshelper.generateAutostartDesktop("/usr/share/accesshelper/accessdock.py","accessdock.desktop")
 		btnHk="Ctrl+Space"
 		for widget in self.widgets.keys():
-			if isinstance(widget,appconfigControls.QHotkeyButton):
+			if isinstance(widget,QtExtendedWidgets.QHotkeyButton):
 				btnHk=widget.text()
 				break
 		btnHk.replace("Any","Space")

@@ -69,15 +69,7 @@ class fonts(confStack):
 	def _load_screen(self):
 		self.box=QGridLayout()
 		self.setLayout(self.box)
-		self._readKdeConfig()
-		kdevalues=self.plasmaConfig.get('kdeglobals',{}).get('General',[])
-		font=''
-		for value in kdevalues:
-			if isinstance(value,tuple):
-				if value[0]=='font':
-					font=value[1]
-					break
-		dlgFont=_QFontDialog(font)
+		dlgFont=_QFontDialog()
 		#Embed in window
 		dlgFont.setWindowFlags(Qt.Widget)
 		dlgFont.setOptions(dlgFont.NoButtons)
@@ -91,16 +83,15 @@ class fonts(confStack):
 		self.box.addWidget(dlgFont)
 		self.widgets={}
 		self.widgets.update({"font":dlgFont})
-		self.config=self.getConfig()
-		config=self.config.get(self.level,{})
 	#def _load_screen
 
 	def _noClose(self,*args,**kwargs):
 		args=()
 		return(False)
-	#def _noClos
+	#def _noClose
 
 	def updateScreen(self):
+		self.refresh=True
 		self.config=self.getConfig()
 		self._readKdeConfig()
 		kdevalues=self.plasmaConfig.get('kdeglobals',{}).get('General',[])

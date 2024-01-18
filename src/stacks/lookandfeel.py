@@ -76,10 +76,6 @@ class lookandfeel(confStack):
 		scr=QScrollArea()
 		self.box.addWidget(scr)
 		self.widgets={}
-		self.config=self.getConfig()
-		config=self.config.get(self.level,{})
-		if config.get("background"):
-			self.imgFile=config.get("background")
 
 		box.addWidget(QLabel(i18n.get("THEME")),0,0,1,1)
 		cmbTheme=QComboBox()

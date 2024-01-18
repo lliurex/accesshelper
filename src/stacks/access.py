@@ -1,8 +1,9 @@
 #!/usr/bin/python3
 from . import libaccesshelper
-from appconfig import appconfigControls
+#from appconfig import appconfigControls
+import QtExtendedWidgets
 import os
-from PySide2.QtWidgets import QApplication,QLabel,QGridLayout,QCheckBox,QSizePolicy,QRadioButton,QTableWidget,QHeaderView,QTableWidgetItem
+from PySide2.QtWidgets import QApplication,QLabel,QGridLayout,QCheckBox,QSizePolicy,QRadioButton,QHeaderView,QTableWidgetItem
 from PySide2 import QtGui
 from PySide2.QtCore import Qt
 from appconfig.appConfigStack import appConfigStack as confStack
@@ -68,7 +69,7 @@ class access(confStack):
 		self.level='user'
 		self.config={}
 		self.plasmaConfig={}
-		self.wrkFiles=["kaccesrc","kwinrc"]
+		self.wrkFiles=["kaccessrc","kwinrc"]
 		self.blockSettings={"kwinrc":["FocusPolicy"]}
 		self.wantSettings={}
 		self.optionChanged=[]
@@ -76,6 +77,7 @@ class access(confStack):
 		self.startup="false"
 		self.zoomRow=0
 		self.accesshelper=libaccesshelper.accesshelper()
+		return(self)
 	#def __init__
 
 	def sortArraySettings(self,settings):
@@ -103,7 +105,7 @@ class access(confStack):
 	def _load_screen(self):
 		self.box=QGridLayout()
 		self.setLayout(self.box)
-		self.tblGrid=QTableWidget()
+		self.tblGrid=QtExtendedWidgets.QTableTouchWidget()
 		self.tblGrid.setColumnCount(2)
 		self.tblGrid.setShowGrid(False)
 		self.tblGrid.verticalHeader().hide()
@@ -148,8 +150,12 @@ class access(confStack):
 		elif btn: #disable all zoom options, enable it later
 			settings=self._disableZoomOptions(settings)
 			value="false"
-		idx=settings.index((setting,value))
-		settings.pop(idx)
+		try:
+			idx=settings.index((setting,value))
+		except:
+			idx=-1
+		else:
+			settings.pop(idx)
 		settings.append((setting,newValue))
 		itemData="{0}~{1}~{2}~{3}".format(kfile,section,setting,newValue)
 		if btn and not chk:
@@ -163,7 +169,7 @@ class access(confStack):
 	#def _updateButtons(self):
 
 	def _disableZoomOptions(self,settings):
-		for i in range(self.zoomRow+1,self.zoomRow+4):
+		for i in range(self.zoomRow+1,self.zoomRow+3):
 			zbtn=self.tblGrid.cellWidget(i,1)
 			zoomItem=self.tblGrid.item(i,0)
 			zoomData=zoomItem.data(Qt.UserRole)
@@ -197,13 +203,17 @@ class access(confStack):
 						(name,data)=setting
 						if name in block or (len(want)>0 and name not in want):
 							continue
-						if name.upper() in ["MAGNIFIERENABLED","ZOOMENABLED","LOOKINGGLASSENABLED"]:
+						#if name.upper() in ["MAGNIFIERENABLED","ZOOMENABLED","LOOKINGGLASSENABLED"]:
+						if name.upper() in ["MAGNIFIERENABLED","ZOOMENABLED"]:
 							zoomOptions.append(setting)
 							continue
 						row=self.tblGrid.rowCount()
 						self.tblGrid.setRowCount(row+1)
 						desc=i18n.get(name.upper(),name)
 						chk=QCheckBox(desc)
+						if name.upper()=="SYSTEMBELL":
+							if len(data)==0:
+								data="true"
 						if data=="true":
 							chk.setChecked(True)
 						chk.stateChanged.connect(self._updateButtons)
@@ -221,27 +231,27 @@ class access(confStack):
 	#def _update_screen
 
 	def _addHotkeyButton(self,name,row,chk):
-		(mainHk,hkData,hkSetting,hkSection)=self.accesshelper.getHotkey(name)
-		if (mainHk=="" or mainHk=="none"):
-			if name=="invertEnabled":
-				mainHk="Meta+Ctrl+I"
-			elif name=="invertWindow":
-				mainHk="Meta+Ctrl+U"
-			elif name=="trackmouseEnabled":
-				mainHk="Meta+/"
-			elif name=="mouseclickEnabled":
-				mainHk="Meta+*"
+		(mainhk,hkdata,hksetting,hksection)=self.accesshelper.getHotkey(name)
+		if (mainhk=="" or mainhk=="none"):
+			if name=="invertenabled":
+				mainhk="meta+ctrl+i"
+			elif name=="invertwindow":
+				mainhk="meta+ctrl+u"
+			elif name=="trackmouseenabled":
+				mainhk="meta+/"
+			elif name=="mouseclickenabled":
+				mainhk="meta+*"
 		item=QTableWidgetItem()
-		itemData="{0}".format(hkSetting)
-		item.setData(Qt.UserRole,itemData)
+		itemdata="{0}".format(hksetting)
+		item.setData(Qt.UserRole,itemdata)
 		self.tblGrid.setItem(row,1,item)
-		btn=appconfigControls.QHotkeyButton()
-		btn.setText(mainHk)
+		btn=QtExtendedWidgets.QHotkeyButton()
+		btn.setText(mainhk)
 		btn.hotkeyAssigned.connect(self._testHotkey)
 		self.chkbtn[chk]=btn
 		self.tblGrid.setCellWidget(row,1,btn)
 		btn.setEnabled(chk.isChecked())
-	#def _addHotkeyButton
+	#def _addhotkeybutton
 
 	def _loadZoomOptions(self,zoomOptions):
 		chk=QCheckBox("{} (Meta+=/Meta+-)".format(i18n.get("MAGNIFIEREFFECTS")))
@@ -311,7 +321,7 @@ class access(confStack):
 			chk=self.tblGrid.cellWidget(i,0)
 			if chk:
 				btn=self.tblGrid.cellWidget(i,1)
-				if isinstance(btn,appconfigControls.QHotkeyButton):
+				if isinstance(btn,QtExtendedWidgets.QHotkeyButton):
 					if (chk.isChecked()):
 						hotkey=btn.text()
 					else:

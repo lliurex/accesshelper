@@ -19,7 +19,7 @@ class plasmaHelperClass():
 		self.tmpDir="/tmp/.accesstmp"
 
 	def _initValues(self):
-		plugins=[("invertEnabled",""),("invertWindow",""),("magnifierEnabled",""),("lookingglassEnabled",""),("trackmouseEnabled",""),("zoomEnabled",""),("snaphelperEnabled",""),("mouseclickEnabled","")]
+		plugins=[("invertEnabled",""),("invertWindow",""),("magnifierEnabled",""),("lookingglassEnabled",""),("trackmouseEnabled",""),("zoomEnabled",""),("snaphelperEnabled",""),("mouseclickEnabled",""),("kwin4_effect_grayscaleEnabled",""),("mousestripEnabled","")]
 		windows=[("FocusPolicy","")]
 		kde=[("singleClick",""),("ScrollbarLeftClickNavigatesByPage","")]
 		bell=[("SystemBell",""),("VisibleBell","")]
@@ -472,6 +472,50 @@ class plasmaHelperClass():
 					availableThemes.append(theme.replace("*","").strip())
 		return (availableThemes)
 	#def getThemes
+
+	def getKwinPlugins(self,*args):
+		plugins={}
+		plugins.update(self.getKWinEffects())
+		plugins.update(self.getKWinScripts())
+		return(plugins)
+	#def getKwinPlugins
+
+	def _readMetadataJson(self,path):
+		metapath=""
+		data={}
+		if os.path.isdir(path):
+			if os.path.isfile(os.path.join(path,"metadata.json")):
+				metapath=os.path.join(path,"metadata.json")
+		elif os.path.basename(path)=="metadata.json" and os.path.isfile(path):
+			metapath=path
+		if len(metapath)>0:
+			data="{}"
+			with open(metapath,"r") as f:
+				data=f.read()
+			data=json.loads(data)
+		return(data)
+	#def _readMetadataJson
+
+	def getKWinEffects(self):
+		paths=["/usr/share/kwin/effects",os.path.join(os.getenv("HOME"),".local","share","kwin","effects")]
+		effects={}
+		for i in paths:
+			if os.path.exists(i):
+				for effect in os.scandir(i):
+					data=self._readMetadataJson(effect.path)
+					effects.update({effect.name:data})
+		return(effects)
+	#def getKWinEffects
+
+	def getKWinScripts(self):
+		paths=["/usr/share/kwin/scripts",os.path.join(os.getenv("HOME"),".local","share","kwin","scripts")]
+		scripts={}
+		for i in paths:
+			if os.path.exists(i):
+				for script in os.scandir(i):
+					data=self._readMetadataJson(script.path)
+					scripts.update({script.name:data})
+		return(scripts)
 
 	def setStartBeep(self,state):
 		if state==True:

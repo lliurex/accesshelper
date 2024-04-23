@@ -208,6 +208,10 @@ class accesshelper():
 		return(self.plasmaHelper.setPlasmaConfig(*args))
 	#def setPlasmaConfig
 
+	def getKwinPlugins(self,*args):
+		return(self.plasmaHelper.getKwinPlugins(*args))
+	#def getKwinPlugins
+
 	def getKdeConfigSetting(self,*args):
 		return(self.plasmaHelper.getKdeConfigSetting(*args))
 	#def getKdeConfigSetting

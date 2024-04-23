@@ -1,20 +1,19 @@
 #!/usr/bin/python3
 from . import libaccesshelper
 #from appconfig import appconfigControls
-import QtExtendedWidgets
 import os
 from PySide2.QtWidgets import QApplication,QLabel,QGridLayout,QCheckBox,QSizePolicy,QRadioButton,QHeaderView,QTableWidgetItem
 from PySide2 import QtGui
 from PySide2.QtCore import Qt
-from appconfig.appConfigStack import appConfigStack as confStack
+from QtExtraWidgets import QStackedWindowItem,QHotkeyButton ,QTableTouchWidget
 import gettext
 _ = gettext.gettext
 
 i18n={
 	"CONFIG":_("Accessibility"),
 	"ACCESSIBILITY":_("Accessibility options"),
-	"DESCRIPTION":_("Accessibility"),
-	"MENUDESCRIPTION":_("Set accesibility options"),
+	"MENU":_("Accessibility"),
+	"DESCRIPTION":_("Set accesibility options"),
 	"TOOLTIP":_("From here you can activate/deactivate accessibility aids"),
 	"INVERTENABLED":_("Invert screen colors"),
 	"INVERTWINDOW":_("Invert windows colors"),
@@ -55,15 +54,16 @@ actionHk={
 	"MOUSECLICKENABLED":"ToggleMouseClick",
 	"SNAPHELPERENABLED":"ShowDesktopGrid"
 	}
-class access(confStack):
+class access(QStackedWindowItem):
 	def __init_stack__(self):
 		self.dbg=False
 		self._debug("access Load")
-		self.menu_description=i18n.get('MENUDESCRIPTION')
-		self.description=i18n.get('DESCRIPTION')
-		self.icon=('preferences-desktop-accessibility')
-		self.tooltip=i18n.get('TOOLTIP')
-		self.index=1
+		self.setProps(shortDesc=i18n.get("MENU"),
+		    description=i18n.get('DESCRIPTION'),
+			icon="preferences-desktop-accessibility",
+			tooltip=i18n.get("TOOLTIP"),
+			index=1,
+			visible=True)
 		self.enabled=True
 		self.changed=[]
 		self.level='user'
@@ -102,10 +102,10 @@ class access(confStack):
 		return(ordArray)
 	#def sortArraySettings(self,settings):
 
-	def _load_screen(self):
+	def __initScreen__(self):
 		self.box=QGridLayout()
 		self.setLayout(self.box)
-		self.tblGrid=QtExtendedWidgets.QTableTouchWidget()
+		self.tblGrid=QTableTouchWidget()
 		self.tblGrid.setColumnCount(2)
 		self.tblGrid.setShowGrid(False)
 		self.tblGrid.verticalHeader().hide()
@@ -186,8 +186,7 @@ class access(confStack):
 		self.tblGrid.setRowCount(0)
 		self.chkbtn={}
 		self.refresh=True
-		config=self.getConfig()
-		self.startup=config.get(self.level,{}).get("startup","false")
+		self.startup="false"#config.get(self.level,{}).get("startup","false")
 		for wrkFile in self.wrkFiles:
 			plasmaConfig=self.accesshelper.getPlasmaConfig(wrkFile)
 			self.plasmaConfig.update(plasmaConfig)
@@ -245,7 +244,7 @@ class access(confStack):
 		itemdata="{0}".format(hksetting)
 		item.setData(Qt.UserRole,itemdata)
 		self.tblGrid.setItem(row,1,item)
-		btn=QtExtendedWidgets.QHotkeyButton()
+		btn=QHotkeyButton()
 		btn.setText(mainhk)
 		btn.hotkeyAssigned.connect(self._testHotkey)
 		self.chkbtn[chk]=btn
@@ -321,7 +320,9 @@ class access(confStack):
 			chk=self.tblGrid.cellWidget(i,0)
 			if chk:
 				btn=self.tblGrid.cellWidget(i,1)
-				if isinstance(btn,QtExtendedWidgets.QHotkeyButton):
+				print("***********")
+				print(type(btn))
+				if isinstance(btn,QHotkeyButton):
 					if (chk.isChecked()):
 						hotkey=btn.text()
 					else:

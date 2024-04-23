@@ -1,4 +1,6 @@
 #!/usr/bin/python3
+from . import accesshelper
+#from appconfig import appconfigControls
 import os
 from PySide2.QtWidgets import QApplication,QLabel,QGridLayout,QCheckBox,QSizePolicy,QRadioButton,QHeaderView,QTableWidgetItem
 from PySide2 import QtGui
@@ -10,27 +12,29 @@ import gettext
 _ = gettext.gettext
 
 i18n={
-	"CONFIG":_("Settings"),
-	"MENU":_("Other Settings"),
-	"DESCRIPTION":_("Other options"),
-	"TOOLTIP":_("Advanced settings"),
+	"CONFIG":_("Effects"),
+	"MENU":_("Visual Effects"),
+	"DESCRIPTION":_("Aids and visual effects"),
+	"TOOLTIP":_("Aids and visual effects for improve system usability"),
 	}
 
-class settings(QStackedWindowItem):
+class effects(QStackedWindowItem):
 	def __init_stack__(self):
 		self.dbg=False
 		self._debug("access Load")
 		self.setProps(shortDesc=i18n.get("MENU"),
 		    description=i18n.get('DESCRIPTION'),
-			icon="preferences-other",
+			icon="preferences-system-windows",
 			tooltip=i18n.get("TOOLTIP"),
-			index=4,
+			index=2,
 			visible=True)
 		self.enabled=True
 		self.changed=[]
 		self.level='user'
 		self.plasmaConfig={}
+		self.accesshelper=accesshelper.client()
 		self.locale=locale.getdefaultlocale()[0][0:2]
+		return(self)
 	#def __init__
 
 	def __initScreen__(self):
@@ -52,12 +56,29 @@ class settings(QStackedWindowItem):
 		self.box.addWidget(self.tblGrid)
 	#def __initScreen__
 
+	def _launch(self,*args):
+		if args[0].text()==_("Window Effects"):
+			cmd=["kcmshell5","kcm_kwin_effects"]
+		elif args[0].text()==_("Desktop Effects"):
+			cmd=["kcmshell5","kcm_kwin_scripts"]
+		subprocess.run(cmd)
+	#def _launch
+
 	def updateScreen(self):
 		self.tblGrid.setRowCount(0)
-		self.tblGrid.setRowCount(2)
-		chkGrub=QCheckBox(i18n("GRUB"))
-		self.tblGrid.setCellWidget(0,0,chkGrub)
-		self.tblGrid.verticalHeader().setSectionResizeMode(0,QHeaderView.Stretch)
-		self.tblGrid.verticalHeader().setSectionResizeMode(1,QHeaderView.Stretch)
+		self.tblGrid.setRowCount(1)
+		btnWneff=QPushInfoButton()
+		btnWneff.setText("Window Effects")
+		btnWneff.setDescription("Graphical effects")
+		btnWneff.loadImg("preferences-system-windows")
+		self.tblGrid.setCellWidget(0,0,btnWneff)
+		btnWneff.clicked.connect(self._launch)
+		btnDseff=QPushInfoButton()
+		btnDseff.setText("Desktop Effects")
+		btnDseff.loadImg("preferences-plugin")
+		self.tblGrid.setCellWidget(0,1,btnDseff)
+		btnDseff.clicked.connect(self._launch)
+	#	self.tblGrid.verticalHeader().setSectionResizeMode(0,QHeaderView.Stretch)
+	#	self.tblGrid.verticalHeader().setSectionResizeMode(1,QHeaderView.Stretch)
 	#def updateScreen
 

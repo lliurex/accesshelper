@@ -1,6 +1,0 @@
-[Desktop Entry]
-Encoding=UTF-8
-Name=Grayscale
-Description=
-Icon=preferences-system-windows-effect-dialog-parent
-Exec=qdbus org.kde.KWin /Effects org.kde.kwin.Effects.toggleEffect qdbus org.kde.KWin /Effects org.kde.kwin.Effects.toggleEffect kwin4_effect_grayscale

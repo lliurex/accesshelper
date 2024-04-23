@@ -1,0 +1,4 @@
+dock/lib/launchers/*
+.gitignore
+.*swp
+__pycache__

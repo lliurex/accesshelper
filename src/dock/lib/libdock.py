@@ -23,7 +23,6 @@ class libdock():
 				if f.name.endswith(".desktop")==False:
 					continue
 				app=app2menu.get_desktop_info(f.path)
-				print(app)
 				if app.get("NoDisplay",False)==True:
 					continue
 				launchers.append((f.name,app))

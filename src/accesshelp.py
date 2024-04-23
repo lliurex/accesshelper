@@ -6,9 +6,8 @@ import json
 from PySide2.QtWidgets import QApplication,QDialog,QGridLayout,QLabel,QPushButton,QLayout,QSizePolicy,QDialogButtonBox
 from PySide2.QtCore import Qt
 from PySide2 import QtGui
-from appconfig.appConfigScreen import appConfigScreen as appConfig
+from QtExtraWidgets import QStackedWindow,QScrollLabel
 from stacks import libaccesshelper
-from appconfig import appconfigControls
 import gettext
 import time
 import notify2
@@ -196,7 +195,7 @@ def showDialog(*args):
 	else:
 		changes="<p><strong>{0}.\n{1}.</strong></p>".format(MSG_ONAPPLY,MSG_ONACCEPT)+changes
 	text="{0}<br>{1}<br>".format(MSG_CHANGES,changes.replace("\n","<br>"))
-	scrLabel=appconfigControls.QScrollLabel(text)
+	scrLabel=QScrollLabel(text)
 	btnOk=QPushButton(TXT_ACCEPT)
 	btnOk.clicked.connect(_restartSession)
 	msgReboot=MSG_REBOOT
@@ -268,14 +267,17 @@ if len(sys.argv)==1:
 	app=QApplication(["AccessHelper"])
 	app.setQuitOnLastWindowClosed(False)
 	app.lastWindowClosed.connect(showDialog)
-	config=appConfig("Access Helper",{'app':app})
-	config.setWindowTitle("Access Helper")
-	config.setRsrcPath("/usr/share/accesshelper/rsrc")
-	config.setIcon('accesshelper')
-	config.setWiki('https://wiki.edu.gva.es/lliurex/tiki-index.php?page=Accesibilidad%20en%20Lliurex:%20Access%20Helper')
-	config.setBanner('access_banner.png')
-	config.setConfig(confDirs={'system':'/usr/share/accesshelper','user':os.path.join(os.environ['HOME'],".config/accesshelper")},confFile="accesshelper.json")
-	config.Show()
+	config=QStackedWindow()
+	if os.path.islink(__file__)==True:
+		abspath=os.path.join(os.path.dirname(__file__),os.path.dirname(os.readlink(__file__)))
+	else:
+		abspath=os.path.dirname(__file__)
+	config.addStacksFromFolder(os.path.join(abspath,"stacks"))
+	config.setBanner("/usr/share/accesshelper/rsrc/access_banner.png")
+	config.setWiki("https://wiki.edu.gva.es/lliurex/")
+	config.setIcon("accesshelper")
+	#config.setConfig(confDirs={'system':'/usr/share/accesshelper','user':os.path.join(os.environ['HOME'],".config/accesshelper")},confFile="accesshelper.json")
+	config.show()
 	app.exec_()
 else:
 	if sys.argv[1].lower()=="--set":

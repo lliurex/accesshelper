@@ -234,6 +234,8 @@ class accessconf(QWidget):
 		self.list.setItem(idx,0,ni)
 		self.list.setCurrentCell(newIdx,0)
 		self.dock._drop(idx=idx,toIdx=newIdx)
+		self._saveChanges()
+		self.dock.setCurrentIndex(newIdx)
 	#def _itemUp
 
 	def _itemDown(self):
@@ -248,6 +250,8 @@ class accessconf(QWidget):
 		self.list.setItem(idx,0,ni)
 		self.list.setCurrentCell(newIdx,0)
 		self.dock._drop(idx=idx,toIdx=newIdx)
+		self._saveChanges()
+		self.dock.setCurrentIndex(newIdx)
 	#def _itemDown
 
 	def _syncListIdx(self,*args):
@@ -302,14 +306,18 @@ class accessconf(QWidget):
 		new=[]
 		for launcher in launchers:
 			new.append(launcher[0])
-		for idx,fname in self.dock.getLaunchers().items():
+		launchers=self.dock.getLaunchers().items()
+		for idx,fname in launchers:
 			name=fname.split("_",1)[-1]
 			fpath=f"{idx:03d}_{name}"
 			for f in new:
 				if name in f and fpath!=f:
-					shutil.move(os.path.join(lpath,f),os.path.join(lpath,fpath.replace(" ","_")))
-					self._debug("Move {} -> {}".format(os.path.join(lpath,f),os.path.join(lpath,fpath.replace(" ","_"))))
-					break
+					sourcef=os.path.join(lpath,f)
+					if os.path.exists(sourcef):
+						destf=os.path.join(lpath,fpath.replace(" ","_"))
+						shutil.move(sourcef,destf)
+						self._debug("Move {} -> {}".format(os.path.join(lpath,f),os.path.join(lpath,fpath.replace(" ","_"))))
+						break
 		self.updateScreen()
 	#def _saveChanges
 		

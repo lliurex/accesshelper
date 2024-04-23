@@ -71,13 +71,21 @@ class actionSelector(QStackedWindowItem):
 			for cat in cats:
 				apps.update(self.app2menu.get_apps_from_category(cat.lower()))
 			for name,data in apps.items():
-				self.lstActions.addItem(data.get("Name"))
-				qicon=QtGui.QIcon.fromTheme(data.get("Icon",""))
+				app=self.app2menu.get_desktop_info(data.get("path"))
+				if app.get("NoDisplay","")==True:
+					continue
+				appicon=data.get("icon","")
+				appname=data.get("name")
+				appexe=data.get("exe")
+				apppath=data.get("path")
+				appdesc=app.get("Comment","")
+				self.lstActions.addItem(appname)
+				if os.path.exists(appicon):
+					qicon=QtGui.QIcon(appicon)
+				else:
+					qicon=QtGui.QIcon.fromTheme(appicon)
 				self.lstActions.item(self.lstActions.count()-1).setIcon(qicon)
-				icon=data.get("Icon","")
-				appname=data.get("Name")
-				desc=""
-				itemData={"type":"desktop","Exec":name,"Name":appname,"Icon":icon,"description":desc}
+				itemData={"type":"desktop","Exec":appexe,"Name":appname,"Icon":appicon,"Comment":appdesc,"Path":apppath}
 				self.lstActions.item(self.lstActions.count()-1).setData(Qt.UserRole,itemData)
 		else:
 			plugins=self.accesshelper.getKWinEffects()
@@ -94,7 +102,7 @@ class actionSelector(QStackedWindowItem):
 				plugid=data.get("KPlugin",{}).get("Id")
 				appname=data.get("KPlugin",{}).get("Name")
 				desc=data.get("KPlugin",{}).get("Comment")
-				itemData={"type":plugType,"Exec":plugid,"Name":appname,"Icon":icon,"Comment":desc}
+				itemData={"type":plugType,"Exec":plugid,"Name":appname,"Icon":icon,"Comment":desc,"Path":""}
 				self.lstActions.item(self.lstActions.count()-1).setData(Qt.UserRole,itemData)
 	#def updateScreen
 
@@ -126,6 +134,7 @@ class portrait(QStackedWindowItem):
 			index=2,
 			visible=True)
 		self.appIcon="shell"
+		self.fName=""
 		self.action={}
 		self.hideControlButtons()
 	#def __init_stack__
@@ -185,8 +194,23 @@ class portrait(QStackedWindowItem):
 		self.setLayout(box)
 	#def _loadScreen
 
+	def _readScreen(self):
+		self.action["Name"]=self.inpName.text()
+		self.action["Comment"]=self.inpDesc.text()
+		self.action["Icon"]=self.appIcon
+		if len(self.fName)>0:
+			self.action["fname"]=self.fName
+	#def _readScreen
+
 	def _accepted(self):
 		if len(self.action)>0:
+			self._readScreen()
+			if self.cmbApp.currentText==i18n["EXECUTABLE"]:
+				if self.action.get("type","")!="":
+					self.showMsg("ERROR")
+					self.close()
+				elif self.action.get("type","")=="":
+					self.action["type"]="desktop"
 			self.accepted.emit(self.action)
 		self.close()
 
@@ -196,9 +220,10 @@ class portrait(QStackedWindowItem):
 	def setParms(self,*args):
 		if len(args)>0:
 			action=args[0]
-			self.inpName.setText(action.get("Name"))
-			self.inpDesc.setText(action.get("Comment"))
-			self.appIcon=action.get("Icon")
+			self.inpName.setText(action.get("Name",""))
+			self.inpDesc.setText(action.get("Comment",""))
+			self.appIcon=action.get("Icon","")
+			self.fName=action.get("fname",self.fName)
 			if action.get("type")=="desktop":
 				self.cmbApp.setCurrentText(i18n["EXECUTABLE"])
 			else:
@@ -283,7 +308,7 @@ class launchers(QStackedWindow):
 			fname=os.path.join(self.destPath,fname)
 		desktop="[Desktop Entry]\nEncoding=UTF-8\n"
 		desktop+="Name={}\n".format(action.get("Name"))
-		desktop+="Description={}\n".format(action.get("Comment"))
+		desktop+="Comment={}\n".format(action.get("Comment"))
 		desktop+="Icon={}\n".format(action.get("Icon"))
 		cmd="qdbus org.kde.KWin /Effects org.kde.kwin.Effects.toggleEffect {}".format(action.get("Exec"))
 		desktop+="Exec={}\n".format(cmd)
@@ -299,7 +324,7 @@ class launchers(QStackedWindow):
 			fname=os.path.join(self.destPath,fname)
 		desktop="[Desktop Entry]\nEncoding=UTF-8\n"
 		desktop+="Name={}\n".format(action.get("Name"))
-		desktop+="Description={}\n".format(action.get("Comment"))
+		desktop+="Comment={}\n".format(action.get("Comment"))
 		desktop+="Icon={}\n".format(action.get("Icon"))
 		cmd="{0}/loadScript.sh {1} add".format(os.path.basename(self.destPath),action.get("Exec"))
 		desktop+="Exec={}\n".format(cmd)
@@ -309,37 +334,55 @@ class launchers(QStackedWindow):
 	#def _addEffect
 
 	def _addDesktop(self,action):
+		fdesktop=action.get("Path","")
 		fname=action.get("fname","")
+		app=self.app2menu.init_desktop_file()
 		if fname=="":
 			prefix="{}".format(len(os.listdir(self.destPath))).zfill(3)
-			fname="{}_{}.desktop".format(prefix,action.get("Exec"))
+			fname="{}_{}.desktop".format(prefix,os.path.basename(action.get("Exec")).lower().replace(" ","_").replace("%",""))
 			fname=os.path.join(self.destPath,fname)
-		d=""
-		for dpath in self.desktopPaths:
-			if os.path.exists(os.path.join(dpath,action.get("Exec"))):
-				d=os.path.join(dpath,action.get("Exec"))
-				break
-		if len(d)>0:
+			action["fname"]=fname
+		if fdesktop!="":
+			app=self.app2menu.get_desktop_info(fdesktop)
+		app.update(action)
+		fname=action.get("fname","")
+		if os.path.exists(fname) and len(fname)>0:
+			os.unlink(fname)
+		fname=app.get("fname","")
+		self.app2menu.write_custom_desktop(app,fname)
+		return
+
+		desktop="[Desktop Entry]\nEncoding=UTF-8\n"
+		desktop+="Name={}\n".format(action.get("Name"))
+		desktop+="Comment={}\n".format(action.get("Comment"))
+		desktop+="Icon={}\n".format(action.get("Icon"))
+		cmd="{0}/loadScript.sh {1} add".format(os.path.basename(self.destPath),action.get("Exec"))
+		desktop+="Exec={}\n".format(cmd)
+		fname=os.path.join(self.destPath,fname)
+		with open(fname,"w") as f:
+			f.write(desktop)
+
+
+
+
+
+		fname=action.get("fname","")
+		fdesktop=action.get("Path","")
+		if fname.strip()=="":
 			prefix="{}".format(len(os.listdir(self.destPath))).zfill(3)
-			shutil.copy(d,fname)
-			self._debug("Copy {} -> {}".format(d,self.destPath))
+			fname="{}_{}.desktop".format(prefix,os.path.basename(action.get("Exec").lower().split()[0]))
+			fname=os.path.join(self.destPath,fname)
+		if len(fdesktop)>0:
+			prefix="{}".format(len(os.listdir(self.destPath))).zfill(3)
+			shutil.copy(fdesktop,fname)
+			self._debug("Copy {} -> {}".format(fdesktop,fname))
+		else: #Edit
+			app=self.app2menu.get_desktop_info(fname)
 	#def _addDesktop
 
 	def setParms(self,action):
 		actionPath=os.path.join(self.destPath,action)
 		actionData=self.app2menu.get_desktop_info(actionPath)
-		#actionData={"type":"","Exec":"","Name":"","Icon":"","description":""}
-		#with open(actionPath,"r") as f:
-		#	fcontent=f.readlines()
-		#for line in fcontent:
-		#	if line.startswith("Exec="):
-		#		actionData["Exec"]=line.split("=")[-1].strip()
-		#	if line.startswith("Name="):
-		#		actionData["Name"]=line.split("=")[-1].strip()
-		#	if line.startswith("Description="):
-		#		actionData["description"]=line.split("=")[-1].strip()
-		#	if line.startswith("Icon="):
-		#		actionData["Icon"]=line.split("=")[-1].strip()
 		actionData["type"]="desktop"
 		if actionData["Exec"].startswith("qdbus"):
 			actionData["type"]="effect"

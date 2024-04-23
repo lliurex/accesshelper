@@ -1,0 +1,6 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Read aid
+Description=Displays a reading guide over mouse position
+Icon=preferences-system-windows
+Exec=../loadScript.sh mousestrip add

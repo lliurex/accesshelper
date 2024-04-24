@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-from . import accesshelper
 #from appconfig import appconfigControls
 import os
 from PySide2.QtWidgets import QApplication,QLabel,QGridLayout,QCheckBox,QSizePolicy,QRadioButton,QHeaderView,QTableWidgetItem
@@ -32,7 +31,6 @@ class effects(QStackedWindowItem):
 		self.changed=[]
 		self.level='user'
 		self.plasmaConfig={}
-		self.accesshelper=accesshelper.client()
 		self.locale=locale.getdefaultlocale()[0][0:2]
 		return(self)
 	#def __init__
@@ -78,7 +76,7 @@ class effects(QStackedWindowItem):
 		btnDseff.loadImg("preferences-plugin")
 		self.tblGrid.setCellWidget(0,1,btnDseff)
 		btnDseff.clicked.connect(self._launch)
-	#	self.tblGrid.verticalHeader().setSectionResizeMode(0,QHeaderView.Stretch)
-	#	self.tblGrid.verticalHeader().setSectionResizeMode(1,QHeaderView.Stretch)
+		self.tblGrid.verticalHeader().setSectionResizeMode(0,QHeaderView.Stretch)
+		self.tblGrid.verticalHeader().setSectionResizeMode(1,QHeaderView.Stretch)
 	#def updateScreen
 

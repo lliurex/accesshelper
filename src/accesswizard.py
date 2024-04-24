@@ -15,7 +15,7 @@ else:
 config.addStacksFromFolder(os.path.join(abspath,"stacks"))
 config.setBanner("/usr/share/accesswizard/rsrc/accesswizard_banner.png")
 config.setWiki("https://wiki.edu.gva.es/lliurex/tiki-index.php?page=Repoman-en-Lliurex-21")
-config.setIcon("accesswizard")
+config.setIcon("accesshelper")
 config.show()
 config.setMinimumWidth(config.sizeHint().width()*1.9)
 config.setMinimumHeight(config.sizeHint().width())

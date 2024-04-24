@@ -277,7 +277,7 @@ class accessconf(QWidget):
 	def _addAction(self,*args):
 		launcher=launchers.launchers()
 		launcher.accepted.connect(self.updateScreen)
-		launcher.destPath=self.launchers.configPath
+		launcher.destPath=self.launchers.launchersPath
 		launcher.show()
 	#def _addAction(self,*args):
 
@@ -286,7 +286,7 @@ class accessconf(QWidget):
 		data=self.dock.data
 		launcher=launchers.launchers()
 		launcher.accepted.connect(self.updateScreen)
-		launcher.destPath=self.launchers.configPath
+		launcher.destPath=self.launchers.launchersPath
 		launcher.setParms(data[idx])
 		launcher.show()
 	#def _addAction(self,*args):
@@ -294,14 +294,14 @@ class accessconf(QWidget):
 	def _delAction(self,*args):
 		idx=self.list.currentRow()
 		data=self.dock.data
-		fpath=os.path.join(self.launchers.configPath,data[idx])
+		fpath=os.path.join(self.launchers.launchersPath,data[idx])
 		if os.path.exists(fpath):
 			os.remove(fpath)
 		self.updateScreen()
 	#def _delAction(self,*args):
 
 	def _saveChanges(self,*args):
-		lpath=self.launchers.configPath
+		lpath=self.launchers.launchersPath
 		launchers=self.launchers.getLaunchers()
 		new=[]
 		for launcher in launchers:

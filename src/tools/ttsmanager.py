@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 import sys
-import os,signal
+import os,json
 import shutil
 from PySide2.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QGridLayout,QComboBox,QTableWidget,QHeaderView,QFileDialog,QScrollArea
 from PySide2 import QtGui
@@ -29,10 +29,9 @@ i18n={
 	"SAVE":_("Save"),
 	"TEXT":_("Text"),
 	"EXPORT":_("Files exported to"),
-	"SPANISHMAN":_("Spanish man"),
-	"SPANISHWOMAN":_("Spanish woman"),
-	"VALENCIANWOMAN":_("Catalan woman"),
-	"VALENCIANMAN":_("Catalan man")
+	"VALCAT":_("Valencian-Catalan"),
+	"SPANISH":_("Spanish"),
+	"ENGLISH":_("English")
 	}
 
 class playSignal(QObject):
@@ -80,12 +79,25 @@ class ttshelper(QWidget):
 		self.mp3BtnDict={}
 		self.playing=[]
 		self.optionChanged=[]
+		self.configFile=os.path.join(os.environ.get("HOME"),".config","accessibility","ttshelper.conf")
 	#def __init__
 
 	def _debug(self,msg=""):
 		if self.dbg:
 			print("tts: {}".format(msg))
 	#def _debug
+
+	def _readConfig(self,*args):
+		data={}
+		if os.path.exists(self.configFile)==False:
+			configDir=os.path.dirname(self.configFile)
+			if os.path.exists(configDir)==False:
+				os.makedirs(configDir)
+		else:
+			with open(self.configFile,"r") as f:
+				data=json.loads(f.read())
+		return(data)
+	#def _readConfig
 
 	def __initScreen__(self):
 		self.box=QGridLayout()
@@ -101,25 +113,25 @@ class ttshelper(QWidget):
 		config=self.config.get(self.level,{})
 		lblVoice=QLabel(i18n.get("VOICE"))
 		box.addWidget(lblVoice,0,0,1,1)
-		cmbVoice=QComboBox()
-		self.widgets.update({cmbVoice:"voice"})
-		box.addWidget(cmbVoice,0,1,1,1)
+		self.cmbVoice=QComboBox()
+		self.widgets.update({self.cmbVoice:"voice"})
+		box.addWidget(self.cmbVoice,0,1,1,1)
 		lblSpeed=QLabel(i18n.get("SPEED"))
 		box.addWidget(lblSpeed,1,0,1,1)
-		cmbSpeed=QComboBox()
-		self.widgets.update({cmbSpeed:"speed"})
-		box.addWidget(cmbSpeed,1,1,1,1)
+		self.cmbSpeed=QComboBox()
+		self.widgets.update({self.cmbSpeed:"speed"})
+		box.addWidget(self.cmbSpeed,1,1,1,1)
 		lblPitch=QLabel(i18n.get("PITCH"))
 		box.addWidget(lblPitch,2,0,1,1)
-		cmbPitch=QComboBox()
-		cmbPitch.setEnabled(False)
-		self.widgets.update({cmbPitch:"pitch"})
-		box.addWidget(cmbPitch,2,1,1,1)
+		self.cmbPitch=QComboBox()
+		self.cmbPitch.setEnabled(False)
+		self.widgets.update({self.cmbPitch:"pitch"})
+		box.addWidget(self.cmbPitch,2,1,1,1)
 		lblSynt=QLabel(i18n.get("SYNT"))
 		box.addWidget(lblSynt,3,0,1,1)
-		cmbSynt=QComboBox()
-		self.widgets.update({cmbSynt:"synt"})
-		box.addWidget(cmbSynt,3,1,1,1)
+		self.cmbSynt=QComboBox()
+		self.widgets.update({self.cmbSynt:"synt"})
+		box.addWidget(self.cmbSynt,3,1,1,1)
 		lblFiles=QLabel(i18n.get("FILES"))
 		box.addWidget(lblFiles,4,0,1,1,Qt.AlignLeft)
 		btnReload=QPushButton()
@@ -128,83 +140,66 @@ class ttshelper(QWidget):
 		btnReload.setIconSize(QSize(24,24))
 		btnReload.clicked.connect(self.updateScreen)
 		box.addWidget(btnReload,4,1,1,1,Qt.AlignRight)
-		tblFiles=QTableWidget()
-		tblFiles.verticalHeader().setVisible(False)
-		self.widgets.update({tblFiles:"files"})
-		box.addWidget(tblFiles,5,0,1,2)
+		self.tblFiles=QTableWidget()
+		self.tblFiles.verticalHeader().setVisible(False)
+		self.widgets.update({self.tblFiles:"files"})
+		box.addWidget(self.tblFiles,5,0,1,2)
 		scr.setWidget(wdg)
 		scr.setWidgetResizable(True)
 	#def _load_screen
 
-	def updateScreen(self):
-		config={"user":{}} #self.getConfig(self.level)
-		speed=config[self.level].get('speed','1x')
-		pitch=config[self.level].get('pitch','50')
-		voice=config[self.level].get('voice','')
-		synt=config[self.level].get('synt','internal')
-		for widget,desc in self.widgets.items():
-			if isinstance(widget,QComboBox):
-				widget.clear()
-			elif isinstance(widget,QTableWidget):
-				widget.setRowCount(0)
-				widget.setColumnCount(4)
-				widget.setHorizontalHeaderLabels([i18n.get("FILE"),i18n.get("RECORD"),i18n.get("TEXT"),i18n.get("SAVE")])
-				widget.setAlternatingRowColors(True)
-			if desc=="voice":
-				select=""
-				if "_es_pa_" in voice:
-					select=i18n.get("SPANISHMAN")
-				elif "_es_sf_" in voice:
-					select=i18n.get("SPANISHWOMAN")
-				elif "_ca_ona" in voice:
-					select=i18n.get("VALENCIANWOMAN")
-				elif "_ca_pau" in voice:
-					select=i18n.get("VALENCIANMAN")
-				else:
-					select=voice
-				self._debug("Getting installed voices")
-				#REM
-				#for lang,voices in self.accesshelper.getFestivalVoices().items():
-				#	for voice in voices:
-				#		if "_es_pa_" in voice:
-				#			widget.addItem(i18n.get("SPANISHMAN"))
-				#		elif "_es_sf_" in voice:
-				#			widget.addItem(i18n.get("SPANISHWOMAN"))
-				#		elif "_ca_ona" in voice:
-				#			widget.addItem(i18n.get("VALENCIANWOMAN"))
-				#		elif "_ca_pau" in voice:
-				#			widget.addItem(i18n.get("VALENCIANMAN"))
-				#		else:
-				#			widget.addItem("{} ({})".format(voice,lang))
-				#			if select==voice:
-				#				select="{} ({})".format(voice,lang)
-				widget.setCurrentText(select)
-			if desc=="speed":
-				self._debug("Setting speed values")
-				i=0
-				while i<=3:
-					if isinstance(i,float):
-						if i.is_integer():
-							i=int(i)
-					widget.addItem("{}x".format(str(i)))
-					i+=0.25
-				widget.setCurrentText(speed)
-			if desc=="pitch":
-				self._debug("Setting pitch values")
-				for i in range (1,101):
-					widget.addItem(str(i))
-				widget.setCurrentText(pitch)
-			if desc=="synt":
-				self._debug("Setting synt values")
-				widget.addItem(i18n.get("INTERNALTTS"))
-				widget.addItem(i18n.get("VLCTTS"))
-				if synt=="vlc":
-					widget.setCurrentText(i18n.get("VLCTTS"))
-			if desc=="files":
-				self._populateFileList(widget)
-	#def _udpate_screen
+	def _resetScreen(self):
+		self.cmbVoice.clear()
+		self.cmbSpeed.clear()
+		self.cmbPitch.clear()
+		self.cmbSynt.clear()
+		self.tblFiles.setRowCount(0)
+		self.tblFiles.setColumnCount(4)
+		self.tblFiles.setHorizontalHeaderLabels([i18n.get("FILE"),i18n.get("RECORD"),i18n.get("TEXT"),i18n.get("SAVE")])
+		self.tblFiles.setAlternatingRowColors(True)
+	#def _resetScreen
 
-	def _populateFileList(self,widget):
+	def _populateVoices(self):
+		added=[]
+		for lang,voices in self.speech.getFestivalVoices().items():
+			for voice in voices:
+				if voice in added:
+					continue
+				added.append(voice)
+				text=voice.split("_")[-2]
+				self.cmbVoice.addItem("{0} {1}".format(text.capitalize(),i18n.get(lang.upper())))
+		self.cmbVoice.setSizeAdjustPolicy(self.cmbVoice.AdjustToContents)
+		self.cmbVoice.adjustSize()
+	#def _populateVoices
+
+	def _populateSpeed(self):
+		self._debug("Setting speed values")
+		i=0
+		while i<=3:
+			if isinstance(i,float):
+				if i.is_integer():
+					i=int(i)
+			self.cmbSpeed.addItem("{}x".format(str(i)))
+			i+=0.25
+		#self.cmbSpeed.setCurrentText(speed)
+	#def _populateSpeed
+
+	def _populatePitch(self):
+		self._debug("Setting pitch values")
+		for i in range (1,101):
+			self.cmbPitch.addItem(str(i))
+		self.cmbPitch.setCurrentText(pitch)
+	#def _populatePitch
+
+	def _populateSynth(self):
+		self._debug("Setting synt values")
+		self.cmbSynt.addItem(i18n.get("INTERNALTTS"))
+		self.cmbSynt.addItem(i18n.get("VLCTTS"))
+		#if synth=="vlc":
+		#	self.cmbSynt.setCurrentText(i18n.get("VLCTTS"))
+	#def _populateSynth(self):
+
+	def _populateFileList(self):
 		sigmap_run=QSignalMapper(self)
 		sigmap_run.mapped[QString].connect(self._processTtsFile)
 		iconSize=QSize(64,64)
@@ -213,40 +208,53 @@ class ttshelper(QWidget):
 		txtIcon=QtGui.QIcon.fromTheme("document-open")
 		saveIcon=QtGui.QIcon.fromTheme("document-save")
 		self._debug("Populating file list")
-		fileDict={} #self.accesshelper.getTtsFiles()
+		fileDict=self.speech.getTtsFiles()
 		for key,files in fileDict.items():
-			row=widget.rowCount()
-			widget.insertRow(row)
+			row=self.tblFiles.rowCount()
+			self.tblFiles.insertRow(row)
 			dateKey=key.split("_")[0]
 			dateKey=dateKey[0:4]+"/"+dateKey[4:6]+"/"+dateKey[6:8]
 			timeKey=key.split("_")[1]
 			timeKey=timeKey[0:2]+":"+timeKey[2:4]+":"+timeKey[4:6]
 			lbl=QLabel("{}_{}".format(dateKey,timeKey))
-			widget.setCellWidget(row,0,lbl)
+			self.tblFiles.setCellWidget(row,0,lbl)
 			btn=""
 			extension=""
 			if files.get("mp3",None):
 				extension=".mp3"
 				col=1
 				icon=mp3Icon
-				btn=self._newBtn(icon,extension,key,iconSize,btnSize,sigmap_run,widget)
-				widget.setCellWidget(row,col,btn)
+				btn=self._newBtn(icon,extension,key,iconSize,btnSize,sigmap_run,self.tblFiles)
+				self.tblFiles.setCellWidget(row,col,btn)
 			if files.get("txt",None):
 				extension=".txt"
 				col=2
 				icon=txtIcon
-				btn=self._newBtn(icon,extension,key,iconSize,btnSize,sigmap_run,widget)
+				btn=self._newBtn(icon,extension,key,iconSize,btnSize,sigmap_run,self.tblFiles)
 				widget.setCellWidget(row,col,btn)
 			if btn:
 				extension=""
 				col=3
 				icon=saveIcon
-				btn=self._newBtn(icon,extension,key,iconSize,btnSize,sigmap_run,widget)
-				widget.setCellWidget(row,col,btn)
-		widget.resizeColumnsToContents()
-		widget.resizeRowsToContents()
-		widget.horizontalHeader().setSectionResizeMode(0,QHeaderView.Stretch)
+				btn=self._newBtn(icon,extension,key,iconSize,btnSize,sigmap_run,self.tblFiles)
+				self.tblFiles.setCellWidget(row,col,btn)
+		self.tblFiles.resizeColumnsToContents()
+		self.tblFiles.resizeRowsToContents()
+		self.tblFiles.horizontalHeader().setSectionResizeMode(0,QHeaderView.Stretch)
 	#def _populateFileList
+
+	def updateScreen(self):
+		config=self._readConfig()
+		speed=config.get('speed','1x')
+		pitch=config.get('pitch','50')
+		voice=config.get('voice','')
+		synth=config.get('synt','internal')
+		self._resetScreen()
+		self._populateVoices()
+		self._populateSpeed()
+		self._populateSynth()
+		self._populateFileList()
+	#def _udpate_screen
 
 	def _newBtn(self,icon,extension,key,iconSize,btnSize,sigmap_run,widget):
 		btn=QPushButton(icon,"")
@@ -299,44 +307,49 @@ class ttshelper(QWidget):
 		btn.setIcon(mp3Icon)
 	#def _stopPlay
 
-	def _updateConfig(self,key):
+	def _readScreen():
 		pass
 
 	def writeConfig(self):
-		config=self.getConfig()
-		voice=""
-		speed=""
-		pitch=""
-		synt=""
-		for widget,desc in self.widgets.items():
-			value=""
-			if desc=="voice":
-				value=widget.currentText()
-				voice=value
-				if value==i18n.get("SPANISHMAN"):
-					value="JuntaDeAndalucia_es_pa_diphone"
-				elif value==i18n.get("SPANISHWOMAN"):
-					value="JuntaDeAndalucia_es_sf_diphone"
-				elif value==i18n.get("VALENCIANWOMAN"):
-					value="upc_ca_ona_hts"
-				elif value==i18n.get("VALENCIANMAN"):
-					value="upc_ca_pau_hts"
-				else:
-					value=value.split("(")[0].strip()
-			if desc=="speed":
-				value=widget.currentText()
-				speed=value
-			if desc=="pitch":
-				value=widget.currentText()
-				pitch=value
-			if desc=="synt":
-				value="tts"
-				if "vlc" in widget.currentText().lower():
-					value="vlc"
-				synt=value
-			if value!="":
-				self.saveChanges(desc,value)
-		self._writeFileChanges(voice,speed,pitch,synt)
+		config=self._readConfig()
+		data=self._readScreen()
+		config.update(data)
+		with open(self.configFile,"w") as f:
+			json.dumps(data, f, indent=4)	
+		return
+	#	voice=""
+	#	speed=""
+	#	pitch=""
+	#	synt=""
+	#	for widget,desc in self.widgets.items():
+	#		value=""
+	#		if desc=="voice":
+	#			value=widget.currentText()
+	#			voice=value
+	#			if value==i18n.get("SPANISHMAN"):
+	#				value="JuntaDeAndalucia_es_pa_diphone"
+	#			elif value==i18n.get("SPANISHWOMAN"):
+	#				value="JuntaDeAndalucia_es_sf_diphone"
+	#			elif value==i18n.get("VALENCIANWOMAN"):
+	#				value="upc_ca_ona_hts"
+	#			elif value==i18n.get("VALENCIANMAN"):
+	#				value="upc_ca_pau_hts"
+	#			else:
+	#				value=value.split("(")[0].strip()
+	#		if desc=="speed":
+	#			value=widget.currentText()
+	#			speed=value
+	#		if desc=="pitch":
+	#			value=widget.currentText()
+	#			pitch=value
+	#		if desc=="synt":
+	#			value="tts"
+	#			if "vlc" in widget.currentText().lower():
+	#				value="vlc"
+	#			synt=value
+	#		if value!="":
+	#			self.saveChanges(desc,value)
+	#	self._writeFileChanges(voice,speed,pitch,synt)
 	#def writeConfig
 		
 	def _writeFileChanges(self,voice,speed,pitch,synt):
@@ -351,7 +364,7 @@ class ttshelper(QWidget):
 
 
 
-app=QApplication(["TtsWizard"])
+app=QApplication(["TTS Manager"])
 config=ttshelper()
 config.__initScreen__()
 config.show()

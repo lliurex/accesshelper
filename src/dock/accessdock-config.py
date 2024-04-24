@@ -204,9 +204,9 @@ class accessconf(QWidget):
 		layout.addWidget(self.list,1,0,3,2)
 		layout.addWidget(self.btnIup,1,2,2,1,Qt.AlignTop|Qt.AlignLeft)
 		layout.addWidget(self.btnIdo,3,2,1,1,Qt.AlignBottom|Qt.AlignLeft)
-		layout.addWidget(btnAdd,1,3,1,1)
-		layout.addWidget(btnEdi,2,3,1,1)
-		layout.addWidget(btnDel,3,3,1,1)
+		layout.addWidget(btnAdd,1,3,1,1,Qt.AlignTop)
+		layout.addWidget(btnEdi,2,3,1,1,Qt.AlignTop)
+		layout.addWidget(btnDel,3,3,1,1,Qt.AlignTop)
 	#def _initScreen
 
 	def updateScreen(self):

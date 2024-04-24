@@ -58,7 +58,7 @@ class accessibility(QStackedWindowItem):
 		elif args[0].text()==_("Orca"):
 			cmd=["orca","-s"]
 		elif args[0].text()==_("LliureX TTS"):
-			cmd=["kcmshell5","kcm_fonts"]
+			cmd=["tools/ttsmanager.py"]
 		elif args[0].text()==_("Accessibility Dock"):
 			cmd=["dock/accessdock-config.py"]
 		subprocess.run(cmd)

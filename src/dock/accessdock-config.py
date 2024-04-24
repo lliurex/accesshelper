@@ -45,7 +45,7 @@ class dock(accessdock.accessdock):
 		self.data={}
 		self.layout().addWidget(self.fakeTable,0,0,1,1)
 		self._cloneDock()
-	#def __init__
+	
 	
 	def _indexToCell(self,idx):
 		cc=self.fakeTable.columnCount()
@@ -199,14 +199,14 @@ class accessconf(QWidget):
 		btnEdi=QPushButton(i18n.get("EDI"))
 		btnEdi.clicked.connect(self._ediAction)
 		layout.addWidget(self.dock,0,0,1,4)
-		layout.addWidget(lbl,1,0,1,1)
-		layout.addWidget(self.max,1,1,1,1)
-		layout.addWidget(self.list,2,0,3,2)
-		layout.addWidget(self.btnIup,2,2,2,1,Qt.AlignTop)
-		layout.addWidget(self.btnIdo,4,2,1,1,Qt.AlignBottom)
-		layout.addWidget(btnAdd,2,3,1,1)
-		layout.addWidget(btnEdi,3,3,1,1)
-		layout.addWidget(btnDel,4,3,1,1)
+		#layout.addWidget(lbl,1,0,1,1)
+		#layout.addWidget(self.max,1,1,1,1)
+		layout.addWidget(self.list,1,0,3,2)
+		layout.addWidget(self.btnIup,1,2,2,1,Qt.AlignTop|Qt.AlignLeft)
+		layout.addWidget(self.btnIdo,3,2,1,1,Qt.AlignBottom|Qt.AlignLeft)
+		layout.addWidget(btnAdd,1,3,1,1)
+		layout.addWidget(btnEdi,2,3,1,1)
+		layout.addWidget(btnDel,3,3,1,1)
 	#def _initScreen
 
 	def updateScreen(self):

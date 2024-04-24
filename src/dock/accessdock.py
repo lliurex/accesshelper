@@ -23,7 +23,8 @@ class accessdock(QWidget):
 		self.dbg=True
 		self.launchers=libdock.libdock()
 		#self.setWindowModality(Qt.WindowModal)
-#		self.setWindowFlags(Qt.NoDropShadowWindowHint|Qt.WindowStaysOnTopHint|Qt.Tool)
+		self.setWindowFlags(Qt.NoDropShadowWindowHint|Qt.WindowStaysOnTopHint)
+	#	self.setWindowFlags(Qt.X11BypassWindowManagerHint)
 		layout=QGridLayout()
 		self.setLayout(layout)
 		self.grid=QTableTouchWidget(1,0)
@@ -31,15 +32,33 @@ class accessdock(QWidget):
 		self.grid.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
 		self.grid.horizontalHeader().hide()
 		self.grid.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
-		layout.addWidget(self.grid)
+		layout.addWidget(self.grid,0,0)#,Qt.AlignCenter|Qt.AlignCenter)
 		self.threadLaunchers=[]
 		self.updateScreen()
+		colWidth=self.grid.horizontalHeader().sectionSize(0)
+		width=(self.grid.columnCount()*colWidth)+(colWidth/3)
+		rowHeight=self.grid.verticalHeader().sectionSize(0)
+		height=(self.grid.rowCount()*rowHeight)
+		self.grid.resize(QSize(width,height))
+		width+=colWidth/30
+		height+=rowHeight/3
+		self.setFixedSize(width,height)
 	#def __init__
 
 	def _debug(self,msg):
 		if self.dbg==True:
 			print("accessdock: {}".format(msg))
 	#def _debug
+
+	def mousePressEvent(self, event):
+		event.accept()
+	#def mousePressEvent
+
+	def mouseMoveEvent(self, e):
+		x = e.globalX()-(self.width()/2)
+		y = e.globalY()
+		self.move(x, y)
+	#def mouseMoveEvent
 
 	def updateScreen(self):
 		self.grid.clear()

@@ -91,21 +91,5 @@ class accessibility(QStackedWindowItem):
 		self.tblGrid.verticalHeader().setSectionResizeMode(0,QHeaderView.Stretch)
 		self.tblGrid.verticalHeader().setSectionResizeMode(1,QHeaderView.Stretch)
 		#self.tblGrid.verticalHeader().setSectionResizeMode(2,QHeaderView.Stretch)
-		
-		return
-		self.plugins=self.accesshelper.getKWinPlugins()
-		self.tblGrid.setRowCount(0)
-		for plugin,data in self.plugins.items():
-			if len(data)<=0:
-				continue
-			self.tblGrid.setRowCount(self.tblGrid.rowCount()+1)
-			item=QItemDescCheck()
-			name=self._geti18nname(data)
-			desc=self._geti18ndesc(data)
-			enabled=self._getPluginEnabled(data)
-			item.setText(name)
-			item.setDesc(desc)
-			item.setState(enabled)
-			self.tblGrid.setCellWidget(self.tblGrid.rowCount()-1,0,item)
 	#def updateScreen
 

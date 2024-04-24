@@ -75,7 +75,6 @@ class ttshelper(QWidget):
 		self.enabled=True
 		self.changed=[]
 		self.level='user'
-		self.config={}
 		self.mp3BtnDict={}
 		self.playing=[]
 		self.optionChanged=[]
@@ -107,31 +106,24 @@ class ttshelper(QWidget):
 		wdg.setLayout(box)
 		scr=QScrollArea()
 		self.box.addWidget(scr)
-		self.widgets={}
 		self.level='user'
-		self.config={}  #self.getConfig(level=self.level)
-		config=self.config.get(self.level,{})
 		lblVoice=QLabel(i18n.get("VOICE"))
 		box.addWidget(lblVoice,0,0,1,1)
 		self.cmbVoice=QComboBox()
-		self.widgets.update({self.cmbVoice:"voice"})
 		box.addWidget(self.cmbVoice,0,1,1,1)
 		lblSpeed=QLabel(i18n.get("SPEED"))
 		box.addWidget(lblSpeed,1,0,1,1)
 		self.cmbSpeed=QComboBox()
-		self.widgets.update({self.cmbSpeed:"speed"})
 		box.addWidget(self.cmbSpeed,1,1,1,1)
 		lblPitch=QLabel(i18n.get("PITCH"))
 		box.addWidget(lblPitch,2,0,1,1)
 		self.cmbPitch=QComboBox()
 		self.cmbPitch.setEnabled(False)
-		self.widgets.update({self.cmbPitch:"pitch"})
 		box.addWidget(self.cmbPitch,2,1,1,1)
 		lblSynt=QLabel(i18n.get("SYNT"))
 		box.addWidget(lblSynt,3,0,1,1)
-		self.cmbSynt=QComboBox()
-		self.widgets.update({self.cmbSynt:"synt"})
-		box.addWidget(self.cmbSynt,3,1,1,1)
+		self.cmbSynth=QComboBox()
+		box.addWidget(self.cmbSynth,3,1,1,1)
 		lblFiles=QLabel(i18n.get("FILES"))
 		box.addWidget(lblFiles,4,0,1,1,Qt.AlignLeft)
 		btnReload=QPushButton()
@@ -142,7 +134,6 @@ class ttshelper(QWidget):
 		box.addWidget(btnReload,4,1,1,1,Qt.AlignRight)
 		self.tblFiles=QTableWidget()
 		self.tblFiles.verticalHeader().setVisible(False)
-		self.widgets.update({self.tblFiles:"files"})
 		box.addWidget(self.tblFiles,5,0,1,2)
 		scr.setWidget(wdg)
 		scr.setWidgetResizable(True)
@@ -152,7 +143,7 @@ class ttshelper(QWidget):
 		self.cmbVoice.clear()
 		self.cmbSpeed.clear()
 		self.cmbPitch.clear()
-		self.cmbSynt.clear()
+		self.cmbSynth.clear()
 		self.tblFiles.setRowCount(0)
 		self.tblFiles.setColumnCount(4)
 		self.tblFiles.setHorizontalHeaderLabels([i18n.get("FILE"),i18n.get("RECORD"),i18n.get("TEXT"),i18n.get("SAVE")])
@@ -193,10 +184,10 @@ class ttshelper(QWidget):
 
 	def _populateSynth(self):
 		self._debug("Setting synt values")
-		self.cmbSynt.addItem(i18n.get("INTERNALTTS"))
-		self.cmbSynt.addItem(i18n.get("VLCTTS"))
+		self.cmbSynth.addItem(i18n.get("INTERNALTTS"))
+		self.cmbSynth.addItem(i18n.get("VLCTTS"))
 		#if synth=="vlc":
-		#	self.cmbSynt.setCurrentText(i18n.get("VLCTTS"))
+		#	self.cmbSynth.setCurrentText(i18n.get("VLCTTS"))
 	#def _populateSynth(self):
 
 	def _populateFileList(self):
@@ -308,7 +299,13 @@ class ttshelper(QWidget):
 	#def _stopPlay
 
 	def _readScreen():
-		pass
+		data={}
+		data["voice"]=self.cmbVoice.currentText()
+		data["speed"]=self.cmbSpeed.currentText()
+		data["pitch"]=self.cmbPitch.currentText()
+		data["synth"]=self.cmbSynth.currentText()
+		return(data)
+	#def _readScreen
 
 	def writeConfig(self):
 		config=self._readConfig()
@@ -317,39 +314,6 @@ class ttshelper(QWidget):
 		with open(self.configFile,"w") as f:
 			json.dumps(data, f, indent=4)	
 		return
-	#	voice=""
-	#	speed=""
-	#	pitch=""
-	#	synt=""
-	#	for widget,desc in self.widgets.items():
-	#		value=""
-	#		if desc=="voice":
-	#			value=widget.currentText()
-	#			voice=value
-	#			if value==i18n.get("SPANISHMAN"):
-	#				value="JuntaDeAndalucia_es_pa_diphone"
-	#			elif value==i18n.get("SPANISHWOMAN"):
-	#				value="JuntaDeAndalucia_es_sf_diphone"
-	#			elif value==i18n.get("VALENCIANWOMAN"):
-	#				value="upc_ca_ona_hts"
-	#			elif value==i18n.get("VALENCIANMAN"):
-	#				value="upc_ca_pau_hts"
-	#			else:
-	#				value=value.split("(")[0].strip()
-	#		if desc=="speed":
-	#			value=widget.currentText()
-	#			speed=value
-	#		if desc=="pitch":
-	#			value=widget.currentText()
-	#			pitch=value
-	#		if desc=="synt":
-	#			value="tts"
-	#			if "vlc" in widget.currentText().lower():
-	#				value="vlc"
-	#			synt=value
-	#		if value!="":
-	#			self.saveChanges(desc,value)
-	#	self._writeFileChanges(voice,speed,pitch,synt)
 	#def writeConfig
 		
 	def _writeFileChanges(self,voice,speed,pitch,synt):
@@ -361,12 +325,10 @@ class ttshelper(QWidget):
 			f.write("{0}->{1}\n".format(i18n.get("SYNT"),synt))
 	#def _writeFileChanges(self):
 
-
-
-
-app=QApplication(["TTS Manager"])
-config=ttshelper()
-config.__initScreen__()
-config.show()
-config.updateScreen()
-app.exec_()
+if __name__=="__main__":
+	app=QApplication(["TTS Manager"])
+	config=ttshelper()
+	config.__initScreen__()
+	config.show()
+	config.updateScreen()
+	app.exec_()

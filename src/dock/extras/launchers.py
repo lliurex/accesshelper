@@ -48,11 +48,24 @@ class actionSelector(QStackedWindowItem):
 		self.mode=mode
 	#def setMode
 
+	def _search(self):
+		txt=self.searchBox.text()
+		searched=self.lstActions.findItems(txt,Qt.MatchContains)
+		for idx in range(0,self.lstActions.count()):
+			i=self.lstActions.item(idx)
+			if i not in searched:
+				i.setHidden(True)
+			else:
+				i.setHidden(False)
+	#def _search
+
 	def __initScreen__(self):
 		layout=QGridLayout()
 		self.setLayout(layout)
-		inpSearch=QSearchBox()
-		layout.addWidget(inpSearch,0,0,1,2)
+		self.searchBox=QSearchBox()
+		self.searchBox.textChanged.connect(self._search)
+		self.searchBox.clicked.connect(self._search)
+		layout.addWidget(self.searchBox,0,0,1,2)
 		self.lstActions=QListWidget()
 		layout.addWidget(self.lstActions,1,0,1,2)
 		btnOk=QPushButton("Ok")
@@ -308,9 +321,6 @@ class launchers(QStackedWindow):
 		self.close()
 
 	def _addEffect(self,action):
-		print("**")
-		print(action)
-		print("**")
 		fname=action.get("fname","")
 		if fname=="":
 			prefix="{}".format(len(os.listdir(self.launchersPath))).zfill(3)
@@ -327,9 +337,6 @@ class launchers(QStackedWindow):
 	#def _addEffect
 
 	def _addScript(self,action):
-		print("**")
-		print(action)
-		print("**")
 		fname=action.get("fname","")
 		if fname=="":
 			prefix="{}".format(len(os.listdir(self.launchersPath))).zfill(3)
@@ -345,7 +352,6 @@ class launchers(QStackedWindow):
 		desktop+="Comment={}\n".format(action.get("Comment"))
 		desktop+="Icon={}\n".format(action.get("Icon"))
 		desktop+="Path={}\n".format(action.get("Path"))
-		print(action)
 		cmd="{0}/loadScript.sh {1} add".format(dockPath,action.get("Path"))
 		desktop+="Exec={}\n".format(cmd)
 		fname=os.path.join(self.launchersPath,fname)
@@ -376,7 +382,6 @@ class launchers(QStackedWindow):
 	def setParms(self,action):
 		actionPath=os.path.join(self.launchersPath,action)
 		actionData=self.app2menu.get_desktop_info(actionPath)
-		print(actionData)
 		actionData["type"]="desktop"
 		if actionData["Exec"].startswith("qdbus"):
 			actionData["type"]="effect"

@@ -86,18 +86,6 @@ class ttshelper(QWidget):
 			print("tts: {}".format(msg))
 	#def _debug
 
-	def _readConfig(self,*args):
-		data={}
-		if os.path.exists(self.configFile)==False:
-			configDir=os.path.dirname(self.configFile)
-			if os.path.exists(configDir)==False:
-				os.makedirs(configDir)
-		else:
-			with open(self.configFile,"r") as f:
-				data=json.loads(f.read())
-		return(data)
-	#def _readConfig
-
 	def __initScreen__(self):
 		self.box=QGridLayout()
 		self.setLayout(self.box)
@@ -190,45 +178,40 @@ class ttshelper(QWidget):
 		#	self.cmbSynth.setCurrentText(i18n.get("VLCTTS"))
 	#def _populateSynth(self):
 
+	def _getDataFromFname(self,fname):
+		dateKey=fname.split("_")[0]
+		dateKey=dateKey[0:4]+"/"+dateKey[4:6]+"/"+dateKey[6:8]
+		timeKey=fname.split("_")[1]
+		timeKey=timeKey[0:2]+":"+timeKey[2:4]+":"+timeKey[4:6]
+		return(dateKey,timeKey)
+	#def _getDataFromFname
+
 	def _populateFileList(self):
 		sigmap_run=QSignalMapper(self)
 		sigmap_run.mapped[QString].connect(self._processTtsFile)
 		iconSize=QSize(64,64)
 		btnSize=QSize(128,72)
-		mp3Icon=QtGui.QIcon.fromTheme("media-playback-start")
-		txtIcon=QtGui.QIcon.fromTheme("document-open")
-		saveIcon=QtGui.QIcon.fromTheme("document-save")
+		icons={"mp3":QtGui.QIcon.fromTheme("media-playback-start"),"txt":QtGui.QIcon.fromTheme("document-open"),"sav":QtGui.QIcon.fromTheme("document-save")}
 		self._debug("Populating file list")
 		fileDict=self.speech.getTtsFiles()
-		for key,files in fileDict.items():
+		for fname,fdata in fileDict.items():
 			row=self.tblFiles.rowCount()
 			self.tblFiles.insertRow(row)
-			dateKey=key.split("_")[0]
-			dateKey=dateKey[0:4]+"/"+dateKey[4:6]+"/"+dateKey[6:8]
-			timeKey=key.split("_")[1]
-			timeKey=timeKey[0:2]+":"+timeKey[2:4]+":"+timeKey[4:6]
+			dateKey,timeKey=self._getDataFromFname(fname)
 			lbl=QLabel("{}_{}".format(dateKey,timeKey))
 			self.tblFiles.setCellWidget(row,0,lbl)
 			btn=""
-			extension=""
-			if files.get("mp3",None):
-				extension=".mp3"
-				col=1
-				icon=mp3Icon
-				btn=self._newBtn(icon,extension,key,iconSize,btnSize,sigmap_run,self.tblFiles)
-				self.tblFiles.setCellWidget(row,col,btn)
-			if files.get("txt",None):
-				extension=".txt"
-				col=2
-				icon=txtIcon
-				btn=self._newBtn(icon,extension,key,iconSize,btnSize,sigmap_run,self.tblFiles)
-				widget.setCellWidget(row,col,btn)
-			if btn:
-				extension=""
-				col=3
-				icon=saveIcon
-				btn=self._newBtn(icon,extension,key,iconSize,btnSize,sigmap_run,self.tblFiles)
-				self.tblFiles.setCellWidget(row,col,btn)
+			col=1
+			for component in ["mp3","txt"]:
+				if fdata.get(component,"")!="":
+					extension=".{}".format(component)
+					icon=icons.get(component)
+					btn=self._newBtn(icon,extension,fname,iconSize,btnSize,sigmap_run,self.tblFiles)
+					self.tblFiles.setCellWidget(row,col,btn)
+					col+=1
+			if col>1:
+				btn=self._newBtn(icons["sav"],"",fname,iconSize,btnSize,sigmap_run,self.tblFiles)
+				self.tblFiles.setCellWidget(row,len(component),btn)
 		self.tblFiles.resizeColumnsToContents()
 		self.tblFiles.resizeRowsToContents()
 		self.tblFiles.horizontalHeader().setSectionResizeMode(0,QHeaderView.Stretch)
@@ -259,24 +242,30 @@ class ttshelper(QWidget):
 	#def _newBtn
 
 	def _processTtsFile(self,ttsFile):
-		confDir=os.path.join(os.environ.get('HOME','/tmp'),".config/accesshelper/tts")
+		confDir=os.path.join(os.environ.get('HOME','/tmp'),".local/share/accesswizard/records")
 		self._debug("Opening {}".format(ttsFile))
 		if ttsFile.endswith(".mp3"):
 			btn=self.mp3BtnDict.get(ttsFile)
-			self._playFile(os.path.join(confDir,"mp3",ttsFile),btn)
+			if os.path.exists(ttsFile)==False:
+				ttsFile=os.path.join(confDir,"mp3",ttsFile)
+			self._playFile(ttsFile,btn)
 		elif ttsFile.endswith(".txt"):
-			subprocess.run(["kwrite",os.path.join(confDir,"txt",ttsFile)])
+			if os.path.exists(ttsFile)==False:
+				ttsFile=os.path.join(confDir,"txt",ttsFile)
+			subprocess.run(["kwrite",ttsFile])
 		else:
 			destDir=QFileDialog.getExistingDirectory()
 			if destDir:
 				self._debug("Exporting {0} to {1}".format(ttsFile,destDir))
 				mp3File="{}.mp3".format(ttsFile)
+				if os.path.exists(mp3File)==False:
+					mp3Path=os.path.join(confDir,"mp3",mp3File)
 				txtFile="{}.txt".format(ttsFile)
-				mp3Path=os.path.join(confDir,"mp3",mp3File)
-				txtPath=os.path.join(confDir,"txt",txtFile)
-				shutil.copy(mp3Path,os.path.join(destDir,mp3File))
-				shutil.copy(txtPath,os.path.join(destDir,txtFile))
-				self.showMsg("{} {}".format(i18n.get("EXPORT"),destDir))
+				if os.path.exists(txtFile)==False:
+					txtPath=os.path.join(confDir,"txt",txtFile)
+				shutil.copy(mp3Path,os.path.join(destDir,os.path.basename(mp3File)))
+				shutil.copy(txtPath,os.path.join(destDir,os.path.basename(txtFile)))
+				#self.showMsg("{} {}".format(i18n.get("EXPORT"),destDir))
 	#def _processTtsFile
 
 	def _playFile(self,ttsFile,btn):
@@ -307,13 +296,25 @@ class ttshelper(QWidget):
 		return(data)
 	#def _readScreen
 
+	def _readConfig(self,*args):
+		data={}
+		if os.path.exists(self.configFile)==False:
+			configDir=os.path.dirname(self.configFile)
+			if os.path.exists(configDir)==False:
+				os.makedirs(configDir)
+		else:
+			with open(self.configFile,"r") as f:
+				data=json.loads(f.read())
+		return(data)
+	#def _readConfig
+
 	def writeConfig(self):
 		config=self._readConfig()
 		data=self._readScreen()
 		config.update(data)
 		with open(self.configFile,"w") as f:
-			json.dumps(data, f, indent=4)	
-		return
+			json.dumps(config, f, indent=4)	
+		return(config)
 	#def writeConfig
 		
 	def _writeFileChanges(self,voice,speed,pitch,synt):

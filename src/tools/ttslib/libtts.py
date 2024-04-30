@@ -16,9 +16,9 @@ class speechhelper():
 	def __init__(self):
 		self.dbg=True
 		self.libfestival="/usr/share/accesshelper/stacks/libfestival.py"
-		self.confDir=os.path.join(os.environ.get('HOME','/tmp'),".config/accesshelper")
-		self.txtDir=os.path.join(self.confDir,"tts/txt")
-		self.mp3Dir=os.path.join(self.confDir,"tts/mp3")
+		self.confDir=os.path.join(os.environ.get('HOME','/tmp'),".local/share/accesswizard")
+		self.txtDir=os.path.join(self.confDir,"records/txt")
+		self.mp3Dir=os.path.join(self.confDir,"records/mp3")
 		if os.path.isdir(self.txtDir)==False:
 			os.makedirs(self.txtDir)
 		if os.path.isdir(self.mp3Dir)==False:
@@ -292,25 +292,24 @@ class speechhelper():
 	#def getFestivalVoices
 
 	def getTtsFiles(self):
-		ttsDir=os.path.join(os.environ.get('HOME'),".config/accesshelper/tts")
 		allDict={}
-		if os.path.isdir(ttsDir)==True:
-			mp3Dir=os.path.join(ttsDir,"mp3")
-			txtDir=os.path.join(ttsDir,"txt")
-			txtDict={}
-			mp3Dict={}
-			for f in os.listdir(mp3Dir):
-				if f.endswith(".mp3") and "_" in f:
-					mp3Dict[f.replace(".mp3","")]=f
-			for f in os.listdir(txtDir):
-				if f.endswith(".txt") and "_" in f:
-					txtDict[f.replace(".txt","")]=f
-			for key,item in mp3Dict.items():
-				allDict[key]={"mp3":item}
-			for key,item in txtDict.items():
-				if allDict.get(key):
-					allDict[key].update({"txt":item})
-				else:
-					allDict[key]={"txt":item}
+		mp3Dict={}
+		txtDict={}
+		if os.path.isdir(self.mp3Dir)==True:
+			for f in os.scandir(self.mp3Dir):
+				if f.name.endswith(".mp3") and "_" in f.name:
+					mp3Dict[f.name.replace(".mp3","")]=f.name
+		if os.path.isdir(self.txtDir)==True:
+			for f in os.scandir(self.txtDir):
+				if f.name.endswith(".txt") and "_" in f.name:
+					txtDict[f.name.replace(".txt","")]=f.name
+		for key,item in mp3Dict.items():
+			allDict[key]={"mp3":item}
+		for key,item in txtDict.items():
+			if allDict.get(key):
+				allDict[key].update({"txt":item})
+			else:
+				allDict[key]={"txt":item}
 		ordDict=OrderedDict(sorted(allDict.items(),reverse=True))
 		return(ordDict)
+	#def getTtsFiles

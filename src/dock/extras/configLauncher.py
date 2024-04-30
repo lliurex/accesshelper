@@ -1,12 +1,12 @@
 #!/usr/bin/python3
 
-import os
+import os,subprocess
 import sys
 from PySide2.QtUiTools import QUiLoader
 from PySide2.QtWidgets import QApplication,QDialog,QWidget,QVBoxLayout,QHBoxLayout,QPushButton,QGridLayout,QLabel,QPushButton,QLineEdit,\
 	QRadioButton,QCheckBox,QComboBox,QTableWidget,QSlider,QScrollArea,QMessageBox,QCalendarWidget
 from PySide2.QtCore import QFile, QIODevice
-
+plugtype="Effect"
 def _getSignalForConnection(widget):
 	name=widget.objectName()
 	if name.startswith("kcfg_"):
@@ -56,13 +56,39 @@ def _recursiveSetupEvents(layout):
 	return(configWidgets)
 #def _recursiveSetupEvents
 
-def saveChanges(configWidgets,uiId):
-	plugType="Effect"
+def readConfig(configWidgets,uiId):
+	if "effect" in uiId:
+		plugType="Effect"
+	else:
+		plugType="Script"
 	for name,wdg in configWidgets:
 		if len(name)==0:
 			continue
 		if hasattr(wdg,"text"):
-			cmd=["kwriteconfig5","--file","kwinrc","--group","{0}-{1}".format(plugType,uiId),"--value",wdg.text()]
+			key=name.replace("kcfg_","")
+			cmd=["kreadconfig5","--file","kwinrc","--group","{0}-{1}".format(plugType,uiId),"--key",key]
+			print(" ".join(cmd))
+			out=subprocess.check_output(cmd,universal_newlines=True,encoding="utf8")
+			value=out.strip()
+			if len(value)>0:
+				print(wdg)
+				if hasattr(wdg,"setText"):
+					wdg.setText(value)
+				elif hasattr(wdg,"setValue"):
+					wdg.setValue(int(value))
+#def readConfig
+
+def saveChanges(configWidgets,uiId):
+	if "effect" in uiId:
+		plugType="Effect"
+	else:
+		plugType="Script"
+	for name,wdg in configWidgets:
+		if len(name)==0:
+			continue
+		key=name.replace("kcfg_","")
+		if hasattr(wdg,"text"):
+			cmd=["kwriteconfig5","--file","kwinrc","--group","{0}-{1}".format(plugType,uiId),"--key",key,"--value",wdg.text()]
 			print(cmd)
 
 def getId(UiFile):
@@ -109,10 +135,11 @@ if __name__ == "__main__":
 	btnOk=QPushButton("Ok")
 	btnOk.clicked.connect(lambda: saveChanges(configWidgets,UiId))
 	btnKo=QPushButton("Cancel")
-	btnKo.clicked.connect(app.exit())
+	btnKo.clicked.connect(app.exit)
 	hlay.addWidget(btnOk)
 	hlay.addWidget(btnKo)
 	btnBox.setLayout(hlay)
 	layout.addWidget(btnBox)
 	window.show()
+	readConfig(configWidgets,UiId)
 	sys.exit(app.exec_())

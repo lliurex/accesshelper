@@ -1,19 +1,22 @@
 #!/usr/bin/python3
-import os
+import os,json
 from PySide2.QtWidgets import QApplication,QLabel,QGridLayout,QCheckBox,QSizePolicy,QRadioButton,QHeaderView,QTableWidgetItem
 from PySide2 import QtGui
 from PySide2.QtCore import Qt
 from QtExtraWidgets import QStackedWindowItem, QTableTouchWidget, QPushInfoButton
-import subprocess
 import locale
 import gettext
 _ = gettext.gettext
 
 i18n={
 	"CONFIG":_("Settings"),
-	"MENU":_("Other Settings"),
 	"DESCRIPTION":_("Other options"),
-	"TOOLTIP":_("Advanced settings"),
+	"DOCK":_("Autostart dock"),
+	"GRUB":_("Beep when computer starts"),
+	"MENU":_("Other Settings"),
+	"SDDM_ORCA":_("Enable ORCA in sddm screen"),
+	"SDDM_BEEP":_("Beep when sddm launches"),
+	"TOOLTIP":_("Advanced settings")
 	}
 
 class settings(QStackedWindowItem):
@@ -27,17 +30,16 @@ class settings(QStackedWindowItem):
 			index=4,
 			visible=True)
 		self.enabled=True
-		self.changed=[]
-		self.level='user'
-		self.plasmaConfig={}
-		self.locale=locale.getdefaultlocale()[0][0:2]
+		self.confDir=os.path.join(os.environ.get("HOME"),".local","share","accesswizard")
+		self.confFile=os.path.join(self.confDir,"accesswizard.conf")
 	#def __init__
 
 	def __initScreen__(self):
 		self.box=QGridLayout()
 		self.setLayout(self.box)
 		self.tblGrid=QTableTouchWidget()
-		self.tblGrid.setColumnCount(3)
+		self.tblGrid.setColumnCount(2)
+		self.tblGrid.setRowCount(2)
 #		self.tblGrid.setShowGrid(False)
 		self.tblGrid.verticalHeader().hide()
 		self.tblGrid.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
@@ -46,18 +48,55 @@ class settings(QStackedWindowItem):
 		self.tblGrid.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
 		self.tblGrid.horizontalHeader().setSectionResizeMode(0,QHeaderView.Stretch)
 		self.tblGrid.horizontalHeader().setSectionResizeMode(1,QHeaderView.Stretch)
-		self.tblGrid.horizontalHeader().setSectionResizeMode(2,QHeaderView.Stretch)
 		self.tblGrid.setSelectionBehavior(self.tblGrid.SelectRows)
 		self.tblGrid.setSelectionMode(self.tblGrid.SingleSelection)
 		self.box.addWidget(self.tblGrid)
+		self.btnAccept.clicked.connect(self.writeConfig)
+		self.tblGrid.verticalHeader().setSectionResizeMode(0,QHeaderView.Stretch)
+		self.tblGrid.verticalHeader().setSectionResizeMode(1,QHeaderView.Stretch)
+		self.chkGrub=QCheckBox(i18n["GRUB"])
+		self.tblGrid.setCellWidget(0,0,self.chkGrub)
+		self.chkDock=QCheckBox(i18n["DOCK"])
+		self.tblGrid.setCellWidget(0,1,self.chkDock)
+		self.chkSddm=QCheckBox(i18n["SDDM_ORCA"])
+		self.tblGrid.setCellWidget(1,0,self.chkSddm)
+		self.chkBeep=QCheckBox(i18n["SDDM_BEEP"])
+		self.tblGrid.setCellWidget(1,1,self.chkBeep)
 	#def __initScreen__
 
 	def updateScreen(self):
-		self.tblGrid.setRowCount(0)
-		self.tblGrid.setRowCount(2)
-		chkGrub=QCheckBox(i18n("GRUB"))
-		self.tblGrid.setCellWidget(0,0,chkGrub)
-		self.tblGrid.verticalHeader().setSectionResizeMode(0,QHeaderView.Stretch)
-		self.tblGrid.verticalHeader().setSectionResizeMode(1,QHeaderView.Stretch)
+		config=self.readConfig()
+		self.chkGrub.setChecked(config.get("grub",False))
+		self.chkSddm.setChecked(config.get("sddm",False))
+		self.chkBeep.setChecked(config.get("beep",False))
+		self.chkDock.setChecked(config.get("dock",False))
 	#def updateScreen
 
+	def readConfig(self):
+		config={}
+		if os.path.exists(self.confFile):
+			try:
+				with open(self.confFile,"r") as f:
+					config=json.loads(f.read())	
+			except:
+				print("Malformed {}".format(self.confFile))
+		return (config)
+	#def readConfig
+
+	def readScreen(self):
+		config={}
+		config["grub"]=self.chkGrub.isChecked()
+		config["beep"]=self.chkBeep.isChecked()
+		config["sddm"]=self.chkSddm.isChecked()
+		config["dock"]=self.chkDock.isChecked()
+		return(config)
+	#def readScreen
+	
+	def writeConfig(self):
+		config=self.readConfig()
+		config.update(self.readScreen())
+		if os.path.exists(self.confDir)==False:
+			os.makedirs(self.confDir)
+		with open(self.confFile,"w") as f:
+			json.dump(config,f,indent=4)
+	#def writeConfig

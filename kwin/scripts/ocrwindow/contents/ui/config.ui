@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>OcrWindowConfig</class>
+ <widget class="QWidget" name="OcrWindowConfig">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>355</width>
+    <height>177</height>
+   </rect>
+  </property>
+  <layout class="QGridLayout" name="formLayout">
+   <item row="0" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Voice:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1" colspan="5">
+    <widget class="KFileDialog" name="kcfg_Voice2">
+    </widget>
+   </item>
+   <item row="1" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Stretch</string>
+       </property>
+      </widget>
+     </item>
+   <item row="1" column="1">
+      <widget class="QSpinBox" name="kcfg_Stretch">
+       <property name="minimum">
+        <number>1</number>
+       </property>
+       <property name="maximum">
+        <number>15</number>
+       </property>
+      </widget>
+     </item>
+   <item row="1" column="2" alignment="Qt::AlignRight">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Pitch</string>
+       </property>
+      </widget>
+     </item>
+   <item row="1" column="3">
+      <widget class="QSpinBox" name="kcfg_Pitch">
+       <property name="minimum">
+        <number>1</number>
+       </property>
+       <property name="maximum">
+        <number>50</number>
+       </property>
+      </widget>
+     </item>
+   <item row="1" column="4">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Rate:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="5">
+      <widget class="QSpinBox" name="kcfg_Rate">
+       <property name="minimum">
+        <number>1</number>
+       </property>
+       <property name="maximum">
+        <number>100</number>
+       </property>
+      </widget>
+     </item>
+	<item row="2" column="0" colspan="6" alignment="Qt::AlignCenter">
+      <widget class="QLabel" name="label" >
+        <property name="text">
+         <string>** Changes apply only after disabling and re-enabling the script **</string>
+  		</property>
+  	  </widget>
+    </item>
+
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KFileDialog</class>
+   <extends>KSelector</extends>
+   <header>kselector.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

@@ -83,6 +83,8 @@ class accessdock(QWidget):
 			icn=QIcon(pxm)
 		else:
 			icn=QIcon.fromTheme(iconName)
+		btn.setToolTip(launcher["Name"])
+		btn.setAccessibleName(launcher["Name"])
 		btn.setIcon(icn)
 		btn.setIconSize(QSize(64,64))
 		btn.setFixedSize(QSize(72,72))

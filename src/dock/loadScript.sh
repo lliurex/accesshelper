@@ -10,9 +10,6 @@ ID=${ID/*: /}
 ID=${ID//\"/}
 ID=${ID/,/}
 ID=${METADATA/metadata.json/contents\/${ID}}
-echo "M: $METADATA"
-echo "T: $TYPE"
-echo "I: $ID"
 LOADED=0
 UNLOAD=$(qdbus org.kde.KWin /Scripting org.kde.kwin.Scripting.unloadScript $ID)
 while [[ $UNLOAD == "true" ]]
@@ -22,7 +19,7 @@ do
 	LOADED=1
 done
 [[ ${LOADED} -ne 0 ]] && exit
-echo $TYPE
+
 if [[ $TYPE == "declarativescript" ]]
 then
 	CONT=$(qdbus org.kde.KWin /Scripting org.kde.kwin.Scripting.loadDeclarativeScript $ID)

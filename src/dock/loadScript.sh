@@ -19,15 +19,11 @@ UNLOAD="true"
 while [[ $UNLOAD == "true" ]]
 do
 	sleep 0.1
-	echo "Disabling $MAIN"
 	UNLOAD=$(qdbus org.kde.KWin /Scripting org.kde.kwin.Scripting.unloadScript $MAIN)
-	echo $UNLOAD
 	if [[ $UNLOAD == "false" ]]
 	then
-		echo "Disabling $ID"
 		UNLOAD=$(qdbus org.kde.KWin /Scripting org.kde.kwin.Scripting.unloadScript $ID)
 	fi
-	echo $UNLOAD
 	[[ $UNLOAD == "true" ]] && LOADED=1
 done
 echo $LOADED

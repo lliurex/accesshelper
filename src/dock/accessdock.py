@@ -1,7 +1,7 @@
 #!/usr/bin/python3
-import os,sys,io,psutil,shutil,signal,time
-from PySide2.QtWidgets import QApplication,QGridLayout,QWidget,QPushButton,QHeaderView
-from PySide2.QtCore import Qt,QSignalMapper,QSize,QThread
+import os,sys,subprocess
+from PySide2.QtWidgets import QApplication,QGridLayout,QWidget,QPushButton,QHeaderView,QMenu,QAction
+from PySide2.QtCore import Qt,QSignalMapper,QSize,QThread,QPoint,QEvent
 from PySide2.QtGui import QIcon,QPixmap,QCursor,QColor
 from QtExtraWidgets import QTableTouchWidget
 import subprocess
@@ -40,6 +40,7 @@ class accessdock(QWidget):
 		rowHeight=self.grid.verticalHeader().sectionSize(0)
 		height=(self.grid.rowCount()*rowHeight)
 		self.grid.resize(QSize(width,height))
+		self.activeWidget=None
 		width+=colWidth/30
 		height+=rowHeight/3
 		self.setFixedSize(width,height)
@@ -60,12 +61,53 @@ class accessdock(QWidget):
 		self.move(x, y)
 	#def mouseMoveEvent
 
+	def eventFilter(self,*args):
+		wdg=args[0]
+		ev=args[1]
+		if ev.type()==QEvent.Type.ContextMenu:
+			self._popup(wdg)
+		else:
+			ev.ignore()
+		return(False)
+	#def eventFilter
+
+	def _popup(self,wdg):
+		mnu=self.btnMnu.get(wdg)
+		if mnu:
+			self.activeWidget=wdg
+			mnu.popup(self.mapToGlobal(QPoint(wdg.x(),wdg.y())))
+	#def _popup
+
+	def _launchConfig(self,*args,**kwargs):
+		path=self.activeWidget.property("path")
+		if len(path)>0:
+			pathdir=os.path.dirname(path)
+			pathconfig=os.path.join(pathdir,"contents","ui","config.ui")
+			if os.path.exists(pathconfig):
+				self.setVisible(False)
+				try:
+					subprocess.run(["extras/configLauncher.py",pathconfig])
+				except:
+					print("Error launching config {}".format(pathconfig))
+				finally:
+					self.setVisible(True)
+
 	def updateScreen(self):
 		self.grid.clear()
 		self.grid.setColumnCount(0)
+		self.btnMnu={}
 		launchers=self.launchers.getLaunchers()
 		for launcher in launchers:
+			mnu=QMenu(launcher[1]["Name"])
+			#actConfig=QAction("Configure")
+			show=mnu.addAction("Configure")
+			show.triggered.connect(self._launchConfig)
 			btn=QPushButton()
+			btn.installEventFilter(self)
+			btn.setContextMenuPolicy(Qt.CustomContextMenu)
+			btn.customContextMenuRequested.connect(self._popup)
+			#btn.setMenu(mnu)
+			self.btnMnu[btn]=mnu
 			btn=self._setUpBtn(btn,launcher[1])
 			btn.setProperty("file",launcher[0])
 			self.grid.setColumnCount(self.grid.columnCount()+1)
@@ -88,6 +130,7 @@ class accessdock(QWidget):
 		btn.setIcon(icn)
 		btn.setIconSize(QSize(64,64))
 		btn.setFixedSize(QSize(72,72))
+		btn.setProperty("path",launcher.get("Path",""))
 		btn.clicked.connect(lambda: self._beginLaunch(launcher.get("Exec")))
 		return(btn)
 	#def _setUpBtn

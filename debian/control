@@ -13,3 +13,16 @@ Depends: python3-appconfig (>= 0.46),python3-pyside2.qtmultimedia,python3-pyside
 Description: Set accessibility settings
  AccessHelper it's a common place for the
  available accessibility options 
+
+Package: kwin-rgbfilter
+Architecture: all
+Depends: accesswizard
+Description: RGB Filter for kwin
+ This plugin for KWin applies a rgb filter to the screen.
+
+Package: kwin-ocrwindow
+Architecture: all
+Depends: accesswizard
+Description: Read window contents with OCR
+ This plugin for KWin captures the active screen
+ and reads the content after processing through tesserocr.

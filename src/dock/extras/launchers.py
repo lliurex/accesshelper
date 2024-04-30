@@ -98,7 +98,7 @@ class actionSelector(QStackedWindowItem):
 				else:
 					qicon=QtGui.QIcon.fromTheme(appicon)
 				self.lstActions.item(self.lstActions.count()-1).setIcon(qicon)
-				itemData={"type":"desktop","Exec":appexe,"Name":appname,"Icon":appicon,"Comment":appdesc,"Path":apppath}
+				itemData={"type":"desktop","Exec":appexe,"Name":appname,"Icon":appicon,"Comment":appdesc,"path":apppath}
 				self.lstActions.item(self.lstActions.count()-1).setData(Qt.UserRole,itemData)
 		else:
 			plugins=self.accesshelper.getKWinEffects()
@@ -116,7 +116,7 @@ class actionSelector(QStackedWindowItem):
 				appname=data.get("KPlugin",{}).get("Name")
 				desc=data.get("KPlugin",{}).get("Comment")
 				apppath=data.get("path")
-				itemData={"type":plugType,"Exec":plugid,"Name":appname,"Icon":icon,"Comment":desc,"Path":apppath}
+				itemData={"type":plugType,"Exec":plugid,"Name":appname,"Icon":icon,"Comment":desc,"path":apppath}
 				self.lstActions.item(self.lstActions.count()-1).setData(Qt.UserRole,itemData)
 	#def updateScreen
 
@@ -330,6 +330,7 @@ class launchers(QStackedWindow):
 		desktop+="Name={}\n".format(action.get("Name"))
 		desktop+="Comment={}\n".format(action.get("Comment"))
 		desktop+="Icon={}\n".format(action.get("Icon"))
+		desktop+="Path={}\n".format(action.get("path"))
 		cmd="qdbus org.kde.KWin /Effects org.kde.kwin.Effects.toggleEffect {}".format(action.get("Exec"))
 		desktop+="Exec={}\n".format(cmd)
 		with open(fname,"w") as f:
@@ -351,16 +352,16 @@ class launchers(QStackedWindow):
 		desktop+="Name={}\n".format(action.get("Name"))
 		desktop+="Comment={}\n".format(action.get("Comment"))
 		desktop+="Icon={}\n".format(action.get("Icon"))
-		desktop+="Path={}\n".format(action.get("Path"))
-		cmd="{0}/loadScript.sh {1} add".format(dockPath,action.get("Path"))
+		desktop+="Path={}\n".format(action.get("path"))
+		cmd="{0}/loadScript.sh {1} add".format(dockPath,action.get("path"))
 		desktop+="Exec={}\n".format(cmd)
 		fname=os.path.join(self.launchersPath,fname)
 		with open(fname,"w") as f:
 			f.write(desktop)
-	#def _addEffect
+	#def _addScript
 
 	def _addDesktop(self,action):
-		fdesktop=action.get("Path","")
+		fdesktop=action.get("path","")
 		fname=action.get("fname","")
 		app=self.app2menu.init_desktop_file()
 		if fname=="":
@@ -389,7 +390,7 @@ class launchers(QStackedWindow):
 			actionData["type"]="script"
 		actionData["fname"]=actionPath
 		if actionData.get("Path","")!="":
-			actionData["Path"]=actionData["Path"]
+			actionData["path"]=actionData["Path"]
 		self.setCurrentStack(0,parms=actionData)
 	#def setParms
 		

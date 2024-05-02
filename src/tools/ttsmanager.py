@@ -331,6 +331,7 @@ if __name__=="__main__":
 	app=QApplication(["TTS Manager"])
 	config=ttshelper()
 	config.__initScreen__()
+	config.setWindowIcon(QtGui.QIcon.fromTheme("kmouth"))
 	config.show()
 	#config.updateScreen()
 	app.exec_()

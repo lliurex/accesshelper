@@ -178,10 +178,12 @@ class accessconf(QWidget):
 		self.max.setVisible(False)
 		self.list=QTableTouchWidget(0,1)
 		self.list.itemSelectionChanged.connect(self._syncDockIdx)
-		self.list.verticalHeader().hide()
 		self.list.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
 		self.list.horizontalHeader().hide()
 		self.list.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+		self.list.setSelectionBehavior(self.list.SelectRows)
+		self.list.setSelectionMode(self.list.SingleSelection)
+		self.list.itemChanged.connect(self._change)
 		self.btnIup=QPushButton()
 		self.btnIup.setAccessibleName(i18n["UP"])
 		self.btnIup.setIcon(QIcon.fromTheme("arrow-up"))
@@ -192,22 +194,45 @@ class accessconf(QWidget):
 		self.btnIdo.setIcon(QIcon.fromTheme("arrow-down"))
 		self.btnIdo.setEnabled(False)
 		self.btnIdo.clicked.connect(self._itemDown)
-		btnAdd=QPushButton(i18n.get("ADD"))
-		btnAdd.clicked.connect(self._addAction)
-		btnDel=QPushButton(i18n.get("DEL"))
-		btnDel.clicked.connect(self._delAction)
-		btnEdi=QPushButton(i18n.get("EDI"))
-		btnEdi.clicked.connect(self._ediAction)
+		self.btnAdd=QPushButton(i18n.get("ADD"))
+		self.btnAdd.clicked.connect(self._addAction)
+		self.btnDel=QPushButton(i18n.get("DEL"))
+		self.btnDel.clicked.connect(self._delAction)
+		self.btnDel.setEnabled(False)
+		self.btnEdi=QPushButton(i18n.get("EDI"))
+		self.btnEdi.clicked.connect(self._ediAction)
+		self.btnEdi.setEnabled(False)
 		layout.addWidget(self.dock,0,0,1,4)
-		#layout.addWidget(lbl,1,0,1,1)
-		#layout.addWidget(self.max,1,1,1,1)
 		layout.addWidget(self.list,1,0,3,2)
 		layout.addWidget(self.btnIup,1,2,2,1,Qt.AlignTop|Qt.AlignLeft)
 		layout.addWidget(self.btnIdo,3,2,1,1,Qt.AlignBottom|Qt.AlignLeft)
-		layout.addWidget(btnAdd,1,3,1,1,Qt.AlignTop)
-		layout.addWidget(btnEdi,2,3,1,1,Qt.AlignTop)
-		layout.addWidget(btnDel,3,3,1,1,Qt.AlignTop)
+		layout.addWidget(self.btnAdd,1,3,1,1,Qt.AlignTop)
+		layout.addWidget(self.btnEdi,2,3,1,1,Qt.AlignTop)
+		layout.addWidget(self.btnDel,3,3,1,1,Qt.AlignTop)
 	#def _initScreen
+
+	def _change(self,*args):
+		if args[0].isSelected():
+			if len(args[0].text())<3:
+				return
+			lpath=launchers.launchers().launchersPath
+			idx=self.list.currentRow()
+			data=self.dock.data
+			fpath=os.path.join(lpath,data[idx])
+			with open(fpath,"r") as f:
+				fcontents=f.read()
+			nfcontents=[]
+			for l in fcontents.split("\n"):
+				nl=l
+				if l.replace(" ","").startswith("Name"):
+					nl=l.split("=")
+					nl[1]=args[0].text()
+					nl="=".join(nl)
+				nfcontents.append("{}\n".format(nl))
+			with open(fpath,"w") as f:
+				f.writelines(nfcontents)
+	#def _change
+
 
 	def updateScreen(self):
 		self.dock.updateScreen()
@@ -255,6 +280,8 @@ class accessconf(QWidget):
 	#def _itemDown
 
 	def _syncListIdx(self,*args):
+		self.btnDel.setEnabled(True)
+		self.btnEdi.setEnabled(True)
 		idx=self.dock.currentIndex()
 		self.list.setEnabled(False)
 		self.list.setCurrentCell(idx,0)

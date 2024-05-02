@@ -216,6 +216,160 @@ class client():
 		else:
 			self._mpLaunchCmd(cmd)
 	#def launchCmd
+
+	def _generateProfileDirs(self,pname):
+		tmpDirs={}
+		#Generate tmp folders
+		tmpFolder=tempfile.mkdtemp()
+		tmpDirs.update({"tmp":tmpFolder})
+		#Plasma config goes to .config
+		plasmaPath=os.path.join(tmpFolder,".config")
+		os.makedirs(plasmaPath)
+		tmpDirs.update({"plasma":plasmaPath})
+		#accesshelper to .config/accesshelper
+		configPath=os.path.join(tmpFolder,".config/accesswizard")
+		#onboard=os.path.join(os.path.dirname(appconfrc),"onboard.dconf")
+		os.makedirs(configPath)
+		tmpDirs.update({"config":configPath})
+		#autostart
+		desktopStartPath=os.path.join(tmpFolder,".config/autostart")
+		os.makedirs(desktopStartPath)
+		#autostartPath=os.path.join(home,".config","autostart")
+		tmpDirs.update({"autostart":desktopStartPath})
+		#autoshutdown
+		desktopShutdownPath=os.path.join(tmpFolder,".config/plasma-workspace/shutdown")
+		os.makedirs(desktopShutdownPath)
+		#autoshutdownPath=os.path.join(home,".config",".config/plasma-workspace/shutdown")
+		tmpDirs.update({"autoshutdown":desktopShutdownPath})
+		#mozilla
+		mozillaPath=os.path.join(tmpFolder,".mozilla")
+		os.makedirs(mozillaPath)
+		tmpDirs.update({"mozilla":mozillaPath})
+		#gtk
+		gtkPath=os.path.join(tmpFolder,".config")
+		if os.path.isdir(gtkPath)==False:
+			os.makedirs(gtkPath)
+		tmpDirs.update({"gtk":gtkPath})
+		return(tmpDirs)
+	#def _generateProfileDirs
+
+	def _copyKFiles(self,plasmaPath):
+		klist=["kcminputrc","konsolerc","kglobalshortcutsrc","khotkeys","kwinrc","kaccessrc"]
+		for kfile in klist:
+			kPath=os.path.join(os.environ['HOME'],".config",kfile)
+			if os.path.isfile(kPath):
+				shutil.copy(kPath,plasmaPath)
+	#def _copyKFiles(self):
+
+	def _copyAccessConfig(self,configPath):
+		conf=os.path.join(os.environ.get("HOME"),".config","accesswizard")
+		if os.path.exists(conf):
+			for f in os.scandir(conf):
+				if os.path.isdir(f.path):
+					continue
+				shutil.copy(f.path,configPath)
+	#def _copyAccessConfig
+
+	def _copyStartShutdown(self,desktopstartPath,desktopshutdownPath):
+		autoshutdownPath=os.path.join(os.environ.get("HOME"),".config",".config/plasma-workspace/shutdown")
+		autostartPath=os.path.join(os.environ.get("HOME"),".config",".config/autostart")
+		for auto in [autostartPath,autoshutdownPath]:
+			if os.path.isdir(auto):
+				for f in os.listdir(auto):
+					if f.startswith("access"):
+						autostart=os.path.join(auto,f)
+						if auto==autostartPath:
+							shutil.copy(autostart,desktopStartPath)
+						else:
+							shutil.copy(autostart,desktopShutdownPath)
+	#def _copyStartShutdown
+
+	def _getMozillaSettingsFiles(self):
+		mozillaFiles=[]
+		mozillaDir=os.path.join(os.environ.get('HOME',''),".mozilla/firefox")
+		if os.path.isdir(mozillaDir)==True:
+			for mozillaF in os.listdir(mozillaDir):
+				self._debug("Reading MOZILLA {}".format(mozillaF))
+				fPath=os.path.join(mozillaDir,mozillaF)
+				if os.path.isdir(fPath):
+					self._debug("Reading DIR {}".format(mozillaF))
+					if "." in mozillaF:
+						self._debug("Reading DIR {}".format(mozillaF))
+						prefs=os.path.join(mozillaDir,mozillaF,"prefs.js")
+						if os.path.isfile(prefs):
+							mozillaFiles.append(prefs)
+		return mozillaFiles
+	#def _getMozillaSettingsFiles
+
+	def _copyMozillaFiles(self,mozillaPath):
+		mozillaFiles=self._getMozillaSettingsFiles()
+		for mozillaFile in mozillaFiles:
+			destdir=os.path.basename(os.path.dirname(mozillaFile))
+			destdir=os.path.join(mozillaPath,destdir)
+			os.makedirs(destdir)
+			shutil.copy(mozillaFile,destdir)
+	#def _copyMozillaFiles
+
+	def _getGtkSettingsFiles(self,checkExists=False):
+		gtkFiles=[]
+		gtkDirs=[os.path.join("/home",os.environ.get('USER',''),".config/gtk-3.0"),os.path.join("/home",os.environ.get('USER',''),".config/gtk-4.0")]
+		for gtkDir in gtkDirs:
+			if checkExists==False:
+				gtkFiles.append(os.path.join(gtkDir,"settings.ini"))
+			elif os.path.isfile(os.path.join(gtkDir,"settings.ini"))==True:
+				gtkFiles.append(os.path.join(gtkDir,"settings.ini"))
+		return gtkFiles
+	#def _getGtkFiles
+
+	def _copyGtkFiles(self,gtkPath):
+		gtkFiles=self._getGtkSettingsFiles(True)
+		for gtkFile in gtkFiles:
+			destdir=os.path.basename(os.path.dirname(gtkFile))
+			destdir=os.path.join(gtkPath,destdir)
+			os.makedirs(destdir)
+			shutil.copy(gtkFile,destdir)
+	#def _copyGtkFiles(self):
+
+	def _copyTarProfile(self,orig,dest):
+		if os.path.isdir(os.path.dirname(dest))==False:
+			os.makedirs(os.path.dirname(dest))
+		try:
+			shutil.copy(orig,dest)
+		except Exception as e:
+			self._debug(e)
+			self._debug("Permission denied for {}".format(dest))
+			sw=False
+	#def _copyTarProfile
 	
+	def saveProfile(self,pname="profile"):
+		profDir=os.path.join(os.environ.get("HOME"),".local","share","accesswizard","profiles",pname)
+		profiles=[]
+		if os.path.exists(os.path.dirname(profDir))==False:
+			os.makedirs(profDir)
+		if os.path.exists(profDir)==True:
+			shutil.rmtree(profDir)
+		os.makedirs(profDir)
+		self._debug("Saving profile {}".format(profDir))
+		profDirs=self._generateProfileDirs(pname)
+		self._copyKFiles(profDirs["plasma"])
+		self._copyAccessConfig(profDirs["config"])
+		self._copyStartShutdown(profDirs["autostart"],profDirs["autoshutdown"])
+		self._copyMozillaFiles(profDirs["mozilla"])
+		self._copyGtkFiles(profDirs["gtk"])
+		(osHdl,tmpFile)=tempfile.mkstemp()
+		oldCwd=os.getcwd()
+		tmpFolder=profDirs["tmp"]
+		os.chdir(tmpFolder)
+		with tarfile.open(tmpFile,"w") as tarFile:
+			for f in os.listdir(tmpFolder):
+				tarFile.add(os.path.basename(f))
+		os.chdir(oldCwd)
+		if profDir.endswith(".tar")==False:
+			profDir+=".tar"
+		self._debug("Copying {0}->{1}".format(tmpFile,profDir))
+		self._copyTarProfile(tmpFile,profDir)
+		os.remove(tmpFile)
+		return(os.path.join(profDir,os.path.basename(tmpFile)))
+	#def take_snapshot
 
 #class client

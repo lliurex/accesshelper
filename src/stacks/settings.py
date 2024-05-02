@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 from . import accesshelper
 import os,json
-from PySide2.QtWidgets import QApplication,QLabel,QGridLayout,QCheckBox,QSizePolicy,QRadioButton,QHeaderView,QTableWidgetItem,QAbstractScrollArea
+from PySide2.QtWidgets import QApplication,QLabel,QGridLayout,QCheckBox,QSizePolicy,QRadioButton,QHeaderView,QTableWidgetItem,QAbstractScrollArea,QComboBox,QPushButton
 from PySide2 import QtGui
 from PySide2.QtCore import Qt
 from QtExtraWidgets import QStackedWindowItem, QTableTouchWidget, QPushInfoButton
@@ -15,6 +15,8 @@ i18n={
 	"DOCK":_("Autostart dock"),
 	"GRUB":_("Beep when computer starts"),
 	"MENU":_("Other Settings"),
+	"PROFILE":_("Start session with profile"),
+	"SAVE":_("Save current profile"),
 	"SDDM_ORCA":_("Enable ORCA in sddm screen"),
 	"SDDM_BEEP":_("Beep when sddm launches"),
 	"TOOLTIP":_("Advanced settings")
@@ -41,7 +43,7 @@ class settings(QStackedWindowItem):
 		self.setLayout(self.box)
 		self.tblGrid=QTableTouchWidget()
 		self.tblGrid.setColumnCount(2)
-		self.tblGrid.setRowCount(2)
+		self.tblGrid.setRowCount(4)
 		self.tblGrid.verticalHeader().hide()
 		self.tblGrid.horizontalHeader().hide()
 		self.tblGrid.setSelectionBehavior(self.tblGrid.SelectRows)
@@ -59,6 +61,13 @@ class settings(QStackedWindowItem):
 		self.tblGrid.setCellWidget(1,0,self.chkSddm)
 		self.chkBeep=QCheckBox(i18n["SDDM_BEEP"])
 		self.tblGrid.setCellWidget(1,1,self.chkBeep)
+		self.chkProf=QCheckBox(i18n["PROFILE"])
+		self.tblGrid.setCellWidget(2,0,self.chkProf)
+		self.cmbProf=QComboBox()
+		self.tblGrid.setCellWidget(2,1,self.cmbProf)
+		self.btnSave=QPushButton(i18n["SAVE"])
+		self.btnSave.clicked.connect(self._saveProfile)
+		self.tblGrid.setCellWidget(3,0,self.btnSave)
 	#def __initScreen__
 
 	def updateScreen(self):
@@ -67,7 +76,22 @@ class settings(QStackedWindowItem):
 		self.chkSddm.setChecked(config.get("sddm",False))
 		self.chkBeep.setChecked(config.get("beep",False))
 		self.chkDock.setChecked(config.get("dock",False))
+		self.cmbProf.setCurrentText(config.get("profile",""))
 	#def updateScreen
+
+	def _getProfiles(self):
+		profDir=os.path.join(os.environ.get("HOME"),".local","share","accesswizard","profiles")
+		profiles=[]
+		if os.path.exists(profDir):
+			for f in os.scandir(profDir):
+				profiles.append(f.path)
+		return(profiles)
+	#def _getProfiles
+
+	def _saveProfile(self,*args,pname="profile"):
+		print(pname)
+		self.accesshelper.saveProfile(pname)
+	#def _getProfiles
 
 	def readConfig(self):
 		config={}

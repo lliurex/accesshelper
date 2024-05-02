@@ -125,6 +125,7 @@ class ttshelper(QWidget):
 		box.addWidget(self.tblFiles,5,0,1,2)
 		scr.setWidget(wdg)
 		scr.setWidgetResizable(True)
+		self.updateScreen()
 	#def _load_screen
 
 	def _resetScreen(self):
@@ -331,5 +332,5 @@ if __name__=="__main__":
 	config=ttshelper()
 	config.__initScreen__()
 	config.show()
-	config.updateScreen()
+	#config.updateScreen()
 	app.exec_()

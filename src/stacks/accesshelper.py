@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 import subprocess,os
+import multiprocessing
 import dbus,dbus.exceptions
 import tarfile
 import tempfile
@@ -195,5 +196,26 @@ class client():
 		self._debug("Reloading kwin")
 		dKwin.reconfigure()
 	#def applyKWinChanges
+
+	def _mpLaunchCmd(self,cmd):
+		try:
+			subprocess.run(cmd)
+		except Exception as e:
+			print (e)
+	#def _mpLaunchKcm
+
+	def launchKcmModule(self,kcmModule,mp=False):
+		cmd=["kcmshell5",kcmModule]
+		self.launchCmd(cmd,mp)
+	#def launchKcmModule
+
+	def launchCmd(self,cmd,mp=False):
+		if mp==True:
+			mp=multiprocessing.Process(target=self._mpLaunchCmd,args=(cmd,))
+			mp.start()
+		else:
+			self._mpLaunchCmd(cmd)
+	#def launchCmd
+	
 
 #class client

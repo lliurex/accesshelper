@@ -1,7 +1,8 @@
 #!/usr/bin/python3
 #from appconfig import appconfigControls
+from . import accesshelper
 import os
-from PySide2.QtWidgets import QApplication,QLabel,QGridLayout,QCheckBox,QSizePolicy,QRadioButton,QHeaderView,QTableWidgetItem
+from PySide2.QtWidgets import QApplication,QLabel,QGridLayout,QCheckBox,QSizePolicy,QRadioButton,QHeaderView,QTableWidgetItem,QAbstractScrollArea
 from PySide2 import QtGui
 from PySide2.QtCore import Qt
 from QtExtraWidgets import QStackedWindowItem, QTableTouchWidget, QPushInfoButton
@@ -32,7 +33,7 @@ class effects(QStackedWindowItem):
 		self.level='user'
 		self.plasmaConfig={}
 		self.locale=locale.getdefaultlocale()[0][0:2]
-		return(self)
+		self.accesshelper=accesshelper.client()
 	#def __init__
 
 	def __initScreen__(self):
@@ -42,27 +43,17 @@ class effects(QStackedWindowItem):
 		self.tblGrid.setColumnCount(3)
 #		self.tblGrid.setShowGrid(False)
 		self.tblGrid.verticalHeader().hide()
-		self.tblGrid.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
-		#self.tblGrid.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
 		self.tblGrid.horizontalHeader().hide()
-		self.tblGrid.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
-		self.tblGrid.horizontalHeader().setSectionResizeMode(0,QHeaderView.Stretch)
-		self.tblGrid.horizontalHeader().setSectionResizeMode(1,QHeaderView.Stretch)
-		self.tblGrid.horizontalHeader().setSectionResizeMode(2,QHeaderView.Stretch)
 		self.tblGrid.setSelectionBehavior(self.tblGrid.SelectRows)
 		self.tblGrid.setSelectionMode(self.tblGrid.SingleSelection)
+		self.tblGrid.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
+		self.tblGrid.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+		self.tblGrid.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
 		self.box.addWidget(self.tblGrid)
+		self._renderGui()
 	#def __initScreen__
 
-	def _launch(self,*args):
-		if args[0].text()==_("Window Effects"):
-			cmd=["kcmshell5","kcm_kwin_effects"]
-		elif args[0].text()==_("Desktop Effects"):
-			cmd=["kcmshell5","kcm_kwin_scripts"]
-		subprocess.run(cmd)
-	#def _launch
-
-	def updateScreen(self):
+	def _renderGui(self):
 		self.tblGrid.setRowCount(0)
 		self.tblGrid.setRowCount(1)
 		btnWneff=QPushInfoButton()
@@ -76,7 +67,17 @@ class effects(QStackedWindowItem):
 		btnDseff.loadImg("preferences-plugin")
 		self.tblGrid.setCellWidget(0,1,btnDseff)
 		btnDseff.clicked.connect(self._launch)
-		self.tblGrid.verticalHeader().setSectionResizeMode(0,QHeaderView.Stretch)
-		self.tblGrid.verticalHeader().setSectionResizeMode(1,QHeaderView.Stretch)
+	#def _renderGui
+
+	def _launch(self,*args):
+		if args[0].text()==_("Window Effects"):
+			mod="kcm_kwin_effects"
+		elif args[0].text()==_("Desktop Effects"):
+			mod="kcm_kwin_scripts"
+		self.accesshelper.launchKcmModule(mod)
+	#def _launch
+
+	def updateScreen(self):
+		pass
 	#def updateScreen
 

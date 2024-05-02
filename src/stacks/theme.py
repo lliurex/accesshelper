@@ -2,7 +2,7 @@
 from . import accesshelper
 #from appconfig import appconfigControls
 import os
-from PySide2.QtWidgets import QApplication,QLabel,QGridLayout,QCheckBox,QSizePolicy,QRadioButton,QHeaderView,QTableWidgetItem
+from PySide2.QtWidgets import QApplication,QLabel,QGridLayout,QCheckBox,QSizePolicy,QRadioButton,QHeaderView,QTableWidgetItem,QAbstractScrollArea
 from PySide2 import QtGui
 from PySide2.QtCore import Qt
 from QtExtraWidgets import QStackedWindowItem, QTableTouchWidget, QPushInfoButton
@@ -44,31 +44,17 @@ class theme(QStackedWindowItem):
 		self.tblGrid.setColumnCount(3)
 #		self.tblGrid.setShowGrid(False)
 		self.tblGrid.verticalHeader().hide()
-		self.tblGrid.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
-		#self.tblGrid.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
 		self.tblGrid.horizontalHeader().hide()
-		self.tblGrid.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
-		self.tblGrid.horizontalHeader().setSectionResizeMode(0,QHeaderView.Stretch)
-		self.tblGrid.horizontalHeader().setSectionResizeMode(1,QHeaderView.Stretch)
-		self.tblGrid.horizontalHeader().setSectionResizeMode(2,QHeaderView.Stretch)
 		self.tblGrid.setSelectionBehavior(self.tblGrid.SelectRows)
 		self.tblGrid.setSelectionMode(self.tblGrid.SingleSelection)
+		self.tblGrid.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
+		self.tblGrid.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+		self.tblGrid.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
 		self.box.addWidget(self.tblGrid)
+		self._renderGui()
 	#def __initScreen__
 
-	def _launch(self,*args):
-		if args[0].text()==_("Theme"):
-			cmd=["kcmshell5","kcm_desktoptheme"]
-		elif args[0].text()==_("Color Scheme"):
-			cmd=["kcmshell5","kcm_colors"]
-		elif args[0].text()==_("Fonts"):
-			cmd=["kcmshell5","kcm_fonts"]
-		elif args[0].text()==_("Mouse"):
-			cmd=["kcmshell5","kcm_cursortheme"]
-		subprocess.run(cmd)
-	#def _launch
-
-	def updateScreen(self):
+	def _renderGui(self):
 		self.tblGrid.setRowCount(0)
 		self.tblGrid.setRowCount(2)
 		btnLookF=QPushInfoButton()
@@ -91,24 +77,21 @@ class theme(QStackedWindowItem):
 		btnMouse.loadImg("preferences-desktop-mouse")
 		self.tblGrid.setCellWidget(1,0,btnMouse)
 		btnMouse.clicked.connect(self._launch)
-		self.tblGrid.verticalHeader().setSectionResizeMode(0,QHeaderView.Stretch)
-		self.tblGrid.verticalHeader().setSectionResizeMode(1,QHeaderView.Stretch)
-		#self.tblGrid.verticalHeader().setSectionResizeMode(2,QHeaderView.Stretch)
-		
-		return
-		self.plugins=self.accesshelper.getKWinPlugins()
-		self.tblGrid.setRowCount(0)
-		for plugin,data in self.plugins.items():
-			if len(data)<=0:
-				continue
-			self.tblGrid.setRowCount(self.tblGrid.rowCount()+1)
-			item=QItemDescCheck()
-			name=self._geti18nname(data)
-			desc=self._geti18ndesc(data)
-			enabled=self._getPluginEnabled(data)
-			item.setText(name)
-			item.setDesc(desc)
-			item.setState(enabled)
-			self.tblGrid.setCellWidget(self.tblGrid.rowCount()-1,0,item)
+	#def _renderGui
+
+	def _launch(self,*args):
+		if args[0].text()==_("Theme"):
+			mod="kcm_desktoptheme"
+		elif args[0].text()==_("Color Scheme"):
+			mod="kcm_colors"
+		elif args[0].text()==_("Fonts"):
+			mod="kcm_fonts"
+		elif args[0].text()==_("Mouse"):
+			mod="kcm_cursortheme"
+		self.accesshelper.launchKcmModule(mod,mp=True)
+	#def _launch
+
+	def updateScreen(self):
+		pass
 	#def updateScreen
 

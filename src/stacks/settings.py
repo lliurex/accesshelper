@@ -1,6 +1,7 @@
 #!/usr/bin/python3
+from . import accesshelper
 import os,json
-from PySide2.QtWidgets import QApplication,QLabel,QGridLayout,QCheckBox,QSizePolicy,QRadioButton,QHeaderView,QTableWidgetItem
+from PySide2.QtWidgets import QApplication,QLabel,QGridLayout,QCheckBox,QSizePolicy,QRadioButton,QHeaderView,QTableWidgetItem,QAbstractScrollArea
 from PySide2 import QtGui
 from PySide2.QtCore import Qt
 from QtExtraWidgets import QStackedWindowItem, QTableTouchWidget, QPushInfoButton
@@ -32,6 +33,7 @@ class settings(QStackedWindowItem):
 		self.enabled=True
 		self.confDir=os.path.join(os.environ.get("HOME"),".local","share","accesswizard")
 		self.confFile=os.path.join(self.confDir,"accesswizard.conf")
+		self.accesshelper=accesshelper.client()
 	#def __init__
 
 	def __initScreen__(self):
@@ -40,20 +42,15 @@ class settings(QStackedWindowItem):
 		self.tblGrid=QTableTouchWidget()
 		self.tblGrid.setColumnCount(2)
 		self.tblGrid.setRowCount(2)
-#		self.tblGrid.setShowGrid(False)
 		self.tblGrid.verticalHeader().hide()
-		self.tblGrid.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
-		#self.tblGrid.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
 		self.tblGrid.horizontalHeader().hide()
-		self.tblGrid.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
-		self.tblGrid.horizontalHeader().setSectionResizeMode(0,QHeaderView.Stretch)
-		self.tblGrid.horizontalHeader().setSectionResizeMode(1,QHeaderView.Stretch)
 		self.tblGrid.setSelectionBehavior(self.tblGrid.SelectRows)
 		self.tblGrid.setSelectionMode(self.tblGrid.SingleSelection)
+		self.tblGrid.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
+		self.tblGrid.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+		self.tblGrid.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
 		self.box.addWidget(self.tblGrid)
 		self.btnAccept.clicked.connect(self.writeConfig)
-		self.tblGrid.verticalHeader().setSectionResizeMode(0,QHeaderView.Stretch)
-		self.tblGrid.verticalHeader().setSectionResizeMode(1,QHeaderView.Stretch)
 		self.chkGrub=QCheckBox(i18n["GRUB"])
 		self.tblGrid.setCellWidget(0,0,self.chkGrub)
 		self.chkDock=QCheckBox(i18n["DOCK"])

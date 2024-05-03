@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
-<id>accesshelper</id>
+<id>accesswizard</id>
 <metadata_license>CC0-1.0</metadata_license>
-<name>Access Helper</name>
-<name xml:lang="ca_ES.UTF-8@valencia">AccessHelper</name>
-<name xml:lang="ca_ES@valencia">AccessHelper</name>
-<name xml:lang="ca">AccessHelper</name>
-<name xml:lang="es">AccessHelper</name>
+<name>Access Wizard</name>
+<name xml:lang="ca_ES.UTF-8@valencia">AccessWizard</name>
+<name xml:lang="ca_ES@valencia">AccessWizard</name>
+<name xml:lang="ca">AccessWizard</name>
+<name xml:lang="es">AccessWizard</name>
 <summary>Manage accessibility options</summary>
 <summary xml:lang="es">Gestiona las opciones de accesibilidad</summary>
 <summary xml:lang="ca_ES@valencia">Gestiona les opciones d'accessibilitat</summary>
 <summary xml:lang="ca_ES.UTF-8@valencia">Gestiona les opciones d'accessibilitat</summary>
 <summary xml:lang="ca">Gestiona les opciones d'accessibilitat</summary>
 <description>
-<p>Access Helper it's a simple app that aims to be a common place for all the accesibiliy options spreaded over system's configuration.</p>
-<p xml:lang="es">Access Helper trata de juntar todas las opciones de accesibilidad disponibles en una misma aplicación</p>
-<p xml:lang="ca_ES@valencia">Access Helper tracta de juntar totes las opcions d'accesibilitat del sistema a una mateixa aplicació</p>
-<p xml:lang="ca_ES.UTF-8@valencia">Access Helper tracta de juntar totes las opcions d'accesibilitat del sistema a una mateixa aplicació</p>
-<p xml:lang="ca">Access Helper tracta de juntar totes las opcions d'accesibilitat del sistema a una mateixa aplicació</p>
+<p>Access Wizard it's a simple app that aims to be a common place for all the accesibiliy options spreaded over system's configuration.</p>
+<p xml:lang="es">Access Wizard trata de juntar todas las opciones de accesibilidad disponibles en una misma aplicación</p>
+<p xml:lang="ca_ES@valencia">Access Wizard tracta de juntar totes las opcions d'accesibilitat del sistema a una mateixa aplicació</p>
+<p xml:lang="ca_ES.UTF-8@valencia">Access Wizard tracta de juntar totes las opcions d'accesibilitat del sistema a una mateixa aplicació</p>
+<p xml:lang="ca">Access Wizard tracta de juntar totes las opcions d'accesibilitat del sistema a una mateixa aplicació</p>
 </description>
 <categories>
 <category>KDE</category>
@@ -25,8 +25,8 @@
 <category>X-Lliurex</category>
 <category>X-Utilities</category>
 </categories>
-<icon type="stock">accesshelper</icon>
-<provides><binary>accesshelper</binary></provides>
+<icon type="stock">accesswizard</icon>
+<provides><binary>accesswizard</binary></provides>
 <keywords>
 <keyword>editor</keyword>
 <keyword>desktop</keyword>

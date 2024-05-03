@@ -9,6 +9,6 @@ Comment[ca]=Barra auxiliar de accessibilitat
 Exec=/usr/share/accesswizard/accessdock.py
 Terminal=false
 Type=Application
-Icon=accessdock
+Icon=accesswdock
 Categories=Accessibility;X-Lliurex;
 TryExec=/usr/share/accesswizard/accessdock.py

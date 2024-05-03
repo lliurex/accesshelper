@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-03 11:57+0200\n"
-"PO-Revision-Date: 2024-05-03 12:06+0200\n"
+"POT-Creation-Date: 2024-05-03 12:44+0200\n"
+"PO-Revision-Date: 2024-05-03 12:46+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es\n"
@@ -18,33 +18,49 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.0.1\n"
 
-#: ../src/stacks/accessibility.py:14 ../src/stacks/accessibility.py:15
-msgid "Accessibility"
-msgstr "Accesibilidad"
-
-#: ../src/stacks/accessibility.py:16
-msgid "Accesibility options"
-msgstr "Opciones de accesibilidad"
-
-#: ../src/stacks/accessibility.py:17
-msgid "Settings which do the system more accessible"
-msgstr "Ajustes para hacer el sistema más accesible"
-
-#: ../src/stacks/accessibility.py:90
+#: ../src/stacks/accessibility.py:14
 msgid "System Accessibility"
 msgstr "Accesibilidad del sistema"
 
-#: ../src/stacks/accessibility.py:94
-msgid "Orca"
-msgstr "ORCA"
+#: ../src/stacks/accessibility.py:15
+msgid "Plasma Accessibility module"
+msgstr "Módulo de accesibilidad de Plasma"
 
-#: ../src/stacks/accessibility.py:96
+#: ../src/stacks/accessibility.py:16 ../src/stacks/accessibility.py:21
+msgid "Accessibility"
+msgstr "Accesibilidad"
+
+#: ../src/stacks/accessibility.py:17
+msgid "Accessibility Dock"
+msgstr "Barra de accesibilidad"
+
+#: ../src/stacks/accessibility.py:18
+msgid "Dock with customizable fast actions"
+msgstr "Barra configurable de acciones rápidas"
+
+#: ../src/stacks/accessibility.py:19
 msgid "LliureX TTS"
 msgstr "Lliurex TTS"
 
-#: ../src/stacks/accessibility.py:98
-msgid "Accessibility Dock"
-msgstr "Barra de accesibilidad"
+#: ../src/stacks/accessibility.py:20
+msgid "Configure Lliurex TTS addon"
+msgstr "Ajustes de la extensión TTS de LliureX"
+
+#: ../src/stacks/accessibility.py:22
+msgid "Orca"
+msgstr "ORCA"
+
+#: ../src/stacks/accessibility.py:23
+msgid "Open Orca configuration tool"
+msgstr "Abrir herramienta de configuración de ORCA"
+
+#: ../src/stacks/accessibility.py:24
+msgid "Accesibility options"
+msgstr "Opciones de accesibilidad"
+
+#: ../src/stacks/accessibility.py:25
+msgid "Settings which do the system more accessible"
+msgstr "Ajustes para hacer el sistema más accesible"
 
 #: ../src/stacks/effects.py:15 ../src/dock/extras/effects.py:15
 msgid "Effects"
@@ -146,45 +162,49 @@ msgstr "Configuración avanzada"
 msgid "Set global color scheme"
 msgstr "Esquema de color global"
 
-#: ../src/stacks/theme.py:16 ../src/stacks/theme.py:20
+#: ../src/stacks/theme.py:16
+msgid "Color scheme"
+msgstr "Esquema de color"
+
+#: ../src/stacks/theme.py:17 ../src/stacks/theme.py:23
 msgid "Appearance"
 msgstr "Apariencia"
 
-#: ../src/stacks/theme.py:17
+#: ../src/stacks/theme.py:18
 msgid "Look and feel options"
 msgstr "Opciones de apariencia"
 
-#: ../src/stacks/theme.py:18
+#: ../src/stacks/theme.py:19
 msgid "Configure system fonts"
 msgstr "Configura las fuentes del sistema"
 
-#: ../src/stacks/theme.py:19
-msgid "Set global theme"
-msgstr "Establece un tema global"
-
-#: ../src/stacks/theme.py:21
-msgid "Set cursor theme and size"
-msgstr "Ajustar tamaño y tema del cursor"
-
-#: ../src/stacks/theme.py:22
-msgid "Appearance customizing"
-msgstr "Personalizar apariencia"
-
-#: ../src/stacks/theme.py:91
-msgid "Theme"
-msgstr "Tema"
-
-#: ../src/stacks/theme.py:93
-msgid "Color Scheme"
-msgstr "Esquema de color"
-
-#: ../src/stacks/theme.py:95
+#: ../src/stacks/theme.py:20 ../src/stacks/theme.py:99
 msgid "Fonts"
 msgstr "Fuentes"
 
-#: ../src/stacks/theme.py:97
+#: ../src/stacks/theme.py:21
+msgid "Set global theme"
+msgstr "Establece un tema global"
+
+#: ../src/stacks/theme.py:22 ../src/stacks/theme.py:95
+msgid "Theme"
+msgstr "Tema"
+
+#: ../src/stacks/theme.py:24
+msgid "Set cursor theme and size"
+msgstr "Ajustar tamaño y tema del cursor"
+
+#: ../src/stacks/theme.py:25 ../src/stacks/theme.py:101
 msgid "Mouse"
 msgstr "Ratón"
+
+#: ../src/stacks/theme.py:26
+msgid "Appearance customizing"
+msgstr "Personalizar apariencia"
+
+#: ../src/stacks/theme.py:97
+msgid "Color Scheme"
+msgstr "Esquema de color"
 
 #: ../src/tools/settings.py:19
 msgid "Configure"
@@ -428,7 +448,7 @@ msgstr "Pulsar tecla"
 
 #: ../src/dock/extras/launchers.py:22
 msgid "Icon: "
-msgstr "Icono:"
+msgstr "Icono: "
 
 #: ../src/dock/extras/launchers.py:23
 msgid "Push to change icon"
@@ -436,7 +456,7 @@ msgstr "Pulsar para cambiar icono"
 
 #: ../src/dock/extras/launchers.py:24
 msgid "Name: "
-msgstr "Nombre:"
+msgstr "Nombre: "
 
 #: ../src/dock/extras/launchers.py:25
 msgid "Unassigned action"
@@ -456,7 +476,7 @@ msgstr "https://ejemplo.com"
 
 #: ../src/dock/extras/launchers.py:189
 msgid "Description (optional): "
-msgstr "Descripción (opcional):"
+msgstr "Descripción (opcional): "
 
 #: ../src/dock/extras/launchers.py:192
 msgid "Insert a description for the app"
@@ -922,9 +942,6 @@ msgstr "Permite asociar pulsaciones de tecla a diferentes acciones del sistema"
 
 #~ msgid "Hotkeys configuration"
 #~ msgstr "Configuración de atajos"
-
-#~ msgid "Font configuration"
-#~ msgstr "Configuración de fuentes"
 
 #~ msgid "Look&Feel configuration"
 #~ msgstr "Configuración de la apariencia visual"

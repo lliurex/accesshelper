@@ -296,7 +296,7 @@ class launchers(QStackedWindow):
 		self.icon=('org.kde.plasma.quicklaunch')
 		self.tooltip=(_("From here you can add a custom launcher"))
 		self.desktopPaths=["/usr/share/applications",os.path.join(os.environ.get("USER"),".local","share","applications")]
-		self.launchersPath=os.path.join(os.environ.get("HOME"),".config","accessibility","launchers")
+		self.launchersPath=os.path.join(os.environ.get("HOME"),".local","accesswizard","launchers")
 		if os.path.exists(self.launchersPath)==False:
 			os.makedirs(self.launchersPath)
 		self.app2menu=App2Menu.app2menu()

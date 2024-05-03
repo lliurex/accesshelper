@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 from . import accesshelper
 import os,json
-from PySide2.QtWidgets import QApplication,QLabel,QGridLayout,QCheckBox,QSizePolicy,QRadioButton,QHeaderView,QTableWidgetItem,QAbstractScrollArea,QComboBox,QPushButton
+from PySide2.QtWidgets import QApplication,QLabel,QGridLayout,QCheckBox,QSizePolicy,QRadioButton,QHeaderView,QTableWidgetItem,QAbstractScrollArea,QComboBox,QPushButton,QFileDialog
 from PySide2 import QtGui
 from PySide2.QtCore import Qt
 from QtExtraWidgets import QStackedWindowItem, QTableTouchWidget, QPushInfoButton
@@ -14,6 +14,7 @@ i18n={
 	"DESCRIPTION":_("Other options"),
 	"DOCK":_("Autostart dock"),
 	"GRUB":_("Beep when computer starts"),
+	"LOAD":_("Load profile"),
 	"MENU":_("Other Settings"),
 	"PROFILE":_("Start session with profile"),
 	"SAVE":_("Save current profile"),
@@ -33,7 +34,7 @@ class settings(QStackedWindowItem):
 			index=4,
 			visible=True)
 		self.enabled=True
-		self.confDir=os.path.join(os.environ.get("HOME"),".local","share","accesswizard")
+		self.confDir=os.path.join(os.environ.get("HOME"),".config","accesswizard")
 		self.confFile=os.path.join(self.confDir,"accesswizard.conf")
 		self.accesshelper=accesshelper.client()
 	#def __init__
@@ -68,6 +69,9 @@ class settings(QStackedWindowItem):
 		self.btnSave=QPushButton(i18n["SAVE"])
 		self.btnSave.clicked.connect(self._saveProfile)
 		self.tblGrid.setCellWidget(3,0,self.btnSave)
+		self.btnLoad=QPushButton(i18n["LOAD"])
+		self.btnLoad.clicked.connect(self._loadProfile)
+		self.tblGrid.setCellWidget(3,1,self.btnLoad)
 	#def __initScreen__
 
 	def updateScreen(self):
@@ -89,8 +93,13 @@ class settings(QStackedWindowItem):
 	#def _getProfiles
 
 	def _saveProfile(self,*args,pname="profile"):
-		print(pname)
 		self.accesshelper.saveProfile(pname)
+	#def _getProfiles
+
+	def _loadProfile(self,*args,ppath="profile"):
+		ppath=QFileDialog.getOpenFileName(None, 'Test Dialog', os.getcwd(), 'All Files(*.*)')[0]
+		if os.path.exists(ppath):
+			self.accesshelper.loadProfile(ppath)
 	#def _getProfiles
 
 	def readConfig(self):

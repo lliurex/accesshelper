@@ -78,7 +78,7 @@ class ttshelper(QWidget):
 		self.mp3BtnDict={}
 		self.playing=[]
 		self.optionChanged=[]
-		self.configFile=os.path.join(os.environ.get("HOME"),".config","accessibility","ttshelper.conf")
+		self.configFile=os.path.join(os.environ.get("HOME"),".config","accesswizard","ttshelper.conf")
 	#def __init__
 
 	def _debug(self,msg=""):

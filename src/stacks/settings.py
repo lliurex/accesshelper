@@ -39,7 +39,9 @@ class settings(QStackedWindowItem):
 		self.enabled=True
 		self.confDir=os.path.join(os.environ.get("HOME"),".config","accesswizard")
 		self.confFile=os.path.join(self.confDir,"accesswizard.conf")
-		self.profDir=os.path.join(os.environ.get("HOME"),".local","share","accesswizard")
+		self.profDir=os.path.join(os.environ.get("HOME"),".local","share","accesswizard","profiles")
+		if os.path.exists(self.profDir)==False and os.environ.get("HOME","")!="":
+			os.makedirs(self.profDir)
 		self.accesshelper=accesshelper.client()
 	#def __init__
 
@@ -69,6 +71,7 @@ class settings(QStackedWindowItem):
 		self.chkProf=QCheckBox(i18n["PROFILE"])
 		self.tblGrid.setCellWidget(2,0,self.chkProf)
 		self.cmbProf=QComboBox()
+		self.chkProf.clicked.connect(lambda: self.cmbProf.setEnabled(self.chkProf.isChecked()))
 		self.tblGrid.setCellWidget(2,1,self.cmbProf)
 		self.btnSave=QPushButton(i18n["SAVE"])
 		self.btnSave.clicked.connect(self._saveProfile)
@@ -84,14 +87,21 @@ class settings(QStackedWindowItem):
 		self.chkSddm.setChecked(config.get("sddm",False))
 		self.chkBeep.setChecked(config.get("beep",False))
 		self.chkDock.setChecked(config.get("dock",False))
-		self.cmbProf.setCurrentText(config.get("profile",""))
+		self.chkProf.setChecked(config.get("prof",False))
+		self.cmbProf.clear()
+		self.cmbProf.setEnabled(self.chkProf.isChecked())
+		profiles=self._getProfiles()
+		for p in profiles:
+			self.cmbProf.addItem(p)
+		self.cmbProf.setCurrentText(config.get("inip",""))
 	#def updateScreen
 
 	def _getProfiles(self):
 		profiles=[]
 		if os.path.exists(self.profDir):
 			for f in os.scandir(self.profDir):
-				profiles.append(f.path)
+				if f.name.endswith(".tar"):
+					profiles.append(f.name)
 		return(profiles)
 	#def _getProfiles
 
@@ -99,13 +109,14 @@ class settings(QStackedWindowItem):
 		pname=QInputDialog.getText(None, i18n.get("DLG"), i18n.get("PROFNME"))[0]
 		if len(pname)>0:
 			self.accesshelper.saveProfile(pname)
-	#def _getProfiles
+	#def _saveProfiles
 
 	def _loadProfile(self,*args,ppath="profile"):
-		ppath=QFileDialog.getOpenFileName(None, i18n.get("DLG"), self.profDir, "{} (*.tar)".format(i18n.get("PROFDSC")))[0]
+		ffilter="{} (*.tar)".format(i18n.get("PROFDSC"))
+		ppath=QFileDialog.getOpenFileName(None, i18n.get("DLG"), self.profDir,ffilter)[0]
 		if os.path.exists(ppath):
 			self.accesshelper.loadProfile(ppath)
-	#def _getProfiles
+	#def _loadProfiles
 
 	def readConfig(self):
 		config={}
@@ -124,6 +135,10 @@ class settings(QStackedWindowItem):
 		config["beep"]=self.chkBeep.isChecked()
 		config["sddm"]=self.chkSddm.isChecked()
 		config["dock"]=self.chkDock.isChecked()
+		config["prof"]=self.chkProf.isChecked()
+		config["inip"]=""
+		if config["prof"]==True:
+			config["inip"]=self.cmbProf.currentText()
 		return(config)
 	#def readScreen
 	

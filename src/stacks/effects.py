@@ -13,6 +13,10 @@ _ = gettext.gettext
 
 i18n={
 	"CONFIG":_("Effects"),
+	"DESBTN":_("Desktop plugins"),
+	"DESDSC":_("Extra functionality for the desktop"),
+	"EFFBTN":_("Windows effects"),
+	"EFFDSC":_("Graphical effects for windows"),
 	"MENU":_("Visual Effects"),
 	"DESCRIPTION":_("Aids and visual effects"),
 	"TOOLTIP":_("Aids and visual effects for improve system usability"),
@@ -57,13 +61,14 @@ class effects(QStackedWindowItem):
 		self.tblGrid.setRowCount(0)
 		self.tblGrid.setRowCount(1)
 		btnWneff=QPushInfoButton()
-		btnWneff.setText("Window Effects")
-		btnWneff.setDescription("Graphical effects")
+		btnWneff.setText(i18n.get("EFFBTN"))
+		btnWneff.setDescription(i18n.get("EFFDSC"))
 		btnWneff.loadImg("preferences-system-windows")
 		self.tblGrid.setCellWidget(0,0,btnWneff)
 		btnWneff.clicked.connect(self._launch)
 		btnDseff=QPushInfoButton()
-		btnDseff.setText("Desktop Effects")
+		btnDseff.setText(i18n.get("DESBTN"))
+		btnDseff.setDescription(i18n.get("DESDSC"))
 		btnDseff.loadImg("preferences-plugin")
 		self.tblGrid.setCellWidget(0,1,btnDseff)
 		btnDseff.clicked.connect(self._launch)

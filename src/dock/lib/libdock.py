@@ -7,7 +7,7 @@ from app2menu import App2Menu
 class libdock():
 	def __init__(self):
 		self.dbg=False
-		self.launchersPath=os.path.join(os.environ.get("HOME"),".config","accessibility","launchers")
+		self.launchersPath=os.path.join(os.environ.get("HOME"),".config","accesswizard","launchers")
 	#def __init__
 
 	def _debug(self,msg):

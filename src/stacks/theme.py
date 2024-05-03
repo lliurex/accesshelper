@@ -13,12 +13,16 @@ _ = gettext.gettext
 
 i18n={
 	"COLOR":_("Set global color scheme"),
+	"COLORTXT":_("Color scheme"),
 	"CONFIG":_("Appearance"),
 	"DESCRIPTION":_("Look and feel options"),
 	"FONTS":_("Configure system fonts"),
+	"FONTSTXT":_("Fonts"),
 	"LOOKF":_("Set global theme"),
+	"LOOKFTXT":_("Theme"),
 	"MENU":_("Appearance"),
 	"MOUSE":_("Set cursor theme and size"),
+	"MOUSETXT":_("Mouse"),
 	"TOOLTIP":_("Appearance customizing"),
 	}
 
@@ -62,25 +66,25 @@ class theme(QStackedWindowItem):
 		self.tblGrid.setRowCount(0)
 		self.tblGrid.setRowCount(2)
 		btnLookF=QPushInfoButton()
-		btnLookF.setText("Theme")
+		btnLookF.setText(i18n.get("LOOKFTXT"))
 		btnLookF.setDescription(i18n.get("LOOKF"))
 		btnLookF.loadImg("preferences-desktop-theme")
 		self.tblGrid.setCellWidget(0,0,btnLookF)
 		btnLookF.clicked.connect(self._launch)
 		btnColor=QPushInfoButton()
-		btnColor.setText("Color Scheme")
+		btnColor.setText(i18n.get("COLORTXT"))
 		btnColor.setDescription(i18n.get("COLOR"))
 		btnColor.loadImg("preferences-desktop-color")
 		self.tblGrid.setCellWidget(0,1,btnColor)
 		btnColor.clicked.connect(self._launch)
 		btnFonts=QPushInfoButton()
-		btnFonts.setText("Fonts")
+		btnFonts.setText(i18n.get("FONTSTXT"))
 		btnFonts.setDescription(i18n.get("FONTS"))
 		btnFonts.loadImg("preferences-desktop-font")
 		self.tblGrid.setCellWidget(0,2,btnFonts)
 		btnFonts.clicked.connect(self._launch)
 		btnMouse=QPushInfoButton()
-		btnMouse.setText("Mouse")
+		btnMouse.setText(i18n.get("MOUSETXT"))
 		btnMouse.setDescription(i18n.get("MOUSE"))
 		btnMouse.loadImg("preferences-desktop-mouse")
 		self.tblGrid.setCellWidget(1,0,btnMouse)

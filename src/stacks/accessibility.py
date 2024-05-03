@@ -11,8 +11,16 @@ import gettext
 _ = gettext.gettext
 
 i18n={
+	"ACCE":_("System Accessibility"),
+	"ACCEDSC":_("Plasma Accessibility module"),
 	"CONFIG":_("Accessibility"),
+	"DOCK":_("Accessibility Dock"),
+	"DOCKDSC":_("Dock with customizable fast actions"),
+	"LTTS":_("LliureX TTS"),
+	"LTTSDSC":_("Configure Lliurex TTS addon"),
 	"MENU":_("Accessibility"),
+	"ORCA":_("Orca"),
+	"ORCADSC":_("Open Orca configuration tool"),
 	"DESCRIPTION":_("Accesibility options"),
 	"TOOLTIP":_("Settings which do the system more accessible"),
 	}
@@ -56,30 +64,30 @@ class accessibility(QStackedWindowItem):
 		self.tblGrid.setRowCount(0)
 		self.tblGrid.setRowCount(2)
 		btnAcce=QPushInfoButton()
-		btnAcce.setText("System Accessibility")
-		btnAcce.setDescription("Plasma Accessibility module")
+		btnAcce.setText(i18n.get("ACCE"))
+		btnAcce.setDescription(i18n.get("ACCEDSC"))
 		btnAcce.loadImg("preferences-desktop-accessibility")
 		self.tblGrid.setCellWidget(0,0,btnAcce)
 		#self.tblGrid.verticalHeader().setSectionResizeMode(0,QHeaderView.ResizeToContents)
 		btnAcce.clicked.connect(self._launch)
 		btnOrca=QPushInfoButton()
-		btnOrca.setText("Orca")
-		btnOrca.setDescription("Open Orca configuration tool")
+		btnOrca.setText(i18n.get("ORCA"))
+		btnOrca.setDescription(i18n.get("ORCADSC"))
 		btnOrca.loadImg("orca")
 		self.tblGrid.setCellWidget(0,1,btnOrca)
 		#self.tblGrid.verticalHeader().setSectionResizeMode(1,QHeaderView.ResizeToContents)
 		btnOrca.clicked.connect(self._launch)
 		btnLtts=QPushInfoButton()
-		btnLtts.setText("LliureX TTS")
-		btnLtts.setDescription("Configure Lliurex TTS addon")
+		btnLtts.setText(i18n.get("LTTS"))
+		btnLtts.setDescription(i18n.get("LTTSDCS"))
 		btnLtts.loadImg("kmouth")
 		self.tblGrid.setCellWidget(0,2,btnLtts)
 		#self.tblGrid.verticalHeader().setSectionResizeMode(2,QHeaderView.ResizeToContents)
 		btnLtts.clicked.connect(self._launch)
 		btnDock=QPushInfoButton()
-		btnDock.setText("Accessibility Dock")
-		btnDock.setDescription("Dock with customizable fast actions")
-		btnDock.loadImg("accessdock")
+		btnDock.setText(i18n.get("DOCK"))
+		btnDock.setDescription(i18n.get("DOCKDSC"))
+		btnDock.loadImg("accesswdock")
 		btnDock.setMinimumWidth(btnDock.width())
 		btnDock.setMinimumHeight(btnDock.height())
 		self.tblGrid.setCellWidget(1,0,btnDock)
@@ -87,16 +95,16 @@ class accessibility(QStackedWindowItem):
 	#	self.tblGrid.horizontalHeader().setSectionResizeMode(2,QHeaderView.Stretch)
 
 	def _launch(self,*args):
-		if args[0].text()==_("System Accessibility"):
+		if args[0].text()==i18n.get("ACCE"):
 			mod="kcm_access"
 			self.accesshelper.launchKcmModule(mod,mp=True)
 		else:
-			if args[0].text()==_("Orca"):
+			if args[0].text()==i18n.get("ORCA"):
 				cmd="orca","-s"
-			elif args[0].text()==_("LliureX TTS"):
-				cmd="tools/ttsmanager.py"
-			elif args[0].text()==_("Accessibility Dock"):
-				cmd="dock/accessdock-config.py"
+			elif args[0].text()==i18n.get("LTTS"):
+				cmd=os.path.join(os.path.dirname(__file__),"..","tools","ttsmanager.py")
+			elif args[0].text()==i18n.get("DOCK"):
+				cmd=os.path.join(os.path.dirname(__file__),"..","dock","accessdock-config.py")
 			self.accesshelper.launchCmd(cmd,mp=True)
 	#def _launch
 

@@ -1,23 +1,17 @@
 #!/usr/bin/python3
-import subprocess,os
-import multiprocessing
-import dbus,dbus.exceptions
+import os
 import tarfile
 import tempfile
 import shutil
-#from PySide2.QtGui import QColor
-import json
-import random
 
 class manager():
 	def __init__(self):
 		self.dbg=True
-		self.bus=None
 	#def __init__
 
 	def _debug(self,msg):
 		if self.dbg:
-			print("libaccess: {}".format(msg))
+			print("profileManager: {}".format(msg))
 	#def _debug
 
 	def _generateProfileDirs(self,pname):
@@ -199,34 +193,29 @@ class manager():
 	#def _isValidTar
 
 	def _extractProfile(self,ppath,merge=False):
-		if self._isValidTar(ppath)==True:
+		sw=self._isValidTar(ppath)
+		if sw==True:
 			tarProfile=tarfile.open(ppath,'r')
 			tmpFolder=tempfile.mkdtemp()
 			tarProfile.extractall(path=tmpFolder)
-			basePath=os.path.join(tmpFolder,".config")
-			self.plasmaHelper._loadPlasmaConfigFromFolder(basePath)
-			confPath=os.path.join(tmpFolder,".config/accesswizard")
-			jcontents={}
-			desktopPath=os.path.join(tmpFolder,".config/autostart")
-			if os.path.isdir(desktopPath)==True:
-				self._initFiles(desktopPath)
-			if os.path.isdir(confPath)==True:
-				self._initProfiles(confPath,profileTar)
-			mozillaPath=os.path.join(tmpFolder,".mozilla")
-			if os.path.isdir(mozillaPath)==True:
-				self._initMozilla(mozillaPath)
-			if os.path.isdir(basePath):
-				self._initConfig(basePath)
-			self.setOnboardConfig()
+			try:
+				home=os.environ.get("HOME","")
+				if len(home)>0:
+					shutil.copytree(tmpFolder,home,dirs_exist_ok=True)
+			except Exception as e:
+				sw=False
+				print("{} could not be restored".format(tmpFolder))
+				print(e)
+				print("----------")
 		return(sw)
-	#def restoreSnapshot
+	#def _extractProfile
 
 	def loadProfile(self,ppath):
 		if os.path.exists(ppath)==True:
 			#Backup current
 			self.saveProfile("backup")
 			#restore
-			self.extractProfile(ppath)
+			self._extractProfile(ppath)
 	#def loadProfile
 
-#class client
+#class manager

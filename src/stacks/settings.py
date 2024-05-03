@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 from . import accesshelper
 import os,json
-from PySide2.QtWidgets import QApplication,QLabel,QGridLayout,QCheckBox,QSizePolicy,QRadioButton,QHeaderView,QTableWidgetItem,QAbstractScrollArea,QComboBox,QPushButton,QFileDialog
+from PySide2.QtWidgets import QApplication,QLabel,QGridLayout,QCheckBox,QSizePolicy,QRadioButton,QHeaderView,QTableWidgetItem,QAbstractScrollArea,QComboBox,QPushButton,QFileDialog,QInputDialog
 from PySide2 import QtGui
 from PySide2.QtCore import Qt
 from QtExtraWidgets import QStackedWindowItem, QTableTouchWidget, QPushInfoButton
@@ -12,11 +12,14 @@ _ = gettext.gettext
 i18n={
 	"CONFIG":_("Settings"),
 	"DESCRIPTION":_("Other options"),
+	"DLG":_("Select accessibility profile"),
 	"DOCK":_("Autostart dock"),
 	"GRUB":_("Beep when computer starts"),
 	"LOAD":_("Load profile"),
 	"MENU":_("Other Settings"),
 	"PROFILE":_("Start session with profile"),
+	"PROFNME":_("Save as..."),
+	"PROFDSC":_("Accesswizard profile"),
 	"SAVE":_("Save current profile"),
 	"SDDM_ORCA":_("Enable ORCA in sddm screen"),
 	"SDDM_BEEP":_("Beep when sddm launches"),
@@ -36,6 +39,7 @@ class settings(QStackedWindowItem):
 		self.enabled=True
 		self.confDir=os.path.join(os.environ.get("HOME"),".config","accesswizard")
 		self.confFile=os.path.join(self.confDir,"accesswizard.conf")
+		self.profDir=os.path.join(os.environ.get("HOME"),".local","share","accesswizard")
 		self.accesshelper=accesshelper.client()
 	#def __init__
 
@@ -84,20 +88,21 @@ class settings(QStackedWindowItem):
 	#def updateScreen
 
 	def _getProfiles(self):
-		profDir=os.path.join(os.environ.get("HOME"),".local","share","accesswizard","profiles")
 		profiles=[]
-		if os.path.exists(profDir):
-			for f in os.scandir(profDir):
+		if os.path.exists(self.profDir):
+			for f in os.scandir(self.profDir):
 				profiles.append(f.path)
 		return(profiles)
 	#def _getProfiles
 
 	def _saveProfile(self,*args,pname="profile"):
-		self.accesshelper.saveProfile(pname)
+		pname=QInputDialog.getText(None, i18n.get("DLG"), i18n.get("PROFNME"))[0]
+		if len(pname)>0:
+			self.accesshelper.saveProfile(pname)
 	#def _getProfiles
 
 	def _loadProfile(self,*args,ppath="profile"):
-		ppath=QFileDialog.getOpenFileName(None, 'Test Dialog', os.getcwd(), 'All Files(*.*)')[0]
+		ppath=QFileDialog.getOpenFileName(None, i18n.get("DLG"), self.profDir, "{} (*.tar)".format(i18n.get("PROFDSC")))[0]
 		if os.path.exists(ppath):
 			self.accesshelper.loadProfile(ppath)
 	#def _getProfiles

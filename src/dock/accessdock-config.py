@@ -8,6 +8,7 @@ import lib.libdock as libdock
 import extras.launchers as launchers
 import accessdock
 import gettext
+import resources
 _ = gettext.gettext
 
 i18n={"ADD":_("Add"),
@@ -154,6 +155,7 @@ class accessconf(QWidget):
 		super().__init__()
 		self.dbg=True
 		self.launchers=libdock.libdock()
+
 		#self.setWindowModality(Qt.WindowModal)
 		#self.setWindowFlags(Qt.NoDropShadowWindowHint|Qt.WindowStaysOnTopHint|Qt.Tool)
 		self._initScreen()
@@ -350,5 +352,8 @@ class accessconf(QWidget):
 		
 app=QApplication(["AccessDock Configuration"])
 dock=accessconf()
+
+icon=QIcon(":/icons/accessdock.png")
+dock.setWindowIcon(icon)
 dock.show()
 app.exec_()

@@ -241,6 +241,7 @@ class accessconf(QWidget):
 		layout.addWidget(self.chkStart,row+1,0,1,2)
 		layout.addWidget(QLabel(i18n["HKEY"]),row+2,0,Qt.AlignLeft)
 		self.btnHkey=QHotkeyButton(i18n["HKEYBTN"])
+		self.btnHkey.hotkeyAssigned.connect(self._assignHotkey)
 		layout.addWidget(self.btnHkey,row+2,0,Qt.AlignRight)
 	#def _renderOptions
 
@@ -265,6 +266,11 @@ class accessconf(QWidget):
 			with open(fpath,"w") as f:
 				f.writelines(nfcontents)
 	#def _change
+
+	def _assignHotkey(self):
+		hkey=self.btnHkey.text()
+		print(hkey)
+	#def _assignHotkey
 
 	def updateScreen(self):
 		self.dock.updateScreen()

@@ -1,0 +1,987 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-05-03 12:44+0200\n"
+"PO-Revision-Date: 2024-05-03 12:48+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ca\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.0.1\n"
+
+#: ../src/stacks/accessibility.py:14
+msgid "System Accessibility"
+msgstr "Accessibilitat del sistema"
+
+#: ../src/stacks/accessibility.py:15
+msgid "Plasma Accessibility module"
+msgstr "Mòdul d'accessibilitat del Plasma"
+
+#: ../src/stacks/accessibility.py:16 ../src/stacks/accessibility.py:21
+msgid "Accessibility"
+msgstr "Accessibilitat"
+
+#: ../src/stacks/accessibility.py:17
+msgid "Accessibility Dock"
+msgstr "Barra d'accesibilitat"
+
+#: ../src/stacks/accessibility.py:18
+msgid "Dock with customizable fast actions"
+msgstr "Barra personalitzable d'accions ràpides"
+
+#: ../src/stacks/accessibility.py:19
+msgid "LliureX TTS"
+msgstr "LliureX TTS"
+
+#: ../src/stacks/accessibility.py:20
+msgid "Configure Lliurex TTS addon"
+msgstr "Configurar extensió TTS del LliureX"
+
+#: ../src/stacks/accessibility.py:22
+msgid "Orca"
+msgstr "ORCA"
+
+#: ../src/stacks/accessibility.py:23
+msgid "Open Orca configuration tool"
+msgstr "Obrir la ferramenta de configuració de ORCA"
+
+#: ../src/stacks/accessibility.py:24
+msgid "Accesibility options"
+msgstr "Opcions d'accessibilitat"
+
+#: ../src/stacks/accessibility.py:25
+msgid "Settings which do the system more accessible"
+msgstr "Ajustos per a fer més accessible el sistema"
+
+#: ../src/stacks/effects.py:15 ../src/dock/extras/effects.py:15
+msgid "Effects"
+msgstr "Efectes"
+
+#: ../src/stacks/effects.py:16
+msgid "Desktop plugins"
+msgstr "Plugins de l'escriptori"
+
+#: ../src/stacks/effects.py:17
+msgid "Extra functionality for the desktop"
+msgstr "Funcionalitat extra per a l'escriptori"
+
+#: ../src/stacks/effects.py:18
+msgid "Windows effects"
+msgstr "Efectes de finestres"
+
+#: ../src/stacks/effects.py:19
+msgid "Graphical effects for windows"
+msgstr "Efectes per a manipular l'apariencia de les finestres"
+
+#: ../src/stacks/effects.py:20 ../src/dock/extras/effects.py:16
+msgid "Visual Effects"
+msgstr "Efectes visuals"
+
+#: ../src/stacks/effects.py:21 ../src/dock/extras/effects.py:17
+msgid "Aids and visual effects"
+msgstr "Ajudas i efectes visuals"
+
+#: ../src/stacks/effects.py:22 ../src/dock/extras/effects.py:18
+msgid "Aids and visual effects for improve system usability"
+msgstr "Diverses ferramentes per a millorar la usabilitat del sistema"
+
+#: ../src/stacks/effects.py:78 ../src/dock/extras/effects.py:60
+msgid "Window Effects"
+msgstr "Efectes de finestra"
+
+#: ../src/stacks/effects.py:80 ../src/dock/extras/effects.py:62
+msgid "Desktop Effects"
+msgstr "Efectes de l'escriptori"
+
+#: ../src/stacks/settings.py:13 ../src/tools/settings.py:18
+msgid "Settings"
+msgstr "Ajustos"
+
+#: ../src/stacks/settings.py:14
+msgid "Other options"
+msgstr "Altres opcions"
+
+#: ../src/stacks/settings.py:15
+msgid "Select accessibility profile"
+msgstr "Tria perfil d'accessibilitat"
+
+#: ../src/stacks/settings.py:16 ../src/tools/settings.py:43
+msgid "Autostart dock"
+msgstr "Autoinici de la barra"
+
+#: ../src/stacks/settings.py:17
+msgid "Beep when computer starts"
+msgstr "Pita al arrancar el sistema"
+
+#: ../src/stacks/settings.py:18
+msgid "Load profile"
+msgstr "Carga"
+
+#: ../src/stacks/settings.py:19
+msgid "Other Settings"
+msgstr "Altres ajustos"
+
+#: ../src/stacks/settings.py:20
+msgid "Start session with profile"
+msgstr "Perfil inicial"
+
+#: ../src/stacks/settings.py:21
+msgid "Save as..."
+msgstr "Desa com a..."
+
+#: ../src/stacks/settings.py:22
+msgid "Accesswizard profile"
+msgstr "Perfil d'accesswizard"
+
+#: ../src/stacks/settings.py:23
+msgid "Save current profile"
+msgstr "Alça perfil actual"
+
+#: ../src/stacks/settings.py:24
+msgid "Enable ORCA in sddm screen"
+msgstr "Activa ORCA en arrancar SDDM"
+
+#: ../src/stacks/settings.py:25
+msgid "Beep when sddm launches"
+msgstr "Emet un só al arrancar SDDM"
+
+#: ../src/stacks/settings.py:26
+msgid "Advanced settings"
+msgstr "Configuració avançada"
+
+#: ../src/stacks/theme.py:15
+msgid "Set global color scheme"
+msgstr "Esquema de colors global"
+
+#: ../src/stacks/theme.py:16
+msgid "Color scheme"
+msgstr "Esquema de colors"
+
+#: ../src/stacks/theme.py:17 ../src/stacks/theme.py:23
+msgid "Appearance"
+msgstr "Apariencia"
+
+#: ../src/stacks/theme.py:18
+msgid "Look and feel options"
+msgstr "Opcions d'apariencia"
+
+#: ../src/stacks/theme.py:19
+msgid "Configure system fonts"
+msgstr "Estableix les fonts del sistema"
+
+#: ../src/stacks/theme.py:20 ../src/stacks/theme.py:99
+msgid "Fonts"
+msgstr "Fonts"
+
+#: ../src/stacks/theme.py:21
+msgid "Set global theme"
+msgstr "Tema global de l'escriptori"
+
+#: ../src/stacks/theme.py:22 ../src/stacks/theme.py:95
+msgid "Theme"
+msgstr "Tema"
+
+#: ../src/stacks/theme.py:24
+msgid "Set cursor theme and size"
+msgstr "Ajustar tamany i apariencia del cursor"
+
+#: ../src/stacks/theme.py:25 ../src/stacks/theme.py:101
+msgid "Mouse"
+msgstr "Ratolí"
+
+#: ../src/stacks/theme.py:26
+msgid "Appearance customizing"
+msgstr "Personalitzar apariencia"
+
+#: ../src/stacks/theme.py:97
+msgid "Color Scheme"
+msgstr "Esquema de colors"
+
+#: ../src/tools/settings.py:19
+msgid "Configure"
+msgstr "Configuració"
+
+#: ../src/tools/settings.py:20
+msgid "Configure some options"
+msgstr "Configurar algunes opcions"
+
+#: ../src/tools/settings.py:21
+msgid "Set config level, default template.."
+msgstr "Trie l'nici automàtic, les plantilles per defecte..."
+
+#: ../src/tools/settings.py:22
+msgid "The config will be applied per user"
+msgstr "La configuració serà per usuari"
+
+#: ../src/tools/settings.py:23
+msgid "The config will be applied to all users"
+msgstr "La configuració serà per a tots els usuaris"
+
+#: ../src/tools/settings.py:24
+msgid "The config will be applied to all users and clients"
+msgstr "La configuració serà per a to usuari i client"
+
+#: ../src/tools/settings.py:25
+msgid "Apply settings to"
+msgstr "Aplicar a"
+
+#: ../src/tools/settings.py:26
+msgid "Session settings"
+msgstr "Opcions de sessió"
+
+#: ../src/tools/settings.py:27
+msgid "Load template on start"
+msgstr "Carregar plantilla en arrancar"
+
+#: ../src/tools/settings.py:28
+msgid "Enable accesshelper dock"
+msgstr "Habilita barra d'accesibilitat"
+
+#: ../src/tools/settings.py:29
+msgid "Autostart enabled for user"
+msgstr "Autoinici activat per a l'usuari"
+
+#: ../src/tools/settings.py:30
+msgid "Autostart disabled for user"
+msgstr "Autoinici desactivat per a l'usuari"
+
+#: ../src/tools/settings.py:31
+msgid "Autostart could not be disabled"
+msgstr "No s'ha pogut desactivar l'autoinici"
+
+#: ../src/tools/settings.py:32
+msgid "Enabled accessibilty dock with hotkey"
+msgstr "Barra d'accesibilitat disponible a la drecera"
+
+#: ../src/tools/settings.py:33
+msgid "Disabled accessibilty dock"
+msgstr "Barra d'accesibilitat inhabilitada"
+
+#: ../src/tools/settings.py:34
+msgid "Use config"
+msgstr "Usar configuració"
+
+#: ../src/tools/settings.py:35 ../src/tools/settings.py:88
+msgid "User"
+msgstr "Usuari"
+
+#: ../src/tools/settings.py:36 ../src/tools/settings.py:89
+msgid "System"
+msgstr "Sistema"
+
+#: ../src/tools/settings.py:38
+msgid "Startup profile"
+msgstr "Perfil inicial"
+
+#: ../src/tools/settings.py:39
+msgid "Autoload profile"
+msgstr "Carrega inicial de perfil"
+
+#: ../src/tools/settings.py:40 ../src/tools/settings.py:41
+msgid "Disabled"
+msgstr "Desactivat"
+
+#: ../src/tools/settings.py:42
+msgid "Enabled"
+msgstr "Activat"
+
+#: ../src/tools/settings.py:44
+msgid "Hotkey for dock"
+msgstr "Drecera per al dock"
+
+#: ../src/tools/settings.py:45
+msgid "Beep when machine starts"
+msgstr "Pita al arrancar el sistema"
+
+#: ../src/tools/settings.py:90
+msgid "N4d"
+msgstr "N4d"
+
+#: ../src/tools/ttsmanager.py:16
+msgid "Screen reader"
+msgstr "Lector de pantalla"
+
+#: ../src/tools/ttsmanager.py:17
+msgid "TTS settings"
+msgstr "Configuració de TTS"
+
+#: ../src/tools/ttsmanager.py:18
+msgid "Text-To-Speech related options"
+msgstr "Opciones relacionades amb el sintetitzador"
+
+#: ../src/tools/ttsmanager.py:19
+msgid "Some options related with TTS"
+msgstr "Algunes opcions de configuració del sintetitzador"
+
+#: ../src/tools/ttsmanager.py:20
+msgid "Voice"
+msgstr "Veu"
+
+#: ../src/tools/ttsmanager.py:21
+msgid "Use synthesizer"
+msgstr "Usar sintetitzador"
+
+#: ../src/tools/ttsmanager.py:22
+msgid "Pitch"
+msgstr "Tó"
+
+#: ../src/tools/ttsmanager.py:23
+msgid "Speed"
+msgstr "Velocitat"
+
+#: ../src/tools/ttsmanager.py:24
+msgid "Recorded file list"
+msgstr "Fitxers disponibles"
+
+#: ../src/tools/ttsmanager.py:25
+msgid "Use internal TTS"
+msgstr "Usa sintetitzador"
+
+#: ../src/tools/ttsmanager.py:26
+msgid "Use VLC player"
+msgstr "Usa VLC"
+
+#: ../src/tools/ttsmanager.py:27
+msgid "File"
+msgstr "Fitxer"
+
+#: ../src/tools/ttsmanager.py:28
+msgid "Mp3"
+msgstr "Mp3"
+
+#: ../src/tools/ttsmanager.py:29
+msgid "Save"
+msgstr "Desa"
+
+#: ../src/tools/ttsmanager.py:30
+msgid "Text"
+msgstr "Text"
+
+#: ../src/tools/ttsmanager.py:31
+msgid "Files exported to"
+msgstr "Fitxers exportats a"
+
+#: ../src/tools/ttsmanager.py:32
+msgid "Valencian-Catalan"
+msgstr "Valencià-Català"
+
+#: ../src/tools/ttsmanager.py:33
+msgid "Spanish"
+msgstr "Espanyol"
+
+#: ../src/tools/ttsmanager.py:34
+msgid "English"
+msgstr "Anglès"
+
+#: ../src/dock/accessdock-config.py:14
+msgid "Add"
+msgstr "Afegir"
+
+#: ../src/dock/accessdock-config.py:15
+msgid "Delete"
+msgstr "Eliminar"
+
+#: ../src/dock/accessdock-config.py:16
+msgid "Down"
+msgstr "Baixar"
+
+#: ../src/dock/accessdock-config.py:17
+msgid "Edit"
+msgstr "Editar"
+
+#: ../src/dock/accessdock-config.py:18
+msgid "Items per row"
+msgstr "Elemets per línia"
+
+#: ../src/dock/accessdock-config.py:19
+msgid "Up"
+msgstr "Pujar"
+
+#: ../src/dock/extras/launchers.py:12
+msgid "Assign"
+msgstr "Assigna"
+
+#: ../src/dock/extras/launchers.py:13
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: ../src/dock/extras/launchers.py:14 ../src/dock/extras/launchers.py:191
+msgid "Description"
+msgstr "Descripció"
+
+#: ../src/dock/extras/launchers.py:15
+msgid "Toggle effect"
+msgstr "Activar efecte"
+
+#: ../src/dock/extras/launchers.py:16
+msgid "Application"
+msgstr "Aplicació"
+
+#: ../src/dock/extras/launchers.py:17
+msgid "Press button to assign one action"
+msgstr "Premer un botó per assignaruna acció"
+
+#: ../src/dock/extras/launchers.py:18
+msgid "Executable path"
+msgstr "Ruta al programa"
+
+#: ../src/dock/extras/launchers.py:19
+msgid "Insert the executable path"
+msgstr "Inserir la ruta a l'aplicació"
+
+#: ../src/dock/extras/launchers.py:20
+msgid "Shortcut"
+msgstr ""
+"Drecera\n"
+" de teclat"
+
+#: ../src/dock/extras/launchers.py:21
+msgid "Press a key"
+msgstr "Premer una tecla"
+
+#: ../src/dock/extras/launchers.py:22
+msgid "Icon: "
+msgstr "Icona: "
+
+#: ../src/dock/extras/launchers.py:23
+msgid "Push to change icon"
+msgstr "Premer per a canviar icona"
+
+#: ../src/dock/extras/launchers.py:24
+msgid "Name: "
+msgstr "Nom: "
+
+#: ../src/dock/extras/launchers.py:25
+msgid "Unassigned action"
+msgstr "Acció sense assignar"
+
+#: ../src/dock/extras/launchers.py:26
+msgid "Insert desktop name"
+msgstr "Inserir nom de l'aplicació"
+
+#: ../src/dock/extras/launchers.py:27
+msgid "Insert the url for the site"
+msgstr "Inserir url del lloc"
+
+#: ../src/dock/extras/launchers.py:28
+msgid "https://example.com"
+msgstr "https://example.com"
+
+#: ../src/dock/extras/launchers.py:189
+msgid "Description (optional): "
+msgstr "Descripció (opcional): "
+
+#: ../src/dock/extras/launchers.py:192
+msgid "Insert a description for the app"
+msgstr "Inserir la descripció de l'aplicació"
+
+#: ../src/dock/extras/launchers.py:261
+msgid "images(*.png *.xpm *jpg)"
+msgstr "imatges (*.png *.xpm *jpg)"
+
+#: ../src/dock/extras/launchers.py:263
+msgid "All files(*.*)"
+msgstr "Tots (*.*)"
+
+#: ../src/dock/extras/launchers.py:297
+msgid "From here you can add a custom launcher"
+msgstr "Des d'aci es poden assignar dreceres per a les diferents accions"
+
+#~ msgid "Apply"
+#~ msgstr "Aplicar"
+
+#~ msgid "Set font size"
+#~ msgstr "Tamany de les lletres"
+
+#~ msgid ""
+#~ "{}%\n"
+#~ "Scale"
+#~ msgstr ""
+#~ "{}%\n"
+#~ "Ampliació"
+
+#~ msgid "Set screen scale"
+#~ msgstr "Ajusta la ampliació de l'entorn"
+
+#~ msgid "Hide"
+#~ msgstr "Amaga"
+
+#~ msgid "Close accessdock"
+#~ msgstr "Tancar"
+
+#~ msgid "Launch accesshelper"
+#~ msgstr "Obri accesshelper"
+
+#~ msgid "Read screen"
+#~ msgstr "Llegir"
+
+#~ msgid "Read text or image from clipboard"
+#~ msgstr "Llig text o una imatge (ocr) desde el porta-retalls"
+
+#~ msgid "Capture"
+#~ msgstr "Capturar"
+
+#~ msgid "Try to read screen content from screenshot"
+#~ msgstr "Intenta llegir el contingut de la pantalla"
+
+#~ msgid "Pointer"
+#~ msgstr "Punter"
+
+#~ msgid "Set mouse pointer size"
+#~ msgstr "Ajusta el tamany del punter"
+
+#~ msgid "Filter"
+#~ msgstr "Filtre"
+
+#~ msgid "Apply a color filter"
+#~ msgstr "Aplica un filtre de color"
+
+#~ msgid "Keyboard"
+#~ msgstr "Teclat"
+
+#~ msgid "Show/Hide on-screen keyboard"
+#~ msgstr "Mostra/amaga el teclat virtual"
+
+#~ msgid "usage: accesshelper [--set profile]|[--list]"
+#~ msgstr "ús: accesshelper [--set perfil]|[--list]"
+
+#~ msgid "With no args launch accesshelper GUI"
+#~ msgstr "Sense arguments executa la GUI de l'accesshelper"
+
+#~ msgid ""
+#~ "--set [profile]: Activate specified profile.\n"
+#~ "\tCould be an absolute path or a profile from default profiles path"
+#~ msgstr ""
+#~ "--set [perfil]: Activa el perfil indicat.\n"
+#~ "\tPot ser una ruta absoluta a un fitxer o el nom d'un perfil"
+
+#~ msgid "--list: List available profiles"
+#~ msgstr "--list: Mostra els perfils"
+
+#~ msgid "could not be accessed"
+#~ msgstr "no existeix"
+
+#~ msgid "There's no profiles at"
+#~ msgstr "No hi han perfils a"
+
+#~ msgid "Error loading"
+#~ msgstr "Error carregant"
+
+#~ msgid "Must select one from:"
+#~ msgstr "Cal seleccionar un perfil de:"
+
+#~ msgid "Loading profile"
+#~ msgstr "Carregant perfil"
+
+#~ msgid "Changes will only apply after session restart"
+#~ msgstr "Els canvis s'aplicarán després de tancar la sessió"
+
+#~ msgid "Changes will be applied now"
+#~ msgstr "S'aplicaran els canvis ara"
+
+#~ msgid "Logout"
+#~ msgstr "Tancar"
+
+#~ msgid "Options selected:"
+#~ msgstr "Opcions a aplicar:"
+
+#~ msgid "Later"
+#~ msgstr "Després"
+
+#~ msgid "Profile not loaded: Autostart is disabled"
+#~ msgstr "Perfil no carregat: Autoinici desactivat"
+
+#~ msgid "Profile loaded"
+#~ msgstr "Perfil carregat"
+
+#~ msgid "Close Session"
+#~ msgstr "Tancar sessió"
+
+#~ msgid "Ignore"
+#~ msgstr "Ignorar"
+
+#~ msgid "Undo"
+#~ msgstr "Desfer"
+
+#~ msgid "Autostart profile is enabled"
+#~ msgstr "Es carregará el perfil a l'inici"
+
+#~ msgid "A profile has been loaded. All settings has been applied if possible. Expect inconsistencies."
+#~ msgstr "S'ha carregat un perfil. S'ha tractat d'aplicar tota la configuració encara que certes inconsistencies son esperables."
+
+#~ msgid "Accesshelper will try to apply as many changes as possible for current session (expect inconsistencies)"
+#~ msgstr "Accesshelper tractarà d'aplicar tots el canvis per a aquesta sessió (poden apareixer inconsistencies)"
+
+#~ msgid "All settings will be applied after a session restart"
+#~ msgstr "Els canvis s'aplicarán després de tancar la sessió"
+
+#~ msgid "The changes will not be persistent.All settings will be restored to profile"
+#~ msgstr "Els canvis no son persistents. A l'inici de sessió es restaurarà el perfil"
+
+#~ msgid "Close this window for ignoring that until a session restart"
+#~ msgstr "Tancar la finestra per a ignorar els canvis i continuar"
+
+#~ msgid "Changes applied"
+#~ msgstr "Canvis aplicats"
+
+#~ msgid "Accesshelper"
+#~ msgstr "Accesshelper"
+
+#~ msgid "Accesshelper running"
+#~ msgstr "Accesshelper en execució"
+
+#~ msgid "Can't execute another instance of Accesshelp"
+#~ msgstr "No es pot llançar de nou"
+
+#~ msgid "From here you can activate/deactivate accessibility aids"
+#~ msgstr "Desde d'aci es poden desactivar/activar les ajudes d'accessibilitat"
+
+#~ msgid "Invert screen colors"
+#~ msgstr "Inverteix colors"
+
+#~ msgid "Invert windows colors"
+#~ msgstr "Inverteix colors de la finestra"
+
+#~ msgid "Show animation on click"
+#~ msgstr "Posiciona el punter al fer clic"
+
+#~ msgid "Show a grid when moving windows"
+#~ msgstr "Mostra una graella al moure finestres"
+
+#~ msgid "Activate eyefish effect"
+#~ msgstr "Activa ull de peix"
+
+#~ msgid "Glass effect"
+#~ msgstr "Activa lupa"
+
+#~ msgid "Enable magnify effects"
+#~ msgstr "Activar efectes d'ampliació"
+
+#~ msgid "Acoustic system bell"
+#~ msgstr "Campana de sistema audible"
+
+#~ msgid "Visible bell"
+#~ msgstr "Campana visible"
+
+#~ msgid "Track pointer"
+#~ msgstr "Posiciona el punter al moure'l"
+
+#~ msgid "Track click"
+#~ msgstr "Posiciona el punter al fer clic"
+
+#~ msgid "Disable load profile on startup or changes will not apply on restart"
+#~ msgstr "Desactivar la carrega inicial de perfil o els canvis no s'aplicaran al reiniciar"
+
+#~ msgid "Invert"
+#~ msgstr "Inverteix colors"
+
+#~ msgid "InvertWindow"
+#~ msgstr "Inverteix colors de la finestra"
+
+#~ msgid "ToggleMouseClick"
+#~ msgstr "Posiciona el punter al fer click"
+
+#~ msgid "hotkeys options"
+#~ msgstr "opcions de dreceres"
+
+#~ msgid "Configuration"
+#~ msgstr "Configuració"
+
+#~ msgid "Add hotkey"
+#~ msgstr "Afegir drecera"
+
+#~ msgid "Add a hotkey for an application, command or action"
+#~ msgstr "Assigna tecles per a llançar accions"
+
+#~ msgid "Assign actions to keys"
+#~ msgstr "Estableix dreceres per a accions"
+
+#~ msgid "Application from system"
+#~ msgstr "Aplicació del sistema"
+
+#~ msgid "Command-line order"
+#~ msgstr "Ordre de la línia de comandaments"
+
+#~ msgid "Command"
+#~ msgstr "Comandament"
+
+#~ msgid "Press a key or key-combination for the shortcut"
+#~ msgstr "Prem una tecla o combinació per a la drecera"
+
+#~ msgid "Search"
+#~ msgstr "Cerca"
+
+#~ msgid "Color"
+#~ msgstr "Color"
+
+#~ msgid "Color filter"
+#~ msgstr "Filtre"
+
+#~ msgid "Modify screen color levels"
+#~ msgstr "Modifica els nivells de color"
+
+#~ msgid "Set color filter for the screen"
+#~ msgstr "Estableix un filre de color per a la pantalla"
+
+#~ msgid "By default"
+#~ msgstr "Per defecte"
+
+#~ msgid "Set color filter: "
+#~ msgstr "Aplica filtre: "
+
+#~ msgid "Hotkeys"
+#~ msgstr "Dreceres"
+
+#~ msgid "Keyboard Hotkeys"
+#~ msgstr "Dreceres de teclat"
+
+#~ msgid "Set hotkeys for launch applications"
+#~ msgstr "Assigna tecles per a llançar accions"
+
+#~ msgid "Go to next window"
+#~ msgstr "Finestra següent"
+
+#~ msgid "Go to previous window"
+#~ msgstr "Darrera finestra"
+
+#~ msgid "Close window"
+#~ msgstr "Tancar finestra"
+
+#~ msgid "Open launch menu"
+#~ msgstr "Obrir menu d'aplicacions"
+
+#~ msgid "Show desktop"
+#~ msgstr "Mostrar escriptori"
+
+#~ msgid "Invert colours"
+#~ msgstr "Inverteix colors"
+
+#~ msgid "Invert window colours"
+#~ msgstr "Inverteix colors de la finestra"
+
+#~ msgid "Show grid when moving windows"
+#~ msgstr "Mostra una graella al moure finestres"
+
+#~ msgid "Show mouse click"
+#~ msgstr "Posiciona el punter al fer clic"
+
+#~ msgid "Zoom in"
+#~ msgstr "Apropar zoom"
+
+#~ msgid "Zoom out"
+#~ msgstr "Allunyar zoom"
+
+#~ msgid "Show mouse pointer"
+#~ msgstr "Posicionar el punter"
+
+#~ msgid "behavior"
+#~ msgstr "comportament"
+
+#~ msgid "Desktop behavior"
+#~ msgstr "Comportament de l'escriptori"
+
+#~ msgid "Configure how desktop works"
+#~ msgstr "Configura com trevalla l'escriptori"
+
+#~ msgid "Set many options related with desktop behavior"
+#~ msgstr "Tria entre diverses opciones relacionades amb l'escriptori"
+
+#~ msgid "Click to focus"
+#~ msgstr "Enfocar al fer clic"
+
+#~ msgid "Focus follows pointer"
+#~ msgstr "El focus segeuix al punter"
+
+#~ msgid "Only one click for open elements"
+#~ msgstr "Un clic per obrir elements"
+
+#~ msgid "Click on scrollbar moves to position"
+#~ msgstr "La barra de desplaçament avança fins la posició al clicar"
+
+#~ msgid "Scrollbar sliding mode"
+#~ msgstr "Comportament de la barra"
+
+#~ msgid "Actions on top left screen corner"
+#~ msgstr "Accions al cantó superior esquerre"
+
+#~ msgid "Set screen resolution"
+#~ msgstr "Resolució de pantalla"
+
+#~ msgid "Customize the system fonts"
+#~ msgstr "Personalitzar les fonts del sistema"
+
+#~ msgid "Font size"
+#~ msgstr "Tamany de font"
+
+#~ msgid "Font family"
+#~ msgstr "Familia"
+
+#~ msgid "Cursor theme"
+#~ msgstr "Tema per al punter"
+
+#~ msgid "Cursor size"
+#~ msgstr "Tamany de punter"
+
+#~ msgid "Font"
+#~ msgstr "Font"
+
+#~ msgid "Look&Feel"
+#~ msgstr "Apariencia"
+
+#~ msgid "Set theme, color scheme or pointers"
+#~ msgstr "Selecciona tema, esquema de color o punters"
+
+#~ msgid "Theme colors"
+#~ msgstr "Colors del tema"
+
+#~ msgid "Background color"
+#~ msgstr "Color de l'escriptori"
+
+#~ msgid "Desktop background"
+#~ msgstr "Fons de l'escriptori"
+
+#~ msgid "Current background"
+#~ msgstr "Imatge actual"
+
+#~ msgid "Widget size"
+#~ msgstr "Tamany dels elements"
+
+#~ msgid "Scale factor"
+#~ msgstr "Factor d'ampliació"
+
+#~ msgid "Run apps maximized"
+#~ msgstr "Maximitza per defecte"
+
+#~ msgid "White"
+#~ msgstr "Blanc"
+
+#~ msgid "Red"
+#~ msgstr "Roig"
+
+#~ msgid "Blue"
+#~ msgstr "Blau"
+
+#~ msgid "Green"
+#~ msgstr "Verd"
+
+#~ msgid "Yellow"
+#~ msgstr "Groc"
+
+#~ msgid "Black"
+#~ msgstr "Negre"
+
+#~ msgid "Manage profiles"
+#~ msgstr "Gestiona perfils"
+
+#~ msgid "Load and save custom profiles"
+#~ msgstr "Carga i alça perfils"
+
+#~ msgid "Use profile templates for quick configuration"
+#~ msgstr "Use les plantilles del perfils per a configurar-ho tot rapidament"
+
+#~ msgid "Remove"
+#~ msgstr "Eliminar"
+
+#~ msgid "Confirm remove"
+#~ msgstr "Confirmació"
+
+#~ msgid "Remove profile"
+#~ msgstr "Eliminar"
+
+#~ msgid "Permission denied"
+#~ msgstr "Permís denegat"
+
+#~ msgid "Default profiles could not be modified"
+#~ msgstr "Els perfils per defecte no son modificables"
+
+#~ msgid "Insuficient permissions for remove"
+#~ msgstr "Usuari sense permís"
+
+#~ msgid "Profile added to system's profiles"
+#~ msgstr "Perfil afegit al sistema"
+
+#~ msgid "Profile added to user's profiles"
+#~ msgstr "Perfil afegit a l'usuari"
+
+#~ msgid "Import profile"
+#~ msgstr "Importar"
+
+#~ msgid "Export profile"
+#~ msgstr "Exportar"
+
+#~ msgid "Profile"
+#~ msgstr "Perfil"
+
+#~ msgid "An error ocurred"
+#~ msgstr "Ocorregué un error"
+
+#~ msgid "Spanish woman"
+#~ msgstr "Espanyol femení"
+
+#~ msgid "Catalan woman"
+#~ msgstr "Català femení"
+
+#~ msgid "Catalan man"
+#~ msgstr "Català masculí"
+
+#~ msgid "Choose the config level that should use the app"
+#~ msgstr "Trie el nivell de configuració per a l'aplicació"
+
+#~ msgid "Accessibility configuration"
+#~ msgstr "Configuració d'accessibilitat"
+
+#~ msgid "Color filter configuration"
+#~ msgstr "Filtres de color"
+
+#~ msgid "Hotkeys configuration"
+#~ msgstr "Configuració de les dreseres"
+
+#~ msgid "Look&Feel configuration"
+#~ msgstr "Configuració de l'apariencia"
+
+#~ msgid ""
+#~ "It's recommended to logout from session now\n"
+#~ "in order of avoid inconsistencies"
+#~ msgstr "Es recomana tancar la sessió per evitar inconsistencies"
+
+#~ msgid "Cursor"
+#~ msgstr "Cursor"
+
+#~ msgid "Screen Options"
+#~ msgstr "Opcions de pantalla"
+
+#~ msgid "Enable high contrast palette"
+#~ msgstr "Paleta d'alt contrast"
+
+#~ msgid "Set the policy focus"
+#~ msgstr "Política de focus"
+
+#~ msgid "Hotkey for restarting Orca"
+#~ msgstr "Dresera per a reiniciar Orca"
+
+#~ msgid "Import Orca settings"
+#~ msgstr "Importar configuracions"
+
+#~ msgid "Voice speed when reading"
+#~ msgstr "Velocitat de la veu al llegir"
+
+#~ msgid "Ctrl+Space"
+#~ msgstr "Ctrl+Espaci"
+
+#~ msgid "Enabled accessibilty dock. Press ctrl+space to show"
+#~ msgstr "Barra d'accesibilitat activada. Prem CTRL+Espaci per a mostrar"
+
+#~ msgid "Set resolution"
+#~ msgstr "Resolució"
+
+#~ msgid "Great A Tuin the turtle comes, swimming slowly through the interstellar gulf, hydrogen frost on his ponderous limbs, his huge and ancient shell pocked with meteor craters. Through sea-sized eyes that are crusted with rheum and asteroid dust He stares fixedly at the Destination."
+#~ msgstr "Arriba la tortuga Great A Tuin, nedant lentament a través del golf interestel·lar, amb gebre d'hidrogen a les seues pesades extremitats, la seua enorme i antiga closca plena de cràters de meteorits. A través d'ulls de la mida d'un mar coberts de pols d'asteroides i lleganyes, mira fixament el destí."

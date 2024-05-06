@@ -79,7 +79,7 @@ class accessibility(QStackedWindowItem):
 		btnOrca.clicked.connect(self._launch)
 		btnLtts=QPushInfoButton()
 		btnLtts.setText(i18n.get("LTTS"))
-		btnLtts.setDescription(i18n.get("LTTSDCS"))
+		btnLtts.setDescription(i18n.get("LTTSDSC"))
 		btnLtts.loadImg("kmouth")
 		self.tblGrid.setCellWidget(0,2,btnLtts)
 		#self.tblGrid.verticalHeader().setSectionResizeMode(2,QHeaderView.ResizeToContents)

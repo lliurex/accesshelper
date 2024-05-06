@@ -18,7 +18,7 @@ i18n={
 	"MENUDESCRIPTION":_("Text-To-Speech related options"),
 	"TOOLTIP":_("Some options related with TTS"),
 	"VOICE":_("Voice"),
-	"SYNT":_("Use synthesizer"),
+	"SYNTH":_("Use synthesizer"),
 	"PITCH":_("Pitch"),
 	"SPEED":_("Speed"),
 	"FILES":_("Recorded file list"),
@@ -98,6 +98,7 @@ class ttshelper(QWidget):
 		lblVoice=QLabel(i18n.get("VOICE"))
 		box.addWidget(lblVoice,0,0,1,1)
 		self.cmbVoice=QComboBox()
+		self.cmbVoice.setAccessibleName(i18n.get("VOICE"))
 		box.addWidget(self.cmbVoice,0,1,1,1)
 		lblSpeed=QLabel(i18n.get("SPEED"))
 		box.addWidget(lblSpeed,1,0,1,1)
@@ -106,11 +107,13 @@ class ttshelper(QWidget):
 		lblPitch=QLabel(i18n.get("PITCH"))
 		box.addWidget(lblPitch,2,0,1,1)
 		self.cmbPitch=QComboBox()
+		self.cmbPitch.setAccessibleName(i18n.get("PITCH"))
 		self.cmbPitch.setEnabled(False)
 		box.addWidget(self.cmbPitch,2,1,1,1)
-		lblSynt=QLabel(i18n.get("SYNT"))
+		lblSynt=QLabel(i18n.get("SYNTH"))
 		box.addWidget(lblSynt,3,0,1,1)
 		self.cmbSynth=QComboBox()
+		self.cmbSynth.setAccessibleName(i18n.get("SYNTH"))
 		box.addWidget(self.cmbSynth,3,1,1,1)
 		lblFiles=QLabel(i18n.get("FILES"))
 		box.addWidget(lblFiles,4,0,1,1,Qt.AlignLeft)
@@ -324,7 +327,7 @@ class ttshelper(QWidget):
 			f.write("{0}->{1}\n".format(i18n.get("VOICE"),voice))
 			f.write("{0}->{1}\n".format(i18n.get("SPEED"),speed))
 			f.write("{0}->{1}\n".format(i18n.get("PITCH"),pitch))
-			f.write("{0}->{1}\n".format(i18n.get("SYNT"),synt))
+			f.write("{0}->{1}\n".format(i18n.get("SYNTH"),synt))
 	#def _writeFileChanges(self):
 
 if __name__=="__main__":

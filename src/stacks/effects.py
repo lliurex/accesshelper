@@ -75,11 +75,13 @@ class effects(QStackedWindowItem):
 	#def _renderGui
 
 	def _launch(self,*args):
-		if args[0].text()==_("Window Effects"):
+		mod=""
+		if args[0].text()==i18n.get("EFFBTN"):
 			mod="kcm_kwin_effects"
-		elif args[0].text()==_("Desktop Effects"):
+		elif args[0].text()==i18n.get("DESBTN"):
 			mod="kcm_kwin_scripts"
-		self.accesshelper.launchKcmModule(mod)
+		if len(mod)>0:
+			self.accesshelper.launchKcmModule(mod)
 	#def _launch
 
 	def updateScreen(self):

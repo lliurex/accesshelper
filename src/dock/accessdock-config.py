@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 import os,sys,shutil
-from PySide2.QtWidgets import QApplication,QGridLayout,QWidget,QPushButton,QHeaderView,QLabel,QSpinBox,QTableWidgetItem,QAbstractItemView
+from PySide2.QtWidgets import QApplication,QGridLayout,QWidget,QPushButton,QHeaderView,QLabel,QSpinBox,QTableWidgetItem,QAbstractItemView,QCheckBox,QFrame
 from PySide2.QtCore import Qt,Signal,QSize,QThread,QPoint,QObject
 from PySide2.QtGui import QIcon,QPixmap,QCursor,QColor,QDrag
-from QtExtraWidgets import QTableTouchWidget
+from QtExtraWidgets import QTableTouchWidget,QHotkeyButton
 import lib.libdock as libdock
 import extras.launchers as launchers
 import accessdock
@@ -12,10 +12,14 @@ import resources
 _ = gettext.gettext
 
 i18n={"ADD":_("Add"),
+	"DCK":_("Rearrange or add new buttons"),
 	"DEL":_("Delete"),
 	"DOWN":_("Down"),
 	"EDI":_("Edit"),
+	"HKEY":_("Assign hotkey"),
+	"HKEYBTN":_("Push"),
 	"MAX":_("Items per row"),
+	"STRT":_("Launch at session start"),
 	"UP":_("Up")
 	}
 
@@ -46,7 +50,7 @@ class dock(accessdock.accessdock):
 		self.data={}
 		self.layout().addWidget(self.fakeTable,0,0,1,1)
 		self._cloneDock()
-	
+	#def __init__
 	
 	def _indexToCell(self,idx):
 		cc=self.fakeTable.columnCount()
@@ -171,6 +175,17 @@ class accessconf(QWidget):
 	def _initScreen(self):
 		layout=QGridLayout()
 		self.setLayout(layout)
+		self._renderDockConfig()
+		self._renderOptions()
+	#def _initScreen
+
+	def _renderDockConfig(self):
+		layout=self.layout()
+		frm=QFrame()
+		frm.setFrameShape(frm.Box)
+		frm.setLayout(QGridLayout())
+		layout.addWidget(frm,0,0,1,2)
+		layout=frm.layout()
 		self.dock=dock()
 		self.dock.signals.changed.connect(self._saveChanges)
 		self.dock.signals.itemSelectionChanged.connect(self._syncListIdx)
@@ -204,14 +219,30 @@ class accessconf(QWidget):
 		self.btnEdi=QPushButton(i18n.get("EDI"))
 		self.btnEdi.clicked.connect(self._ediAction)
 		self.btnEdi.setEnabled(False)
-		layout.addWidget(self.dock,0,0,1,4)
-		layout.addWidget(self.list,1,0,3,2)
-		layout.addWidget(self.btnIup,1,2,2,1,Qt.AlignTop|Qt.AlignLeft)
-		layout.addWidget(self.btnIdo,3,2,1,1,Qt.AlignBottom|Qt.AlignLeft)
-		layout.addWidget(self.btnAdd,1,3,1,1,Qt.AlignTop)
-		layout.addWidget(self.btnEdi,2,3,1,1,Qt.AlignTop)
-		layout.addWidget(self.btnDel,3,3,1,1,Qt.AlignTop)
-	#def _initScreen
+		layout.addWidget(QLabel(i18n["DCK"]),0,0,1,4)
+		layout.addWidget(self.dock,1,0,1,4)
+		layout.addWidget(self.list,2,0,3,2)
+		layout.addWidget(self.btnIup,2,2,2,1,Qt.AlignTop|Qt.AlignLeft)
+		layout.addWidget(self.btnIdo,4,2,1,1,Qt.AlignBottom|Qt.AlignLeft)
+		layout.addWidget(self.btnAdd,2,3,1,1,Qt.AlignTop)
+		layout.addWidget(self.btnEdi,3,3,1,1,Qt.AlignTop)
+		layout.addWidget(self.btnDel,4,3,1,1,Qt.AlignTop)
+	#def _renderDockConfig
+
+	def _renderOptions(self):
+		layout=self.layout()
+		row=layout.rowCount()
+		frm=QFrame()
+		frm.setLayout(QGridLayout())
+		frm.setFrameShape(frm.HLine)
+		layout.addWidget(frm,row,0,1,2)
+		self.chkStart=QCheckBox(i18n["STRT"])
+		self.chkStart.setChecked(self._chkStartStatus())
+		layout.addWidget(self.chkStart,row+1,0)
+		layout.addWidget(QLabel(i18n["HKEY"]),row+2,0,Qt.AlignRight)
+		self.btnHkey=QHotkeyButton(i18n["HKEYBTN"])
+		layout.addWidget(self.btnHkey,row+2,1)
+	#def _renderOptions
 
 	def _change(self,*args):
 		if args[0].isSelected():
@@ -235,7 +266,6 @@ class accessconf(QWidget):
 				f.writelines(nfcontents)
 	#def _change
 
-
 	def updateScreen(self):
 		self.dock.updateScreen()
 		self.dock._cloneDock()
@@ -247,7 +277,30 @@ class accessconf(QWidget):
 			item.setText(launcher[1].get("Name",launcher[0]))
 			self.list.setRowCount(self.list.rowCount()+1)
 			self.list.setItem(self.list.rowCount()-1,self.list.columnCount()-1,item)
+		self.chkStart.stateChanged.connect(self._toggleStart)
 	#def updateScreen
+
+	def _toggleStart(self):
+		dskName="net.lliurex.accessibledock.desktop"
+		dskPath=os.path.join(os.environ.get("HOME"),".config","autostart",dskName)
+		srcPath=os.path.join("/usr","share","applications",dskName)
+		if self._chkStartStatus()==True:
+			self._debug("Disable autostart")
+			os.unlink(dskPath)
+		elif os.path.exists(srcPath):
+			if os.path.exists(os.path.dirname(dskPath))==False:
+				os.makedirs(os.path.dirname(dskPath))
+			self._debug("Enable autostart")
+			shutil.copy(srcPath,dskPath)
+	#def _toggleStart
+
+	def _chkStartStatus(self):
+		status=False
+		dskName="net.lliurex.accessibledock.desktop"
+		if os.path.exists(os.path.join(os.environ.get("HOME"),".config","autostart",dskName)):
+			status=True
+		return status
+	#def _chkStartStatus
 
 	def _itemUp(self):
 		idx=self.list.currentRow()

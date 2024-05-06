@@ -1,0 +1,14 @@
+[Desktop Entry]
+Name=Accessible Dock
+GenericName=Accessible Dock
+Comment=Helper dock for accessibility
+Comment[es]=Barra auxiliar de accesibilidad
+Comment[ca_ES@valencia]=Barra auxiliar de accessibilitat
+Comment[ca_ES.UTF-8@valencia]=Barra auxiliar de accessibilitat
+Comment[ca]=Barra auxiliar de accessibilitat
+Exec=/usr/share/accesswizard/dock/accessdock.py
+Terminal=false
+Type=Application
+Icon=accessibledock
+Categories=Accessibility;X-Lliurex;
+TryExec=/usr/share/accesswizard/dock/accessdock.py

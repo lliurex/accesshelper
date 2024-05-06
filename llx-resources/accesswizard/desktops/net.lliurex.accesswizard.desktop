@@ -1,0 +1,18 @@
+[Desktop Entry]
+Name=Access Wizard
+GenericName=Access Wizard
+Comment=Manage available accessibility options
+Comment[es]=Gestiona las opciones de accesibilidad
+Comment[ca_ES@valencia]=Gestiona les opciones d'accessibilitat
+Comment[ca_ES.UTF-8@valencia]=Gestiona les opciones d'accessibilitat
+Comment[ca]=Gestiona les opciones d'accessibilitat
+Exec=/usr/share/accesswizard/accesswizard.py
+Terminal=false
+Type=Application
+Icon=accesswizard
+Name[ca_ES.UTF-8@valencia]=Access Wizard
+Name[ca_ES@valencia]=Access Wizard
+Name[ca]=Access Wizard 
+Name[es]=Access Wizard 
+Categories=Accessibility;X-Lliurex;
+Exec=/usr/share/accesswizard/accesswizard.py

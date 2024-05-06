@@ -238,10 +238,10 @@ class accessconf(QWidget):
 		layout.addWidget(frm,row,0,1,2)
 		self.chkStart=QCheckBox(i18n["STRT"])
 		self.chkStart.setChecked(self._chkStartStatus())
-		layout.addWidget(self.chkStart,row+1,0)
-		layout.addWidget(QLabel(i18n["HKEY"]),row+2,0,Qt.AlignRight)
+		layout.addWidget(self.chkStart,row+1,0,1,2)
+		layout.addWidget(QLabel(i18n["HKEY"]),row+2,0,Qt.AlignLeft)
 		self.btnHkey=QHotkeyButton(i18n["HKEYBTN"])
-		layout.addWidget(self.btnHkey,row+2,1)
+		layout.addWidget(self.btnHkey,row+2,0,Qt.AlignRight)
 	#def _renderOptions
 
 	def _change(self,*args):

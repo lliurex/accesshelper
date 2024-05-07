@@ -1,11 +1,31 @@
 #!/usr/bin/python3
 import os,sys,subprocess
 from PySide2.QtWidgets import QApplication,QGridLayout,QWidget,QPushButton,QHeaderView,QMenu,QAction
-from PySide2.QtCore import Qt,QSignalMapper,QSize,QThread,QPoint,QEvent
+from PySide2.QtCore import Qt,QSignalMapper,QSize,QThread,QPoint,QEvent,Signal
 from PySide2.QtGui import QIcon,QPixmap,QCursor,QColor
+import dbus
+import dbus.service
+import dbus.mainloop.glib
 from QtExtraWidgets import QTableTouchWidget
 import subprocess
 import lib.libdock as libdock
+
+class dbusMethods(dbus.service.Object):
+	def __init__(self,bus_name,*args,**kwargs):
+		super().__init__(bus_name,"/net/lliurex/accessibledock")
+		self.widget=args[0]
+
+	@dbus.service.signal("net.lliurex.accessibledock")
+	def visibilityChanged(self):
+		pass
+	#def toggle(self)
+
+	@dbus.service.method("net.lliurex.accessibledock")
+	def toggle(self,*args):
+		self.visibilityChanged()
+		pass
+	#def toggle(self)
+#class dbusMethods
 
 class threadLauncher(QThread):
 	def __init__(self,cmd,parent=None):
@@ -145,9 +165,40 @@ class accessdock(QWidget):
 	def _endLaunch(self,*args):
 		print(args)
 	#def _endLaunch
+
+	def _toggle(self,*args,**kwargs):
+		self.setVisible(not(self.isVisible()))
+	#def _toggle
 		
 if __name__=="__main__":
 	app=QApplication(["AccessDock"])
 	dock=accessdock()
+	#Check if is already running
+	dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
+	try:
+		bus=dbus.SessionBus()
+	except Exception as e:
+		print("Could not get session bus: %s\nAborting"%e)
+		sys.exit(1)
+	try:
+		objbus=bus.get_object("net.lliurex.accessibledock","/net/lliurex/accessibledock")
+		objint=dbus.Interface(bus,"net.lliurex.accessibledock")
+		objbus.toggle()
+		print("Already launched!")
+		sys.exit(2)
+	except Exception as e:
+		print(e)
+		pass
+	name=dbus.service.BusName("net.lliurex.accessibledock",bus)
+	bus.add_signal_receiver(dock._toggle,
+                        bus_name='net.lliurex.accessibledock',
+                        interface_keyword='',
+                        member_keyword='',
+                        path_keyword='',
+                        message_keyword='')
+
+	objbus=bus.get_object("net.lliurex.accessibledock","/net/lliurex/accessibledock")
+	objbus.connect_to_signal("Toggled", dock._toggle,    dbus_interface="net.lliurex.accessibledock")
+	dclient=dbusMethods(bus,dock)
 	dock.show()
 	app.exec_()

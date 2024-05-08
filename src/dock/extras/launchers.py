@@ -230,9 +230,11 @@ class portrait(QStackedWindowItem):
 					self.action["type"]="desktop"
 			self.accepted.emit(self.action)
 		self.close()
+	#def _accepted
 
 	def _setHkText(self):
 		self.hkBtn.setText(i18n["HOTKEY_PRESS"])
+	#def _setHkText
 
 	def setParms(self,*args):
 		if len(args)>0:
@@ -396,7 +398,7 @@ class launchers(QStackedWindow):
 		
 	def _debug(self,msg):
 		if self.dbg:
-			print("ConfDesktops: %s"%msg)
+			print("launchers: %s"%msg)
 	#def _debug
 
 if __name__=="__main__":

@@ -42,7 +42,7 @@ class accessdock(QWidget):
 		super().__init__()
 		self.dbg=True
 		self.launchers=libdock.libdock()
-		#self.setWindowModality(Qt.WindowModal)
+		self.setWindowModality(Qt.WindowModal)
 		self.setWindowFlags(Qt.NoDropShadowWindowHint|Qt.WindowStaysOnTopHint)
 	#	self.setWindowFlags(Qt.X11BypassWindowManagerHint)
 		layout=QGridLayout()
@@ -117,6 +117,7 @@ class accessdock(QWidget):
 		self.grid.setColumnCount(0)
 		self.btnMnu={}
 		launchers=self.launchers.getLaunchers()
+		print(len(launchers))
 		for launcher in launchers:
 			mnu=QMenu(launcher[1]["Name"])
 			#actConfig=QAction("Configure")
@@ -128,13 +129,13 @@ class accessdock(QWidget):
 			btn.customContextMenuRequested.connect(self._popup)
 			#btn.setMenu(mnu)
 			self.btnMnu[btn]=mnu
-			btn=self._setUpBtn(btn,launcher[1])
+			btn=self._setupBtn(btn,launcher[1])
 			btn.setProperty("file",launcher[0])
 			self.grid.setColumnCount(self.grid.columnCount()+1)
 			self.grid.setCellWidget(0,self.grid.columnCount()-1,btn)
 	#def updateScreen
 
-	def _setUpBtn(self,btn,launcher):
+	def _setupBtn(self,btn,launcher):
 		#btn.setText(launcher.get("Name","Unknown"))
 		icn=QIcon()
 		iconName=launcher.get("Icon","")
@@ -153,7 +154,7 @@ class accessdock(QWidget):
 		btn.setProperty("path",launcher.get("Path",""))
 		btn.clicked.connect(lambda: self._beginLaunch(launcher.get("Exec")))
 		return(btn)
-	#def _setUpBtn
+	#def _setupBtn
 
 	def _beginLaunch(self,*args):
 		l=threadLauncher(args[0])

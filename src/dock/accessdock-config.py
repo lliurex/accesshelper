@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 import os,sys,shutil
-from PySide2.QtWidgets import QApplication,QGridLayout,QWidget,QPushButton,QHeaderView,QLabel,QSpinBox,QTableWidgetItem,QAbstractItemView,QCheckBox,QFrame
+from PySide2.QtWidgets import QApplication,QGridLayout,QWidget,QPushButton,QHeaderView,QLabel,QSpinBox,QTableWidgetItem,QAbstractItemView,QCheckBox,QFrame,QHBoxLayout
 from PySide2.QtCore import Qt,Signal,QSize,QThread,QPoint,QObject
 from PySide2.QtGui import QIcon,QPixmap,QCursor,QColor,QDrag
 from QtExtraWidgets import QTableTouchWidget,QHotkeyButton
@@ -12,12 +12,12 @@ import resources
 _ = gettext.gettext
 
 i18n={"ADD":_("Add"),
-	"DCK":_("Rearrange or add new buttons"),
+	"DCK":_("Rearrange or modify buttons for the dock"),
 	"DEL":_("Delete"),
 	"DOWN":_("Down"),
 	"EDI":_("Edit"),
-	"HKEY":_("Assign hotkey"),
-	"HKEYBTN":_("Push"),
+	"HKEY":_("Keyboard shortcut"),
+	"HKEYBTN":_("Push to assign"),
 	"MAX":_("Items per row"),
 	"STRT":_("Launch at session start"),
 	"UP":_("Up")
@@ -158,7 +158,7 @@ class accessconf(QWidget):
 	def __init__(self,parent=None):
 		super().__init__()
 		self.dbg=True
-		self.launchers=libdock.libdock()
+		self.libdock=libdock.libdock()
 
 		#self.setWindowModality(Qt.WindowModal)
 		#self.setWindowFlags(Qt.NoDropShadowWindowHint|Qt.WindowStaysOnTopHint|Qt.Tool)
@@ -238,11 +238,21 @@ class accessconf(QWidget):
 		layout.addWidget(frm,row,0,1,2)
 		self.chkStart=QCheckBox(i18n["STRT"])
 		self.chkStart.setChecked(self._chkStartStatus())
+		self.chkStart.stateChanged.connect(self._toggleStart)
 		layout.addWidget(self.chkStart,row+1,0,1,2)
-		layout.addWidget(QLabel(i18n["HKEY"]),row+2,0,Qt.AlignLeft)
-		self.btnHkey=QHotkeyButton(i18n["HKEYBTN"])
+		wdg=QWidget()
+		hlay=QHBoxLayout()
+		wdg.setLayout(hlay)
+		hlay.addWidget(QLabel(i18n["HKEY"]))
+		btnHkeyText=self.libdock.getShortcut()
+		if len(btnHkeyText.strip())>0:
+			btnHkeyText=btnHkeyText.split(",")[0]
+			self.btnHkey=QHotkeyButton(btnHkeyText)
+		else:
+			self.btnHkey=QHotkeyButton(i18n["HKEYBTN"])
 		self.btnHkey.hotkeyAssigned.connect(self._assignHotkey)
-		layout.addWidget(self.btnHkey,row+2,0,Qt.AlignRight)
+		hlay.addWidget(self.btnHkey)
+		layout.addWidget(wdg,row+2,0)
 	#def _renderOptions
 
 	def _change(self,*args):
@@ -269,7 +279,8 @@ class accessconf(QWidget):
 
 	def _assignHotkey(self):
 		hkey=self.btnHkey.text()
-		print(hkey)
+		hkey=hkey.replace("Any","Space")
+		self.libdock.setShortcut(hkey)
 	#def _assignHotkey
 
 	def updateScreen(self):
@@ -277,13 +288,12 @@ class accessconf(QWidget):
 		self.dock._cloneDock()
 		self.list.clear()
 		self.list.setRowCount(0)
-		launchers=self.launchers.getLaunchers()
+		launchers=self.libdock.getLaunchers()
 		for launcher in launchers:
 			item=QTableWidgetItem()
 			item.setText(launcher[1].get("Name",launcher[0]))
 			self.list.setRowCount(self.list.rowCount()+1)
 			self.list.setItem(self.list.rowCount()-1,self.list.columnCount()-1,item)
-		self.chkStart.stateChanged.connect(self._toggleStart)
 	#def updateScreen
 
 	def _toggleStart(self):
@@ -365,7 +375,7 @@ class accessconf(QWidget):
 	def _addAction(self,*args):
 		launcher=launchers.launchers()
 		launcher.accepted.connect(self.updateScreen)
-		launcher.destPath=self.launchers.launchersPath
+		launcher.destPath=self.libdock.launchersPath
 		launcher.show()
 	#def _addAction(self,*args):
 
@@ -374,7 +384,7 @@ class accessconf(QWidget):
 		data=self.dock.data
 		launcher=launchers.launchers()
 		launcher.accepted.connect(self.updateScreen)
-		launcher.destPath=self.launchers.launchersPath
+		launcher.destPath=self.libdock.launchersPath
 		launcher.setParms(data[idx])
 		launcher.show()
 	#def _addAction(self,*args):
@@ -382,15 +392,15 @@ class accessconf(QWidget):
 	def _delAction(self,*args):
 		idx=self.list.currentRow()
 		data=self.dock.data
-		fpath=os.path.join(self.launchers.launchersPath,data[idx])
+		fpath=os.path.join(self.libdock.launchersPath,data[idx])
 		if os.path.exists(fpath):
 			os.remove(fpath)
 		self.updateScreen()
 	#def _delAction(self,*args):
 
 	def _saveChanges(self,*args):
-		lpath=self.launchers.launchersPath
-		launchers=self.launchers.getLaunchers()
+		lpath=self.libdock.launchersPath
+		launchers=self.libdock.getLaunchers()
 		new=[]
 		for launcher in launchers:
 			new.append(launcher[0])

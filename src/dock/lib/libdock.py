@@ -3,11 +3,12 @@
 #Library for handling desktop files for accessdock
 import os,sys
 from app2menu import App2Menu
+import subprocess
 
 class libdock():
 	def __init__(self):
 		self.dbg=False
-		self.launchersPath=os.path.join(os.environ.get("HOME"),".config","accesswizard","launchers")
+		self.launchersPath=os.path.join(os.environ.get("HOME"),".local","accesswizard","launchers")
 	#def __init__
 
 	def _debug(self,msg):
@@ -27,4 +28,27 @@ class libdock():
 					continue
 				launchers.append((f.name,app))
 		return(launchers)
+
+	def getShortcut(self):
+		cmd=["kreadconfig5","--file","kglobalshortcutsrc","--group","net.lliurex.accessibledock.desktop","--key","_launch"]
+		out=subprocess.check_output(cmd,encoding="utf8",universal_newlines=True)
+		return(out.strip())
+	#def getShortcut
+
+	def setShortcut(self,hkey):
+		appname="accessibledock"
+		cmdargs="{0},{0},{1}.desktop".format(hkey,appname)
+		cmd=["kwriteconfig5","--file","kglobalshortcutsrc","--group","net.lliurex.accessibledock.desktop","--key","_launch",cmdargs]
+		try:
+			subprocess.check_call(cmd)
+		except Exception as e:
+			print("Failed to set shortcut")
+			print(e)
+		else:
+			try:
+				cmd=["kwriteconfig5","--file","kglobalshortcutsrc","--group","net.lliurex.accessibledock.desktop","--key","_k_friendly_name",appname]
+				subprocess.run(cmd)
+			except Exception as e:
+				print(e)
+	#def setShortcut
 #class libdock

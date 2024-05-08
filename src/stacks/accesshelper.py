@@ -1,14 +1,10 @@
 #!/usr/bin/python3
-import subprocess,os
+import subprocess,os,sys
 import multiprocessing
 import dbus,dbus.exceptions
-import tarfile
-import tempfile
-import shutil
 #from PySide2.QtGui import QColor
 import json
-import random
-from . import profileManager
+import profileManager
 
 class client():
 	def __init__(self):
@@ -227,4 +223,36 @@ class client():
 		prfman=profileManager.manager()
 		prfman.loadProfile(ppath)
 	#def take_snapshot
+
+	def listProfiles(self):
+		prfman=profileManager.manager()
+		return(prfman.listProfiles())
+	#def listProfiles
+		
+	def getProfilesDir(self):
+		prfman=profileManager.manager()
+		return(prfman.getProfilesDir())
+	#def getProfilesDir
 #class client
+
+if __name__=="__main__":
+	c=client()
+	for idx in range(1,len(sys.argv)):
+		if sys.argv[idx].lower()=="--load":
+			if len(sys.argv)>idx+1:
+				profile=sys.argv[idx+1]
+				if profile.endswith(".tar")==False:
+					profile+=".tar"
+				prfs=os.listdir(c.getProfilesDir())
+				if profile in prfs:
+					c.loadProfile(os.path.join(c.getProfilesDir(),profile))
+					c.applyKWinChanges()
+				else:
+					print("Profile {0} not found at {1}".format(profile,c.getProfilesDir()))
+				break
+		if sys.argv[idx].lower()=="--list":
+			for i in os.scandir(c.getProfilesDir()):
+				if i.path.endswith(".tar"):
+					print(i.name)
+			break
+

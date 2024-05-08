@@ -39,9 +39,6 @@ class settings(QStackedWindowItem):
 		self.enabled=True
 		self.confDir=os.path.join(os.environ.get("HOME"),".config","accesswizard")
 		self.confFile=os.path.join(self.confDir,"accesswizard.conf")
-		self.profDir=os.path.join(os.environ.get("HOME"),".local","share","accesswizard","profiles")
-		if os.path.exists(self.profDir)==False and os.environ.get("HOME","")!="":
-			os.makedirs(self.profDir)
 		self.accesshelper=accesshelper.client()
 	#def __init__
 
@@ -87,22 +84,17 @@ class settings(QStackedWindowItem):
 		self.chkSddm.setChecked(config.get("sddm",False))
 		self.chkBeep.setChecked(config.get("beep",False))
 		self.chkDock.setChecked(config.get("dock",False))
-		self.chkProf.setChecked(config.get("prof",False))
+		self.chkProf.setChecked(config.get("prfl",False))
 		self.cmbProf.clear()
 		self.cmbProf.setEnabled(self.chkProf.isChecked())
 		profiles=self._getProfiles()
 		for p in profiles:
 			self.cmbProf.addItem(p)
-		self.cmbProf.setCurrentText(config.get("inip",""))
+		self.cmbProf.setCurrentText(config.get("iprf",""))
 	#def updateScreen
 
 	def _getProfiles(self):
-		profiles=[]
-		if os.path.exists(self.profDir):
-			for f in os.scandir(self.profDir):
-				if f.name.endswith(".tar"):
-					profiles.append(f.name)
-		return(profiles)
+		return(self.accesshelper.listProfiles())
 	#def _getProfiles
 
 	def _saveProfile(self,*args,pname="profile"):
@@ -113,7 +105,8 @@ class settings(QStackedWindowItem):
 
 	def _loadProfile(self,*args,ppath="profile"):
 		ffilter="{} (*.tar)".format(i18n.get("PROFDSC"))
-		ppath=QFileDialog.getOpenFileName(None, i18n.get("DLG"), self.profDir,ffilter)[0]
+		prflDir=self.accesshelper.getProfilesDir()
+		ppath=QFileDialog.getOpenFileName(None, i18n.get("DLG"), prflDir,ffilter)[0]
 		if os.path.exists(ppath):
 			self.accesshelper.loadProfile(ppath)
 	#def _loadProfiles
@@ -135,10 +128,10 @@ class settings(QStackedWindowItem):
 		config["beep"]=self.chkBeep.isChecked()
 		config["sddm"]=self.chkSddm.isChecked()
 		config["dock"]=self.chkDock.isChecked()
-		config["prof"]=self.chkProf.isChecked()
-		config["inip"]=""
-		if config["prof"]==True:
-			config["inip"]=self.cmbProf.currentText()
+		config["prfl"]=self.chkProf.isChecked()
+		config["iprf"]=""
+		if config["prfl"]==True:
+			config["iprf"]=self.cmbProf.currentText()
 		return(config)
 	#def readScreen
 	

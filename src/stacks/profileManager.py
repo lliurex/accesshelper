@@ -7,6 +7,9 @@ import shutil
 class manager():
 	def __init__(self):
 		self.dbg=True
+		self.prflDir=os.path.join(os.environ.get("HOME"),".local","share","accesswizard","profiles")
+		if os.path.exists(self.prflDir)==False and os.environ.get("HOME","")!="":
+			os.makedirs(self.prflDir)
 	#def __init__
 
 	def _debug(self,msg):
@@ -152,35 +155,35 @@ class manager():
 	#def _copyTarProfile
 	
 	def saveProfile(self,pname="profile"):
-		profDir=os.path.join(os.environ.get("HOME"),".local","share","accesswizard","profiles",pname)
+		prflDir=os.path.join(os.environ.get("HOME"),".local","share","accesswizard","profiles",pname)
 		profiles=[]
-		if os.path.exists(os.path.dirname(profDir))==False:
-			os.makedirs(profDir)
-		if os.path.exists(profDir)==True:
-			shutil.rmtree(profDir)
-		os.makedirs(profDir)
-		self._debug("Saving profile {}".format(profDir))
-		profDirs=self._generateProfileDirs(pname)
-		self._copyKFiles(profDirs["plasma"])
-		self._copyAccessFiles(profDirs["config"])
-		self._copyAccessFiles(profDirs["local"])
-		self._copyStartShutdown(profDirs["autostart"],profDirs["autoshutdown"])
-		self._copyMozillaFiles(profDirs["mozilla"])
-		self._copyGtkFiles(profDirs["gtk"])
+		if os.path.exists(os.path.dirname(prflDir))==False:
+			os.makedirs(prflDir)
+		if os.path.exists(prflDir)==True:
+			shutil.rmtree(prflDir)
+		os.makedirs(prflDir)
+		self._debug("Saving profile {}".format(prflDir))
+		prflDirs=self._generateProfileDirs(pname)
+		self._copyKFiles(prflDirs["plasma"])
+		self._copyAccessFiles(prflDirs["config"])
+		self._copyAccessFiles(prflDirs["local"])
+		self._copyStartShutdown(prflDirs["autostart"],prflDirs["autoshutdown"])
+		self._copyMozillaFiles(prflDirs["mozilla"])
+		self._copyGtkFiles(prflDirs["gtk"])
 		(osHdl,tmpFile)=tempfile.mkstemp()
 		oldCwd=os.getcwd()
-		tmpFolder=profDirs["tmp"]
+		tmpFolder=prflDirs["tmp"]
 		os.chdir(tmpFolder)
 		with tarfile.open(tmpFile,"w") as tarFile:
 			for f in os.listdir(tmpFolder):
 				tarFile.add(os.path.basename(f))
 		os.chdir(oldCwd)
-		if profDir.endswith(".tar")==False:
-			profDir+=".tar"
-		self._debug("Copying {0}->{1}".format(tmpFile,profDir))
-		self._copyTarProfile(tmpFile,profDir)
+		if prflDir.endswith(".tar")==False:
+			prflDir+=".tar"
+		self._debug("Copying {0}->{1}".format(tmpFile,prflDir))
+		self._copyTarProfile(tmpFile,prflDir)
 		os.remove(tmpFile)
-		return(os.path.join(profDir,os.path.basename(tmpFile)))
+		return(os.path.join(prflDir,os.path.basename(tmpFile)))
 	#def saveProfile
 
 	def _isValidTar(self,ppath):
@@ -217,5 +220,18 @@ class manager():
 			#restore
 			self._extractProfile(ppath)
 	#def loadProfile
+
+	def listProfiles(self):
+		profiles=[]
+		if os.path.exists(self.prflDir):
+			for f in os.scandir(self.prflDir):
+				if f.name.endswith(".tar"):
+					profiles.append(f.name)
+		return(profiles)
+	#def listProfiles
+
+	def getProfilesDir(self):
+		return(self.prflDir)
+	#def getProfilesDir
 
 #class manager

@@ -16,35 +16,36 @@ class dbusMethods(dbus.service.Object):
 		self.widget=args[0]
 
 	@dbus.service.signal("net.lliurex.accessibledock")
-	def visibilityChanged(self):
+	def toggleVisible(self):
 		pass
-	#def toggle(self)
+	#def toggleVisible(self)
 
 	@dbus.service.method("net.lliurex.accessibledock")
 	def toggle(self,*args):
-		self.visibilityChanged()
+		self.toggleVisible()
 		pass
-	#def toggle(self)
+	#def toggle
 #class dbusMethods
 
 class threadLauncher(QThread):
 	def __init__(self,cmd,parent=None):
 		super().__init__()
 		self.cmd=cmd
+	#def __init__
 
 	def run(self):
 		subprocess.run(self.cmd.split())
 		return(True)
-#class launch(QThread):
+	#def run
+#class threadLauncher
 
 class accessdock(QWidget):
 	def __init__(self,parent=None):
 		super().__init__()
 		self.dbg=True
 		self.launchers=libdock.libdock()
-		self.setWindowModality(Qt.WindowModal)
 		self.setWindowFlags(Qt.NoDropShadowWindowHint|Qt.WindowStaysOnTopHint)
-	#	self.setWindowFlags(Qt.X11BypassWindowManagerHint)
+		self.setWindowFlags(Qt.BypassWindowManagerHint)
 		layout=QGridLayout()
 		self.setLayout(layout)
 		self.grid=QTableTouchWidget(1,0)
@@ -52,7 +53,7 @@ class accessdock(QWidget):
 		self.grid.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
 		self.grid.horizontalHeader().hide()
 		self.grid.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
-		layout.addWidget(self.grid,0,0)#,Qt.AlignCenter|Qt.AlignCenter)
+		layout.addWidget(self.grid,0,0)
 		self.threadLaunchers=[]
 		self.updateScreen()
 		colWidth=self.grid.horizontalHeader().sectionSize(0)
@@ -111,13 +112,13 @@ class accessdock(QWidget):
 					print("Error launching config {}".format(pathconfig))
 				finally:
 					self.setVisible(True)
+	#def _launchConfig
 
 	def updateScreen(self):
 		self.grid.clear()
 		self.grid.setColumnCount(0)
 		self.btnMnu={}
 		launchers=self.launchers.getLaunchers()
-		print(len(launchers))
 		for launcher in launchers:
 			mnu=QMenu(launcher[1]["Name"])
 			#actConfig=QAction("Configure")
@@ -170,6 +171,7 @@ class accessdock(QWidget):
 	def _toggle(self,*args,**kwargs):
 		self.setVisible(not(self.isVisible()))
 	#def _toggle
+#class accessdock
 		
 if __name__=="__main__":
 	app=QApplication(["AccessDock"])
@@ -197,9 +199,8 @@ if __name__=="__main__":
                         member_keyword='',
                         path_keyword='',
                         message_keyword='')
-
 	objbus=bus.get_object("net.lliurex.accessibledock","/net/lliurex/accessibledock")
-	objbus.connect_to_signal("Toggled", dock._toggle,    dbus_interface="net.lliurex.accessibledock")
+	objbus.connect_to_signal("Toggled",dock._toggle,dbus_interface="net.lliurex.accessibledock")
 	dclient=dbusMethods(bus,dock)
 	dock.show()
 	app.exec_()

@@ -78,7 +78,7 @@ class actionSelector(QStackedWindowItem):
 		layout.addWidget(btnKo,2,1,1,1)
 	#def __initScreen__
 
-	def _loadApps():
+	def _loadApps(self):
 		apps={}
 		cats=self.app2menu.get_categories()
 		for cat in cats:
@@ -130,6 +130,8 @@ class actionSelector(QStackedWindowItem):
 				if " - " not in line:
 					continue
 				(kcm,desc)=line.split(" - ")
+				kcm=kcm.strip()
+				desc=desc.strip()
 				name=kcm.replace("kcm_","").capitalize()
 				icon=kcm.replace("kcm_","preferences-")
 				self.lstActions.addItem(name)
@@ -436,6 +438,11 @@ class launchers(QStackedWindow):
 	def setParms(self,action):
 		actionPath=os.path.join(self.launchersPath,action)
 		actionData=self.app2menu.get_desktop_info(actionPath)
+		print("***PO")
+		print(action)
+		print(actionPath)
+		print(actionData)
+		print("***PO")
 		actionData["type"]="desktop"
 		if actionData["Exec"].startswith("qdbus"):
 			actionData["type"]="effect"
@@ -455,5 +462,9 @@ class launchers(QStackedWindow):
 if __name__=="__main__":
 	app=QApplication(["Add launcher"])
 	mw=launchers()
+	if len(sys.argv)>1:
+		dpath=sys.argv[1]
+		if os.path.exists(dpath):
+			mw.setParms(os.path.basename(dpath))
 	mw.show()
 	app.exec_()

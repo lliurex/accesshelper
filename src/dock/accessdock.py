@@ -9,6 +9,12 @@ import dbus.mainloop.glib
 from QtExtraWidgets import QTableTouchWidget
 import subprocess
 import lib.libdock as libdock
+import gettext
+import resources
+_ = gettext.gettext
+
+i18n={"CONFIGURE":_("Configure"),
+	"CONFDOCK":_("Configure dock")}
 
 class dbusMethods(dbus.service.Object):
 	def __init__(self,bus_name,*args,**kwargs):
@@ -43,7 +49,7 @@ class accessdock(QWidget):
 	def __init__(self,parent=None):
 		super().__init__()
 		self.dbg=True
-		self.launchers=libdock.libdock()
+		self.libdock=libdock.libdock()
 		self.setWindowFlags(Qt.NoDropShadowWindowHint|Qt.WindowStaysOnTopHint)
 		self.setWindowFlags(Qt.BypassWindowManagerHint)
 		layout=QGridLayout()
@@ -97,33 +103,56 @@ class accessdock(QWidget):
 		if mnu:
 			self.activeWidget=wdg
 			mnu.popup(self.mapToGlobal(QPoint(wdg.x(),wdg.y())))
+			path=self.activeWidget.property("path")
+			if len(path)==0:
+				act=mnu.defaultAction()
+				act.setEnabled(False)
 	#def _popup
+
+	def _launchDockConfig(self,*args,**kwargs):
+		self.setVisible(False)
+		try:
+			subprocess.run(["./accessdock-config.py"])
+		except:
+			print("Error launching config")
+		finally:
+			self.updateScreen()
+			self.setFixedSize(self.grid.size())
+			self.setVisible(True)
+	#def _launchDockConfig
 
 	def _launchConfig(self,*args,**kwargs):
 		path=self.activeWidget.property("path")
 		if len(path)>0:
-			pathdir=os.path.dirname(path)
-			pathconfig=os.path.join(pathdir,"contents","ui","config.ui")
-			if os.path.exists(pathconfig):
-				self.setVisible(False)
-				try:
-					subprocess.run(["extras/configLauncher.py",pathconfig])
-				except:
-					print("Error launching config {}".format(pathconfig))
-				finally:
-					self.setVisible(True)
+			if path.endswith(".desktop") and "applications" in path:
+				path=self.activeWidget.property("fpath")
+				subprocess.run(["python3","extras/launchers.py",path])
+			else:
+				pathdir=os.path.dirname(path)
+				pathconfig=os.path.join(pathdir,"contents","ui","config.ui")
+				if os.path.exists(pathconfig):
+					self.setVisible(False)
+					try:
+						subprocess.run(["extras/configLauncher.py",pathconfig])
+					except:
+						print("Error launching config {}".format(pathconfig))
+					finally:
+						self.setVisible(True)
 	#def _launchConfig
 
 	def updateScreen(self):
 		self.grid.clear()
 		self.grid.setColumnCount(0)
 		self.btnMnu={}
-		launchers=self.launchers.getLaunchers()
+		launchers=self.libdock.getLaunchers()
 		for launcher in launchers:
 			mnu=QMenu(launcher[1]["Name"])
 			#actConfig=QAction("Configure")
-			show=mnu.addAction("Configure")
-			show.triggered.connect(self._launchConfig)
+			confapp=mnu.addAction(i18n["CONFIGURE"])
+			confdock=mnu.addAction(i18n["CONFDOCK"])
+			confapp.triggered.connect(self._launchConfig)
+			confdock.triggered.connect(self._launchDockConfig)
+			mnu.setDefaultAction(confapp)
 			btn=QPushButton()
 			btn.installEventFilter(self)
 			btn.setContextMenuPolicy(Qt.CustomContextMenu)
@@ -153,6 +182,7 @@ class accessdock(QWidget):
 		btn.setIconSize(QSize(64,64))
 		btn.setFixedSize(QSize(72,72))
 		btn.setProperty("path",launcher.get("Path",""))
+		btn.setProperty("fpath",launcher.get("fpath",""))
 		btn.clicked.connect(lambda: self._beginLaunch(launcher.get("Exec")))
 		return(btn)
 	#def _setupBtn

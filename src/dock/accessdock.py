@@ -112,7 +112,8 @@ class accessdock(QWidget):
 	def _launchDockConfig(self,*args,**kwargs):
 		self.setVisible(False)
 		try:
-			subprocess.run(["./accessdock-config.py"])
+			cmd=[os.path.join(os.path.dirname(os.path.abspath(__file__)),"accessdock-config.py")]
+			subprocess.run(cmd)
 		except:
 			print("Error launching config")
 		finally:
@@ -126,14 +127,16 @@ class accessdock(QWidget):
 		if len(path)>0:
 			if path.endswith(".desktop") and "applications" in path:
 				path=self.activeWidget.property("fpath")
-				subprocess.run(["python3","extras/launchers.py",path])
+				cmd=["python3",os.path.join(os.path.dirname(os.path.abspath(__file__)),"extras/launchers.py"),path]
+				subprocess.run(cmd)
 			else:
 				pathdir=os.path.dirname(path)
 				pathconfig=os.path.join(pathdir,"contents","ui","config.ui")
 				if os.path.exists(pathconfig):
 					self.setVisible(False)
+					cmd=["python3",os.path.join(os.path.dirname(os.path.abspath(__file__)),"extras/configLauncher.py"),pathconfig]
 					try:
-						subprocess.run(["extras/configLauncher.py",pathconfig])
+						subprocess.run(cmd)
 					except:
 						print("Error launching config {}".format(pathconfig))
 					finally:

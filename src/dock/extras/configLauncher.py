@@ -106,11 +106,15 @@ def saveChanges(configWidgets,uiId):
 		if hasKcolor!=None:
 			color="{0},{1},{2}".format(hasKcolor.red(),hasKcolor.green(),hasKcolor.blue())
 			cmd=["kwriteconfig5","--file","kwinrc","--group","{0}-{1}".format(plugType,uiId),"--key",key,str(color)]
+		elif hasattr(wdg,"checkState"):
+			state=wdg.isChecked()
+			cmd=["kwriteconfig5","--file","kwinrc","--group","{0}-{1}".format(plugType,uiId),"--key",key,str(state).lower()]
 		elif hasattr(wdg,"value"):
 			cmd=["kwriteconfig5","--file","kwinrc","--group","{0}-{1}".format(plugType,uiId),"--key",key,str(wdg.value())]
 		elif hasattr(wdg,"text"):
 			cmd=["kwriteconfig5","--file","kwinrc","--group","{0}-{1}".format(plugType,uiId),"--key",key,wdg.text()]
 		subprocess.run(cmd)
+	sys.exit(0)
 #def saveChanges
 
 def getId(UiFile):

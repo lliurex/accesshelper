@@ -118,7 +118,6 @@ class accessdock(QWidget):
 			print("Error launching config")
 		finally:
 			self.updateScreen()
-			self.setFixedSize(self.grid.size())
 			self.setVisible(True)
 	#def _launchDockConfig
 
@@ -144,6 +143,10 @@ class accessdock(QWidget):
 	#def _launchConfig
 
 	def updateScreen(self):
+		oldcount=self.grid.columnCount()
+		w=0
+		if oldcount>0:
+			w=self.width()/oldcount
 		self.grid.clear()
 		self.grid.setColumnCount(0)
 		self.btnMnu={}
@@ -166,6 +169,10 @@ class accessdock(QWidget):
 			btn.setProperty("file",launcher[0])
 			self.grid.setColumnCount(self.grid.columnCount()+1)
 			self.grid.setCellWidget(0,self.grid.columnCount()-1,btn)
+			if oldcount>0:
+				new=self.grid.columnCount()
+				size=QSize(w*(new)+10,self.height())
+				self.setFixedSize(size)
 	#def updateScreen
 
 	def _setupBtn(self,btn,launcher):

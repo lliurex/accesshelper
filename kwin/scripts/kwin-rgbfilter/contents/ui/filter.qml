@@ -12,7 +12,7 @@ PlasmaCore.Dialog {
     id: rgbfilter
     location: PlasmaCore.Types.Floating
     visible: true
-    flags: Qt.BypassWindowManagerHint | Qt.FramelessWindowHint | Qt.WindowTransparentForInput
+    flags: Qt.X11BypassWindowManagerHint | Qt.FramelessWindowHint | Qt.WindowTransparentForInput
     width: Screen.width
     height: Screen.height
     outputOnly: true

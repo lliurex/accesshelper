@@ -3,9 +3,10 @@
 import os,subprocess
 import sys
 from PySide2.QtUiTools import QUiLoader
-from PySide2.QtWidgets import QApplication,QDialog,QWidget,QVBoxLayout,QHBoxLayout,QPushButton,QGridLayout,QLabel,QPushButton,QLineEdit,\
-	QRadioButton,QCheckBox,QComboBox,QTableWidget,QSlider,QScrollArea,QMessageBox,QCalendarWidget
+from PySide2.QtWidgets import QApplication,QWidget,QVBoxLayout,QHBoxLayout,QPushButton,QGridLayout,QTableWidget,QScrollArea,QLabel
 from PySide2.QtCore import QFile, QIODevice
+from PySide2.QtGui import QColor
+
 plugtype="Effect"
 def _getSignalForConnection(widget):
 	name=widget.objectName()
@@ -23,7 +24,7 @@ def _recursiveExploreWidgets(widget):
 			for y in range (0,widget.columnCount()):
 				tableWidget=widget.cellWidget(x,y)
 				_recursiveExploreWidgets(tableWidget)
-	if isinstance(widget,QScrollArea):
+	elif isinstance(widget,QScrollArea):
 		wdg=widget.widget()
 		if wdg:
 			_recursiveExploreWidgets(wdg)
@@ -50,7 +51,9 @@ def _recursiveSetupEvents(layout):
 	for idx in range(0,layout.count()):
 		widget=layout.itemAt(idx).widget()
 		if isinstance(widget,QWidget):
-			configWidgets.append(_recursiveExploreWidgets(widget))
+			wdg=_recursiveExploreWidgets(widget)
+			if wdg not in configWidgets:
+				configWidgets.append(wdg)
 		elif layout.itemAt(idx).layout():
 			_recursiveSetupEvents(layout.itemAt(idx).layout(),block)
 	return(configWidgets)
@@ -64,18 +67,28 @@ def readConfig(configWidgets,uiId):
 	for name,wdg in configWidgets:
 		if len(name)==0:
 			continue
-		if hasattr(wdg,"text"):
-			key=name.replace("kcfg_","")
-			cmd=["kreadconfig5","--file","kwinrc","--group","{0}-{1}".format(plugType,uiId),"--key",key]
-			print(" ".join(cmd))
-			out=subprocess.check_output(cmd,universal_newlines=True,encoding="utf8")
-			value=out.strip()
-			if len(value)>0:
-				print(wdg)
-				if hasattr(wdg,"setText"):
-					wdg.setText(value)
-				elif hasattr(wdg,"setValue"):
-					wdg.setValue(int(value))
+		#if hasattr(wdg,"text"):
+		key=name.replace("kcfg_","")
+		cmd=["kreadconfig5","--file","kwinrc","--group","{0}-{1}".format(plugType,uiId),"--key",key]
+		out=subprocess.check_output(cmd,universal_newlines=True,encoding="utf8")
+		value=out.strip()
+		if len(value)>0:
+			if isinstance(wdg,QPushButton):
+				hasKcolor=wdg.property("color")
+				if hasKcolor!=None:
+					kcolor=value.split(",")
+					newcolor=QColor.fromRgb(int(kcolor[0]),int(kcolor[1]),int(kcolor[2]))
+					wdg.setProperty("color",newcolor)
+				wdg.setText(value)
+			elif hasattr(wdg,"checkState"):
+				state=True
+				if value!="true":
+					state=False
+				wdg.setChecked(state)
+			elif hasattr(wdg,"setValue"):
+				wdg.setValue(int(value))
+			elif hasattr(wdg,"setText"):
+				wdg.setText(value)
 #def readConfig
 
 def saveChanges(configWidgets,uiId):
@@ -84,12 +97,21 @@ def saveChanges(configWidgets,uiId):
 	else:
 		plugType="Script"
 	for name,wdg in configWidgets:
+		if isinstance(wdg,QLabel):
+			continue
 		if len(name)==0:
 			continue
 		key=name.replace("kcfg_","")
-		if hasattr(wdg,"text"):
-			cmd=["kwriteconfig5","--file","kwinrc","--group","{0}-{1}".format(plugType,uiId),"--key",key,"--value",wdg.text()]
-			print(cmd)
+		hasKcolor=wdg.property("color")
+		if hasKcolor!=None:
+			color="{0},{1},{2}".format(hasKcolor.red(),hasKcolor.green(),hasKcolor.blue())
+			cmd=["kwriteconfig5","--file","kwinrc","--group","{0}-{1}".format(plugType,uiId),"--key",key,str(color)]
+		elif hasattr(wdg,"value"):
+			cmd=["kwriteconfig5","--file","kwinrc","--group","{0}-{1}".format(plugType,uiId),"--key",key,str(wdg.value())]
+		elif hasattr(wdg,"text"):
+			cmd=["kwriteconfig5","--file","kwinrc","--group","{0}-{1}".format(plugType,uiId),"--key",key,wdg.text()]
+		subprocess.run(cmd)
+#def saveChanges
 
 def getId(UiFile):
 	#search for a metadata file
@@ -130,6 +152,7 @@ if __name__ == "__main__":
 	UiId=getId(UiFile)
 	layout=window.layout()
 	configWidgets=_recursiveSetupEvents(layout)
+	readConfig(configWidgets,UiId)
 	btnBox=QWidget()
 	hlay=QHBoxLayout()
 	btnOk=QPushButton("Ok")
@@ -141,5 +164,4 @@ if __name__ == "__main__":
 	btnBox.setLayout(hlay)
 	layout.addWidget(btnBox)
 	window.show()
-	readConfig(configWidgets,UiId)
 	sys.exit(app.exec_())

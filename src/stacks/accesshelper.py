@@ -158,10 +158,15 @@ class client():
 		return(enabled)
 	#def getPluginEnabled
 
-	def _writeKwinrc(self,group,key,data):
-		cmd=["kwriteconfig5","--file","kwinrc","--group",group,"--key",key,data]
+	def writeKFile(self,kfile,group,key,data):
+		cmd=["kwriteconfig5","--file",kfile,"--group",group,"--key",key,data]
 		out=subprocess.check_output(cmd)
 		self._debug(out)
+		return(out)
+	#def _writeKFile
+
+	def _writeKwinrc(self,group,key,data):
+		return(self._writeKFile("kwinrc",group,key,data))
 	#def _writeKwinrc
 
 	def togglePlugin(self,plugin):
@@ -233,6 +238,12 @@ class client():
 		prfman=profileManager.manager()
 		return(prfman.getProfilesDir())
 	#def getProfilesDir
+
+	def setSDDMSound(self,state=True):
+		action=""
+		if state==True:
+			action="Sound"
+		self.writeKFile("plasma_workspace.notifyrc","Event/startkde","Action",action)
 #class client
 
 if __name__=="__main__":

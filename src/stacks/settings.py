@@ -138,8 +138,9 @@ class settings(QStackedWindowItem):
 	def writeConfig(self):
 		config=self.readConfig()
 		config.update(self.readScreen())
-		if os.path.exists(self.confDir)==False:
-			os.makedirs(self.confDir)
-		with open(self.confFile,"w") as f:
-			json.dump(config,f,indent=4)
+		self.accesshelper.setSDDMSound(config["beep"])
+		#if os.path.exists(self.confDir)==False:
+		#	os.makedirs(self.confDir)
+		#with open(self.confFile,"w") as f:
+		#	json.dump(config,f,indent=4)
 	#def writeConfig

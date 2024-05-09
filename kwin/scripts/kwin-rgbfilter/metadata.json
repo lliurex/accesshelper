@@ -1,0 +1,25 @@
+{
+    "KPackageStructure": "KWin/Script",
+    "KPlugin": {
+        "Authors": [
+            {
+                "Email": "juanma1980@gmail.com",
+                "Name": "Juanma1980"
+            }
+        ],
+        "Description": "Applies a color filter",
+        "Description[es]": "Aplica un filtro de color",
+        "Description[ca]": "Aplica un filtre de color",
+        "Icon": "preferences-system-windows",
+        "Id": "kwin-rgbfilter",
+        "License": "GPL",
+        "Name": "RGB Filter",
+        "Name[es]": "Filtro RGB",
+        "Name[ca]": "Filtre RGB",
+        "Version": "1.0"
+    },
+    "X-KWin-Exclude-Listing": "true",
+    "X-Plasma-API": "declarativescript",
+    "X-KDE-ConfigModule": "kwin/effects/configs/kcm_kwin4_genericscripted",
+    "X-Plasma-MainScript": "ui/main.qml"
+}

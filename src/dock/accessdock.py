@@ -71,6 +71,7 @@ class accessdock(QWidget):
 		width+=colWidth/30
 		height+=rowHeight/3
 		self.setFixedSize(width,height)
+		self.originalSize=QSize(72,72)
 	#def __init__
 
 	def _debug(self,msg):
@@ -93,8 +94,18 @@ class accessdock(QWidget):
 		ev=args[1]
 		if ev.type()==QEvent.Type.ContextMenu:
 			self._popup(wdg)
+		elif ev.type()==QEvent.Type.Enter:
+			wdg.setFocus()
+		elif ev.type()==QEvent.Type.FocusIn:
+			size=wdg.size()
+			newsize=QSize(size.width(),self.originalSize.height()*1.1)
+			wdg.setFixedSize(newsize)
+		elif ev.type()==QEvent.Type.Leave or ev.type()==QEvent.Type.FocusOut:
+			size=wdg.size()
+			newsize=QSize(size.width(),self.originalSize.height()/1.1)
+			wdg.setFixedSize(newsize)
 		else:
-			ev.ignore()
+			ev.accept()
 		return(False)
 	#def eventFilter
 
@@ -141,6 +152,11 @@ class accessdock(QWidget):
 					finally:
 						self.setVisible(True)
 	#def _launchConfig
+
+	def leaveEvent(self,*args):
+		#steal focus so buttons get resized
+		self.setFocus()
+	#def leaveEvent
 
 	def updateScreen(self):
 		oldcount=self.grid.columnCount()

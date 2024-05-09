@@ -278,10 +278,12 @@ class portrait(QStackedWindowItem):
 			self.path=action.get("path","")
 			if action.get("type")=="desktop":
 				self.cmbApp.setCurrentText(i18n["EXECUTABLE"])
-			if action.get("type")=="kcm":
+			elif action.get("type")=="kcm":
 				self.cmbApp.setCurrentText(i18n["KCM"])
 			else:
 				self.cmbApp.setCurrentText(i18n["EFFECT"])
+			self.cmbApp.setEnabled(False)
+			self.btnApp.setEnabled(False)
 			self.action=action.copy()
 	#def setParms
 
@@ -438,16 +440,13 @@ class launchers(QStackedWindow):
 	def setParms(self,action):
 		actionPath=os.path.join(self.launchersPath,action)
 		actionData=self.app2menu.get_desktop_info(actionPath)
-		print("***PO")
-		print(action)
-		print(actionPath)
-		print(actionData)
-		print("***PO")
 		actionData["type"]="desktop"
 		if actionData["Exec"].startswith("qdbus"):
 			actionData["type"]="effect"
 		elif "loadScript.sh" in actionData["Exec"]:
 			actionData["type"]="script"
+		elif "kcmshell" in actionData["Exec"]:
+			actionData["type"]="kcm"
 		actionData["fname"]=actionPath
 		if actionData.get("Path","")!="":
 			actionData["path"]=actionData["Path"]

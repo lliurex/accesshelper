@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-03 12:44+0200\n"
-"PO-Revision-Date: 2024-05-03 12:48+0200\n"
+"POT-Creation-Date: 2024-05-09 12:14+0200\n"
+"PO-Revision-Date: 2024-05-09 12:17+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ca\n"
@@ -63,6 +63,7 @@ msgid "Settings which do the system more accessible"
 msgstr "Ajustos per a fer més accessible el sistema"
 
 #: ../src/stacks/effects.py:15 ../src/dock/extras/effects.py:15
+#: ../src/dock/extras/kcms.py:15
 msgid "Effects"
 msgstr "Efectes"
 
@@ -83,24 +84,19 @@ msgid "Graphical effects for windows"
 msgstr "Efectes per a manipular l'apariencia de les finestres"
 
 #: ../src/stacks/effects.py:20 ../src/dock/extras/effects.py:16
+#: ../src/dock/extras/kcms.py:16
 msgid "Visual Effects"
 msgstr "Efectes visuals"
 
 #: ../src/stacks/effects.py:21 ../src/dock/extras/effects.py:17
+#: ../src/dock/extras/kcms.py:17
 msgid "Aids and visual effects"
 msgstr "Ajudas i efectes visuals"
 
 #: ../src/stacks/effects.py:22 ../src/dock/extras/effects.py:18
+#: ../src/dock/extras/kcms.py:18
 msgid "Aids and visual effects for improve system usability"
 msgstr "Diverses ferramentes per a millorar la usabilitat del sistema"
-
-#: ../src/stacks/effects.py:78 ../src/dock/extras/effects.py:60
-msgid "Window Effects"
-msgstr "Efectes de finestra"
-
-#: ../src/stacks/effects.py:80 ../src/dock/extras/effects.py:62
-msgid "Desktop Effects"
-msgstr "Efectes de l'escriptori"
 
 #: ../src/stacks/settings.py:13 ../src/tools/settings.py:18
 msgid "Settings"
@@ -206,7 +202,7 @@ msgstr "Personalitzar apariencia"
 msgid "Color Scheme"
 msgstr "Esquema de colors"
 
-#: ../src/tools/settings.py:19
+#: ../src/tools/settings.py:19 ../src/dock/accessdock.py:16
 msgid "Configure"
 msgstr "Configuració"
 
@@ -387,112 +383,144 @@ msgid "Add"
 msgstr "Afegir"
 
 #: ../src/dock/accessdock-config.py:15
+msgid "Rearrange or modify buttons for the dock"
+msgstr "Reorganitzar o modificar les accions de la barra"
+
+#: ../src/dock/accessdock-config.py:16
 msgid "Delete"
 msgstr "Eliminar"
 
-#: ../src/dock/accessdock-config.py:16
+#: ../src/dock/accessdock-config.py:17
 msgid "Down"
 msgstr "Baixar"
 
-#: ../src/dock/accessdock-config.py:17
+#: ../src/dock/accessdock-config.py:18
 msgid "Edit"
 msgstr "Editar"
 
-#: ../src/dock/accessdock-config.py:18
+#: ../src/dock/accessdock-config.py:19
+msgid "Keyboard shortcut"
+msgstr "Drecera de teclat"
+
+#: ../src/dock/accessdock-config.py:20
+msgid "Push to assign"
+msgstr "Premer per assignar"
+
+#: ../src/dock/accessdock-config.py:21
 msgid "Items per row"
 msgstr "Elemets per línia"
 
-#: ../src/dock/accessdock-config.py:19
+#: ../src/dock/accessdock-config.py:22
+msgid "Launch at session start"
+msgstr "Carregar amb l'inici de sessió"
+
+#: ../src/dock/accessdock-config.py:23
 msgid "Up"
 msgstr "Pujar"
 
-#: ../src/dock/extras/launchers.py:12
+#: ../src/dock/accessdock.py:17
+msgid "Configure dock"
+msgstr "Configuració de la barra"
+
+#: ../src/dock/extras/effects.py:60 ../src/dock/extras/kcms.py:60
+msgid "Window Effects"
+msgstr "Efectes de finestra"
+
+#: ../src/dock/extras/effects.py:62 ../src/dock/extras/kcms.py:62
+msgid "Desktop Effects"
+msgstr "Efectes de l'escriptori"
+
+#: ../src/dock/extras/launchers.py:13
 msgid "Assign"
 msgstr "Assigna"
 
-#: ../src/dock/extras/launchers.py:13
+#: ../src/dock/extras/launchers.py:14
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: ../src/dock/extras/launchers.py:14 ../src/dock/extras/launchers.py:191
+#: ../src/dock/extras/launchers.py:15 ../src/dock/extras/launchers.py:223
 msgid "Description"
 msgstr "Descripció"
 
-#: ../src/dock/extras/launchers.py:15
+#: ../src/dock/extras/launchers.py:16
 msgid "Toggle effect"
 msgstr "Activar efecte"
 
-#: ../src/dock/extras/launchers.py:16
+#: ../src/dock/extras/launchers.py:17
 msgid "Application"
 msgstr "Aplicació"
 
-#: ../src/dock/extras/launchers.py:17
+#: ../src/dock/extras/launchers.py:18
 msgid "Press button to assign one action"
 msgstr "Premer un botó per assignaruna acció"
 
-#: ../src/dock/extras/launchers.py:18
+#: ../src/dock/extras/launchers.py:19
 msgid "Executable path"
 msgstr "Ruta al programa"
 
-#: ../src/dock/extras/launchers.py:19
+#: ../src/dock/extras/launchers.py:20
 msgid "Insert the executable path"
 msgstr "Inserir la ruta a l'aplicació"
 
-#: ../src/dock/extras/launchers.py:20
+#: ../src/dock/extras/launchers.py:21
 msgid "Shortcut"
 msgstr ""
 "Drecera\n"
 " de teclat"
 
-#: ../src/dock/extras/launchers.py:21
+#: ../src/dock/extras/launchers.py:22
 msgid "Press a key"
 msgstr "Premer una tecla"
 
-#: ../src/dock/extras/launchers.py:22
+#: ../src/dock/extras/launchers.py:23
 msgid "Icon: "
 msgstr "Icona: "
 
-#: ../src/dock/extras/launchers.py:23
+#: ../src/dock/extras/launchers.py:24
 msgid "Push to change icon"
 msgstr "Premer per a canviar icona"
 
-#: ../src/dock/extras/launchers.py:24
+#: ../src/dock/extras/launchers.py:25
+msgid "Module"
+msgstr "Mòdul"
+
+#: ../src/dock/extras/launchers.py:26
 msgid "Name: "
 msgstr "Nom: "
 
-#: ../src/dock/extras/launchers.py:25
+#: ../src/dock/extras/launchers.py:27
 msgid "Unassigned action"
 msgstr "Acció sense assignar"
 
-#: ../src/dock/extras/launchers.py:26
+#: ../src/dock/extras/launchers.py:28
 msgid "Insert desktop name"
 msgstr "Inserir nom de l'aplicació"
 
-#: ../src/dock/extras/launchers.py:27
+#: ../src/dock/extras/launchers.py:29
 msgid "Insert the url for the site"
 msgstr "Inserir url del lloc"
 
-#: ../src/dock/extras/launchers.py:28
+#: ../src/dock/extras/launchers.py:30
 msgid "https://example.com"
 msgstr "https://example.com"
 
-#: ../src/dock/extras/launchers.py:189
+#: ../src/dock/extras/launchers.py:221
 msgid "Description (optional): "
 msgstr "Descripció (opcional): "
 
-#: ../src/dock/extras/launchers.py:192
+#: ../src/dock/extras/launchers.py:224
 msgid "Insert a description for the app"
 msgstr "Inserir la descripció de l'aplicació"
 
-#: ../src/dock/extras/launchers.py:261
+#: ../src/dock/extras/launchers.py:297
 msgid "images(*.png *.xpm *jpg)"
 msgstr "imatges (*.png *.xpm *jpg)"
 
-#: ../src/dock/extras/launchers.py:263
+#: ../src/dock/extras/launchers.py:299
 msgid "All files(*.*)"
 msgstr "Tots (*.*)"
 
-#: ../src/dock/extras/launchers.py:297
+#: ../src/dock/extras/launchers.py:333
 msgid "From here you can add a custom launcher"
 msgstr "Des d'aci es poden assignar dreceres per a les diferents accions"
 
@@ -740,9 +768,6 @@ msgstr "Des d'aci es poden assignar dreceres per a les diferents accions"
 
 #~ msgid "Hotkeys"
 #~ msgstr "Dreceres"
-
-#~ msgid "Keyboard Hotkeys"
-#~ msgstr "Dreceres de teclat"
 
 #~ msgid "Set hotkeys for launch applications"
 #~ msgstr "Assigna tecles per a llançar accions"

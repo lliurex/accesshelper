@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-03 12:44+0200\n"
-"PO-Revision-Date: 2024-05-03 12:46+0200\n"
+"POT-Creation-Date: 2024-05-09 12:14+0200\n"
+"PO-Revision-Date: 2024-05-09 12:15+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es\n"
@@ -63,6 +63,7 @@ msgid "Settings which do the system more accessible"
 msgstr "Ajustes para hacer el sistema más accesible"
 
 #: ../src/stacks/effects.py:15 ../src/dock/extras/effects.py:15
+#: ../src/dock/extras/kcms.py:15
 msgid "Effects"
 msgstr "Efectos"
 
@@ -83,24 +84,19 @@ msgid "Graphical effects for windows"
 msgstr "Efectos para manipular la apariencia de las ventanas"
 
 #: ../src/stacks/effects.py:20 ../src/dock/extras/effects.py:16
+#: ../src/dock/extras/kcms.py:16
 msgid "Visual Effects"
 msgstr "Efectos visuales"
 
 #: ../src/stacks/effects.py:21 ../src/dock/extras/effects.py:17
+#: ../src/dock/extras/kcms.py:17
 msgid "Aids and visual effects"
 msgstr "Ayudas y efectos visuales"
 
 #: ../src/stacks/effects.py:22 ../src/dock/extras/effects.py:18
+#: ../src/dock/extras/kcms.py:18
 msgid "Aids and visual effects for improve system usability"
 msgstr "Colección de heraamientas para mejorar la usabilidad del sistema"
-
-#: ../src/stacks/effects.py:78 ../src/dock/extras/effects.py:60
-msgid "Window Effects"
-msgstr "Efectos de ventana"
-
-#: ../src/stacks/effects.py:80 ../src/dock/extras/effects.py:62
-msgid "Desktop Effects"
-msgstr "Efectos de escritorio"
 
 #: ../src/stacks/settings.py:13 ../src/tools/settings.py:18
 msgid "Settings"
@@ -206,7 +202,7 @@ msgstr "Personalizar apariencia"
 msgid "Color Scheme"
 msgstr "Esquema de color"
 
-#: ../src/tools/settings.py:19
+#: ../src/tools/settings.py:19 ../src/dock/accessdock.py:16
 msgid "Configure"
 msgstr "Configurar"
 
@@ -387,110 +383,142 @@ msgid "Add"
 msgstr "Añadir"
 
 #: ../src/dock/accessdock-config.py:15
+msgid "Rearrange or modify buttons for the dock"
+msgstr "Reordenar o modificar los botones de la barra"
+
+#: ../src/dock/accessdock-config.py:16
 msgid "Delete"
 msgstr "Eliminar"
 
-#: ../src/dock/accessdock-config.py:16
+#: ../src/dock/accessdock-config.py:17
 msgid "Down"
 msgstr "Bajar"
 
-#: ../src/dock/accessdock-config.py:17
+#: ../src/dock/accessdock-config.py:18
 msgid "Edit"
 msgstr "Editar"
 
-#: ../src/dock/accessdock-config.py:18
+#: ../src/dock/accessdock-config.py:19
+msgid "Keyboard shortcut"
+msgstr "Atajo de teclado"
+
+#: ../src/dock/accessdock-config.py:20
+msgid "Push to assign"
+msgstr "Pulsar para asignar"
+
+#: ../src/dock/accessdock-config.py:21
 msgid "Items per row"
 msgstr "Botones por línea"
 
-#: ../src/dock/accessdock-config.py:19
+#: ../src/dock/accessdock-config.py:22
+msgid "Launch at session start"
+msgstr "Cargar al inicio de sesión"
+
+#: ../src/dock/accessdock-config.py:23
 msgid "Up"
 msgstr "Subir"
 
-#: ../src/dock/extras/launchers.py:12
+#: ../src/dock/accessdock.py:17
+msgid "Configure dock"
+msgstr "Configurar barra"
+
+#: ../src/dock/extras/effects.py:60 ../src/dock/extras/kcms.py:60
+msgid "Window Effects"
+msgstr "Efectos de ventana"
+
+#: ../src/dock/extras/effects.py:62 ../src/dock/extras/kcms.py:62
+msgid "Desktop Effects"
+msgstr "Efectos de escritorio"
+
+#: ../src/dock/extras/launchers.py:13
 msgid "Assign"
 msgstr "Asignar"
 
-#: ../src/dock/extras/launchers.py:13
+#: ../src/dock/extras/launchers.py:14
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: ../src/dock/extras/launchers.py:14 ../src/dock/extras/launchers.py:191
+#: ../src/dock/extras/launchers.py:15 ../src/dock/extras/launchers.py:223
 msgid "Description"
 msgstr "Descripción"
 
-#: ../src/dock/extras/launchers.py:15
+#: ../src/dock/extras/launchers.py:16
 msgid "Toggle effect"
 msgstr "Activar efecto"
 
-#: ../src/dock/extras/launchers.py:16
+#: ../src/dock/extras/launchers.py:17
 msgid "Application"
 msgstr "Aplicación"
 
-#: ../src/dock/extras/launchers.py:17
+#: ../src/dock/extras/launchers.py:18
 msgid "Press button to assign one action"
 msgstr "Pulsar un botón para asignar una acción"
 
-#: ../src/dock/extras/launchers.py:18
+#: ../src/dock/extras/launchers.py:19
 msgid "Executable path"
 msgstr "Ruta al programa"
 
-#: ../src/dock/extras/launchers.py:19
+#: ../src/dock/extras/launchers.py:20
 msgid "Insert the executable path"
 msgstr "Introducir la ruta a la aplicación"
 
-#: ../src/dock/extras/launchers.py:20
+#: ../src/dock/extras/launchers.py:21
 msgid "Shortcut"
 msgstr "Atajos de teclado"
 
-#: ../src/dock/extras/launchers.py:21
+#: ../src/dock/extras/launchers.py:22
 msgid "Press a key"
 msgstr "Pulsar tecla"
 
-#: ../src/dock/extras/launchers.py:22
+#: ../src/dock/extras/launchers.py:23
 msgid "Icon: "
 msgstr "Icono: "
 
-#: ../src/dock/extras/launchers.py:23
+#: ../src/dock/extras/launchers.py:24
 msgid "Push to change icon"
 msgstr "Pulsar para cambiar icono"
 
-#: ../src/dock/extras/launchers.py:24
+#: ../src/dock/extras/launchers.py:25
+msgid "Module"
+msgstr "Módulo"
+
+#: ../src/dock/extras/launchers.py:26
 msgid "Name: "
 msgstr "Nombre: "
 
-#: ../src/dock/extras/launchers.py:25
+#: ../src/dock/extras/launchers.py:27
 msgid "Unassigned action"
 msgstr "Acción sin asignar"
 
-#: ../src/dock/extras/launchers.py:26
+#: ../src/dock/extras/launchers.py:28
 msgid "Insert desktop name"
 msgstr "Nombre de la aplicación"
 
-#: ../src/dock/extras/launchers.py:27
+#: ../src/dock/extras/launchers.py:29
 msgid "Insert the url for the site"
 msgstr "Dirección del sitio"
 
-#: ../src/dock/extras/launchers.py:28
+#: ../src/dock/extras/launchers.py:30
 msgid "https://example.com"
 msgstr "https://ejemplo.com"
 
-#: ../src/dock/extras/launchers.py:189
+#: ../src/dock/extras/launchers.py:221
 msgid "Description (optional): "
 msgstr "Descripción (opcional): "
 
-#: ../src/dock/extras/launchers.py:192
+#: ../src/dock/extras/launchers.py:224
 msgid "Insert a description for the app"
 msgstr "Descripción de la aplicación"
 
-#: ../src/dock/extras/launchers.py:261
+#: ../src/dock/extras/launchers.py:297
 msgid "images(*.png *.xpm *jpg)"
 msgstr "imágenes (*.png *.xpm *jpg)"
 
-#: ../src/dock/extras/launchers.py:263
+#: ../src/dock/extras/launchers.py:299
 msgid "All files(*.*)"
 msgstr "Todos (*.*)"
 
-#: ../src/dock/extras/launchers.py:297
+#: ../src/dock/extras/launchers.py:333
 msgid "From here you can add a custom launcher"
 msgstr "Permite asociar pulsaciones de tecla a diferentes acciones del sistema"
 
@@ -738,9 +766,6 @@ msgstr "Permite asociar pulsaciones de tecla a diferentes acciones del sistema"
 
 #~ msgid "Hotkeys"
 #~ msgstr "Atajos"
-
-#~ msgid "Keyboard Hotkeys"
-#~ msgstr "Atajos de teclado"
 
 #~ msgid "Set hotkeys for launch applications"
 #~ msgstr "Asocia combinaciones de teclas con aplicaciones"

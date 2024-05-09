@@ -14,42 +14,27 @@ ID=$(grep \"Id\" $METADATA)
 ID=${ID/*: /}
 ID=${ID//\"/}
 ID=${ID/,/}
+echo M $MAIN
+echo I $ID
 LOADED=0
 UNLOAD="true"
 while [[ $UNLOAD == "true" ]]
 do
 	sleep 0.1
 	UNLOAD=$(qdbus org.kde.KWin /Scripting org.kde.kwin.Scripting.unloadScript $MAIN)
+	echo "U $UNLOAD"
 	if [[ $UNLOAD == "false" ]]
 	then
 		UNLOAD=$(qdbus org.kde.KWin /Scripting org.kde.kwin.Scripting.unloadScript $ID)
 	fi
+	echo "U $UNLOAD"
 	[[ $UNLOAD == "true" ]] && LOADED=1
 done
 echo $LOADED
+echo "ESTO PASA SIEMPRE"
 [[ ${LOADED} -ne 0 ]] && exit
-
+echo "ESTO SOLO DEBE PASAR AL ACTIVARSE"
 OUT=$(kwriteconfig5 --file kwinrc --group Plugins --key ${ID}Enabled true)
-echo $OUT
+echo "kwriteconfig5 --file kwinrc --group Plugins --key ${ID}Enabled true"
 qdbus org.kde.KWin /KWin org.kde.KWin.reconfigure
 exit 0
-
-if [[ $TYPE == "declarativescript" ]]
-then
-	CONT=$(qdbus org.kde.KWin /Scripting org.kde.kwin.Scripting.loadDeclarativeScript $MAIN)
-	echo "qdbus org.kde.KWin /Scripting org.kde.kwin.Scripting.loadDeclarativeScript $MAIN"
-else
-	CONT=$(qdbus org.kde.KWin /Scripting org.kde.kwin.Scripting.loadScript $MAIN)
-	echo "qdbus org.kde.KWin /Scripting org.kde.kwin.Scripting.loadScript $MAIN"
-fi
-echo "Launch $CONT"
-if [[ $? -ne 0 ]]
-then
-	echo "ERROR"
-fi
-qdbus org.kde.KWin /$CONT run
-#Twice because they gave me two
-#qdbus org.kde.KWin /KWin org.kde.KWin.reconfigure
-#sleep 1
-#qdbus org.kde.KWin /KWin org.kde.KWin.reconfigure
-echo "DONE"

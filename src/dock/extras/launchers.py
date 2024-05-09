@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 import os,sys,shutil
+import subprocess
 from PySide2.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QLineEdit,QHBoxLayout,QGridLayout,QComboBox,QFileDialog,QListWidget
 from PySide2 import QtGui
 from PySide2.QtCore import Qt,Signal,QSize
@@ -21,6 +22,7 @@ i18n={"ADD":_("Assign"),
 	"HOTKEY_PRESS":_("Press a key"),
 	"ICON":_("Icon: "),
 	"ICON_TOOLTIP":_("Push to change icon"),
+	"KCM":_("Module"),
 	"NAME":_("Name: "),
 	"NAME_PLACEHOLDER":_("Unassigned action"),
 	"NAME_TOOLTIP":_("Insert desktop name"),
@@ -76,54 +78,81 @@ class actionSelector(QStackedWindowItem):
 		layout.addWidget(btnKo,2,1,1,1)
 	#def __initScreen__
 
+	def _loadApps():
+		apps={}
+		cats=self.app2menu.get_categories()
+		for cat in cats:
+			apps.update(self.app2menu.get_apps_from_category(cat.lower()))
+		for name,data in apps.items():
+			app=self.app2menu.get_desktop_info(data.get("path"))
+			if app.get("NoDisplay","")==True:
+				continue
+			appicon=data.get("icon","")
+			appname=data.get("name")
+			appexe=data.get("exe")
+			apppath=data.get("path")
+			appdesc=app.get("Comment","")
+			self.lstActions.addItem(appname)
+			if os.path.exists(appicon):
+				qicon=QtGui.QIcon(appicon)
+			else:
+				qicon=QtGui.QIcon.fromTheme(appicon)
+			self.lstActions.item(self.lstActions.count()-1).setIcon(qicon)
+			itemData={"type":"desktop","Exec":appexe,"Name":appname,"Icon":appicon,"Comment":appdesc,"path":apppath}
+			self.lstActions.item(self.lstActions.count()-1).setData(Qt.UserRole,itemData)
+	#def _loadApps
+
+	def _loadPlugins(self):
+		plugins=self.accesshelper.getKWinEffects()
+		plugins.update(self.accesshelper.getKWinScripts())
+		for name,data in plugins.items():
+			name=data.get("KPlugin",{}).get("Name","")
+			if len(name)==0:
+				continue
+			self.lstActions.addItem(data.get("KPlugin",{}).get("Name"))
+			plugType="script"
+			if "Category" in data.get("KPlugin",{}):
+				plugType="effect"
+			icon=data.get("KPlugin",{}).get("Icon")
+			plugid=data.get("KPlugin",{}).get("Id")
+			appname=data.get("KPlugin",{}).get("Name")
+			desc=data.get("KPlugin",{}).get("Comment")
+			apppath=data.get("path")
+			itemData={"type":plugType,"Exec":plugid,"Name":appname,"Icon":icon,"Comment":desc,"path":apppath}
+			self.lstActions.item(self.lstActions.count()-1).setData(Qt.UserRole,itemData)
+	#def _loadPlugins
+
+	def _loadKcm(self):
+		cmd=["kcmshell5","--list"]
+		out=subprocess.check_output(cmd,universal_newlines=True,encoding="utf8")
+		for line in out.split("\n"):
+			if line.strip()!="":
+				if " - " not in line:
+					continue
+				(kcm,desc)=line.split(" - ")
+				name=kcm.replace("kcm_","").capitalize()
+				icon=kcm.replace("kcm_","preferences-")
+				self.lstActions.addItem(name)
+				itemData={"type":"kcm","Exec":kcm,"Name":name,"Icon":icon,"Comment":desc,"path":""}
+				self.lstActions.item(self.lstActions.count()-1).setData(Qt.UserRole,itemData)
+	#def _loadKcm
+
 	def updateScreen(self):
 		self.lstActions.clear()
-		apps={}
 		if self.mode=="apps":
-			cats=self.app2menu.get_categories()
-			for cat in cats:
-				apps.update(self.app2menu.get_apps_from_category(cat.lower()))
-			for name,data in apps.items():
-				app=self.app2menu.get_desktop_info(data.get("path"))
-				if app.get("NoDisplay","")==True:
-					continue
-				appicon=data.get("icon","")
-				appname=data.get("name")
-				appexe=data.get("exe")
-				apppath=data.get("path")
-				appdesc=app.get("Comment","")
-				self.lstActions.addItem(appname)
-				if os.path.exists(appicon):
-					qicon=QtGui.QIcon(appicon)
-				else:
-					qicon=QtGui.QIcon.fromTheme(appicon)
-				self.lstActions.item(self.lstActions.count()-1).setIcon(qicon)
-				itemData={"type":"desktop","Exec":appexe,"Name":appname,"Icon":appicon,"Comment":appdesc,"path":apppath}
-				self.lstActions.item(self.lstActions.count()-1).setData(Qt.UserRole,itemData)
+			self._loadApps()
+		if self.mode=="kcm":
+			self._loadKcm()
 		else:
-			plugins=self.accesshelper.getKWinEffects()
-			plugins.update(self.accesshelper.getKWinScripts())
-			for name,data in plugins.items():
-				name=data.get("KPlugin",{}).get("Name","")
-				if len(name)==0:
-					continue
-				self.lstActions.addItem(data.get("KPlugin",{}).get("Name"))
-				plugType="script"
-				if "Category" in data.get("KPlugin",{}):
-					plugType="effect"
-				icon=data.get("KPlugin",{}).get("Icon")
-				plugid=data.get("KPlugin",{}).get("Id")
-				appname=data.get("KPlugin",{}).get("Name")
-				desc=data.get("KPlugin",{}).get("Comment")
-				apppath=data.get("path")
-				itemData={"type":plugType,"Exec":plugid,"Name":appname,"Icon":icon,"Comment":desc,"path":apppath}
-				self.lstActions.item(self.lstActions.count()-1).setData(Qt.UserRole,itemData)
+			self._loadPlugins()
 	#def updateScreen
 
 	def setParms(self,*args):
 		self.mode="effects"
 		if args[0]==i18n["EXECUTABLE"]:
 			self.mode="apps"
+		elif args[0]==i18n["KCM"]:
+			self.mode="kcm"
 		if len(args)>1:
 			if os.path.exists(args[1]):
 				self.fname=args[1]
@@ -162,6 +191,7 @@ class portrait(QStackedWindowItem):
 		self.cmbApp=QComboBox()
 		self.cmbApp.addItem(i18n["EFFECT"])
 		self.cmbApp.addItem(i18n["EXECUTABLE"])
+		self.cmbApp.addItem(i18n["KCM"])
 		hbox.addWidget(self.cmbApp,Qt.Alignment(0))
 		self.btnApp=QPushButton(i18n["ADD"])
 		self.btnApp.setObjectName("btnFile")
@@ -246,6 +276,8 @@ class portrait(QStackedWindowItem):
 			self.path=action.get("path","")
 			if action.get("type")=="desktop":
 				self.cmbApp.setCurrentText(i18n["EXECUTABLE"])
+			if action.get("type")=="kcm":
+				self.cmbApp.setCurrentText(i18n["KCM"])
 			else:
 				self.cmbApp.setCurrentText(i18n["EFFECT"])
 			self.action=action.copy()
@@ -313,6 +345,8 @@ class launchers(QStackedWindow):
 			action=args[0]
 			if os.path.exists(self.launchersPath)==False:
 				os.makedirs(self.launchersPath)
+			if action.get("type")=="kcm":
+				self._addKcm(action)
 			if action.get("type")=="desktop":
 				self._addDesktop(action)
 			if action.get("type")=="effect":
@@ -321,6 +355,23 @@ class launchers(QStackedWindow):
 				self._addScript(action)
 		self.accepted.emit(args)
 		self.close()
+
+	def _addKcm(self,action):
+		fname=action.get("fname","")
+		if fname=="":
+			prefix="{}".format(len(os.listdir(self.launchersPath))).zfill(3)
+			fname="{}_{}.desktop".format(prefix,action.get("Exec"))
+			fname=os.path.join(self.launchersPath,fname)
+		desktop="[Desktop Entry]\nEncoding=UTF-8\n"
+		desktop+="Name={}\n".format(action.get("Name"))
+		desktop+="Comment={}\n".format(action.get("Comment"))
+		desktop+="Icon={}\n".format(action.get("Icon"))
+		desktop+="Path={}\n".format(action.get("path"))
+		cmd="kcmshell5 {}".format(action.get("Exec"))
+		desktop+="Exec={}\n".format(cmd)
+		with open(fname,"w") as f:
+			f.write(desktop)
+	#def _addEffect
 
 	def _addEffect(self,action):
 		fname=action.get("fname","")

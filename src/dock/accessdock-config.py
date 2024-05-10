@@ -9,6 +9,7 @@ import extras.launchers as launchers
 import accessdock
 import gettext
 import resources
+gettext.textdomain('accesswizard')
 _ = gettext.gettext
 
 i18n={"ADD":_("Add"),

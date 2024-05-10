@@ -11,6 +11,7 @@ import subprocess
 import lib.libdock as libdock
 import gettext
 import resources
+gettext.textdomain('accesswizard')
 _ = gettext.gettext
 
 i18n={"CONFIGURE":_("Configure"),

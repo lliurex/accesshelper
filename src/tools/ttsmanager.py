@@ -175,7 +175,8 @@ class ttshelper(QWidget):
 					continue
 				added.append(voice)
 				text=voice.split("_")[-2]
-				self.cmbVoice.addItem("{0} {1}".format(text.capitalize(),i18n.get(lang.upper())))
+				text="{0} {1}".format(text.capitalize(),i18n.get(lang.upper()))
+				self.cmbVoice.addItem(text)
 				self.voiceMap.update({text:voice})
 		self.cmbVoice.setSizeAdjustPolicy(self.cmbVoice.AdjustToContents)
 		self.cmbVoice.adjustSize()
@@ -264,6 +265,10 @@ class ttshelper(QWidget):
 		synth=config.get('synt','internal')
 		self._resetScreen()
 		self._populateVoices()
+		for desc,name in self.voiceMap.items():
+			if name==voice:
+				voice=desc
+				break
 		self.cmbVoice.setCurrentText(voice)
 		self._populateRate()
 		self.cmbRate.setCurrentText(rate)
@@ -332,9 +337,10 @@ class ttshelper(QWidget):
 
 	def _readScreen(self):
 		data={}
-		data["voice"]=self.cmbVoice.currentText()
+		data["voice"]=self.voiceMap.get(self.cmbVoice.currentText(),self.cmbVoice.currentText().replace(" ","_"))
 		data["rate"]=self.cmbRate.currentText().replace("x","")
-		data["pitch"]=self.cmbPitch.currentText()
+		#data["pitch"]=self.cmbPitch.currentText()
+		data["pitch"]="1"
 		data["strch"]=self.cmbStrch.currentText()
 		synt=self.cmbSynth.currentText()
 		if "vlc" in synt.lower():

@@ -17,5 +17,8 @@
         <entry name="Rate" type="Int">
             <default>0</default>
         </entry>
+        <entry name="Synth" type="String">
+            <default>Internal</default>
+        </entry>
     </group>
 </kcfg>

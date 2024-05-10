@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-09 12:14+0200\n"
+"POT-Creation-Date: 2024-05-09 18:35+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -509,14 +509,14 @@ msgstr ""
 msgid "Insert a description for the app"
 msgstr ""
 
-#: ../src/dock/extras/launchers.py:297
+#: ../src/dock/extras/launchers.py:299
 msgid "images(*.png *.xpm *jpg)"
 msgstr ""
 
-#: ../src/dock/extras/launchers.py:299
+#: ../src/dock/extras/launchers.py:301
 msgid "All files(*.*)"
 msgstr ""
 
-#: ../src/dock/extras/launchers.py:333
+#: ../src/dock/extras/launchers.py:335
 msgid "From here you can add a custom launcher"
 msgstr ""

@@ -8,6 +8,7 @@ from QtExtraWidgets import QSearchBox,QStackedWindow,QStackedWindowItem,QHotkeyB
 from app2menu import App2Menu
 from accesshelper import accesshelper
 import gettext
+gettext.textdomain('accesswizard')
 _ = gettext.gettext
 
 i18n={"ADD":_("Assign"),
@@ -126,17 +127,30 @@ class actionSelector(QStackedWindowItem):
 		cmd=["kcmshell5","--list"]
 		out=subprocess.check_output(cmd,universal_newlines=True,encoding="utf8")
 		for line in out.split("\n"):
-			if line.strip()!="":
+			line=line.strip().strip("\t")
+			if line!="":
 				if " - " not in line:
 					continue
 				(kcm,desc)=line.split(" - ")
-				kcm=kcm.strip()
-				desc=desc.strip()
-				name=kcm.replace("kcm_","").capitalize()
-				icon=kcm.replace("kcm_","preferences-")
-				self.lstActions.addItem(name)
-				itemData={"type":"kcm","Exec":kcm,"Name":name,"Icon":icon,"Comment":desc,"path":""}
-				self.lstActions.item(self.lstActions.count()-1).setData(Qt.UserRole,itemData)
+				kcm=kcm.strip().strip("\t")
+				desc=desc.strip().strip("\t")
+				apppath=os.path.join("/usr","share","applications","{}.desktop".format(kcm))
+				if os.path.exists(apppath):
+					app=self.app2menu.get_desktop_info(apppath)
+					appicon=app.get("Icon","")
+					appname=app.get("Name")
+					appexe=app.get("Exec")
+					appdesc=app.get("Comment","")
+					if len(appdesc.strip())==0:
+						appdesc=desc
+					self.lstActions.addItem(appname)
+					if os.path.exists(appicon):
+						qicon=QtGui.QIcon(appicon)
+					else:
+						qicon=QtGui.QIcon.fromTheme(appicon)
+					self.lstActions.item(self.lstActions.count()-1).setIcon(qicon)
+					itemData={"type":"desktop","Exec":appexe,"Name":appname,"Icon":appicon,"Comment":appdesc,"path":apppath}
+					self.lstActions.item(self.lstActions.count()-1).setData(Qt.UserRole,itemData)
 	#def _loadKcm
 
 	def updateScreen(self):

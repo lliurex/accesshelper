@@ -459,7 +459,7 @@ class launchers(QStackedWindow):
 			actionData["type"]="effect"
 		elif "loadScript.sh" in actionData["Exec"]:
 			actionData["type"]="script"
-		elif "kcmshell" in actionData["Exec"]:
+		elif " kcm_" in actionData["Exec"]:
 			actionData["type"]="kcm"
 		actionData["fname"]=actionPath
 		if actionData.get("Path","")!="":

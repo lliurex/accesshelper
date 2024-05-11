@@ -262,7 +262,7 @@ class ttshelper(QWidget):
 		pitch=config.get('pitch','50')
 		strch=config.get('strch','50')
 		voice=config.get('voice','')
-		synth=config.get('synt','internal')
+		synth=config.get('synth','true')
 		self._resetScreen()
 		self._populateVoices()
 		for desc,name in self.voiceMap.items():
@@ -275,6 +275,9 @@ class ttshelper(QWidget):
 		self._populateStrch()
 		self.cmbStrch.setCurrentText(strch)
 		self._populateSynth()
+		self.cmbSynth.setCurrentText(i18n.get("VLCTTS"))
+		if synth!="true":
+			self.cmbSynth.setCurrentText(i18n.get("INTERNALTTS"))
 		self._populateFileList()
 	#def _udpate_screen
 
@@ -343,10 +346,10 @@ class ttshelper(QWidget):
 		data["pitch"]="1"
 		data["strch"]=self.cmbStrch.currentText()
 		synt=self.cmbSynth.currentText()
-		if "vlc" in synt.lower():
-			data["synth"]="vlc"
+		if self.cmbSynth.currentText==i18n.get("INTERNALTTS"):
+			data["synth"]="false"
 		else:
-			data["synth"]="internal"
+			data["synth"]="true"
 		return(data)
 	#def _readScreen
 

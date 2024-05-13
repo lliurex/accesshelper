@@ -1,12 +1,12 @@
 #!/usr/bin/python3
 import os,sys,subprocess
-from PySide2.QtWidgets import QApplication,QGridLayout,QWidget,QPushButton,QHeaderView,QMenu,QAction
-from PySide2.QtCore import Qt,QSignalMapper,QSize,QThread,QPoint,QEvent,Signal
-from PySide2.QtGui import QIcon,QPixmap,QCursor,QColor
+from PySide2.QtWidgets import QApplication,QGridLayout,QWidget,QPushButton,QHeaderView,QMenu,QAction,QToolTip,QLabel
+from PySide2.QtCore import Qt,QSignalMapper,QSize,QThread,QPoint,QEvent,Signal,QObject,QRect
+from PySide2.QtGui import QIcon,QPixmap,QCursor,QColor,QPalette
 import dbus
 import dbus.service
 import dbus.mainloop.glib
-from QtExtraWidgets import QTableTouchWidget
+from QtExtraWidgets import QTableTouchWidget,QScrollLabel
 import subprocess
 import lib.libdock as libdock
 import gettext
@@ -18,6 +18,7 @@ i18n={"CONFIGURE":_("Configure"),
 	"CONFDOCK":_("Configure dock")}
 
 class dbusMethods(dbus.service.Object):
+	"""DBus service that fires \"toggleVisible\" signal on demand"""
 	def __init__(self,bus_name,*args,**kwargs):
 		super().__init__(bus_name,"/net/lliurex/accessibledock")
 		self.widget=args[0]
@@ -28,13 +29,18 @@ class dbusMethods(dbus.service.Object):
 	#def toggleVisible(self)
 
 	@dbus.service.method("net.lliurex.accessibledock")
-	def toggle(self,*args):
+	def toggle(self):
+		"""Calling this method fires up the signal."""
 		self.toggleVisible()
-		pass
 	#def toggle
 #class dbusMethods
 
 class threadLauncher(QThread):
+	"""QThread based subprocess launcher
+		...
+		Parameters:
+			cmd: str
+				Command to launch"""
 	def __init__(self,cmd,parent=None):
 		super().__init__()
 		self.cmd=cmd
@@ -46,7 +52,194 @@ class threadLauncher(QThread):
 	#def run
 #class threadLauncher
 
+class QToolTipDock(QLabel):
+	"""Custom tooltip for dock buttons
+
+		Parameters
+		----------
+			text: str
+				tooltip text
+
+		Methods
+		-------
+			toggle: Calling this shows/hide the tooltip
+
+			Parameters
+			----------
+				coords: QPoint whith x/y coordenates
+	"""
+	def __init__(self,text="",parent=None):
+		super().__init__()
+		self.setWindowFlags(Qt.NoDropShadowWindowHint|Qt.WindowStaysOnTopHint)
+		self.setWindowFlags(Qt.BypassWindowManagerHint|Qt.WindowTransparentForInput)
+		self.setText(text)
+		self.setStyleSheet("border: 1px solid black;")
+	#def __init__
+
+	def toggle(self,coords):
+		if self.isVisible():
+			self.setVisible(False)
+		else:
+			self.move(coords)
+			self.setVisible(True)
+	#def toggle
+#class QToolTipDock
+	
+class QPushButtonDock(QPushButton):
+	"""A dock button
+		
+		Parameters
+		----------
+			launcher: Data
+				Desktop info associated with this button as returned by libdock
+
+		Attributes
+		----------
+			name: str
+				Launcher name
+			data: dict
+				Launcher data
+			file: str
+				Path to the file on disk
+			path: str
+				Relative path to the file
+			fpath: str
+				Path to the file processed with app2menu
+			initialSize: QSize
+				Initial button size
+			mnu: QMenu
+				Contextual menu
+			lbl: QToolTipDock
+				Custom fake tooltip 
+
+		Signals
+		-------
+			configure: -> QObject (self)
+				Configure option clicked
+			configureMain:
+				ConfigureMain option clicked
+			focusIn: -> QObject (self)
+				Focus entered
+	"""
+	configure=Signal(QObject)
+	focusIn=Signal(QObject)
+	configureMain=Signal()
+	def __init__(self,launcher,parent=None):
+		super().__init__()
+		layout=QGridLayout()
+		self.setLayout(layout)
+		self.name,self.data=launcher
+		self.setProperty("file",self.data.get("File",""))
+		self.setProperty("path",self.data.get("Path",""))
+		self.setProperty("fpath",self.data.get("fpath",""))
+		self.installEventFilter(self)
+		self.setContextMenuPolicy(Qt.CustomContextMenu)
+		self.initialSize=QSize(72,72)
+		self.mnu=self._addContextMenu()
+		self.customContextMenuRequested.connect(self._popup)
+		self.lbl=QToolTipDock(self.data.get("Name"))
+		self.lbl.setVisible(False)
+		#layout.addWidget(self.lbl,0,0)
+		self._renderBtn()
+	#def __init__(self,text="",parent=None):
+	
+	def _renderBtn(self):
+		self.setFixedSize(self.initialSize)
+		icn=QIcon()
+		iconName=self.data.get("Icon","")
+		if len(iconName)==0:
+			iconName="rebost"
+		if os.path.exists(iconName):
+			pxm=QPixmap(iconName)
+			icn=QIcon(pxm)
+		else:
+			icn=QIcon.fromTheme(iconName)
+		self.setAccessibleName(self.data["Name"])
+		self.setIcon(icn)
+		self.setIconSize(QSize(64,64))
+		self.setFixedSize(QSize(72,72))
+	#def _renderBtn
+
+	def _launchConfig(self,*args,**kwargs):
+		path=self.property("path")
+		if len(path)>0:
+			self.configure.emit(self)
+			if path.endswith(".desktop") and "applications" in path:
+				path=wdg.property("fpath")
+				cmd=["python3",os.path.join(os.path.dirname(os.path.abspath(__file__)),"extras/launchers.py"),path]
+				subprocess.run(cmd)
+			else:
+				pathdir=os.path.dirname(path)
+				pathconfig=os.path.join(pathdir,"contents","ui","config.ui")
+				if os.path.exists(pathconfig):
+					cmd=["python3",os.path.join(os.path.dirname(os.path.abspath(__file__)),"extras/configLauncher.py"),pathconfig]
+					try:
+						subprocess.run(cmd)
+					except Exception as e:
+						print("Error launching config {}".format(pathconfig))
+						print(e)
+			self.configure.emit(self)
+	#def _launchConfig
+
+	def _popup(self,wdg):
+		if self.mnu:
+			self.mnu.popup(self.mapToGlobal(QPoint(0,self.y())))
+			path=self.property("path")
+			if path.endswith("metadata.json"):
+				dirn=os.path.dirname(path)
+				path=os.path.join(dirn,"contents","ui","config.ui")
+				if os.path.exists(path)==False:
+					path=""
+			if len(path)==0:
+				act=self.mnu.defaultAction()
+				act.setEnabled(False)
+	#def _popup
+
+	def _addContextMenu(self):
+		mnu=QMenu(self.name)
+		confapp=mnu.addAction(i18n["CONFIGURE"])
+		confdock=mnu.addAction(i18n["CONFDOCK"])
+		confapp.triggered.connect(self._launchConfig)
+		confdock.triggered.connect(self.configureMain.emit)
+		mnu.setDefaultAction(confapp)
+		return(mnu)
+	#def _addContextMenu
+
+	def eventFilter(self,*args):
+		wdg=args[0]
+		ev=args[1]
+		if ev.type()==QEvent.Type.Enter or ev.type()==QEvent.Type.FocusIn:
+			if self.hasFocus()==False:
+				self.setFocus()
+				size=self.size()
+				origSize=72
+				newsize=QSize(size.width(),origSize*1.1)
+				self.setFixedSize(newsize)
+				self.lbl.toggle(self.mapToGlobal(QPoint(0,self.y())))
+				self.focusIn.emit(self)
+		elif ev.type()==QEvent.Type.Leave or ev.type()==QEvent.Type.FocusOut:
+			size=self.size()
+			self.lbl.toggle(self.mapToGlobal(QPoint(self.x(),self.y())))
+			newsize=QSize(size.width(),self.initialSize.height()/1.1)
+			self.setFixedSize(newsize)
+		ev.ignore()
+		return(False)
+	#def eventFilter
+#class QPushButtonDock
+
 class accessdock(QWidget):
+	"""Accessible dock main class.
+		Draws the dock in screen at position x,y (borrowed from kwinrc)
+
+		Attributes
+		----------
+			grid: QTableTouchWidget
+				Grid for buttons
+			libdock: Module
+				Module with extra functionality
+			threadLaunchers: List
+				List with launched commands
+	"""
 	def __init__(self,parent=None):
 		super().__init__()
 		self.dbg=True
@@ -68,58 +261,18 @@ class accessdock(QWidget):
 		rowHeight=self.grid.verticalHeader().sectionSize(0)
 		height=(self.grid.rowCount()*rowHeight)
 		self.grid.resize(QSize(width,height))
-		self.activeWidget=None
 		width+=colWidth/30
 		height+=rowHeight/3
 		self.setFixedSize(width,height)
-		self.originalSize=QSize(72,72)
+		coords=self.libdock.readKValue("kwinrc","accessibledock","coords").split(",")
+		if len(coords)>1:
+			self.move(int(coords[0]),int(coords[1]))
 	#def __init__
 
 	def _debug(self,msg):
 		if self.dbg==True:
 			print("accessdock: {}".format(msg))
 	#def _debug
-
-	def mousePressEvent(self, event):
-		event.accept()
-	#def mousePressEvent
-
-	def mouseMoveEvent(self, e):
-		x = e.globalX()-(self.width()/2)
-		y = e.globalY()
-		self.move(x, y)
-	#def mouseMoveEvent
-
-	def eventFilter(self,*args):
-		wdg=args[0]
-		ev=args[1]
-		if ev.type()==QEvent.Type.ContextMenu:
-			self._popup(wdg)
-		elif ev.type()==QEvent.Type.Enter:
-			wdg.setFocus()
-		elif ev.type()==QEvent.Type.FocusIn:
-			size=wdg.size()
-			newsize=QSize(size.width(),self.originalSize.height()*1.1)
-			wdg.setFixedSize(newsize)
-		elif ev.type()==QEvent.Type.Leave or ev.type()==QEvent.Type.FocusOut:
-			size=wdg.size()
-			newsize=QSize(size.width(),self.originalSize.height()/1.1)
-			wdg.setFixedSize(newsize)
-		else:
-			ev.accept()
-		return(False)
-	#def eventFilter
-
-	def _popup(self,wdg):
-		mnu=self.btnMnu.get(wdg)
-		if mnu:
-			self.activeWidget=wdg
-			mnu.popup(self.mapToGlobal(QPoint(wdg.x(),wdg.y())))
-			path=self.activeWidget.property("path")
-			if len(path)==0:
-				act=mnu.defaultAction()
-				act.setEnabled(False)
-	#def _popup
 
 	def _launchDockConfig(self,*args,**kwargs):
 		self.setVisible(False)
@@ -133,26 +286,22 @@ class accessdock(QWidget):
 			self.setVisible(True)
 	#def _launchDockConfig
 
-	def _launchConfig(self,*args,**kwargs):
-		path=self.activeWidget.property("path")
-		if len(path)>0:
-			if path.endswith(".desktop") and "applications" in path:
-				path=self.activeWidget.property("fpath")
-				cmd=["python3",os.path.join(os.path.dirname(os.path.abspath(__file__)),"extras/launchers.py"),path]
-				subprocess.run(cmd)
-			else:
-				pathdir=os.path.dirname(path)
-				pathconfig=os.path.join(pathdir,"contents","ui","config.ui")
-				if os.path.exists(pathconfig):
-					self.setVisible(False)
-					cmd=["python3",os.path.join(os.path.dirname(os.path.abspath(__file__)),"extras/configLauncher.py"),pathconfig]
-					try:
-						subprocess.run(cmd)
-					except:
-						print("Error launching config {}".format(pathconfig))
-					finally:
-						self.setVisible(True)
-	#def _launchConfig
+	def mousePressEvent(self, ev):
+		ev.accept()
+	#def mousePressEvent
+
+	def mouseMoveEvent(self, ev):
+		x = ev.globalX()-(self.width()/2)
+		y = ev.globalY()
+		self.move(x, y)
+	#def mouseMoveEvent
+
+	def mouseReleaseEvent(self,*args):
+		ncoords="{},{}".format(self.x(),self.y())
+		coords=self.libdock.readKValue("kwinrc","accessibledock","coords").split(",")
+		if ncoords!=coords:
+			self.libdock.writeKValue("kwinrc","accessibledock","coords",ncoords)
+	#def mouseReleaseEvent
 
 	def leaveEvent(self,*args):
 		#steal focus so buttons get resized
@@ -169,50 +318,18 @@ class accessdock(QWidget):
 		self.btnMnu={}
 		launchers=self.libdock.getLaunchers()
 		for launcher in launchers:
-			mnu=QMenu(launcher[1]["Name"])
-			#actConfig=QAction("Configure")
-			confapp=mnu.addAction(i18n["CONFIGURE"])
-			confdock=mnu.addAction(i18n["CONFDOCK"])
-			confapp.triggered.connect(self._launchConfig)
-			confdock.triggered.connect(self._launchDockConfig)
-			mnu.setDefaultAction(confapp)
-			btn=QPushButton()
-			btn.installEventFilter(self)
-			btn.setContextMenuPolicy(Qt.CustomContextMenu)
-			btn.customContextMenuRequested.connect(self._popup)
+			btn=QPushButtonDock(launcher)
+			btn.configureMain.connect(self._launchDockConfig)
+			btn.configure.connect(self._toggle)
 			#btn.setMenu(mnu)
-			self.btnMnu[btn]=mnu
-			btn=self._setupBtn(btn,launcher[1])
-			btn.setProperty("file",launcher[0])
+			#self.btnMnu[btn]=mnu
 			self.grid.setColumnCount(self.grid.columnCount()+1)
 			self.grid.setCellWidget(0,self.grid.columnCount()-1,btn)
-			if oldcount>0:
-				new=self.grid.columnCount()
-				size=QSize(w*(new)+10,self.height())
-				self.setFixedSize(size)
+		if oldcount>0:
+			new=self.grid.columnCount()
+			size=QSize(w*(new)+10,self.height())
+			self.setFixedSize(size)
 	#def updateScreen
-
-	def _setupBtn(self,btn,launcher):
-		#btn.setText(launcher.get("Name","Unknown"))
-		icn=QIcon()
-		iconName=launcher.get("Icon","")
-		if len(iconName)==0:
-			iconName="rebost"
-		if os.path.exists(iconName):
-			pxm=QPixmap(iconName)
-			icn=QIcon(pxm)
-		else:
-			icn=QIcon.fromTheme(iconName)
-		btn.setToolTip(launcher["Name"])
-		btn.setAccessibleName(launcher["Name"])
-		btn.setIcon(icn)
-		btn.setIconSize(QSize(64,64))
-		btn.setFixedSize(QSize(72,72))
-		btn.setProperty("path",launcher.get("Path",""))
-		btn.setProperty("fpath",launcher.get("fpath",""))
-		btn.clicked.connect(lambda: self._beginLaunch(launcher.get("Exec")))
-		return(btn)
-	#def _setupBtn
 
 	def _beginLaunch(self,*args):
 		l=threadLauncher(args[0])

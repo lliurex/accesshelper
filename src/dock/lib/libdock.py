@@ -52,4 +52,22 @@ class libdock():
 			except Exception as e:
 				print(e)
 	#def setShortcut
+
+	def writeKValue(self,kfile,kgroup,key,value):
+		cmd=["kwriteconfig5","--file",kfile,"--group",kgroup,"--key",key,value]
+		try:
+			subprocess.run(cmd)
+		except Exception as e:
+			raise()
+	#def writeKValue
+
+	def readKValue(self,kfile,kgroup,key):
+		out=""
+		cmd=["kreadconfig5","--file",kfile,"--group",kgroup,"--key",key]
+		try:
+			out=subprocess.check_output(cmd,universal_newlines=True,encoding="utf8")
+		except Exception as e:
+			raise()
+		return(out)
+	#def readKValue
 #class libdock

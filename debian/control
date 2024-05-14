@@ -16,13 +16,13 @@ Description: Set accessibility settings
 
 Package: kwin-rgbfilter
 Architecture: all
-Depends: accesswizard
+Depends: kwin-addons
 Description: RGB Filter for kwin
  This plugin for KWin applies a rgb filter to the screen.
 
 Package: kwin-ocrwindow
 Architecture: all
-Depends: accesswizard
+Depends: accesswizard, kwin-addons
 Description: Read window contents with OCR
  This plugin for KWin captures the active screen
  and reads the content after processing through tesserocr.

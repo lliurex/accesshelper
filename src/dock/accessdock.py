@@ -165,6 +165,7 @@ class QPushButtonDock(QPushButton):
 	#def _renderBtn
 
 	def _beginLaunch(self,*args):
+		self.setEnabled(False)
 		cmd=self.data.get("Exec","")
 		if len(cmd)>0:
 			l=threadLauncher(cmd)
@@ -174,7 +175,10 @@ class QPushButtonDock(QPushButton):
 	#def _beginLaunch
 
 	def _endLaunch(self,*args):
-		print(args)
+		if self.isEnabled()==False:
+			self.setEnabled(True)
+		else:
+			self.configure.emit(self)
 	#def _endLaunch
 
 	def _launchConfig(self,*args,**kwargs):
@@ -183,19 +187,27 @@ class QPushButtonDock(QPushButton):
 			self.configure.emit(self)
 			if path.endswith(".desktop") and "applications" in path:
 				path=self.property("fpath")
-				cmd=["python3",os.path.join(os.path.dirname(os.path.abspath(__file__)),"extras/launchers.py"),path]
-				subprocess.run(cmd)
+				cmd="python3 {0} {1}".format(os.path.join(os.path.dirname(os.path.abspath(__file__)),"extras/launchers.py"),path)
+				#cmd=["python3",os.path.join(os.path.dirname(os.path.abspath(__file__)),"extras/launchers.py"),path]
+				l=threadLauncher(cmd)
+				self.threadLaunchers.append(l)
+				l.start()
+				l.finished.connect(self._endLaunch)
+			#	subprocess.run(cmd)
 			else:
 				pathdir=os.path.dirname(path)
 				pathconfig=os.path.join(pathdir,"contents","ui","config.ui")
 				if os.path.exists(pathconfig):
-					cmd=["python3",os.path.join(os.path.dirname(os.path.abspath(__file__)),"extras/configLauncher.py"),pathconfig]
+					cmd="python3 {0} {1}".format(os.path.join(os.path.dirname(os.path.abspath(__file__)),"extras/configLauncher.py"),pathconfig)
 					try:
-						subprocess.run(cmd)
+						l=threadLauncher(cmd)
+						self.threadLaunchers.append(l)
+						l.start()
+						l.finished.connect(self._endLaunch)
+				#		subprocess.run(cmd)
 					except Exception as e:
 						print("Error launching config {}".format(pathconfig))
 						print(e)
-			self.configure.emit(self)
 	#def _launchConfig
 
 	def _popup(self):
@@ -266,9 +278,12 @@ class accessdock(QWidget):
 		self.grid=QTableTouchWidget(1,0)
 		self.grid.verticalHeader().hide()
 		self.grid.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+		self.grid.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 		self.grid.horizontalHeader().hide()
 		self.grid.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+		self.grid.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 		layout.addWidget(self.grid,0,0)
+		self.threadLaunchers=[]
 		self.updateScreen()
 		self._resize()
 		coords=self.libdock.readKValue("kwinrc","accessibledock","coords").split(",")
@@ -284,14 +299,19 @@ class accessdock(QWidget):
 	def _launchDockConfig(self,*args,**kwargs):
 		self.setVisible(False)
 		try:
-			cmd=[os.path.join(os.path.dirname(os.path.abspath(__file__)),"accessdock-config.py")]
-			subprocess.run(cmd)
+			cmd=os.path.join(os.path.dirname(os.path.abspath(__file__)),"accessdock-config.py")
+			l=threadLauncher(cmd)
+			self.threadLaunchers.append(l)
+			l.start()
+			l.finished.connect(self._endLaunch)
 		except:
 			print("Error launching config")
-		finally:
-			self.updateScreen()
-			self.setVisible(True)
 	#def _launchDockConfig
+
+	def _endLaunch(self,*args):
+		self.updateScreen()
+		self.setVisible(True)
+	#def _endLaunch
 
 	def mousePressEvent(self, ev):
 		ev.accept()

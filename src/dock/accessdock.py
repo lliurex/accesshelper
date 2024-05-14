@@ -111,6 +111,8 @@ class QPushButtonDock(QPushButton):
 				Contextual menu
 			lbl: QToolTipDock
 				Custom fake tooltip 
+			threadLaunchers: List
+				List with launched threads
 
 		Signals
 		-------
@@ -140,7 +142,9 @@ class QPushButtonDock(QPushButton):
 		self.lbl=QToolTipDock(self.data.get("Name"))
 		self.lbl.setVisible(False)
 		#layout.addWidget(self.lbl,0,0)
+		self.threadLaunchers=[]
 		self._renderBtn()
+		self.clicked.connect(self._beginLaunch)
 	#def __init__(self,text="",parent=None):
 	
 	def _renderBtn(self):
@@ -159,6 +163,19 @@ class QPushButtonDock(QPushButton):
 		self.setIconSize(QSize(64,64))
 		self.setFixedSize(QSize(72,72))
 	#def _renderBtn
+
+	def _beginLaunch(self,*args):
+		cmd=self.data.get("Exec","")
+		if len(cmd)>0:
+			l=threadLauncher(cmd)
+			l.start()
+			l.finished.connect(self._endLaunch)
+			self.threadLaunchers.append(l)
+	#def _beginLaunch
+
+	def _endLaunch(self,*args):
+		print(args)
+	#def _endLaunch
 
 	def _launchConfig(self,*args,**kwargs):
 		path=self.property("path")
@@ -237,8 +254,6 @@ class accessdock(QWidget):
 				Grid for buttons
 			libdock: Module
 				Module with extra functionality
-			threadLaunchers: List
-				List with launched commands
 	"""
 	def __init__(self,parent=None):
 		super().__init__()
@@ -254,16 +269,8 @@ class accessdock(QWidget):
 		self.grid.horizontalHeader().hide()
 		self.grid.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
 		layout.addWidget(self.grid,0,0)
-		self.threadLaunchers=[]
 		self.updateScreen()
-		colWidth=self.grid.horizontalHeader().sectionSize(0)
-		width=(self.grid.columnCount()*colWidth)+(colWidth/3)
-		rowHeight=self.grid.verticalHeader().sectionSize(0)
-		height=(self.grid.rowCount()*rowHeight)
-		self.grid.resize(QSize(width,height))
-		width+=colWidth/30
-		height+=rowHeight/3
-		self.setFixedSize(width,height)
+		self._resize()
 		coords=self.libdock.readKValue("kwinrc","accessibledock","coords").split(",")
 		if len(coords)>1:
 			self.move(int(coords[0]),int(coords[1]))
@@ -321,26 +328,27 @@ class accessdock(QWidget):
 			btn=QPushButtonDock(launcher)
 			btn.configureMain.connect(self._launchDockConfig)
 			btn.configure.connect(self._toggle)
-			#btn.setMenu(mnu)
-			#self.btnMnu[btn]=mnu
 			self.grid.setColumnCount(self.grid.columnCount()+1)
 			self.grid.setCellWidget(0,self.grid.columnCount()-1,btn)
+		hh=self.grid.horizontalHeader()
+		hh.setSectionResizeMode(hh.ResizeToContents)
+		vh=self.grid.verticalHeader()
+		vh.setSectionResizeMode(vh.ResizeToContents)
 		if oldcount>0:
-			new=self.grid.columnCount()
-			size=QSize(w*(new)+10,self.height())
-			self.setFixedSize(size)
+			self._resize()
 	#def updateScreen
+	
+	def _resize(self):
+		colWidth=self.grid.horizontalHeader().sectionSize(0)
+		width=(self.grid.columnCount()*colWidth)+(colWidth/3)
+		rowHeight=self.grid.verticalHeader().sectionSize(0)
+		height=(self.grid.rowCount()*rowHeight)
+		self.grid.resize(QSize(width,height))
+		width+=colWidth/30
+		height+=rowHeight/3
+		self.setFixedSize(width,height)
+	#def _resize
 
-	def _beginLaunch(self,*args):
-		l=threadLauncher(args[0])
-		l.start()
-		l.finished.connect(self._endLaunch)
-		self.threadLaunchers.append(l)
-	#def _beginLaunch
-
-	def _endLaunch(self,*args):
-		print(args)
-	#def _endLaunch
 
 	def _toggle(self,*args,**kwargs):
 		self.setVisible(not(self.isVisible()))

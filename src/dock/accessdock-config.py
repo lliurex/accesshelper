@@ -32,6 +32,7 @@ class dockSignals(QObject):
 class dock(accessdock.accessdock):
 	def __init__(self):
 		super().__init__()
+		self.dbg=True
 		self.signals=dockSignals()
 		self.realTable=None
 		self._fakeDock()
@@ -52,9 +53,15 @@ class dock(accessdock.accessdock):
 		self.layout().addWidget(self.fakeTable,0,0,1,1)
 		self._cloneDock()
 	#def __init__
+
+	def _debug(self,msg):
+		if self.dbg==True:
+			print("dock: {}".format(msg))
 	
 	def _indexToCell(self,idx):
+		self._debug("Getting coords for IDX {}".format(idx))
 		cc=self.fakeTable.columnCount()
+		self._debug("Columns: {}".format(cc))
 		row,col=divmod(idx,cc)
 		return(row,col)
 	#def _indexToCell
@@ -66,15 +73,21 @@ class dock(accessdock.accessdock):
 	def _beginDrag(self,*args):
 		self.sourceCol=self.fakeTable.currentColumn()
 		self.sourceRow=self.fakeTable.currentRow()
+		self._debug("Begint at {} {}".format(self.sourceRow,self.sourceCol))
 	#def _beginDrag
 
 	def _drop(self,*args,**kwargs):
 		block=False
+		self._debug("Drop Kwargs: {}".format(kwargs))
 		if "idx" in kwargs.keys():
 			row,col=self._indexToCell(kwargs.get("idx"))
-			self.sourceCol=col
-			self.sourceRow=row
+			sourceCol=col
+			sourceRow=row
+			self._debug("SOURCE C: {}".format(sourceCol))
+			self._debug("SOURCE R: {}".format(sourceRow))
 			destRow,destCol=self._indexToCell(kwargs.get("toIdx"))
+			self._debug("DEST C: {}".format(destCol))
+			self._debug("DEST R: {}".format(destRow))
 			block=True
 		else:
 			ev=args[0]
@@ -84,31 +97,42 @@ class dock(accessdock.accessdock):
 			if destCol==self.fakeTable.columnCount():
 				destCol-=1
 			destRow=int(pos.y()/self.fakeTable.verticalHeader().height())
-		self.source=self.fakeTable.takeItem(self.sourceRow,self.sourceCol)
-		self.fakeTable.setItem(self.sourceRow,self.sourceCol,None)
-		self._rearrangeDock(destRow,destCol,block)
+			sourceCol=self.sourceCol
+			sourceRow=self.sourceRow
+		#self.source=self.fakeTable.takeItem(self.sourceRow,self.sourceCol)
+		#self.fakeTable.setItem(self.sourceRow,self.sourceCol,None)
+		self._rearrangeDock(sourceRow,sourceCol,destRow,destCol,block)
 	#def _drop
 
-	def _rearrangeDock(self,destRow,destCol,block=False):
-		sourceIdx=self.sourceCol+(self.fakeTable.columnCount()*self.sourceRow)
+	def _rearrangeDock(self,sourceRow,sourceCol,destRow,destCol,block=False):
+		sourceIdx=sourceCol+((self.fakeTable.columnCount())*sourceRow)
+		self._debug("SOURCE IDX: {}".format(sourceIdx))
 		cc=self.fakeTable.columnCount()
 		destIdx=destCol+(cc*destRow)
-		tmpIdx=sourceIdx
+		self._debug("DEST IDX: {}".format(destIdx))
 		inc=1
 		if destIdx<sourceIdx:
 			inc=-1
-		for i in range(sourceIdx+inc,destIdx+inc,inc):
-			row,col=self._indexToCell(i)
-			newRow,newCol=self._indexToCell(tmpIdx)
-			dest=self.fakeTable.takeItem(row,col)
-			self.data[tmpIdx]=dest.data(Qt.UserRole)
-			self.fakeTable.setItem(newRow,newCol,None)
-			self.fakeTable.setItem(row,col,None)
-			self.fakeTable.setItem(newRow,newCol,dest)
-			tmpIdx=i
+		self._debug("MOVE FROM {} TO {} INC {}".format(sourceIdx,destIdx,inc))
+		for currentIdx in range(sourceIdx+inc,destIdx+inc,inc):
+			crow,ccol=self._indexToCell(currentIdx)
+			orow,ocol=self._indexToCell(sourceIdx)
+			source=self.fakeTable.takeItem(orow,ocol)
+			self._debug("From Coords {} {}".format(orow,ocol))
+			if source==None:
+				continue
+			self._debug("To Coords {} {}".format(crow,ccol))
+			dest=self.fakeTable.takeItem(crow,ccol)
+			if dest==None:
+				continue
+			self.fakeTable.setItem(crow,ccol,source)
+			self.data[currentIdx]=source.data(Qt.UserRole)
+			self._debug("{},{} -> {}".format(crow,ccol,source.data(Qt.UserRole)))
+			self.fakeTable.setItem(orow,ocol,dest)
+			self.data[sourceIdx]=dest.data(Qt.UserRole)
+			self._debug("{},{} -> {}".format(orow,ocol,dest.data(Qt.UserRole)))
+			sourceIdx=currentIdx
 		destRow,destCol=self._indexToCell(destIdx)
-		self.fakeTable.setItem(destRow,destCol,self.source)
-		self.data[destIdx]=self.source.data(Qt.UserRole)
 		if block==False:
 			self.signals.changed.emit()
 	#def _rearrangeDock
@@ -133,10 +157,13 @@ class dock(accessdock.accessdock):
 					icon=wdg.icon()
 					item=QTableWidgetItem()
 					item.setIcon(icon)
-					item.setData(Qt.UserRole,wdg.property("file"))
+					#item.setData(Qt.UserRole,wdg.property("file"))
+					item.setData(Qt.UserRole,wdg.property("fpath"))
 					self.fakeTable.setItem(i,j,item)
 					idx=j+(i*self.fakeTable.columnCount())
-					self.data[idx]=wdg.property("file")
+					#self.data[idx]=wdg.property("file")
+					self.data[idx]=wdg.property("fpath")
+					self._debug("Item for {} {}".format(i,j))
 	#def _cloneDock
 
 	def getLaunchers(self):
@@ -160,9 +187,6 @@ class accessconf(QWidget):
 		super().__init__()
 		self.dbg=True
 		self.libdock=libdock.libdock()
-
-		#self.setWindowModality(Qt.WindowModal)
-		#self.setWindowFlags(Qt.NoDropShadowWindowHint|Qt.WindowStaysOnTopHint|Qt.Tool)
 		self._initScreen()
 		self.threadLaunchers=[]
 		self.updateScreen()

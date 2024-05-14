@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+import dbus,dbus.exceptions
 import os,sys,shutil
 from PySide2.QtWidgets import QApplication,QGridLayout,QWidget,QPushButton,QHeaderView,QLabel,QSpinBox,QTableWidgetItem,QAbstractItemView,QCheckBox,QFrame,QHBoxLayout
 from PySide2.QtCore import Qt,Signal,QSize,QThread,QPoint,QObject
@@ -443,6 +444,20 @@ class accessconf(QWidget):
 						break
 		self.updateScreen()
 	#def _saveChanges
+
+	def closeEvent(self,*args):
+		bus=dbus.SessionBus()
+		try:
+			objbus=bus.get_object("net.lliurex.accessibledock","/net/lliurex/accessibledock")
+			objint=dbus.Interface(bus,"net.lliurex.accessibledock")
+			objbus.toggle()
+			objbus.toggle()
+		except:
+			print("e")
+			pass
+		finally:
+			sys.exit(0)
+	#def closeEvent
 		
 app=QApplication(["AccessDock Configuration"])
 dock=accessconf()

@@ -118,7 +118,7 @@ class actionSelector(QStackedWindowItem):
 			plugid=data.get("KPlugin",{}).get("Id")
 			appname=data.get("KPlugin",{}).get("Name")
 			desc=data.get("KPlugin",{}).get("Comment")
-			apppath=data.get("path")
+			apppath=data.get("path","")
 			itemData={"type":plugType,"Exec":plugid,"Name":appname,"Icon":icon,"Comment":desc,"path":apppath}
 			self.lstActions.item(self.lstActions.count()-1).setData(Qt.UserRole,itemData)
 	#def _loadPlugins
@@ -195,6 +195,7 @@ class portrait(QStackedWindowItem):
 		self.appIcon="shell"
 		self.fName=""
 		self.path=""
+		print(self.path)
 		self.action={}
 		self.hideControlButtons()
 	#def __init_stack__
@@ -387,11 +388,13 @@ class launchers(QStackedWindow):
 		desktop+="Path={}\n".format(action.get("path"))
 		cmd="kcmshell5 {}".format(action.get("Exec"))
 		desktop+="Exec={}\n".format(cmd)
+		desktop+="Fname={}\n".format(fname)
 		with open(fname,"w") as f:
 			f.write(desktop)
-	#def _addEffect
+	#def _addKcm
 
 	def _addEffect(self,action):
+		print(action)
 		fname=action.get("fname","")
 		if fname=="":
 			prefix="{}".format(len(os.listdir(self.launchersPath))).zfill(3)
@@ -404,6 +407,7 @@ class launchers(QStackedWindow):
 		desktop+="Path={}\n".format(action.get("path"))
 		cmd="qdbus org.kde.KWin /Effects org.kde.kwin.Effects.toggleEffect {}".format(action.get("Exec"))
 		desktop+="Exec={}\n".format(cmd)
+		desktop+="Fname={}\n".format(fname)
 		with open(fname,"w") as f:
 			f.write(desktop)
 	#def _addEffect
@@ -427,6 +431,7 @@ class launchers(QStackedWindow):
 		cmd="{0}/loadScript.sh {1} add".format(dockPath,action.get("path"))
 		desktop+="Exec={}\n".format(cmd)
 		fname=os.path.join(self.launchersPath,fname)
+		desktop+="Fname={}\n".format(fname)
 		with open(fname,"w") as f:
 			f.write(desktop)
 	#def _addScript

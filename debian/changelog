@@ -1,3 +1,10 @@
+accesswizard (0.0.2) jammy-testing; urgency=medium
+
+  * Threaded dock 
+  * Set accessibility functions as python module (python3-llxaccessibility)
+
+ -- Juanma1980 <juanma1980@gmail.com>  Tue, 14 May 2024 18:47:18 +0200
+
 accesswizard (0.0.1) jammy-testing; urgency=medium
 
   * Alpha 0.1

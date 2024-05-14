@@ -165,7 +165,7 @@ class QPushButtonDock(QPushButton):
 		if len(path)>0:
 			self.configure.emit(self)
 			if path.endswith(".desktop") and "applications" in path:
-				path=wdg.property("fpath")
+				path=self.property("fpath")
 				cmd=["python3",os.path.join(os.path.dirname(os.path.abspath(__file__)),"extras/launchers.py"),path]
 				subprocess.run(cmd)
 			else:
@@ -181,7 +181,7 @@ class QPushButtonDock(QPushButton):
 			self.configure.emit(self)
 	#def _launchConfig
 
-	def _popup(self,wdg):
+	def _popup(self):
 		if self.mnu:
 			self.mnu.popup(self.mapToGlobal(QPoint(0,self.y())))
 			path=self.property("path")

@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-from . import accesshelper
+from llxaccessibility import llxaccessibility
 import os,json
 from PySide2.QtWidgets import QApplication,QLabel,QGridLayout,QCheckBox,QSizePolicy,QRadioButton,QHeaderView,QTableWidgetItem,QAbstractScrollArea,QComboBox,QPushButton,QFileDialog,QInputDialog
 from PySide2 import QtGui
@@ -39,7 +39,7 @@ class settings(QStackedWindowItem):
 		self.enabled=True
 		self.confDir=os.path.join(os.environ.get("HOME"),".config","accesswizard")
 		self.confFile=os.path.join(self.confDir,"accesswizard.conf")
-		self.accesshelper=accesshelper.client()
+		self.accesshelper=llxaccessibility.client()
 	#def __init__
 
 	def __initScreen__(self):

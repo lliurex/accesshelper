@@ -11,7 +11,7 @@ import gettext
 gettext.textdomain("accesswizard")
 _ = gettext.gettext
 import subprocess
-from ttslib import libtts
+from llxaccessibility import llxaccessibility
 QString=type("")
 
 i18n={
@@ -71,7 +71,7 @@ class ttshelper(QWidget):
 		self.dbg=False
 		QWidget.__init__(self)
 		self._debug("tts Load")
-		self.speech=libtts.speechhelper()
+		self.accesshelper=llxaccessibility.client()
 		self.menu_description=i18n.get('MENUDESCRIPTION')
 		self.description=i18n.get('DESCRIPTION')
 		self.icon=('preferences-desktop-text-to-speech')
@@ -169,7 +169,7 @@ class ttshelper(QWidget):
 
 	def _populateVoices(self):
 		added=[]
-		for lang,voices in self.speech.getFestivalVoices().items():
+		for lang,voices in self.accesshelper.getFestivalVoices().items():
 			for voice in voices:
 				if voice in added:
 					continue
@@ -230,7 +230,7 @@ class ttshelper(QWidget):
 		btnSize=QSize(128,72)
 		icons={"mp3":QtGui.QIcon.fromTheme("media-playback-start"),"txt":QtGui.QIcon.fromTheme("document-open"),"sav":QtGui.QIcon.fromTheme("document-save")}
 		self._debug("Populating file list")
-		fileDict=self.speech.getTtsFiles()
+		fileDict=self.accesshelper.getTtsFiles()
 		for fname,fdata in fileDict.items():
 			row=self.tblFiles.rowCount()
 			self.tblFiles.insertRow(row)
@@ -373,20 +373,10 @@ class ttshelper(QWidget):
 		for field,value in config.items():
 			if field=="strch":
 				field="stretch"
-			cmd=["kwriteconfig5","--file","kwinrc","--group","Script-ocrwindow","--key",field.capitalize(),value]
-			subprocess.run(cmd)
-			print(" ".join(cmd))
+			self.accesshelper.writeKFile("kwinrc","Script-ocrwindow",field.capitalize(),value)
 		return(config)
 	#def writeConfig
-		
-	def _writeFileChanges(self,voice,rate,pitch,synt):
-		with open("/tmp/.accesshelper_{}".format(os.environ.get('USER')),'a') as f:
-			f.write("<b>{}</b>\n".format(i18n.get("CONFIG")))
-			f.write("{0}->{1}\n".format(i18n.get("VOICE"),voice))
-			f.write("{0}->{1}\n".format(i18n.get("RATE"),rate))
-			f.write("{0}->{1}\n".format(i18n.get("PITCH"),pitch))
-			f.write("{0}->{1}\n".format(i18n.get("SYNTH"),synt))
-	#def _writeFileChanges(self):
+#class ttshelper
 
 if __name__=="__main__":
 	app=QApplication(["TTS Manager"])

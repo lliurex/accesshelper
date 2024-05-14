@@ -1,6 +1,5 @@
 #!/usr/bin/python3
-#from appconfig import appconfigControls
-from . import accesshelper
+from llxaccessibility import llxaccessibility
 import os
 from PySide2.QtWidgets import QApplication,QLabel,QGridLayout,QCheckBox,QSizePolicy,QRadioButton,QHeaderView,QTableWidgetItem,QAbstractScrollArea
 from PySide2 import QtGui
@@ -37,7 +36,8 @@ class effects(QStackedWindowItem):
 		self.level='user'
 		self.plasmaConfig={}
 		self.locale=locale.getdefaultlocale()[0][0:2]
-		self.accesshelper=accesshelper.client()
+		#self.accesshelper=accesshelper.client()
+		self.accesshelper=llxaccessibility.client()
 	#def __init__
 
 	def __initScreen__(self):

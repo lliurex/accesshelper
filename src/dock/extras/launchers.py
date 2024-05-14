@@ -6,7 +6,7 @@ from PySide2 import QtGui
 from PySide2.QtCore import Qt,Signal,QSize
 from QtExtraWidgets import QSearchBox,QStackedWindow,QStackedWindowItem,QHotkeyButton
 from app2menu import App2Menu
-from accesshelper import accesshelper
+from llxaccessibility import llxaccessibility
 import gettext
 gettext.textdomain('accesswizard')
 _ = gettext.gettext
@@ -41,7 +41,7 @@ class actionSelector(QStackedWindowItem):
 			visible=True)
 		self.hideControlButtons()
 		self.app2menu=App2Menu.app2menu()
-		self.accesshelper=accesshelper.client()
+		self.accesshelper=llxaccessibility.client()
 		self.mode=mode
 		self.fname=""
 		self.btnCancel.clicked.connect(self._back)

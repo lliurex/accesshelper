@@ -288,7 +288,9 @@ class portrait(QStackedWindowItem):
 			action=args[0]
 			self.inpName.setText(action.get("Name",""))
 			self.inpDesc.setText(action.get("Comment",""))
-			self.appIcon=action.get("Icon","")
+			self.appIcon=action.get("Icon","accesswizard")
+			if isinstance(self.appIcon,str)==False:
+				self.appIcon="accesswizard"
 			self.fName=action.get("fname",self.fName)
 			self.path=action.get("path","")
 			if action.get("type")=="desktop":

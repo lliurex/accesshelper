@@ -31,6 +31,7 @@ class accessibility(QStackedWindowItem):
 		self._debug("access Load")
 		self.setProps(shortDesc=i18n.get("MENU"),
 		    description=i18n.get('DESCRIPTION'),
+		    longDesc=i18n.get('DESCRIPTION'),
 			icon="preferences-desktop-accessibility",
 			tooltip=i18n.get("TOOLTIP"),
 			index=3,

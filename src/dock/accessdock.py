@@ -189,10 +189,9 @@ class QPushButtonDock(QPushButton):
 		path=self.property("fpath")
 		if len(path)>0:
 			self.configureLauncher.emit(self)
-			if path.endswith(".desktop") and "applications" in path:
+			if path.endswith(".desktop"):
 				path=self.property("fpath")
 				cmd="python3 {0} {1}".format(os.path.join(os.path.dirname(os.path.abspath(__file__)),"extras/launchers.py"),path)
-				#cmd=["python3",os.path.join(os.path.dirname(os.path.abspath(__file__)),"extras/launchers.py"),path]
 				l=threadLauncher(cmd)
 				self.threadLaunchers.append(l)
 				l.start()
@@ -202,18 +201,10 @@ class QPushButtonDock(QPushButton):
 
 	def _launchConfig(self,*args,**kwargs):
 		path=self.property("path")
+		fpath=self.property("fpath")
 		if len(path)>0:
 			self.configure.emit(self)
-			if path.endswith(".desktop") and "applications" in path:
-				path=self.property("fpath")
-				cmd="python3 {0} {1}".format(os.path.join(os.path.dirname(os.path.abspath(__file__)),"extras/launchers.py"),path)
-				#cmd=["python3",os.path.join(os.path.dirname(os.path.abspath(__file__)),"extras/launchers.py"),path]
-				l=threadLauncher(cmd)
-				self.threadLaunchers.append(l)
-				l.start()
-				l.finished.connect(self._endLaunch)
-			#	subprocess.run(cmd)
-			else:
+			if not path.endswith(".desktop") or "applications" not in path:
 				pathdir=os.path.dirname(path)
 				pathconfig=os.path.join(pathdir,"contents","ui","config.ui")
 				if os.path.exists(pathconfig):
@@ -223,10 +214,21 @@ class QPushButtonDock(QPushButton):
 						self.threadLaunchers.append(l)
 						l.start()
 						l.finished.connect(self._endLaunch)
-				#		subprocess.run(cmd)
 					except Exception as e:
 						print("Error launching config {}".format(pathconfig))
 						print(e)
+		elif len(fpath)>0:
+			if "kwin4_effect" in fpath:
+				self.configure.emit(self)
+				cmd="systemsettings kcm_kwin_effects"
+				try:
+					l=threadLauncher(cmd)
+					self.threadLaunchers.append(l)
+					l.start()
+					l.finished.connect(self._endLaunch)
+				except Exception as e:
+					print("Error launching config {}".format(pathconfig))
+					print(e)
 	#def _launchConfig
 
 	def _popup(self):
@@ -238,6 +240,10 @@ class QPushButtonDock(QPushButton):
 				path=os.path.join(dirn,"contents","ui","config.ui")
 				if os.path.exists(path)==False:
 					path=""
+			elif "kwin4_effect" in self.property("fpath"):
+					path=self.property("fpath")
+			else:
+				path=""
 			if len(path)==0:
 				act=self.mnu.defaultAction()
 				act.setEnabled(False)
@@ -369,6 +375,7 @@ class accessdock(QWidget):
 			btn=QPushButtonDock(launcher)
 			btn.configureMain.connect(self._launchDockConfig)
 			btn.configure.connect(self._toggle)
+			btn.configureLauncher.connect(self._toggle)
 			self.grid.setColumnCount(self.grid.columnCount()+1)
 			self.grid.setCellWidget(0,self.grid.columnCount()-1,btn)
 		hh=self.grid.horizontalHeader()

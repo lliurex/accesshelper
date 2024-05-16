@@ -48,8 +48,6 @@ class dock(accessdock.accessdock):
 		self.fakeTable.cellPressed.connect(self._beginDrag)
 		self.fakeTable.itemSelectionChanged.connect(self._itemSelectionChanged)
 		self.fakeTable.dropEvent=self._drop
-		self.source=None
-		self.dest=None
 		self.data={}
 		self.layout().addWidget(self.fakeTable,0,0,1,1)
 		self._cloneDock()
@@ -100,8 +98,6 @@ class dock(accessdock.accessdock):
 			destRow=int(pos.y()/self.fakeTable.verticalHeader().height())
 			sourceCol=self.sourceCol
 			sourceRow=self.sourceRow
-		#self.source=self.fakeTable.takeItem(self.sourceRow,self.sourceCol)
-		#self.fakeTable.setItem(self.sourceRow,self.sourceCol,None)
 		self._rearrangeDock(sourceRow,sourceCol,destRow,destCol,block)
 	#def _drop
 
@@ -320,28 +316,15 @@ class accessconf(QWidget):
 			item.setText(launcher[1].get("Name",launcher[0]))
 			self.list.setRowCount(self.list.rowCount()+1)
 			self.list.setItem(self.list.rowCount()-1,self.list.columnCount()-1,item)
+		self.chkStart.setChecked(self._chkStartStatus())
 	#def updateScreen
 
 	def _toggleStart(self):
-		dskName="net.lliurex.accessibledock.desktop"
-		dskPath=os.path.join(os.environ.get("HOME"),".config","autostart",dskName)
-		srcPath=os.path.join("/usr","share","applications",dskName)
-		if self._chkStartStatus()==True:
-			self._debug("Disable autostart")
-			os.unlink(dskPath)
-		elif os.path.exists(srcPath):
-			if os.path.exists(os.path.dirname(dskPath))==False:
-				os.makedirs(os.path.dirname(dskPath))
-			self._debug("Enable autostart")
-			shutil.copy(srcPath,dskPath)
+		return (self.libdock.setDockEnabled(self.chkStart.isChecked()))
 	#def _toggleStart
 
 	def _chkStartStatus(self):
-		status=False
-		dskName="net.lliurex.accessibledock.desktop"
-		if os.path.exists(os.path.join(os.environ.get("HOME"),".config","autostart",dskName)):
-			status=True
-		return status
+		return (self.libdock.getDockEnabled())
 	#def _chkStartStatus
 
 	def _itemUp(self):

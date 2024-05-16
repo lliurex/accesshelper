@@ -37,8 +37,6 @@ class settings(QStackedWindowItem):
 			index=4,
 			visible=True)
 		self.enabled=True
-		self.confDir=os.path.join(os.environ.get("HOME"),".config","accesswizard")
-		self.confFile=os.path.join(self.confDir,"accesswizard.conf")
 		self.accesshelper=llxaccessibility.client()
 	#def __init__
 
@@ -113,12 +111,21 @@ class settings(QStackedWindowItem):
 
 	def readConfig(self):
 		config={}
-		if os.path.exists(self.confFile):
-			try:
-				with open(self.confFile,"r") as f:
-					config=json.loads(f.read())	
-			except:
-				print("Malformed {}".format(self.confFile))
+		grub=self.accesshelper.readKFile("kaccessrc","LliurexAccessibility","beepOnGrub")
+		config["grub"]=False
+		if grub=="true":
+			config["grub"]=True
+		config["beep"]=self.accesshelper.getSDDMSound()
+		sddm=self.accesshelper.readKFile("kaccessrc","LliurexAccessibility","orcaOnSDDM")
+		config["sddm"]=False
+		if sddm==True:
+			config["sddm"]=True
+		dock=self.accesshelper.readKFile("kaccessrc","LliurexAccessibility","autostartDock")
+		config["dock"]=self.accesshelper.getDockEnabled()
+		config["prfl"]=False
+		config["iprf"]=self.accesshelper.readKFile("kaccessrc","LliurexAccessibility","profileOnInit")
+		if len(config["iprf"])>0:
+			config["prfl"]=True
 		return (config)
 	#def readConfig
 
@@ -138,9 +145,10 @@ class settings(QStackedWindowItem):
 	def writeConfig(self):
 		config=self.readConfig()
 		config.update(self.readScreen())
+		self.accesshelper.writeKFile("kaccessrc","LliurexAccessibility","beepOnGrub",config["grub"])
+		self.accesshelper.writeKFile("kaccessrc","LliurexAccessibility","beepOnSession","managed")
+		self.accesshelper.writeKFile("kaccessrc","LliurexAccessibility","autostartDock",config["dock"])
+		self.accesshelper.writeKFile("kaccessrc","LliurexAccessibility","profileOnInit",config["iprf"])
 		self.accesshelper.setSDDMSound(config["beep"])
-		#if os.path.exists(self.confDir)==False:
-		#	os.makedirs(self.confDir)
-		#with open(self.confFile,"w") as f:
-		#	json.dump(config,f,indent=4)
+		self.accesshelper.setDockEnabled(config["dock"])
 	#def writeConfig

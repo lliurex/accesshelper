@@ -15,7 +15,8 @@ gettext.textdomain('accesswizard')
 _ = gettext.gettext
 
 i18n={"CONFIGURE":_("Configure"),
-	"CONFDOCK":_("Configure dock")}
+	"CONFDOCK":_("Configure dock"),
+	"CONFBTN":_("Configure launcher")}
 
 class dbusMethods(dbus.service.Object):
 	"""DBus service that fires \"toggleVisible\" signal on demand"""
@@ -118,12 +119,15 @@ class QPushButtonDock(QPushButton):
 		-------
 			configure: -> QObject (self)
 				Configure option clicked
+			configureLauncher: -> QObject (self)
+				ConfigureLauncher option clicked
 			configureMain:
 				ConfigureMain option clicked
 			focusIn: -> QObject (self)
 				Focus entered
 	"""
 	configure=Signal(QObject)
+	configureLauncher=Signal(QObject)
 	focusIn=Signal(QObject)
 	configureMain=Signal()
 	def __init__(self,launcher,parent=None):
@@ -181,6 +185,21 @@ class QPushButtonDock(QPushButton):
 			self.configure.emit(self)
 	#def _endLaunch
 
+	def _launchConfigBtn(self,*args,**kwargs):
+		path=self.property("fpath")
+		if len(path)>0:
+			self.configureLauncher.emit(self)
+			if path.endswith(".desktop") and "applications" in path:
+				path=self.property("fpath")
+				cmd="python3 {0} {1}".format(os.path.join(os.path.dirname(os.path.abspath(__file__)),"extras/launchers.py"),path)
+				#cmd=["python3",os.path.join(os.path.dirname(os.path.abspath(__file__)),"extras/launchers.py"),path]
+				l=threadLauncher(cmd)
+				self.threadLaunchers.append(l)
+				l.start()
+				l.finished.connect(self._endLaunch)
+			#	subprocess.run(cmd)
+	#def _launchConfigBtn
+
 	def _launchConfig(self,*args,**kwargs):
 		path=self.property("path")
 		if len(path)>0:
@@ -227,8 +246,10 @@ class QPushButtonDock(QPushButton):
 	def _addContextMenu(self):
 		mnu=QMenu(self.name)
 		confapp=mnu.addAction(i18n["CONFIGURE"])
+		confbtn=mnu.addAction(i18n["CONFBTN"])
 		confdock=mnu.addAction(i18n["CONFDOCK"])
 		confapp.triggered.connect(self._launchConfig)
+		confbtn.triggered.connect(self._launchConfigBtn)
 		confdock.triggered.connect(self.configureMain.emit)
 		mnu.setDefaultAction(confapp)
 		return(mnu)

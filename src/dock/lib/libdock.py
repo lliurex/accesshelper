@@ -4,11 +4,13 @@
 import os,sys
 from app2menu import App2Menu
 import subprocess
+from llxaccessibility import llxaccessibility
 
 class libdock():
 	def __init__(self):
 		self.dbg=False
 		self.launchersPath=os.path.join(os.environ.get("HOME"),".local","accesswizard","launchers")
+		self.accesshelper=llxaccessibility.client()
 	#def __init__
 
 	def _debug(self,msg):
@@ -29,6 +31,7 @@ class libdock():
 					continue
 				launchers.append((f.name,app))
 		return(launchers)
+	#def getLaunchers
 
 	def getShortcut(self):
 		cmd=["kreadconfig5","--file","kglobalshortcutsrc","--group","net.lliurex.accessibledock.desktop","--key","_launch"]
@@ -54,20 +57,19 @@ class libdock():
 	#def setShortcut
 
 	def writeKValue(self,kfile,kgroup,key,value):
-		cmd=["kwriteconfig5","--file",kfile,"--group",kgroup,"--key",key,value]
-		try:
-			subprocess.run(cmd)
-		except Exception as e:
-			raise()
+		self.accesshelper.writeKFile(kfile,kgroup,key,value)
 	#def writeKValue
 
 	def readKValue(self,kfile,kgroup,key):
-		out=""
-		cmd=["kreadconfig5","--file",kfile,"--group",kgroup,"--key",key]
-		try:
-			out=subprocess.check_output(cmd,universal_newlines=True,encoding="utf8")
-		except Exception as e:
-			raise()
+		out=self.accesshelper.readKFile(kfile,kgroup,key)
 		return(out)
 	#def readKValue
+
+	def getDockEnabled(self):
+		return(self.accesshelper.getDockEnabled())
+	#def getDockEnabled
+
+	def setDockEnabled(self,*args):
+		return(self.accesshelper.setDockEnabled(args))
+	#def getDockEnabled
 #class libdock

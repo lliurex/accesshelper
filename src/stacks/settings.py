@@ -151,4 +151,7 @@ class settings(QStackedWindowItem):
 		self.accesshelper.writeKFile("kaccessrc","LliurexAccessibility","profileOnInit",config["iprf"])
 		self.accesshelper.setSDDMSound(config["beep"])
 		self.accesshelper.setDockEnabled(config["dock"])
+		if config["grub"]!=self.accesshelper.getGrubBeep():
+			cmd=["pkexec","/usr/share/accesswizard/helper/enableGrubBeep.sh",state]
+			subprocess.run(cmd)
 	#def writeConfig

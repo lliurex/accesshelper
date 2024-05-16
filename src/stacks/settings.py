@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 from llxaccessibility import llxaccessibility
 import os,json
+import subprocess
 from PySide2.QtWidgets import QApplication,QLabel,QGridLayout,QCheckBox,QSizePolicy,QRadioButton,QHeaderView,QTableWidgetItem,QAbstractScrollArea,QComboBox,QPushButton,QFileDialog,QInputDialog
 from PySide2 import QtGui
 from PySide2.QtCore import Qt
@@ -151,7 +152,7 @@ class settings(QStackedWindowItem):
 		self.accesshelper.writeKFile("kaccessrc","LliurexAccessibility","profileOnInit",config["iprf"])
 		self.accesshelper.setSDDMSound(config["beep"])
 		self.accesshelper.setDockEnabled(config["dock"])
-		if config["grub"]!=self.accesshelper.getGrubBeep():
-			cmd=["pkexec","/usr/share/accesswizard/helper/enableGrubBeep.sh",state]
+		if self.chkGrub.isChecked()!=self.accesshelper.getGrubBeep():
+			cmd=["pkexec","/usr/share/accesswizard/tools/enableGrubBeep.sh",str(self.chkGrub.isChecked())]
 			subprocess.run(cmd)
 	#def writeConfig

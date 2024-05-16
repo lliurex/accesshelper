@@ -4,7 +4,7 @@
 BEEP="GRUB_INIT_TUNE"
 TUNE="480 440 1"
 GRUB="/etc/default/grub"
-if [ x$1 == "xenable" ]
+if [ x$1 == "xTrue" ]
 then
 	if [[ -n $(grep "^#$BEEP" $GRUB)  ]]
 	then 

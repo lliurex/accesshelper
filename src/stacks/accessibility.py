@@ -88,7 +88,7 @@ class accessibility(QStackedWindowItem):
 		btnDock=QPushInfoButton()
 		btnDock.setText(i18n.get("DOCK"))
 		btnDock.setDescription(i18n.get("DOCKDSC"))
-		btnDock.loadImg("accesswdock")
+		btnDock.loadImg("accesswizard")
 		btnDock.setMinimumWidth(btnDock.width())
 		btnDock.setMinimumHeight(btnDock.height())
 		self.tblGrid.setCellWidget(1,0,btnDock)

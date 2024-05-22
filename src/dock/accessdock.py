@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 import os,sys,subprocess
-from PySide2.QtWidgets import QApplication,QGridLayout,QWidget,QPushButton,QHeaderView,QMenu,QAction,QToolTip,QLabel
+from PySide2.QtWidgets import QApplication,QGridLayout,QWidget,QPushButton,QHeaderView,QMenu,QAction,QToolTip,QLabel,QDesktopWidget
 from PySide2.QtCore import Qt,QSignalMapper,QSize,QThread,QPoint,QEvent,Signal,QObject,QRect
 from PySide2.QtGui import QIcon,QPixmap,QCursor,QColor,QPalette
 import dbus
@@ -233,7 +233,12 @@ class QPushButtonDock(QPushButton):
 
 	def _popup(self):
 		if self.mnu:
-			self.mnu.popup(self.mapToGlobal(QPoint(0,self.y())))
+			y=self.y()+self.height()
+			screenheight=QDesktopWidget().screenGeometry(-1).height()
+			if y+self.mnu.height()>screenheight:
+				y=self.y()-(screenheight-y-self.mnu.height())
+			x=0
+			self.mnu.popup(self.mapToGlobal(QPoint(x,y)))
 			path=self.property("path")
 			if path.endswith("metadata.json"):
 				dirn=os.path.dirname(path)

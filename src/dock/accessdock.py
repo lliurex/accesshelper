@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-import os,sys,subprocess
+import os,sys,subprocess,json
 from PySide2.QtWidgets import QApplication,QGridLayout,QWidget,QPushButton,QHeaderView,QMenu,QAction,QToolTip,QLabel,QDesktopWidget
 from PySide2.QtCore import Qt,QSignalMapper,QSize,QThread,QPoint,QEvent,Signal,QObject,QRect
 from PySide2.QtGui import QIcon,QPixmap,QCursor,QColor,QPalette
@@ -33,6 +33,17 @@ class dbusMethods(dbus.service.Object):
 	def toggle(self):
 		"""Calling this method fires up the signal."""
 		self.toggleVisible()
+	#def toggle
+
+	@dbus.service.method("net.lliurex.accessibledock", in_signature='', out_signature='as')
+	def getLaunchers(self):
+		dock=libdock.libdock()
+		dbusList = dbus.Array()
+		for launcher in dock.getLaunchers():
+			name,data=launcher
+			dbusList.append(json.dumps(launcher))
+		return(dbusList)
+		"""Calling this method fires up the signal."""
 	#def toggle
 #class dbusMethods
 

@@ -35,7 +35,6 @@ Item {
 			var stdout = data["stdout"]
 			var stderr = data["stderr"]
 			if ((stdout.trim()!="") && (stdout[0]==="{")){
-				console.log(stdout)
 				stdout=stdout.replace(/\"/g,'###%%%')
 				stdout=stdout.replace(/, \'/g,', "')
 				stdout=stdout.replace(/\':/g,'":')
@@ -53,10 +52,8 @@ Item {
 				}
 				launchersModel.clear()
 				var objkeys=Object.keys(jsonout)
-				console.log(objkeys)
 				objkeys.forEach(item=>{
 					var objItem=jsonout[item]
-					console.log(objItem["Name"])
 					plasmoid.setAction(objItem["Exec"], i18n(objItem["Name"]),objItem["Name"])
 					launchersModel.append({"name":objItem["Name"],"exec":objItem["Exec"],"icon":objItem["Icon"]})
 					});

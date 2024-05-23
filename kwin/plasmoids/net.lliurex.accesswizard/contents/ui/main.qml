@@ -35,6 +35,7 @@ Item {
 			var stdout = data["stdout"]
 			var stderr = data["stderr"]
 			if ((stdout.trim()!="") && (stdout[0]==="{")){
+				console.log(stdout)
 				stdout=stdout.replace(/\"/g,'###%%%')
 				stdout=stdout.replace(/, \'/g,', "')
 				stdout=stdout.replace(/\':/g,'":')
@@ -52,13 +53,14 @@ Item {
 				}
 				launchersModel.clear()
 				var objkeys=Object.keys(jsonout)
+				console.log(objkeys)
 				objkeys.forEach(item=>{
 					var objItem=jsonout[item]
 					console.log(objItem["Name"])
 					plasmoid.setAction(objItem["Exec"], i18n(objItem["Name"]),objItem["Name"])
-					launchersModel.insert(0,{"name":objItem["Name"],"exec":objItem["Exec"],"icon":objItem["Icon"]})
+					launchersModel.append({"name":objItem["Name"],"exec":objItem["Exec"],"icon":objItem["Icon"]})
 					});
-					launchersModel.insert(0,{"name":"Toggle dock","exec":"qdbus net.lliurex.accessibledock /net/lliurex/accessibledock net.lliurex.accessibledock.toggle","icon":"accesswizard"})
+				launchersModel.append({"name":"Toggle dock","exec":"qdbus net.lliurex.accessibledock /net/lliurex/accessibledock net.lliurex.accessibledock.toggle","icon":"accesswizard"})
 			}
 			exited(exitCode, exitStatus, stdout, stderr)
 			disconnectSource(sourceName) // cmd finished

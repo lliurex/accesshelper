@@ -1,5 +1,6 @@
-accesswizard (0.0.3) jammy-testing; urgency=medium
+accesswizard (0.0.4) jammy-testing; urgency=medium
 
+  * WIP on plasmoid
   * Threaded dock 
   * Set accessibility functions as python module (python3-llxaccessibility)
   * Accessdock full config for launchers

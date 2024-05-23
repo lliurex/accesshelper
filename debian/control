@@ -26,3 +26,9 @@ Depends: accesswizard, kwin-addons
 Description: Read window contents with OCR
  This plugin for KWin captures the active screen
  and reads the content after processing through tesserocr.
+
+Package: plasma-accesswizard
+Architecture: all
+Depends: accesswizard, kwin-addons
+Description: Plasmoid for accesswizard
+ Gives quick access to accessdock launchers

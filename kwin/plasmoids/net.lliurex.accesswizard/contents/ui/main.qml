@@ -54,7 +54,6 @@ Item {
 				var objkeys=Object.keys(jsonout)
 				objkeys.forEach(item=>{
 					var objItem=jsonout[item]
-					plasmoid.setAction(objItem["Exec"], i18n(objItem["Name"]),objItem["Name"])
 					launchersModel.append({"name":objItem["Name"],"exec":objItem["Exec"],"icon":objItem["Icon"]})
 					});
 				launchersModel.append({"name":"Toggle dock","exec":"qdbus net.lliurex.accessibledock /net/lliurex/accessibledock net.lliurex.accessibledock.toggle","icon":"accesswizard"})
@@ -108,11 +107,15 @@ Item {
         plasmoid.removeAction("configure");
 		var cmd = wrkdir.replace("file://","")+'dockinfo.py';
 		launchers.exec(cmd);
+		plasmoid.setAction("configureDock", i18n("Configure Dock"),"Configure Dock")
+		plasmoid.setAction("accessWizard", i18n("Access Wizard"),"Access Wizard")
 	}
 
-    function launchConfig() {
-		console.log("l");
-        //accessibiltyMenu.launch_llxup()
+    function action_accessWizard() {
+		launchers.exec("/usr/share/accesswizard/accesswizard.py")
+    }
+    function action_configureDock() {
+		launchers.exec("/usr/share/accesswizard/dock/accessdock-config.py")
     }
 
  }	

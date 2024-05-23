@@ -1,0 +1,33 @@
+{
+    "KPlugin": {
+        "Authors": [
+            {
+                "Email": "juanma1980@gmail.com",
+                "Name": "Juanma1980"
+            }
+        ],
+        "Category": "Accessibility",
+        "Dependencies": [
+        ],
+        "Description": "Accessibility for Lliurex",
+        "Description[ca]": "Accessibilitat per a Lliurex",
+        "Description[es]": "Accesibilidad para Lliurex",
+        "EnabledByDefault": true,
+        "Icon": "accesswizard",
+        "Id": "net.lliurex.accesswizard",
+        "License": "GPL",
+        "Name": "Accessibilty Helper",
+        "Name[ca]": "Ajudant d'accessibilitat",
+        "Name[es]": "Ayudante de accesibilidad",
+        "ServiceTypes": [
+            "Plasma/Applet"
+        ],
+        "Version": "1.0",
+        "Website": "http://lliurex.net"
+    },
+    "X-Plasma-API": "declarativeappletscript",
+    "X-Plasma-MainScript": "ui/main.qml",
+    "X-Plasma-NotificationArea": "true",
+    "X-Plasma-NotificationAreaCategory": "SystemServices",
+    "X-Plasma-StandAloneApp": true
+}

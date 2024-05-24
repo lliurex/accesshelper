@@ -18,8 +18,8 @@ Item {
 	Plasmoid.switchHeight: PlasmaCore.Units.gridUnit * 5
 
 	Plasmoid.icon: "accesswizard"
-	Plasmoid.toolTipMainText: "Accessibility Helper"
-	Plasmoid.toolTipSubText: "Quick launcher for accessibility"
+	Plasmoid.toolTipMainText: i18n("Accessibility Helper")
+	Plasmoid.toolTipSubText: i18n("Quick launcher for accessibility")
 
 	ListModel {
 		id: launchersModel
@@ -63,7 +63,7 @@ Item {
 					"icon":objItem["Icon"]})
 				});
 			var bus="net.lliurex.accessibledock";
-			launchersModel.append({"name":"Toggle dock",
+			launchersModel.append({"name": i18n("Toggle dock"),
 				"exec":"qdbus "+bus+" /"+bus.replace(/\./g,"/")+" "+bus+".toggle",
 				"icon":"accesswizard"})
 		} //processData

@@ -415,6 +415,8 @@ class accessdock(QWidget):
 
 
 	def _toggle(self,*args,**kwargs):
+		if self.isVisible()==False:
+			self.updateScreen()
 		self.setVisible(not(self.isVisible()))
 	#def _toggle
 #class accessdock

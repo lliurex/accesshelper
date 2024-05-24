@@ -14,9 +14,11 @@ import resources
 gettext.textdomain('accesswizard')
 _ = gettext.gettext
 
-i18n={"CONFIGURE":_("Configure"),
+i18n={"CONFBTN":_("Configure launcher"),
 	"CONFDOCK":_("Configure dock"),
-	"CONFBTN":_("Configure launcher")}
+	"CONFIGURE":_("Configure"),
+	"TOGGLE":_("Toggle visibility")
+	}
 
 class dbusMethods(dbus.service.Object):
 	"""DBus service that fires \"toggleVisible\" signal on demand"""
@@ -140,6 +142,7 @@ class QPushButtonDock(QPushButton):
 	configure=Signal(QObject)
 	configureLauncher=Signal(QObject)
 	focusIn=Signal(QObject)
+	toggle=Signal()
 	configureMain=Signal()
 	def __init__(self,launcher,parent=None):
 		super().__init__()
@@ -195,6 +198,10 @@ class QPushButtonDock(QPushButton):
 		else:
 			self.configure.emit(self)
 	#def _endLaunch
+
+	def _toggle(self,*Args,**kwargs):
+		self.toggle.emit()
+	#def _toggle
 
 	def _launchConfigBtn(self,*args,**kwargs):
 		path=self.property("fpath")
@@ -267,9 +274,11 @@ class QPushButtonDock(QPushButton):
 
 	def _addContextMenu(self):
 		mnu=QMenu(self.name)
+		toggle=mnu.addAction(i18n["TOGGLE"])
 		confapp=mnu.addAction(i18n["CONFIGURE"])
 		confbtn=mnu.addAction(i18n["CONFBTN"])
 		confdock=mnu.addAction(i18n["CONFDOCK"])
+		toggle.triggered.connect(self._toggle)
 		confapp.triggered.connect(self._launchConfig)
 		confbtn.triggered.connect(self._launchConfigBtn)
 		confdock.triggered.connect(self.configureMain.emit)
@@ -392,6 +401,7 @@ class accessdock(QWidget):
 			btn.configureMain.connect(self._launchDockConfig)
 			btn.configure.connect(self._toggle)
 			btn.configureLauncher.connect(self._toggle)
+			btn.toggle.connect(self._toggle)
 			self.grid.setColumnCount(self.grid.columnCount()+1)
 			self.grid.setCellWidget(0,self.grid.columnCount()-1,btn)
 		hh=self.grid.horizontalHeader()

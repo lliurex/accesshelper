@@ -1,4 +1,7 @@
 #!/bin/bash
+# Copyright 2024 LliureX Team
+#Licensed under GPL-3 license
+#https://www.gnu.org/licenses/gpl-3.0.en.html
 
 METADATA=$1
 TYPE=$(grep X-Plasma-API $METADATA)

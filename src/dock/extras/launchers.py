@@ -402,12 +402,17 @@ class launchers(QStackedWindow):
 			prefix="{}".format(len(os.listdir(self.launchersPath))).zfill(3)
 			fname="{}_{}.desktop".format(prefix,action.get("Exec"))
 			fname=os.path.join(self.launchersPath,fname)
+		dockPath=__file__
+		while dockPath.endswith("dock")==False and dockPath.count("/")>2:
+			dockPath=os.path.dirname(dockPath)
+		if os.path.exists(dockPath)==False:
+			return
 		desktop="[Desktop Entry]\nEncoding=UTF-8\n"
 		desktop+="Name={}\n".format(action.get("Name"))
 		desktop+="Comment={}\n".format(action.get("Comment"))
 		desktop+="Icon={}\n".format(action.get("Icon"))
 		desktop+="Path={}\n".format(action.get("path"))
-		cmd="qdbus org.kde.KWin /Effects org.kde.kwin.Effects.toggleEffect {}".format(action.get("Exec"))
+		cmd="{0}/loadEffect.sh {1} add".format(dockPath,action.get("path"))
 		desktop+="Exec={}\n".format(cmd)
 		desktop+="Fname={}\n".format(fname)
 		with open(fname,"w") as f:

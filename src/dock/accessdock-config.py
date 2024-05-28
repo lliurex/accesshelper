@@ -22,6 +22,7 @@ i18n={"ADD":_("Add"),
 	"HKEYBTN":_("Push to assign"),
 	"MAX":_("Items per row"),
 	"STRT":_("Launch at session start"),
+	"TOOLTIPBIG":_("Displays launcher name at fullscreen on mouse over"),
 	"UP":_("Up")
 	}
 
@@ -262,6 +263,9 @@ class accessconf(QWidget):
 		self.chkStart.setChecked(self._chkStartStatus())
 		self.chkStart.stateChanged.connect(self._toggleStart)
 		layout.addWidget(self.chkStart,row+1,0,1,2)
+		self.chkToolT=QCheckBox(i18n["TOOLTIPBIG"])
+		self.chkToolT.stateChanged.connect(self._toggleToolT)
+		layout.addWidget(self.chkToolT,row+2,0,1,1)
 		wdg=QWidget()
 		hlay=QHBoxLayout()
 		wdg.setLayout(hlay)
@@ -274,7 +278,7 @@ class accessconf(QWidget):
 			self.btnHkey=QHotkeyButton(i18n["HKEYBTN"])
 		self.btnHkey.hotkeyAssigned.connect(self._assignHotkey)
 		hlay.addWidget(self.btnHkey)
-		layout.addWidget(wdg,row+2,0)
+		layout.addWidget(wdg,row+3,0)
 	#def _renderOptions
 
 	def _change(self,*args):
@@ -317,7 +321,18 @@ class accessconf(QWidget):
 			self.list.setRowCount(self.list.rowCount()+1)
 			self.list.setItem(self.list.rowCount()-1,self.list.columnCount()-1,item)
 		self.chkStart.setChecked(self._chkStartStatus())
+		self.chkToolT.setChecked(self._chkToolTStatus())
 	#def updateScreen
+
+	def _toggleToolT(self):
+		self.libdock.writeKValue("kwinrc","accessibledock","tooltipbig",str(self.chkToolT.isChecked()).lower())
+	#def _toggleToolT
+
+	def _chkToolTStatus(self):
+		if self.libdock.readKValue("kwinrc","accessibledock","tooltipbig")=="true":
+			return True
+		return False
+	#def _chkToolTStatus
 
 	def _toggleStart(self):
 		return (self.libdock.setDockEnabled(self.chkStart.isChecked()))

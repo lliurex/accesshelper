@@ -82,18 +82,56 @@ class QToolTipDock(QLabel):
 			----------
 				coords: QPoint whith x/y coordenates
 	"""
-	def __init__(self,text="",parent=None):
+	def __init__(self,text="",bigTip=False,parent=None):
 		super().__init__()
-		self.setWindowFlags(Qt.NoDropShadowWindowHint|Qt.WindowStaysOnTopHint)
-		self.setWindowFlags(Qt.BypassWindowManagerHint|Qt.WindowTransparentForInput)
+		self.setWindowFlags(Qt.FramelessWindowHint|Qt.WindowTransparentForInput|Qt.NoDropShadowWindowHint|Qt.WindowStaysOnTopHint)
 		self.setText(text)
+		self.setAccessibleName(text)
+		self.setAccessibleDescription("")
+		self.setAlignment(Qt.AlignCenter)
+		f=self.font()
+		f.setWeight(f.Bold)
+		f.setPointSize(f.pointSize()+2)
+		self.setFont(f)
+		scr=QApplication.screens()[0]
+		newSize=scr.size().width()/(len(self.text()))
+		f.setPointSize(newSize-10)
+		self.fontFull=f
+		self.bigTip=bigTip
 		self.setStyleSheet("border: 1px solid black;")
 	#def __init__
+
+	def _getCoordsForFull(self,oldCoords):
+		scr=QApplication.screens()[0]
+		h=scr.size().height()
+		portion=int(h/6)-1
+		zone=int(oldCoords.y()/portion)
+		if self.bigTip==True:
+			f=self.font()
+			newSize=portion-10
+			f.setPointSize(newSize)
+			self.setFont(f)
+			zoneInc=2
+			zoneBorder=3
+		else:
+			zoneInc=1
+			zoneBorder=5
+		coordX=int(scr.size().width()/2)-int(len(self.text())*self.font().pointSize()/2)
+		if zone<zoneBorder:
+			coordY=portion*(zone+zoneInc)
+		else:
+			coordY=portion*(zone-zoneInc)
+		return(QPoint(coordX,coordY))
+	#def _getCoordsForFull
 
 	def toggle(self,coords):
 		if self.isVisible():
 			self.setVisible(False)
 		else:
+			if self.bigTip==True:
+				self.setFont(self.fontFull)
+			coords=self._getCoordsForFull(coords)
+			self.setMinimumWidth(len(self.text())*self.font().pointSize())
 			self.move(coords)
 			self.setVisible(True)
 	#def toggle
@@ -144,10 +182,12 @@ class QPushButtonDock(QPushButton):
 	focusIn=Signal(QObject)
 	toggle=Signal()
 	configureMain=Signal()
-	def __init__(self,launcher,parent=None):
+	def __init__(self,launcher,bigTip=False,parent=None):
 		super().__init__()
 		layout=QGridLayout()
 		self.setLayout(layout)
+		self.setWindowFlags(Qt.NoDropShadowWindowHint|Qt.WindowStaysOnTopHint)
+		self.setWindowFlags(Qt.BypassWindowManagerHint)
 		self.name,self.data=launcher
 		self.setProperty("file",self.data.get("File",""))
 		self.setProperty("path",self.data.get("Path",""))
@@ -157,14 +197,16 @@ class QPushButtonDock(QPushButton):
 		self.initialSize=QSize(72,72)
 		self.mnu=self._addContextMenu()
 		self.customContextMenuRequested.connect(self._popup)
-		self.lbl=QToolTipDock(self.data.get("Name"))
+		self.lbl=QToolTipDock(self.data.get("Name"),bigTip)
+		self.lbl.setAccessibleName(self.data.get("Name"))
 		self.lbl.setVisible(False)
 		#layout.addWidget(self.lbl,0,0)
 		self.threadLaunchers=[]
+		self.popupShow=False
 		self._renderBtn()
 		self.clicked.connect(self._beginLaunch)
 	#def __init__(self,text="",parent=None):
-	
+
 	def _renderBtn(self):
 		self.setFixedSize(self.initialSize)
 		icn=QIcon()
@@ -252,7 +294,8 @@ class QPushButtonDock(QPushButton):
 	def _popup(self):
 		if self.mnu:
 			y=self.y()+self.height()
-			screenheight=QDesktopWidget().screenGeometry(-1).height()
+			scr=QApplication.screens()[0]
+			screenheight=scr.size().height()
 			if y+self.mnu.height()>screenheight:
 				y=self.y()-(screenheight-y-self.mnu.height())
 			x=0
@@ -289,20 +332,28 @@ class QPushButtonDock(QPushButton):
 	def eventFilter(self,*args):
 		wdg=args[0]
 		ev=args[1]
-		if ev.type()==QEvent.Type.Enter or ev.type()==QEvent.Type.FocusIn:
+		if ev.type()==QEvent.Type.ContextMenu:
+			self.popupShow=True
+		if ev.type()==QEvent.Type.Resize and self.popupShow==True:
+			self.popupShow=False
+		if self.popupShow==False and (ev.type()==QEvent.Type.Enter or ev.type()==QEvent.Type.FocusIn):
 			if self.hasFocus()==False:
 				self.setFocus()
 				size=self.size()
 				origSize=72
-				newsize=QSize(size.width(),origSize*1.1)
+				newsize=QSize(size.width(),origSize*1.5)
+				self.setIconSize(newsize)
 				self.setFixedSize(newsize)
-				self.lbl.toggle(self.mapToGlobal(QPoint(0,self.y())))
+				self.lbl.toggle(self.mapToGlobal(QPoint(0,self.y()+self.height())))
 				self.focusIn.emit(self)
-		elif ev.type()==QEvent.Type.Leave or ev.type()==QEvent.Type.FocusOut:
+		elif self.popupShow==True or (ev.type()==QEvent.Type.Leave or ev.type()==QEvent.Type.FocusOut):
 			size=self.size()
-			self.lbl.toggle(self.mapToGlobal(QPoint(self.x(),self.y())))
+			if self.lbl.isVisible():
+				self.lbl.setVisible(False)
+		#		self.lbl.toggle(self.mapToGlobal(QPoint(self.x(),self.y())))
 			newsize=QSize(size.width(),self.initialSize.height()/1.1)
 			self.setFixedSize(newsize)
+			self.setIconSize(newsize)
 		ev.ignore()
 		return(False)
 	#def eventFilter
@@ -324,19 +375,28 @@ class accessdock(QWidget):
 		self.dbg=True
 		self.libdock=libdock.libdock()
 		self.setWindowFlags(Qt.NoDropShadowWindowHint|Qt.WindowStaysOnTopHint)
+		#This hides decoration and bypass window 
+		#also skips app registering in at-spi so is unexistent for ORCA 
 		self.setWindowFlags(Qt.BypassWindowManagerHint)
+		#self.setStyleSheet("margin:0px")
 		layout=QGridLayout()
+		layout.setContentsMargins(2,2,2,2)
 		self.setLayout(layout)
 		self.grid=QTableTouchWidget(1,0)
+		self.grid.setObjectName("Table")
+		self.grid.setShowGrid(False)
 		self.grid.verticalHeader().hide()
 		self.grid.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
 		self.grid.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 		self.grid.horizontalHeader().hide()
 		self.grid.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
 		self.grid.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+		#redirect event easy way
+		self.grid.mouseMoveEvent=self.mouseMoveEvent
 		layout.addWidget(self.grid,0,0)
 		self.threadLaunchers=[]
 		self.updateScreen()
+		#self.setStyleSheet('QPushButton{border:3px solid rgba(%s);}'%color)
 		self._resize()
 		coords=self.libdock.readKValue("kwinrc","accessibledock","coords").split(",")
 		if len(coords)>1:
@@ -347,6 +407,20 @@ class accessdock(QWidget):
 		if self.dbg==True:
 			print("accessdock: {}".format(msg))
 	#def _debug
+
+	def _setColorForBorder(self):
+		qplt=QPalette()
+		if hasattr(qplt,"accent"):
+			qbrs=qplt.accent()
+			(r,g,b,a)=qbrs.color().getRgbF()
+		else:
+			qbrs=qplt.dark()
+			(r,g,b,a)=qbrs.color().getRgbF()
+			(r,g,b,a)=(a-r,a-g,a-b,a)
+		#Dark is the new bright in the world of nonsense
+		color="{},{},{},{}".format(255*r,255*g,255*b,a)
+		self.setStyleSheet('#Table{border:3px solid rgba(%s);}'%color)
+	#def _setColorForBorder
 
 	def _launchDockConfig(self,*args,**kwargs):
 		self.setVisible(False)
@@ -388,6 +462,7 @@ class accessdock(QWidget):
 	#def leaveEvent
 
 	def updateScreen(self):
+		self._setColorForBorder()
 		oldcount=self.grid.columnCount()
 		w=0
 		if oldcount>0:
@@ -396,8 +471,11 @@ class accessdock(QWidget):
 		self.grid.setColumnCount(0)
 		self.btnMnu={}
 		launchers=self.libdock.getLaunchers()
+		bigTip=False
+		if self.libdock.readKValue("kwinrc","accessibledock","tooltipbig")=="true":
+			bigTip=True
 		for launcher in launchers:
-			btn=QPushButtonDock(launcher)
+			btn=QPushButtonDock(launcher,bigTip)
 			btn.configureMain.connect(self._launchDockConfig)
 			btn.configure.connect(self._toggle)
 			btn.configureLauncher.connect(self._toggle)
@@ -422,7 +500,6 @@ class accessdock(QWidget):
 		height+=rowHeight/3
 		self.setFixedSize(width,height)
 	#def _resize
-
 
 	def _toggle(self,*args,**kwargs):
 		if self.isVisible()==False:

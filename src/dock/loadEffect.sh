@@ -13,10 +13,20 @@ function load
 	qdbus org.kde.KWin /Effects org.kde.kwin.Effects.loadEffect $ID
 }
 
+function unload
+{
+	if [[ $ID == "magnifier" ]]
+	then
+		qdbus org.kde.kglobalaccel /component/kwin org.kde.kglobalaccel.Component.invokeShortcut "view_zoom_out"
+	fi
+	qdbus org.kde.KWin /Effects org.kde.kwin.Effects.toggleEffect $ID
+	qdbus org.kde.KWin /Effects org.kde.kwin.Effects.unloadEffect $ID
+}
+
 function launchEffect
 {
 	echo "qdbus org.kde.kglobalaccel /component/kwin org.kde.kglobalaccel.Component.invokeShortcut $NAME"
-	qdbus org.kde.kglobalaccel /component/kwin org.kde.kglobalaccel.Component.invokeShortcut ${NAME// /}
+	qdbus org.kde.kglobalaccel /component/kwin org.kde.kglobalaccel.Component.invokeShortcut "${NAME}"
 }
 
 function enable
@@ -24,13 +34,16 @@ function enable
 	if [[ $(qdbus org.kde.KWin /Effects org.kde.kwin.Effects.isEffectLoaded $ID) == "false" ]]
 	then
 		load
+		[[ $(qdbus org.kde.KWin /Effects org.kde.kwin.Effects.loadedEffects | grep $ID) ]] || toggle
+		[[ $(qdbus org.kde.KWin /Effects org.kde.kwin.Effects.activeEffects | grep $ID) ]] || launchEffect
+	else
+		unload
 	fi
-	[[ $(qdbus org.kde.KWin /Effects org.kde.kwin.Effects.loadedEffects | grep $ID) ]] || toggle
-	[[ $(qdbus org.kde.KWin /Effects org.kde.kwin.Effects.activeEffects | grep $ID) ]] || launchEffect
 }
 
 
 METADATA=$1
+echo $1
 ID=$(grep \"Id\" $METADATA)
 ID=${ID/*: /}
 ID=${ID//\"/}
@@ -39,5 +52,7 @@ NAME=$(grep \"Name\" $METADATA)
 NAME=${NAME/*: /}
 NAME=${NAME//\"/}
 NAME=${NAME/,/}
+CHK_MAGNIFIERS=$(grep \"exclusiveGroup\" $METADATA)
+[ ! -z ${#CHK_MAGNIFIERS} ] && NAME="view_zoom_in"
 [[ $(qdbus org.kde.KWin /Effects org.kde.kwin.Effects.activeEffects | grep $ID) ]] && toggle || enable
 exit 0

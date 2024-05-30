@@ -187,7 +187,7 @@ class QPushButtonDock(QPushButton):
 		layout=QGridLayout()
 		self.setLayout(layout)
 		self.setWindowFlags(Qt.NoDropShadowWindowHint|Qt.WindowStaysOnTopHint)
-		self.setWindowFlags(Qt.BypassWindowManagerHint)
+		#self.setWindowFlags(Qt.BypassWindowManagerHint)
 		self.name,self.data=launcher
 		self.setProperty("file",self.data.get("File",""))
 		self.setProperty("path",self.data.get("Path",""))
@@ -317,13 +317,13 @@ class QPushButtonDock(QPushButton):
 
 	def _addContextMenu(self):
 		mnu=QMenu(self.name)
-		toggle=mnu.addAction(i18n["TOGGLE"])
+		#toggle=mnu.addAction(i18n["TOGGLE"])
 		confapp=mnu.addAction(i18n["CONFIGURE"])
-		confbtn=mnu.addAction(i18n["CONFBTN"])
+		#confbtn=mnu.addAction(i18n["CONFBTN"])
 		confdock=mnu.addAction(i18n["CONFDOCK"])
-		toggle.triggered.connect(self._toggle)
+		#toggle.triggered.connect(self._toggle)
 		confapp.triggered.connect(self._launchConfig)
-		confbtn.triggered.connect(self._launchConfigBtn)
+		#confbtn.triggered.connect(self._launchConfigBtn)
 		confdock.triggered.connect(self.configureMain.emit)
 		mnu.setDefaultAction(confapp)
 		return(mnu)
@@ -374,10 +374,11 @@ class accessdock(QWidget):
 		super().__init__()
 		self.dbg=True
 		self.libdock=libdock.libdock()
-		self.setWindowFlags(Qt.NoDropShadowWindowHint|Qt.WindowStaysOnTopHint)
+		self.setWindowIcon(QIcon.fromTheme("accesswizard"))
+		self.setWindowFlags(Qt.NoDropShadowWindowHint|Qt.WindowStaysOnTopHint|Qt.Tool)
 		#This hides decoration and bypass window 
 		#also skips app registering in at-spi so is unexistent for ORCA 
-		self.setWindowFlags(Qt.BypassWindowManagerHint)
+		#self.setWindowFlags(Qt.BypassWindowManagerHint)
 		#self.setStyleSheet("margin:0px")
 		layout=QGridLayout()
 		layout.setContentsMargins(2,2,2,2)
@@ -407,6 +408,10 @@ class accessdock(QWidget):
 		if self.dbg==True:
 			print("accessdock: {}".format(msg))
 	#def _debug
+
+	def closeEvent(self,*args):
+		args[0].ignore()
+		self._toggle()
 
 	def _setColorForBorder(self):
 		qplt=QPalette()

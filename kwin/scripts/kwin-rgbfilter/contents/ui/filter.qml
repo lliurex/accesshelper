@@ -5,20 +5,22 @@
 */
 import QtQuick 2.0;
 import QtQuick.Window 2.0;
-import org.kde.plasma.core 2.0 as PlasmaCore;
-import org.kde.kwin 2.0;
 
-PlasmaCore.Dialog {
+Window {
     id: rgbfilter
-    location: PlasmaCore.Types.Floating
-    visible: true
-    flags: Qt.X11BypassWindowManagerHint | Qt.FramelessWindowHint | Qt.WindowTransparentForInput
+	flags:Qt.FrameLessHint|Qt.WindowStaysOnTopHint|Qt.WindowSystemMenuHint| Qt.X11BypassWindowManagerHint | Qt.FramelessWindowHint| Qt.WindowTransparentForInput| Qt.TransparentForMouseEvents|Qt.OnScreenDisplay
+    visible: false
     width: Screen.width
     height: Screen.height
-    outputOnly: true
+	property bool outputOnly:true
+	Rectangle {
+		id:rect
+		anchors.fill:parent
+		color:rgbfilter.color
+		visible:true
+	}
     Component.onCompleted: {
         rgbfilter.show();
-        KWin.registerWindow(rgbfilter);
     }
 
 }

@@ -24,7 +24,7 @@ Description: Systemd and sddm scripts
 
 Package: kwin-rgbfilter
 Architecture: all
-Depends: kwin-addons
+Depends: accesswizard, kwin-addons
 Description: RGB Filter for kwin
  This plugin for KWin applies a rgb filter to the screen.
 

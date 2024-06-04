@@ -14,10 +14,11 @@ Description: Set accessibility settings
  AccessHelper it's a common place for the
  available accessibility options 
 
-Package: orca-sddm
+Package: pulse-sddm
 Architecture: all
-Breaks: zero-lliurex-accessibility(<0.5.4.99)
-Conflicts: zero-lliurex-accessibility(<0.5.4.99)
+Breaks: zero-lliurex-accessibility(<0.5.4.99),orca-sddm
+Conflicts: zero-lliurex-accessibility(<0.5.4.99),orca-sddm
+Replaces: orca-sddm
 Depends: sddm,orca
 Description: Systemd and sddm scripts
  for enabling ORCA screen reader at SDDM

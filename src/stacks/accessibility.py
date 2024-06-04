@@ -13,6 +13,8 @@ _ = gettext.gettext
 i18n={
 	"ACCE":_("System Accessibility"),
 	"ACCEDSC":_("Plasma Accessibility module"),
+	"ANTI":_("Joystick as mouse"),
+	"ANTIDSC":_("Configure a gamepad/joystick as mouse"),
 	"CONFIG":_("Accessibility"),
 	"DOCK":_("Accessibility Dock"),
 	"DOCKDSC":_("Dock with customizable fast actions"),
@@ -93,6 +95,14 @@ class accessibility(QStackedWindowItem):
 		btnDock.setMinimumHeight(btnDock.height())
 		self.tblGrid.setCellWidget(1,0,btnDock)
 		btnDock.clicked.connect(self._launch)
+		btnJoys=QPushInfoButton()
+		btnJoys.setText(i18n.get("ANTI"))
+		btnJoys.setDescription(i18n.get("ANTIDSC"))
+		btnJoys.loadImg("io.github.antimicrox.antimicrox")
+		btnJoys.setMinimumWidth(btnJoys.width())
+		btnJoys.setMinimumHeight(btnJoys.height())
+		self.tblGrid.setCellWidget(1,1,btnJoys)
+		btnJoys.clicked.connect(self._launch)
 	#	self.tblGrid.horizontalHeader().setSectionResizeMode(2,QHeaderView.Stretch)
 
 	def _launch(self,*args):
@@ -106,6 +116,8 @@ class accessibility(QStackedWindowItem):
 				cmd=os.path.join(os.path.dirname(__file__),"..","tools","ttsmanager.py")
 			elif args[0].text()==i18n.get("DOCK"):
 				cmd=os.path.join(os.path.dirname(__file__),"..","dock","accessdock-config.py")
+			elif args[0].text()==i18n.get("ANTI"):
+				cmd="/usr/bin/antimicrox"
 			self.accesshelper.launchCmd(cmd,mp=True)
 	#def _launch
 

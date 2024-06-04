@@ -1,3 +1,9 @@
+accesswizard (0.0.5) jammy-testing; urgency=medium
+
+  * orca and sddm
+
+ -- Juanma1980 <juanma1980@gmail.com>  Tue, 04 Jun 2024 16:04:50 +0200
+
 accesswizard (0.0.4) jammy-testing; urgency=medium
 
   * WIP on plasmoid

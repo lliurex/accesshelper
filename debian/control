@@ -14,6 +14,14 @@ Description: Set accessibility settings
  AccessHelper it's a common place for the
  available accessibility options 
 
+Package: orca-sddm
+Architecture: all
+Breaks: zero-lliurex-accessibility(<0.5.4.99)
+Conflicts: zero-lliurex-accessibility(<0.5.4.99)
+Depends: sddm,orca
+Description: Systemd and sddm scripts
+ for enabling ORCA screen reader at SDDM
+
 Package: kwin-rgbfilter
 Architecture: all
 Depends: kwin-addons

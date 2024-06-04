@@ -7,16 +7,3 @@ if [ -e /sbin/prime-offload ]; then
 fi
 
 [ -x /usr/bin/xbrlapi ] && /usr/bin/xbrlapi -q &
-#sudo -u sddm /atlaunch.sh &
-rm /tmp/.orca 2>/dev/null
-/usr/share/accesswizard/tools/setSddmSound.sh $DISPLAY $XAUTHORITY &
-CONT=0
-while [ -z "$(ps -ef | grep orca | grep ^sddm)" ]
-do 
-	sleep 1
-	[ ! -z "$(ps -ef | grep orca | grep ^sddm)" ] && break
-	[[ $CONT >= 10 ]] && break
-	let CONT=$CONT+2
-done
-exit 0
-##[ -x /usr/bin/orca ] # && su -c /usr/bin/orca sddm 

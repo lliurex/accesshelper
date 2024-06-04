@@ -1,0 +1,18 @@
+#!/bin/bash
+date > /tmp/zzzz
+echo "$(ps -ef | grep orca | grep ^sddm)" >> /tmp/zzzz
+/usr/share/accesswizard/tools/setSddmSound.sh $DISPLAY $XAUTHORITY &
+date >> /tmp/zzzz
+CONT=0
+while [ -z "$(ps -ef | grep orca | grep ^sddm)" ]
+do 
+	echo "$CONT" >> /tmp/zzzz
+	sleep 1
+	[ ! -z "$(ps -ef | grep orca | grep ^sddm)" ] && break
+	[ $CONT -gt 10 ] && break
+	let CONT=$CONT+2
+done
+echo "$CONT" >> /tmp/zzzz
+echo "----" >> /tmp/zzzz
+exit 0
+##[ -x /usr/bin/orca ] # && su -c /usr/bin/orca sddm 

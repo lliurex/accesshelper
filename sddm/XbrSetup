@@ -9,7 +9,7 @@ fi
 [ -x /usr/bin/xbrlapi ] && /usr/bin/xbrlapi -q &
 #sudo -u sddm /atlaunch.sh &
 rm /tmp/.orca 2>/dev/null
-/usr/share/accesswizard/tools/playSound.sh $DISPLAY $XAUTHORITY &
+/usr/share/accesswizard/tools/setSddmSound.sh $DISPLAY $XAUTHORITY &
 CONT=0
 while [ -z "$(ps -ef | grep orca | grep ^sddm)" ]
 do 

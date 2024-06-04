@@ -22,8 +22,9 @@ i18n={
 	"PROFNME":_("Save as..."),
 	"PROFDSC":_("Accesswizard profile"),
 	"SAVE":_("Save current profile"),
-	"SDDM_ORCA":_("Enable ORCA in sddm screen"),
-	"SDDM_BEEP":_("Beep when sddm launches"),
+	"SDDM_ORCA":_("Enable ORCA in login screen"),
+	"SDDM_BEEP":_("Beep when login screen loads"),
+	"SESSION_BEEP":_("Beep on session start"),
 	"TOOLTIP":_("Advanced settings")
 	}
 
@@ -63,13 +64,15 @@ class settings(QStackedWindowItem):
 		self.tblGrid.setCellWidget(0,1,self.chkDock)
 		self.chkSddm=QCheckBox(i18n["SDDM_ORCA"])
 		self.tblGrid.setCellWidget(1,0,self.chkSddm)
-		self.chkBeep=QCheckBox(i18n["SDDM_BEEP"])
-		self.tblGrid.setCellWidget(1,1,self.chkBeep)
+		self.chkSdBe=QCheckBox(i18n["SDDM_BEEP"])
+		self.tblGrid.setCellWidget(1,1,self.chkSdBe)
+		self.chkSeBe=QCheckBox(i18n["SESSION_BEEP"])
+		self.tblGrid.setCellWidget(2,0,self.chkSeBe)
 		self.chkProf=QCheckBox(i18n["PROFILE"])
-		self.tblGrid.setCellWidget(2,0,self.chkProf)
+		self.tblGrid.setCellWidget(3,0,self.chkProf)
 		self.cmbProf=QComboBox()
 		self.chkProf.clicked.connect(lambda: self.cmbProf.setEnabled(self.chkProf.isChecked()))
-		self.tblGrid.setCellWidget(2,1,self.cmbProf)
+		self.tblGrid.setCellWidget(3,1,self.cmbProf)
 		self.btnSave=QPushButton(i18n["SAVE"])
 		self.btnSave.clicked.connect(self._saveProfile)
 		self.tblGrid.setCellWidget(3,0,self.btnSave)
@@ -82,7 +85,7 @@ class settings(QStackedWindowItem):
 		config=self.readConfig()
 		self.chkGrub.setChecked(config.get("grub",False))
 		self.chkSddm.setChecked(config.get("sddm",False))
-		self.chkBeep.setChecked(config.get("beep",False))
+		self.chkSeBe.setChecked(config.get("sebe",False))
 		self.chkDock.setChecked(config.get("dock",False))
 		self.chkProf.setChecked(config.get("prfl",False))
 		self.cmbProf.clear()
@@ -117,7 +120,7 @@ class settings(QStackedWindowItem):
 		config["grub"]=False
 		if grub=="true":
 			config["grub"]=True
-		config["beep"]=self.accesshelper.getSDDMSound()
+		config["sebe"]=self.accesshelper.getSDDMSound()
 		sddm=self.accesshelper.readKFile("kaccessrc","LliurexAccessibility","orcaOnSDDM")
 		config["sddm"]=False
 		if sddm==True:
@@ -134,7 +137,8 @@ class settings(QStackedWindowItem):
 	def readScreen(self):
 		config={}
 		config["grub"]=self.chkGrub.isChecked()
-		config["beep"]=self.chkBeep.isChecked()
+		config["sebe"]=self.chkSeBe.isChecked()
+		config["sdbe"]=self.chkSdBe.isChecked()
 		config["sddm"]=self.chkSddm.isChecked()
 		config["dock"]=self.chkDock.isChecked()
 		config["prfl"]=self.chkProf.isChecked()
@@ -151,7 +155,8 @@ class settings(QStackedWindowItem):
 		self.accesshelper.writeKFile("kaccessrc","LliurexAccessibility","beepOnSession","managed")
 		self.accesshelper.writeKFile("kaccessrc","LliurexAccessibility","autostartDock",config["dock"])
 		self.accesshelper.writeKFile("kaccessrc","LliurexAccessibility","profileOnInit",config["iprf"])
-		self.accesshelper.setSDDMSound(config["beep"])
+		self.accesshelper.setSessionSound(config["sebe"])
+		self.accesshelper.setSDDMSound(config["sdbe"])
 		self.accesshelper.setDockEnabled(config["dock"])
 		if self.chkGrub.isChecked()!=self.accesshelper.getGrubBeep():
 			cmd=["pkexec","/usr/share/accesswizard/tools/enableGrubBeep.sh",str(self.chkGrub.isChecked())]

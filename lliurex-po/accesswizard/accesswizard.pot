@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-24 09:41+0200\n"
+"POT-Creation-Date: 2024-06-04 18:27+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,39 +25,47 @@ msgstr ""
 msgid "Plasma Accessibility module"
 msgstr ""
 
-#: ../src/stacks/accessibility.py:16 ../src/stacks/accessibility.py:21
-msgid "Accessibility"
+#: ../src/stacks/accessibility.py:16
+msgid "Joystick as mouse"
 msgstr ""
 
 #: ../src/stacks/accessibility.py:17
-msgid "Accessibility Dock"
+msgid "Configure a gamepad/joystick as mouse"
 msgstr ""
 
-#: ../src/stacks/accessibility.py:18
-msgid "Dock with customizable fast actions"
+#: ../src/stacks/accessibility.py:18 ../src/stacks/accessibility.py:23
+msgid "Accessibility"
 msgstr ""
 
 #: ../src/stacks/accessibility.py:19
-msgid "LliureX TTS"
+msgid "Accessibility Dock"
 msgstr ""
 
 #: ../src/stacks/accessibility.py:20
-msgid "Configure Lliurex TTS addon"
+msgid "Dock with customizable fast actions"
+msgstr ""
+
+#: ../src/stacks/accessibility.py:21
+msgid "LliureX TTS"
 msgstr ""
 
 #: ../src/stacks/accessibility.py:22
-msgid "Orca"
-msgstr ""
-
-#: ../src/stacks/accessibility.py:23
-msgid "Open Orca configuration tool"
+msgid "Configure Lliurex TTS addon"
 msgstr ""
 
 #: ../src/stacks/accessibility.py:24
-msgid "Accesibility options"
+msgid "Orca"
 msgstr ""
 
 #: ../src/stacks/accessibility.py:25
+msgid "Open Orca configuration tool"
+msgstr ""
+
+#: ../src/stacks/accessibility.py:26
+msgid "Accesibility options"
+msgstr ""
+
+#: ../src/stacks/accessibility.py:27
 msgid "Settings which do the system more accessible"
 msgstr ""
 
@@ -142,14 +150,18 @@ msgid "Save current profile"
 msgstr ""
 
 #: ../src/stacks/settings.py:25
-msgid "Enable ORCA in sddm screen"
+msgid "Enable ORCA in login screen"
 msgstr ""
 
 #: ../src/stacks/settings.py:26
-msgid "Beep when sddm launches"
+msgid "Beep when login screen loads"
 msgstr ""
 
 #: ../src/stacks/settings.py:27
+msgid "Beep on session start"
+msgstr ""
+
+#: ../src/stacks/settings.py:28
 msgid "Advanced settings"
 msgstr ""
 
@@ -326,6 +338,10 @@ msgid "Launch at session start"
 msgstr ""
 
 #: ../src/dock/accessdock-config.py:25
+msgid "Displays launcher name at fullscreen on mouse over"
+msgstr ""
+
+#: ../src/dock/accessdock-config.py:26
 msgid "Up"
 msgstr ""
 

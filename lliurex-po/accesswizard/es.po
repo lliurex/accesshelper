@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-09 12:14+0200\n"
-"PO-Revision-Date: 2024-05-09 12:15+0200\n"
+"POT-Creation-Date: 2024-06-04 18:27+0200\n"
+"PO-Revision-Date: 2024-06-04 18:31+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es\n"
@@ -26,175 +26,187 @@ msgstr "Accesibilidad del sistema"
 msgid "Plasma Accessibility module"
 msgstr "Módulo de accesibilidad de Plasma"
 
-#: ../src/stacks/accessibility.py:16 ../src/stacks/accessibility.py:21
+#: ../src/stacks/accessibility.py:16
+msgid "Joystick as mouse"
+msgstr "Usar joystick como ratón"
+
+#: ../src/stacks/accessibility.py:17
+msgid "Configure a gamepad/joystick as mouse"
+msgstr "Configura un gamepd o joystick para su uso como ratón"
+
+#: ../src/stacks/accessibility.py:18 ../src/stacks/accessibility.py:23
 msgid "Accessibility"
 msgstr "Accesibilidad"
 
-#: ../src/stacks/accessibility.py:17
+#: ../src/stacks/accessibility.py:19
 msgid "Accessibility Dock"
 msgstr "Barra de accesibilidad"
 
-#: ../src/stacks/accessibility.py:18
+#: ../src/stacks/accessibility.py:20
 msgid "Dock with customizable fast actions"
 msgstr "Barra configurable de acciones rápidas"
 
-#: ../src/stacks/accessibility.py:19
+#: ../src/stacks/accessibility.py:21
 msgid "LliureX TTS"
 msgstr "Lliurex TTS"
 
-#: ../src/stacks/accessibility.py:20
+#: ../src/stacks/accessibility.py:22
 msgid "Configure Lliurex TTS addon"
 msgstr "Ajustes de la extensión TTS de LliureX"
 
-#: ../src/stacks/accessibility.py:22
+#: ../src/stacks/accessibility.py:24
 msgid "Orca"
 msgstr "ORCA"
 
-#: ../src/stacks/accessibility.py:23
+#: ../src/stacks/accessibility.py:25
 msgid "Open Orca configuration tool"
 msgstr "Abrir herramienta de configuración de ORCA"
 
-#: ../src/stacks/accessibility.py:24
+#: ../src/stacks/accessibility.py:26
 msgid "Accesibility options"
 msgstr "Opciones de accesibilidad"
 
-#: ../src/stacks/accessibility.py:25
+#: ../src/stacks/accessibility.py:27
 msgid "Settings which do the system more accessible"
 msgstr "Ajustes para hacer el sistema más accesible"
 
-#: ../src/stacks/effects.py:15 ../src/dock/extras/effects.py:15
-#: ../src/dock/extras/kcms.py:15
+#: ../src/stacks/effects.py:14 ../src/dock/extras/effects.py:14
+#: ../src/dock/extras/kcms.py:14
 msgid "Effects"
 msgstr "Efectos"
 
-#: ../src/stacks/effects.py:16
+#: ../src/stacks/effects.py:15
 msgid "Desktop plugins"
 msgstr "Plugins de escritorio"
 
-#: ../src/stacks/effects.py:17
+#: ../src/stacks/effects.py:16
 msgid "Extra functionality for the desktop"
 msgstr "Funcionalidad extra para el escritorio"
 
-#: ../src/stacks/effects.py:18
+#: ../src/stacks/effects.py:17
 msgid "Windows effects"
 msgstr "Efectos de ventanas"
 
-#: ../src/stacks/effects.py:19
+#: ../src/stacks/effects.py:18
 msgid "Graphical effects for windows"
 msgstr "Efectos para manipular la apariencia de las ventanas"
 
-#: ../src/stacks/effects.py:20 ../src/dock/extras/effects.py:16
-#: ../src/dock/extras/kcms.py:16
+#: ../src/stacks/effects.py:19 ../src/dock/extras/effects.py:15
+#: ../src/dock/extras/kcms.py:15
 msgid "Visual Effects"
 msgstr "Efectos visuales"
 
-#: ../src/stacks/effects.py:21 ../src/dock/extras/effects.py:17
-#: ../src/dock/extras/kcms.py:17
+#: ../src/stacks/effects.py:20 ../src/dock/extras/effects.py:16
+#: ../src/dock/extras/kcms.py:16
 msgid "Aids and visual effects"
 msgstr "Ayudas y efectos visuales"
 
-#: ../src/stacks/effects.py:22 ../src/dock/extras/effects.py:18
-#: ../src/dock/extras/kcms.py:18
+#: ../src/stacks/effects.py:21 ../src/dock/extras/effects.py:17
+#: ../src/dock/extras/kcms.py:17
 msgid "Aids and visual effects for improve system usability"
 msgstr "Colección de heraamientas para mejorar la usabilidad del sistema"
 
-#: ../src/stacks/settings.py:13 ../src/tools/settings.py:18
+#: ../src/stacks/settings.py:14
 msgid "Settings"
 msgstr "Ajustes"
 
-#: ../src/stacks/settings.py:14
+#: ../src/stacks/settings.py:15
 msgid "Other options"
 msgstr "Otras opciones"
 
-#: ../src/stacks/settings.py:15
+#: ../src/stacks/settings.py:16
 msgid "Select accessibility profile"
 msgstr "Seleccionar el perfil de accesibilidad"
 
-#: ../src/stacks/settings.py:16 ../src/tools/settings.py:43
+#: ../src/stacks/settings.py:17
 msgid "Autostart dock"
 msgstr "Autoinicio del dock"
 
-#: ../src/stacks/settings.py:17
+#: ../src/stacks/settings.py:18
 msgid "Beep when computer starts"
 msgstr "Pitar en el arranque del sistema"
 
-#: ../src/stacks/settings.py:18
+#: ../src/stacks/settings.py:19
 msgid "Load profile"
 msgstr "Cargar perfil"
 
-#: ../src/stacks/settings.py:19
+#: ../src/stacks/settings.py:20
 msgid "Other Settings"
 msgstr "Otros ajustes"
 
-#: ../src/stacks/settings.py:20
+#: ../src/stacks/settings.py:21
 msgid "Start session with profile"
 msgstr "Cargar perfil al arrancar"
 
-#: ../src/stacks/settings.py:21
+#: ../src/stacks/settings.py:22
 msgid "Save as..."
 msgstr "Guardar como..."
 
-#: ../src/stacks/settings.py:22
+#: ../src/stacks/settings.py:23
 msgid "Accesswizard profile"
 msgstr "Perfil de accesswizard"
 
-#: ../src/stacks/settings.py:23
+#: ../src/stacks/settings.py:24
 msgid "Save current profile"
 msgstr "Guardar perfil actual"
 
-#: ../src/stacks/settings.py:24
-msgid "Enable ORCA in sddm screen"
-msgstr "Activar ORCA en la pantalla de SDDM"
-
 #: ../src/stacks/settings.py:25
-msgid "Beep when sddm launches"
-msgstr "Emitir alerta sonoar al iniciar SDDM"
+msgid "Enable ORCA in login screen"
+msgstr "Activar ORCA en la pantalla de acceso"
 
 #: ../src/stacks/settings.py:26
+msgid "Beep when login screen loads"
+msgstr "Pita cuando arranca el ordenador"
+
+#: ../src/stacks/settings.py:27
+msgid "Beep on session start"
+msgstr "Emite un sonido al inciar sesión"
+
+#: ../src/stacks/settings.py:28
 msgid "Advanced settings"
 msgstr "Configuración avanzada"
 
-#: ../src/stacks/theme.py:15
+#: ../src/stacks/theme.py:14
 msgid "Set global color scheme"
 msgstr "Esquema de color global"
 
-#: ../src/stacks/theme.py:16
+#: ../src/stacks/theme.py:15
 msgid "Color scheme"
 msgstr "Esquema de color"
 
-#: ../src/stacks/theme.py:17 ../src/stacks/theme.py:23
+#: ../src/stacks/theme.py:16 ../src/stacks/theme.py:22
 msgid "Appearance"
 msgstr "Apariencia"
 
-#: ../src/stacks/theme.py:18
+#: ../src/stacks/theme.py:17
 msgid "Look and feel options"
 msgstr "Opciones de apariencia"
 
-#: ../src/stacks/theme.py:19
+#: ../src/stacks/theme.py:18
 msgid "Configure system fonts"
 msgstr "Configura las fuentes del sistema"
 
-#: ../src/stacks/theme.py:20 ../src/stacks/theme.py:99
+#: ../src/stacks/theme.py:19 ../src/stacks/theme.py:99
 msgid "Fonts"
 msgstr "Fuentes"
 
-#: ../src/stacks/theme.py:21
+#: ../src/stacks/theme.py:20
 msgid "Set global theme"
 msgstr "Establece un tema global"
 
-#: ../src/stacks/theme.py:22 ../src/stacks/theme.py:95
+#: ../src/stacks/theme.py:21 ../src/stacks/theme.py:95
 msgid "Theme"
 msgstr "Tema"
 
-#: ../src/stacks/theme.py:24
+#: ../src/stacks/theme.py:23
 msgid "Set cursor theme and size"
 msgstr "Ajustar tamaño y tema del cursor"
 
-#: ../src/stacks/theme.py:25 ../src/stacks/theme.py:101
+#: ../src/stacks/theme.py:24 ../src/stacks/theme.py:101
 msgid "Mouse"
 msgstr "Ratón"
 
-#: ../src/stacks/theme.py:26
+#: ../src/stacks/theme.py:25
 msgid "Appearance customizing"
 msgstr "Personalizar apariencia"
 
@@ -202,325 +214,326 @@ msgstr "Personalizar apariencia"
 msgid "Color Scheme"
 msgstr "Esquema de color"
 
-#: ../src/tools/settings.py:19 ../src/dock/accessdock.py:16
-msgid "Configure"
-msgstr "Configurar"
-
-#: ../src/tools/settings.py:20
-msgid "Configure some options"
-msgstr "Opciones de configuración"
-
-#: ../src/tools/settings.py:21
-msgid "Set config level, default template.."
-msgstr "Elige la plantilla por defecto, arranque al inicio..."
-
-#: ../src/tools/settings.py:22
-msgid "The config will be applied per user"
-msgstr "La configuracion se aplicara a cada usuario"
-
-#: ../src/tools/settings.py:23
-msgid "The config will be applied to all users"
-msgstr "La configuración se aplicará a todos los usuarios"
-
-#: ../src/tools/settings.py:24
-msgid "The config will be applied to all users and clients"
-msgstr "La configuración se aplicará a todos los usuarios y clientes"
-
-#: ../src/tools/settings.py:25
-msgid "Apply settings to"
-msgstr "Aplicar a"
-
-#: ../src/tools/settings.py:26
-msgid "Session settings"
-msgstr "Opciones de sesión"
-
-#: ../src/tools/settings.py:27
-msgid "Load template on start"
-msgstr "Cargar plantilla al incio"
-
-#: ../src/tools/settings.py:28
-msgid "Enable accesshelper dock"
-msgstr "Activar barra de accesibilidad"
-
-#: ../src/tools/settings.py:29
-msgid "Autostart enabled for user"
-msgstr "Autoinicio activado para el usuario"
-
-#: ../src/tools/settings.py:30
-msgid "Autostart disabled for user"
-msgstr "Autoinicio desactivado para el usuario"
-
-#: ../src/tools/settings.py:31
-msgid "Autostart could not be disabled"
-msgstr "No se pudo desactivar el autoinicio"
-
-#: ../src/tools/settings.py:32
-msgid "Enabled accessibilty dock with hotkey"
-msgstr "Barra de accesibilidad disponible usando atajo"
-
-#: ../src/tools/settings.py:33
-msgid "Disabled accessibilty dock"
-msgstr "Barra de accesibilidad desactivada"
-
-#: ../src/tools/settings.py:34
-msgid "Use config"
-msgstr "Usar configuración"
-
-#: ../src/tools/settings.py:35 ../src/tools/settings.py:88
-msgid "User"
-msgstr "Usuario/a"
-
-#: ../src/tools/settings.py:36 ../src/tools/settings.py:89
-msgid "System"
-msgstr "Sistema"
-
-#: ../src/tools/settings.py:38
-msgid "Startup profile"
-msgstr "Plantilla inicial"
-
-#: ../src/tools/settings.py:39
-msgid "Autoload profile"
-msgstr "Cargar perfil al inicio"
-
-#: ../src/tools/settings.py:40 ../src/tools/settings.py:41
-msgid "Disabled"
-msgstr "Desactivado"
-
-#: ../src/tools/settings.py:42
-msgid "Enabled"
-msgstr "Activado"
-
-#: ../src/tools/settings.py:44
-msgid "Hotkey for dock"
-msgstr "Atajo para el dock"
-
-#: ../src/tools/settings.py:45
-msgid "Beep when machine starts"
-msgstr "Pitar en el arranque del sistema"
-
-#: ../src/tools/settings.py:90
-msgid "N4d"
-msgstr "N4d"
-
-#: ../src/tools/ttsmanager.py:16
+#: ../src/tools/ttsmanager.py:18
 msgid "Screen reader"
 msgstr "Lector de pantalla"
 
-#: ../src/tools/ttsmanager.py:17
+#: ../src/tools/ttsmanager.py:19
 msgid "TTS settings"
 msgstr "Configuración de TTS"
 
-#: ../src/tools/ttsmanager.py:18
-msgid "Text-To-Speech related options"
-msgstr "Opciones relacionadas con sintetizador"
-
-#: ../src/tools/ttsmanager.py:19
-msgid "Some options related with TTS"
-msgstr "Algunas opciones para configurar el sintetizador"
-
 #: ../src/tools/ttsmanager.py:20
-msgid "Voice"
-msgstr "Voz"
-
-#: ../src/tools/ttsmanager.py:21
-msgid "Use synthesizer"
-msgstr "Usar sintetizador"
-
-#: ../src/tools/ttsmanager.py:22
-msgid "Pitch"
-msgstr "Tono"
-
-#: ../src/tools/ttsmanager.py:23
-msgid "Speed"
-msgstr "Velocidad"
-
-#: ../src/tools/ttsmanager.py:24
-msgid "Recorded file list"
-msgstr "Ficheros generados"
-
-#: ../src/tools/ttsmanager.py:25
-msgid "Use internal TTS"
-msgstr "Usa sintetizador"
-
-#: ../src/tools/ttsmanager.py:26
-msgid "Use VLC player"
-msgstr "Usa VLC"
-
-#: ../src/tools/ttsmanager.py:27
-msgid "File"
-msgstr "Fichero"
-
-#: ../src/tools/ttsmanager.py:28
-msgid "Mp3"
-msgstr "Mp3"
-
-#: ../src/tools/ttsmanager.py:29
-msgid "Save"
-msgstr "Guardar"
-
-#: ../src/tools/ttsmanager.py:30
-msgid "Text"
-msgstr "Texto"
-
-#: ../src/tools/ttsmanager.py:31
-msgid "Files exported to"
-msgstr "Ficheros exportados a"
-
-#: ../src/tools/ttsmanager.py:32
-msgid "Valencian-Catalan"
-msgstr "Valenciano-Catalán"
-
-#: ../src/tools/ttsmanager.py:33
-msgid "Spanish"
-msgstr "Español"
-
-#: ../src/tools/ttsmanager.py:34
 msgid "English"
 msgstr "Inglés"
 
-#: ../src/dock/accessdock-config.py:14
+#: ../src/tools/ttsmanager.py:21
+msgid "Files exported to"
+msgstr "Ficheros exportados a"
+
+#: ../src/tools/ttsmanager.py:22
+msgid "File"
+msgstr "Fichero"
+
+#: ../src/tools/ttsmanager.py:23
+msgid "Recorded file list"
+msgstr "Ficheros generados"
+
+#: ../src/tools/ttsmanager.py:24
+msgid "Use internal TTS"
+msgstr "Usa sintetizador"
+
+#: ../src/tools/ttsmanager.py:25 ../src/dock/extras/launchers.py:15
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: ../src/tools/ttsmanager.py:26
+msgid "Text-To-Speech related options"
+msgstr "Opciones relacionadas con sintetizador"
+
+#: ../src/tools/ttsmanager.py:27
+msgid "Accept"
+msgstr "Aceptar"
+
+#: ../src/tools/ttsmanager.py:28
+msgid "Pitch"
+msgstr "Tono"
+
+#: ../src/tools/ttsmanager.py:29
+msgid "Rate"
+msgstr "Cadencia"
+
+#: ../src/tools/ttsmanager.py:30
+msgid "Mp3"
+msgstr "Mp3"
+
+#: ../src/tools/ttsmanager.py:31
+msgid "Save"
+msgstr "Guardar"
+
+#: ../src/tools/ttsmanager.py:32
+msgid "Spanish"
+msgstr "Español"
+
+#: ../src/tools/ttsmanager.py:33
+#, fuzzy
+#| msgid "Scale factor"
+msgid "Stretch factor"
+msgstr "Factor de ampliación"
+
+#: ../src/tools/ttsmanager.py:34
+msgid "Use synthesizer"
+msgstr "Usar sintetizador"
+
+#: ../src/tools/ttsmanager.py:35
+msgid "Text"
+msgstr "Texto"
+
+#: ../src/tools/ttsmanager.py:36
+msgid "Some options related with TTS"
+msgstr "Algunas opciones para configurar el sintetizador"
+
+#: ../src/tools/ttsmanager.py:37
+msgid "Valencian-Catalan"
+msgstr "Valenciano-Catalán"
+
+#: ../src/tools/ttsmanager.py:38
+msgid "Use VLC player"
+msgstr "Usa VLC"
+
+#: ../src/tools/ttsmanager.py:39
+msgid "Voice"
+msgstr "Voz"
+
+#: ../src/dock/accessdock-config.py:16
 msgid "Add"
 msgstr "Añadir"
 
-#: ../src/dock/accessdock-config.py:15
+#: ../src/dock/accessdock-config.py:17
 msgid "Rearrange or modify buttons for the dock"
 msgstr "Reordenar o modificar los botones de la barra"
 
-#: ../src/dock/accessdock-config.py:16
+#: ../src/dock/accessdock-config.py:18
 msgid "Delete"
 msgstr "Eliminar"
 
-#: ../src/dock/accessdock-config.py:17
+#: ../src/dock/accessdock-config.py:19
 msgid "Down"
 msgstr "Bajar"
 
-#: ../src/dock/accessdock-config.py:18
+#: ../src/dock/accessdock-config.py:20
 msgid "Edit"
 msgstr "Editar"
 
-#: ../src/dock/accessdock-config.py:19
+#: ../src/dock/accessdock-config.py:21
 msgid "Keyboard shortcut"
 msgstr "Atajo de teclado"
 
-#: ../src/dock/accessdock-config.py:20
+#: ../src/dock/accessdock-config.py:22
 msgid "Push to assign"
 msgstr "Pulsar para asignar"
 
-#: ../src/dock/accessdock-config.py:21
+#: ../src/dock/accessdock-config.py:23
 msgid "Items per row"
 msgstr "Botones por línea"
 
-#: ../src/dock/accessdock-config.py:22
+#: ../src/dock/accessdock-config.py:24
 msgid "Launch at session start"
 msgstr "Cargar al inicio de sesión"
 
-#: ../src/dock/accessdock-config.py:23
+#: ../src/dock/accessdock-config.py:25
+msgid "Displays launcher name at fullscreen on mouse over"
+msgstr "Muestra el nombre del lanzador a pantalla completa al posicionar el puntero encima"
+
+#: ../src/dock/accessdock-config.py:26
 msgid "Up"
 msgstr "Subir"
 
 #: ../src/dock/accessdock.py:17
+msgid "Configure launcher"
+msgstr "Configurar botón"
+
+#: ../src/dock/accessdock.py:18
 msgid "Configure dock"
 msgstr "Configurar barra"
 
-#: ../src/dock/extras/effects.py:60 ../src/dock/extras/kcms.py:60
+#: ../src/dock/accessdock.py:19
+msgid "Configure"
+msgstr "Configurar"
+
+#: ../src/dock/accessdock.py:20
+msgid "Toggle visibility"
+msgstr "Alternar visibilidad"
+
+#: ../src/dock/extras/effects.py:59 ../src/dock/extras/kcms.py:59
 msgid "Window Effects"
 msgstr "Efectos de ventana"
 
-#: ../src/dock/extras/effects.py:62 ../src/dock/extras/kcms.py:62
+#: ../src/dock/extras/effects.py:61 ../src/dock/extras/kcms.py:61
 msgid "Desktop Effects"
 msgstr "Efectos de escritorio"
 
-#: ../src/dock/extras/launchers.py:13
+#: ../src/dock/extras/launchers.py:14
 msgid "Assign"
 msgstr "Asignar"
 
-#: ../src/dock/extras/launchers.py:14
-msgid "Cancel"
-msgstr "Cancelar"
-
-#: ../src/dock/extras/launchers.py:15 ../src/dock/extras/launchers.py:223
+#: ../src/dock/extras/launchers.py:16 ../src/dock/extras/launchers.py:238
 msgid "Description"
 msgstr "Descripción"
 
-#: ../src/dock/extras/launchers.py:16
+#: ../src/dock/extras/launchers.py:17
 msgid "Toggle effect"
 msgstr "Activar efecto"
 
-#: ../src/dock/extras/launchers.py:17
+#: ../src/dock/extras/launchers.py:18
 msgid "Application"
 msgstr "Aplicación"
 
-#: ../src/dock/extras/launchers.py:18
+#: ../src/dock/extras/launchers.py:19
 msgid "Press button to assign one action"
 msgstr "Pulsar un botón para asignar una acción"
 
-#: ../src/dock/extras/launchers.py:19
+#: ../src/dock/extras/launchers.py:20
 msgid "Executable path"
 msgstr "Ruta al programa"
 
-#: ../src/dock/extras/launchers.py:20
+#: ../src/dock/extras/launchers.py:21
 msgid "Insert the executable path"
 msgstr "Introducir la ruta a la aplicación"
 
-#: ../src/dock/extras/launchers.py:21
+#: ../src/dock/extras/launchers.py:22
 msgid "Shortcut"
 msgstr "Atajos de teclado"
 
-#: ../src/dock/extras/launchers.py:22
+#: ../src/dock/extras/launchers.py:23
 msgid "Press a key"
 msgstr "Pulsar tecla"
 
-#: ../src/dock/extras/launchers.py:23
+#: ../src/dock/extras/launchers.py:24
 msgid "Icon: "
 msgstr "Icono: "
 
-#: ../src/dock/extras/launchers.py:24
+#: ../src/dock/extras/launchers.py:25
 msgid "Push to change icon"
 msgstr "Pulsar para cambiar icono"
 
-#: ../src/dock/extras/launchers.py:25
+#: ../src/dock/extras/launchers.py:26
 msgid "Module"
 msgstr "Módulo"
 
-#: ../src/dock/extras/launchers.py:26
+#: ../src/dock/extras/launchers.py:27
 msgid "Name: "
 msgstr "Nombre: "
 
-#: ../src/dock/extras/launchers.py:27
+#: ../src/dock/extras/launchers.py:28
 msgid "Unassigned action"
 msgstr "Acción sin asignar"
 
-#: ../src/dock/extras/launchers.py:28
+#: ../src/dock/extras/launchers.py:29
 msgid "Insert desktop name"
 msgstr "Nombre de la aplicación"
 
-#: ../src/dock/extras/launchers.py:29
+#: ../src/dock/extras/launchers.py:30
 msgid "Insert the url for the site"
 msgstr "Dirección del sitio"
 
-#: ../src/dock/extras/launchers.py:30
+#: ../src/dock/extras/launchers.py:31
 msgid "https://example.com"
 msgstr "https://ejemplo.com"
 
-#: ../src/dock/extras/launchers.py:221
+#: ../src/dock/extras/launchers.py:236
 msgid "Description (optional): "
 msgstr "Descripción (opcional): "
 
-#: ../src/dock/extras/launchers.py:224
+#: ../src/dock/extras/launchers.py:239
 msgid "Insert a description for the app"
 msgstr "Descripción de la aplicación"
 
-#: ../src/dock/extras/launchers.py:297
+#: ../src/dock/extras/launchers.py:316
 msgid "images(*.png *.xpm *jpg)"
 msgstr "imágenes (*.png *.xpm *jpg)"
 
-#: ../src/dock/extras/launchers.py:299
+#: ../src/dock/extras/launchers.py:318
 msgid "All files(*.*)"
 msgstr "Todos (*.*)"
 
-#: ../src/dock/extras/launchers.py:333
+#: ../src/dock/extras/launchers.py:352
 msgid "From here you can add a custom launcher"
 msgstr "Permite asociar pulsaciones de tecla a diferentes acciones del sistema"
+
+#~ msgid "Beep when sddm launches"
+#~ msgstr "Emitir alerta sonoar al iniciar SDDM"
+
+#~ msgid "Configure some options"
+#~ msgstr "Opciones de configuración"
+
+#~ msgid "Set config level, default template.."
+#~ msgstr "Elige la plantilla por defecto, arranque al inicio..."
+
+#~ msgid "The config will be applied per user"
+#~ msgstr "La configuracion se aplicara a cada usuario"
+
+#~ msgid "The config will be applied to all users"
+#~ msgstr "La configuración se aplicará a todos los usuarios"
+
+#~ msgid "The config will be applied to all users and clients"
+#~ msgstr "La configuración se aplicará a todos los usuarios y clientes"
+
+#~ msgid "Apply settings to"
+#~ msgstr "Aplicar a"
+
+#~ msgid "Session settings"
+#~ msgstr "Opciones de sesión"
+
+#~ msgid "Load template on start"
+#~ msgstr "Cargar plantilla al incio"
+
+#~ msgid "Enable accesshelper dock"
+#~ msgstr "Activar barra de accesibilidad"
+
+#~ msgid "Autostart enabled for user"
+#~ msgstr "Autoinicio activado para el usuario"
+
+#~ msgid "Autostart disabled for user"
+#~ msgstr "Autoinicio desactivado para el usuario"
+
+#~ msgid "Autostart could not be disabled"
+#~ msgstr "No se pudo desactivar el autoinicio"
+
+#~ msgid "Enabled accessibilty dock with hotkey"
+#~ msgstr "Barra de accesibilidad disponible usando atajo"
+
+#~ msgid "Disabled accessibilty dock"
+#~ msgstr "Barra de accesibilidad desactivada"
+
+#~ msgid "Use config"
+#~ msgstr "Usar configuración"
+
+#~ msgid "User"
+#~ msgstr "Usuario/a"
+
+#~ msgid "System"
+#~ msgstr "Sistema"
+
+#~ msgid "Startup profile"
+#~ msgstr "Plantilla inicial"
+
+#~ msgid "Autoload profile"
+#~ msgstr "Cargar perfil al inicio"
+
+#~ msgid "Disabled"
+#~ msgstr "Desactivado"
+
+#~ msgid "Enabled"
+#~ msgstr "Activado"
+
+#~ msgid "Hotkey for dock"
+#~ msgstr "Atajo para el dock"
+
+#~ msgid "N4d"
+#~ msgstr "N4d"
+
+#~ msgid "Speed"
+#~ msgstr "Velocidad"
 
 #~ msgid "Apply"
 #~ msgstr "Aplicar"
@@ -877,9 +890,6 @@ msgstr "Permite asociar pulsaciones de tecla a diferentes acciones del sistema"
 
 #~ msgid "Widget size"
 #~ msgstr "Tamaño de los elementos"
-
-#~ msgid "Scale factor"
-#~ msgstr "Factor de ampliación"
 
 #~ msgid "Run apps maximized"
 #~ msgstr "Maximiza por defecto"

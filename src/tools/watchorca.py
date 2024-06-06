@@ -154,6 +154,10 @@ def isAlive():
 	return([swDbus,swOrca])
 #def isAlive
 
+cmd=["/usr/bin/kreadconfig5","--file","kaccessrc","--group","ScreenReader","--key","Enabled"]
+out=subprocess.check_output(cmd,universal_newlines=True,encoding="utf8")
+if out.strip().lower()!="true":
+	sys.exit(0)
 processes=[]
 cont=0
 while True:

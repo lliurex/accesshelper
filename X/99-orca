@@ -1,4 +1,4 @@
 #!/bin/bash
 #Must run before x11_commom_start
-date > /tmp/orca.log
-/home/juanma/git/accesshelper/src/tools/watchorca.py &
+[[ $(/usr/bin/kreadconfig5 --file kaccessrc --group ScreenReader --key Enabled1) != "true" ]] && exit 0
+/usr/share/accesswizard/tools/watchorca.py &

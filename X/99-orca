@@ -1,0 +1,4 @@
+#!/bin/bash
+#Must run before x11_commom_start
+date > /tmp/orca.log
+/home/juanma/git/accesshelper/src/tools/watchorca.py &

@@ -58,16 +58,16 @@ class settings(QStackedWindowItem):
 		self.tblGrid.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
 		self.box.addWidget(self.tblGrid)
 		self.btnAccept.clicked.connect(self.writeConfig)
-		self.chkGrub=QCheckBox(i18n["GRUB"])
-		self.tblGrid.setCellWidget(0,0,self.chkGrub)
-		self.chkDock=QCheckBox(i18n["DOCK"])
-		self.tblGrid.setCellWidget(0,1,self.chkDock)
-		self.chkSddm=QCheckBox(i18n["SDDM_ORCA"])
-		self.tblGrid.setCellWidget(1,0,self.chkSddm)
-		self.chkSdBe=QCheckBox(i18n["SDDM_BEEP"])
-		self.tblGrid.setCellWidget(1,1,self.chkSdBe)
-		self.chkSeBe=QCheckBox(i18n["SESSION_BEEP"])
-		self.tblGrid.setCellWidget(2,0,self.chkSeBe)
+		self.chkBeGr=QCheckBox(i18n["GRUB"])
+		self.tblGrid.setCellWidget(0,0,self.chkBeGr)
+		self.chkBeSd=QCheckBox(i18n["SDDM_BEEP"])
+		self.tblGrid.setCellWidget(0,1,self.chkBeSd)
+		self.chkOrSd=QCheckBox(i18n["SDDM_ORCA"])
+		self.tblGrid.setCellWidget(1,0,self.chkOrSd)
+		self.chkAuDo=QCheckBox(i18n["DOCK"])
+		self.tblGrid.setCellWidget(2,0,self.chkAuDo)
+		self.chkBeSe=QCheckBox(i18n["SESSION_BEEP"])
+		self.tblGrid.setCellWidget(2,1,self.chkBeSe)
 		self.chkProf=QCheckBox(i18n["PROFILE"])
 		self.tblGrid.setCellWidget(3,0,self.chkProf)
 		self.cmbProf=QComboBox()
@@ -75,25 +75,26 @@ class settings(QStackedWindowItem):
 		self.tblGrid.setCellWidget(3,1,self.cmbProf)
 		self.btnSave=QPushButton(i18n["SAVE"])
 		self.btnSave.clicked.connect(self._saveProfile)
-		self.tblGrid.setCellWidget(3,0,self.btnSave)
+		self.tblGrid.setCellWidget(4,0,self.btnSave)
 		self.btnLoad=QPushButton(i18n["LOAD"])
 		self.btnLoad.clicked.connect(self._loadProfile)
-		self.tblGrid.setCellWidget(3,1,self.btnLoad)
+		self.tblGrid.setCellWidget(4,1,self.btnLoad)
 	#def __initScreen__
 
 	def updateScreen(self):
 		config=self.readConfig()
-		self.chkGrub.setChecked(config.get("grub",False))
-		self.chkSddm.setChecked(config.get("sddm",False))
-		self.chkSeBe.setChecked(config.get("sebe",False))
-		self.chkDock.setChecked(config.get("dock",False))
+		self.chkBeGr.setChecked(config.get("begr",False))
+		self.chkBeSd.setChecked(config.get("besd",False))
+		self.chkOrSd.setChecked(config.get("orsd",False))
+		self.chkBeSe.setChecked(config.get("bese",False))
+		self.chkAuDo.setChecked(config.get("audo",False))
 		self.chkProf.setChecked(config.get("prfl",False))
 		self.cmbProf.clear()
 		self.cmbProf.setEnabled(self.chkProf.isChecked())
 		profiles=self._getProfiles()
 		for p in profiles:
 			self.cmbProf.addItem(p)
-		self.cmbProf.setCurrentText(config.get("iprf",""))
+		self.cmbProf.setCurrentText(config.get("prin",""))
 	#def updateScreen
 
 	def _getProfiles(self):
@@ -128,37 +129,49 @@ class settings(QStackedWindowItem):
 		dock=self.accesshelper.readKFile("kaccessrc","LliurexAccessibility","autostartDock")
 		config["dock"]=self.accesshelper.getDockEnabled()
 		config["prfl"]=False
-		config["iprf"]=self.accesshelper.readKFile("kaccessrc","LliurexAccessibility","profileOnInit")
-		if len(config["iprf"])>0:
+		config["prin"]=self.accesshelper.readKFile("kaccessrc","LliurexAccessibility","profileOnInit")
+		if len(config["prin"])>0:
 			config["prfl"]=True
 		return (config)
 	#def readConfig
 
 	def readScreen(self):
 		config={}
-		config["grub"]=self.chkGrub.isChecked()
-		config["sebe"]=self.chkSeBe.isChecked()
-		config["sdbe"]=self.chkSdBe.isChecked()
-		config["sddm"]=self.chkSddm.isChecked()
-		config["dock"]=self.chkDock.isChecked()
+		config["begr"]=self.chkBeGr.isChecked()
+		config["bese"]=self.chkBeSe.isChecked()
+		config["besd"]=self.chkBeSd.isChecked()
+		config["orsd"]=self.chkBeSd.isChecked()
+		config["audo"]=self.chkAuDo.isChecked()
 		config["prfl"]=self.chkProf.isChecked()
-		config["iprf"]=""
+		config["prin"]=""
 		if config["prfl"]==True:
-			config["iprf"]=self.cmbProf.currentText()
+			config["prin"]=self.cmbProf.currentText()
 		return(config)
 	#def readScreen
 	
 	def writeConfig(self):
+		sw_grub=str(self.chkBeGr.isChecked())
+		sw_sddm=str(self.chkBeSd.isChecked())
+		sw_orca=str(self.chkOrSd.isChecked())
 		config=self.readConfig()
 		config.update(self.readScreen())
-		self.accesshelper.writeKFile("kaccessrc","LliurexAccessibility","beepOnGrub",config["grub"])
-		self.accesshelper.writeKFile("kaccessrc","LliurexAccessibility","beepOnSession","managed")
-		self.accesshelper.writeKFile("kaccessrc","LliurexAccessibility","autostartDock",config["dock"])
-		self.accesshelper.writeKFile("kaccessrc","LliurexAccessibility","profileOnInit",config["iprf"])
-		self.accesshelper.setSessionSound(config["sebe"])
-		self.accesshelper.setSDDMSound(config["sdbe"])
-		self.accesshelper.setDockEnabled(config["dock"])
-		if self.chkGrub.isChecked()!=self.accesshelper.getGrubBeep():
-			cmd=["pkexec","/usr/share/accesswizard/tools/enableGrubBeep.sh",str(self.chkGrub.isChecked())]
-			subprocess.run(cmd)
+		self.accesshelper.writeKFile("kaccessrc","LliurexAccessibility","beepOnSession",config["bese"])
+		self.accesshelper.writeKFile("kaccessrc","LliurexAccessibility","autostartDock",config["audo"])
+		self.accesshelper.writeKFile("kaccessrc","LliurexAccessibility","profileOnInit",config["prin"])
+		self.accesshelper.writeKFile("kaccessrc","LliurexAccessibility","beepOnSddm",config["besd"])
+		self.accesshelper.writeKFile("kaccessrc","LliurexAccessibility","sddmOrca",config["orsd"])
+		self.accesshelper.writeKFile("kaccessrc","LliurexAccessibility","beepOnGrub",config["begr"])
+		#REM
+		self.accesshelper.setSessionSound(config["bese"])
+		self.accesshelper.setDockEnabled(config["audo"])
+		#Privileged options
+		if sw_grub==config["begr"]:
+			sw_grub=""
+		if sw_sddm==config["besd"]:
+			sw_sddm=""
+		if sw_orca==config["orsd"]:
+			sw_orca=""
+		#self.accesshelper.setSDDMSound(config["sdbe"])
+		cmd=["pkexec","/usr/share/accesswizard/tools/enableOptions.sh",sw_grub,sw_sddm,sw_orca]
+		subprocess.run(cmd)
 	#def writeConfig

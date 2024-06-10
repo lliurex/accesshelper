@@ -16,8 +16,8 @@ Description: Set accessibility settings
 
 Package: pulse-sddm
 Architecture: all
-Breaks: zero-lliurex-accessibility(<0.5.4.99),orca-sddm
-Conflicts: zero-lliurex-accessibility(<0.5.4.99),orca-sddm
+Breaks: zero-lliurex-accessibility(<<0.5.4.99),orca-sddm
+Conflicts: zero-lliurex-accessibility(<<0.5.4.99),orca-sddm
 Replaces: orca-sddm
 Depends: sddm,orca
 Description: Systemd and sddm scripts

@@ -117,17 +117,15 @@ class settings(QStackedWindowItem):
 
 	def readConfig(self):
 		config={}
-		grub=self.accesshelper.readKFile("kaccessrc","LliurexAccessibility","beepOnGrub")
-		config["grub"]=False
-		if grub=="true":
-			config["grub"]=True
-		config["sebe"]=self.accesshelper.getSDDMSound()
-		sddm=self.accesshelper.readKFile("kaccessrc","LliurexAccessibility","orcaOnSDDM")
-		config["sddm"]=False
-		if sddm==True:
-			config["sddm"]=True
-		dock=self.accesshelper.readKFile("kaccessrc","LliurexAccessibility","autostartDock")
-		config["dock"]=self.accesshelper.getDockEnabled()
+		begr=self.accesshelper.readKFile("kaccessrc","LliurexAccessibility","beepOnGrub")
+		config["begr"]=bool(begr.capitalize())
+		config["bese"]=self.accesshelper.getSDDMSound()
+		orsd=self.accesshelper.readKFile("kaccessrc","LliurexAccessibility","orcaOnSddm")
+		config["orsd"]=bool(orsd.capitalize())
+		besd=self.accesshelper.readKFile("kaccessrc","LliurexAccessibility","beepOnSddm")
+		config["besd"]=bool(besd.capitalize())
+		audo=self.accesshelper.readKFile("kaccessrc","LliurexAccessibility","autostartDock")
+		config["audo"]=self.accesshelper.getDockEnabled()
 		config["prfl"]=False
 		config["prin"]=self.accesshelper.readKFile("kaccessrc","LliurexAccessibility","profileOnInit")
 		if len(config["prin"])>0:
@@ -140,7 +138,7 @@ class settings(QStackedWindowItem):
 		config["begr"]=self.chkBeGr.isChecked()
 		config["bese"]=self.chkBeSe.isChecked()
 		config["besd"]=self.chkBeSd.isChecked()
-		config["orsd"]=self.chkBeSd.isChecked()
+		config["orsd"]=self.chkOrSd.isChecked()
 		config["audo"]=self.chkAuDo.isChecked()
 		config["prfl"]=self.chkProf.isChecked()
 		config["prin"]=""
@@ -159,7 +157,7 @@ class settings(QStackedWindowItem):
 		self.accesshelper.writeKFile("kaccessrc","LliurexAccessibility","autostartDock",config["audo"])
 		self.accesshelper.writeKFile("kaccessrc","LliurexAccessibility","profileOnInit",config["prin"])
 		self.accesshelper.writeKFile("kaccessrc","LliurexAccessibility","beepOnSddm",config["besd"])
-		self.accesshelper.writeKFile("kaccessrc","LliurexAccessibility","sddmOrca",config["orsd"])
+		self.accesshelper.writeKFile("kaccessrc","LliurexAccessibility","orcaOnSddm",config["orsd"])
 		self.accesshelper.writeKFile("kaccessrc","LliurexAccessibility","beepOnGrub",config["begr"])
 		#REM
 		self.accesshelper.setSessionSound(config["bese"])

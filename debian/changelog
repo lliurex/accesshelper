@@ -1,3 +1,9 @@
+accesswizard (0.0.6) jammy-testing; urgency=medium
+
+  * WIP on RC.
+
+ -- Juanma1980 <juanma1980@gmail.com>  Mon, 10 Jun 2024 16:54:15 +0200
+
 accesswizard (0.0.5) jammy-testing; urgency=medium
 
   * orca and sddm

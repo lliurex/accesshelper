@@ -8,7 +8,7 @@ SW_ORCA=$3
 
 function enableOrcaOnSddm()
 {
-	echo 10 > /usr/share/accesswizard/tools/timeout
+	echo "TIMEOUT=10" > /usr/share/accesswizard/tools/timeout
 	enableBeepOnSddm
 }
 function disableOrcaOnSddm()

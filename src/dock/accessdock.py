@@ -410,8 +410,12 @@ class accessdock(QWidget):
 	#def _debug
 
 	def closeEvent(self,*args):
-		args[0].ignore()
-		self._toggle()
+		if args[0].spontaneus():
+			args[0].accept()
+		else:
+			args[0].ignore()
+			self._toggle()
+	#def closeEvent
 
 	def _setColorForBorder(self):
 		qplt=QPalette()

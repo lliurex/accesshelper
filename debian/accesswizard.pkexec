@@ -1,6 +1,6 @@
 [
     {
-        "cmd": "/usr/share/accesshelper/tools/enableOptions.sh",
+        "cmd": "/usr/share/accesswizard/tools/enableOptions.sh",
         "prefix": "net.lliurex.llxaccessibilty",
         "nameaction": "enableAccessibilityOptions",
 		"domain": "accesswizard",

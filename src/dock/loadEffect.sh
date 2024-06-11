@@ -53,6 +53,6 @@ NAME=${NAME/*: /}
 NAME=${NAME//\"/}
 NAME=${NAME/,/}
 CHK_MAGNIFIERS=$(grep \"exclusiveGroup\" $METADATA)
-[ ! -z ${#CHK_MAGNIFIERS} ] && NAME="view_zoom_in"
+[ ${#CHK_MAGNIFIERS} -ne 0 ] && NAME="view_zoom_in"
 [[ $(qdbus org.kde.KWin /Effects org.kde.kwin.Effects.activeEffects | grep $ID) ]] && toggle || enable
 exit 0

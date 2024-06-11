@@ -117,19 +117,20 @@ class settings(QStackedWindowItem):
 
 	def readConfig(self):
 		config={}
-		begr=self.accesshelper.readKFile("kaccessrc","LliurexAccessibility","beepOnGrub")
-		config["begr"]=bool(begr.capitalize())
-		config["bese"]=self.accesshelper.getSDDMSound()
-		orsd=self.accesshelper.readKFile("kaccessrc","LliurexAccessibility","orcaOnSddm")
-		config["orsd"]=bool(orsd.capitalize())
-		besd=self.accesshelper.readKFile("kaccessrc","LliurexAccessibility","beepOnSddm")
-		config["besd"]=bool(besd.capitalize())
-		audo=self.accesshelper.readKFile("kaccessrc","LliurexAccessibility","autostartDock")
-		config["audo"]=self.accesshelper.getDockEnabled()
+		config["begr"]=self.accesshelper.readKFile("kaccessrc","LliurexAccessibility","beepOnGrub")
+		config["besd"]=self.accesshelper.readKFile("kaccessrc","LliurexAccessibility","beepOnSddm")
+		config["orsd"]=self.accesshelper.readKFile("kaccessrc","LliurexAccessibility","orcaOnSddm")
+		config["bese"]=self.accesshelper.readKFile("kaccessrc","LliurexAccessibility","beepOnSession")
+		config["audo"]=self.accesshelper.readKFile("kaccessrc","LliurexAccessibility","autostartDock")
 		config["prfl"]=False
 		config["prin"]=self.accesshelper.readKFile("kaccessrc","LliurexAccessibility","profileOnInit")
 		if len(config["prin"])>0:
 			config["prfl"]=True
+		for key in config.keys():
+			if config[key]=="false":
+				config[key]=False
+			elif config[key]=="true":
+				config[key]=True
 		return (config)
 	#def readConfig
 
@@ -152,6 +153,12 @@ class settings(QStackedWindowItem):
 		sw_sddm=str(self.chkBeSd.isChecked())
 		sw_orca=str(self.chkOrSd.isChecked())
 		config=self.readConfig()
+		if sw_grub==str(config["begr"]):
+			sw_grub=""
+		if sw_sddm==str(config["besd"]):
+			sw_sddm=""
+		if sw_orca==str(config["orsd"]):
+			sw_orca=""
 		config.update(self.readScreen())
 		self.accesshelper.writeKFile("kaccessrc","LliurexAccessibility","beepOnSession",config["bese"])
 		self.accesshelper.writeKFile("kaccessrc","LliurexAccessibility","autostartDock",config["audo"])
@@ -163,13 +170,8 @@ class settings(QStackedWindowItem):
 		self.accesshelper.setSessionSound(config["bese"])
 		self.accesshelper.setDockEnabled(config["audo"])
 		#Privileged options
-		if sw_grub==config["begr"]:
-			sw_grub=""
-		if sw_sddm==config["besd"]:
-			sw_sddm=""
-		if sw_orca==config["orsd"]:
-			sw_orca=""
 		#self.accesshelper.setSDDMSound(config["sdbe"])
-		cmd=["pkexec","/usr/share/accesswizard/tools/enableOptions.sh",sw_grub,sw_sddm,sw_orca]
-		subprocess.run(cmd)
+		if len(sw_grub+sw_sddm+sw_orca)>0:
+			cmd=["pkexec","/usr/share/accesswizard/tools/enableOptions.sh",sw_grub,sw_sddm,sw_orca]
+			subprocess.run(cmd)
 	#def writeConfig

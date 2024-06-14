@@ -80,13 +80,15 @@ class actionSelector(QStackedWindowItem):
 	#def __initScreen__
 
 	def _loadApps(self):
+		self.lstActions.clear()
 		apps={}
 		cats=self.app2menu.get_categories()
+		cats.append("utility")
 		for cat in cats:
 			apps.update(self.app2menu.get_apps_from_category(cat.lower()))
 		for name,data in apps.items():
 			app=self.app2menu.get_desktop_info(data.get("path"))
-			if app.get("NoDisplay","")==True:
+			if app.get("NoDisplay",False)==True:
 				continue
 			appicon=data.get("icon","")
 			appname=data.get("name")
@@ -104,6 +106,7 @@ class actionSelector(QStackedWindowItem):
 	#def _loadApps
 
 	def _loadPlugins(self):
+		self.lstActions.clear()
 		plugins=self.accesshelper.getKWinEffects()
 		plugins.update(self.accesshelper.getKWinScripts())
 		for name,data in plugins.items():
@@ -124,6 +127,7 @@ class actionSelector(QStackedWindowItem):
 	#def _loadPlugins
 
 	def _loadKcm(self):
+		self.lstActions.clear()
 		cmd=["kcmshell5","--list"]
 		out=subprocess.check_output(cmd,universal_newlines=True,encoding="utf8")
 		for line in out.split("\n"):
@@ -157,7 +161,7 @@ class actionSelector(QStackedWindowItem):
 		self.lstActions.clear()
 		if self.mode=="apps":
 			self._loadApps()
-		if self.mode=="kcm":
+		elif self.mode=="kcm":
 			self._loadKcm()
 		else:
 			self._loadPlugins()

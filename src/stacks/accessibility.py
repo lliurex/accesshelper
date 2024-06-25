@@ -118,6 +118,8 @@ class accessibility(QStackedWindowItem):
 				cmd=os.path.join(os.path.dirname(__file__),"..","dock","accessdock-config.py")
 			elif args[0].text()==i18n.get("ANTI"):
 				cmd="/usr/bin/antimicrox"
+				if os.path.exists(cmd)==False:
+					cmd="/usr/bin/appsedu appstream://antimicrox"
 			self.accesshelper.launchCmd(cmd,mp=True)
 	#def _launch
 

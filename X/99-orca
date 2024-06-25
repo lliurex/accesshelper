@@ -1,0 +1,3 @@
+#!/bin/bash
+#Must run before x11_commom_start
+[[ $(/usr/bin/kreadconfig5 --file kaccessrc --group ScreenReader --key Enabled) == "true" ]] && /usr/share/accesswizard/tools/watchorca.py &

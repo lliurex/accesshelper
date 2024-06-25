@@ -1,0 +1,25 @@
+{
+    "KPackageStructure": "KWin/Script",
+    "KPlugin": {
+        "Authors": [
+            {
+                "Email": "juanma1980@gmail.com",
+                "Name": "Juanma1980"
+            }
+        ],
+        "Description": "Reads active window contents with ocr and festival.",
+        "Description[es]": "Lee el contenido de la ventana activa a través de OCR y festival",
+        "Description[ca]": "Llig el contingut de la finestra activa mitjançant OCR i festival",
+        "Icon": "preferences-system-windows-effect-dialog-parent",
+        "Id": "ocrwindow",
+        "License": "GPL",
+        "Name": "Window OCR",
+        "Name[es]": "OCR a ventana",
+        "Name[ca]": "OCR a finestra",
+        "Version": "0.2.0"
+    },
+    "X-KWin-Exclude-Listing": "true",
+    "X-Plasma-API": "declarativescript",
+    "X-KDE-ConfigModule": "kwin/effects/configs/kcm_kwin4_genericscripted",
+    "X-Plasma-MainScript": "ui/main.qml"
+}

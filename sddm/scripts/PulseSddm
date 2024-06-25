@@ -1,0 +1,13 @@
+#!/bin/bash
+[[ $(/usr/bin/systemctl is-enabled pulse-sddm ) != "enabled" ]] && exit 0
+#TIMEOUT from timeout
+source /usr/share/accesswizard/tools/timeout || exit 0
+/usr/share/accesswizard/tools/setSddmSound.sh $DISPLAY $XAUTHORITY &
+while [ -z "$(ps -ef | grep orca | grep ^sddm)" ]
+do 
+	sleep 1
+	[ ! -z "$(ps -ef | grep orca | grep ^sddm)" ] && break
+	[ $TIMEOUT -gt 10 ] && break
+	let CONT=$TIMEOUT+2
+done
+exit 0

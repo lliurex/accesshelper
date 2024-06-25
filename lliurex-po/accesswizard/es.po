@@ -1,0 +1,1020 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-06-04 18:27+0200\n"
+"PO-Revision-Date: 2024-06-04 18:31+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.0.1\n"
+
+#: ../src/stacks/accessibility.py:14
+msgid "System Accessibility"
+msgstr "Accesibilidad del sistema"
+
+#: ../src/stacks/accessibility.py:15
+msgid "Plasma Accessibility module"
+msgstr "Módulo de accesibilidad de Plasma"
+
+#: ../src/stacks/accessibility.py:16
+msgid "Joystick as mouse"
+msgstr "Usar joystick como ratón"
+
+#: ../src/stacks/accessibility.py:17
+msgid "Configure a gamepad/joystick as mouse"
+msgstr "Configura un gamepd o joystick para su uso como ratón"
+
+#: ../src/stacks/accessibility.py:18 ../src/stacks/accessibility.py:23
+msgid "Accessibility"
+msgstr "Accesibilidad"
+
+#: ../src/stacks/accessibility.py:19
+msgid "Accessibility Dock"
+msgstr "Barra de accesibilidad"
+
+#: ../src/stacks/accessibility.py:20
+msgid "Dock with customizable fast actions"
+msgstr "Barra configurable de acciones rápidas"
+
+#: ../src/stacks/accessibility.py:21
+msgid "LliureX TTS"
+msgstr "Lliurex TTS"
+
+#: ../src/stacks/accessibility.py:22
+msgid "Configure Lliurex TTS addon"
+msgstr "Ajustes de la extensión TTS de LliureX"
+
+#: ../src/stacks/accessibility.py:24
+msgid "Orca"
+msgstr "ORCA"
+
+#: ../src/stacks/accessibility.py:25
+msgid "Open Orca configuration tool"
+msgstr "Abrir herramienta de configuración de ORCA"
+
+#: ../src/stacks/accessibility.py:26
+msgid "Accesibility options"
+msgstr "Opciones de accesibilidad"
+
+#: ../src/stacks/accessibility.py:27
+msgid "Settings which do the system more accessible"
+msgstr "Ajustes para hacer el sistema más accesible"
+
+#: ../src/stacks/effects.py:14 ../src/dock/extras/effects.py:14
+#: ../src/dock/extras/kcms.py:14
+msgid "Effects"
+msgstr "Efectos"
+
+#: ../src/stacks/effects.py:15
+msgid "Desktop plugins"
+msgstr "Plugins de escritorio"
+
+#: ../src/stacks/effects.py:16
+msgid "Extra functionality for the desktop"
+msgstr "Funcionalidad extra para el escritorio"
+
+#: ../src/stacks/effects.py:17
+msgid "Windows effects"
+msgstr "Efectos de ventanas"
+
+#: ../src/stacks/effects.py:18
+msgid "Graphical effects for windows"
+msgstr "Efectos para manipular la apariencia de las ventanas"
+
+#: ../src/stacks/effects.py:19 ../src/dock/extras/effects.py:15
+#: ../src/dock/extras/kcms.py:15
+msgid "Visual Effects"
+msgstr "Efectos visuales"
+
+#: ../src/stacks/effects.py:20 ../src/dock/extras/effects.py:16
+#: ../src/dock/extras/kcms.py:16
+msgid "Aids and visual effects"
+msgstr "Ayudas y efectos visuales"
+
+#: ../src/stacks/effects.py:21 ../src/dock/extras/effects.py:17
+#: ../src/dock/extras/kcms.py:17
+msgid "Aids and visual effects for improve system usability"
+msgstr "Colección de heraamientas para mejorar la usabilidad del sistema"
+
+#: ../src/stacks/settings.py:14
+msgid "Settings"
+msgstr "Ajustes"
+
+#: ../src/stacks/settings.py:15
+msgid "Other options"
+msgstr "Otras opciones"
+
+#: ../src/stacks/settings.py:16
+msgid "Select accessibility profile"
+msgstr "Seleccionar el perfil de accesibilidad"
+
+#: ../src/stacks/settings.py:17
+msgid "Autostart dock"
+msgstr "Autoinicio del dock"
+
+#: ../src/stacks/settings.py:18
+msgid "Beep when computer starts"
+msgstr "Pitar en el arranque del sistema"
+
+#: ../src/stacks/settings.py:19
+msgid "Load profile"
+msgstr "Cargar perfil"
+
+#: ../src/stacks/settings.py:20
+msgid "Other Settings"
+msgstr "Otros ajustes"
+
+#: ../src/stacks/settings.py:21
+msgid "Start session with profile"
+msgstr "Cargar perfil al arrancar"
+
+#: ../src/stacks/settings.py:22
+msgid "Save as..."
+msgstr "Guardar como..."
+
+#: ../src/stacks/settings.py:23
+msgid "Accesswizard profile"
+msgstr "Perfil de accesswizard"
+
+#: ../src/stacks/settings.py:24
+msgid "Save current profile"
+msgstr "Guardar perfil actual"
+
+#: ../src/stacks/settings.py:25
+msgid "Enable ORCA in login screen"
+msgstr "Activar ORCA en la pantalla de acceso"
+
+#: ../src/stacks/settings.py:26
+msgid "Beep when login screen loads"
+msgstr "Pita cuando arranca el ordenador"
+
+#: ../src/stacks/settings.py:27
+msgid "Beep on session start"
+msgstr "Emite un sonido al inciar sesión"
+
+#: ../src/stacks/settings.py:28
+msgid "Advanced settings"
+msgstr "Configuración avanzada"
+
+#: ../src/stacks/theme.py:14
+msgid "Set global color scheme"
+msgstr "Esquema de color global"
+
+#: ../src/stacks/theme.py:15
+msgid "Color scheme"
+msgstr "Esquema de color"
+
+#: ../src/stacks/theme.py:16 ../src/stacks/theme.py:22
+msgid "Appearance"
+msgstr "Apariencia"
+
+#: ../src/stacks/theme.py:17
+msgid "Look and feel options"
+msgstr "Opciones de apariencia"
+
+#: ../src/stacks/theme.py:18
+msgid "Configure system fonts"
+msgstr "Configura las fuentes del sistema"
+
+#: ../src/stacks/theme.py:19 ../src/stacks/theme.py:99
+msgid "Fonts"
+msgstr "Fuentes"
+
+#: ../src/stacks/theme.py:20
+msgid "Set global theme"
+msgstr "Establece un tema global"
+
+#: ../src/stacks/theme.py:21 ../src/stacks/theme.py:95
+msgid "Theme"
+msgstr "Tema"
+
+#: ../src/stacks/theme.py:23
+msgid "Set cursor theme and size"
+msgstr "Ajustar tamaño y tema del cursor"
+
+#: ../src/stacks/theme.py:24 ../src/stacks/theme.py:101
+msgid "Mouse"
+msgstr "Ratón"
+
+#: ../src/stacks/theme.py:25
+msgid "Appearance customizing"
+msgstr "Personalizar apariencia"
+
+#: ../src/stacks/theme.py:97
+msgid "Color Scheme"
+msgstr "Esquema de color"
+
+#: ../src/tools/ttsmanager.py:18
+msgid "Screen reader"
+msgstr "Lector de pantalla"
+
+#: ../src/tools/ttsmanager.py:19
+msgid "TTS settings"
+msgstr "Configuración de TTS"
+
+#: ../src/tools/ttsmanager.py:20
+msgid "English"
+msgstr "Inglés"
+
+#: ../src/tools/ttsmanager.py:21
+msgid "Files exported to"
+msgstr "Ficheros exportados a"
+
+#: ../src/tools/ttsmanager.py:22
+msgid "File"
+msgstr "Fichero"
+
+#: ../src/tools/ttsmanager.py:23
+msgid "Recorded file list"
+msgstr "Ficheros generados"
+
+#: ../src/tools/ttsmanager.py:24
+msgid "Use internal TTS"
+msgstr "Usa sintetizador"
+
+#: ../src/tools/ttsmanager.py:25 ../src/dock/extras/launchers.py:15
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: ../src/tools/ttsmanager.py:26
+msgid "Text-To-Speech related options"
+msgstr "Opciones relacionadas con sintetizador"
+
+#: ../src/tools/ttsmanager.py:27
+msgid "Accept"
+msgstr "Aceptar"
+
+#: ../src/tools/ttsmanager.py:28
+msgid "Pitch"
+msgstr "Tono"
+
+#: ../src/tools/ttsmanager.py:29
+msgid "Rate"
+msgstr "Cadencia"
+
+#: ../src/tools/ttsmanager.py:30
+msgid "Mp3"
+msgstr "Mp3"
+
+#: ../src/tools/ttsmanager.py:31
+msgid "Save"
+msgstr "Guardar"
+
+#: ../src/tools/ttsmanager.py:32
+msgid "Spanish"
+msgstr "Español"
+
+#: ../src/tools/ttsmanager.py:33
+#, fuzzy
+#| msgid "Scale factor"
+msgid "Stretch factor"
+msgstr "Factor de ampliación"
+
+#: ../src/tools/ttsmanager.py:34
+msgid "Use synthesizer"
+msgstr "Usar sintetizador"
+
+#: ../src/tools/ttsmanager.py:35
+msgid "Text"
+msgstr "Texto"
+
+#: ../src/tools/ttsmanager.py:36
+msgid "Some options related with TTS"
+msgstr "Algunas opciones para configurar el sintetizador"
+
+#: ../src/tools/ttsmanager.py:37
+msgid "Valencian-Catalan"
+msgstr "Valenciano-Catalán"
+
+#: ../src/tools/ttsmanager.py:38
+msgid "Use VLC player"
+msgstr "Usa VLC"
+
+#: ../src/tools/ttsmanager.py:39
+msgid "Voice"
+msgstr "Voz"
+
+#: ../src/dock/accessdock-config.py:16
+msgid "Add"
+msgstr "Añadir"
+
+#: ../src/dock/accessdock-config.py:17
+msgid "Rearrange or modify buttons for the dock"
+msgstr "Reordenar o modificar los botones de la barra"
+
+#: ../src/dock/accessdock-config.py:18
+msgid "Delete"
+msgstr "Eliminar"
+
+#: ../src/dock/accessdock-config.py:19
+msgid "Down"
+msgstr "Bajar"
+
+#: ../src/dock/accessdock-config.py:20
+msgid "Edit"
+msgstr "Editar"
+
+#: ../src/dock/accessdock-config.py:21
+msgid "Keyboard shortcut"
+msgstr "Atajo de teclado"
+
+#: ../src/dock/accessdock-config.py:22
+msgid "Push to assign"
+msgstr "Pulsar para asignar"
+
+#: ../src/dock/accessdock-config.py:23
+msgid "Items per row"
+msgstr "Botones por línea"
+
+#: ../src/dock/accessdock-config.py:24
+msgid "Launch at session start"
+msgstr "Cargar al inicio de sesión"
+
+#: ../src/dock/accessdock-config.py:25
+msgid "Displays launcher name at fullscreen on mouse over"
+msgstr "Muestra el nombre del lanzador a pantalla completa al posicionar el puntero encima"
+
+#: ../src/dock/accessdock-config.py:26
+msgid "Up"
+msgstr "Subir"
+
+#: ../src/dock/accessdock.py:17
+msgid "Configure launcher"
+msgstr "Configurar botón"
+
+#: ../src/dock/accessdock.py:18
+msgid "Configure dock"
+msgstr "Configurar barra"
+
+#: ../src/dock/accessdock.py:19
+msgid "Configure"
+msgstr "Configurar"
+
+#: ../src/dock/accessdock.py:20
+msgid "Toggle visibility"
+msgstr "Alternar visibilidad"
+
+#: ../src/dock/extras/effects.py:59 ../src/dock/extras/kcms.py:59
+msgid "Window Effects"
+msgstr "Efectos de ventana"
+
+#: ../src/dock/extras/effects.py:61 ../src/dock/extras/kcms.py:61
+msgid "Desktop Effects"
+msgstr "Efectos de escritorio"
+
+#: ../src/dock/extras/launchers.py:14
+msgid "Assign"
+msgstr "Asignar"
+
+#: ../src/dock/extras/launchers.py:16 ../src/dock/extras/launchers.py:238
+msgid "Description"
+msgstr "Descripción"
+
+#: ../src/dock/extras/launchers.py:17
+msgid "Toggle effect"
+msgstr "Activar efecto"
+
+#: ../src/dock/extras/launchers.py:18
+msgid "Application"
+msgstr "Aplicación"
+
+#: ../src/dock/extras/launchers.py:19
+msgid "Press button to assign one action"
+msgstr "Pulsar un botón para asignar una acción"
+
+#: ../src/dock/extras/launchers.py:20
+msgid "Executable path"
+msgstr "Ruta al programa"
+
+#: ../src/dock/extras/launchers.py:21
+msgid "Insert the executable path"
+msgstr "Introducir la ruta a la aplicación"
+
+#: ../src/dock/extras/launchers.py:22
+msgid "Shortcut"
+msgstr "Atajos de teclado"
+
+#: ../src/dock/extras/launchers.py:23
+msgid "Press a key"
+msgstr "Pulsar tecla"
+
+#: ../src/dock/extras/launchers.py:24
+msgid "Icon: "
+msgstr "Icono: "
+
+#: ../src/dock/extras/launchers.py:25
+msgid "Push to change icon"
+msgstr "Pulsar para cambiar icono"
+
+#: ../src/dock/extras/launchers.py:26
+msgid "Module"
+msgstr "Módulo"
+
+#: ../src/dock/extras/launchers.py:27
+msgid "Name: "
+msgstr "Nombre: "
+
+#: ../src/dock/extras/launchers.py:28
+msgid "Unassigned action"
+msgstr "Acción sin asignar"
+
+#: ../src/dock/extras/launchers.py:29
+msgid "Insert desktop name"
+msgstr "Nombre de la aplicación"
+
+#: ../src/dock/extras/launchers.py:30
+msgid "Insert the url for the site"
+msgstr "Dirección del sitio"
+
+#: ../src/dock/extras/launchers.py:31
+msgid "https://example.com"
+msgstr "https://ejemplo.com"
+
+#: ../src/dock/extras/launchers.py:236
+msgid "Description (optional): "
+msgstr "Descripción (opcional): "
+
+#: ../src/dock/extras/launchers.py:239
+msgid "Insert a description for the app"
+msgstr "Descripción de la aplicación"
+
+#: ../src/dock/extras/launchers.py:316
+msgid "images(*.png *.xpm *jpg)"
+msgstr "imágenes (*.png *.xpm *jpg)"
+
+#: ../src/dock/extras/launchers.py:318
+msgid "All files(*.*)"
+msgstr "Todos (*.*)"
+
+#: ../src/dock/extras/launchers.py:352
+msgid "From here you can add a custom launcher"
+msgstr "Permite asociar pulsaciones de tecla a diferentes acciones del sistema"
+
+#~ msgid "Beep when sddm launches"
+#~ msgstr "Emitir alerta sonoar al iniciar SDDM"
+
+#~ msgid "Configure some options"
+#~ msgstr "Opciones de configuración"
+
+#~ msgid "Set config level, default template.."
+#~ msgstr "Elige la plantilla por defecto, arranque al inicio..."
+
+#~ msgid "The config will be applied per user"
+#~ msgstr "La configuracion se aplicara a cada usuario"
+
+#~ msgid "The config will be applied to all users"
+#~ msgstr "La configuración se aplicará a todos los usuarios"
+
+#~ msgid "The config will be applied to all users and clients"
+#~ msgstr "La configuración se aplicará a todos los usuarios y clientes"
+
+#~ msgid "Apply settings to"
+#~ msgstr "Aplicar a"
+
+#~ msgid "Session settings"
+#~ msgstr "Opciones de sesión"
+
+#~ msgid "Load template on start"
+#~ msgstr "Cargar plantilla al incio"
+
+#~ msgid "Enable accesshelper dock"
+#~ msgstr "Activar barra de accesibilidad"
+
+#~ msgid "Autostart enabled for user"
+#~ msgstr "Autoinicio activado para el usuario"
+
+#~ msgid "Autostart disabled for user"
+#~ msgstr "Autoinicio desactivado para el usuario"
+
+#~ msgid "Autostart could not be disabled"
+#~ msgstr "No se pudo desactivar el autoinicio"
+
+#~ msgid "Enabled accessibilty dock with hotkey"
+#~ msgstr "Barra de accesibilidad disponible usando atajo"
+
+#~ msgid "Disabled accessibilty dock"
+#~ msgstr "Barra de accesibilidad desactivada"
+
+#~ msgid "Use config"
+#~ msgstr "Usar configuración"
+
+#~ msgid "User"
+#~ msgstr "Usuario/a"
+
+#~ msgid "System"
+#~ msgstr "Sistema"
+
+#~ msgid "Startup profile"
+#~ msgstr "Plantilla inicial"
+
+#~ msgid "Autoload profile"
+#~ msgstr "Cargar perfil al inicio"
+
+#~ msgid "Disabled"
+#~ msgstr "Desactivado"
+
+#~ msgid "Enabled"
+#~ msgstr "Activado"
+
+#~ msgid "Hotkey for dock"
+#~ msgstr "Atajo para el dock"
+
+#~ msgid "N4d"
+#~ msgstr "N4d"
+
+#~ msgid "Speed"
+#~ msgstr "Velocidad"
+
+#~ msgid "Apply"
+#~ msgstr "Aplicar"
+
+#~ msgid "Set font size"
+#~ msgstr "Ajusta tamaño de la letra"
+
+#~ msgid ""
+#~ "{}%\n"
+#~ "Scale"
+#~ msgstr ""
+#~ "{}%\n"
+#~ "Aumento"
+
+#~ msgid "Set screen scale"
+#~ msgstr "Ajusta la ampliación del entorno"
+
+#~ msgid "Hide"
+#~ msgstr "Ocultar"
+
+#~ msgid "Close accessdock"
+#~ msgstr "Cerrar"
+
+#~ msgid "Launch accesshelper"
+#~ msgstr "Ejecuta accesshelper"
+
+#~ msgid "Read screen"
+#~ msgstr "Leer"
+
+#~ msgid "Read text or image from clipboard"
+#~ msgstr "Lee un texto o una imagen (ocr) desde el portapapeles"
+
+#~ msgid "Capture"
+#~ msgstr "Captura"
+
+#~ msgid "Try to read screen content from screenshot"
+#~ msgstr "Intenta leer el contenido de la pantalla"
+
+#~ msgid "Pointer"
+#~ msgstr "Puntero"
+
+#~ msgid "Set mouse pointer size"
+#~ msgstr "Tamaño del puntero"
+
+#~ msgid "Filter"
+#~ msgstr "Filtro"
+
+#~ msgid "Apply a color filter"
+#~ msgstr "Aplica un filtro de color a la pantalla"
+
+#~ msgid "Keyboard"
+#~ msgstr "Teclado"
+
+#~ msgid "Show/Hide on-screen keyboard"
+#~ msgstr "Muestra/esconde el teclado virtual"
+
+#~ msgid "usage: accesshelper [--set profile]|[--list]"
+#~ msgstr "uso: accesshelper [--set perfil]|[--list]"
+
+#~ msgid "With no args launch accesshelper GUI"
+#~ msgstr "Sin argumentos ejecuta la GUI de accesshelper"
+
+#~ msgid ""
+#~ "--set [profile]: Activate specified profile.\n"
+#~ "\tCould be an absolute path or a profile from default profiles path"
+#~ msgstr ""
+#~ "--set [perfil]: Activa el perfil indicado.\n"
+#~ "\tPuede ser una ruta completa a un fichero o el nombre de un perfil"
+
+#~ msgid "--list: List available profiles"
+#~ msgstr "--list: Lista los perfiles"
+
+#~ msgid "could not be accessed"
+#~ msgstr "no existe"
+
+#~ msgid "There's no profiles at"
+#~ msgstr "No se encuentan perfiles en"
+
+#~ msgid "Error loading"
+#~ msgstr "No se puede cargar"
+
+#~ msgid "Must select one from:"
+#~ msgstr "Debe seleccionarse uno de:"
+
+#~ msgid "Loading profile"
+#~ msgstr "Cargando perfil"
+
+#~ msgid "Changes will only apply after session restart"
+#~ msgstr "Los cambios se aplicarán después de reiniciar la sesión"
+
+#~ msgid "Changes will be applied now"
+#~ msgstr "Los cambios se aplicarán ahora"
+
+#~ msgid "Logout"
+#~ msgstr "Terminar"
+
+#~ msgid "Options selected:"
+#~ msgstr "Resumen de opciones:"
+
+#~ msgid "Later"
+#~ msgstr "Más tarde"
+
+#~ msgid "Profile not loaded: Autostart is disabled"
+#~ msgstr "Perfil no cargado: El autoinicio esta desactivado"
+
+#~ msgid "Profile loaded"
+#~ msgstr "Perfil cargado"
+
+#~ msgid "Close Session"
+#~ msgstr "Cerrar sesión"
+
+#~ msgid "Ignore"
+#~ msgstr "Ignorar"
+
+#~ msgid "Undo"
+#~ msgstr "Deshacer"
+
+#~ msgid "Autostart profile is enabled"
+#~ msgstr "Se ha activado la carga inicial de perfil"
+
+#~ msgid "A profile has been loaded. All settings has been applied if possible. Expect inconsistencies."
+#~ msgstr "Se ha cargado un perfil. Se han intentado aplicar todos los cambios. Pueden existir inconsistencias."
+
+#~ msgid "Accesshelper will try to apply as many changes as possible for current session (expect inconsistencies)"
+#~ msgstr "Accesshelper tratará de aplicar tantos cambios como sean posible para esta sesión (pueden aparecer inconsistencias)"
+
+#~ msgid "All settings will be applied after a session restart"
+#~ msgstr "Los cambios se aplicarán después de reiniciar la sesión"
+
+#~ msgid "The changes will not be persistent.All settings will be restored to profile"
+#~ msgstr "Los cambios no serán permanentes. La configuración sera restaurada el perfil"
+
+#~ msgid "Close this window for ignoring that until a session restart"
+#~ msgstr "Cerrar esta ventana para ignorar esto hasta reiniciar la sesión"
+
+#~ msgid "Changes applied"
+#~ msgstr "Cambios aplicados"
+
+#~ msgid "Accesshelper"
+#~ msgstr "Accesshelper"
+
+#~ msgid "Accesshelper running"
+#~ msgstr "Accesshelper en ejecución"
+
+#~ msgid "Can't execute another instance of Accesshelp"
+#~ msgstr "No se puede ejecutar otra instancia"
+
+#~ msgid "From here you can activate/deactivate accessibility aids"
+#~ msgstr "Desde aquí puedes activar/desactivar las ayudas visuales"
+
+#~ msgid "Invert screen colors"
+#~ msgstr "Invertir colores"
+
+#~ msgid "Invert windows colors"
+#~ msgstr "Invertir colores de ventana"
+
+#~ msgid "Show animation on click"
+#~ msgstr "Mostrar animación al clicar"
+
+#~ msgid "Show a grid when moving windows"
+#~ msgstr "Mostrar rejilla al mover una ventana"
+
+#~ msgid "Activate eyefish effect"
+#~ msgstr "Efecto ojo de pez"
+
+#~ msgid "Glass effect"
+#~ msgstr "Efecto lupa"
+
+#~ msgid "Enable magnify effects"
+#~ msgstr "Activar efectos de ampliación"
+
+#~ msgid "Acoustic system bell"
+#~ msgstr "Campana de sistema audible"
+
+#~ msgid "Visible bell"
+#~ msgstr "Campana de sistema visible"
+
+#~ msgid "Track pointer"
+#~ msgstr "Localizar ratón al moverlo"
+
+#~ msgid "Track click"
+#~ msgstr "Localizar ratón al pulsar"
+
+#~ msgid "Disable load profile on startup or changes will not apply on restart"
+#~ msgstr "Desactivar la carga inicial de perfil o los cambios se perderán al reiniciar"
+
+#~ msgid "Invert"
+#~ msgstr "Invertir colores"
+
+#~ msgid "InvertWindow"
+#~ msgstr "Invertir colores de ventana"
+
+#~ msgid "ToggleMouseClick"
+#~ msgstr "Señalar posición al pulsar el ratón"
+
+#~ msgid "hotkeys options"
+#~ msgstr "opciones de atajos"
+
+#~ msgid "Configuration"
+#~ msgstr "Configuración"
+
+#~ msgid "Add hotkey"
+#~ msgstr "Añadir atajo"
+
+#~ msgid "Add a hotkey for an application, command or action"
+#~ msgstr "Asocia combinaciones de teclas con aplicaciones"
+
+#~ msgid "Assign actions to keys"
+#~ msgstr "Asigna acciones a atajos"
+
+#~ msgid "Application from system"
+#~ msgstr "Aplicación del sistema"
+
+#~ msgid "Command-line order"
+#~ msgstr "Orden de línea de comandos"
+
+#~ msgid "Command"
+#~ msgstr "Comando"
+
+#~ msgid "Press a key or key-combination for the shortcut"
+#~ msgstr "Pulsa una tecla o combincación de ellas para el atajo"
+
+#~ msgid "Search"
+#~ msgstr "Buscar"
+
+#~ msgid "Color"
+#~ msgstr "Color"
+
+#~ msgid "Color filter"
+#~ msgstr "Filtro"
+
+#~ msgid "Modify screen color levels"
+#~ msgstr "Modifica los niveles de color"
+
+#~ msgid "Set color filter for the screen"
+#~ msgstr "Establecer filtros de colores para la pantalla"
+
+#~ msgid "By default"
+#~ msgstr "Por defecto"
+
+#~ msgid "Set color filter: "
+#~ msgstr "Filtro de color: "
+
+#~ msgid "Hotkeys"
+#~ msgstr "Atajos"
+
+#~ msgid "Set hotkeys for launch applications"
+#~ msgstr "Asocia combinaciones de teclas con aplicaciones"
+
+#~ msgid "Go to next window"
+#~ msgstr "Siguiente ventana"
+
+#~ msgid "Go to previous window"
+#~ msgstr "Ventana anterior"
+
+#~ msgid "Close window"
+#~ msgstr "Cerrar ventana"
+
+#~ msgid "Open launch menu"
+#~ msgstr "Abrir lanzador de aplicaciones"
+
+#~ msgid "Show desktop"
+#~ msgstr "Mostrar escritorio"
+
+#~ msgid "Invert colours"
+#~ msgstr "Invertir colores"
+
+#~ msgid "Invert window colours"
+#~ msgstr "Invertir colores de ventana"
+
+#~ msgid "Show grid when moving windows"
+#~ msgstr "Mostrar rejilla al mover una ventana"
+
+#~ msgid "Show mouse click"
+#~ msgstr "Mostrar animación al clicar"
+
+#~ msgid "Zoom in"
+#~ msgstr "Acercar Zoom"
+
+#~ msgid "Zoom out"
+#~ msgstr "Alejar zoom"
+
+#~ msgid "Show mouse pointer"
+#~ msgstr "Localizar el puntero"
+
+#~ msgid "behavior"
+#~ msgstr "comportamiento"
+
+#~ msgid "Desktop behavior"
+#~ msgstr "Comportamiento del escritoro"
+
+#~ msgid "Configure how desktop works"
+#~ msgstr "Configura como se comporta el escritorio"
+
+#~ msgid "Set many options related with desktop behavior"
+#~ msgstr "Diferentes opciones relacionadas con el comportamiento"
+
+#~ msgid "Click to focus"
+#~ msgstr "Pulsar para enfocar"
+
+#~ msgid "Focus follows pointer"
+#~ msgstr "El foco sigue al ratón"
+
+#~ msgid "Only one click for open elements"
+#~ msgstr "Un click abre los elementos"
+
+#~ msgid "Click on scrollbar moves to position"
+#~ msgstr "Click en la barra mueve a la posición"
+
+#~ msgid "Scrollbar sliding mode"
+#~ msgstr "Modo de deslizamiento de la barra"
+
+#~ msgid "Actions on top left screen corner"
+#~ msgstr "Actiones en la esquina superior izquierda"
+
+#~ msgid "Set screen resolution"
+#~ msgstr "Resolución de pantalla"
+
+#~ msgid "Customize the system fonts"
+#~ msgstr "Personalizar las fuentes"
+
+#~ msgid "Font size"
+#~ msgstr "Tamaño de fuente"
+
+#~ msgid "Font family"
+#~ msgstr "Familia"
+
+#~ msgid "Cursor theme"
+#~ msgstr "Tema del cursor"
+
+#~ msgid "Cursor size"
+#~ msgstr "Tamaño del cursor"
+
+#~ msgid "Font"
+#~ msgstr "Fuent"
+
+#~ msgid "Look&Feel"
+#~ msgstr "Apariencia visual"
+
+#~ msgid "Set theme, color scheme or pointers"
+#~ msgstr "Selecciona tema, esquema de color o punteros"
+
+#~ msgid "Theme colors"
+#~ msgstr "Colores del tema"
+
+#~ msgid "Background color"
+#~ msgstr "Color del escritorio"
+
+#~ msgid "Desktop background"
+#~ msgstr "Fondo del escritorio"
+
+#~ msgid "Current background"
+#~ msgstr "Imagen actual"
+
+#~ msgid "Widget size"
+#~ msgstr "Tamaño de los elementos"
+
+#~ msgid "Run apps maximized"
+#~ msgstr "Maximiza por defecto"
+
+#~ msgid "White"
+#~ msgstr "Blanco"
+
+#~ msgid "Red"
+#~ msgstr "Rojo"
+
+#~ msgid "Blue"
+#~ msgstr "Azul"
+
+#~ msgid "Green"
+#~ msgstr "Verde"
+
+#~ msgid "Yellow"
+#~ msgstr "Amarillo"
+
+#~ msgid "Black"
+#~ msgstr "Negro"
+
+#~ msgid "Manage profiles"
+#~ msgstr "Gestionar perfiles"
+
+#~ msgid "Load and save custom profiles"
+#~ msgstr "Carga y guarda perfiles"
+
+#~ msgid "Use profile templates for quick configuration"
+#~ msgstr "Usa las plantillas para configurarlo todo al momento"
+
+#~ msgid "Remove"
+#~ msgstr "Eliminar"
+
+#~ msgid "Confirm remove"
+#~ msgstr "Confirmación"
+
+#~ msgid "Remove profile"
+#~ msgstr "Eliminar"
+
+#~ msgid "Permission denied"
+#~ msgstr "Permiso denegado"
+
+#~ msgid "Default profiles could not be modified"
+#~ msgstr "Los perfiles por defecto no son modificables"
+
+#~ msgid "Insuficient permissions for remove"
+#~ msgstr "Usuario sin permiso"
+
+#~ msgid "Profile added to system's profiles"
+#~ msgstr "Perfil añadido al sistema"
+
+#~ msgid "Profile added to user's profiles"
+#~ msgstr "Perfil añadido al usuario"
+
+#~ msgid "Import profile"
+#~ msgstr "Importar"
+
+#~ msgid "Export profile"
+#~ msgstr "Exportar"
+
+#~ msgid "Profile"
+#~ msgstr "Perfil"
+
+#~ msgid "An error ocurred"
+#~ msgstr "Ocurrió un error"
+
+#~ msgid "Spanish woman"
+#~ msgstr "Español femenino"
+
+#~ msgid "Catalan woman"
+#~ msgstr "Catalán femenino"
+
+#~ msgid "Catalan man"
+#~ msgstr "Catalán masculino"
+
+#~ msgid "Choose the config level that should use the app"
+#~ msgstr "Elige el nivel de configuración"
+
+#~ msgid "Accessibility configuration"
+#~ msgstr "Configuración de accesibilidad"
+
+#~ msgid "Color filter configuration"
+#~ msgstr "Filtros de color"
+
+#~ msgid "Hotkeys configuration"
+#~ msgstr "Configuración de atajos"
+
+#~ msgid "Look&Feel configuration"
+#~ msgstr "Configuración de la apariencia visual"
+
+#~ msgid ""
+#~ "It's recommended to logout from session now\n"
+#~ "in order of avoid inconsistencies"
+#~ msgstr "Se recomienda terminar la sesión para evitar inconsistencias"
+
+#~ msgid "Cursor"
+#~ msgstr "Cursor"
+
+#~ msgid "Screen Options"
+#~ msgstr "Opciones de pantalla"
+
+#~ msgid "Enable high contrast palette"
+#~ msgstr "Paleta de alto contraste"
+
+#~ msgid "Set the policy focus"
+#~ msgstr "Política de foco"
+
+#~ msgid "Hotkey for restarting Orca"
+#~ msgstr "Atajo para reinicio de Orca"
+
+#~ msgid "Import Orca settings"
+#~ msgstr "Importar configuración de Orca"
+
+#~ msgid "Voice speed when reading"
+#~ msgstr "Velocidad de voz al leer"
+
+#~ msgid "Ctrl+Space"
+#~ msgstr "Ctrl+Espacio"
+
+#~ msgid "Enabled accessibilty dock. Press ctrl+space to show"
+#~ msgstr "Barra de accesibilidad activa. Pulsar CTRL+Espacio para mostrar"
+
+#~ msgid "Set resolution"
+#~ msgstr "Resolución"
+
+#~ msgid "Great A Tuin the turtle comes, swimming slowly through the interstellar gulf, hydrogen frost on his ponderous limbs, his huge and ancient shell pocked with meteor craters. Through sea-sized eyes that are crusted with rheum and asteroid dust He stares fixedly at the Destination."
+#~ msgstr "La Gran Tortuga A'Tuin se acerca, nadando lentamente por el golfo interestelar, con los pesados miembros llenos de hidrógeno congelado, la enorme y viejísima concha llena de cráteres de meteoros. Con unos ojos del tamaño de mares, encostrados de lágrimas reumáticas y polvo de asteroides, Él contempla fijamente el Destino."

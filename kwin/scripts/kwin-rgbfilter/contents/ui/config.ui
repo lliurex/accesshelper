@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>RgbFilterConfig</class>
+ <widget class="QWidget" name="RgbFilterConfig">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>355</width>
+    <height>177</height>
+   </rect>
+  </property>
+  <layout class="QGridLayout" name="formLayout">
+   <item row="0" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Filter color:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="KColorButton" name="kcfg_BackgroundColor">
+     <property name="color">
+      <color></color>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Opacity</string>
+       </property>
+      </widget>
+     </item>
+   <item row="1" column="1">
+      <widget class="QSpinBox" name="kcfg_Opacity">
+       <property name="suffix">
+        <string>%</string>
+       </property>
+       <property name="minimum">
+        <number>0</number>
+       </property>
+       <property name="maximum">
+        <number>75</number>
+       </property>
+      </widget>
+     </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KColorButton</class>
+   <extends>QPushButton</extends>
+   <header>kcolorbutton.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

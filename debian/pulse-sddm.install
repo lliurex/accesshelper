@@ -1,0 +1,2 @@
+sddm/sddm.conf.d/* /usr/lib/sddm/sddm.conf.d
+sddm/scripts/* /usr/share/sddm/scripts

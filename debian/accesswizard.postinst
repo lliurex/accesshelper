@@ -1,0 +1,22 @@
+#!/bin/bash
+
+set -e
+
+case $1 in 
+
+    configure)
+		[ -x /etc/xdg/Xwayland-session.d/99-orca ] && chmod +x /etc/xdg/Xwayland-session.d/99-orca
+
+    ;;
+    abort-upgrade|abort-remove|abort-deconfigure)
+    ;;
+
+    *)
+    	echo "postinst called with unknown argument \`$1'" >&2
+        exit 1
+    ;;
+    
+esac
+
+#DEBHELPER#
+exit 0

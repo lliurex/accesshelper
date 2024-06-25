@@ -119,7 +119,7 @@ class accessibility(QStackedWindowItem):
 			elif args[0].text()==i18n.get("ANTI"):
 				cmd="/usr/bin/antimicrox"
 				if os.path.exists(cmd)==False:
-					cmd="/usr/bin/appsedu appstream://antimicrox"
+					cmd=["/usr/bin/appsedu","appstream://antimicrox"]
 			self.accesshelper.launchCmd(cmd,mp=True)
 	#def _launch
 

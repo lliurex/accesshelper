@@ -1,3 +1,0 @@
-src/* /usr/share/accesswizard/
-X/* /etc/X11/Xsession.d
-X/* /etc/xdg/Xwayland-session.d/

@@ -1,4 +1,4 @@
-Source: accesshelper
+Source: accesswizard
 Section: admin
 Priority: optional
 Maintainer: Juanma1980 <juanma1980@gmail.com>
@@ -7,9 +7,37 @@ Build-Depends: llxsrchelper,debhelper (>= 7.0), python3-poinstaller, zero-dev
 Standards-Version: 4.4.1
 Homepage: https://github.com/lliurex/rebost
 
-Package: accesshelper
+Package: accesswizard
 Architecture: all
-Depends: python3-appconfig (>= 0.46),python3-pyside2.qtmultimedia,python3-pyside2.qtgui,accesshelper-data (>=0.5.2),xcur2png,xpanimated-yb-cursor-theme,python3-app2menu,onboard,python3-opencv,python3-tesserocr,festival,lame,festvox-palpc16k,festvox-sflpc16k,festvox-ca-ona-hts, tesseract-ocr, tesseract-ocr-spa,python3-spellchecker, libx11-dev,libxfixes-dev, python3-pyside2.qtmultimediawidgets
+Depends: python3-qtextrawidgets (>= 0.3.0),python3-pyside2.qtmultimedia,python3-pyside2.qtgui,xpanimated-yb-cursor-theme,python3-app2menu (>= 1.4),onboard,python3-opencv,python3-tesserocr,festival,lame,festvox-palpc16k,festvox-sflpc16k,festvox-ca-ona-hts, tesseract-ocr, tesseract-ocr-spa,python3-spellchecker, python3-pyside2.qtmultimediawidgets,speech-dispatcher-audio-plugins,speech-dispatcher-espeak-ng,python3-llxaccessibility
 Description: Set accessibility settings
  AccessHelper it's a common place for the
  available accessibility options 
+
+Package: pulse-sddm
+Architecture: all
+Breaks: zero-lliurex-accessibility(<<0.5.4.99),orca-sddm
+Conflicts: zero-lliurex-accessibility(<<0.5.4.99),orca-sddm
+Replaces: orca-sddm
+Depends: sddm,orca
+Description: Systemd and sddm scripts
+ for enabling ORCA screen reader at SDDM
+
+Package: kwin-rgbfilter
+Architecture: all
+Depends: accesswizard, kwin-addons
+Description: RGB Filter for kwin
+ This plugin for KWin applies a rgb filter to the screen.
+
+Package: kwin-ocrwindow
+Architecture: all
+Depends: accesswizard, kwin-addons
+Description: Read window contents with OCR
+ This plugin for KWin captures the active screen
+ and reads the content after processing through tesserocr.
+
+Package: plasma-accesswizard
+Architecture: all
+Depends: accesswizard, kwin-addons
+Description: Plasmoid for accesswizard
+ Gives quick access to accessdock launchers

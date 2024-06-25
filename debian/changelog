@@ -1,121 +1,40 @@
-accesshelper (0.9.1lliurex23) jammy; urgency=medium
+accesswizard (0.1.0) jammy; urgency=medium
 
-  * Jammy release
+  * First RC stable release
 
- -- Juanma1980 <juanma1980@gmail.com>  Wed, 06 Sep 2023 08:36:39 +0200
+ -- Juanma1980 <juanma1980@gmail.com>  Tue, 25 Jun 2024 12:23:33 +0200
 
-accesshelper (0.9.1) focal; urgency=medium
+accesswizard (0.0.7) jammy-testing; urgency=medium
 
-  * Last RC
-  * Don't duplicate info
-  * Use system font as backup value for activefont
-  * Force stop after playing records
-  * if mouse size is unknown use 24 as default value
-  * Improve startup
-  * Improve hotkey management
+  * RC1
 
- -- Juanma1980 <juanma1980@gmail.com>  Tue, 04 Jul 2023 09:13:39 +0200
+ -- Juanma1980 <juanma1980@gmail.com>  Tue, 11 Jun 2024 08:05:40 +0200
 
-accesshelper (0.8.2.2) focal; urgency=medium
+accesswizard (0.0.6) jammy-testing; urgency=medium
 
-  * Add options for xrand scale and plasma scale
-  * Add maximize when opening 
-  * Enable plasma startup sound
-  * Try to apply as many changes as possible
-  * Close dialog offers apply, reboot and dismiss.
-  * Diferentiate between read clipboard and read screenshot
-  * Accessdock only sets temporary settings
-  * Accesshelp doesn't apply by default any setting but color screen filter
-  * Other minor changes & bugfixes
+  * WIP on RC.
 
- -- Juanma1980 <juanma1980@gmail.com>  Mon, 15 May 2023 11:36:02 +0200
+ -- Juanma1980 <juanma1980@gmail.com>  Mon, 10 Jun 2024 16:54:15 +0200
 
-accesshelper (0.7.7.4) lliurex22; urgency=medium
+accesswizard (0.0.5) jammy-testing; urgency=medium
 
-  * BugFix release
-  * Add option for grub beep
-  * Remove profiles
+  * orca and sddm
 
- -- Juanma1980 <juanma1980@gmail.com>  Wed, 03 Jun 2022 15:37:19 +0200
+ -- Juanma1980 <juanma1980@gmail.com>  Tue, 04 Jun 2024 16:04:50 +0200
 
-accesshelper (0.7.3.6.12) focal; urgency=medium
+accesswizard (0.0.4) jammy-testing; urgency=medium
 
-  * Show list with changes before apply
-  * Adjust cursor size from accessdock
-  * Profiles breaks compatibility with <0.7.3.6.2
+  * WIP on plasmoid
+  * Threaded dock 
+  * Set accessibility functions as python module (python3-llxaccessibility)
+  * Accessdock full config for launchers
 
- -- Juanma1980 <juanma1980@gmail.com>  Wed, 01 Jun 2022 11:17:59 +0200
+ -- Juanma1980 <juanma1980@gmail.com>  Tue, 14 May 2024 18:47:18 +0200
 
-accesshelper (0.7.3.5.13) focal; urgency=medium
+accesswizard (0.0.1) jammy-testing; urgency=medium
 
-  * TTS uses festival engine
-  * WIP on festival settings
-  * Manager for text/sounds generated from TTS engine
-  * Add setting for background plain color
-  * Play/Stop recordings from reader through QtMultimedia
-  * Preliminar support for catalan voices
-  * Option for export generated records/transcriptions
-  * Bugfixes
+  * Alpha 0.1
+  * Mostly works!
 
- -- Juanma1980 <juanma1980@gmail.com>  Fri, 13 May 2022 17:02:45 +0200
-
-accesshelper (0.6.5.3) focal; urgency=medium
-
-  * Accessdocker supports TTS from images (no real tts, some limitations)
-  * Same config file for accessdocker and accesshelper
-  * Multiple bug fixes
-  * WIP on real TTS
-  * WIP on pointer lookandfeel hotswap
-
- -- Juanma1980 <juanma1980@gmail.com>  Tue, 29 Mar 2022 13:07:52 +0200
-
-accesshelper (0.5.3.4) focal; urgency=medium
-
-  * Implement helper as loadable module
-  * Functionality provided by helper module
-  * Accessdocker alpha release
-
- -- Juanma1980 <juanma1980@gmail.com>  Thu, 17 Mar 2022 12:59:23 +0100
-
-accesshelper (0.4.7.4) focal; urgency=medium
-
-  * Implemented cursor preview
-  * Fix add new hotkeys
-  * Fix apply button status
-  * Color screen filter use plasma config
-  * Reload config instead of restart session 
-  * Accessibility options disable related hotkeys
-
- -- Juanma1980 <juanma1980@gmail.com>  Fri, 11 Feb 2022 14:06:59 +0100
-
-accesshelper (0.4.3) focal; urgency=medium
-
-  * Theme and cursor settings
-  * Reworked font config
-  * Disabled behavior stack
-  * Minor bugfixes
-  * Add depends on accesshelper-data
-  * Add rgb filter options for screen
-
- -- Juanma1980 <juanma1980@gmail.com>  Mon, 07 Feb 2022 11:34:51 +0100
-
-accesshelper (0.3.2) focal; urgency=medium
-
-  * Bugfix release
-
- -- Juanma1980 <juanma1980@gmail.com>  Tue, 21 Dec 2021 12:51:21 +0100
-
-accesshelper (0.2.5.4) focal; urgency=medium
-
-  * Shortcut management
-  * Add change resolution 
-
- -- Juanma1980 <juanma1980@gmail.com>  Wed, 15 Dec 2021 16:10:05 +0100
-
-accesshelper (0.1.1) focal; urgency=medium
-
-  * Beta release.
-  *Almost all works
-
- -- Juanma1980 <juanma1980@gmail.com>  Fri, 10 Dec 2021 18:24:34 +0100
+ -- Juanma1980 <juanma1980@gmail.com>  Tue, 30 Apr 2024 08:09:50 +0200
 

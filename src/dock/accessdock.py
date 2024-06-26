@@ -410,7 +410,7 @@ class accessdock(QWidget):
 	#def _debug
 
 	def closeEvent(self,*args):
-		if args[0].spontaneus():
+		if args[0].spontaneous():
 			args[0].accept()
 		else:
 			args[0].ignore()

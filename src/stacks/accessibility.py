@@ -1,11 +1,13 @@
 #!/usr/bin/python3
 from llxaccessibility import llxaccessibility
 import os
+import json
 from PySide2.QtWidgets import QApplication,QLabel,QGridLayout,QCheckBox,QSizePolicy,QRadioButton,QHeaderView,QTableWidgetItem,QAbstractScrollArea
 from PySide2 import QtGui
 from PySide2.QtCore import Qt
 from QtExtraWidgets import QStackedWindowItem, QTableTouchWidget, QPushInfoButton
 import subprocess
+from rebost import store
 import locale
 import gettext
 _ = gettext.gettext
@@ -32,8 +34,8 @@ class accessibility(QStackedWindowItem):
 		self.dbg=False
 		self._debug("access Load")
 		self.setProps(shortDesc=i18n.get("MENU"),
-		    description=i18n.get('DESCRIPTION'),
-		    longDesc=i18n.get('DESCRIPTION'),
+			description=i18n.get('DESCRIPTION'),
+			longDesc=i18n.get('DESCRIPTION'),
 			icon="preferences-desktop-accessibility",
 			tooltip=i18n.get("TOOLTIP"),
 			index=3,
@@ -43,6 +45,7 @@ class accessibility(QStackedWindowItem):
 		self.level='user'
 		self.plasmaConfig={}
 		self.locale=locale.getdefaultlocale()[0][0:2]
+		self.rebost=store.client()
 		self.accesshelper=llxaccessibility.client()
 	#def __init__
 
@@ -117,11 +120,33 @@ class accessibility(QStackedWindowItem):
 			elif args[0].text()==i18n.get("DOCK"):
 				cmd=os.path.join(os.path.dirname(__file__),"..","dock","accessdock-config.py")
 			elif args[0].text()==i18n.get("ANTI"):
-				cmd="/usr/bin/antimicrox"
-				if os.path.exists(cmd)==False:
-					cmd=["/usr/bin/appsedu","appstream://antimicrox"]
+				cmd=self._getAntiMicroPath()
 			self.accesshelper.launchCmd(cmd,mp=True)
 	#def _launch
+
+	def _getAntiMicroPath(self):
+		cmd=["/usr/bin/appsedu","appstream://antimicrox"]
+		appraw=json.loads(self.rebost.matchApp("antimicrox"))
+		bundle=""
+		if len(appraw)>0:
+			app=json.loads(appraw[0])
+			for bun in app.get("bundle",{}).keys():
+				if bun.lower()=="zomando":
+					continue
+				if self.rebost.getAppStatus(app.get("name"),bun)=="0":
+					bundle=bun
+					break
+			if bundle=="package":
+				cmd=["gtk-launch",app.get("id",'')]
+			elif bundle=="flatpak":
+				cmd=["flatpak","run",app.get("bundle",{}).get("flatpak","")]
+			elif bundle=="snap":
+				cmd=["snap","run",app.get("bundle",{}).get("snap","")]
+			elif bundle=="appimage":
+				cmd=["gtk-launch","{}-appimage".format(app.get("pkgname",''))]
+			#proc=subprocess.run(cmd)
+		return(cmd)
+	#def _getAntiMicroPath
 
 	def updateScreen(self):
 		pass

@@ -212,7 +212,7 @@ class QPushButtonDock(QPushButton):
 		icn=QIcon()
 		iconName=self.data.get("Icon","")
 		if len(iconName)==0:
-			iconName="rebost"
+			iconName="accesswiza"
 		if os.path.exists(iconName):
 			pxm=QPixmap(iconName)
 			icn=QIcon(pxm)
@@ -225,9 +225,9 @@ class QPushButtonDock(QPushButton):
 	#def _renderBtn
 
 	def _beginLaunch(self,*args):
-		self.setEnabled(False)
 		cmd=self.data.get("Exec","")
 		if len(cmd)>0:
+			self.setEnabled(False)
 			l=threadLauncher(cmd)
 			l.start()
 			l.finished.connect(self._endLaunch)
@@ -483,6 +483,9 @@ class accessdock(QWidget):
 		bigTip=False
 		if self.libdock.readKValue("kwinrc","accessibledock","tooltipbig")=="true":
 			bigTip=True
+		if len(launchers)<=0:
+			wrkF="/usr/share/accesswizard/dock/accessdock-config.py"
+			launchers.append(("accessdock-config.py",{"File":wrkF,"Path":wrkF,"fpath":wrkF,"Name":"Configure","Icon":"accessdock","Exec":wrkF}))
 		for launcher in launchers:
 			btn=QPushButtonDock(launcher,bigTip)
 			btn.configureMain.connect(self._launchDockConfig)

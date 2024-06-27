@@ -9,7 +9,7 @@ Homepage: https://github.com/lliurex/accesshelper
 
 Package: accesswizard
 Architecture: all
-Depends: python3-qtextrawidgets (>= 0.3.0),python3-pyside2.qtmultimedia,python3-pyside2.qtgui,xpanimated-yb-cursor-theme,python3-app2menu (>= 1.4),onboard,python3-opencv,python3-tesserocr,festival,lame,festvox-palpc16k,festvox-sflpc16k,festvox-ca-ona-hts, tesseract-ocr, tesseract-ocr-spa,python3-spellchecker, python3-pyside2.qtmultimediawidgets,speech-dispatcher-festival,python3-llxaccessibility,zero-lliurex-antimicrox,kwin-script-mouseframe,kwin-script-mousestrip,kwin-effect-colorcorrection
+Depends: python3-qtextrawidgets (>= 0.3.0),python3-pyside2.qtmultimedia,python3-pyside2.qtgui,xpanimated-yb-cursor-theme,python3-app2menu (>= 1.4),onboard,python3-opencv,python3-tesserocr,festival,lame,festvox-palpc16k,festvox-sflpc16k,festvox-ca-ona-hts, tesseract-ocr, tesseract-ocr-spa,python3-spellchecker, python3-pyside2.qtmultimediawidgets,speech-dispatcher-festival,python3-llxaccessibility,zero-lliurex-antimicrox,kwin-script-mouseframe,kwin-script-mousestrip,kwin-effect-colorcorrection,kwin-script-rgbfilter
 Description: Set accessibility settings
  AccessHelper it's a common place for the
  available accessibility options 
@@ -22,12 +22,6 @@ Replaces: orca-sddm
 Depends: sddm,orca
 Description: Systemd and sddm scripts
  for enabling ORCA screen reader at SDDM
-
-Package: kwin-rgbfilter
-Architecture: all
-Depends: accesswizard, kwin-addons
-Description: RGB Filter for kwin
- This plugin for KWin applies a rgb filter to the screen.
 
 Package: kwin-ocrwindow
 Architecture: all

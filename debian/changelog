@@ -1,6 +1,7 @@
-accesswizard (0.2.0) jammy; urgency=medium
+accesswizard (0.1.3) jammy; urgency=medium
 
   * RC3
+  * Split kwin-script-rgbfilter
 
  -- Juanma1980 <juanma1980@gmail.com>  Thu, 27 Jun 2024 08:33:18 +0200
 

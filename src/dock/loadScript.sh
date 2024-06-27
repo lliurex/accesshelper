@@ -29,8 +29,9 @@ do
 	fi
 	[[ $UNLOAD == "true" ]] && LOADED=1
 done
-ENABLED=true
-[[ ${LOADED} -ne 0 ]] && ENABLED=false
+ENABLED="true"
+[[ ${LOADED} -ne 0 ]] && ENABLED="false"
 OUT=$(kwriteconfig5 --file kwinrc --group Plugins --key ${ID}Enabled $ENABLED)
-qdbus org.kde.KWin /KWin org.kde.KWin.reconfigure
+qdbus org.kde.KWin /Scripting org.kde.kwin.Scripting.start
+#qdbus org.kde.KWin /KWin org.kde.KWin.reconfigure
 exit 0

@@ -212,7 +212,7 @@ class QPushButtonDock(QPushButton):
 		icn=QIcon()
 		iconName=self.data.get("Icon","")
 		if len(iconName)==0:
-			iconName="accesswiza"
+			iconName="accesswizard"
 		if os.path.exists(iconName):
 			pxm=QPixmap(iconName)
 			icn=QIcon(pxm)

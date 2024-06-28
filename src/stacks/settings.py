@@ -174,4 +174,6 @@ class settings(QStackedWindowItem):
 		if len(sw_grub+sw_sddm+sw_orca)>0:
 			cmd=["pkexec","/usr/share/accesswizard/tools/enableOptions.sh",sw_grub,sw_sddm,sw_orca]
 			subprocess.run(cmd)
+		self.btnAccept.setEnabled(False)
+		self.btnCancel.setEnabled(False)
 	#def writeConfig

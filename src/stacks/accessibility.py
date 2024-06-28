@@ -44,6 +44,7 @@ class accessibility(QStackedWindowItem):
 		self.changed=[]
 		self.level='user'
 		self.plasmaConfig={}
+		self.hideControlButtons()
 		self.locale=locale.getdefaultlocale()[0][0:2]
 		self.rebost=store.client()
 		self.accesshelper=llxaccessibility.client()

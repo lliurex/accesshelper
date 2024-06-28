@@ -15,7 +15,8 @@ function load
 
 function unload
 {
-	if [[ $ID == "magnifier" ]]
+	echo $ID
+	if [[ $ID == "magnifier" ]] || [[ $ID == "zoom" ]]
 	then
 		qdbus org.kde.kglobalaccel /component/kwin org.kde.kglobalaccel.Component.invokeShortcut "view_zoom_out"
 	fi

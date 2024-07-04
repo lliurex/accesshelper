@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-04 18:27+0200\n"
-"PO-Revision-Date: 2024-06-04 18:31+0200\n"
+"POT-Creation-Date: 2024-07-04 20:36+0200\n"
+"PO-Revision-Date: 2024-07-04 20:39+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es\n"
@@ -18,55 +18,63 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.0.1\n"
 
-#: ../src/stacks/accessibility.py:14
+#: ../src/stacks/accessibility.py:16
 msgid "System Accessibility"
 msgstr "Accesibilidad del sistema"
 
-#: ../src/stacks/accessibility.py:15
+#: ../src/stacks/accessibility.py:17
 msgid "Plasma Accessibility module"
 msgstr "Módulo de accesibilidad de Plasma"
 
-#: ../src/stacks/accessibility.py:16
+#: ../src/stacks/accessibility.py:18
 msgid "Joystick as mouse"
 msgstr "Usar joystick como ratón"
 
-#: ../src/stacks/accessibility.py:17
+#: ../src/stacks/accessibility.py:19
 msgid "Configure a gamepad/joystick as mouse"
 msgstr "Configura un gamepd o joystick para su uso como ratón"
 
-#: ../src/stacks/accessibility.py:18 ../src/stacks/accessibility.py:23
+#: ../src/stacks/accessibility.py:20 ../src/stacks/accessibility.py:27
 msgid "Accessibility"
 msgstr "Accesibilidad"
 
-#: ../src/stacks/accessibility.py:19
+#: ../src/stacks/accessibility.py:21
 msgid "Accessibility Dock"
 msgstr "Barra de accesibilidad"
 
-#: ../src/stacks/accessibility.py:20
+#: ../src/stacks/accessibility.py:22
 msgid "Dock with customizable fast actions"
 msgstr "Barra configurable de acciones rápidas"
 
-#: ../src/stacks/accessibility.py:21
+#: ../src/stacks/accessibility.py:23
+msgid "Webcam as mouse"
+msgstr "Usar webcam como ratón"
+
+#: ../src/stacks/accessibility.py:24
+msgid "Webcam based mouse control"
+msgstr "Controla el ratón usando captura de movimientos desde la webcam"
+
+#: ../src/stacks/accessibility.py:25
 msgid "LliureX TTS"
 msgstr "Lliurex TTS"
 
-#: ../src/stacks/accessibility.py:22
+#: ../src/stacks/accessibility.py:26
 msgid "Configure Lliurex TTS addon"
 msgstr "Ajustes de la extensión TTS de LliureX"
 
-#: ../src/stacks/accessibility.py:24
+#: ../src/stacks/accessibility.py:28
 msgid "Orca"
 msgstr "ORCA"
 
-#: ../src/stacks/accessibility.py:25
+#: ../src/stacks/accessibility.py:29
 msgid "Open Orca configuration tool"
 msgstr "Abrir herramienta de configuración de ORCA"
 
-#: ../src/stacks/accessibility.py:26
+#: ../src/stacks/accessibility.py:30
 msgid "Accesibility options"
 msgstr "Opciones de accesibilidad"
 
-#: ../src/stacks/accessibility.py:27
+#: ../src/stacks/accessibility.py:31
 msgid "Settings which do the system more accessible"
 msgstr "Ajustes para hacer el sistema más accesible"
 
@@ -186,7 +194,7 @@ msgstr "Opciones de apariencia"
 msgid "Configure system fonts"
 msgstr "Configura las fuentes del sistema"
 
-#: ../src/stacks/theme.py:19 ../src/stacks/theme.py:99
+#: ../src/stacks/theme.py:19 ../src/stacks/theme.py:100
 msgid "Fonts"
 msgstr "Fuentes"
 
@@ -194,7 +202,7 @@ msgstr "Fuentes"
 msgid "Set global theme"
 msgstr "Establece un tema global"
 
-#: ../src/stacks/theme.py:21 ../src/stacks/theme.py:95
+#: ../src/stacks/theme.py:21 ../src/stacks/theme.py:96
 msgid "Theme"
 msgstr "Tema"
 
@@ -202,7 +210,7 @@ msgstr "Tema"
 msgid "Set cursor theme and size"
 msgstr "Ajustar tamaño y tema del cursor"
 
-#: ../src/stacks/theme.py:24 ../src/stacks/theme.py:101
+#: ../src/stacks/theme.py:24 ../src/stacks/theme.py:102
 msgid "Mouse"
 msgstr "Ratón"
 
@@ -210,7 +218,7 @@ msgstr "Ratón"
 msgid "Appearance customizing"
 msgstr "Personalizar apariencia"
 
-#: ../src/stacks/theme.py:97
+#: ../src/stacks/theme.py:98
 msgid "Color Scheme"
 msgstr "Esquema de color"
 
@@ -275,10 +283,8 @@ msgid "Spanish"
 msgstr "Español"
 
 #: ../src/tools/ttsmanager.py:33
-#, fuzzy
-#| msgid "Scale factor"
 msgid "Stretch factor"
-msgstr "Factor de ampliación"
+msgstr "Compresión"
 
 #: ../src/tools/ttsmanager.py:34
 msgid "Use synthesizer"
@@ -303,6 +309,14 @@ msgstr "Usa VLC"
 #: ../src/tools/ttsmanager.py:39
 msgid "Voice"
 msgstr "Voz"
+
+#: ../src/tools/watchorca.py:15
+msgid "Orca warning"
+msgstr "Alerta de orca"
+
+#: ../src/tools/watchorca.py:16
+msgid "Due a system error Plasma has been restarted"
+msgstr "Debido a un error del sistema plasma se ha reiniciado"
 
 #: ../src/dock/accessdock-config.py:16
 msgid "Add"
@@ -342,7 +356,9 @@ msgstr "Cargar al inicio de sesión"
 
 #: ../src/dock/accessdock-config.py:25
 msgid "Displays launcher name at fullscreen on mouse over"
-msgstr "Muestra el nombre del lanzador a pantalla completa al posicionar el puntero encima"
+msgstr ""
+"Muestra el nombre del lanzador a pantalla completa al posicionar el puntero "
+"encima"
 
 #: ../src/dock/accessdock-config.py:26
 msgid "Up"
@@ -376,7 +392,7 @@ msgstr "Efectos de escritorio"
 msgid "Assign"
 msgstr "Asignar"
 
-#: ../src/dock/extras/launchers.py:16 ../src/dock/extras/launchers.py:238
+#: ../src/dock/extras/launchers.py:16 ../src/dock/extras/launchers.py:242
 msgid "Description"
 msgstr "Descripción"
 
@@ -440,23 +456,23 @@ msgstr "Dirección del sitio"
 msgid "https://example.com"
 msgstr "https://ejemplo.com"
 
-#: ../src/dock/extras/launchers.py:236
+#: ../src/dock/extras/launchers.py:240
 msgid "Description (optional): "
 msgstr "Descripción (opcional): "
 
-#: ../src/dock/extras/launchers.py:239
+#: ../src/dock/extras/launchers.py:243
 msgid "Insert a description for the app"
 msgstr "Descripción de la aplicación"
 
-#: ../src/dock/extras/launchers.py:316
+#: ../src/dock/extras/launchers.py:320
 msgid "images(*.png *.xpm *jpg)"
 msgstr "imágenes (*.png *.xpm *jpg)"
 
-#: ../src/dock/extras/launchers.py:318
+#: ../src/dock/extras/launchers.py:322
 msgid "All files(*.*)"
 msgstr "Todos (*.*)"
 
-#: ../src/dock/extras/launchers.py:352
+#: ../src/dock/extras/launchers.py:356
 msgid "From here you can add a custom launcher"
 msgstr "Permite asociar pulsaciones de tecla a diferentes acciones del sistema"
 
@@ -654,17 +670,29 @@ msgstr "Permite asociar pulsaciones de tecla a diferentes acciones del sistema"
 #~ msgid "Autostart profile is enabled"
 #~ msgstr "Se ha activado la carga inicial de perfil"
 
-#~ msgid "A profile has been loaded. All settings has been applied if possible. Expect inconsistencies."
-#~ msgstr "Se ha cargado un perfil. Se han intentado aplicar todos los cambios. Pueden existir inconsistencias."
+#~ msgid ""
+#~ "A profile has been loaded. All settings has been applied if possible. "
+#~ "Expect inconsistencies."
+#~ msgstr ""
+#~ "Se ha cargado un perfil. Se han intentado aplicar todos los cambios. "
+#~ "Pueden existir inconsistencias."
 
-#~ msgid "Accesshelper will try to apply as many changes as possible for current session (expect inconsistencies)"
-#~ msgstr "Accesshelper tratará de aplicar tantos cambios como sean posible para esta sesión (pueden aparecer inconsistencias)"
+#~ msgid ""
+#~ "Accesshelper will try to apply as many changes as possible for current "
+#~ "session (expect inconsistencies)"
+#~ msgstr ""
+#~ "Accesshelper tratará de aplicar tantos cambios como sean posible para "
+#~ "esta sesión (pueden aparecer inconsistencias)"
 
 #~ msgid "All settings will be applied after a session restart"
 #~ msgstr "Los cambios se aplicarán después de reiniciar la sesión"
 
-#~ msgid "The changes will not be persistent.All settings will be restored to profile"
-#~ msgstr "Los cambios no serán permanentes. La configuración sera restaurada el perfil"
+#~ msgid ""
+#~ "The changes will not be persistent.All settings will be restored to "
+#~ "profile"
+#~ msgstr ""
+#~ "Los cambios no serán permanentes. La configuración sera restaurada el "
+#~ "perfil"
 
 #~ msgid "Close this window for ignoring that until a session restart"
 #~ msgstr "Cerrar esta ventana para ignorar esto hasta reiniciar la sesión"
@@ -718,7 +746,9 @@ msgstr "Permite asociar pulsaciones de tecla a diferentes acciones del sistema"
 #~ msgstr "Localizar ratón al pulsar"
 
 #~ msgid "Disable load profile on startup or changes will not apply on restart"
-#~ msgstr "Desactivar la carga inicial de perfil o los cambios se perderán al reiniciar"
+#~ msgstr ""
+#~ "Desactivar la carga inicial de perfil o los cambios se perderán al "
+#~ "reiniciar"
 
 #~ msgid "Invert"
 #~ msgstr "Invertir colores"
@@ -1016,5 +1046,14 @@ msgstr "Permite asociar pulsaciones de tecla a diferentes acciones del sistema"
 #~ msgid "Set resolution"
 #~ msgstr "Resolución"
 
-#~ msgid "Great A Tuin the turtle comes, swimming slowly through the interstellar gulf, hydrogen frost on his ponderous limbs, his huge and ancient shell pocked with meteor craters. Through sea-sized eyes that are crusted with rheum and asteroid dust He stares fixedly at the Destination."
-#~ msgstr "La Gran Tortuga A'Tuin se acerca, nadando lentamente por el golfo interestelar, con los pesados miembros llenos de hidrógeno congelado, la enorme y viejísima concha llena de cráteres de meteoros. Con unos ojos del tamaño de mares, encostrados de lágrimas reumáticas y polvo de asteroides, Él contempla fijamente el Destino."
+#~ msgid ""
+#~ "Great A Tuin the turtle comes, swimming slowly through the interstellar "
+#~ "gulf, hydrogen frost on his ponderous limbs, his huge and ancient shell "
+#~ "pocked with meteor craters. Through sea-sized eyes that are crusted with "
+#~ "rheum and asteroid dust He stares fixedly at the Destination."
+#~ msgstr ""
+#~ "La Gran Tortuga A'Tuin se acerca, nadando lentamente por el golfo "
+#~ "interestelar, con los pesados miembros llenos de hidrógeno congelado, la "
+#~ "enorme y viejísima concha llena de cráteres de meteoros. Con unos ojos "
+#~ "del tamaño de mares, encostrados de lágrimas reumáticas y polvo de "
+#~ "asteroides, Él contempla fijamente el Destino."

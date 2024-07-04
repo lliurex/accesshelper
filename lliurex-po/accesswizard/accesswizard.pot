@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-04 18:27+0200\n"
+"POT-Creation-Date: 2024-07-04 20:36+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,55 +17,63 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../src/stacks/accessibility.py:14
+#: ../src/stacks/accessibility.py:16
 msgid "System Accessibility"
 msgstr ""
 
-#: ../src/stacks/accessibility.py:15
+#: ../src/stacks/accessibility.py:17
 msgid "Plasma Accessibility module"
 msgstr ""
 
-#: ../src/stacks/accessibility.py:16
+#: ../src/stacks/accessibility.py:18
 msgid "Joystick as mouse"
 msgstr ""
 
-#: ../src/stacks/accessibility.py:17
+#: ../src/stacks/accessibility.py:19
 msgid "Configure a gamepad/joystick as mouse"
 msgstr ""
 
-#: ../src/stacks/accessibility.py:18 ../src/stacks/accessibility.py:23
+#: ../src/stacks/accessibility.py:20 ../src/stacks/accessibility.py:27
 msgid "Accessibility"
 msgstr ""
 
-#: ../src/stacks/accessibility.py:19
+#: ../src/stacks/accessibility.py:21
 msgid "Accessibility Dock"
 msgstr ""
 
-#: ../src/stacks/accessibility.py:20
+#: ../src/stacks/accessibility.py:22
 msgid "Dock with customizable fast actions"
 msgstr ""
 
-#: ../src/stacks/accessibility.py:21
-msgid "LliureX TTS"
-msgstr ""
-
-#: ../src/stacks/accessibility.py:22
-msgid "Configure Lliurex TTS addon"
+#: ../src/stacks/accessibility.py:23
+msgid "Webcam as mouse"
 msgstr ""
 
 #: ../src/stacks/accessibility.py:24
-msgid "Orca"
+msgid "Webcam based mouse control"
 msgstr ""
 
 #: ../src/stacks/accessibility.py:25
-msgid "Open Orca configuration tool"
+msgid "LliureX TTS"
 msgstr ""
 
 #: ../src/stacks/accessibility.py:26
+msgid "Configure Lliurex TTS addon"
+msgstr ""
+
+#: ../src/stacks/accessibility.py:28
+msgid "Orca"
+msgstr ""
+
+#: ../src/stacks/accessibility.py:29
+msgid "Open Orca configuration tool"
+msgstr ""
+
+#: ../src/stacks/accessibility.py:30
 msgid "Accesibility options"
 msgstr ""
 
-#: ../src/stacks/accessibility.py:27
+#: ../src/stacks/accessibility.py:31
 msgid "Settings which do the system more accessible"
 msgstr ""
 
@@ -185,7 +193,7 @@ msgstr ""
 msgid "Configure system fonts"
 msgstr ""
 
-#: ../src/stacks/theme.py:19 ../src/stacks/theme.py:99
+#: ../src/stacks/theme.py:19 ../src/stacks/theme.py:100
 msgid "Fonts"
 msgstr ""
 
@@ -193,7 +201,7 @@ msgstr ""
 msgid "Set global theme"
 msgstr ""
 
-#: ../src/stacks/theme.py:21 ../src/stacks/theme.py:95
+#: ../src/stacks/theme.py:21 ../src/stacks/theme.py:96
 msgid "Theme"
 msgstr ""
 
@@ -201,7 +209,7 @@ msgstr ""
 msgid "Set cursor theme and size"
 msgstr ""
 
-#: ../src/stacks/theme.py:24 ../src/stacks/theme.py:101
+#: ../src/stacks/theme.py:24 ../src/stacks/theme.py:102
 msgid "Mouse"
 msgstr ""
 
@@ -209,7 +217,7 @@ msgstr ""
 msgid "Appearance customizing"
 msgstr ""
 
-#: ../src/stacks/theme.py:97
+#: ../src/stacks/theme.py:98
 msgid "Color Scheme"
 msgstr ""
 
@@ -301,6 +309,14 @@ msgstr ""
 msgid "Voice"
 msgstr ""
 
+#: ../src/tools/watchorca.py:15
+msgid "Orca warning"
+msgstr ""
+
+#: ../src/tools/watchorca.py:16
+msgid "Due a system error Plasma has been restarted"
+msgstr ""
+
 #: ../src/dock/accessdock-config.py:16
 msgid "Add"
 msgstr ""
@@ -373,7 +389,7 @@ msgstr ""
 msgid "Assign"
 msgstr ""
 
-#: ../src/dock/extras/launchers.py:16 ../src/dock/extras/launchers.py:238
+#: ../src/dock/extras/launchers.py:16 ../src/dock/extras/launchers.py:242
 msgid "Description"
 msgstr ""
 
@@ -437,22 +453,22 @@ msgstr ""
 msgid "https://example.com"
 msgstr ""
 
-#: ../src/dock/extras/launchers.py:236
+#: ../src/dock/extras/launchers.py:240
 msgid "Description (optional): "
 msgstr ""
 
-#: ../src/dock/extras/launchers.py:239
+#: ../src/dock/extras/launchers.py:243
 msgid "Insert a description for the app"
 msgstr ""
 
-#: ../src/dock/extras/launchers.py:316
+#: ../src/dock/extras/launchers.py:320
 msgid "images(*.png *.xpm *jpg)"
 msgstr ""
 
-#: ../src/dock/extras/launchers.py:318
+#: ../src/dock/extras/launchers.py:322
 msgid "All files(*.*)"
 msgstr ""
 
-#: ../src/dock/extras/launchers.py:352
+#: ../src/dock/extras/launchers.py:356
 msgid "From here you can add a custom launcher"
 msgstr ""

@@ -32,5 +32,10 @@ done
 [[ ${LOADED} -ne 0 ]] && ENABLED="false" || ENABLED="true"
 OUT=$(kwriteconfig5 --file kwinrc --group Plugins --key ${ID}Enabled $ENABLED)
 qdbus org.kde.KWin /Scripting org.kde.kwin.Scripting.start
+echo $ID
+	if [[ $ID == "ocrwindow" ]]
+	then
+		qdbus org.kde.kglobalaccel /component/kwin org.kde.kglobalaccel.Component.invokeShortcut "Toggle Window OCR"
+	fi
 #qdbus org.kde.KWin /KWin org.kde.KWin.reconfigure
 exit 0

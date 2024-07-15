@@ -130,9 +130,20 @@ class QToolTipDock(QLabel):
 		else:
 			if self.bigTip==True:
 				self.setFont(self.fontFull)
-			coords=self._getCoordsForFull(coords)
+				coords=self._getCoordsForFull(coords)
+			else:
+				cursor=self.cursor()
+				coords=cursor.pos()
 			self.setMinimumWidth(len(self.text())*self.font().pointSize())
-			self.move(coords)
+			(x,y)=(coords.x(),coords.y())
+			scr=QApplication.screens()[0]
+			if coords.x()+(len(self.text())*self.font().pointSize())>scr.size().width():
+				w=scr.size().width()
+				x=w-(len(self.text())*self.font().pointSize())
+			if (coords.y()+self.height())>scr.size().height():
+				h=scr.size().height()
+				y=h-self.height()
+			self.move(x,y)
 			self.setVisible(True)
 	#def toggle
 #class QToolTipDock

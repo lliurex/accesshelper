@@ -10,6 +10,7 @@ import cv2
 import numpy as np
 import tesserocr
 from PIL import Image
+from orca import orca
 import subprocess
 from datetime import datetime
 import string
@@ -69,7 +70,6 @@ class clipboardManager():
 class speaker():
 	def __init__(self,*args,**kwargs):
 		self.txtFile=kwargs.get("txtFile")#.encode('iso8859-15',"replace")
-		print(self.txtFile)
 		self.stretch=float(kwargs.get("stretch",1))
 		self.voice=kwargs.get("voice","kal")
 		self.currentDate=kwargs.get("date","240101")
@@ -88,6 +88,10 @@ class speaker():
 		if os.path.exists(self.txtFile):
 			with open(self.txtFile,"r") as f:
 				txt=f.read()
+		self._runFestival(txt)
+	#def run
+
+	def _runFestival(self,txt):
 		p=subprocess.Popen(["festival","--pipe"],stdout=subprocess.PIPE,stdin=subprocess.PIPE,stderr=subprocess.PIPE)
 		if self.voice.startswith("voice_")==False:
 			self.voice="voice_{}".format(self.voice)

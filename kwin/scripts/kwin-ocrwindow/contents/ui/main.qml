@@ -52,7 +52,7 @@ Item {
 		var rate=KWin.readConfig("Rate",3);
 		var voice=KWin.readConfig("Voice","kal");
 		var cmd2=cmd+" "+stretch+" "+pitch+" "+rate+" "+voice;
-        KWin.registerShortcut("Toggle Window OCR", "Toggle Window OCR", "Ctrl+Alt+S", function() {  speaker.exec(cmd2); }); 
+        KWin.registerShortcut("Toggle Window OCR", "Toggle Window OCR", "Ctrl+Meta+O", function() {  speaker.exec(cmd2); }); 
 		speaker.exec(cmd2);
 		console.log(workspace.activeClient.internalId)
 		//takeScreenshot.setArguments([0,0]);

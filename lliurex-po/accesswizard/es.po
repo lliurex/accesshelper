@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-04 20:36+0200\n"
-"PO-Revision-Date: 2024-07-04 20:39+0200\n"
+"POT-Creation-Date: 2024-07-16 12:13+0200\n"
+"PO-Revision-Date: 2024-07-16 12:14+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es\n"
@@ -475,6 +475,14 @@ msgstr "Todos (*.*)"
 #: ../src/dock/extras/launchers.py:356
 msgid "From here you can add a custom launcher"
 msgstr "Permite asociar pulsaciones de tecla a diferentes acciones del sistema"
+
+#: ../kwin/scripts/kwin-ocrwindow/contents/ui/tts.py:115
+msgid "TTS finished. Listen?"
+msgstr "Lectura de imagen preparada. ¿Escuchar?"
+
+#: ../kwin/scripts/kwin-ocrwindow/contents/ui/tts.py:116
+msgid "Image was processesed"
+msgstr "La imagen se ha procesado"
 
 #~ msgid "Beep when sddm launches"
 #~ msgstr "Emitir alerta sonoar al iniciar SDDM"

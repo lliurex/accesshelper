@@ -2,7 +2,7 @@
 ### This library implements atspi communications
 import os,shutil,sys
 from spellchecker import SpellChecker
-from PySide2.QtWidgets import QApplication
+from PySide2.QtWidgets import QApplication,QMessageBox
 import dbus,dbus.exceptions
 from PySide2.QtGui import QClipboard
 from collections import OrderedDict
@@ -14,6 +14,9 @@ from orca import orca
 import subprocess
 from datetime import datetime
 import string
+import gettext
+gettext.textdomain('accesswizard')
+_=gettext.gettext
 
 class clipboardManager():
 	def __init__(self,*args,**kwargs):
@@ -108,12 +111,21 @@ class speaker():
 		mp3File=os.path.join(mp3Dir,"{}.mp3".format(self.currentDate))
 		p=subprocess.run(["lame","/tmp/.baseUtt.wav",mp3File],stdout=subprocess.PIPE,stdin=subprocess.PIPE,stderr=subprocess.PIPE)
 		#os.unlink("/tmp/.baseUtt.wav")
-		if self.player==True:
-			#self._debug("Playing {} with vlc".format(mp3))
-			prc=subprocess.run(["vlc",mp3File])
-		else:
-			#self._debug("Playing {} with TTS Strech {}".format(mp3,self.stretch))
-			prc=subprocess.run(["play",mp3File])
+		msgBox=QMessageBox()
+		msgTxt=_("TTS finished. Listen?")
+		msgInformativeTxt=_("Image was processesed")
+		msgBox.setText(msgTxt)
+		msgBox.setInformativeText(msgInformativeTxt)
+		msgBox.setStandardButtons(QMessageBox.Yes | QMessageBox.Cancel)
+		msgBox.setDefaultButton(QMessageBox.Yes)
+		ret=msgBox.exec()
+		if ret==QMessageBox.Yes:
+			if self.player==True:
+				#self._debug("Playing {} with vlc".format(mp3))
+				prc=subprocess.run(["vlc",mp3File])
+			else:
+				#self._debug("Playing {} with TTS Strech {}".format(mp3,self.stretch))
+				prc=subprocess.run(["play",mp3File])
 		return 
 	#def run
 #class speaker

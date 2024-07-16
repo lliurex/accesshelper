@@ -25,6 +25,7 @@ class dbusMethods(dbus.service.Object):
 	def __init__(self,bus_name,*args,**kwargs):
 		super().__init__(bus_name,"/net/lliurex/accessibledock")
 		self.widget=args[0]
+	#def __init__(self,bus_name,*args,**kwargs):
 
 	@dbus.service.signal("net.lliurex.accessibledock")
 	def toggleVisible(self):
@@ -46,6 +47,11 @@ class dbusMethods(dbus.service.Object):
 			dbusList.append(json.dumps(launcher))
 		return(dbusList)
 		"""Calling this method fires up the signal."""
+	#def toggle
+
+	@dbus.service.method("net.lliurex.accessibledock", in_signature='', out_signature='b')
+	def isVisible(self):
+		return(self.widget.isVisible())
 	#def toggle
 #class dbusMethods
 
@@ -214,6 +220,7 @@ class QPushButtonDock(QPushButton):
 		#layout.addWidget(self.lbl,0,0)
 		self.threadLaunchers=[]
 		self.popupShow=False
+		self.dock=parent
 		self._renderBtn()
 		self.clicked.connect(self._beginLaunch)
 	#def __init__(self,text="",parent=None):
@@ -239,6 +246,7 @@ class QPushButtonDock(QPushButton):
 		cmd=self.data.get("Exec","")
 		if len(cmd)>0:
 			self.setEnabled(False)
+			#self.dock.setVisible(False)
 			l=threadLauncher(cmd)
 			l.start()
 			l.finished.connect(self._endLaunch)
@@ -246,6 +254,7 @@ class QPushButtonDock(QPushButton):
 	#def _beginLaunch
 
 	def _endLaunch(self,*args):
+		#self.dock.setVisible(True)
 		if self.isEnabled()==False:
 			self.setEnabled(True)
 		else:
@@ -498,7 +507,7 @@ class accessdock(QWidget):
 			wrkF="/usr/share/accesswizard/dock/accessdock-config.py"
 			launchers.append(("accessdock-config.py",{"File":wrkF,"Path":wrkF,"fpath":wrkF,"Name":"Configure","Icon":"accessdock","Exec":wrkF}))
 		for launcher in launchers:
-			btn=QPushButtonDock(launcher,bigTip)
+			btn=QPushButtonDock(launcher,bigTip,parent=self)
 			btn.configureMain.connect(self._launchDockConfig)
 			btn.configure.connect(self._toggle)
 			btn.configureLauncher.connect(self._toggle)

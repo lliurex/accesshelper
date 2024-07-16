@@ -13,10 +13,9 @@ Item {
 
 	id:main
 	property string wrkdir: Qt.resolvedUrl("./")
-
 	Plasmoid.switchWidth: PlasmaCore.Units.gridUnit * 5
 	Plasmoid.switchHeight: PlasmaCore.Units.gridUnit * 5
-
+	Plasmoid.hideOnWindowDeactivate: true
 	Plasmoid.icon: "accesswizard"
 	Plasmoid.toolTipMainText: i18n("Accessibility Helper")
 	Plasmoid.toolTipSubText: i18n("Quick launcher for accessibility")
@@ -128,7 +127,7 @@ Item {
 			width: parent? parent.width:PlasmaCore.Units.gridUnit*10
 		   	text: model.name 
 			icon.name:model.icon
-			onClicked:{launchers.exec(model.exec)}
+			onClicked:{Plasmoid.expanded=false;launchers.exec(model.exec)}
 		}
 	}
 	Component.onCompleted: {

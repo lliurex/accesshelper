@@ -20,6 +20,8 @@ i18n={
 	"CONFIG":_("Accessibility"),
 	"DOCK":_("Accessibility Dock"),
 	"DOCKDSC":_("Dock with customizable fast actions"),
+	"EVIA":_("Webcam as mouse"),
+	"EVIADSC":_("Webcam based mouse control"),
 	"LTTS":_("LliureX TTS"),
 	"LTTSDSC":_("Configure Lliurex TTS addon"),
 	"MENU":_("Accessibility"),
@@ -44,6 +46,7 @@ class accessibility(QStackedWindowItem):
 		self.changed=[]
 		self.level='user'
 		self.plasmaConfig={}
+		self.hideControlButtons()
 		self.locale=locale.getdefaultlocale()[0][0:2]
 		self.rebost=store.client()
 		self.accesshelper=llxaccessibility.client()
@@ -106,9 +109,18 @@ class accessibility(QStackedWindowItem):
 		btnJoys.setMinimumHeight(btnJoys.height())
 		self.tblGrid.setCellWidget(1,1,btnJoys)
 		btnJoys.clicked.connect(self._launch)
+		btnEvia=QPushInfoButton()
+		btnEvia.setText(i18n.get("EVIA"))
+		btnEvia.setDescription(i18n.get("EVIADSC"))
+		btnEvia.loadImg("eviacam")
+		btnEvia.setMinimumWidth(btnEvia.width())
+		btnEvia.setMinimumHeight(btnEvia.height())
+		self.tblGrid.setCellWidget(1,2,btnEvia)
+		btnEvia.clicked.connect(self._launch)
 	#	self.tblGrid.horizontalHeader().setSectionResizeMode(2,QHeaderView.Stretch)
 
 	def _launch(self,*args):
+		args[0].setEnabled(False)
 		if args[0].text()==i18n.get("ACCE"):
 			mod="kcm_access"
 			self.accesshelper.launchKcmModule(mod,mp=True)
@@ -120,13 +132,15 @@ class accessibility(QStackedWindowItem):
 			elif args[0].text()==i18n.get("DOCK"):
 				cmd=os.path.join(os.path.dirname(__file__),"..","dock","accessdock-config.py")
 			elif args[0].text()==i18n.get("ANTI"):
-				cmd=self._getAntiMicroPath()
+				cmd=self._getAppPath("antimicrox")
+			elif args[0].text()==i18n.get("EVIA"):
+				cmd=self._getAppPath("eviacam")
 			self.accesshelper.launchCmd(cmd,mp=True)
 	#def _launch
 
-	def _getAntiMicroPath(self):
-		cmd=["/usr/bin/appsedu","appstream://antimicrox"]
-		appraw=json.loads(self.rebost.matchApp("antimicrox"))
+	def _getAppPath(self,app):
+		cmd=["/usr/bin/appsedu","appstream://{}".format(app)]
+		appraw=json.loads(self.rebost.matchApp(app))
 		bundle=""
 		if len(appraw)>0:
 			app=json.loads(appraw[0])

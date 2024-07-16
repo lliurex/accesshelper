@@ -10,6 +10,7 @@ import cv2
 import numpy as np
 import tesserocr
 from PIL import Image
+from orca import orca
 import subprocess
 from datetime import datetime
 import string
@@ -69,7 +70,6 @@ class clipboardManager():
 class speaker():
 	def __init__(self,*args,**kwargs):
 		self.txtFile=kwargs.get("txtFile")#.encode('iso8859-15',"replace")
-		print(self.txtFile)
 		self.stretch=float(kwargs.get("stretch",1))
 		self.voice=kwargs.get("voice","kal")
 		self.currentDate=kwargs.get("date","240101")
@@ -88,6 +88,11 @@ class speaker():
 		if os.path.exists(self.txtFile):
 			with open(self.txtFile,"r") as f:
 				txt=f.read()
+		self._runFestival(txt)
+	#def run
+
+	def _runFestival(self,txt):
+		confDir=os.path.join(os.environ.get('HOME','/tmp'),".local/share/accesswizard/records")
 		p=subprocess.Popen(["festival","--pipe"],stdout=subprocess.PIPE,stdin=subprocess.PIPE,stderr=subprocess.PIPE)
 		if self.voice.startswith("voice_")==False:
 			self.voice="voice_{}".format(self.voice)
@@ -161,6 +166,31 @@ class speechhelper():
 			self.player="tts"
 	#def setVoice
 
+	def hideDock(self):
+		try:
+			bus=dbus.SessionBus()
+			objbus=bus.get_object("net.lliurex.accessibledock","/net/lliurex/accessibledock")
+			objint=dbus.Interface(bus,"net.lliurex.accessibledock")
+			if objbus.isVisible():
+				objbus.toggle()
+		except Exception as e:
+			print(e)
+			pass
+	#def hideDock
+
+	def showDock(self):
+		try:
+			bus=dbus.SessionBus()
+			objbus=bus.get_object("net.lliurex.accessibledock","/net/lliurex/accessibledock")
+			objint=dbus.Interface(bus,"net.lliurex.accessibledock")
+			if objbus.isVisible()==False:
+				objbus.toggle()
+		except Exception as e:
+			print(e)
+			pass
+	#def showDock
+
+
 	def readScreen(self,*args,onlyClipboard=False,onlyScreen=False):
 		txt=""
 		if onlyScreen==False:
@@ -203,6 +233,7 @@ class speechhelper():
 
 	def _getClipboardImg(self):
 		self._debug("Taking Screenshot to clipboard")
+		self.hideDock()
 		subprocess.run(["spectacle","-a","-b","-c"])
 		img=self.clipboard.image()
 		buffer = QBuffer()
@@ -226,6 +257,7 @@ class speechhelper():
 				self._debug("Reading clipboard PXM")
 				img.save(outImg, "PNG")
 			elif onlyClipboard==False:
+				self.hideDock()
 				self._debug("Taking Screenshot")
 				subprocess.run(["spectacle","-a","-e","-b","-c","-o",outImg])
 		return(outImg)
@@ -256,6 +288,7 @@ class speechhelper():
 		self._debug("Date type {}".format(type(currentDate)))
 		spk=speaker(txtFile=txtFile,stretch=self.stretch,voice=self.voice,date=currentDate,player=self.player)
 		spk.run()
+		self.showDock()
 	#	try:
 	#		prc=subprocess.Popen(["python3",self.libfestival,txt,str(self.stretch),self.voice,currentDate,self.player])
 	#	except:

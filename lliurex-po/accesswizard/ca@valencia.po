@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-04 18:27+0200\n"
-"PO-Revision-Date: 2024-06-04 18:34+0200\n"
+"POT-Creation-Date: 2024-07-04 20:36+0200\n"
+"PO-Revision-Date: 2024-07-04 20:41+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ca\n"
@@ -18,55 +18,63 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.0.1\n"
 
-#: ../src/stacks/accessibility.py:14
+#: ../src/stacks/accessibility.py:16
 msgid "System Accessibility"
 msgstr "Accessibilitat del sistema"
 
-#: ../src/stacks/accessibility.py:15
+#: ../src/stacks/accessibility.py:17
 msgid "Plasma Accessibility module"
 msgstr "Mòdul d'accessibilitat del Plasma"
 
-#: ../src/stacks/accessibility.py:16
+#: ../src/stacks/accessibility.py:18
 msgid "Joystick as mouse"
 msgstr "Joystick com ratolí"
 
-#: ../src/stacks/accessibility.py:17
+#: ../src/stacks/accessibility.py:19
 msgid "Configure a gamepad/joystick as mouse"
 msgstr "Configura un gamepad/joystick com a ratolí"
 
-#: ../src/stacks/accessibility.py:18 ../src/stacks/accessibility.py:23
+#: ../src/stacks/accessibility.py:20 ../src/stacks/accessibility.py:27
 msgid "Accessibility"
 msgstr "Accessibilitat"
 
-#: ../src/stacks/accessibility.py:19
+#: ../src/stacks/accessibility.py:21
 msgid "Accessibility Dock"
 msgstr "Barra d'accesibilitat"
 
-#: ../src/stacks/accessibility.py:20
+#: ../src/stacks/accessibility.py:22
 msgid "Dock with customizable fast actions"
 msgstr "Barra personalitzable d'accions ràpides"
 
-#: ../src/stacks/accessibility.py:21
+#: ../src/stacks/accessibility.py:23
+msgid "Webcam as mouse"
+msgstr "Càmera web com ratolí"
+
+#: ../src/stacks/accessibility.py:24
+msgid "Webcam based mouse control"
+msgstr "Controla el ratolí mitjançat moviments capturats per una càmera web"
+
+#: ../src/stacks/accessibility.py:25
 msgid "LliureX TTS"
 msgstr "LliureX TTS"
 
-#: ../src/stacks/accessibility.py:22
+#: ../src/stacks/accessibility.py:26
 msgid "Configure Lliurex TTS addon"
 msgstr "Configurar extensió TTS del LliureX"
 
-#: ../src/stacks/accessibility.py:24
+#: ../src/stacks/accessibility.py:28
 msgid "Orca"
 msgstr "ORCA"
 
-#: ../src/stacks/accessibility.py:25
+#: ../src/stacks/accessibility.py:29
 msgid "Open Orca configuration tool"
 msgstr "Obrir la ferramenta de configuració de ORCA"
 
-#: ../src/stacks/accessibility.py:26
+#: ../src/stacks/accessibility.py:30
 msgid "Accesibility options"
 msgstr "Opcions d'accessibilitat"
 
-#: ../src/stacks/accessibility.py:27
+#: ../src/stacks/accessibility.py:31
 msgid "Settings which do the system more accessible"
 msgstr "Ajustos per a fer més accessible el sistema"
 
@@ -186,7 +194,7 @@ msgstr "Opcions d'apariencia"
 msgid "Configure system fonts"
 msgstr "Estableix les fonts del sistema"
 
-#: ../src/stacks/theme.py:19 ../src/stacks/theme.py:99
+#: ../src/stacks/theme.py:19 ../src/stacks/theme.py:100
 msgid "Fonts"
 msgstr "Fonts"
 
@@ -194,7 +202,7 @@ msgstr "Fonts"
 msgid "Set global theme"
 msgstr "Tema global de l'escriptori"
 
-#: ../src/stacks/theme.py:21 ../src/stacks/theme.py:95
+#: ../src/stacks/theme.py:21 ../src/stacks/theme.py:96
 msgid "Theme"
 msgstr "Tema"
 
@@ -202,7 +210,7 @@ msgstr "Tema"
 msgid "Set cursor theme and size"
 msgstr "Ajustar tamany i apariencia del cursor"
 
-#: ../src/stacks/theme.py:24 ../src/stacks/theme.py:101
+#: ../src/stacks/theme.py:24 ../src/stacks/theme.py:102
 msgid "Mouse"
 msgstr "Ratolí"
 
@@ -210,7 +218,7 @@ msgstr "Ratolí"
 msgid "Appearance customizing"
 msgstr "Personalitzar apariencia"
 
-#: ../src/stacks/theme.py:97
+#: ../src/stacks/theme.py:98
 msgid "Color Scheme"
 msgstr "Esquema de colors"
 
@@ -275,10 +283,8 @@ msgid "Spanish"
 msgstr "Espanyol"
 
 #: ../src/tools/ttsmanager.py:33
-#, fuzzy
-#| msgid "Scale factor"
 msgid "Stretch factor"
-msgstr "Factor d'ampliació"
+msgstr "Compresió"
 
 #: ../src/tools/ttsmanager.py:34
 msgid "Use synthesizer"
@@ -303,6 +309,14 @@ msgstr "Usa VLC"
 #: ../src/tools/ttsmanager.py:39
 msgid "Voice"
 msgstr "Veu"
+
+#: ../src/tools/watchorca.py:15
+msgid "Orca warning"
+msgstr "Avìs del Orca"
+
+#: ../src/tools/watchorca.py:16
+msgid "Due a system error Plasma has been restarted"
+msgstr "A causa d'un error del sistema Plasma s'ha reiniciat"
 
 #: ../src/dock/accessdock-config.py:16
 msgid "Add"
@@ -342,7 +356,9 @@ msgstr "Carregar amb l'inici de sessió"
 
 #: ../src/dock/accessdock-config.py:25
 msgid "Displays launcher name at fullscreen on mouse over"
-msgstr "Mostra el nom del llançador a pantalla completa al posicionar el punter damunt"
+msgstr ""
+"Mostra el nom del llançador a pantalla completa al posicionar el punter "
+"damunt"
 
 #: ../src/dock/accessdock-config.py:26
 msgid "Up"
@@ -376,7 +392,7 @@ msgstr "Efectes de l'escriptori"
 msgid "Assign"
 msgstr "Assigna"
 
-#: ../src/dock/extras/launchers.py:16 ../src/dock/extras/launchers.py:238
+#: ../src/dock/extras/launchers.py:16 ../src/dock/extras/launchers.py:242
 msgid "Description"
 msgstr "Descripció"
 
@@ -442,23 +458,23 @@ msgstr "Inserir url del lloc"
 msgid "https://example.com"
 msgstr "https://example.com"
 
-#: ../src/dock/extras/launchers.py:236
+#: ../src/dock/extras/launchers.py:240
 msgid "Description (optional): "
 msgstr "Descripció (opcional): "
 
-#: ../src/dock/extras/launchers.py:239
+#: ../src/dock/extras/launchers.py:243
 msgid "Insert a description for the app"
 msgstr "Inserir la descripció de l'aplicació"
 
-#: ../src/dock/extras/launchers.py:316
+#: ../src/dock/extras/launchers.py:320
 msgid "images(*.png *.xpm *jpg)"
 msgstr "imatges (*.png *.xpm *jpg)"
 
-#: ../src/dock/extras/launchers.py:318
+#: ../src/dock/extras/launchers.py:322
 msgid "All files(*.*)"
 msgstr "Tots (*.*)"
 
-#: ../src/dock/extras/launchers.py:352
+#: ../src/dock/extras/launchers.py:356
 msgid "From here you can add a custom launcher"
 msgstr "Des d'aci es poden assignar dreceres per a les diferents accions"
 
@@ -656,17 +672,28 @@ msgstr "Des d'aci es poden assignar dreceres per a les diferents accions"
 #~ msgid "Autostart profile is enabled"
 #~ msgstr "Es carregará el perfil a l'inici"
 
-#~ msgid "A profile has been loaded. All settings has been applied if possible. Expect inconsistencies."
-#~ msgstr "S'ha carregat un perfil. S'ha tractat d'aplicar tota la configuració encara que certes inconsistencies son esperables."
+#~ msgid ""
+#~ "A profile has been loaded. All settings has been applied if possible. "
+#~ "Expect inconsistencies."
+#~ msgstr ""
+#~ "S'ha carregat un perfil. S'ha tractat d'aplicar tota la configuració "
+#~ "encara que certes inconsistencies son esperables."
 
-#~ msgid "Accesshelper will try to apply as many changes as possible for current session (expect inconsistencies)"
-#~ msgstr "Accesshelper tractarà d'aplicar tots el canvis per a aquesta sessió (poden apareixer inconsistencies)"
+#~ msgid ""
+#~ "Accesshelper will try to apply as many changes as possible for current "
+#~ "session (expect inconsistencies)"
+#~ msgstr ""
+#~ "Accesshelper tractarà d'aplicar tots el canvis per a aquesta sessió "
+#~ "(poden apareixer inconsistencies)"
 
 #~ msgid "All settings will be applied after a session restart"
 #~ msgstr "Els canvis s'aplicarán després de tancar la sessió"
 
-#~ msgid "The changes will not be persistent.All settings will be restored to profile"
-#~ msgstr "Els canvis no son persistents. A l'inici de sessió es restaurarà el perfil"
+#~ msgid ""
+#~ "The changes will not be persistent.All settings will be restored to "
+#~ "profile"
+#~ msgstr ""
+#~ "Els canvis no son persistents. A l'inici de sessió es restaurarà el perfil"
 
 #~ msgid "Close this window for ignoring that until a session restart"
 #~ msgstr "Tancar la finestra per a ignorar els canvis i continuar"
@@ -720,7 +747,9 @@ msgstr "Des d'aci es poden assignar dreceres per a les diferents accions"
 #~ msgstr "Posiciona el punter al fer clic"
 
 #~ msgid "Disable load profile on startup or changes will not apply on restart"
-#~ msgstr "Desactivar la carrega inicial de perfil o els canvis no s'aplicaran al reiniciar"
+#~ msgstr ""
+#~ "Desactivar la carrega inicial de perfil o els canvis no s'aplicaran al "
+#~ "reiniciar"
 
 #~ msgid "Invert"
 #~ msgstr "Inverteix colors"
@@ -1018,5 +1047,14 @@ msgstr "Des d'aci es poden assignar dreceres per a les diferents accions"
 #~ msgid "Set resolution"
 #~ msgstr "Resolució"
 
-#~ msgid "Great A Tuin the turtle comes, swimming slowly through the interstellar gulf, hydrogen frost on his ponderous limbs, his huge and ancient shell pocked with meteor craters. Through sea-sized eyes that are crusted with rheum and asteroid dust He stares fixedly at the Destination."
-#~ msgstr "Arriba la tortuga Great A Tuin, nedant lentament a través del golf interestel·lar, amb gebre d'hidrogen a les seues pesades extremitats, la seua enorme i antiga closca plena de cràters de meteorits. A través d'ulls de la mida d'un mar coberts de pols d'asteroides i lleganyes, mira fixament el destí."
+#~ msgid ""
+#~ "Great A Tuin the turtle comes, swimming slowly through the interstellar "
+#~ "gulf, hydrogen frost on his ponderous limbs, his huge and ancient shell "
+#~ "pocked with meteor craters. Through sea-sized eyes that are crusted with "
+#~ "rheum and asteroid dust He stares fixedly at the Destination."
+#~ msgstr ""
+#~ "Arriba la tortuga Great A Tuin, nedant lentament a través del golf "
+#~ "interestel·lar, amb gebre d'hidrogen a les seues pesades extremitats, la "
+#~ "seua enorme i antiga closca plena de cràters de meteorits. A través "
+#~ "d'ulls de la mida d'un mar coberts de pols d'asteroides i lleganyes, mira "
+#~ "fixament el destí."

@@ -40,6 +40,7 @@ class theme(QStackedWindowItem):
 		self.changed=[]
 		self.level='user'
 		self.plasmaConfig={}
+		self.hideControlButtons()
 		self.accesshelper=llxaccessibility.client()
 		self.locale=locale.getdefaultlocale()[0][0:2]
 		return(self)

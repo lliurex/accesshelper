@@ -36,6 +36,7 @@ class effects(QStackedWindowItem):
 		self.changed=[]
 		self.level='user'
 		self.plasmaConfig={}
+		self.hideControlButtons()
 		self.locale=locale.getdefaultlocale()[0][0:2]
 		#self.accesshelper=accesshelper.client()
 		self.accesshelper=llxaccessibility.client()

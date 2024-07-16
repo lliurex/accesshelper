@@ -23,8 +23,9 @@ Item {
 			disconnectSource(sourceName) // cmd finished
 		}
 		function exec(cmd) {
-			connectSource(cmd)
-			console.log(cmd)
+			//takeScreenshot.setArguments([workspace.activeClient.internalId]);
+			connectSource(cmd);
+			console.log(cmd);
 		}
 		signal exited(int exitCode, int exitStatus, string stdout, string stderr)
 	}
@@ -51,9 +52,9 @@ Item {
 		var pitch=KWin.readConfig("Pitch",2);
 		var rate=KWin.readConfig("Rate",3);
 		var voice=KWin.readConfig("Voice","kal");
-		var cmd2=cmd+" "+stretch+" "+pitch+" "+rate+" "+voice;
-        KWin.registerShortcut("Toggle Window OCR", "Toggle Window OCR", "Ctrl+Meta+O", function() {  speaker.exec(cmd2); }); 
-		//speaker.exec(cmd2);
+		var cmdWithArgs=cmd+" "+stretch+" "+pitch+" "+rate+" "+voice;
+		KWin.registerShortcut("Toggle Window OCR", "Toggle Window OCR", "Ctrl+Meta+O", function() {  speaker.exec(cmdWithArgs); }); 
+		//speaker.exec(cmdWithArgs);
 		console.log(workspace.activeClient.internalId)
 		//takeScreenshot.setArguments([0,0]);
 		//takeScreenshot.setArguments([workspace.activeClient.internalId]);

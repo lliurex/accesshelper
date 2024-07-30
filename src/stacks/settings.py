@@ -127,9 +127,9 @@ class settings(QStackedWindowItem):
 		if len(config["prin"])>0:
 			config["prfl"]=True
 		for key in config.keys():
-			if config[key]=="false":
+			if config[key]=="false" or (config[key]=="" and key!="prin"):
 				config[key]=False
-			elif config[key]=="true":
+			if config[key]=="true":
 				config[key]=True
 		return (config)
 	#def readConfig

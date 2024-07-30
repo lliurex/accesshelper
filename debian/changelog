@@ -1,3 +1,9 @@
+accesswizard (0.1.3.2) jammy; urgency=medium
+
+  * Fix init values
+
+ -- Juanma1980 <juanma1980@gmail.com>  Tue, 30 Jul 2024 10:44:20 +0200
+
 accesswizard (0.1.3.1) jammy; urgency=medium
 
   * RC3

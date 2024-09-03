@@ -3,7 +3,7 @@ import dbus,dbus.exceptions
 import os,sys,shutil
 from PySide2.QtWidgets import QApplication,QGridLayout,QWidget,QPushButton,QHeaderView,QLabel,QSpinBox,QTableWidgetItem,QAbstractItemView,QCheckBox,QFrame,QHBoxLayout
 from PySide2.QtCore import Qt,Signal,QSize,QThread,QPoint,QObject
-from PySide2.QtGui import QIcon,QPixmap,QCursor,QColor,QDrag
+from PySide2.QtGui import QIcon,QPixmap,QCursor,QColor,QDrag,QGuiApplication
 from QtExtraWidgets import QTableTouchWidget,QHotkeyButton
 import lib.libdock as libdock
 import extras.launchers as launchers
@@ -462,5 +462,6 @@ dock=accessconf()
 
 icon=QIcon(":/icons/accessdock.png")
 dock.setWindowIcon(icon)
+QGuiApplication.setDesktopFileName("accessdock")
 dock.show()
 app.exec_()

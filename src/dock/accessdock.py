@@ -2,7 +2,7 @@
 import os,sys,subprocess,json
 from PySide2.QtWidgets import QApplication,QGridLayout,QWidget,QPushButton,QHeaderView,QMenu,QAction,QToolTip,QLabel,QDesktopWidget
 from PySide2.QtCore import Qt,QSignalMapper,QSize,QThread,QPoint,QEvent,Signal,QObject,QRect
-from PySide2.QtGui import QIcon,QPixmap,QCursor,QColor,QPalette
+from PySide2.QtGui import QIcon,QPixmap,QCursor,QColor,QPalette,QGuiApplication
 import dbus
 import dbus.service
 import dbus.mainloop.glib
@@ -395,6 +395,7 @@ class accessdock(QWidget):
 		self.dbg=True
 		self.libdock=libdock.libdock()
 		self.setWindowIcon(QIcon.fromTheme("accesswizard"))
+		QGuiApplication.setDesktopFileName("accesswizard")
 		self.setWindowFlags(Qt.NoDropShadowWindowHint|Qt.WindowStaysOnTopHint|Qt.Tool)
 		#This hides decoration and bypass window 
 		#also skips app registering in at-spi so is unexistent for ORCA 

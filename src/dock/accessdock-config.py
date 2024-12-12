@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 import dbus,dbus.exceptions
 import os,sys,shutil
-from PySide2.QtWidgets import QApplication,QGridLayout,QWidget,QPushButton,QHeaderView,QLabel,QSpinBox,QTableWidgetItem,QAbstractItemView,QCheckBox,QFrame,QHBoxLayout
+from PySide2.QtWidgets import QApplication,QGridLayout,QWidget,QPushButton,QHeaderView,QLabel,QSpinBox,QTableWidgetItem,QAbstractItemView,QCheckBox,QFrame,QHBoxLayout,QMessageBox
 from PySide2.QtCore import Qt,Signal,QSize,QThread,QPoint,QObject
 from PySide2.QtGui import QIcon,QPixmap,QCursor,QColor,QDrag,QGuiApplication
 from QtExtraWidgets import QTableTouchWidget,QHotkeyButton
@@ -14,7 +14,9 @@ gettext.textdomain('accesswizard')
 _ = gettext.gettext
 
 i18n={"ADD":_("Add"),
+	"BTNDEF":_("Default apps"),
 	"DCK":_("Rearrange or modify buttons for the dock"),
+	"DEF":_("This will delete all contents"),
 	"DEL":_("Delete"),
 	"DOWN":_("Down"),
 	"EDI":_("Edit"),
@@ -234,6 +236,8 @@ class accessconf(QWidget):
 		self.btnIdo.setIcon(QIcon.fromTheme("arrow-down"))
 		self.btnIdo.setEnabled(False)
 		self.btnIdo.clicked.connect(self._itemDown)
+		self.btnDef=QPushButton(i18n.get("BTNDEF"))
+		self.btnDef.clicked.connect(self._defAction)
 		self.btnAdd=QPushButton(i18n.get("ADD"))
 		self.btnAdd.clicked.connect(self._addAction)
 		self.btnDel=QPushButton(i18n.get("DEL"))
@@ -244,12 +248,13 @@ class accessconf(QWidget):
 		self.btnEdi.setEnabled(False)
 		layout.addWidget(QLabel(i18n["DCK"]),0,0,1,4)
 		layout.addWidget(self.dock,1,0,1,4)
-		layout.addWidget(self.list,2,0,3,2)
+		layout.addWidget(self.list,2,0,4,2)
 		layout.addWidget(self.btnIup,2,2,2,1,Qt.AlignTop|Qt.AlignLeft)
 		layout.addWidget(self.btnIdo,4,2,1,1,Qt.AlignBottom|Qt.AlignLeft)
-		layout.addWidget(self.btnAdd,2,3,1,1,Qt.AlignTop)
-		layout.addWidget(self.btnEdi,3,3,1,1,Qt.AlignTop)
-		layout.addWidget(self.btnDel,4,3,1,1,Qt.AlignTop)
+		layout.addWidget(self.btnDef,2,3,1,1,Qt.AlignTop)
+		layout.addWidget(self.btnAdd,3,3,1,1,Qt.AlignTop)
+		layout.addWidget(self.btnEdi,4,3,1,1,Qt.AlignTop)
+		layout.addWidget(self.btnDel,5,3,1,1,Qt.AlignTop)
 	#def _renderDockConfig
 
 	def _renderOptions(self):
@@ -402,6 +407,16 @@ class accessconf(QWidget):
 		launcher.destPath=self.libdock.launchersPath
 		launcher.show()
 	#def _addAction(self,*args):
+
+	def _defAction(self,*args):
+		dlg=QMessageBox()
+		dlg.addButton(QMessageBox.Ok)
+		dlg.addButton(QMessageBox.Cancel)
+		dlg.setText(i18n.get("DEF"))
+		if dlg.exec_()==QMessageBox.Ok:
+			self.list.clear()
+			self.updateScreen()
+	#def _defAction(self,*args):
 
 	def _ediAction(self,*args):
 		idx=self.list.currentRow()

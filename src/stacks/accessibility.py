@@ -1,10 +1,10 @@
 #!/usr/bin/python3
 from llxaccessibility import llxaccessibility
-import os
+import os,shutil
 import json
-from PySide2.QtWidgets import QApplication,QLabel,QGridLayout,QCheckBox,QSizePolicy,QRadioButton,QHeaderView,QTableWidgetItem,QAbstractScrollArea
+from PySide2.QtWidgets import QApplication,QLabel,QGridLayout,QCheckBox,QSizePolicy,QRadioButton,QHeaderView,QTableWidgetItem,QAbstractScrollArea,QTableWidget
 from PySide2 import QtGui
-from PySide2.QtCore import Qt
+from PySide2.QtCore import Qt,QThread,Signal
 from QtExtraWidgets import QStackedWindowItem, QTableTouchWidget, QPushInfoButton
 import subprocess
 from rebost import store
@@ -31,6 +31,39 @@ i18n={
 	"TOOLTIP":_("Settings which do the system more accessible"),
 	}
 
+class thLauncher(QThread):
+	finished=Signal("PyObject")
+	def __init__(self,parent=None,*args,**kwargs):
+		super().__init__()
+		self.accesshelper=llxaccessibility.client()
+
+	def setParms(self,*args):
+		cmd=args[0]
+		procCmd=[]
+		self.parms=[]
+		if " " in cmd:
+			procCmd.extend(cmd[0].split(" ")[1:])
+			procCmd.insert(0,cmd[0].split(" ")[0])
+		else:
+			if isinstance(cmd,str):
+				procCmd=cmd.split(" ")
+			else:
+				procCmd=cmd
+		self.cmd=procCmd[0]
+		self.parms.extend(cmd[1:])
+	#def setParms
+
+	def run(self):
+		cmd=[self.cmd]
+		cmd.extend(self.parms)
+		if "kcm" in cmd[0]:
+			proc=self.accesshelper.launchKcmModule(self.cmd)
+		else:
+			proc=self.accesshelper.launchCmd(cmd)
+		self.finished.emit(proc)
+	#def run
+#class thLauncher
+
 class accessibility(QStackedWindowItem):
 	def __init_stack__(self):
 		self.dbg=False
@@ -49,7 +82,8 @@ class accessibility(QStackedWindowItem):
 		self.hideControlButtons()
 		self.locale=locale.getdefaultlocale()[0][0:2]
 		self.rebost=store.client()
-		self.accesshelper=llxaccessibility.client()
+		self.launch=thLauncher()
+		self.launch.finished.connect(self._endCmd)
 	#def __init__
 
 	def __initScreen__(self):
@@ -60,8 +94,8 @@ class accessibility(QStackedWindowItem):
 #		self.tblGrid.setShowGrid(False)
 		self.tblGrid.verticalHeader().hide()
 		self.tblGrid.horizontalHeader().hide()
-		self.tblGrid.setSelectionBehavior(self.tblGrid.SelectRows)
-		self.tblGrid.setSelectionMode(self.tblGrid.SingleSelection)
+		self.tblGrid.setSelectionBehavior(QTableWidget.SelectRows)
+		self.tblGrid.setSelectionMode(QTableWidget.SingleSelection)
 		self.tblGrid.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
 		self.tblGrid.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 		self.tblGrid.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
@@ -123,44 +157,70 @@ class accessibility(QStackedWindowItem):
 		args[0].setEnabled(False)
 		if args[0].text()==i18n.get("ACCE"):
 			mod="kcm_access"
-			self.accesshelper.launchKcmModule(mod,mp=True)
+			self.launch.setParms(mod)
+			self.launch.start()
 		else:
 			if args[0].text()==i18n.get("ORCA"):
-				cmd="orca","-s"
+				cmd=self._getAppCmd("orca")
 			elif args[0].text()==i18n.get("LTTS"):
 				cmd=os.path.join(os.path.dirname(__file__),"..","tools","ttsmanager.py")
 			elif args[0].text()==i18n.get("DOCK"):
 				cmd=os.path.join(os.path.dirname(__file__),"..","dock","accessdock-config.py")
 			elif args[0].text()==i18n.get("ANTI"):
-				cmd=self._getAppPath("antimicrox")
+				cmd=self._getAppCmd("antimicrox")
 			elif args[0].text()==i18n.get("EVIA"):
-				cmd=self._getAppPath("eviacam")
-			self.accesshelper.launchCmd(cmd,mp=True)
+				cmd=self._getAppCmd("eviacam")
+			self.launch.setParms(cmd)
+			self.launch.start()
 	#def _launch
 
-	def _getAppPath(self,app):
-		cmd=["/usr/bin/appsedu","appstream://{}".format(app)]
-		appraw=json.loads(self.rebost.matchApp(app))
-		bundle=""
-		if len(appraw)>0:
-			app=json.loads(appraw[0])
-			for bun in app.get("bundle",{}).keys():
-				if bun.lower()=="zomando":
-					continue
-				if self.rebost.getAppStatus(app.get("name"),bun)=="0":
-					bundle=bun
-					break
-			if bundle=="package":
-				cmd=["gtk-launch",app.get("id",'')]
-			elif bundle=="flatpak":
-				cmd=["flatpak","run",app.get("bundle",{}).get("flatpak","")]
-			elif bundle=="snap":
-				cmd=["snap","run",app.get("bundle",{}).get("snap","")]
-			elif bundle=="appimage":
-				cmd=["gtk-launch","{}-appimage".format(app.get("pkgname",''))]
-			#proc=subprocess.run(cmd)
+	def _endCmd(self,*args):
+		for i in range(0,self.tblGrid.rowCount()):
+			for j in range(0,self.tblGrid.columnCount()):
+				wdg=self.tblGrid.cellWidget(i,j)
+				if wdg.isEnabled()==False:
+					wdg.setEnabled(True)
+		
+		print("++++++")
+		print(args)
+		print("++++++")
+	#def _endCmd
+
+	def _getAppCmd(self,app):
+		cmdPath=self._getPathForCmd(app)
+		if cmdPath!="":
+			cmd=[cmdPath]
+			if cmdPath.endswith("/orca"):
+				cmd.append("-s")
+		else:
+			cmd=["/usr/bin/appsedu","appstream://{}".format(app)]
+			appraw=json.loads(self.rebost.matchApp(app))
+			bundle=""
+			if len(appraw)>0:
+				app=json.loads(appraw[0])
+				for bun in app.get("bundle",{}).keys():
+					if bun.lower()=="zomando":
+						continue
+					if self.rebost.getAppStatus(app.get("name"),bun)=="0":
+						bundle=bun
+						break
+				if bundle=="package":
+					cmd=["gtk-launch",app.get("id",'')]
+				elif bundle=="flatpak":
+					cmd=["flatpak","run",app.get("bundle",{}).get("flatpak","")]
+				elif bundle=="snap":
+					cmd=["snap","run",app.get("bundle",{}).get("snap","")]
+				elif bundle=="appimage":
+					cmd=["gtk-launch","{}-appimage".format(app.get("pkgname",''))]
+				#proc=subprocess.run(cmd)
 		return(cmd)
-	#def _getAntiMicroPath
+	#def _getAppCmd
+
+	def _getPathForCmd(self,cmd):
+		cmdPath=""
+		if os.path.isfile(cmd)==False:
+			cmdPath=shutil.which(os.path.basename(cmd.split(" ")[0]))
+		return(cmdPath)
 
 	def updateScreen(self):
 		pass

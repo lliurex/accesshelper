@@ -415,6 +415,7 @@ class accessconf(QWidget):
 		dlg.setText(i18n.get("DEF"))
 		if dlg.exec_()==QMessageBox.Ok:
 			self.list.clear()
+			self.libdock.initLaunchers()
 			self.updateScreen()
 	#def _defAction(self,*args):
 

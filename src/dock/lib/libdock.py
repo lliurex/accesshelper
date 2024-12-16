@@ -10,6 +10,7 @@ class libdock():
 	def __init__(self):
 		self.dbg=False
 		self.launchersPath=os.path.join(os.environ.get("HOME"),".local","accesswizard","launchers")
+		self.defaultPath=os.path.join("/","usr","share","accesswizard","dock","extras","default")
 		self.accesshelper=llxaccessibility.client()
 	#def __init__
 
@@ -17,12 +18,12 @@ class libdock():
 		if self.dbg==True:
 			print("dock: {}".format(msg))
 	#def _debug
-	
-	def getLaunchers(self):
+
+	def _loadLaunchersFromPath(self,path):
 		app2menu=App2Menu.app2menu()
 		launchers=[]
-		if os.path.exists(self.launchersPath)==True:
-			for f in sorted(os.scandir(self.launchersPath),key=lambda x: x.name):
+		if os.path.exists(path)==True:
+			for f in sorted(os.scandir(path),key=lambda x: x.name):
 				if f.name.endswith(".desktop")==False:
 					continue
 				app=app2menu.get_desktop_info(f.path)
@@ -31,7 +32,32 @@ class libdock():
 					continue
 				launchers.append((f.name,app))
 		return(launchers)
+	#def _loadLaunchersFromPath
+
+	def getLaunchers(self):
+		launchers=self._loadLaunchersFromPath(self.launchersPath)
+		if len(launchers)==0 and os.path.exists(self.launchersPath)==False:
+			launchers=self._loadLaunchersFromPath(self.defaultPath)
+		return(launchers)
 	#def getLaunchers
+
+	def loadDefaultLaunchers(self):
+		launchers=self._loadLaunchersFromPath(self.defaultPath)
+	#def loadDefaultLaunchers
+
+	def initLaunchers(self):
+		if os.path.exists(self.launchersPath):
+			for f in os.scandir(self.launchersPath):
+				os.unlink(f.path)
+		if os.path.exists(self.defaultPath):
+			if os.path.exists(self.launchersPath)==False:
+				os.makedirs(self.launchersPath)
+			for f in os.scandir(self.defaultPath):
+				with open(f.path,"r") as defaultF:
+					defContent=defaultF.read()
+				with open(os.path.join(self.launchersPath,f.name),"w") as initF:
+					initF.write(defContent)
+	#def initLaunchers
 
 	def getShortcut(self):
 		cmd=["kreadconfig5","--file","kglobalshortcutsrc","--group","net.lliurex.accessibledock.desktop","--key","_launch"]

@@ -6,7 +6,7 @@
 
     <group name="">
         <entry name="Voice" type="String">
-            <default>#ff00ff</default>
+            <default>Dona valencià</default>
         </entry>
         <entry name="Stretch" type="Int">
             <default>3</default>
@@ -19,6 +19,9 @@
         </entry>
         <entry name="Synth" type="String">
             <default>Internal</default>
+        </entry>
+        <entry name="Dictionary" type="String">
+            <default>Ca@valencia</default>
         </entry>
     </group>
 </kcfg>

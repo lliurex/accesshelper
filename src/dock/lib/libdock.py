@@ -37,7 +37,8 @@ class libdock():
 	def getLaunchers(self):
 		launchers=self._loadLaunchersFromPath(self.launchersPath)
 		if len(launchers)==0 and os.path.exists(self.launchersPath)==False:
-			launchers=self._loadLaunchersFromPath(self.defaultPath)
+			self.initLaunchers()
+			launchers=self._loadLaunchersFromPath(self.launchersPath)
 		return(launchers)
 	#def getLaunchers
 

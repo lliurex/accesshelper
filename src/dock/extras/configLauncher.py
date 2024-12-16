@@ -3,7 +3,7 @@
 import os,subprocess
 import sys
 from PySide2.QtUiTools import QUiLoader
-from PySide2.QtWidgets import QApplication,QWidget,QVBoxLayout,QHBoxLayout,QPushButton,QGridLayout,QTableWidget,QScrollArea,QLabel
+from PySide2.QtWidgets import QApplication,QWidget,QVBoxLayout,QHBoxLayout,QPushButton,QGridLayout,QTableWidget,QScrollArea,QLabel,QGroupBox,QRadioButton
 from PySide2.QtCore import QFile, QIODevice
 from PySide2.QtGui import QColor
 
@@ -51,7 +51,13 @@ def _recursiveSetupEvents(layout):
 	for idx in range(0,layout.count()):
 		widget=layout.itemAt(idx).widget()
 		if isinstance(widget,QWidget):
-			wdg=_recursiveExploreWidgets(widget)
+			if isinstance(widget,QGroupBox):
+				for rad in widget.findChildren(QRadioButton):
+					wdg=_recursiveExploreWidgets(rad)
+					if wdg not in configWidgets:
+						configWidgets.append(wdg)
+			else:
+				wdg=_recursiveExploreWidgets(widget)
 			if wdg not in configWidgets:
 				configWidgets.append(wdg)
 		elif layout.itemAt(idx).layout():
@@ -85,13 +91,27 @@ def readConfig(configWidgets,uiId):
 				if value!="true":
 					state=False
 				wdg.setChecked(state)
+			elif hasattr(wdg,"isChecked"):
+				state=True
+				if value!="true":
+					state=False
+				wdg.setChecked(state)
+			elif hasattr(wdg,"setCurrentIndex"):
+				wdg.setCurrentIndex(int(value))
 			elif hasattr(wdg,"setValue"):
 				wdg.setValue(int(value))
 			elif hasattr(wdg,"setText"):
 				wdg.setText(value)
 #def readConfig
 
+def _generateCommand(plugType,uiId,key,text):
+	cmd=[]
+	cmd=["kwriteconfig5","--file","kwinrc","--group","{0}-{1}".format(plugType,uiId),"--key",key,str(text)]
+	return(cmd)
+#def _generateCommand
+
 def saveChanges(configWidgets,uiId):
+	cmd=""
 	if "effect" in uiId:
 		plugType="Effect"
 	else:
@@ -105,15 +125,18 @@ def saveChanges(configWidgets,uiId):
 		hasKcolor=wdg.property("color")
 		if hasKcolor!=None:
 			color="{0},{1},{2}".format(hasKcolor.red(),hasKcolor.green(),hasKcolor.blue())
-			cmd=["kwriteconfig5","--file","kwinrc","--group","{0}-{1}".format(plugType,uiId),"--key",key,str(color)]
-		elif hasattr(wdg,"checkState"):
+			cmd=self._generateCommand(plugType,uiId,key,color)
+			#cmd=["kwriteconfig5","--file","kwinrc","--group","{0}-{1}".format(plugType,uiId),"--key",key,str(color)]
+		elif hasattr(wdg,"checkState") or hasattr(wdg,"group"):
+			print(wdg)
 			state=wdg.isChecked()
-			cmd=["kwriteconfig5","--file","kwinrc","--group","{0}-{1}".format(plugType,uiId),"--key",key,str(state).lower()]
+			cmd=_generateCommand(plugType,uiId,key,str(state).lower())
 		elif hasattr(wdg,"value"):
-			cmd=["kwriteconfig5","--file","kwinrc","--group","{0}-{1}".format(plugType,uiId),"--key",key,str(wdg.value())]
+			cmd=_generateCommand(plugType,uiId,key,str(wdg.value()))
 		elif hasattr(wdg,"text"):
-			cmd=["kwriteconfig5","--file","kwinrc","--group","{0}-{1}".format(plugType,uiId),"--key",key,wdg.text()]
-		subprocess.run(cmd)
+			cmd=_generateCommand(plugType,uiId,key,str(wdg.text()))
+		if len(cmd)>0:
+			subprocess.run(cmd)
 	sys.exit(0)
 #def saveChanges
 

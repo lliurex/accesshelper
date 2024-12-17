@@ -322,9 +322,9 @@ class ttshelper(QWidget):
 	#def _processTtsFile
 
 	def _playFile(self,ttsFile,btn):
-		if btn in self.playing:
+		if len(self.playing)>0:
 			self.playThread.stopPlay()
-		elif len(self.playing)==0:
+		if len(self.playing)==0:
 			self.playing.append(btn)
 			self.playThread=playFile(ttsFile)
 			self.playThread.signal.sig.connect(lambda:(self._stopPlay(btn)))

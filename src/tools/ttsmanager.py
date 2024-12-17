@@ -21,7 +21,6 @@ i18n={
 	"EXPORT":_("Files exported to"),
 	"FILE":_("File"),
 	"FILES":_("Recorded file list"),
-	"INTERNALTTS":_("Use internal TTS"),
 	"KO":_("Cancel"),
 	"MENUDESCRIPTION":_("Text-To-Speech related options"),
 	"OK":_("Accept"),
@@ -34,8 +33,10 @@ i18n={
 	"SYNTH":_("Use synthesizer"),
 	"TEXT":_("Text"),
 	"TOOLTIP":_("Some options related with TTS"),
+	"TTSINTERNAL":_("Use internal TTS"),
+	"TTSORCA":_("Use ORCA"),
+	"TTSVLC":_("Use VLC player"),
 	"VALCAT":_("Valencian-Catalan"),
-	"VLCTTS":_("Use VLC player"),
 	"VOICE":_("Voice")
 	}
 
@@ -209,10 +210,11 @@ class ttshelper(QWidget):
 
 	def _populateSynth(self):
 		self._debug("Setting synt values")
-		self.cmbSynth.addItem(i18n.get("INTERNALTTS"))
-		self.cmbSynth.addItem(i18n.get("VLCTTS"))
+		self.cmbSynth.addItem(i18n.get("TTSORCA"))
+		self.cmbSynth.addItem(i18n.get("TTSVLC"))
+		self.cmbSynth.addItem(i18n.get("TTSINTERNAL"))
 		#if synth=="vlc":
-		#	self.cmbSynth.setCurrentText(i18n.get("VLCTTS"))
+		#	self.cmbSynth.setCurrentText(i18n.get("TTSVLC"))
 	#def _populateSynth(self):
 
 	def _getDataFromFname(self,fname):
@@ -275,9 +277,9 @@ class ttshelper(QWidget):
 		self._populateStrch()
 		self.cmbStrch.setCurrentText(strch)
 		self._populateSynth()
-		self.cmbSynth.setCurrentText(i18n.get("VLCTTS"))
+		self.cmbSynth.setCurrentText(i18n.get("TTSVLC"))
 		if synth!="true":
-			self.cmbSynth.setCurrentText(i18n.get("INTERNALTTS"))
+			self.cmbSynth.setCurrentText(i18n.get("TTSINTERNAL"))
 		self._populateFileList()
 	#def _udpate_screen
 
@@ -346,7 +348,7 @@ class ttshelper(QWidget):
 		data["pitch"]="1"
 		data["strch"]=self.cmbStrch.currentText()
 		synt=self.cmbSynth.currentText()
-		if self.cmbSynth.currentText==i18n.get("INTERNALTTS"):
+		if self.cmbSynth.currentText==i18n.get("TTSINTERNAL"):
 			data["synth"]="false"
 		else:
 			data["synth"]="true"
@@ -356,7 +358,7 @@ class ttshelper(QWidget):
 	def _readConfig(self,*args):
 		#Data is provided from kwin-script ocrwindow
 		data={}
-		for field in ["voice","rate","pitch","synth","stretch"]:
+		for field in ["voice","rate","pitch","synth","stretch","orca","vlc"]:
 			cmd=["kreadconfig5","--file","kwinrc","--group","Script-ocrwindow","--key",field.capitalize()]
 			out=subprocess.check_output(cmd,universal_newlines=True,encoding="utf8")
 			if field=="stretch":

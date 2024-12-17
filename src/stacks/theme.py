@@ -101,7 +101,7 @@ class theme(QStackedWindowItem):
 			mod="kcm_fonts"
 		elif args[0].text()==_("Mouse"):
 			mod="kcm_cursortheme"
-		self.accesshelper.launchKcmModule(mod,mp=True)
+		self.accesshelper.launchKcmModuleAsync(mod)
 	#def _launch
 
 	def updateScreen(self):

@@ -18,8 +18,23 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="1" colspan="5">
-    <widget class="KFileDialog" name="kcfg_Voice2">
+   <item row="0" column="1">
+    <widget class="QComboBox" name="kcfg_Voice">
+	  <item>
+	    <property name="text">
+	      <string>Managed by system</string>
+	    </property>
+	  </item>
+	  <item>
+	    <property name="text">
+	      <string>es_ES</string>
+	    </property>
+	  </item>
+	  <item>
+	    <property name="text">
+	      <string>ca@valencia</string>
+	    </property>
+	  </item>
     </widget>
    </item>
    <item row="1" column="0">
@@ -39,7 +54,7 @@
        </property>
       </widget>
      </item>
-   <item row="1" column="2" alignment="Qt::AlignRight">
+   <!--<item row="1" column="2" alignment="Qt::AlignRight">
       <widget class="QLabel" name="label_2">
        <property name="text">
         <string>Pitch</string>
@@ -55,7 +70,7 @@
         <number>50</number>
        </property>
       </widget>
-     </item>
+     </item>-->
    <item row="1" column="4">
     <widget class="QLabel" name="label">
      <property name="text">
@@ -73,30 +88,59 @@
        </property>
       </widget>
      </item>
-	<item row="2" column="0">
-      <widget class="QCheckBox" name="kcfg_Synth" >
-	    <property name="text">
-		<string>Use vlc instead of internal TTS (recommended)</string>
+
+	<item row="3" column="0" colspan="6">
+      <widget class="QGroupBox">
+	    <property name="title">
+		<string>TTS engine</string>
        </property>
-  	  </widget>
+	   <layout class="QVBoxLayout">
+	     <item>
+             <widget class="QRadioButton" name="kcfg_Orca" >
+	         <property name="text">
+		     <string>Use ORCA</string>
+             </property>
+		   <property name="pressed">
+		   <bool>true</bool>
+		   </property>
+  	       </widget>
+		</item>
+		<item>
+		  <widget class="QRadioButton" name="kcfg_Vlc" >
+			<property name="text">
+			<string>Use VLC</string>
+		   </property>
+		   <property name="pressed">
+		   <bool>false</bool>
+		   </property>
+		  </widget>
+		</item>
+		<item>
+		  <widget class="QRadioButton" name="kcfg_Synth" >
+			<property name="text">
+			<string> Use internal synth</string>
+		   </property>
+		   <property name="pressed">
+		   <bool>false</bool>
+		   </property>
+		  </widget>
+		</item>
+	  </layout>
+	</widget>
     </item>
-	<item row="3" column="0" colspan="6" alignment="Qt::AlignCenter">
-      <widget class="QLabel" name="label" >
-        <property name="text">
-         <string>** Changes apply only after disabling and re-enabling the script **</string>
-  		</property>
-  	  </widget>
+    <item row="7" column="0" colspan="6" alignment="Qt::AlignCenter">
+	  <widget class="QLabel" name="label" >
+	    <property name="text">
+		  <string>** Changes apply only after disabling and re-enabling the script **</string>
+	    </property>
+      </widget>
     </item>
 
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>KFileDialog</class>
-   <extends>KSelector</extends>
-   <header>kselector.h</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
+ <buttongroups>
+   <buttongroup name="buttonGroup"></buttongroup>
+ </buttongroups>
 </ui>

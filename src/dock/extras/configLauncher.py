@@ -186,9 +186,14 @@ if __name__ == "__main__":
 	btnOk.clicked.connect(lambda: saveChanges(configWidgets,UiId))
 	btnKo=QPushButton("Cancel")
 	btnKo.clicked.connect(app.exit)
+	btnOk.setFixedSize(btnKo.sizeHint().width(),btnOk.sizeHint().height())
+	btnKo.setFixedSize(btnKo.sizeHint().width(),btnOk.sizeHint().height())
 	hlay.addWidget(btnOk)
 	hlay.addWidget(btnKo)
 	btnBox.setLayout(hlay)
-	layout.addWidget(btnBox)
+	if isinstance(layout,QGridLayout):
+		layout.addWidget(btnBox,layout.rowCount(),0,1,layout.columnCount())
+	else:
+		layout.addWidget(btnBox)
 	window.show()
 	sys.exit(app.exec_())

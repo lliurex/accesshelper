@@ -51,7 +51,14 @@ Item {
 		var stretch=KWin.readConfig("Stretch",1);
 		var pitch=KWin.readConfig("Pitch",2);
 		var rate=KWin.readConfig("Rate",3);
-		var voice=KWin.readConfig("Voice","kal");
+		//var rate=KWin.readConfig("Rate",3);
+		var selVoice=KWin.readConfig("Voice","kal");
+		var Vlc=KWin.readConfig("Vlc",true);
+		var Orca=KWin.readConfig("Orca",0);
+		var Synth=KWin.readConfig("Synth",0);
+		listmodel.append(selVoice);
+		console.log("******");
+		console.log(selVoice);
 		var cmdWithArgs=cmd+" "+stretch+" "+pitch+" "+rate+" "+voice;
 		KWin.registerShortcut("Toggle Window OCR", "Toggle Window OCR", "Ctrl+Meta+O", function() {  speaker.exec(cmdWithArgs); }); 
 		//speaker.exec(cmdWithArgs);
@@ -60,6 +67,15 @@ Item {
 		//takeScreenshot.setArguments([workspace.activeClient.internalId]);
 		//takeScreenshot.setArguments([0,0,100,100]);
 		//takeScreenshot.call();
+	}
+
+	QComboBox{
+		id: voice
+		model: listmodel
+	}
+
+	ListModel{
+		id: listmodel
 	}
 
 }

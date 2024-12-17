@@ -233,7 +233,7 @@ class QPushButtonDock(QPushButton):
 		icn=QIcon()
 		iconName=self.data.get("Icon","")
 		if len(iconName)==0:
-			iconName="accesswizard"
+			iconName="accessibledock"
 		if os.path.exists(iconName):
 			pxm=QPixmap(iconName)
 			icn=QIcon(pxm)
@@ -397,8 +397,9 @@ class accessdock(QWidget):
 		super().__init__()
 		self.dbg=True
 		self.libdock=libdock.libdock()
-		self.setWindowIcon(QIcon.fromTheme("accessdock"))
-		QGuiApplication.setDesktopFileName("accessdock")
+
+		self.setWindowIcon(QIcon.fromTheme("accessibledock"))
+		QGuiApplication.setDesktopFileName("accessibledock")
 		self.setWindowFlags(Qt.NoDropShadowWindowHint|Qt.WindowStaysOnTopHint|Qt.Tool)
 		#This hides decoration and bypass window 
 		#also skips app registering in at-spi so is unexistent for ORCA 

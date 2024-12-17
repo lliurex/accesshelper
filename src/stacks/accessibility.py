@@ -129,7 +129,7 @@ class accessibility(QStackedWindowItem):
 		btnLtts=QPushInfoButton()
 		btnLtts.setText(i18n.get("LTTS"))
 		btnLtts.setDescription(i18n.get("LTTSDSC"))
-		btnLtts.loadImg("kmouth")
+		btnLtts.loadImg("rsrc/ttsmanager.png")
 		self.tblGrid.setCellWidget(0,2,btnLtts)
 		btnLtts.clicked.connect(self._launch)
 		btnDock=QPushInfoButton()

@@ -1,8 +1,0 @@
-[Desktop Entry]
-Encoding=UTF-8
-Name=Mouse Frame
-Comment=
-Icon=/usr/share/icons/hicolor/48x48/apps/accessibledock.png
-Path=/usr/share/kwin/scripts/mouseframe/metadata.json
-Exec=/usr/share/accesswizard/dock/loadScript.sh /usr/share/kwin/scripts/mouseframe/metadata.json add
-Fname=/usr/share/accesswizard/dock/extras/default/003_mouseframe.desktop

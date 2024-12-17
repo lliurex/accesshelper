@@ -1,8 +1,0 @@
-[Desktop Entry]
-Encoding=UTF-8
-Name=Read aid
-Comment=
-Icon=preferences-system-windows
-Path=/usr/share/kwin/scripts/mousestrip/metadata.json
-Exec=/home/lliurex/git/accesshelper/src/dock/loadScript.sh /usr/share/kwin/scripts/mousestrip/metadata.json add
-Fname=/usr/share/accesswizard/dock/extras/default/001_mousestrip.desktop

@@ -1,8 +1,0 @@
-[Desktop Entry]
-Encoding=UTF-8
-Name=Window OCR
-Comment=
-Icon=preferences-system-windows-effect-dialog-parent
-Path=/usr/share/kwin/scripts/ocrwindow/metadata.json
-Exec=/usr/share/accesswizard/dock/loadScript.sh /usr/share/kwin/scripts/ocrwindow/metadata.json add
-Fname=/usr/share/accesswizard/dock/extras/default/003_ocrwindow.desktop

@@ -1,8 +1,0 @@
-[Desktop Entry]
-Encoding=UTF-8
-Name=Zoom
-Comment=
-Icon=/usr/share/icons/oxygen/base/64x64/actions/zoom-fit-best.png
-Path=/usr/share/kwin/builtin-effects/kwin4_effect_zoom/metadata.json
-Exec=/home/lliurex/git/accesshelper/src/dock/loadEffect.sh /usr/share/kwin/builtin-effects/kwin4_effect_zoom/metadata.json add
-Fname=/usr/share/accesswizard/dock/extras/default/003_zoom.desktop

@@ -6,7 +6,7 @@ from PySide2.QtCore import Qt,Signal,QSize,QThread,QPoint,QObject
 from PySide2.QtGui import QIcon,QPixmap,QCursor,QColor,QDrag,QGuiApplication
 from QtExtraWidgets import QTableTouchWidget,QHotkeyButton
 import lib.libdock as libdock
-import extras.launchers as launchers
+import lib.launchers as launchers
 import accessdock
 import gettext
 import resources

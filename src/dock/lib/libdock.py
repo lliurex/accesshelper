@@ -10,7 +10,7 @@ class libdock():
 	def __init__(self):
 		self.dbg=False
 		self.launchersPath=os.path.join(os.environ.get("HOME"),".local","accesswizard","launchers")
-		self.defaultPath=os.path.join("/","usr","share","accesswizard","dock","extras","default")
+		self.defaultPath=os.path.join("/","usr","share","accesswizard","dock","default")
 		self.accesshelper=llxaccessibility.client()
 	#def __init__
 

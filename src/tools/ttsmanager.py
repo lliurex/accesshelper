@@ -76,15 +76,9 @@ class ttshelper(QWidget):
 		self.accesshelper=llxaccessibility.client()
 		self.menu_description=i18n.get('MENUDESCRIPTION')
 		self.description=i18n.get('DESCRIPTION')
-		self.icon=('preferences-desktop-text-to-speech')
 		self.tooltip=i18n.get('TOOLTIP')
-		self.index=7
-		self.enabled=True
-		self.changed=[]
-		self.level='user'
 		self.mp3BtnDict={}
 		self.playing=[]
-		self.optionChanged=[]
 		self.voiceMap={}
 	#def __init__
 
@@ -278,9 +272,12 @@ class ttshelper(QWidget):
 	#def _processTtsFile
 
 	def _playFile(self,ttsFile,btn):
+		skip=False
 		if len(self.playing)>0:
+			if btn==self.playing[0]:
+				skip=True
 			self.playThread.stopPlay()
-		if len(self.playing)==0:
+		if len(self.playing)==0 and skip==False:
 			self.playing.append(btn)
 			self.playThread=playFile(ttsFile)
 			self.playThread.signal.sig.connect(lambda:(self._stopPlay(btn)))
@@ -337,7 +334,9 @@ if __name__=="__main__":
 	app=QApplication(["TTS Manager"])
 	config=ttshelper()
 	config.__initScreen__()
-	config.setWindowIcon(QtGui.QIcon.fromTheme("kmouth"))
+	icn=QtGui.QIcon("rsrc/ttsmanager.png")
+	config.setWindowIcon(icn)
 	config.show()
+	config.setMinimumHeight(config.sizeHint().height()*1.2)
 	#config.updateScreen()
 	app.exec_()

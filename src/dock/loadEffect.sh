@@ -15,7 +15,6 @@ function load
 
 function unload
 {
-	echo $ID
 	if [[ $ID == "magnifier" ]] || [[ $ID == "zoom" ]]
 	then
 		qdbus org.kde.kglobalaccel /component/kwin org.kde.kglobalaccel.Component.invokeShortcut "view_zoom_out"
@@ -44,7 +43,6 @@ function enable
 
 
 METADATA=$1
-echo $1
 ID=$(grep \"Id\" $METADATA)
 ID=${ID/*: /}
 ID=${ID//\"/}

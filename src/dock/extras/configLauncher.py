@@ -52,7 +52,7 @@ def _recursiveSetupEvents(layout):
 		widget=layout.itemAt(idx).widget()
 		if isinstance(widget,QWidget):
 			if isinstance(widget,QGroupBox):
-				for rad in widget.findChildren(QRadioButton):
+				for rad in widget.children():
 					wdg=_recursiveExploreWidgets(rad)
 					if wdg not in configWidgets:
 						configWidgets.append(wdg)
@@ -70,38 +70,39 @@ def readConfig(configWidgets,uiId):
 		plugType="Effect"
 	else:
 		plugType="Script"
-	for name,wdg in configWidgets:
-		if len(name)==0:
-			continue
-		#if hasattr(wdg,"text"):
-		key=name.replace("kcfg_","")
-		cmd=["kreadconfig5","--file","kwinrc","--group","{0}-{1}".format(plugType,uiId),"--key",key]
-		out=subprocess.check_output(cmd,universal_newlines=True,encoding="utf8")
-		value=out.strip()
-		if len(value)>0:
-			if isinstance(wdg,QPushButton):
-				hasKcolor=wdg.property("color")
-				if hasKcolor!=None:
-					kcolor=value.split(",")
-					newcolor=QColor.fromRgb(int(kcolor[0]),int(kcolor[1]),int(kcolor[2]))
-					wdg.setProperty("color",newcolor)
-				wdg.setText(value)
-			elif hasattr(wdg,"checkState"):
-				state=True
-				if value!="true":
-					state=False
-				wdg.setChecked(state)
-			elif hasattr(wdg,"isChecked"):
-				state=True
-				if value!="true":
-					state=False
-				wdg.setChecked(state)
-			elif hasattr(wdg,"setCurrentIndex"):
-				wdg.setCurrentIndex(int(value))
-			elif hasattr(wdg,"setValue"):
-				wdg.setValue(int(value))
-			elif hasattr(wdg,"setText"):
-				wdg.setText(value)
+	if len(configWidgets)>0:
+		for name,wdg in configWidgets:
+			if len(name)==0:
+				continue
+			#if hasattr(wdg,"text"):
+			key=name.replace("kcfg_","")
+			cmd=["kreadconfig5","--file","kwinrc","--group","{0}-{1}".format(plugType,uiId),"--key",key]
+			out=subprocess.check_output(cmd,universal_newlines=True,encoding="utf8")
+			value=out.strip()
+			if len(value)>0:
+				if isinstance(wdg,QPushButton):
+					hasKcolor=wdg.property("color")
+					if hasKcolor!=None:
+						kcolor=value.split(",")
+						newcolor=QColor.fromRgb(int(kcolor[0]),int(kcolor[1]),int(kcolor[2]))
+						wdg.setProperty("color",newcolor)
+					wdg.setText(value)
+				elif hasattr(wdg,"checkState"):
+					state=True
+					if value!="true":
+						state=False
+					wdg.setChecked(state)
+				elif hasattr(wdg,"isChecked"):
+					state=True
+					if value!="true":
+						state=False
+					wdg.setChecked(state)
+				elif hasattr(wdg,"setCurrentIndex"):
+					wdg.setCurrentIndex(int(value))
+				elif hasattr(wdg,"setValue"):
+					wdg.setValue(int(value))
+				elif hasattr(wdg,"setText"):
+					wdg.setText(value)
 #def readConfig
 
 def _generateCommand(plugType,uiId,key,text):

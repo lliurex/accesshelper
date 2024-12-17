@@ -11,83 +11,89 @@
    </rect>
   </property>
   <layout class="QGridLayout" name="formLayout">
-   <item row="0" column="0">
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>Voice:</string>
-     </property>
+    <item row="0" column="0">
+    <widget class="QGroupBox" name="groupVoice">
+      <layout class="QGridLayout" name="voiceLayout">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Voice:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QComboBox" name="kcfg_Voice">
+          <item>
+            <property name="text">
+              <string>Managed by system</string>
+            </property>
+          </item>
+          <item>
+            <property name="text">
+              <string>es_ES</string>
+            </property>
+          </item>
+          <item>
+            <property name="text">
+              <string>ca@valencia</string>
+            </property>
+          </item>
+        </widget>
+       </item>
+       <item row="1" column="0">
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>Stretch</string>
+           </property>
+          </widget>
+         </item>
+       <item row="1" column="1">
+          <widget class="QSpinBox" name="kcfg_Stretch">
+           <property name="minimum">
+            <number>1</number>
+           </property>
+           <property name="maximum">
+            <number>15</number>
+           </property>
+          </widget>
+         </item>
+       <!--<item row="1" column="2" alignment="Qt::AlignRight">
+          <widget class="QLabel" name="label_2">
+           <property name="text">
+            <string>Pitch</string>
+           </property>
+          </widget>
+         </item>
+       <item row="1" column="3">
+          <widget class="QSpinBox" name="kcfg_Pitch">
+           <property name="minimum">
+            <number>1</number>
+           </property>
+           <property name="maximum">
+            <number>50</number>
+           </property>
+          </widget>
+         </item>-->
+       <item row="1" column="4">
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Rate:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="5">
+          <widget class="QSpinBox" name="kcfg_Rate">
+           <property name="minimum">
+            <number>1</number>
+           </property>
+           <property name="maximum">
+            <number>100</number>
+           </property>
+          </widget>
+         </item>
+      </layout>
     </widget>
-   </item>
-   <item row="0" column="1">
-    <widget class="QComboBox" name="kcfg_Voice">
-	  <item>
-	    <property name="text">
-	      <string>Managed by system</string>
-	    </property>
-	  </item>
-	  <item>
-	    <property name="text">
-	      <string>es_ES</string>
-	    </property>
-	  </item>
-	  <item>
-	    <property name="text">
-	      <string>ca@valencia</string>
-	    </property>
-	  </item>
-    </widget>
-   </item>
-   <item row="1" column="0">
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>Stretch</string>
-       </property>
-      </widget>
-     </item>
-   <item row="1" column="1">
-      <widget class="QSpinBox" name="kcfg_Stretch">
-       <property name="minimum">
-        <number>1</number>
-       </property>
-       <property name="maximum">
-        <number>15</number>
-       </property>
-      </widget>
-     </item>
-   <!--<item row="1" column="2" alignment="Qt::AlignRight">
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>Pitch</string>
-       </property>
-      </widget>
-     </item>
-   <item row="1" column="3">
-      <widget class="QSpinBox" name="kcfg_Pitch">
-       <property name="minimum">
-        <number>1</number>
-       </property>
-       <property name="maximum">
-        <number>50</number>
-       </property>
-      </widget>
-     </item>-->
-   <item row="1" column="4">
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>Rate:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="5">
-      <widget class="QSpinBox" name="kcfg_Rate">
-       <property name="minimum">
-        <number>1</number>
-       </property>
-       <property name="maximum">
-        <number>100</number>
-       </property>
-      </widget>
-     </item>
+    </item>
 
 	<item row="3" column="0" colspan="6">
       <widget class="QGroupBox">
@@ -139,7 +145,20 @@
   </layout>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+   <connection>
+     <sender>kcfg_Synth</sender>
+     <signal>toggled(bool)</signal>
+     <receiver>groupVoice</receiver>
+     <slot>setEnabled(bool)</slot>
+    </connection>
+   <connection>
+     <sender>kcfg_Vlc</sender>
+     <signal>toggled(bool)</signal>
+     <receiver>groupVoice</receiver>
+     <slot>setEnabled(bool)</slot>
+    </connection>
+ </connections>
  <buttongroups>
    <buttongroup name="buttonGroup"></buttongroup>
  </buttongroups>

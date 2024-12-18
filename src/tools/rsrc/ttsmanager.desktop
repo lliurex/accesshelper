@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=TTS Manager
+Name[ca_ES.UTF-8@valencia]=Configuració de Text a Parla
+Name[ca_ES@valencia]=Configuració de Text a Parla
+Name[ca]=Configuració de Text a Parla
+Name[es]=Configuración de Texto a Habla
+GenericName=TTS Manager
+Exec=/usr/share/accesswizard/tools/ttsmanager.py
+Terminal=false
+Type=Application
+Categories=Accessibility;X-Lliurex;
+TryExec=/usr/share/accesswizard/tools/ttsmanager.py

@@ -158,6 +158,12 @@
      <receiver>groupVoice</receiver>
      <slot>setEnabled(bool)</slot>
     </connection>
+   <connection>
+     <sender>kcfg_Orca</sender>
+     <signal>toggled(bool)</signal>
+     <receiver>groupVoice</receiver>
+     <slot>setDisabled(bool)</slot>
+    </connection>
  </connections>
  <buttongroups>
    <buttongroup name="buttonGroup"></buttongroup>

@@ -1,5 +1,9 @@
 [Desktop Entry]
 Name=Access Wizard
+Name[ca_ES.UTF-8@valencia]=Assistent d'accesibilitat
+Name[ca_ES@valencia]=Assistent d'accesibilitat
+Name[ca]=Assistent d'accesibilitat
+Name[es]=Asistente de accesibilidad
 GenericName=Access Wizard
 Comment=Manage available accessibility options
 Comment[es]=Gestiona las opciones de accesibilidad
@@ -10,9 +14,5 @@ Exec=/usr/share/accesswizard/accesswizard.py
 Terminal=false
 Type=Application
 Icon=accesswizard
-Name[ca_ES.UTF-8@valencia]=Access Wizard
-Name[ca_ES@valencia]=Access Wizard
-Name[ca]=Access Wizard 
-Name[es]=Access Wizard 
 Categories=Accessibility;X-Lliurex;
-Exec=/usr/share/accesswizard/accesswizard.py
+TryExec=/usr/share/accesswizard/accesswizard.py

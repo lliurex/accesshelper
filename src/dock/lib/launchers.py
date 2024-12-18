@@ -416,7 +416,7 @@ class launchers(QStackedWindow):
 		desktop+="Comment={}\n".format(action.get("Comment"))
 		desktop+="Icon={}\n".format(action.get("Icon"))
 		desktop+="Path={}\n".format(action.get("path"))
-		cmd="{0}/loadEffect.sh {1} add".format(dockPath,action.get("path"))
+		cmd="{0}/tools/loadEffect.sh {1} add".format(dockPath,action.get("path"))
 		desktop+="Exec={}\n".format(cmd)
 		desktop+="Fname={}\n".format(fname)
 		with open(fname,"w") as f:
@@ -439,7 +439,7 @@ class launchers(QStackedWindow):
 		desktop+="Comment={}\n".format(action.get("Comment"))
 		desktop+="Icon={}\n".format(action.get("Icon"))
 		desktop+="Path={}\n".format(action.get("path"))
-		cmd="{0}/loadScript.sh {1} add".format(dockPath,action.get("path"))
+		cmd="{0}/tools/loadScript.sh {1} add".format(dockPath,action.get("path"))
 		desktop+="Exec={}\n".format(cmd)
 		fname=os.path.join(self.launchersPath,fname)
 		desktop+="Fname={}\n".format(fname)

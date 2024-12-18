@@ -114,44 +114,43 @@ class accessibility(QStackedWindowItem):
 		#self.tblGrid.verticalHeader().setSectionResizeMode(0,QHeaderView.ResizeToContents)
 		btnAcce.clicked.connect(self._launch)
 		btnOrca=QPushInfoButton()
+		icons={}
+		for app in ["orca","eviacam","antimicrox"]:
+			appInfo=json.loads(self.rebost.showApp(app))
+			if len(appInfo)>0:
+				jInfo=json.loads(appInfo[0])
+				icons.update({app:jInfo.get("icon","default")})
 		btnOrca.setText(i18n.get("ORCA"))
 		btnOrca.setDescription(i18n.get("ORCADSC"))
-		btnOrca.loadImg("orca")
+		btnOrca.loadImg(icons["orca"])
 		self.tblGrid.setCellWidget(0,1,btnOrca)
 		#self.tblGrid.verticalHeader().setSectionResizeMode(1,QHeaderView.ResizeToContents)
 		btnOrca.clicked.connect(self._launch)
 		btnLtts=QPushInfoButton()
 		btnLtts.setText(i18n.get("LTTS"))
 		btnLtts.setDescription(i18n.get("LTTSDSC"))
-		btnLtts.loadImg("kmouth")
+		btnLtts.loadImg("rsrc/ttsmanager.png")
 		self.tblGrid.setCellWidget(0,2,btnLtts)
-		#self.tblGrid.verticalHeader().setSectionResizeMode(2,QHeaderView.ResizeToContents)
 		btnLtts.clicked.connect(self._launch)
 		btnDock=QPushInfoButton()
 		btnDock.setText(i18n.get("DOCK"))
 		btnDock.setDescription(i18n.get("DOCKDSC"))
 		btnDock.loadImg("accesswizard")
-		btnDock.setMinimumWidth(btnDock.width())
-		btnDock.setMinimumHeight(btnDock.height())
 		self.tblGrid.setCellWidget(1,0,btnDock)
 		btnDock.clicked.connect(self._launch)
 		btnJoys=QPushInfoButton()
 		btnJoys.setText(i18n.get("ANTI"))
 		btnJoys.setDescription(i18n.get("ANTIDSC"))
-		btnJoys.loadImg("io.github.antimicrox.antimicrox")
-		btnJoys.setMinimumWidth(btnJoys.width())
-		btnJoys.setMinimumHeight(btnJoys.height())
+		btnJoys.loadImg(icons["antimicrox"])
 		self.tblGrid.setCellWidget(1,1,btnJoys)
 		btnJoys.clicked.connect(self._launch)
 		btnEvia=QPushInfoButton()
 		btnEvia.setText(i18n.get("EVIA"))
 		btnEvia.setDescription(i18n.get("EVIADSC"))
-		btnEvia.loadImg("eviacam")
-		btnEvia.setMinimumWidth(btnEvia.width())
-		btnEvia.setMinimumHeight(btnEvia.height())
+		btnEvia.loadImg(icons["eviacam"])
 		self.tblGrid.setCellWidget(1,2,btnEvia)
 		btnEvia.clicked.connect(self._launch)
-	#	self.tblGrid.horizontalHeader().setSectionResizeMode(2,QHeaderView.Stretch)
+		self.tblGrid.horizontalHeader().setSectionResizeMode(1,QHeaderView.ResizeToContents)
 
 	def _launch(self,*args):
 		args[0].setEnabled(False)
@@ -188,7 +187,7 @@ class accessibility(QStackedWindowItem):
 
 	def _getAppCmd(self,app):
 		cmdPath=self._getPathForCmd(app)
-		if cmdPath!="":
+		if len(cmdPath)>0:
 			cmd=[cmdPath]
 			if cmdPath.endswith("/orca"):
 				cmd.append("-s")
@@ -217,9 +216,11 @@ class accessibility(QStackedWindowItem):
 	#def _getAppCmd
 
 	def _getPathForCmd(self,cmd):
-		cmdPath=""
+		cmdPath=None
 		if os.path.isfile(cmd)==False:
 			cmdPath=shutil.which(os.path.basename(cmd.split(" ")[0]))
+		if cmdPath==None:
+			cmdPath=""
 		return(cmdPath)
 
 	def updateScreen(self):

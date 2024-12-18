@@ -5,8 +5,9 @@ import shutil
 from PySide2.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QGridLayout,QComboBox,QHeaderView,QFileDialog,QScrollArea,QFrame
 from PySide2 import QtGui
 from PySide2 import QtMultimedia
-from PySide2.QtCore import Qt,QSignalMapper,QSize,QThread,QObject,Signal,QUrl
-from QtExtraWidgets import QTableTouchWidget
+from PySide2.QtCore import Qt,QSignalMapper,QSize,QThread,QObject,Signal,QUrl,QFile, QIODevice
+from PySide2.QtUiTools import QUiLoader
+from QtExtraWidgets import QTableTouchWidget,QKdeConfigWidget
 import gettext
 gettext.textdomain("accesswizard")
 _ = gettext.gettext
@@ -21,7 +22,6 @@ i18n={
 	"EXPORT":_("Files exported to"),
 	"FILE":_("File"),
 	"FILES":_("Recorded file list"),
-	"INTERNALTTS":_("Use internal TTS"),
 	"KO":_("Cancel"),
 	"MENUDESCRIPTION":_("Text-To-Speech related options"),
 	"OK":_("Accept"),
@@ -30,12 +30,14 @@ i18n={
 	"RECORD":_("Mp3"),
 	"SAVE":_("Save"),
 	"SPANISH":_("Spanish"),
-	"STRCH":_("Stretch factor"),
+	"STRETCH":_("Stretch factor"),
 	"SYNTH":_("Use synthesizer"),
 	"TEXT":_("Text"),
 	"TOOLTIP":_("Some options related with TTS"),
+	"TTSINTERNAL":_("Use internal TTS"),
+	"TTSORCA":_("Use ORCA"),
+	"TTSVLC":_("Use VLC player"),
 	"VALCAT":_("Valencian-Catalan"),
-	"VLCTTS":_("Use VLC player"),
 	"VOICE":_("Voice")
 	}
 
@@ -74,15 +76,9 @@ class ttshelper(QWidget):
 		self.accesshelper=llxaccessibility.client()
 		self.menu_description=i18n.get('MENUDESCRIPTION')
 		self.description=i18n.get('DESCRIPTION')
-		self.icon=('preferences-desktop-text-to-speech')
 		self.tooltip=i18n.get('TOOLTIP')
-		self.index=7
-		self.enabled=True
-		self.changed=[]
-		self.level='user'
 		self.mp3BtnDict={}
 		self.playing=[]
-		self.optionChanged=[]
 		self.voiceMap={}
 	#def __init__
 
@@ -90,6 +86,18 @@ class ttshelper(QWidget):
 		if self.dbg:
 			print("tts: {}".format(msg))
 	#def _debug
+
+	def _loadConfigScreenFromScript(self):
+		candidateFiles=[os.path.join(os.environ.get("HOME",""),".local","share","kwin","scripts","ocrwindow","contents","ui","config.ui"),"/usr/share/kwin/scripts/ocrwindow/contents/ui/config.ui"]
+		uiFile=""
+		for candidate in candidateFiles:
+			if os.path.exists(candidate):
+				uiFile=candidate
+				break
+		if len(uiFile)==0:
+			return
+		return(QKdeConfigWidget.QKdeConfigWidget(uiFile))
+	#def _loadConfigScreenFromScript(self):
 
 	def __initScreen__(self):
 		self.box=QGridLayout()
@@ -99,33 +107,39 @@ class ttshelper(QWidget):
 		wdg.setLayout(box)
 		scr=QScrollArea()
 		self.box.addWidget(scr,0,0,1,2)
-		self.level='user'
-		lblVoice=QLabel(i18n.get("VOICE"))
-		box.addWidget(lblVoice,0,0,1,1)
-		self.cmbVoice=QComboBox()
-		self.cmbVoice.setAccessibleName(i18n.get("VOICE"))
-		box.addWidget(self.cmbVoice,0,1,1,1)
-		lblRate=QLabel(i18n.get("RATE"))
-		box.addWidget(lblRate,1,0,1,1)
-		self.cmbRate=QComboBox()
-		box.addWidget(self.cmbRate,1,1,1,1)
-		lblPitch=QLabel(i18n.get("PITCH"))
-		lblPitch.setVisible(False)
-		#box.addWidget(lblPitch,2,0,1,1)
-		self.cmbPitch=QComboBox()
-		self.cmbPitch.setAccessibleName(i18n.get("PITCH"))
-		self.cmbPitch.setVisible(False)
-		#box.addWidget(self.cmbPitch,2,1,1,1)
-		lblStrch=QLabel(i18n.get("STRCH"))
-		box.addWidget(lblStrch,2,0,1,1)
-		self.cmbStrch=QComboBox()
-		self.cmbStrch.setAccessibleName(i18n.get("STRCH"))
-		box.addWidget(self.cmbStrch,2,1,1,1)
-		lblSynt=QLabel(i18n.get("SYNTH"))
-		box.addWidget(lblSynt,3,0,1,1)
-		self.cmbSynth=QComboBox()
-		self.cmbSynth.setAccessibleName(i18n.get("SYNTH"))
-		box.addWidget(self.cmbSynth,3,1,1,1)
+		lbl=QLabel(i18n.get("CONFIG"))
+		box.addWidget(lbl,0,0,1,1)
+		#REM -> CUT
+		#self.level='user'
+		#lblVoice=QLabel(i18n.get("VOICE"))
+		#box.addWidget(lblVoice,0,0,1,1)
+		#self.cmbVoice=QComboBox()
+		#self.cmbVoice.setAccessibleName(i18n.get("VOICE"))
+		#box.addWidget(self.cmbVoice,0,1,1,1)
+		#lblRate=QLabel(i18n.get("RATE"))
+		#box.addWidget(lblRate,1,0,1,1)
+		#self.cmbRate=QComboBox()
+		#box.addWidget(self.cmbRate,1,1,1,1)
+		#lblPitch=QLabel(i18n.get("PITCH"))
+		#lblPitch.setVisible(False)
+		##box.addWidget(lblPitch,2,0,1,1)
+		#self.cmbPitch=QComboBox()
+		#self.cmbPitch.setAccessibleName(i18n.get("PITCH"))
+		#self.cmbPitch.setVisible(False)
+		##box.addWidget(self.cmbPitch,2,1,1,1)
+		#lblstretch=QLabel(i18n.get("STRETCH"))
+		#box.addWidget(lblstretch,2,0,1,1)
+		#self.cmbstretch=QComboBox()
+		#self.cmbstretch.setAccessibleName(i18n.get("STRETCH"))
+		#box.addWidget(self.cmbstretch,2,1,1,1)
+		#lblSynt=QLabel(i18n.get("SYNTH"))
+		#box.addWidget(lblSynt,3,0,1,1)
+		#self.cmbSynth=QComboBox()
+		#self.cmbSynth.setAccessibleName(i18n.get("SYNTH"))
+		#box.addWidget(self.cmbSynth,3,1,1,1)
+		#<- CUT
+		self.wdgConfig=self._loadConfigScreenFromScript()
+		box.addWidget(self.wdgConfig,1,0,1,2)
 		frm=QFrame()
 		frm.setFrameShape(frm.HLine)
 		box.addWidget(frm,4,0,1,2)
@@ -157,63 +171,15 @@ class ttshelper(QWidget):
 	#def _load_screen
 
 	def _resetScreen(self):
-		self.cmbVoice.clear()
-		self.cmbRate.clear()
-		self.cmbPitch.clear()
-		self.cmbSynth.clear()
+		#self.cmbVoice.clear()
+		#self.cmbRate.clear()
+		#self.cmbPitch.clear()
+		#self.cmbSynth.clear()
 		self.tblFiles.setRowCount(0)
 		self.tblFiles.setColumnCount(4)
 		self.tblFiles.setHorizontalHeaderLabels([i18n.get("FILE"),i18n.get("RECORD"),i18n.get("TEXT"),i18n.get("SAVE")])
 		self.tblFiles.setAlternatingRowColors(True)
 	#def _resetScreen
-
-	def _populateVoices(self):
-		added=[]
-		for lang,voices in self.accesshelper.getFestivalVoices().items():
-			for voice in voices:
-				if voice in added:
-					continue
-				added.append(voice)
-				text=voice.split("_")[-2]
-				text="{0} {1}".format(text.capitalize(),i18n.get(lang.upper()))
-				self.cmbVoice.addItem(text)
-				self.voiceMap.update({text:voice})
-		self.cmbVoice.setSizeAdjustPolicy(self.cmbVoice.AdjustToContents)
-		self.cmbVoice.adjustSize()
-	#def _populateVoices
-
-	def _populateRate(self):
-		self._debug("Setting rate values")
-		i=0
-		while i<=3:
-			if isinstance(i,float):
-				if i.is_integer():
-					i=int(i)
-			self.cmbRate.addItem("{}x".format(str(i)))
-			i+=0.25
-		#self.cmbRate.setCurrentText(rate)
-	#def _populateRate
-
-	def _populatePitch(self):
-		self._debug("Setting pitch values")
-		for i in range (1,101):
-			self.cmbPitch.addItem(str(i))
-		#self.cmbPitch.setCurrentText(pitch)
-	#def _populatePitch
-
-	def _populateStrch(self):
-		self._debug("Setting stretch values")
-		for i in range (1,10):
-			self.cmbStrch.addItem(str(i))
-	#def _populateStrch
-
-	def _populateSynth(self):
-		self._debug("Setting synt values")
-		self.cmbSynth.addItem(i18n.get("INTERNALTTS"))
-		self.cmbSynth.addItem(i18n.get("VLCTTS"))
-		#if synth=="vlc":
-		#	self.cmbSynth.setCurrentText(i18n.get("VLCTTS"))
-	#def _populateSynth(self):
 
 	def _getDataFromFname(self,fname):
 		dateKey=fname.split("_")[0]
@@ -260,24 +226,10 @@ class ttshelper(QWidget):
 		rate=config.get('rate','1')
 		rate+="x"
 		pitch=config.get('pitch','50')
-		strch=config.get('strch','50')
+		stretch=config.get('stretch','50')
 		voice=config.get('voice','')
 		synth=config.get('synth','true')
 		self._resetScreen()
-		self._populateVoices()
-		for desc,name in self.voiceMap.items():
-			if name==voice:
-				voice=desc
-				break
-		self.cmbVoice.setCurrentText(voice)
-		self._populateRate()
-		self.cmbRate.setCurrentText(rate)
-		self._populateStrch()
-		self.cmbStrch.setCurrentText(strch)
-		self._populateSynth()
-		self.cmbSynth.setCurrentText(i18n.get("VLCTTS"))
-		if synth!="true":
-			self.cmbSynth.setCurrentText(i18n.get("INTERNALTTS"))
 		self._populateFileList()
 	#def _udpate_screen
 
@@ -320,9 +272,12 @@ class ttshelper(QWidget):
 	#def _processTtsFile
 
 	def _playFile(self,ttsFile,btn):
-		if btn in self.playing:
+		skip=False
+		if len(self.playing)>0:
+			if btn==self.playing[0]:
+				skip=True
 			self.playThread.stopPlay()
-		elif len(self.playing)==0:
+		if len(self.playing)==0 and skip==False:
 			self.playing.append(btn)
 			self.playThread=playFile(ttsFile)
 			self.playThread.signal.sig.connect(lambda:(self._stopPlay(btn)))
@@ -340,13 +295,13 @@ class ttshelper(QWidget):
 
 	def _readScreen(self):
 		data={}
-		data["voice"]=self.voiceMap.get(self.cmbVoice.currentText(),self.cmbVoice.currentText().replace(" ","_"))
-		data["rate"]=self.cmbRate.currentText().replace("x","")
-		#data["pitch"]=self.cmbPitch.currentText()
-		data["pitch"]="1"
-		data["strch"]=self.cmbStrch.currentText()
+		#data["voice"]=self.voiceMap.get(self.cmbVoice.currentText(),self.cmbVoice.currentText().replace(" ","_"))
+		#data["rate"]=self.cmbRate.currentText().replace("x","")
+		##data["pitch"]=self.cmbPitch.currentText()
+		#data["pitch"]="1"
+		#data["stretch"]=self.cmbstretch.currentText()
 		synt=self.cmbSynth.currentText()
-		if self.cmbSynth.currentText==i18n.get("INTERNALTTS"):
+		if self.cmbSynth.currentText==i18n.get("TTSINTERNAL"):
 			data["synth"]="false"
 		else:
 			data["synth"]="true"
@@ -356,25 +311,22 @@ class ttshelper(QWidget):
 	def _readConfig(self,*args):
 		#Data is provided from kwin-script ocrwindow
 		data={}
-		for field in ["voice","rate","pitch","synth","stretch"]:
+		for field in ["voice","rate","pitch","synth","stretch","orca","vlc"]:
 			cmd=["kreadconfig5","--file","kwinrc","--group","Script-ocrwindow","--key",field.capitalize()]
 			out=subprocess.check_output(cmd,universal_newlines=True,encoding="utf8")
-			if field=="stretch":
-				field="strch"
 			data[field]=out.strip()
 		return(data)
 	#def _readConfig
 
 	def writeConfig(self):
-		config=self._readConfig()
-		data=self._readScreen()
+		self.wdgConfig.saveChanges()
+		#config=self._readConfig()
+		#data=self._readScreen()
 		#Data is saved to kwin-script ocrwindow
-		config.update(data)
-		for field,value in config.items():
-			if field=="strch":
-				field="stretch"
-			self.accesshelper.writeKFile("kwinrc","Script-ocrwindow",field.capitalize(),value)
-		return(config)
+		#config.update(data)
+		#for field,value in config.items():
+		#	self.accesshelper.writeKFile("kwinrc","Script-ocrwindow",field.capitalize(),value)
+		#return(config)
 	#def writeConfig
 #class ttshelper
 
@@ -382,7 +334,9 @@ if __name__=="__main__":
 	app=QApplication(["TTS Manager"])
 	config=ttshelper()
 	config.__initScreen__()
-	config.setWindowIcon(QtGui.QIcon.fromTheme("kmouth"))
+	icn=QtGui.QIcon("rsrc/ttsmanager.png")
+	config.setWindowIcon(icn)
 	config.show()
+	config.setMinimumHeight(config.sizeHint().height()*1.2)
 	#config.updateScreen()
 	app.exec_()

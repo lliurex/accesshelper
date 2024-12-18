@@ -67,7 +67,10 @@ class threadLauncher(QThread):
 	#def __init__
 
 	def run(self):
-		subprocess.run(self.cmd.split())
+		try:
+			subprocess.run(self.cmd.split())
+		except Exception as e:
+			print("Err launching {0}:\nFailed cmd: {1}".format(e,self.cmd))
 		return(True)
 	#def run
 #class threadLauncher
@@ -230,7 +233,7 @@ class QPushButtonDock(QPushButton):
 		icn=QIcon()
 		iconName=self.data.get("Icon","")
 		if len(iconName)==0:
-			iconName="accesswizard"
+			iconName="accessibledock"
 		if os.path.exists(iconName):
 			pxm=QPixmap(iconName)
 			icn=QIcon(pxm)
@@ -271,7 +274,7 @@ class QPushButtonDock(QPushButton):
 			self.configureLauncher.emit(self)
 			if path.endswith(".desktop"):
 				path=self.property("fpath")
-				cmd="python3 {0} {1}".format(os.path.join(os.path.dirname(os.path.abspath(__file__)),"extras/launchers.py"),path)
+				cmd="python3 {0} {1}".format(os.path.join(os.path.dirname(os.path.abspath(__file__)),"lib/launchers.py"),path)
 				l=threadLauncher(cmd)
 				self.threadLaunchers.append(l)
 				l.start()
@@ -288,7 +291,7 @@ class QPushButtonDock(QPushButton):
 				pathdir=os.path.dirname(path)
 				pathconfig=os.path.join(pathdir,"contents","ui","config.ui")
 				if os.path.exists(pathconfig):
-					cmd="python3 {0} {1}".format(os.path.join(os.path.dirname(os.path.abspath(__file__)),"extras/configLauncher.py"),pathconfig)
+					cmd="python3 {0} {1}".format(os.path.join(os.path.dirname(os.path.abspath(__file__)),"tools/configLauncher.py"),pathconfig)
 					try:
 						l=threadLauncher(cmd)
 						self.threadLaunchers.append(l)
@@ -394,8 +397,9 @@ class accessdock(QWidget):
 		super().__init__()
 		self.dbg=True
 		self.libdock=libdock.libdock()
-		self.setWindowIcon(QIcon.fromTheme("accessdock"))
-		QGuiApplication.setDesktopFileName("accessdock")
+
+		self.setWindowIcon(QIcon.fromTheme("accessibledock"))
+		QGuiApplication.setDesktopFileName("accessibledock")
 		self.setWindowFlags(Qt.NoDropShadowWindowHint|Qt.WindowStaysOnTopHint|Qt.Tool)
 		#This hides decoration and bypass window 
 		#also skips app registering in at-spi so is unexistent for ORCA 

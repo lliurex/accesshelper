@@ -52,14 +52,20 @@ Item {
 		var pitch=KWin.readConfig("Pitch",2);
 		var rate=KWin.readConfig("Rate",3);
 		//var rate=KWin.readConfig("Rate",3);
-		var selVoice=KWin.readConfig("Voice","kal");
-		var Vlc=KWin.readConfig("Vlc",true);
-		var Orca=KWin.readConfig("Orca",0);
-		var Synth=KWin.readConfig("Synth",0);
-		listmodel.append(selVoice);
-		console.log("******");
-		console.log(selVoice);
-		var cmdWithArgs=cmd+" "+stretch+" "+pitch+" "+rate+" "+voice;
+		var voice=KWin.readConfig("Voice","ca");
+		var Vlc=KWin.readConfig("Vlc",false);
+		var Orca=KWin.readConfig("Orca",false);
+		var Synth=KWin.readConfig("Synth",false);
+		if (Synt==true)
+		{
+			ttsengine="synth"
+		}else if (Orca==true){
+			ttsengine="orca"
+		}else{
+			ttsengine="vlc"
+		}
+			
+		var cmdWithArgs=cmd+" "+stretch+" "+pitch+" "+rate+" "+voice+ttsengine;
 		KWin.registerShortcut("Toggle Window OCR", "Toggle Window OCR", "Ctrl+Meta+O", function() {  speaker.exec(cmdWithArgs); }); 
 		//speaker.exec(cmdWithArgs);
 		console.log(workspace.activeClient.internalId)
@@ -67,15 +73,6 @@ Item {
 		//takeScreenshot.setArguments([workspace.activeClient.internalId]);
 		//takeScreenshot.setArguments([0,0,100,100]);
 		//takeScreenshot.call();
-	}
-
-	QComboBox{
-		id: voice
-		model: listmodel
-	}
-
-	ListModel{
-		id: listmodel
 	}
 
 }

@@ -473,8 +473,9 @@ class speechhelper():
 		ordDict=OrderedDict(sorted(allDict.items(),reverse=True))
 		return(ordDict)
 #class speechhelper
-with open("/tmp/d","w") as f:
-	f.write("OOEOEO\n")
+
 app=QApplication(["TTS"])
+print("******")
+print(sys.argv)
 spk=speechhelper()
 spk.readScreen()

@@ -9,8 +9,9 @@ from PySide2.QtGui import QColor
 from QtExtraWidgets import QKdeConfigWidget
 
 if __name__ == "__main__":
-	app = QApplication(["Configuration"])
 	UiFile=sys.argv[1]
+	name=os.path.basename(os.path.dirname(os.path.dirname(os.path.dirname(UiFile))))
+	app = QApplication([name])
 	window=QKdeConfigWidget.QKdeConfigWidget(UiFile)
 	layout=window.layout()
 	btnBox=QWidget()

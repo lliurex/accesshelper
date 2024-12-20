@@ -1,0 +1,66 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-12-20 06:55+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: entrada estàndard:3
+msgid "Voice:"
+msgstr ""
+
+#: entrada estàndard:6
+msgid "Managed by system"
+msgstr ""
+
+#: entrada estàndard:9
+msgid "Spanish"
+msgstr ""
+
+#: entrada estàndard:12
+msgid "Valencian"
+msgstr ""
+
+#: entrada estàndard:15
+msgid "Stretch"
+msgstr ""
+
+#: entrada estàndard:18
+msgid "Pitch"
+msgstr ""
+
+#: entrada estàndard:21
+msgid "Rate:"
+msgstr ""
+
+#: entrada estàndard:24
+msgid "TTS engine"
+msgstr ""
+
+#: entrada estàndard:27
+msgid "Use ORCA"
+msgstr ""
+
+#: entrada estàndard:30
+msgid "Use VLC"
+msgstr ""
+
+#: entrada estàndard:33
+msgid "Use internal synth"
+msgstr ""
+
+#: entrada estàndard:36
+msgid "** Changes apply only after disabling and re-enabling the script **"
+msgstr ""

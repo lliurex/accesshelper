@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>OcrWindowConfig</class>
- <widget class="QWidget" name="OcrWindowConfig">
+ <class>ocrwindowConfig</class>
+ <widget class="QWidget" name="ocrwindowConfig">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -30,12 +30,12 @@
           </item>
           <item>
             <property name="text">
-              <string>es_ES</string>
+              <string>Spanish</string>
             </property>
           </item>
           <item>
             <property name="text">
-              <string>ca@valencia</string>
+              <string>Valencian</string>
             </property>
           </item>
         </widget>
@@ -124,7 +124,7 @@
 		<item>
 		  <widget class="QRadioButton" name="kcfg_Synth" >
 			<property name="text">
-			<string> Use internal synth</string>
+			<string>Use internal synth</string>
 		   </property>
 		   <property name="pressed">
 		   <bool>false</bool>

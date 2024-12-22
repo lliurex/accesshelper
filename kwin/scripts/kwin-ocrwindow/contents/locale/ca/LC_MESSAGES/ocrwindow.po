@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-20 06:55+0100\n"
-"PO-Revision-Date: 2024-12-20 06:55+0100\n"
+"POT-Creation-Date: 2024-12-22 20:36+0100\n"
+"PO-Revision-Date: 2024-12-22 20:38+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ca\n"
@@ -63,5 +63,53 @@ msgid "Use internal synth"
 msgstr "Usar motor intern"
 
 #: entrada estÃ ndard:36
+msgid "OCR Settings"
+msgstr "Configuració OCR"
+
+#: entrada estÃ ndard:39
+msgid "Auto spellcheck correction (recomended)"
+msgstr "Correció automàtica (recomendat)"
+
+#: entrada estÃ ndard:42
+msgid "Select region for process"
+msgstr "Seleccionar regió a processar"
+
+#: entrada estÃ ndard:45
+msgid "Filter for image processing. Often grayscale has better results"
+msgstr "Filter per al processament de la imatge. Usualment \"Escala de grisos\" obté emillors resultats"
+
+#: entrada estÃ ndard:48
+msgid "Grayscale (default)"
+msgstr "Escala de grisos (per defecte)"
+
+#: entrada estÃ ndard:51
+msgid "Sobel"
+msgstr "Sobel"
+
+#: entrada estÃ ndard:54
+msgid "Morph"
+msgstr "Morph"
+
+#: entrada estÃ ndard:57
+msgid "Smooth"
+msgstr "Smooth"
+
+#: entrada estÃ ndard:60
+msgid "Gaussian"
+msgstr "Gaussian"
+
+#: entrada estÃ ndard:63
+msgid "Read content from Clipboard"
+msgstr "Llegir contingut del porta-retalls"
+
+#: entrada estÃ ndard:66
+msgid ""
+"If this options is enabled the content will be readed \n"
+"from clipboard (text or images)."
+msgstr ""
+"Si s'activa aquesta opció el contingut es llegirà\n"
+"desde el portarretalls (text o imatges)"
+
+#: entrada estÃ ndard:70
 msgid "** Changes apply only after disabling and re-enabling the script **"
 msgstr "** Per a aplicar els canvis cal desactivar i activar el script **"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-20 06:55+0100\n"
+"POT-Creation-Date: 2024-12-22 20:36+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -62,5 +62,51 @@ msgid "Use internal synth"
 msgstr ""
 
 #: entrada estàndard:36
+msgid "OCR Settings"
+msgstr ""
+
+#: entrada estàndard:39
+msgid "Auto spellcheck correction (recomended)"
+msgstr ""
+
+#: entrada estàndard:42
+msgid "Select region for process"
+msgstr ""
+
+#: entrada estàndard:45
+msgid "Filter for image processing. Often grayscale has better results"
+msgstr ""
+
+#: entrada estàndard:48
+msgid "Grayscale (default)"
+msgstr ""
+
+#: entrada estàndard:51
+msgid "Sobel"
+msgstr ""
+
+#: entrada estàndard:54
+msgid "Morph"
+msgstr ""
+
+#: entrada estàndard:57
+msgid "Smooth"
+msgstr ""
+
+#: entrada estàndard:60
+msgid "Gaussian"
+msgstr ""
+
+#: entrada estàndard:63
+msgid "Read content from Clipboard"
+msgstr ""
+
+#: entrada estàndard:66
+msgid ""
+"If this options is enabled the content will be readed \n"
+"from clipboard (text or images)."
+msgstr ""
+
+#: entrada estàndard:70
 msgid "** Changes apply only after disabling and re-enabling the script **"
 msgstr ""

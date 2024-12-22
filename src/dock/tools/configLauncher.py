@@ -8,6 +8,10 @@ from PySide2.QtCore import QFile, QIODevice
 from PySide2.QtGui import QColor
 from QtExtraWidgets import QKdeConfigWidget
 
+def save(window,app):
+	window.saveChanges()
+	app.exit()
+
 if __name__ == "__main__":
 	UiFile=sys.argv[1]
 	name=os.path.basename(os.path.dirname(os.path.dirname(os.path.dirname(UiFile))))
@@ -17,7 +21,7 @@ if __name__ == "__main__":
 	btnBox=QWidget()
 	hlay=QHBoxLayout()
 	btnOk=QPushButton("Ok")
-	btnOk.clicked.connect(window.saveChanges)
+	btnOk.clicked.connect(lambda x:save(window,app))
 	btnKo=QPushButton("Cancel")
 	btnKo.clicked.connect(app.exit)
 	btnOk.setFixedSize(btnKo.sizeHint().width(),btnOk.sizeHint().height())

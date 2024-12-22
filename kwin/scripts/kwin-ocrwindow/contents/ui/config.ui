@@ -94,54 +94,141 @@
       </layout>
     </widget>
     </item>
-
-	<item row="3" column="0" colspan="6">
+    <item row="1" column="0" colspan="3" rowspan="2">
       <widget class="QGroupBox">
-	    <property name="title">
-		<string>TTS engine</string>
-       </property>
-	   <layout class="QVBoxLayout">
-	     <item>
-             <widget class="QRadioButton" name="kcfg_Orca" >
-	         <property name="text">
-		     <string>Use ORCA</string>
+        <property name="title">
+             <string>TTS engine</string>
+        </property>
+       <layout class="QVBoxLayout">
+         <item row="0" column="0">
+           <widget class="QRadioButton" name="kcfg_Orca" >
+             <property name="text">
+               <string>Use ORCA</string>
              </property>
-		   <property name="pressed">
-		   <bool>true</bool>
-		   </property>
-  	       </widget>
-		</item>
-		<item>
-		  <widget class="QRadioButton" name="kcfg_Vlc" >
-			<property name="text">
-			<string>Use VLC</string>
-		   </property>
-		   <property name="pressed">
-		   <bool>false</bool>
-		   </property>
-		  </widget>
-		</item>
-		<item>
-		  <widget class="QRadioButton" name="kcfg_Synth" >
-			<property name="text">
-			<string>Use internal synth</string>
-		   </property>
-		   <property name="pressed">
-		   <bool>false</bool>
-		   </property>
-		  </widget>
-		</item>
-	  </layout>
-	</widget>
-    </item>
-    <item row="7" column="0" colspan="6" alignment="Qt::AlignCenter">
-	  <widget class="QLabel" name="label" >
-	    <property name="text">
-		  <string>** Changes apply only after disabling and re-enabling the script **</string>
-	    </property>
+             <property name="pressed">
+               <bool>true</bool>
+             </property>
+             </widget>
+        </item>
+        <item row="1" column="0">
+          <widget class="QRadioButton" name="kcfg_Vlc" >
+            <property name="text">
+              <string>Use VLC</string>
+            </property>
+            <property name="pressed">
+              <bool>false</bool>
+            </property>
+          </widget>
+        </item>
+        <item row="2" column="0">
+          <widget class="QRadioButton" name="kcfg_Synth" >
+            <property name="text">
+              <string>Use internal synth</string>
+            </property>
+           <property name="pressed">
+           <bool>false</bool>
+           </property>
+          </widget>
+        </item>
+        </layout>
       </widget>
     </item>
-
+    <item row="0" column="3" colspan="3" rowspan="1">
+      <widget class="QGroupBox">
+        <property name="title">
+             <string>OCR Settings</string>
+        </property>
+       <layout class="QVBoxLayout">
+        <item row="0" column="0">
+          <widget class="QCheckBox" name="spellchecker" >
+            <property name="text">
+            <string>Auto spellcheck correction (recomended)</string>
+           </property>
+          </widget>
+        </item>
+        <item row="1" column="0">
+          <widget class="QCheckBox" name="screenshotmode" >
+            <property name="text">
+            <string>Select region for process</string>
+           </property>
+          </widget>
+        </item>
+        <item row="2" column="0">
+          <widget class="QLabel">
+            <property name="text">
+            <string>Filter for image processing. Often grayscale has better results</string>
+           </property>
+            <property name="alignment">
+				<set>Qt::AlignBottom</set>
+           </property>
+          </widget>
+        </item>
+        <item row="3" column="0">
+          <widget class="QComboBox" name="kcfg_filter">
+            <item>
+              <property name="text">
+                <string>Grayscale (default)</string>
+              </property>
+            </item>
+            <item>
+              <property name="text">
+                <string>Sobel</string>
+              </property>
+            </item>
+            <item>
+              <property name="text">
+                <string>Morph</string>
+              </property>
+            </item>
+            <item>
+              <property name="text">
+                <string>Smooth</string>
+              </property>
+            </item>
+            <item>
+              <property name="text">
+                <string>Gaussian</string>
+              </property>
+            </item>
+          </widget>
+        </item>
+      </layout>
+    </widget>
+    </item>
+    <item row="1" column="3" colspan="3">
+      <widget class="QGroupBox">
+       <layout class="QVBoxLayout">
+         <item>
+            <widget class="QCheckBox" name="kfc_clipboard" >
+	          <property name="text">
+	  	        <string>Read content from Clipboard</string>
+		      </property>
+		      <property name="alignment">
+		        <set>Qt::AlignBottom</set>
+		      </property>
+	        </widget>
+	      </item>
+          <item row="2" column="3" colspan="3">
+            <widget class="QLabel">
+      	    <property name="text">
+      	  	  <string>If this options is enabled the content will be readed 
+from clipboard (text or images).</string>
+      		</property>
+      		<property name="alignment">
+      		  <set>Qt::AlignTop</set>
+      		</property>
+      	  </widget>
+      	</item>
+		</layout>
+      </widget>
+	</item>
+    <item row="7" column="0" colspan="6" alignment="Qt::AlignCenter">
+      <widget class="QLabel" name="label" >
+        <property name="text">
+          <string>** Changes apply only after disabling and re-enabling the script **</string>
+        </property>
+      </widget>
+    </item>
   </layout>
  </widget>
  <resources/>

@@ -51,7 +51,7 @@ the language of the document to process</string>
        <item row="2" column="0">
           <widget class="QLabel" name="label">
            <property name="text">
-            <string>Stretch</string>
+            <string>Stretch:</string>
            </property>
           </widget>
          </item>

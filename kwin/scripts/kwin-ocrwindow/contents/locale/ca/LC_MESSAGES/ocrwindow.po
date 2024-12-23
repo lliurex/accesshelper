@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-22 20:36+0100\n"
-"PO-Revision-Date: 2024-12-22 20:38+0100\n"
+"POT-Creation-Date: 2024-12-23 07:37+0100\n"
+"PO-Revision-Date: 2024-12-23 07:40+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ca\n"
@@ -19,90 +19,103 @@ msgstr ""
 "X-Generator: Poedit 3.0.1\n"
 
 #: entrada estÃ ndard:3
+msgid ""
+"Best results if selected language matches \n"
+"the language of the document to process"
+msgstr ""
+"Per a resultats òptimes es imprescindible \n"
+"que el llenguatge siga el mateix que el del\n"
+"document que es vullga processar"
+
+#: entrada estÃ ndard:7
 msgid "Voice:"
 msgstr "Veu:"
 
-#: entrada estÃ ndard:6
+#: entrada estÃ ndard:10
 msgid "Managed by system"
 msgstr "Per defecte"
 
-#: entrada estÃ ndard:9
+#: entrada estÃ ndard:13
 msgid "Spanish"
 msgstr "Espanyol"
 
-#: entrada estÃ ndard:12
+#: entrada estÃ ndard:16
 msgid "Valencian"
 msgstr "Valencià"
 
-#: entrada estÃ ndard:15
+#: entrada estÃ ndard:19
 msgid "Stretch"
 msgstr "Amplaria"
 
-#: entrada estÃ ndard:18
+#: entrada estÃ ndard:22
 msgid "Pitch"
 msgstr "Tó"
 
-#: entrada estÃ ndard:21
+#: entrada estÃ ndard:25
 msgid "Rate:"
 msgstr "Velocitat:"
 
-#: entrada estÃ ndard:24
+#: entrada estÃ ndard:28
 msgid "TTS engine"
 msgstr "Motor TTS"
 
-#: entrada estÃ ndard:27
+#: entrada estÃ ndard:31
 msgid "Use ORCA"
 msgstr "Usar ORCA"
 
-#: entrada estÃ ndard:30
+#: entrada estÃ ndard:34
 msgid "Use VLC"
 msgstr "Usar VLC"
 
-#: entrada estÃ ndard:33
+#: entrada estÃ ndard:37
 msgid "Use internal synth"
 msgstr "Usar motor intern"
 
-#: entrada estÃ ndard:36
+#: entrada estÃ ndard:40
 msgid "OCR Settings"
 msgstr "Configuració OCR"
 
-#: entrada estÃ ndard:39
+#: entrada estÃ ndard:43
 msgid "Auto spellcheck correction (recomended)"
 msgstr "Correció automàtica (recomendat)"
 
-#: entrada estÃ ndard:42
+#: entrada estÃ ndard:46
 msgid "Select region for process"
 msgstr "Seleccionar regió a processar"
 
-#: entrada estÃ ndard:45
-msgid "Filter for image processing. Often grayscale has better results"
-msgstr "Filter per al processament de la imatge. Usualment \"Escala de grisos\" obté emillors resultats"
+#: entrada estÃ ndard:49
+msgid ""
+"Filter for image processing. \n"
+"Often grayscale has better results"
+msgstr ""
+"Filter per al processament de la imatge. Usualment \n"
+"\"Escala de grisos\" obté emillors resultats"
 
-#: entrada estÃ ndard:48
+#: entrada estÃ ndard:53
 msgid "Grayscale (default)"
 msgstr "Escala de grisos (per defecte)"
 
-#: entrada estÃ ndard:51
+#: entrada estÃ ndard:56
 msgid "Sobel"
 msgstr "Sobel"
 
-#: entrada estÃ ndard:54
+#: entrada estÃ ndard:59
 msgid "Morph"
 msgstr "Morph"
 
-#: entrada estÃ ndard:57
+#: entrada estÃ ndard:62
 msgid "Smooth"
 msgstr "Smooth"
 
-#: entrada estÃ ndard:60
+#: entrada estÃ ndard:65
 msgid "Gaussian"
 msgstr "Gaussian"
 
-#: entrada estÃ ndard:63
+#: entrada estÃ ndard:68
 msgid "Read content from Clipboard"
 msgstr "Llegir contingut del porta-retalls"
 
-#: entrada estÃ ndard:66
+#: entrada estÃ ndard:71
 msgid ""
 "If this options is enabled the content will be readed \n"
 "from clipboard (text or images)."
@@ -110,6 +123,6 @@ msgstr ""
 "Si s'activa aquesta opció el contingut es llegirà\n"
 "desde el portarretalls (text o imatges)"
 
-#: entrada estÃ ndard:70
+#: entrada estÃ ndard:75
 msgid "** Changes apply only after disabling and re-enabling the script **"
 msgstr "** Per a aplicar els canvis cal desactivar i activar el script **"

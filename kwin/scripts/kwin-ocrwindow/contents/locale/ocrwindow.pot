@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-22 20:36+0100\n"
+"POT-Creation-Date: 2024-12-23 07:37+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,95 +18,103 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: entrada estàndard:3
+msgid ""
+"Best results if selected language matches \n"
+"the language of the document to process"
+msgstr ""
+
+#: entrada estàndard:7
 msgid "Voice:"
 msgstr ""
 
-#: entrada estàndard:6
+#: entrada estàndard:10
 msgid "Managed by system"
 msgstr ""
 
-#: entrada estàndard:9
+#: entrada estàndard:13
 msgid "Spanish"
 msgstr ""
 
-#: entrada estàndard:12
+#: entrada estàndard:16
 msgid "Valencian"
 msgstr ""
 
-#: entrada estàndard:15
+#: entrada estàndard:19
 msgid "Stretch"
 msgstr ""
 
-#: entrada estàndard:18
+#: entrada estàndard:22
 msgid "Pitch"
 msgstr ""
 
-#: entrada estàndard:21
+#: entrada estàndard:25
 msgid "Rate:"
 msgstr ""
 
-#: entrada estàndard:24
+#: entrada estàndard:28
 msgid "TTS engine"
 msgstr ""
 
-#: entrada estàndard:27
+#: entrada estàndard:31
 msgid "Use ORCA"
 msgstr ""
 
-#: entrada estàndard:30
+#: entrada estàndard:34
 msgid "Use VLC"
 msgstr ""
 
-#: entrada estàndard:33
+#: entrada estàndard:37
 msgid "Use internal synth"
 msgstr ""
 
-#: entrada estàndard:36
+#: entrada estàndard:40
 msgid "OCR Settings"
 msgstr ""
 
-#: entrada estàndard:39
+#: entrada estàndard:43
 msgid "Auto spellcheck correction (recomended)"
 msgstr ""
 
-#: entrada estàndard:42
+#: entrada estàndard:46
 msgid "Select region for process"
 msgstr ""
 
-#: entrada estàndard:45
-msgid "Filter for image processing. Often grayscale has better results"
+#: entrada estàndard:49
+msgid ""
+"Filter for image processing. \n"
+"Often grayscale has better results"
 msgstr ""
 
-#: entrada estàndard:48
+#: entrada estàndard:53
 msgid "Grayscale (default)"
 msgstr ""
 
-#: entrada estàndard:51
+#: entrada estàndard:56
 msgid "Sobel"
 msgstr ""
 
-#: entrada estàndard:54
+#: entrada estàndard:59
 msgid "Morph"
 msgstr ""
 
-#: entrada estàndard:57
+#: entrada estàndard:62
 msgid "Smooth"
 msgstr ""
 
-#: entrada estàndard:60
+#: entrada estàndard:65
 msgid "Gaussian"
 msgstr ""
 
-#: entrada estàndard:63
+#: entrada estàndard:68
 msgid "Read content from Clipboard"
 msgstr ""
 
-#: entrada estàndard:66
+#: entrada estàndard:71
 msgid ""
 "If this options is enabled the content will be readed \n"
 "from clipboard (text or images)."
 msgstr ""
 
-#: entrada estàndard:70
+#: entrada estàndard:75
 msgid "** Changes apply only after disabling and re-enabling the script **"
 msgstr ""

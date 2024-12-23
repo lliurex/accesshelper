@@ -164,7 +164,8 @@ the language of the document to process</string>
         <item row="2" column="0">
           <widget class="QLabel">
             <property name="text">
-            <string>Filter for image processing. Often grayscale has better results</string>
+            <string>Filter for image processing. 
+Often grayscale has better results</string>
            </property>
             <property name="alignment">
                 <set>Qt::AlignBottom</set>

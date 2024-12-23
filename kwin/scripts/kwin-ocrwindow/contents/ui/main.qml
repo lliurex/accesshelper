@@ -48,25 +48,7 @@ Item {
 
 	Component.onCompleted: {
 		var cmd = wrkdir.replace("file://","")+'tts.py';
-		var stretch=KWin.readConfig("Stretch",1);
-		var pitch=KWin.readConfig("Pitch",2);
-		var rate=KWin.readConfig("Rate",3);
-		//var rate=KWin.readConfig("Rate",3);
-		var voice=KWin.readConfig("Voice","ca");
-		var Vlc=KWin.readConfig("Vlc",false);
-		var Orca=KWin.readConfig("Orca",false);
-		var Synth=KWin.readConfig("Synth",false);
-		if (Synt==true)
-		{
-			ttsengine="synth"
-		}else if (Orca==true){
-			ttsengine="orca"
-		}else{
-			ttsengine="vlc"
-		}
-			
-		var cmdWithArgs=cmd+" "+stretch+" "+pitch+" "+rate+" "+voice+ttsengine;
-		KWin.registerShortcut("Toggle Window OCR", "Toggle Window OCR", "Ctrl+Meta+O", function() {  speaker.exec(cmdWithArgs); }); 
+		KWin.registerShortcut("Toggle Window OCR", "Toggle Window OCR", "Ctrl+Meta+O", function() {  speaker.exec(); }); 
 		//speaker.exec(cmdWithArgs);
 		console.log(workspace.activeClient.internalId)
 		//takeScreenshot.setArguments([0,0]);

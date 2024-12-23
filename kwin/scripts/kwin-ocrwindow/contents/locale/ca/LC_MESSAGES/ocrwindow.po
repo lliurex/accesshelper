@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-23 07:46+0100\n"
-"PO-Revision-Date: 2024-12-23 07:50+0100\n"
+"POT-Creation-Date: 2024-12-23 07:53+0100\n"
+"PO-Revision-Date: 2024-12-23 08:02+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ca\n"
@@ -44,8 +44,8 @@ msgid "Valencian"
 msgstr "Valencià"
 
 #: entrada estÃ ndard:19
-msgid "Stretch"
-msgstr "Amplaria"
+msgid "Stretch:"
+msgstr "Cadència:"
 
 #: entrada estÃ ndard:22
 msgid "Pitch"
@@ -77,7 +77,7 @@ msgstr "Configuració OCR"
 
 #: entrada estÃ ndard:43
 msgid "Auto spellcheck correction (recomended)"
-msgstr "Correció automàtica (recomendat)"
+msgstr "Correció automàtica (recomanat)"
 
 #: entrada estÃ ndard:46
 msgid "Select region for process"
@@ -88,8 +88,8 @@ msgid ""
 "Filter for image processing. \n"
 "Often grayscale has better results"
 msgstr ""
-"Filter per al processament de la imatge. Usualment \n"
-"\"Escala de grisos\" obté emillors resultats"
+"Filtre per al processament de la imatge. Usualment \n"
+"\"Escala de grisos\" obté millors resultats"
 
 #: entrada estÃ ndard:53
 msgid "Grayscale (default)"

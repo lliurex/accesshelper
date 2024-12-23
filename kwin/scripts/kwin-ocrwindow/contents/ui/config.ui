@@ -17,7 +17,7 @@
        <item row="0" column="0" colspan="6">
         <widget class="QLabel">
          <property name="text">
-          <string>Best results if selected language matches 
+          <string>Best results if voice matches 
 the language of the document to process</string>
          </property>
         </widget>

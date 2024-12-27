@@ -249,7 +249,7 @@ class QPushButtonDock(QPushButton):
 		cmd=self.data.get("Exec","")
 		if len(cmd)>0:
 			self.setEnabled(False)
-			#self.dock.setVisible(False)
+			self.dock.setVisible(False)
 			l=threadLauncher(cmd)
 			l.start()
 			l.finished.connect(self._endLaunch)
@@ -257,7 +257,7 @@ class QPushButtonDock(QPushButton):
 	#def _beginLaunch
 
 	def _endLaunch(self,*args):
-		#self.dock.setVisible(True)
+		self.dock.setVisible(True)
 		if self.isEnabled()==False:
 			self.setEnabled(True)
 		else:

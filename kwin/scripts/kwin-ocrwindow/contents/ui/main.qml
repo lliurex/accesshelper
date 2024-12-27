@@ -21,14 +21,37 @@ Item {
 			var stderr = data["stderr"]
 			exited(exitCode, exitStatus, stdout, stderr)
 			disconnectSource(sourceName) // cmd finished
+			console.log("FINISHED");
+			var cWindow=workspace.activeClient;
+			restoreWindow(cWindow);
 		}
 		function exec(cmd) {
 			//takeScreenshot.setArguments([workspace.activeClient.internalId]);
+			prepareWindow();
+			console.log("INIT");
 			connectSource(cmd);
 			console.log(cmd);
 		}
+
+		function prepareWindow()
+		{
+			console.log("INIT PREPARE");
+			console.log(workspace.activeClient);
+			var cWindow=workspace.activeClient;
+			console.log("W selected");
+			cWindow.fullScreen=true;
+			console.log("END PREPARE");
+		}
+
+		function restoreWindow(cWindow)
+		{
+			console.log("END RESTORE");
+			cWindow.fullScreen=false;
+		}
 		signal exited(int exitCode, int exitStatus, string stdout, string stderr)
 	}
+
+
 
     KWinComponents.DBusCall {
         id: takeScreenshot
@@ -48,7 +71,7 @@ Item {
 
 	Component.onCompleted: {
 		var cmd = wrkdir.replace("file://","")+'tts.py';
-		KWin.registerShortcut("Toggle Window OCR", "Toggle Window OCR", "Ctrl+Meta+O", function() {  speaker.exec(); }); 
+		KWin.registerShortcut("Toggle Window OCR", "Toggle Window OCR", "Ctrl+Meta+O", function() {  speaker.exec(cmd); }); 
 		//speaker.exec(cmdWithArgs);
 		console.log(workspace.activeClient.internalId)
 		//takeScreenshot.setArguments([0,0]);

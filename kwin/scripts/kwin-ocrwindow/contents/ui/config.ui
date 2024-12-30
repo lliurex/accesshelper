@@ -61,7 +61,7 @@ the language of the document to process</string>
             <number>1</number>
            </property>
            <property name="maximum">
-            <number>15</number>
+            <number>10</number>
            </property>
           </widget>
          </item>
@@ -92,7 +92,7 @@ the language of the document to process</string>
        <item row="2" column="5">
           <widget class="QSpinBox" name="kcfg_Rate">
            <property name="minimum">
-            <number>1</number>
+            <number>0</number>
            </property>
            <property name="maximum">
             <number>100</number>
@@ -109,16 +109,6 @@ the language of the document to process</string>
         </property>
        <layout class="QVBoxLayout">
          <item row="0" column="0">
-           <widget class="QRadioButton" name="kcfg_Orca" >
-             <property name="text">
-               <string>Use ORCA</string>
-             </property>
-             <property name="pressed">
-               <bool>true</bool>
-             </property>
-             </widget>
-        </item>
-        <item row="1" column="0">
           <widget class="QRadioButton" name="kcfg_Vlc" >
             <property name="text">
               <string>Use VLC</string>
@@ -128,7 +118,7 @@ the language of the document to process</string>
             </property>
           </widget>
         </item>
-        <item row="2" column="0">
+        <item row="1" column="0">
           <widget class="QRadioButton" name="kcfg_Synth" >
             <property name="text">
               <string>Use internal synth</string>

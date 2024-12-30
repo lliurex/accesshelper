@@ -134,11 +134,7 @@ class QToolTipDock(QLabel):
 	#def _getCoordsForFull
 
 	def toggle(self,coords):
-		print("TOGGLE")
-		if self.isVisible():
-			print("HIDE")
-			#self.setVisible(False)
-		else:
+		if self.isVisible()==False:
 			if self.bigTip==True:
 				self.setFont(self.fontFull)
 				coords=self._getCoordsForFull(coords)
@@ -262,7 +258,6 @@ class QPushButtonDock(QPushButton):
 			self.setEnabled(True)
 		else:
 			self.configure.emit(self)
-		self.dock.setVisible(True)
 	#def _endLaunch
 
 	def _toggle(self,*Args,**kwargs):
@@ -548,9 +543,9 @@ class accessdock(QWidget):
 	#def _resize
 
 	def _toggle(self,*args,**kwargs):
-		if self.isVisible()==False:
-			self.updateScreen()
 		self.setVisible(not(self.isVisible()))
+		if self.isVisible()==True:
+			self.updateScreen()
 	#def _toggle
 #class accessdock
 		

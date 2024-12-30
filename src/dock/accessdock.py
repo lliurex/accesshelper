@@ -134,15 +134,16 @@ class QToolTipDock(QLabel):
 	#def _getCoordsForFull
 
 	def toggle(self,coords):
+		print("TOGGLE")
 		if self.isVisible():
-			self.setVisible(False)
+			print("HIDE")
+			#self.setVisible(False)
 		else:
 			if self.bigTip==True:
 				self.setFont(self.fontFull)
 				coords=self._getCoordsForFull(coords)
-			else:
-				cursor=self.cursor()
-				coords=cursor.pos()
+			#else:
+			#	coords=self.cursor().pos()
 			self.setMinimumWidth(len(self.text())*self.font().pointSize())
 			(x,y)=(coords.x(),coords.y())
 			scr=QApplication.screens()[0]
@@ -362,13 +363,13 @@ class QPushButtonDock(QPushButton):
 		if self.popupShow==False and (ev.type()==QEvent.Type.Enter or ev.type()==QEvent.Type.FocusIn):
 			if self.hasFocus()==False:
 				self.setFocus()
-				size=self.size()
-				origSize=72
-				newsize=QSize(size.width(),origSize*1.5)
-				self.setIconSize(newsize)
-				self.setFixedSize(newsize)
-				self.lbl.toggle(self.mapToGlobal(QPoint(0,self.y()+self.height())))
-				self.focusIn.emit(self)
+			size=self.size()
+			origSize=72
+			newsize=QSize(size.width(),origSize*1.5)
+			self.setIconSize(newsize)
+			self.setFixedSize(newsize)
+			self.lbl.toggle(self.mapToGlobal(QPoint(0,self.y()+self.height())))
+			self.focusIn.emit(self)
 		elif self.popupShow==True or (ev.type()==QEvent.Type.Leave or ev.type()==QEvent.Type.FocusOut):
 			size=self.size()
 			if self.lbl.isVisible():
@@ -377,7 +378,7 @@ class QPushButtonDock(QPushButton):
 			newsize=QSize(size.width(),self.initialSize.height()/1.1)
 			self.setFixedSize(newsize)
 			self.setIconSize(newsize)
-		ev.ignore()
+		#ev.ignore()
 		return(False)
 	#def eventFilter
 #class QPushButtonDock
@@ -512,13 +513,16 @@ class accessdock(QWidget):
 			wrkF="/usr/share/accesswizard/dock/accessdock-config.py"
 			launchers.append(("accessdock-config.py",{"File":wrkF,"Path":wrkF,"fpath":wrkF,"Name":"Configure","Icon":"accessdock","Exec":wrkF}))
 		for launcher in launchers:
-			btn=QPushButtonDock(launcher,bigTip,parent=self)
+			btn=QPushButtonDock(launcher,bigTip)
 			btn.configureMain.connect(self._launchDockConfig)
 			btn.configure.connect(self._toggle)
 			btn.configureLauncher.connect(self._toggle)
 			btn.toggle.connect(self._toggle)
 			self.grid.setColumnCount(self.grid.columnCount()+1)
 			self.grid.setCellWidget(0,self.grid.columnCount()-1,btn)
+			if self.grid.columnCount()>1:
+				#self.grid.setTabOrder(self.grid.cellWidget(0,self.grid.columnCount()-1),btn)
+				btn.setFocusPolicy(Qt.StrongFocus)
 		hh=self.grid.horizontalHeader()
 		hh.setSectionResizeMode(hh.ResizeToContents)
 		vh=self.grid.verticalHeader()
@@ -526,6 +530,11 @@ class accessdock(QWidget):
 		if oldcount>0:
 			self._resize()
 	#def updateScreen
+
+	def showEvent(self,*args):
+		self.activateWindow()
+		self.setFocus()
+	#def showEvent
 	
 	def _resize(self):
 		colWidth=self.grid.horizontalHeader().sectionSize(0)

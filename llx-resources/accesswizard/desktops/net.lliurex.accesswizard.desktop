@@ -13,6 +13,6 @@ Comment[ca]=Gestiona les opciones d'accessibilitat
 Exec=/usr/share/accesswizard/accesswizard.py
 Terminal=false
 Type=Application
-Icon=accesswizard
+Icon=accessibledock
 Categories=Accessibility;X-Lliurex;
 TryExec=/usr/share/accesswizard/accesswizard.py

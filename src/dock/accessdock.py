@@ -257,11 +257,11 @@ class QPushButtonDock(QPushButton):
 	#def _beginLaunch
 
 	def _endLaunch(self,*args):
-		self.dock.setVisible(True)
 		if self.isEnabled()==False:
 			self.setEnabled(True)
 		else:
 			self.configure.emit(self)
+		self.dock.setVisible(True)
 	#def _endLaunch
 
 	def _toggle(self,*Args,**kwargs):

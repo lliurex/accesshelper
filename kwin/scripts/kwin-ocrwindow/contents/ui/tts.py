@@ -4,4 +4,4 @@ import os,shutil,sys
 from llxaccessibility import llxaccessibility
 
 accessibility=llxaccessibility.client()
-accessibility.readScreen(onlyScreen=True)
+accessibility.readScreen()

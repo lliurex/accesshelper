@@ -258,6 +258,7 @@ class QPushButtonDock(QPushButton):
 			self.setEnabled(True)
 		else:
 			self.configure.emit(self)
+		self.dock.setVisible(True)
 	#def _endLaunch
 
 	def _toggle(self,*Args,**kwargs):
@@ -508,7 +509,7 @@ class accessdock(QWidget):
 			wrkF="/usr/share/accesswizard/dock/accessdock-config.py"
 			launchers.append(("accessdock-config.py",{"File":wrkF,"Path":wrkF,"fpath":wrkF,"Name":"Configure","Icon":"accessdock","Exec":wrkF}))
 		for launcher in launchers:
-			btn=QPushButtonDock(launcher,bigTip)
+			btn=QPushButtonDock(launcher,bigTip,self)
 			btn.configureMain.connect(self._launchDockConfig)
 			btn.configure.connect(self._toggle)
 			btn.configureLauncher.connect(self._toggle)

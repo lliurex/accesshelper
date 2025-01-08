@@ -27,31 +27,34 @@ Item {
 		}
 		function exec(cmd) {
 			//takeScreenshot.setArguments([workspace.activeClient.internalId]);
+			toggleDock.call();
 			prepareWindow();
-			console.log("INIT");
 			connectSource(cmd);
-			console.log(cmd);
 		}
 
 		function prepareWindow()
 		{
-			console.log("INIT PREPARE");
 			console.log(workspace.activeClient);
 			var cWindow=workspace.activeClient;
 			console.log("W selected");
 			cWindow.fullScreen=true;
-			console.log("END PREPARE");
 		}
 
 		function restoreWindow(cWindow)
 		{
-			console.log("END RESTORE");
 			cWindow.fullScreen=false;
+			toggleDock.call();
 		}
 		signal exited(int exitCode, int exitStatus, string stdout, string stderr)
 	}
 
 
+    KWinComponents.DBusCall {
+        id: toggleDock
+        //service: "org.kde.Spectacle"; path: "/"; method: "ActiveWindow";
+        //service: "org.kde.KWin"; path: "/Screenshot"; method: "screenshotForWindow";
+        service: "net.lliurex.accessibledock"; path: "/net/lliurex/accessibledock"; method: "toggle";
+    }
 
     KWinComponents.DBusCall {
         id: takeScreenshot

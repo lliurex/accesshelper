@@ -220,7 +220,6 @@ class QPushButtonDock(QPushButton):
 		#layout.addWidget(self.lbl,0,0)
 		self.threadLaunchers=[]
 		self.popupShow=False
-		self.dock=parent
 		self._renderBtn()
 		self.clicked.connect(self._beginLaunch)
 	#def __init__(self,text="",parent=None):
@@ -243,10 +242,10 @@ class QPushButtonDock(QPushButton):
 	#def _renderBtn
 
 	def _beginLaunch(self,*args):
+		self._toggle()
 		cmd=self.data.get("Exec","")
 		if len(cmd)>0:
 			self.setEnabled(False)
-			self.dock.setVisible(False)
 			l=threadLauncher(cmd)
 			l.start()
 			l.finished.connect(self._endLaunch)
@@ -258,7 +257,7 @@ class QPushButtonDock(QPushButton):
 			self.setEnabled(True)
 		else:
 			self.configure.emit(self)
-		self.dock.setVisible(True)
+		self._toggle()
 	#def _endLaunch
 
 	def _toggle(self,*Args,**kwargs):

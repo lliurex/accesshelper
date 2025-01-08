@@ -253,14 +253,14 @@ class QPushButtonDock(QPushButton):
 	#def _beginLaunch
 
 	def _endLaunch(self,*args):
+		self._toggle()
 		if self.isEnabled()==False:
 			self.setEnabled(True)
 		else:
 			self.configure.emit(self)
-		self._toggle()
 	#def _endLaunch
 
-	def _toggle(self,*Args,**kwargs):
+	def _toggle(self,*args,**kwargs):
 		self.toggle.emit()
 	#def _toggle
 
@@ -453,7 +453,7 @@ class accessdock(QWidget):
 	#def _setColorForBorder
 
 	def _launchDockConfig(self,*args,**kwargs):
-		self.setVisible(False)
+		self._toggle()
 		try:
 			cmd=os.path.join(os.path.dirname(os.path.abspath(__file__)),"accessdock-config.py")
 			l=threadLauncher(cmd)
@@ -465,8 +465,8 @@ class accessdock(QWidget):
 	#def _launchDockConfig
 
 	def _endLaunch(self,*args):
-		self.updateScreen()
-		self.setVisible(True)
+		self._debug("Process end detected")
+		self._toggle()
 	#def _endLaunch
 
 	def mousePressEvent(self, ev):
@@ -512,7 +512,7 @@ class accessdock(QWidget):
 			btn.configureMain.connect(self._launchDockConfig)
 			btn.configure.connect(self._toggle)
 			btn.configureLauncher.connect(self._toggle)
-			btn.toggle.connect(self._toggle)
+			#btn.toggle.connect(self._toggle)
 			self.grid.setColumnCount(self.grid.columnCount()+1)
 			self.grid.setCellWidget(0,self.grid.columnCount()-1,btn)
 			if self.grid.columnCount()>1:
@@ -543,6 +543,7 @@ class accessdock(QWidget):
 	#def _resize
 
 	def _toggle(self,*args,**kwargs):
+		self._debug("Toggle visibility from {0} to {1}".format(not(self.isVisible()),self.isVisible()))
 		self.setVisible(not(self.isVisible()))
 		if self.isVisible()==True:
 			self.updateScreen()

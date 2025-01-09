@@ -21,13 +21,12 @@ Item {
 			var stderr = data["stderr"]
 			exited(exitCode, exitStatus, stdout, stderr)
 			disconnectSource(sourceName) // cmd finished
-			console.log("FINISHED");
 			var cWindow=workspace.activeClient;
 			restoreWindow(cWindow);
 		}
 		function exec(cmd) {
 			//takeScreenshot.setArguments([workspace.activeClient.internalId]);
-			toggleDock.call();
+			//toggleDock.call();
 			prepareWindow();
 			connectSource(cmd);
 		}

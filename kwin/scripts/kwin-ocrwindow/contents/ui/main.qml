@@ -9,6 +9,7 @@ import org.kde.kwin 2.0 as KWinComponents
 Item {
     id: root
 	property string wrkdir: Qt.resolvedUrl("./")
+	property var cWindow:""
 
 	PlasmaCore.DataSource {
 		id: speaker
@@ -21,26 +22,25 @@ Item {
 			var stderr = data["stderr"]
 			exited(exitCode, exitStatus, stdout, stderr)
 			disconnectSource(sourceName) // cmd finished
-			var cWindow=workspace.activeClient;
 			restoreWindow(cWindow);
 		}
 		function exec(cmd) {
 			//takeScreenshot.setArguments([workspace.activeClient.internalId]);
-			//toggleDock.call();
+			toggleDock.call();
 			prepareWindow();
 			connectSource(cmd);
 		}
 
 		function prepareWindow()
 		{
-			console.log(workspace.activeClient);
-			var cWindow=workspace.activeClient;
-			console.log("W selected");
+			cWindow=workspace.activeClient;
+			console.log(cWindow);
 			cWindow.fullScreen=true;
 		}
 
 		function restoreWindow(cWindow)
 		{
+			console.log(cWindow)
 			cWindow.fullScreen=false;
 			toggleDock.call();
 		}

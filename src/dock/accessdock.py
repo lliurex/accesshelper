@@ -47,12 +47,12 @@ class dbusMethods(dbus.service.Object):
 			dbusList.append(json.dumps(launcher))
 		return(dbusList)
 		"""Calling this method fires up the signal."""
-	#def toggle
+	#def getLaunchers
 
 	@dbus.service.method("net.lliurex.accessibledock", in_signature='', out_signature='b')
 	def isVisible(self):
 		return(self.widget.isVisible())
-	#def toggle
+	#def isVisible
 #class dbusMethods
 
 class threadLauncher(QThread):
@@ -203,7 +203,7 @@ class QPushButtonDock(QPushButton):
 		super().__init__()
 		layout=QGridLayout()
 		self.setLayout(layout)
-		self.setWindowFlags(Qt.NoDropShadowWindowHint|Qt.WindowStaysOnTopHint)
+		#self.setWindowFlags(Qt.NoDropShadowWindowHint|Qt.WindowStaysOnTopHint)
 		#self.setWindowFlags(Qt.BypassWindowManagerHint)
 		self.name,self.data=launcher
 		self.setProperty("file",self.data.get("File",""))
@@ -453,7 +453,7 @@ class accessdock(QWidget):
 	#def _setColorForBorder
 
 	def _launchDockConfig(self,*args,**kwargs):
-		self._toggle()
+		#self._toggle()
 		try:
 			cmd=os.path.join(os.path.dirname(os.path.abspath(__file__)),"accessdock-config.py")
 			l=threadLauncher(cmd)
@@ -466,7 +466,7 @@ class accessdock(QWidget):
 
 	def _endLaunch(self,*args):
 		self._debug("Process end detected")
-		self._toggle()
+		#self._toggle()
 	#def _endLaunch
 
 	def mousePressEvent(self, ev):
@@ -512,7 +512,7 @@ class accessdock(QWidget):
 			btn.configureMain.connect(self._launchDockConfig)
 			btn.configure.connect(self._toggle)
 			btn.configureLauncher.connect(self._toggle)
-			#btn.toggle.connect(self._toggle)
+			btn.toggle.connect(self._toggle)
 			self.grid.setColumnCount(self.grid.columnCount()+1)
 			self.grid.setCellWidget(0,self.grid.columnCount()-1,btn)
 			if self.grid.columnCount()>1:

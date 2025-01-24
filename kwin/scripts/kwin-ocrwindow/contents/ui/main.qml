@@ -27,13 +27,13 @@ Item {
 		function exec(cmd) {
 			//takeScreenshot.setArguments([workspace.activeClient.internalId]);
 			toggleDock.call();
+			cWindow=workspace.activeClient;
 			prepareWindow();
 			connectSource(cmd);
 		}
 
 		function prepareWindow()
 		{
-			cWindow=workspace.activeClient;
 			console.log(cWindow);
 			cWindow.fullScreen=true;
 		}

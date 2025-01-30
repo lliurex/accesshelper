@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>FocusTrackConfig</class>
+ <widget class="QWidget" name="FocusTrackConfig">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>355</width>
+    <height>177</height>
+   </rect>
+  </property>
+  <layout class="QGridLayout" name="formLayout">
+   <item row="0" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Border color:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="KColorButton" name="kcfg_BorderColor">
+     <property name="color">
+      <color>white</color>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Border Height</string>
+       </property>
+      </widget>
+     </item>
+   <item row="1" column="1">
+      <widget class="QSpinBox" name="kcfg_BorderHeight">
+       <property name="suffix">
+        <string>px</string>
+       </property>
+       <property name="minimum">
+        <number>0</number>
+       </property>
+       <property name="maximum">
+        <number>20</number>
+       </property>
+      </widget>
+     </item>
+	<item row="2" column="0" colspan="4" alignment="Qt::AlignCenter">
+      <widget class="QLabel" name="label" >
+        <property name="text">
+         <string>** Changes apply only after disabling and re-enabling the script **</string>
+  		</property>
+  	  </widget>
+    </item>
+
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KColorButton</class>
+   <extends>QPushButton</extends>
+   <header>kcolorbutton.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

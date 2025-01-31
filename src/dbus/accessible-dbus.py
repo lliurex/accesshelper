@@ -24,46 +24,36 @@ class accessibilityDbusMethods(dbus.service.Object):
 			print("accessibility-dbus: %s"%str(msg))
 	#def _debug
 
-	def _reloadSignal(self,*args,**kwargs):
-		self.reloadSignal()
-	#def _reloadSignal
-
 	def _print(self,msg):
 		logging.info("accessibility-dbus: %s"%str(msg))
 	#def _print
 
-	@dbus.service.signal("net.lliurex.accessibility")
-	def toggleDockSignal(self):
-		pass
-	#def toggleDockVisible(self)
-
-	@dbus.service.method("net.lliurex.accessibility")
-
-	def toggleDock(self):
-		"""Calling this method fires up the signal."""
-		self.toggleDockSignal()
-	#def toggleDock
+	def _emitFocusChanged(self,*args,**kwargs):
+		print(args[0])
+		self.focusChanged(str(args[0]))
+	#def _updatedSignal
 
 	@dbus.service.signal("net.lliurex.accessibility")
-	def isDockVisibleSignal(self,*args,**kwargs):
+	def focusChanged(self,*args,**kwargs):
 		pass
-	#def isDockVisibleSignal(self)
+	#def focusChanged
 
-	@dbus.service.method("net.lliurex.accessibility", in_signature='', out_signature='b')
-	def isDockVisible(self):
-		self.isDockVisibleSignal()
-	#def isVisible
+	@dbus.service.method("net.lliurex.accessibility",
+						 in_signature='', out_signature='b')
+	def trackFocus(self):
+		self.accessibility.trackFocus(self._emitFocusChanged)
+		return(True)
+	#def trackFocus
 
-	@dbus.service.method("net.lliurex.accessibility", in_signature='', out_signature='as')
-	def getLaunchers(self):
-		dock=libdock.libdock()
-		dbusList = dbus.Array()
-		for launcher in dock.getLaunchers():
-			name,data=launcher
-			dbusList.append(json.dumps(launcher))
-		return(dbusList)
-		"""Calling this method fires up the signal."""
-	#def getLaunchers
+	@dbus.service.method("net.lliurex.accessibility",
+						 in_signature='', out_signature='a{sn}')
+	def getCurrentFocusCoords(self):
+		return(self.accessibility.getCurrentFocusCoords())
+	#def getCurrentFocusCoords
+
+	def _reloadSignal(self,*args,**kwargs):
+		self.reloadSignal()
+	#def _reloadSignal
 #class accessibilityDbusMethods
 
 class accessibilityDBus():

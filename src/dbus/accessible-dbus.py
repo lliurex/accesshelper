@@ -29,8 +29,16 @@ class accessibilityDbusMethods(dbus.service.Object):
 	#def _print
 
 	def _emitFocusChanged(self,*args,**kwargs):
+		if len(args)>0:
+			coords=args[0]
 		print(args[0])
-		self.focusChanged(str(args[0]))
+		if isinstance(coords,dict):
+			fields=["x","y","w","h"]
+			total=0
+			for field in fields:
+				total+=coords.get(field,0)
+			if total>0:	
+				self.focusChanged(str(coords))
 	#def _updatedSignal
 
 	@dbus.service.signal("net.lliurex.accessibility")
@@ -48,7 +56,9 @@ class accessibilityDbusMethods(dbus.service.Object):
 	@dbus.service.method("net.lliurex.accessibility",
 						 in_signature='', out_signature='a{sn}')
 	def getCurrentFocusCoords(self):
-		return(self.accessibility.getCurrentFocusCoords())
+		coords=self.accessibility.getCurrentFocusCoords()
+		self._emitFocusChanged(coords)
+		return(coords)
 	#def getCurrentFocusCoords
 
 	def _reloadSignal(self,*args,**kwargs):

@@ -14,6 +14,11 @@ Description: Set accessibility settings
  AccessHelper it's a common place for the
  available accessibility options 
 
+Package: accesswizard-dbus
+Architecture: all
+Depends: python3-llxaccessibility
+Description: DBus service for accessibility
+
 Package: pulse-sddm
 Architecture: all
 Breaks: zero-lliurex-accessibility(<<0.5.4.99),orca-sddm
@@ -23,14 +28,14 @@ Depends: sddm,orca
 Description: Systemd and sddm scripts
  for enabling ORCA screen reader at SDDM
 
-Package: kwin-ocrwindow
+Package: accesswizard-kwin-ocrwindow
 Architecture: all
 Depends: accesswizard, kwin-addons
 Description: Read window contents with OCR
  This plugin for KWin captures the active screen
  and reads the content after processing through tesserocr.
 
-Package: plasma-accesswizard
+Package: accesswizard-plasmoid
 Architecture: all
 Depends: accesswizard, kwin-addons
 Description: Plasmoid for accesswizard

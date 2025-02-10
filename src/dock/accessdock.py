@@ -23,22 +23,22 @@ i18n={"CONFBTN":_("Configure launcher"),
 class dbusMethods(dbus.service.Object):
 	"""DBus service that fires \"toggleVisible\" signal on demand"""
 	def __init__(self,bus_name,*args,**kwargs):
-		super().__init__(bus_name,"/net/lliurex/accessibledock")
+		super().__init__(bus_name,"/net/lliurex/accessibility/Dock")
 		self.widget=args[0]
 	#def __init__(self,bus_name,*args,**kwargs):
 
-	@dbus.service.signal("net.lliurex.accessibledock")
+	@dbus.service.signal("net.lliurex.accessibility.Dock")
 	def toggleVisible(self):
 		pass
 	#def toggleVisible(self)
 
-	@dbus.service.method("net.lliurex.accessibledock")
+	@dbus.service.method("net.lliurex.accessibility.Dock")
 	def toggle(self):
 		"""Calling this method fires up the signal."""
 		self.toggleVisible()
 	#def toggle
 
-	@dbus.service.method("net.lliurex.accessibledock", in_signature='', out_signature='as')
+	@dbus.service.method("net.lliurex.accessibility.Dock", in_signature='', out_signature='as')
 	def getLaunchers(self):
 		dock=libdock.libdock()
 		dbusList = dbus.Array()
@@ -49,7 +49,7 @@ class dbusMethods(dbus.service.Object):
 		"""Calling this method fires up the signal."""
 	#def getLaunchers
 
-	@dbus.service.method("net.lliurex.accessibledock", in_signature='', out_signature='b')
+	@dbus.service.method("net.lliurex.accessibility.Dock", in_signature='', out_signature='b')
 	def isVisible(self):
 		return(self.widget.isVisible())
 	#def isVisible
@@ -548,6 +548,11 @@ class accessdock(QWidget):
 		if self.isVisible()==True:
 			self.updateScreen()
 	#def _toggle
+
+	def _isVisible(self,*args,**kwargs):
+		self._debug("Dock visible: {}".format(self.isVisible()))
+		return(self.isVisible())
+	#def _visible
 #class accessdock
 		
 if __name__=="__main__":
@@ -561,23 +566,24 @@ if __name__=="__main__":
 		print("Could not get session bus: %s\nAborting"%e)
 		sys.exit(1)
 	try:
-		objbus=bus.get_object("net.lliurex.accessibledock","/net/lliurex/accessibledock")
-		objint=dbus.Interface(bus,"net.lliurex.accessibledock")
-		objbus.toggle()
+		objbus=bus.get_object("net.lliurex.accessibility.Dock","/net/lliurex/accessibility/Dock")
+		objint=dbus.Interface(bus,"net.lliurex.accessibility.Dock")
+		objbus.isDockVisible()
 		print("Already launched!")
-		sys.exit(2)
+	#	sys.exit(2)
 	except Exception as e:
 		print(e)
 		pass
-	name=dbus.service.BusName("net.lliurex.accessibledock",bus)
-	bus.add_signal_receiver(dock._toggle,
-                        bus_name='net.lliurex.accessibledock',
-                        interface_keyword='',
-                        member_keyword='',
-                        path_keyword='',
-                        message_keyword='')
-	objbus=bus.get_object("net.lliurex.accessibledock","/net/lliurex/accessibledock")
-	objbus.connect_to_signal("Toggled",dock._toggle,dbus_interface="net.lliurex.accessibledock")
+	name=dbus.service.BusName("net.lliurex.accessibility.Dock",bus)
+	#bus.add_signal_receiver(dock._toggle,
+    #                    bus_name='net.lliurex.accessibility',
+    #                    interface_keyword='',
+    #                    member_keyword='',
+    #                    path_keyword='',
+    #                    message_keyword='')
+	objbus=bus.get_object("net.lliurex.accessibility.Dock","/net/lliurex/accessibility/Dock")
+	objbus.connect_to_signal("toggleVisible",dock._toggle,dbus_interface="net.lliurex.accessibility.Dock")
+	objbus.connect_to_signal("isDockVisibleSignal",dock._isVisible,dbus_interface="net.lliurex.accessibility.Dock")
 	dclient=dbusMethods(bus,dock)
 	dock.show()
 	app.exec_()

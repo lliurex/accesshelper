@@ -61,7 +61,7 @@ Item {
 					"exec":objItem["Exec"],
 					"icon":objItem["Icon"]})
 				});
-			var bus="net.lliurex.accessibledock";
+			var bus="net.lliurex.accessibility.Dock";
 			launchersModel.append({"name": i18n("Toggle dock"),
 				"exec":"qdbus "+bus+" /"+bus.replace(/\./g,"/")+" "+bus+".toggle",
 				"icon":"accesswizard"})

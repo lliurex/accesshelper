@@ -16,4 +16,4 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 [D-BUS Service]
 Name=net.lliurex.accessibility
-Exec=/usr/share/accesshelper/dbus/accessibility-dbus.py
+Exec=/usr/share/accesswizard/dbus/accessibility-dbus.py

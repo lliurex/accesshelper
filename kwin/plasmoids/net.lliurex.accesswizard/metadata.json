@@ -27,6 +27,7 @@
     },
     "X-Plasma-API": "declarativeappletscript",
     "X-Plasma-MainScript": "ui/main.qml",
+    "X-Plasma-DBusActivationService": "net.lliurex.accessibledock",
     "X-Plasma-NotificationArea": "true",
     "X-Plasma-NotificationAreaCategory": "SystemServices",
     "X-Plasma-StandAloneApp": true,

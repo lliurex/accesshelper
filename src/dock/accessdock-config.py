@@ -427,7 +427,7 @@ class accessconf(QWidget):
 		launcher.destPath=self.libdock.launchersPath
 		launcher.setParms(data[idx])
 		launcher.show()
-	#def _addAction(self,*args):
+	#def _ediAction(self,*args):
 
 	def _delAction(self,*args):
 		idx=self.list.currentRow()

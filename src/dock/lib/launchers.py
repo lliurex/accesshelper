@@ -241,7 +241,7 @@ class portrait(QStackedWindowItem):
 		self.inpDesc=QLineEdit()
 		self.inpDesc.setPlaceholderText(_("Description"))
 		self.inpDesc.setToolTip(_("Insert a description for the app"))
-		self.inpDesc.setReadOnly(True)
+		#self.inpDesc.setReadOnly(True)
 		box.addWidget(self.inpDesc,4,0,1,2)
 		self.hkBtn=QHotkeyButton(i18n["HOTKEY"],alternate=i18n["HOTKEY_PRESS"])
 		self.hkBtn.pressed.connect(self._setHkText)
@@ -356,6 +356,8 @@ class launchers(QStackedWindow):
 		self.tooltip=(_("From here you can add a custom launcher"))
 		self.desktopPaths=["/usr/share/applications",os.path.join(os.environ.get("USER"),".local","share","applications")]
 		self.launchersPath=os.path.join(os.environ.get("HOME"),".local","accesswizard","launchers")
+		self.effectsPaths=[os.path.join(os.environ.get("HOME"),".local","share","kwin","effects"),"/usr/share/kwin/builtin_effects","/usr/share/kwin/effects"]
+		self.scriptsPaths=[os.path.join(os.environ.get("HOME"),".local","share","kwin","scripts"),"/usr/share/kwin/scripts"]
 		if os.path.exists(self.launchersPath)==False:
 			os.makedirs(self.launchersPath)
 		self.app2menu=App2Menu.app2menu()
@@ -416,12 +418,39 @@ class launchers(QStackedWindow):
 		desktop+="Comment={}\n".format(action.get("Comment"))
 		desktop+="Icon={}\n".format(action.get("Icon"))
 		desktop+="Path={}\n".format(action.get("path"))
-		cmd="{0}/tools/loadEffect.sh {1} add".format(dockPath,action.get("path"))
+		effectPath=action.get("path","")
+		if effectPath=="":
+			effectPath=self._searchEffectPath(action.get("Name"))
+		cmd="{0}/tools/loadEffect.sh {1} add".format(dockPath,effectPath)
+		print(cmd)
 		desktop+="Exec={}\n".format(cmd)
 		desktop+="Fname={}\n".format(fname)
 		with open(fname,"w") as f:
 			f.write(desktop)
 	#def _addEffect
+
+	def _searchEffectPath(self,effectName):
+		rname=effectName.lower().replace(" ","")
+		jname=rname.replace(" ","")
+		cname=rname.replace(" ","-")
+		bname=rname.replace(" ","_")
+		for epath in self.effectsPaths:
+			if os.path.exists(epath)==False:
+				continue
+			match=False
+			for f in os.scandir(epath):
+				for name in set([rname,jname,cname,bname]):
+					if name.lower() in f.name.lower():
+						match=True
+						rname=f.path
+					elif "kwin4_effect_{}".format(name.lower()) in f.name.lower():
+						match==True
+						rname=f.path
+					if match==True:
+						break
+				if match==True:
+					break
+		return(rname)
 
 	def _addScript(self,action):
 		fname=action.get("fname","")

@@ -453,7 +453,7 @@ class accessdock(QWidget):
 	#def _setColorForBorder
 
 	def _launchDockConfig(self,*args,**kwargs):
-		#self._toggle()
+		self._toggle()
 		try:
 			cmd=os.path.join(os.path.dirname(os.path.abspath(__file__)),"accessdock-config.py")
 			l=threadLauncher(cmd)
@@ -466,7 +466,7 @@ class accessdock(QWidget):
 
 	def _endLaunch(self,*args):
 		self._debug("Process end detected")
-		#self._toggle()
+		self._toggle()
 	#def _endLaunch
 
 	def mousePressEvent(self, ev):

@@ -193,7 +193,7 @@ class accessibility(QStackedWindowItem):
 			if cmdPath.endswith("/orca"):
 				cmd.append("-s")
 		else:
-			cmd=["/usr/bin/appsedu","appstream://{}".format(app)]
+			cmd=["/usr/bin/lliurex-store","appsedu://{}".format(app)]
 			appraw=json.loads(self.rebost.matchApp(app))
 			bundle=""
 			if len(appraw)>0:

@@ -13,7 +13,7 @@
         "Description[ca]": "Accessibilitat per a Lliurex",
         "Description[es]": "Accesibilidad para Lliurex",
         "EnabledByDefault": true,
-        "Icon": "accesswizard",
+        "Icon": "accessibledock",
         "Id": "net.lliurex.accesswizard",
         "License": "GPL",
         "Name": "Accessibilty Helper",

@@ -16,7 +16,7 @@ Item {
 	Plasmoid.switchWidth: PlasmaCore.Units.gridUnit * 5
 	Plasmoid.switchHeight: PlasmaCore.Units.gridUnit * 5
 	Plasmoid.hideOnWindowDeactivate: true
-	Plasmoid.icon: "accesswizard"
+	Plasmoid.icon: "accessibledock"
 	Plasmoid.toolTipMainText: i18n("Accessibility Helper")
 	Plasmoid.toolTipSubText: i18n("Quick launcher for accessibility")
 

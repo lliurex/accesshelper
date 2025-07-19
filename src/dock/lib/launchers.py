@@ -65,10 +65,10 @@ class actionSelector(QStackedWindowItem):
 	def __initScreen__(self):
 		layout=QGridLayout()
 		self.setLayout(layout)
-		self.searchBox=QSearchBox()
+		self.searchBox=QSearchBox(history=False,)
 		self.searchBox.textChanged.connect(self._search)
 		self.searchBox.clicked.connect(self._search)
-		layout.addWidget(self.searchBox,0,0,1,2)
+		layout.addWidget(self.searchBox,0,0,1,1)
 		self.lstActions=QListWidget()
 		layout.addWidget(self.lstActions,1,0,1,2)
 		btnOk=QPushButton("Ok")
@@ -199,7 +199,6 @@ class portrait(QStackedWindowItem):
 		self.appIcon="shell"
 		self.fName=""
 		self.path=""
-		print(self.path)
 		self.action={}
 		self.hideControlButtons()
 	#def __init_stack__
@@ -402,7 +401,6 @@ class launchers(QStackedWindow):
 	#def _addKcm
 
 	def _addEffect(self,action):
-		print(action)
 		fname=action.get("fname","")
 		if fname=="":
 			prefix="{}".format(len(os.listdir(self.launchersPath))).zfill(3)
@@ -422,7 +420,6 @@ class launchers(QStackedWindow):
 		if effectPath=="":
 			effectPath=self._searchEffectPath(action.get("Name"))
 		cmd="{0}/tools/loadEffect.sh {1} add".format(dockPath,effectPath)
-		print(cmd)
 		desktop+="Exec={}\n".format(cmd)
 		desktop+="Fname={}\n".format(fname)
 		with open(fname,"w") as f:

@@ -152,6 +152,7 @@ class QToolTipDock(QLabel):
 			self.move(x,y)
 			self.setVisible(True)
 	#def toggle
+
 #class QToolTipDock
 	
 class QPushButtonDock(QPushButton):
@@ -437,6 +438,11 @@ class accessdock(QWidget):
 			args[0].ignore()
 			self._toggle()
 	#def closeEvent
+
+	def hideEvent(self,*args):
+		args[0].ignore()
+		self.setVisible(False)
+	#def hideEvent
 
 	def _setColorForBorder(self):
 		qplt=QPalette()

@@ -47,7 +47,7 @@ class effects(QStackedWindowItem):
 		#self.tblGrid.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
 		self.tblGrid.horizontalHeader().hide()
 		self.tblGrid.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
-		self.tblGrid.horizontalHeader().setSectionResizeMode(0,QHeaderView.Stretch)
+		#self.tblGrid.horizontalHeader().setSectionResizeMode(0,QHeaderView.Stretch)
 		self.tblGrid.horizontalHeader().setSectionResizeMode(1,QHeaderView.Stretch)
 		self.tblGrid.horizontalHeader().setSectionResizeMode(2,QHeaderView.Stretch)
 		self.tblGrid.setSelectionBehavior(self.tblGrid.SelectRows)

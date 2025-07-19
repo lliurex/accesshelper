@@ -17,6 +17,8 @@ i18n={
 	"ACCEDSC":_("Plasma Accessibility module"),
 	"ANTI":_("Joystick as mouse"),
 	"ANTIDSC":_("Configure a gamepad/joystick as mouse"),
+	"BROWS":_("Browsers accessibility"),
+	"BROWSDSC":_("Selection of addons and configurations for accessible browsing"),
 	"CONFIG":_("Accessibility"),
 	"DOCK":_("Accessibility Dock"),
 	"DOCKDSC":_("Dock with customizable fast actions"),
@@ -105,7 +107,7 @@ class accessibility(QStackedWindowItem):
 
 	def _renderGui(self):
 		self.tblGrid.setRowCount(0)
-		self.tblGrid.setRowCount(2)
+		self.tblGrid.setRowCount(3)
 		btnAcce=QPushInfoButton()
 		btnAcce.setText(i18n.get("ACCE"))
 		btnAcce.setDescription(i18n.get("ACCEDSC"))
@@ -151,7 +153,15 @@ class accessibility(QStackedWindowItem):
 		btnEvia.loadImg(icons["eviacam"])
 		self.tblGrid.setCellWidget(1,2,btnEvia)
 		btnEvia.clicked.connect(self._launch)
+		btnBrows=QPushInfoButton()
+		btnBrows.setText(i18n.get("BROWS"))
+		btnBrows.setDescription(i18n.get("BROWSDSC"))
+		fname=os.path.join(os.path.dirname(os.path.realpath(__file__)),"..","rsrc","browsermanager.png")
+		btnBrows.loadImg(fname)
+		self.tblGrid.setCellWidget(2,0,btnBrows)
+		btnBrows.clicked.connect(self._launch)
 		self.tblGrid.horizontalHeader().setSectionResizeMode(1,QHeaderView.ResizeToContents)
+	#def _renderGui
 
 	def _launch(self,*args):
 		args[0].setEnabled(False)
@@ -170,6 +180,8 @@ class accessibility(QStackedWindowItem):
 				cmd=self._getAppCmd("antimicrox")
 			elif args[0].text()==i18n.get("EVIA"):
 				cmd=self._getAppCmd("eviacam")
+			elif args[0].text()==i18n.get("BROWS"):
+				cmd=os.path.join(os.path.dirname(__file__),"..","tools","browsermanager.py")
 			self.launch.setParms(cmd)
 			self.launch.start()
 	#def _launch
@@ -178,8 +190,9 @@ class accessibility(QStackedWindowItem):
 		for i in range(0,self.tblGrid.rowCount()):
 			for j in range(0,self.tblGrid.columnCount()):
 				wdg=self.tblGrid.cellWidget(i,j)
-				if wdg.isEnabled()==False:
-					wdg.setEnabled(True)
+				if wdg!=None:
+					if wdg.isEnabled()==False:
+						wdg.setEnabled(True)
 		
 		print("++++++")
 		print(args)

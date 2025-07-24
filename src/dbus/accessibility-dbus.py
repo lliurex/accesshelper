@@ -37,7 +37,7 @@ class accessibilityDbusMethods(dbus.service.Object):
 			for field in fields:
 				total+=coords.get(field,0)
 			if total>0:	
-				self.focusChanged(str(coords))
+				self.focusChanged(json.dumps(coords))
 	#def _updatedSignal
 
 	@dbus.service.signal("net.lliurex.accessibility")

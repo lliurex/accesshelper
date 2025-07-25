@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 import os,sys,subprocess,json
-from PySide2.QtWidgets import QApplication,QGridLayout,QWidget,QPushButton,QHeaderView,QMenu,QAction,QToolTip,QLabel,QDesktopWidget
-from PySide2.QtCore import Qt,QSignalMapper,QSize,QThread,QPoint,QEvent,Signal,QObject,QRect
-from PySide2.QtGui import QIcon,QPixmap,QCursor,QColor,QPalette,QGuiApplication
+from PySide6.QtWidgets import QApplication,QGridLayout,QWidget,QPushButton,QHeaderView,QMenu,QAction,QToolTip,QLabel,QDesktopWidget
+from PySide6.QtCore import Qt,QSignalMapper,QSize,QThread,QPoint,QEvent,Signal,QObject,QRect
+from PySide6.QtGui import QIcon,QPixmap,QCursor,QColor,QPalette,QGuiApplication
 import dbus
 import dbus.service
 import dbus.mainloop.glib
@@ -592,4 +592,4 @@ if __name__=="__main__":
 	objbus.connect_to_signal("isDockVisibleSignal",dock._isVisible,dbus_interface="net.lliurex.accessibility.Dock")
 	dclient=dbusMethods(bus,dock)
 	dock.show()
-	app.exec_()
+	app.exec()

@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 import os,sys,shutil
 import subprocess
-from PySide2.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QLineEdit,QHBoxLayout,QGridLayout,QComboBox,QFileDialog,QListWidget
-from PySide2 import QtGui
-from PySide2.QtCore import Qt,Signal,QSize
+from PySide6.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QLineEdit,QHBoxLayout,QGridLayout,QComboBox,QFileDialog,QListWidget
+from PySide6 import QtGui
+from PySide6.QtCore import Qt,Signal,QSize
 from QtExtraWidgets import QSearchBox,QStackedWindow,QStackedWindowItem,QHotkeyButton
 from app2menu import App2Menu
 from llxaccessibility import llxaccessibility
@@ -322,7 +322,7 @@ class portrait(QStackedWindowItem):
 		if path:
 			self._debug("Set path to %s"%path)
 			fdia.setDirectory(path)
-		if (fdia.exec_()):
+		if (fdia.exec()):
 			fchoosed=fdia.selectedFiles()[0]
 			if widget:
 				if imgDialog:
@@ -522,4 +522,4 @@ if __name__=="__main__":
 		if os.path.exists(dpath):
 			mw.setParms(os.path.basename(dpath))
 	mw.show()
-	app.exec_()
+	app.exec()

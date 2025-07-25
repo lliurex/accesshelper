@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 import dbus,dbus.exceptions
 import os,sys,shutil
-from PySide2.QtWidgets import QApplication,QGridLayout,QWidget,QPushButton,QHeaderView,QLabel,QSpinBox,QTableWidgetItem,QAbstractItemView,QCheckBox,QFrame,QHBoxLayout,QMessageBox
-from PySide2.QtCore import Qt,Signal,QSize,QThread,QPoint,QObject
-from PySide2.QtGui import QIcon,QPixmap,QCursor,QColor,QDrag,QGuiApplication
+from PySide6.QtWidgets import QApplication,QGridLayout,QWidget,QPushButton,QHeaderView,QLabel,QSpinBox,QTableWidgetItem,QAbstractItemView,QCheckBox,QFrame,QHBoxLayout,QMessageBox
+from PySide6.QtCore import Qt,Signal,QSize,QThread,QPoint,QObject
+from PySide6.QtGui import QIcon,QPixmap,QCursor,QColor,QDrag,QGuiApplication
 from QtExtraWidgets import QTableTouchWidget,QHotkeyButton
 import lib.libdock as libdock
 import lib.launchers as launchers
@@ -413,7 +413,7 @@ class accessconf(QWidget):
 		dlg.addButton(QMessageBox.Ok)
 		dlg.addButton(QMessageBox.Cancel)
 		dlg.setText(i18n.get("DEF"))
-		if dlg.exec_()==QMessageBox.Ok:
+		if dlg.exec()==QMessageBox.Ok:
 			self.list.clear()
 			self.libdock.initLaunchers()
 			self.updateScreen()
@@ -480,4 +480,4 @@ icon=QIcon(":/icons/accessdock.png")
 dock.setWindowIcon(icon)
 QGuiApplication.setDesktopFileName("accessdock")
 dock.show()
-app.exec_()
+app.exec()

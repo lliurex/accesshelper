@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import sys
 import os
-from PySide2.QtWidgets import QApplication
+from PySide6.QtWidgets import QApplication
 from QtExtraWidgets import QStackedWindow
 import gettext
 gettext.textdomain('accesswizard')
@@ -19,4 +19,4 @@ config.setIcon("accesswizard")
 config.show()
 config.setMinimumWidth(config.sizeHint().width()*1.9)
 config.setMinimumHeight(config.sizeHint().width())
-app.exec_()
+app.exec()

@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 from llxaccessibility import llxaccessibility
 import os
-from PySide2.QtWidgets import QApplication,QLabel,QGridLayout,QCheckBox,QSizePolicy,QRadioButton,QHeaderView,QTableWidgetItem
-from PySide2 import QtGui
-from PySide2.QtCore import Qt
+from PySide6.QtWidgets import QApplication,QLabel,QGridLayout,QCheckBox,QSizePolicy,QRadioButton,QHeaderView,QTableWidgetItem
+from PySide6 import QtGui
+from PySide6.QtCore import Qt
 from QtExtraWidgets import QStackedWindowItem, QTableTouchWidget, QPushInfoButton
 import subprocess
 import locale
@@ -47,7 +47,7 @@ class effects(QStackedWindowItem):
 		#self.tblGrid.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
 		self.tblGrid.horizontalHeader().hide()
 		self.tblGrid.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
-		self.tblGrid.horizontalHeader().setSectionResizeMode(0,QHeaderView.Stretch)
+		#self.tblGrid.horizontalHeader().setSectionResizeMode(0,QHeaderView.Stretch)
 		self.tblGrid.horizontalHeader().setSectionResizeMode(1,QHeaderView.Stretch)
 		self.tblGrid.horizontalHeader().setSectionResizeMode(2,QHeaderView.Stretch)
 		self.tblGrid.setSelectionBehavior(self.tblGrid.SelectRows)

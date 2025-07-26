@@ -2,7 +2,7 @@
 import dbus
 import json
 bus=dbus.Bus()
-busobj=bus.get_object("net.lliurex.accessibledock","/net/lliurex/accessibledock")
+busobj=bus.get_object("net.lliurex.accessibility.Dock","/net/lliurex/accessibility/Dock")
 launchers={}
 for objLauncher in busobj.getLaunchers():
 	jsonLauncher=json.loads(objLauncher)

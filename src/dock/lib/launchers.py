@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 import os,sys,shutil
 import subprocess
-from PySide2.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QLineEdit,QHBoxLayout,QGridLayout,QComboBox,QFileDialog,QListWidget
-from PySide2 import QtGui
-from PySide2.QtCore import Qt,Signal,QSize
+from PySide6.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QLineEdit,QHBoxLayout,QGridLayout,QComboBox,QFileDialog,QListWidget
+from PySide6 import QtGui
+from PySide6.QtCore import Qt,Signal,QSize
 from QtExtraWidgets import QSearchBox,QStackedWindow,QStackedWindowItem,QHotkeyButton
 from app2menu import App2Menu
 from llxaccessibility import llxaccessibility
@@ -65,10 +65,10 @@ class actionSelector(QStackedWindowItem):
 	def __initScreen__(self):
 		layout=QGridLayout()
 		self.setLayout(layout)
-		self.searchBox=QSearchBox()
+		self.searchBox=QSearchBox(history=False,)
 		self.searchBox.textChanged.connect(self._search)
 		self.searchBox.clicked.connect(self._search)
-		layout.addWidget(self.searchBox,0,0,1,2)
+		layout.addWidget(self.searchBox,0,0,1,1)
 		self.lstActions=QListWidget()
 		layout.addWidget(self.lstActions,1,0,1,2)
 		btnOk=QPushButton("Ok")
@@ -199,7 +199,6 @@ class portrait(QStackedWindowItem):
 		self.appIcon="shell"
 		self.fName=""
 		self.path=""
-		print(self.path)
 		self.action={}
 		self.hideControlButtons()
 	#def __init_stack__
@@ -241,7 +240,7 @@ class portrait(QStackedWindowItem):
 		self.inpDesc=QLineEdit()
 		self.inpDesc.setPlaceholderText(_("Description"))
 		self.inpDesc.setToolTip(_("Insert a description for the app"))
-		self.inpDesc.setReadOnly(True)
+		#self.inpDesc.setReadOnly(True)
 		box.addWidget(self.inpDesc,4,0,1,2)
 		self.hkBtn=QHotkeyButton(i18n["HOTKEY"],alternate=i18n["HOTKEY_PRESS"])
 		self.hkBtn.pressed.connect(self._setHkText)
@@ -323,7 +322,7 @@ class portrait(QStackedWindowItem):
 		if path:
 			self._debug("Set path to %s"%path)
 			fdia.setDirectory(path)
-		if (fdia.exec_()):
+		if (fdia.exec()):
 			fchoosed=fdia.selectedFiles()[0]
 			if widget:
 				if imgDialog:
@@ -356,6 +355,8 @@ class launchers(QStackedWindow):
 		self.tooltip=(_("From here you can add a custom launcher"))
 		self.desktopPaths=["/usr/share/applications",os.path.join(os.environ.get("USER"),".local","share","applications")]
 		self.launchersPath=os.path.join(os.environ.get("HOME"),".local","accesswizard","launchers")
+		self.effectsPaths=[os.path.join(os.environ.get("HOME"),".local","share","kwin","effects"),"/usr/share/kwin/builtin_effects","/usr/share/kwin/effects"]
+		self.scriptsPaths=[os.path.join(os.environ.get("HOME"),".local","share","kwin","scripts"),"/usr/share/kwin/scripts"]
 		if os.path.exists(self.launchersPath)==False:
 			os.makedirs(self.launchersPath)
 		self.app2menu=App2Menu.app2menu()
@@ -400,7 +401,6 @@ class launchers(QStackedWindow):
 	#def _addKcm
 
 	def _addEffect(self,action):
-		print(action)
 		fname=action.get("fname","")
 		if fname=="":
 			prefix="{}".format(len(os.listdir(self.launchersPath))).zfill(3)
@@ -416,12 +416,38 @@ class launchers(QStackedWindow):
 		desktop+="Comment={}\n".format(action.get("Comment"))
 		desktop+="Icon={}\n".format(action.get("Icon"))
 		desktop+="Path={}\n".format(action.get("path"))
-		cmd="{0}/loadEffect.sh {1} add".format(dockPath,action.get("path"))
+		effectPath=action.get("path","")
+		if effectPath=="":
+			effectPath=self._searchEffectPath(action.get("Name"))
+		cmd="{0}/tools/loadEffect.sh {1} add".format(dockPath,effectPath)
 		desktop+="Exec={}\n".format(cmd)
 		desktop+="Fname={}\n".format(fname)
 		with open(fname,"w") as f:
 			f.write(desktop)
 	#def _addEffect
+
+	def _searchEffectPath(self,effectName):
+		rname=effectName.lower().replace(" ","")
+		jname=rname.replace(" ","")
+		cname=rname.replace(" ","-")
+		bname=rname.replace(" ","_")
+		for epath in self.effectsPaths:
+			if os.path.exists(epath)==False:
+				continue
+			match=False
+			for f in os.scandir(epath):
+				for name in set([rname,jname,cname,bname]):
+					if name.lower() in f.name.lower():
+						match=True
+						rname=f.path
+					elif "kwin4_effect_{}".format(name.lower()) in f.name.lower():
+						match==True
+						rname=f.path
+					if match==True:
+						break
+				if match==True:
+					break
+		return(rname)
 
 	def _addScript(self,action):
 		fname=action.get("fname","")
@@ -439,7 +465,7 @@ class launchers(QStackedWindow):
 		desktop+="Comment={}\n".format(action.get("Comment"))
 		desktop+="Icon={}\n".format(action.get("Icon"))
 		desktop+="Path={}\n".format(action.get("path"))
-		cmd="{0}/loadScript.sh {1} add".format(dockPath,action.get("path"))
+		cmd="{0}/tools/loadScript.sh {1} add".format(dockPath,action.get("path"))
 		desktop+="Exec={}\n".format(cmd)
 		fname=os.path.join(self.launchersPath,fname)
 		desktop+="Fname={}\n".format(fname)
@@ -496,4 +522,4 @@ if __name__=="__main__":
 		if os.path.exists(dpath):
 			mw.setParms(os.path.basename(dpath))
 	mw.show()
-	app.exec_()
+	app.exec()

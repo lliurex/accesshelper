@@ -16,10 +16,11 @@
         "Name": "Window OCR",
         "Name[es]": "OCR a ventana",
         "Name[ca]": "OCR a finestra",
-        "Version": "0.2.0"
+        "Version": "0.9.0"
     },
     "X-KWin-Exclude-Listing": "true",
     "X-Plasma-API": "declarativescript",
     "X-KDE-ConfigModule": "kwin/effects/configs/kcm_kwin4_genericscripted",
+	"X-KWin-Config-TranslationDomain": "ocrwindow",
     "X-Plasma-MainScript": "ui/main.qml"
 }

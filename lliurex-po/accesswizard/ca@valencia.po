@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-16 12:13+0200\n"
-"PO-Revision-Date: 2024-07-16 12:15+0200\n"
+"POT-Creation-Date: 2024-12-20 09:10+0100\n"
+"PO-Revision-Date: 2024-12-20 09:13+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ca\n"
@@ -78,8 +78,7 @@ msgstr "Opcions d'accessibilitat"
 msgid "Settings which do the system more accessible"
 msgstr "Ajustos per a fer més accessible el sistema"
 
-#: ../src/stacks/effects.py:14 ../src/dock/extras/effects.py:14
-#: ../src/dock/extras/kcms.py:14
+#: ../src/stacks/effects.py:14
 msgid "Effects"
 msgstr "Efectes"
 
@@ -99,18 +98,15 @@ msgstr "Efectes de finestres"
 msgid "Graphical effects for windows"
 msgstr "Efectes per a manipular l'apariencia de les finestres"
 
-#: ../src/stacks/effects.py:19 ../src/dock/extras/effects.py:15
-#: ../src/dock/extras/kcms.py:15
+#: ../src/stacks/effects.py:19
 msgid "Visual Effects"
 msgstr "Efectes visuals"
 
-#: ../src/stacks/effects.py:20 ../src/dock/extras/effects.py:16
-#: ../src/dock/extras/kcms.py:16
+#: ../src/stacks/effects.py:20
 msgid "Aids and visual effects"
 msgstr "Ajudas i efectes visuals"
 
-#: ../src/stacks/effects.py:21 ../src/dock/extras/effects.py:17
-#: ../src/dock/extras/kcms.py:17
+#: ../src/stacks/effects.py:21
 msgid "Aids and visual effects for improve system usability"
 msgstr "Diverses ferramentes per a millorar la usabilitat del sistema"
 
@@ -222,35 +218,31 @@ msgstr "Personalitzar apariencia"
 msgid "Color Scheme"
 msgstr "Esquema de colors"
 
-#: ../src/tools/ttsmanager.py:18
+#: ../src/tools/ttsmanager.py:19
 msgid "Screen reader"
 msgstr "Lector de pantalla"
 
-#: ../src/tools/ttsmanager.py:19
+#: ../src/tools/ttsmanager.py:20
 msgid "TTS settings"
 msgstr "Configuració de TTS"
 
-#: ../src/tools/ttsmanager.py:20
+#: ../src/tools/ttsmanager.py:21
 msgid "English"
 msgstr "Anglès"
 
-#: ../src/tools/ttsmanager.py:21
+#: ../src/tools/ttsmanager.py:22
 msgid "Files exported to"
 msgstr "Fitxers exportats a"
 
-#: ../src/tools/ttsmanager.py:22
+#: ../src/tools/ttsmanager.py:23
 msgid "File"
 msgstr "Fitxer"
 
-#: ../src/tools/ttsmanager.py:23
+#: ../src/tools/ttsmanager.py:24
 msgid "Recorded file list"
 msgstr "Fitxers disponibles"
 
-#: ../src/tools/ttsmanager.py:24
-msgid "Use internal TTS"
-msgstr "Usa sintetitzador"
-
-#: ../src/tools/ttsmanager.py:25 ../src/dock/extras/launchers.py:15
+#: ../src/tools/ttsmanager.py:25
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -299,14 +291,22 @@ msgid "Some options related with TTS"
 msgstr "Algunes opcions de configuració del sintetitzador"
 
 #: ../src/tools/ttsmanager.py:37
+msgid "Use internal TTS"
+msgstr "Usa sintetitzador"
+
+#: ../src/tools/ttsmanager.py:38
+msgid "Use ORCA"
+msgstr "Usar ORCA"
+
+#: ../src/tools/ttsmanager.py:39
+msgid "Use VLC player"
+msgstr "Usar VLC"
+
+#: ../src/tools/ttsmanager.py:40
 msgid "Valencian-Catalan"
 msgstr "Valencià-Català"
 
-#: ../src/tools/ttsmanager.py:38
-msgid "Use VLC player"
-msgstr "Usa VLC"
-
-#: ../src/tools/ttsmanager.py:39
+#: ../src/tools/ttsmanager.py:41
 msgid "Voice"
 msgstr "Veu"
 
@@ -323,44 +323,52 @@ msgid "Add"
 msgstr "Afegir"
 
 #: ../src/dock/accessdock-config.py:17
+msgid "Default apps"
+msgstr "Per defecte"
+
+#: ../src/dock/accessdock-config.py:18
 msgid "Rearrange or modify buttons for the dock"
 msgstr "Reorganitzar o modificar les accions de la barra"
 
-#: ../src/dock/accessdock-config.py:18
+#: ../src/dock/accessdock-config.py:19
+msgid "This will delete all contents"
+msgstr "S'esborrarà tota la configuració"
+
+#: ../src/dock/accessdock-config.py:20
 msgid "Delete"
 msgstr "Eliminar"
 
-#: ../src/dock/accessdock-config.py:19
+#: ../src/dock/accessdock-config.py:21
 msgid "Down"
 msgstr "Baixar"
 
-#: ../src/dock/accessdock-config.py:20
+#: ../src/dock/accessdock-config.py:22
 msgid "Edit"
 msgstr "Editar"
 
-#: ../src/dock/accessdock-config.py:21
+#: ../src/dock/accessdock-config.py:23
 msgid "Keyboard shortcut"
 msgstr "Drecera de teclat"
 
-#: ../src/dock/accessdock-config.py:22
+#: ../src/dock/accessdock-config.py:24
 msgid "Push to assign"
 msgstr "Premer per assignar"
 
-#: ../src/dock/accessdock-config.py:23
+#: ../src/dock/accessdock-config.py:25
 msgid "Items per row"
 msgstr "Elemets per línia"
 
-#: ../src/dock/accessdock-config.py:24
+#: ../src/dock/accessdock-config.py:26
 msgid "Launch at session start"
 msgstr "Carregar amb l'inici de sessió"
 
-#: ../src/dock/accessdock-config.py:25
+#: ../src/dock/accessdock-config.py:27
 msgid "Displays launcher name at fullscreen on mouse over"
 msgstr ""
 "Mostra el nom del llançador a pantalla completa al posicionar el punter "
 "damunt"
 
-#: ../src/dock/accessdock-config.py:26
+#: ../src/dock/accessdock-config.py:28
 msgid "Up"
 msgstr "Pujar"
 
@@ -380,104 +388,6 @@ msgstr "Configuració"
 msgid "Toggle visibility"
 msgstr "Alterna visibilitat"
 
-#: ../src/dock/extras/effects.py:59 ../src/dock/extras/kcms.py:59
-msgid "Window Effects"
-msgstr "Efectes de finestra"
-
-#: ../src/dock/extras/effects.py:61 ../src/dock/extras/kcms.py:61
-msgid "Desktop Effects"
-msgstr "Efectes de l'escriptori"
-
-#: ../src/dock/extras/launchers.py:14
-msgid "Assign"
-msgstr "Assigna"
-
-#: ../src/dock/extras/launchers.py:16 ../src/dock/extras/launchers.py:242
-msgid "Description"
-msgstr "Descripció"
-
-#: ../src/dock/extras/launchers.py:17
-msgid "Toggle effect"
-msgstr "Activar efecte"
-
-#: ../src/dock/extras/launchers.py:18
-msgid "Application"
-msgstr "Aplicació"
-
-#: ../src/dock/extras/launchers.py:19
-msgid "Press button to assign one action"
-msgstr "Premer un botó per assignaruna acció"
-
-#: ../src/dock/extras/launchers.py:20
-msgid "Executable path"
-msgstr "Ruta al programa"
-
-#: ../src/dock/extras/launchers.py:21
-msgid "Insert the executable path"
-msgstr "Inserir la ruta a l'aplicació"
-
-#: ../src/dock/extras/launchers.py:22
-msgid "Shortcut"
-msgstr ""
-"Drecera\n"
-" de teclat"
-
-#: ../src/dock/extras/launchers.py:23
-msgid "Press a key"
-msgstr "Premer una tecla"
-
-#: ../src/dock/extras/launchers.py:24
-msgid "Icon: "
-msgstr "Icona: "
-
-#: ../src/dock/extras/launchers.py:25
-msgid "Push to change icon"
-msgstr "Premer per a canviar icona"
-
-#: ../src/dock/extras/launchers.py:26
-msgid "Module"
-msgstr "Mòdul"
-
-#: ../src/dock/extras/launchers.py:27
-msgid "Name: "
-msgstr "Nom: "
-
-#: ../src/dock/extras/launchers.py:28
-msgid "Unassigned action"
-msgstr "Acció sense assignar"
-
-#: ../src/dock/extras/launchers.py:29
-msgid "Insert desktop name"
-msgstr "Inserir nom de l'aplicació"
-
-#: ../src/dock/extras/launchers.py:30
-msgid "Insert the url for the site"
-msgstr "Inserir url del lloc"
-
-#: ../src/dock/extras/launchers.py:31
-msgid "https://example.com"
-msgstr "https://example.com"
-
-#: ../src/dock/extras/launchers.py:240
-msgid "Description (optional): "
-msgstr "Descripció (opcional): "
-
-#: ../src/dock/extras/launchers.py:243
-msgid "Insert a description for the app"
-msgstr "Inserir la descripció de l'aplicació"
-
-#: ../src/dock/extras/launchers.py:320
-msgid "images(*.png *.xpm *jpg)"
-msgstr "imatges (*.png *.xpm *jpg)"
-
-#: ../src/dock/extras/launchers.py:322
-msgid "All files(*.*)"
-msgstr "Tots (*.*)"
-
-#: ../src/dock/extras/launchers.py:356
-msgid "From here you can add a custom launcher"
-msgstr "Des d'aci es poden assignar dreceres per a les diferents accions"
-
 #: ../kwin/scripts/kwin-ocrwindow/contents/ui/tts.py:115
 msgid "TTS finished. Listen?"
 msgstr "La lectura de la imatge está preparada. Escoltar?"
@@ -485,6 +395,80 @@ msgstr "La lectura de la imatge está preparada. Escoltar?"
 #: ../kwin/scripts/kwin-ocrwindow/contents/ui/tts.py:116
 msgid "Image was processesed"
 msgstr "S'ha processat la imatge"
+
+#~ msgid "Window Effects"
+#~ msgstr "Efectes de finestra"
+
+#~ msgid "Desktop Effects"
+#~ msgstr "Efectes de l'escriptori"
+
+#~ msgid "Assign"
+#~ msgstr "Assigna"
+
+#~ msgid "Description"
+#~ msgstr "Descripció"
+
+#~ msgid "Toggle effect"
+#~ msgstr "Activar efecte"
+
+#~ msgid "Application"
+#~ msgstr "Aplicació"
+
+#~ msgid "Press button to assign one action"
+#~ msgstr "Premer un botó per assignaruna acció"
+
+#~ msgid "Executable path"
+#~ msgstr "Ruta al programa"
+
+#~ msgid "Insert the executable path"
+#~ msgstr "Inserir la ruta a l'aplicació"
+
+#~ msgid "Shortcut"
+#~ msgstr ""
+#~ "Drecera\n"
+#~ " de teclat"
+
+#~ msgid "Press a key"
+#~ msgstr "Premer una tecla"
+
+#~ msgid "Icon: "
+#~ msgstr "Icona: "
+
+#~ msgid "Push to change icon"
+#~ msgstr "Premer per a canviar icona"
+
+#~ msgid "Module"
+#~ msgstr "Mòdul"
+
+#~ msgid "Name: "
+#~ msgstr "Nom: "
+
+#~ msgid "Unassigned action"
+#~ msgstr "Acció sense assignar"
+
+#~ msgid "Insert desktop name"
+#~ msgstr "Inserir nom de l'aplicació"
+
+#~ msgid "Insert the url for the site"
+#~ msgstr "Inserir url del lloc"
+
+#~ msgid "https://example.com"
+#~ msgstr "https://example.com"
+
+#~ msgid "Description (optional): "
+#~ msgstr "Descripció (opcional): "
+
+#~ msgid "Insert a description for the app"
+#~ msgstr "Inserir la descripció de l'aplicació"
+
+#~ msgid "images(*.png *.xpm *jpg)"
+#~ msgstr "imatges (*.png *.xpm *jpg)"
+
+#~ msgid "All files(*.*)"
+#~ msgstr "Tots (*.*)"
+
+#~ msgid "From here you can add a custom launcher"
+#~ msgstr "Des d'aci es poden assignar dreceres per a les diferents accions"
 
 #~ msgid "Beep when sddm launches"
 #~ msgstr "Emet un só al arrancar SDDM"

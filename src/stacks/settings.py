@@ -2,9 +2,9 @@
 from llxaccessibility import llxaccessibility
 import os,json
 import subprocess
-from PySide2.QtWidgets import QApplication,QLabel,QGridLayout,QCheckBox,QSizePolicy,QRadioButton,QHeaderView,QTableWidgetItem,QAbstractScrollArea,QComboBox,QPushButton,QFileDialog,QInputDialog
-from PySide2 import QtGui
-from PySide2.QtCore import Qt
+from PySide6.QtWidgets import QApplication,QLabel,QGridLayout,QCheckBox,QHeaderView,QTableWidgetItem,QAbstractScrollArea,QComboBox,QPushButton,QFileDialog,QInputDialog,QTableWidget
+from PySide6 import QtGui
+from PySide6.QtCore import Qt
 from QtExtraWidgets import QStackedWindowItem, QTableTouchWidget, QPushInfoButton
 import locale
 import gettext
@@ -51,8 +51,8 @@ class settings(QStackedWindowItem):
 		self.tblGrid.setRowCount(4)
 		self.tblGrid.verticalHeader().hide()
 		self.tblGrid.horizontalHeader().hide()
-		self.tblGrid.setSelectionBehavior(self.tblGrid.SelectRows)
-		self.tblGrid.setSelectionMode(self.tblGrid.SingleSelection)
+		self.tblGrid.setSelectionBehavior(QTableWidget.SelectRows)
+		self.tblGrid.setSelectionMode(QTableWidget.SingleSelection)
 		self.tblGrid.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
 		self.tblGrid.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 		self.tblGrid.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)

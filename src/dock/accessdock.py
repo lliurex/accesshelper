@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 import os,sys,subprocess,json
-from PySide2.QtWidgets import QApplication,QGridLayout,QWidget,QPushButton,QHeaderView,QMenu,QAction,QToolTip,QLabel,QDesktopWidget
-from PySide2.QtCore import Qt,QSignalMapper,QSize,QThread,QPoint,QEvent,Signal,QObject,QRect
-from PySide2.QtGui import QIcon,QPixmap,QCursor,QColor,QPalette,QGuiApplication
+from PySide6.QtWidgets import QApplication,QGridLayout,QWidget,QPushButton,QHeaderView,QMenu,QAction,QToolTip,QLabel,QDesktopWidget
+from PySide6.QtCore import Qt,QSignalMapper,QSize,QThread,QPoint,QEvent,Signal,QObject,QRect
+from PySide6.QtGui import QIcon,QPixmap,QCursor,QColor,QPalette,QGuiApplication
 import dbus
 import dbus.service
 import dbus.mainloop.glib
@@ -23,22 +23,22 @@ i18n={"CONFBTN":_("Configure launcher"),
 class dbusMethods(dbus.service.Object):
 	"""DBus service that fires \"toggleVisible\" signal on demand"""
 	def __init__(self,bus_name,*args,**kwargs):
-		super().__init__(bus_name,"/net/lliurex/accessibledock")
+		super().__init__(bus_name,"/net/lliurex/accessibility/Dock")
 		self.widget=args[0]
 	#def __init__(self,bus_name,*args,**kwargs):
 
-	@dbus.service.signal("net.lliurex.accessibledock")
+	@dbus.service.signal("net.lliurex.accessibility.Dock")
 	def toggleVisible(self):
 		pass
 	#def toggleVisible(self)
 
-	@dbus.service.method("net.lliurex.accessibledock")
+	@dbus.service.method("net.lliurex.accessibility.Dock")
 	def toggle(self):
 		"""Calling this method fires up the signal."""
 		self.toggleVisible()
 	#def toggle
 
-	@dbus.service.method("net.lliurex.accessibledock", in_signature='', out_signature='as')
+	@dbus.service.method("net.lliurex.accessibility.Dock", in_signature='', out_signature='as')
 	def getLaunchers(self):
 		dock=libdock.libdock()
 		dbusList = dbus.Array()
@@ -47,12 +47,12 @@ class dbusMethods(dbus.service.Object):
 			dbusList.append(json.dumps(launcher))
 		return(dbusList)
 		"""Calling this method fires up the signal."""
-	#def toggle
+	#def getLaunchers
 
-	@dbus.service.method("net.lliurex.accessibledock", in_signature='', out_signature='b')
+	@dbus.service.method("net.lliurex.accessibility.Dock", in_signature='', out_signature='b')
 	def isVisible(self):
 		return(self.widget.isVisible())
-	#def toggle
+	#def isVisible
 #class dbusMethods
 
 class threadLauncher(QThread):
@@ -67,7 +67,10 @@ class threadLauncher(QThread):
 	#def __init__
 
 	def run(self):
-		subprocess.run(self.cmd.split())
+		try:
+			subprocess.run(self.cmd.split())
+		except Exception as e:
+			print("Err launching {0}:\nFailed cmd: {1}".format(e,self.cmd))
 		return(True)
 	#def run
 #class threadLauncher
@@ -131,15 +134,12 @@ class QToolTipDock(QLabel):
 	#def _getCoordsForFull
 
 	def toggle(self,coords):
-		if self.isVisible():
-			self.setVisible(False)
-		else:
+		if self.isVisible()==False:
 			if self.bigTip==True:
 				self.setFont(self.fontFull)
 				coords=self._getCoordsForFull(coords)
-			else:
-				cursor=self.cursor()
-				coords=cursor.pos()
+			#else:
+			#	coords=self.cursor().pos()
 			self.setMinimumWidth(len(self.text())*self.font().pointSize())
 			(x,y)=(coords.x(),coords.y())
 			scr=QApplication.screens()[0]
@@ -152,6 +152,7 @@ class QToolTipDock(QLabel):
 			self.move(x,y)
 			self.setVisible(True)
 	#def toggle
+
 #class QToolTipDock
 	
 class QPushButtonDock(QPushButton):
@@ -203,7 +204,7 @@ class QPushButtonDock(QPushButton):
 		super().__init__()
 		layout=QGridLayout()
 		self.setLayout(layout)
-		self.setWindowFlags(Qt.NoDropShadowWindowHint|Qt.WindowStaysOnTopHint)
+		#self.setWindowFlags(Qt.NoDropShadowWindowHint|Qt.WindowStaysOnTopHint)
 		#self.setWindowFlags(Qt.BypassWindowManagerHint)
 		self.name,self.data=launcher
 		self.setProperty("file",self.data.get("File",""))
@@ -220,7 +221,6 @@ class QPushButtonDock(QPushButton):
 		#layout.addWidget(self.lbl,0,0)
 		self.threadLaunchers=[]
 		self.popupShow=False
-		self.dock=parent
 		self._renderBtn()
 		self.clicked.connect(self._beginLaunch)
 	#def __init__(self,text="",parent=None):
@@ -230,7 +230,7 @@ class QPushButtonDock(QPushButton):
 		icn=QIcon()
 		iconName=self.data.get("Icon","")
 		if len(iconName)==0:
-			iconName="accesswizard"
+			iconName="accessibledock"
 		if os.path.exists(iconName):
 			pxm=QPixmap(iconName)
 			icn=QIcon(pxm)
@@ -243,10 +243,10 @@ class QPushButtonDock(QPushButton):
 	#def _renderBtn
 
 	def _beginLaunch(self,*args):
+		self._toggle()
 		cmd=self.data.get("Exec","")
 		if len(cmd)>0:
 			self.setEnabled(False)
-			#self.dock.setVisible(False)
 			l=threadLauncher(cmd)
 			l.start()
 			l.finished.connect(self._endLaunch)
@@ -254,14 +254,14 @@ class QPushButtonDock(QPushButton):
 	#def _beginLaunch
 
 	def _endLaunch(self,*args):
-		#self.dock.setVisible(True)
+		self._toggle()
 		if self.isEnabled()==False:
 			self.setEnabled(True)
 		else:
 			self.configure.emit(self)
 	#def _endLaunch
 
-	def _toggle(self,*Args,**kwargs):
+	def _toggle(self,*args,**kwargs):
 		self.toggle.emit()
 	#def _toggle
 
@@ -271,7 +271,7 @@ class QPushButtonDock(QPushButton):
 			self.configureLauncher.emit(self)
 			if path.endswith(".desktop"):
 				path=self.property("fpath")
-				cmd="python3 {0} {1}".format(os.path.join(os.path.dirname(os.path.abspath(__file__)),"extras/launchers.py"),path)
+				cmd="python3 {0} {1}".format(os.path.join(os.path.dirname(os.path.abspath(__file__)),"lib/launchers.py"),path)
 				l=threadLauncher(cmd)
 				self.threadLaunchers.append(l)
 				l.start()
@@ -288,7 +288,7 @@ class QPushButtonDock(QPushButton):
 				pathdir=os.path.dirname(path)
 				pathconfig=os.path.join(pathdir,"contents","ui","config.ui")
 				if os.path.exists(pathconfig):
-					cmd="python3 {0} {1}".format(os.path.join(os.path.dirname(os.path.abspath(__file__)),"extras/configLauncher.py"),pathconfig)
+					cmd="python3 {0} {1}".format(os.path.join(os.path.dirname(os.path.abspath(__file__)),"tools/configLauncher.py"),pathconfig)
 					try:
 						l=threadLauncher(cmd)
 						self.threadLaunchers.append(l)
@@ -359,13 +359,13 @@ class QPushButtonDock(QPushButton):
 		if self.popupShow==False and (ev.type()==QEvent.Type.Enter or ev.type()==QEvent.Type.FocusIn):
 			if self.hasFocus()==False:
 				self.setFocus()
-				size=self.size()
-				origSize=72
-				newsize=QSize(size.width(),origSize*1.5)
-				self.setIconSize(newsize)
-				self.setFixedSize(newsize)
-				self.lbl.toggle(self.mapToGlobal(QPoint(0,self.y()+self.height())))
-				self.focusIn.emit(self)
+			size=self.size()
+			origSize=72
+			newsize=QSize(size.width(),origSize*1.5)
+			self.setIconSize(newsize)
+			self.setFixedSize(newsize)
+			self.lbl.toggle(self.mapToGlobal(QPoint(0,self.y()+self.height())))
+			self.focusIn.emit(self)
 		elif self.popupShow==True or (ev.type()==QEvent.Type.Leave or ev.type()==QEvent.Type.FocusOut):
 			size=self.size()
 			if self.lbl.isVisible():
@@ -374,7 +374,7 @@ class QPushButtonDock(QPushButton):
 			newsize=QSize(size.width(),self.initialSize.height()/1.1)
 			self.setFixedSize(newsize)
 			self.setIconSize(newsize)
-		ev.ignore()
+		#ev.ignore()
 		return(False)
 	#def eventFilter
 #class QPushButtonDock
@@ -394,8 +394,9 @@ class accessdock(QWidget):
 		super().__init__()
 		self.dbg=True
 		self.libdock=libdock.libdock()
-		self.setWindowIcon(QIcon.fromTheme("accessdock"))
-		QGuiApplication.setDesktopFileName("accessdock")
+
+		self.setWindowIcon(QIcon.fromTheme("accessibledock"))
+		QGuiApplication.setDesktopFileName("accessibledock")
 		self.setWindowFlags(Qt.NoDropShadowWindowHint|Qt.WindowStaysOnTopHint|Qt.Tool)
 		#This hides decoration and bypass window 
 		#also skips app registering in at-spi so is unexistent for ORCA 
@@ -438,6 +439,11 @@ class accessdock(QWidget):
 			self._toggle()
 	#def closeEvent
 
+	def hideEvent(self,*args):
+		args[0].ignore()
+		self.setVisible(False)
+	#def hideEvent
+
 	def _setColorForBorder(self):
 		qplt=QPalette()
 		if hasattr(qplt,"accent"):
@@ -453,7 +459,7 @@ class accessdock(QWidget):
 	#def _setColorForBorder
 
 	def _launchDockConfig(self,*args,**kwargs):
-		self.setVisible(False)
+		self._toggle()
 		try:
 			cmd=os.path.join(os.path.dirname(os.path.abspath(__file__)),"accessdock-config.py")
 			l=threadLauncher(cmd)
@@ -465,8 +471,8 @@ class accessdock(QWidget):
 	#def _launchDockConfig
 
 	def _endLaunch(self,*args):
-		self.updateScreen()
-		self.setVisible(True)
+		self._debug("Process end detected")
+		self._toggle()
 	#def _endLaunch
 
 	def mousePressEvent(self, ev):
@@ -508,13 +514,16 @@ class accessdock(QWidget):
 			wrkF="/usr/share/accesswizard/dock/accessdock-config.py"
 			launchers.append(("accessdock-config.py",{"File":wrkF,"Path":wrkF,"fpath":wrkF,"Name":"Configure","Icon":"accessdock","Exec":wrkF}))
 		for launcher in launchers:
-			btn=QPushButtonDock(launcher,bigTip,parent=self)
+			btn=QPushButtonDock(launcher,bigTip,self)
 			btn.configureMain.connect(self._launchDockConfig)
 			btn.configure.connect(self._toggle)
 			btn.configureLauncher.connect(self._toggle)
 			btn.toggle.connect(self._toggle)
 			self.grid.setColumnCount(self.grid.columnCount()+1)
 			self.grid.setCellWidget(0,self.grid.columnCount()-1,btn)
+			if self.grid.columnCount()>1:
+				#self.grid.setTabOrder(self.grid.cellWidget(0,self.grid.columnCount()-1),btn)
+				btn.setFocusPolicy(Qt.StrongFocus)
 		hh=self.grid.horizontalHeader()
 		hh.setSectionResizeMode(hh.ResizeToContents)
 		vh=self.grid.verticalHeader()
@@ -522,6 +531,11 @@ class accessdock(QWidget):
 		if oldcount>0:
 			self._resize()
 	#def updateScreen
+
+	def showEvent(self,*args):
+		self.activateWindow()
+		self.setFocus()
+	#def showEvent
 	
 	def _resize(self):
 		colWidth=self.grid.horizontalHeader().sectionSize(0)
@@ -535,10 +549,16 @@ class accessdock(QWidget):
 	#def _resize
 
 	def _toggle(self,*args,**kwargs):
-		if self.isVisible()==False:
-			self.updateScreen()
+		self._debug("Toggle visibility from {0} to {1}".format(not(self.isVisible()),self.isVisible()))
 		self.setVisible(not(self.isVisible()))
+		if self.isVisible()==True:
+			self.updateScreen()
 	#def _toggle
+
+	def _isVisible(self,*args,**kwargs):
+		self._debug("Dock visible: {}".format(self.isVisible()))
+		return(self.isVisible())
+	#def _visible
 #class accessdock
 		
 if __name__=="__main__":
@@ -552,23 +572,24 @@ if __name__=="__main__":
 		print("Could not get session bus: %s\nAborting"%e)
 		sys.exit(1)
 	try:
-		objbus=bus.get_object("net.lliurex.accessibledock","/net/lliurex/accessibledock")
-		objint=dbus.Interface(bus,"net.lliurex.accessibledock")
-		objbus.toggle()
+		objbus=bus.get_object("net.lliurex.accessibility.Dock","/net/lliurex/accessibility/Dock")
+		objint=dbus.Interface(bus,"net.lliurex.accessibility.Dock")
+		objbus.isDockVisible()
 		print("Already launched!")
-		sys.exit(2)
+	#	sys.exit(2)
 	except Exception as e:
 		print(e)
 		pass
-	name=dbus.service.BusName("net.lliurex.accessibledock",bus)
-	bus.add_signal_receiver(dock._toggle,
-                        bus_name='net.lliurex.accessibledock',
-                        interface_keyword='',
-                        member_keyword='',
-                        path_keyword='',
-                        message_keyword='')
-	objbus=bus.get_object("net.lliurex.accessibledock","/net/lliurex/accessibledock")
-	objbus.connect_to_signal("Toggled",dock._toggle,dbus_interface="net.lliurex.accessibledock")
+	name=dbus.service.BusName("net.lliurex.accessibility.Dock",bus)
+	#bus.add_signal_receiver(dock._toggle,
+    #                    bus_name='net.lliurex.accessibility',
+    #                    interface_keyword='',
+    #                    member_keyword='',
+    #                    path_keyword='',
+    #                    message_keyword='')
+	objbus=bus.get_object("net.lliurex.accessibility.Dock","/net/lliurex/accessibility/Dock")
+	objbus.connect_to_signal("toggleVisible",dock._toggle,dbus_interface="net.lliurex.accessibility.Dock")
+	objbus.connect_to_signal("isDockVisibleSignal",dock._isVisible,dbus_interface="net.lliurex.accessibility.Dock")
 	dclient=dbusMethods(bus,dock)
 	dock.show()
-	app.exec_()
+	app.exec()

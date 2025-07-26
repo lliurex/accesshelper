@@ -6,7 +6,7 @@
 
     <group name="">
         <entry name="Voice" type="String">
-            <default>#ff00ff</default>
+            <default>Managed by system</default>
         </entry>
         <entry name="Stretch" type="Int">
             <default>3</default>
@@ -17,8 +17,23 @@
         <entry name="Rate" type="Int">
             <default>0</default>
         </entry>
-        <entry name="Synth" type="String">
-            <default>Internal</default>
+        <entry name="Synth" type="Bool">
+            <default>true</default>
+        </entry>
+        <entry name="Vlc" type="Bool">
+            <default>false</default>
+        </entry>
+        <entry name="Screenshot" type="Bool">
+            <default>false</default>
+        </entry>
+        <entry name="Spellchecker" type="Bool">
+            <default>true</default>
+        </entry>
+        <entry name="Filter" type="String">
+            <default>Grayscale (default)</default>
+        </entry>
+        <entry name="Clipboard" type="Bool">
+            <default>false</default>
         </entry>
     </group>
 </kcfg>

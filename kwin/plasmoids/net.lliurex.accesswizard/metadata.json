@@ -1,4 +1,5 @@
 {
+    "KPackageStructure": "Plasma/Applet",
     "KPlugin": {
         "Authors": [
             {
@@ -26,6 +27,7 @@
         "Website": "http://lliurex.net"
     },
     "X-Plasma-API": "declarativeappletscript",
+    "X-Plasma-API-Minimum-Version": "6.0",
     "X-Plasma-MainScript": "ui/main.qml",
     "X-Plasma-DBusActivationService": "net.lliurex.accessibledock",
     "X-Plasma-NotificationArea": "true",

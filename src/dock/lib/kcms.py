@@ -57,9 +57,9 @@ class effects(QStackedWindowItem):
 
 	def _launch(self,*args):
 		if args[0].text()==_("Window Effects"):
-			cmd=["kcmshell5","kcm_kwin_effects"]
+			cmd=["kcmshell6","kcm_kwin_effects"]
 		elif args[0].text()==_("Desktop Effects"):
-			cmd=["kcmshell5","kcm_kwin_scripts"]
+			cmd=["kcmshell6","kcm_kwin_scripts"]
 		subprocess.run(cmd)
 	#def _launch
 

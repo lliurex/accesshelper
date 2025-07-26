@@ -183,7 +183,7 @@ class actionSelector(QStackedWindowItem):
 	#def _addAction
 
 	def _back(self,*args):
-		self.parent.setCurrentStack(0)
+		self.quit()
 	#def _back
 #class actionSelector
 

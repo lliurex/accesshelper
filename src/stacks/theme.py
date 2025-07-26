@@ -56,7 +56,6 @@ class theme(QStackedWindowItem):
 		self.tblGrid.horizontalHeader().hide()
 		self.tblGrid.setSelectionBehavior(QTableWidget.SelectRows)
 		self.tblGrid.setSelectionMode(QTableWidget.SingleSelection)
-		self.tblGrid.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
 		self.tblGrid.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 		self.tblGrid.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
 		self.box.addWidget(self.tblGrid)
@@ -90,6 +89,8 @@ class theme(QStackedWindowItem):
 		btnMouse.loadImg("preferences-desktop-mouse")
 		self.tblGrid.setCellWidget(1,0,btnMouse)
 		btnMouse.clicked.connect(self._launch)
+		self.tblGrid.verticalHeader().setSectionResizeMode(self.tblGrid.rowCount()-1,QHeaderView.ResizeToContents)
+		self.tblGrid.horizontalHeader().setSectionResizeMode(0,QHeaderView.ResizeToContents)
 	#def _renderGui
 
 	def _launch(self,*args):

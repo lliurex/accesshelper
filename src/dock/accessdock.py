@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 import os,sys,subprocess,json
-from PySide6.QtWidgets import QApplication,QGridLayout,QWidget,QPushButton,QHeaderView,QMenu,QAction,QToolTip,QLabel,QDesktopWidget
+from PySide6.QtWidgets import QApplication,QGridLayout,QWidget,QPushButton,QHeaderView,QMenu,QToolTip,QLabel,QTableWidget
 from PySide6.QtCore import Qt,QSignalMapper,QSize,QThread,QPoint,QEvent,Signal,QObject,QRect
-from PySide6.QtGui import QIcon,QPixmap,QCursor,QColor,QPalette,QGuiApplication
+from PySide6.QtGui import QIcon,QPixmap,QCursor,QColor,QPalette,QGuiApplication,QFont
 import dbus
 import dbus.service
 import dbus.mainloop.glib
@@ -99,7 +99,7 @@ class QToolTipDock(QLabel):
 		self.setAccessibleDescription("")
 		self.setAlignment(Qt.AlignCenter)
 		f=self.font()
-		f.setWeight(f.Bold)
+		f.setWeight(QFont.Bold)
 		f.setPointSize(f.pointSize()+2)
 		self.setFont(f)
 		scr=QApplication.screens()[0]
@@ -525,9 +525,9 @@ class accessdock(QWidget):
 				#self.grid.setTabOrder(self.grid.cellWidget(0,self.grid.columnCount()-1),btn)
 				btn.setFocusPolicy(Qt.StrongFocus)
 		hh=self.grid.horizontalHeader()
-		hh.setSectionResizeMode(hh.ResizeToContents)
+		#hh.setSectionResizeMode(QTableWidget.ResizeToContents)
 		vh=self.grid.verticalHeader()
-		vh.setSectionResizeMode(vh.ResizeToContents)
+		#vh.setSectionResizeMode(vh.ResizeToContents)
 		if oldcount>0:
 			self._resize()
 	#def updateScreen

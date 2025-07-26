@@ -128,7 +128,7 @@ class actionSelector(QStackedWindowItem):
 
 	def _loadKcm(self):
 		self.lstActions.clear()
-		cmd=["kcmshell5","--list"]
+		cmd=["kcmshell6","--list"]
 		out=subprocess.check_output(cmd,universal_newlines=True,encoding="utf8")
 		for line in out.split("\n"):
 			line=line.strip().strip("\t")
@@ -183,7 +183,7 @@ class actionSelector(QStackedWindowItem):
 	#def _addAction
 
 	def _back(self,*args):
-		self.parent.setCurrentStack(0)
+		self.quit()
 	#def _back
 #class actionSelector
 
@@ -393,7 +393,7 @@ class launchers(QStackedWindow):
 		desktop+="Comment={}\n".format(action.get("Comment"))
 		desktop+="Icon={}\n".format(action.get("Icon"))
 		desktop+="Path={}\n".format(action.get("path"))
-		cmd="kcmshell5 {}".format(action.get("Exec"))
+		cmd="kcmshell6 {}".format(action.get("Exec"))
 		desktop+="Exec={}\n".format(cmd)
 		desktop+="Fname={}\n".format(fname)
 		with open(fname,"w") as f:

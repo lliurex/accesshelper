@@ -23,7 +23,7 @@ if __name__ == "__main__":
 	btnOk=QPushButton("Ok")
 	btnOk.clicked.connect(lambda x:save(window,app))
 	btnKo=QPushButton("Cancel")
-	btnKo.clicked.connect(app.exit)
+	btnKo.clicked.connect(app.quit)
 	btnOk.setFixedSize(btnKo.sizeHint().width(),btnOk.sizeHint().height())
 	btnKo.setFixedSize(btnKo.sizeHint().width(),btnOk.sizeHint().height())
 	hlay.addWidget(btnOk)

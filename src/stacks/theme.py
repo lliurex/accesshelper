@@ -94,15 +94,18 @@ class theme(QStackedWindowItem):
 	#def _renderGui
 
 	def _launch(self,*args):
+		args[0].setEnabled(False)
+		QApplication.processEvents()
 		if args[0].text()==_("Theme"):
 			mod="kcm_desktoptheme"
-		elif args[0].text()==_("Color Scheme"):
+		elif args[0].text()==_("Color scheme"):
 			mod="kcm_colors"
 		elif args[0].text()==_("Fonts"):
 			mod="kcm_fonts"
 		elif args[0].text()==_("Mouse"):
 			mod="kcm_cursortheme"
-		self.accesshelper.launchKcmModuleAsync(mod)
+		self.accesshelper.launchKcmModule(mod)
+		args[0].setEnabled(True)
 	#def _launch
 
 	def updateScreen(self):

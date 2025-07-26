@@ -77,6 +77,8 @@ class effects(QStackedWindowItem):
 	#def _renderGui
 
 	def _launch(self,*args):
+		args[0].setEnabled(False)
+		QApplication.processEvents()
 		mod=""
 		if args[0].text()==i18n.get("EFFBTN"):
 			mod="kcm_kwin_effects"
@@ -84,6 +86,7 @@ class effects(QStackedWindowItem):
 			mod="kcm_kwin_scripts"
 		if len(mod)>0:
 			self.accesshelper.launchKcmModule(mod)
+		args[0].setEnabled(True)
 	#def _launch
 
 	def updateScreen(self):

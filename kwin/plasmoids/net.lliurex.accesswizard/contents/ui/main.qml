@@ -5,8 +5,8 @@ import QtQuick.Layouts 1.15
 import org.kde.plasma.plasmoid 2.0
 import org.kde.kirigami 2.20 as Kirigami
 import org.kde.plasma.components 3.0 as PlasmaComponents
+import org.kde.plasma.core as PlasmaCore
 import org.kde.plasma.plasma5support 2.0 as PlasmaSupport
-import org.kde.plasma.plasmoid 2.0 as PlasmaPlamoid
 import org.kde.plasma.extras 2.0 as PlasmaExtras
 //import net.lliurex.accesswizard 1.0
 
@@ -30,11 +30,11 @@ PlasmoidItem {
 		id: launchers
 		engine: "executable"
 		connectedSources: []
-		onNewData: {
-			var exitCode = data["exit code"]
-			var exitStatus = data["exit status"]
-			var stdout = data["stdout"]
-			var stderr = data["stderr"]
+		onNewData:  {
+			var exitCode = data["exit code"];
+			var exitStatus = data["exit status"];
+			var stdout = data["stdout"];
+			var stderr = data["stderr"];
 			if ((stdout.trim()!="") && (stdout[0]==="{"))
 			{
 				processData(stdout);
@@ -42,8 +42,8 @@ PlasmoidItem {
 			onSourceDisconnected:{
 				reload();
 			}
-			exited(exitCode, exitStatus, stdout, stderr)
-			disconnectSource(sourceName) // cmd finished
+			exited(exitCode, exitStatus, stdout, stderr);
+			disconnectSource(sourceName); // cmd finished
 		} //OnNewData
 
 		function processData(stdout) {
@@ -104,7 +104,7 @@ PlasmoidItem {
 			anchors.bottom: parent.bottom
 			width: parent.width - (Kirigami.Units.gridUnit * 4)
 			iconName: Plasmoid.icon
-			text:Plasmoid.toolTipSubText
+			text:main.toolTipSubText
 		}
 		ColumnLayout {
 			width: parent.width 
@@ -139,16 +139,30 @@ PlasmoidItem {
 		//root.setAction("accessWizard", i18n("Access Wizard"),"Access Wizard")
 	}
 
+    Plasmoid.contextualActions: [
+        PlasmaCore.Action {
+            text: i18nc(i18n("Configure Dock"), i18n("Configure Dock"))
+            icon.name: "list-edit"
+            onTriggered: configureDock()
+        },
+        PlasmaCore.Action {
+            text: i18nc(i18n("Access Wizard"), i18n("Access Wizard"))
+            icon.name: "list-edit"
+            onTriggered: accessWizard()
+        }
+    ]
+
+
 	function reload() {
 		var cmd = wrkdir.replace("file://","")+'dockinfo.py';
 		launchers.exec(cmd);
 
 	}
 
-	function action_accessWizard() {
+	function accessWizard() {
 		launchers.exec("/usr/share/accesswizard/accesswizard.py")
 	}
-	function action_configureDock() {
+	function configureDock() {
 		launchers.exec("/usr/share/accesswizard/dock/accessdock-config.py")
 	}
 

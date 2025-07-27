@@ -93,7 +93,7 @@ class QToolTipDock(QLabel):
 	"""
 	def __init__(self,text="",bigTip=False,parent=None):
 		super().__init__()
-		self.setWindowFlags(Qt.X11BypassWindowManagerHint|Qt.BypassWindowManagerHint|Qt.FramelessWindowHint|Qt.WindowTransparentForInput|Qt.NoDropShadowWindowHint|Qt.WindowStaysOnTopHint)
+		self.setWindowFlags(Qt.X11BypassWindowManagerHint|Qt.BypassWindowManagerHint|Qt.FramelessWindowHint|Qt.WindowTransparentForInput|Qt.NoDropShadowWindowHint|Qt.WindowStaysOnTopHint|Qt.ToolTip)
 		self.setText(text)
 		self.setAccessibleName(text)
 		self.setAccessibleDescription("")
@@ -254,7 +254,7 @@ class QPushButtonDock(QPushButton):
 	#def _beginLaunch
 
 	def _endLaunch(self,*args):
-		self._toggle()
+		#self._toggle()
 		if self.isEnabled()==False:
 			self.setEnabled(True)
 		else:
@@ -472,7 +472,7 @@ class accessdock(QWidget):
 
 	def _endLaunch(self,*args):
 		self._debug("Process end detected")
-		self._toggle()
+		#self._toggle()
 	#def _endLaunch
 
 	def mousePressEvent(self, ev):
@@ -549,7 +549,7 @@ class accessdock(QWidget):
 	#def _resize
 
 	def _toggle(self,*args,**kwargs):
-		self._debug("Toggle visibility from {0} to {1}".format(not(self.isVisible()),self.isVisible()))
+		self._debug("Toggle visibility to {0} from {1}".format(not(self.isVisible()),self.isVisible()))
 		self.setVisible(not(self.isVisible()))
 		if self.isVisible()==True:
 			self.updateScreen()

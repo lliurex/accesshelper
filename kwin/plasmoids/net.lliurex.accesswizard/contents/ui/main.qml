@@ -1,38 +1,40 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.15
 
+
 import org.kde.plasma.plasmoid 2.0
-import org.kde.plasma.core 2.1 as PlasmaCore
+import org.kde.kirigami 2.20 as Kirigami
 import org.kde.plasma.components 3.0 as PlasmaComponents
+import org.kde.plasma.core as PlasmaCore
+import org.kde.plasma.plasma5support 2.0 as PlasmaSupport
 import org.kde.plasma.extras 2.0 as PlasmaExtras
-import org.kde.kwin 2.0 as KWinComponents
 //import net.lliurex.accesswizard 1.0
 
 // Item - the most basic plasmoid component, an empty container.
-Item {
+PlasmoidItem {
 
 	id:main
 	property string wrkdir: Qt.resolvedUrl("./")
-	Plasmoid.switchWidth: PlasmaCore.Units.gridUnit * 5
-	Plasmoid.switchHeight: PlasmaCore.Units.gridUnit * 5
-	Plasmoid.hideOnWindowDeactivate: true
+	switchWidth: Kirigami.Units.gridUnit * 5
+	switchHeight: Kirigami.Units.gridUnit * 5
+	hideOnWindowDeactivate: true
 	Plasmoid.icon: "accessibledock"
-	Plasmoid.toolTipMainText: i18n("Accessibility Helper")
-	Plasmoid.toolTipSubText: i18n("Quick launcher for accessibility")
+	toolTipMainText: i18n("Accessibility Helper")
+	toolTipSubText: i18n("Quick launcher for accessibility")
 
 	ListModel {
 		id: launchersModel
 	}
 
-	PlasmaCore.DataSource {
+	PlasmaSupport.DataSource {
 		id: launchers
 		engine: "executable"
 		connectedSources: []
-		onNewData: {
-			var exitCode = data["exit code"]
-			var exitStatus = data["exit status"]
-			var stdout = data["stdout"]
-			var stderr = data["stderr"]
+		onNewData:  {
+			var exitCode = data["exit code"];
+			var exitStatus = data["exit status"];
+			var stdout = data["stdout"];
+			var stderr = data["stderr"];
 			if ((stdout.trim()!="") && (stdout[0]==="{"))
 			{
 				processData(stdout);
@@ -40,8 +42,8 @@ Item {
 			onSourceDisconnected:{
 				reload();
 			}
-			exited(exitCode, exitStatus, stdout, stderr)
-			disconnectSource(sourceName) // cmd finished
+			exited(exitCode, exitStatus, stdout, stderr);
+			disconnectSource(sourceName); // cmd finished
 		} //OnNewData
 
 		function processData(stdout) {
@@ -91,27 +93,27 @@ Item {
 		signal exited(int exitCode, int exitStatus, string stdout, string stderr)
 	}
 
-	Plasmoid.preferredRepresentation: Plasmoid.fullRepresentation
+	//preferredRepresentation: Plasmoid.fullRepresentation
    
-	Plasmoid.fullRepresentation: PlasmaComponents.Page {
-		implicitWidth: PlasmaCore.Units.gridUnit * 12
-		implicitHeight: PlasmaCore.Units.gridUnit * 6
+	fullRepresentation: PlasmaComponents.Page {
+		implicitWidth: Kirigami.Units.gridUnit * 12
+		implicitHeight: Kirigami.Units.gridUnit * 6
 
 		PlasmaExtras.PlaceholderMessage {
 			//anchors.centerIn: parent
 			anchors.bottom: parent.bottom
-			width: parent.width - (PlasmaCore.Units.gridUnit * 4)
+			width: parent.width - (Kirigami.Units.gridUnit * 4)
 			iconName: Plasmoid.icon
-			text:Plasmoid.toolTipSubText
+			text:main.toolTipSubText
 		}
 		ColumnLayout {
 			width: parent.width 
-			height: parent.height - (PlasmaCore.Units.gridUnit * 2)
+			height: parent.height - (Kirigami.Units.gridUnit * 2)
 			ListView {
 				Layout.fillWidth: true
 				Layout.fillHeight: true
-				Layout.margins:PlasmaCore.Units.gridUnit/2
-				spacing:PlasmaCore.Units.gridUnit/20
+				Layout.margins:Kirigami.Units.gridUnit/2
+				spacing:Kirigami.Units.gridUnit/20
 				model: launchersModel
 				delegate: launcherDelegate
 			}
@@ -122,20 +124,34 @@ Item {
 	Component {
 		id: launcherDelegate
 		PlasmaComponents.Button {
-			Layout.margins:PlasmaCore.Units.gridUnit/2
-			height:PlasmaCore.Units.gridUnit*2
-			width: parent? parent.width:PlasmaCore.Units.gridUnit*10
+			Layout.margins:Kirigami.Units.gridUnit/2
+			height:Kirigami.Units.gridUnit*2
+			width: parent? parent.width:Kirigami.Units.gridUnit*10
 		   	text: model.name 
 			icon.name:model.icon
 			onClicked:{Plasmoid.expanded=false;launchers.exec(model.exec)}
 		}
 	}
 	Component.onCompleted: {
-		plasmoid.removeAction("configure");
+		//root.removeAction("configure");
 		reload();
-		plasmoid.setAction("configureDock", i18n("Configure Dock"),"Configure Dock")
-		plasmoid.setAction("accessWizard", i18n("Access Wizard"),"Access Wizard")
+		//root.setAction("configureDock", i18n("Configure Dock"),"Configure Dock")
+		//root.setAction("accessWizard", i18n("Access Wizard"),"Access Wizard")
 	}
+
+    Plasmoid.contextualActions: [
+        PlasmaCore.Action {
+            text: i18nc(i18n("Configure Dock"), i18n("Configure Dock"))
+            icon.name: "list-edit"
+            onTriggered: configureDock()
+        },
+        PlasmaCore.Action {
+            text: i18nc(i18n("Access Wizard"), i18n("Access Wizard"))
+            icon.name: "list-edit"
+            onTriggered: accessWizard()
+        }
+    ]
+
 
 	function reload() {
 		var cmd = wrkdir.replace("file://","")+'dockinfo.py';
@@ -143,10 +159,10 @@ Item {
 
 	}
 
-	function action_accessWizard() {
+	function accessWizard() {
 		launchers.exec("/usr/share/accesswizard/accesswizard.py")
 	}
-	function action_configureDock() {
+	function configureDock() {
 		launchers.exec("/usr/share/accesswizard/dock/accessdock-config.py")
 	}
 

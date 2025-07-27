@@ -357,8 +357,12 @@ class QPushButtonDock(QPushButton):
 		if ev.type()==QEvent.Type.Resize and self.popupShow==True:
 			self.popupShow=False
 		if self.popupShow==False and (ev.type()==QEvent.Type.Enter or ev.type()==QEvent.Type.FocusIn):
-			if self.hasFocus()==False:
-				self.setFocus()
+			if ev.type()==QEvent.Type.FocusIn:
+				if ev.reason()==Qt.FocusReason.OtherFocusReason:
+					self.move(self.mapToGlobal(QPoint(0,self.y()+self.height())))
+				else:
+					if self.hasFocus()==False:
+						self.setFocus()
 			size=self.size()
 			origSize=72
 			newsize=QSize(size.width(),origSize*1.5)
@@ -374,7 +378,6 @@ class QPushButtonDock(QPushButton):
 			newsize=QSize(size.width(),self.initialSize.height()/1.1)
 			self.setFixedSize(newsize)
 			self.setIconSize(newsize)
-		#ev.ignore()
 		return(False)
 	#def eventFilter
 #class QPushButtonDock
@@ -503,9 +506,14 @@ class accessdock(QWidget):
 		w=0
 		if oldcount>0:
 			w=self.width()/oldcount
+			for idx in range(0,oldcount):
+				btn=self.grid.cellWidget(0,idx)
+				print(btn)
+				btn.lbl.deleteLater()
+				btn.deleteLater()
+
 		self.grid.clear()
 		self.grid.setColumnCount(0)
-		self.btnMnu={}
 		launchers=self.libdock.getLaunchers()
 		bigTip=False
 		if self.libdock.readKValue("kwinrc","accessibledock","tooltipbig")=="true":
@@ -528,7 +536,7 @@ class accessdock(QWidget):
 		#hh.setSectionResizeMode(QTableWidget.ResizeToContents)
 		vh=self.grid.verticalHeader()
 		#vh.setSectionResizeMode(vh.ResizeToContents)
-		if oldcount>0:
+		if oldcount!=self.grid.columnCount():
 			self._resize()
 	#def updateScreen
 

@@ -3,16 +3,46 @@ Section: admin
 Priority: optional
 Maintainer: Juanma1980 <juanma1980@gmail.com>
 Uploaders: LliureX Team
-Build-Depends: llxsrchelper,debhelper (>= 7.0), python3-poinstaller, zero-dev
+Build-Depends: llxsrchelper,debhelper (>= 13.0), python3-poinstaller, zero-dev
 Standards-Version: 4.4.1
 Homepage: https://github.com/lliurex/accesshelper
 
 Package: accesswizard
 Architecture: all
-Depends: python3-qtextrawidgets (>= 0.3.0),python3-pyside6.qtmultimedia,python3-pyside6.qtgui,xpanimated-yb-cursor-theme,python3-app2menu (>= 1.4),onboard,python3-opencv,python3-tesserocr,festival,lame,festvox-palpc16k,festvox-sflpc16k,festvox-ca-ona-hts, tesseract-ocr, tesseract-ocr-spa,python3-spellchecker, python3-pyside6.qtmultimediawidgets,speech-dispatcher-festival,python3-llxaccessibility,zero-lliurex-antimicrox,kwin-script-mouseframe,kwin-script-mousestrip,kwin-script-rgbfilter
+Depends: python3-qtextrawidgets (>= 0.3.0),
+	python3-pyside6.qtmultimedia,
+	python3-pyside6.qtgui,
+	xpanimated-yb-cursor-theme,
+	python3-app2menu (>= 1.4),
+	onboard,
+	python3-opencv,
+	python3-tesserocr,
+	festival,
+	lame,
+	festvox-palpc16k,
+	festvox-sflpc16k,
+	festvox-valcat-voices, 
+	tesseract-ocr, 
+	tesseract-ocr-spa,
+	python3-spellchecker, 
+	python3-pyside6.qtmultimediawidgets,
+	speech-dispatcher-festival,
+	python3-llxaccessibility,
+	zero-lliurex-antimicrox,
+	kwin-script-mouseframe,
+	kwin-script-mousestrip,
+	kwin-script-rgbfilter,
+	kwin-effect-colorcorrection,
+	kwin-effect-focustrack,
+	python3-imutils
 Description: Set accessibility settings
  AccessHelper it's a common place for the
  available accessibility options 
+
+Package: accesswizard-dbus
+Architecture: all
+Depends: python3-llxaccessibility
+Description: DBus service for accessibility
 
 Package: pulse-sddm
 Architecture: all
@@ -23,15 +53,21 @@ Depends: sddm,orca
 Description: Systemd and sddm scripts
  for enabling ORCA screen reader at SDDM
 
-Package: kwin-ocrwindow
+Package: accesswizard-kwin-ocrwindow
 Architecture: all
 Depends: accesswizard, kwin-addons
+Breaks: kwin-ocrwindow
+Conflicts: kwin-ocrwindow
+Replaces: kwin-ocrwindow
 Description: Read window contents with OCR
  This plugin for KWin captures the active screen
  and reads the content after processing through tesserocr.
 
-Package: plasma-accesswizard
+Package: accesswizard-plasmoid
 Architecture: all
+Breaks: plasma-accesswizard
+Conflicts: plasma-accesswizard
+Replaces: plasma-accesswizard
 Depends: accesswizard, kwin-addons
 Description: Plasmoid for accesswizard
  Gives quick access to accessdock launchers

@@ -34,7 +34,7 @@ class theme(QStackedWindowItem):
 		    longDesc=i18n.get('DESCRIPTION'),
 			icon="preferences-desktop-theme",
 			tooltip=i18n.get("TOOLTIP"),
-			index=1,
+			index=3,
 			visible=True)
 		self.enabled=True
 		self.changed=[]

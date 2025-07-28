@@ -161,7 +161,7 @@ class accessibility(QStackedWindowItem):
 			longDesc=i18n.get('DESCRIPTION'),
 			icon="preferences-desktop-accessibility",
 			tooltip=i18n.get("TOOLTIP"),
-			index=3,
+			index=1,
 			visible=True)
 		self.enabled=True
 		self.changed=[]

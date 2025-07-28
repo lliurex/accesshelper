@@ -57,6 +57,8 @@ class settings(QStackedWindowItem):
 		self.tblGrid.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
 		self.tblGrid.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 		self.tblGrid.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+		font=self.tblGrid.font()
+		self.tblGrid.verticalHeader().setMinimumSectionSize(font.weight()/10)
 		self.box.addWidget(self.tblGrid)
 		self.btnAccept.clicked.connect(self.writeConfig)
 		self.chkBeGr=QCheckBox(i18n["GRUB"])

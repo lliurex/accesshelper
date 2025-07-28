@@ -359,7 +359,8 @@ class QPushButtonDock(QPushButton):
 		if self.popupShow==False and (ev.type()==QEvent.Type.Enter or ev.type()==QEvent.Type.FocusIn):
 			if ev.type()==QEvent.Type.FocusIn:
 				if ev.reason()==Qt.FocusReason.OtherFocusReason:
-					self.move(self.mapToGlobal(QPoint(0,self.y()+self.height())))
+			#		self.move(self.mapToGlobal(QPoint(0,self.y()+self.height())))
+					pass
 				else:
 					if self.hasFocus()==False:
 						self.setFocus()

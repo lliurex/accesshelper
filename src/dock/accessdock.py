@@ -484,8 +484,8 @@ class accessdock(QWidget):
 	#def mousePressEvent
 
 	def mouseMoveEvent(self, ev):
-		x = ev.globalX()-(self.width()/2)
-		y = ev.globalY()
+		x = ev.globalPosition().x()-(self.width()/2)
+		y = ev.globalPosition().y()
 		self.move(x, y)
 	#def mouseMoveEvent
 
@@ -509,7 +509,6 @@ class accessdock(QWidget):
 			w=self.width()/oldcount
 			for idx in range(0,oldcount):
 				btn=self.grid.cellWidget(0,idx)
-				print(btn)
 				btn.lbl.deleteLater()
 				btn.deleteLater()
 

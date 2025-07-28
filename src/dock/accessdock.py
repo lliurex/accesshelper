@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 import os,sys,subprocess,json
-from PySide6.QtWidgets import QApplication,QGridLayout,QWidget,QPushButton,QHeaderView,QMenu,QToolTip,QLabel,QTableWidget
+from PySide6.QtWidgets import QApplication,QGridLayout,QWidget,QPushButton,QHeaderView,QMenu,QToolTip,QLabel,QTableWidget,QToolBar
 from PySide6.QtCore import Qt,QSignalMapper,QSize,QThread,QPoint,QEvent,Signal,QObject,QRect
 from PySide6.QtGui import QIcon,QPixmap,QCursor,QColor,QPalette,QGuiApplication,QFont
 import dbus
@@ -254,7 +254,7 @@ class QPushButtonDock(QPushButton):
 	#def _beginLaunch
 
 	def _endLaunch(self,*args):
-		#self._toggle()
+		self._toggle()
 		if self.isEnabled()==False:
 			self.setEnabled(True)
 		else:
@@ -400,10 +400,10 @@ class accessdock(QWidget):
 
 		self.setWindowIcon(QIcon.fromTheme("accessibledock"))
 		QGuiApplication.setDesktopFileName("accessibledock")
-		self.setWindowFlags(Qt.NoDropShadowWindowHint|Qt.WindowStaysOnTopHint|Qt.Tool)
+		#self.setWindowFlag(Qt.Window)
 		#This hides decoration and bypass window 
 		#also skips app registering in at-spi so is unexistent for ORCA 
-		#self.setWindowFlags(Qt.BypassWindowManagerHint)
+		self.setWindowFlags(Qt.BypassWindowManagerHint|Qt.X11BypassWindowManagerHint|Qt.WindowStaysOnTopHint|Qt.Dialog)
 		#self.setStyleSheet("margin:0px")
 		layout=QGridLayout()
 		layout.setContentsMargins(2,2,2,2)

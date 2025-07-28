@@ -34,10 +34,8 @@ Depends: python3-qtextrawidgets (>= 0.3.0),
 	kwin-script-rgbfilter,
 	kwin-effect-focustrack,
 	python3-imutils
-
 Recommends:
-	kwin-effect-colorcorrection,
-
+	kwin-effect-colorcorrection
 Description: Set accessibility settings
  AccessHelper it's a common place for the
  available accessibility options 

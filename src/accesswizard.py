@@ -18,5 +18,5 @@ config.setWiki("https://wiki.edu.gva.es/lliurex/tiki-index.php?page=accesswizard
 config.setIcon("accesswizard")
 config.show()
 config.setMinimumWidth(config.sizeHint().width()*1.9)
-config.setMinimumHeight(config.sizeHint().width())
+config.setMinimumHeight(config.sizeHint().height()*1.9)
 app.exec()

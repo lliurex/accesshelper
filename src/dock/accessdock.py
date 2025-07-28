@@ -476,7 +476,7 @@ class accessdock(QWidget):
 
 	def _endLaunch(self,*args):
 		self._debug("Process end detected")
-		#self._toggle()
+		self._toggle()
 	#def _endLaunch
 
 	def mousePressEvent(self, ev):

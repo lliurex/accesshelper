@@ -8,7 +8,6 @@ from PySide6.QtCore import Qt,QThread,Signal
 from QtExtraWidgets import QStackedWindowItem, QTableTouchWidget, QPushInfoButton
 import subprocess
 from rebost import store
-import locale
 import gettext
 _ = gettext.gettext
 
@@ -162,7 +161,7 @@ class accessibility(QStackedWindowItem):
 			longDesc=i18n.get('DESCRIPTION'),
 			icon="preferences-desktop-accessibility",
 			tooltip=i18n.get("TOOLTIP"),
-			index=3,
+			index=1,
 			visible=True)
 		self.enabled=True
 		self.changed=[]
@@ -170,7 +169,6 @@ class accessibility(QStackedWindowItem):
 		self.rebost=store.client()
 		self.plasmaConfig={}
 		self.hideControlButtons()
-		self.locale=locale.getdefaultlocale()[0][0:2]
 		self.launch=thLauncher()
 		self.launch.finished.connect(self._endCmd)
 	#def __init__

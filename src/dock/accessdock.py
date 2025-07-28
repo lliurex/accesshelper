@@ -93,7 +93,7 @@ class QToolTipDock(QLabel):
 	"""
 	def __init__(self,text="",bigTip=False,parent=None):
 		super().__init__()
-		self.setWindowFlags(Qt.X11BypassWindowManagerHint|Qt.BypassWindowManagerHint|Qt.FramelessWindowHint|Qt.WindowTransparentForInput|Qt.NoDropShadowWindowHint|Qt.WindowStaysOnTopHint|Qt.ToolTip)
+		self.setWindowFlags(Qt.X11BypassWindowManagerHint|Qt.BypassWindowManagerHint|Qt.WindowTransparentForInput|Qt.NoDropShadowWindowHint|Qt.WindowStaysOnTopHint|Qt.ToolTip)
 		self.setText(text)
 		self.setAccessibleName(text)
 		self.setAccessibleDescription("")
@@ -359,7 +359,8 @@ class QPushButtonDock(QPushButton):
 		if self.popupShow==False and (ev.type()==QEvent.Type.Enter or ev.type()==QEvent.Type.FocusIn):
 			if ev.type()==QEvent.Type.FocusIn:
 				if ev.reason()==Qt.FocusReason.OtherFocusReason:
-					self.move(self.mapToGlobal(QPoint(0,self.y()+self.height())))
+			#		self.move(self.mapToGlobal(QPoint(0,self.y()+self.height())))
+					pass
 				else:
 					if self.hasFocus()==False:
 						self.setFocus()
@@ -403,7 +404,7 @@ class accessdock(QWidget):
 		#self.setWindowFlag(Qt.Window)
 		#This hides decoration and bypass window 
 		#also skips app registering in at-spi so is unexistent for ORCA 
-		self.setWindowFlags(Qt.BypassWindowManagerHint|Qt.X11BypassWindowManagerHint|Qt.WindowStaysOnTopHint|Qt.Dialog)
+		self.setWindowFlags(Qt.NoDropShadowWindowHint|Qt.WindowStaysOnTopHint|Qt.Tool)
 		#self.setStyleSheet("margin:0px")
 		layout=QGridLayout()
 		layout.setContentsMargins(2,2,2,2)
@@ -475,7 +476,7 @@ class accessdock(QWidget):
 
 	def _endLaunch(self,*args):
 		self._debug("Process end detected")
-		#self._toggle()
+		self._toggle()
 	#def _endLaunch
 
 	def mousePressEvent(self, ev):
@@ -483,8 +484,8 @@ class accessdock(QWidget):
 	#def mousePressEvent
 
 	def mouseMoveEvent(self, ev):
-		x = ev.globalX()-(self.width()/2)
-		y = ev.globalY()
+		x = ev.globalPosition().x()-(self.width()/2)
+		y = ev.globalPosition().y()
 		self.move(x, y)
 	#def mouseMoveEvent
 
@@ -508,7 +509,6 @@ class accessdock(QWidget):
 			w=self.width()/oldcount
 			for idx in range(0,oldcount):
 				btn=self.grid.cellWidget(0,idx)
-				print(btn)
 				btn.lbl.deleteLater()
 				btn.deleteLater()
 
@@ -532,8 +532,8 @@ class accessdock(QWidget):
 			if self.grid.columnCount()>1:
 				#self.grid.setTabOrder(self.grid.cellWidget(0,self.grid.columnCount()-1),btn)
 				btn.setFocusPolicy(Qt.StrongFocus)
-		hh=self.grid.horizontalHeader()
-		#hh.setSectionResizeMode(QTableWidget.ResizeToContents)
+		self.grid.resizeRowToContents(0)
+		self.grid.resizeColumnToContents(0)
 		vh=self.grid.verticalHeader()
 		#vh.setSectionResizeMode(vh.ResizeToContents)
 		if oldcount!=self.grid.columnCount():

@@ -93,7 +93,7 @@ class QToolTipDock(QLabel):
 	"""
 	def __init__(self,text="",bigTip=False,parent=None):
 		super().__init__()
-		self.setWindowFlags(Qt.X11BypassWindowManagerHint|Qt.BypassWindowManagerHint|Qt.FramelessWindowHint|Qt.WindowTransparentForInput|Qt.NoDropShadowWindowHint|Qt.WindowStaysOnTopHint|Qt.ToolTip)
+		self.setWindowFlags(Qt.X11BypassWindowManagerHint|Qt.BypassWindowManagerHint|Qt.WindowTransparentForInput|Qt.NoDropShadowWindowHint|Qt.WindowStaysOnTopHint|Qt.ToolTip)
 		self.setText(text)
 		self.setAccessibleName(text)
 		self.setAccessibleDescription("")
@@ -404,7 +404,7 @@ class accessdock(QWidget):
 		#self.setWindowFlag(Qt.Window)
 		#This hides decoration and bypass window 
 		#also skips app registering in at-spi so is unexistent for ORCA 
-		self.setWindowFlags(Qt.BypassWindowManagerHint|Qt.X11BypassWindowManagerHint|Qt.WindowStaysOnTopHint|Qt.Dialog)
+		self.setWindowFlags(Qt.NoDropShadowWindowHint|Qt.WindowStaysOnTopHint|Qt.Tool)
 		#self.setStyleSheet("margin:0px")
 		layout=QGridLayout()
 		layout.setContentsMargins(2,2,2,2)
@@ -533,8 +533,8 @@ class accessdock(QWidget):
 			if self.grid.columnCount()>1:
 				#self.grid.setTabOrder(self.grid.cellWidget(0,self.grid.columnCount()-1),btn)
 				btn.setFocusPolicy(Qt.StrongFocus)
-		hh=self.grid.horizontalHeader()
-		#hh.setSectionResizeMode(QTableWidget.ResizeToContents)
+		self.grid.resizeRowToContents(0)
+		self.grid.resizeColumnToContents(0)
 		vh=self.grid.verticalHeader()
 		#vh.setSectionResizeMode(vh.ResizeToContents)
 		if oldcount!=self.grid.columnCount():

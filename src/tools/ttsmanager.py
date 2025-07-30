@@ -314,4 +314,4 @@ if __name__=="__main__":
 	config.setMinimumHeight(config.sizeHint().height()*1.2)
 	config.setMinimumWidth(config.sizeHint().width()*1.2)
 	#config.updateScreen()
-	app.exec_()
+	app.exec()

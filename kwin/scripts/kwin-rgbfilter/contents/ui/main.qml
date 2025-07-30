@@ -7,7 +7,7 @@
 import QtQuick 2.12
 import QtQuick.Window 2.12
 import QtQuick.Controls 2.12
-import org.kde.kwin 2.0 as KWinComponents
+import org.kde.kwin 3.0 as KWinComponents
 
 Item {
     id: root

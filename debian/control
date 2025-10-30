@@ -17,7 +17,7 @@ Depends: python3-qtextrawidgets (>= 0.3.0),
 	festvox-valcat-voices, 
 	python3-app2menu (>= 1.4),
 	python3-hunspell,
-	python3-imutils
+	python3-imutils,
 	python3-llxaccessibility,
 	python3-opencv,
 	python3-pyside6.qtgui,
@@ -33,7 +33,7 @@ Depends: python3-qtextrawidgets (>= 0.3.0),
 	kwin-script-mousestrip,
 	kwin-script-rgbfilter,
 	kwin-effect-focustrack,
-	xpanimated-yb-cursor-theme,
+	xpanimated-yb-cursor-theme
 Recommends:
 	kwin-effect-colorcorrection
 Description: Set accessibility settings

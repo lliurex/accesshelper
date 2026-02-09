@@ -1,10 +1,10 @@
 #!/usr/bin/python3
 from llxaccessibility import llxaccessibility
 import os
-from PySide6.QtWidgets import QApplication,QLabel,QGridLayout,QCheckBox,QSizePolicy,QRadioButton,QHeaderView,QTableWidgetItem,QAbstractScrollArea,QTableWidget
+from PySide6.QtWidgets import QApplication,QGridLayout,QListWidget,QListWidgetItem,QLabel
 from PySide6 import QtGui
-from PySide6.QtCore import Qt
-from QtExtraWidgets import QStackedWindowItem, QTableTouchWidget, QPushInfoButton
+from PySide6.QtCore import Qt,QSize
+from QtExtraWidgets import QStackedWindowItem, QPushInfoButton
 import subprocess
 import locale
 import gettext
@@ -43,37 +43,32 @@ class effects(QStackedWindowItem):
 	#def __init__
 
 	def __initScreen__(self):
-		self.box=QGridLayout()
-		self.setLayout(self.box)
-		self.tblGrid=QTableTouchWidget()
-		self.tblGrid.setColumnCount(3)
-#		self.tblGrid.setShowGrid(False)
-		self.tblGrid.verticalHeader().hide()
-		self.tblGrid.horizontalHeader().hide()
-		self.tblGrid.setSelectionBehavior(QTableWidget.SelectRows)
-		self.tblGrid.setSelectionMode(QTableWidget.SingleSelection)
-		self.tblGrid.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
-		self.tblGrid.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-		self.tblGrid.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
-		self.box.addWidget(self.tblGrid)
+		lay=QGridLayout()
+		self.lstApps=QListWidget()
+		lay.addWidget(self.lstApps)
+		self.setLayout(lay)
 		self._renderGui()
 	#def __initScreen__
 
 	def _renderGui(self):
-		self.tblGrid.setRowCount(0)
-		self.tblGrid.setRowCount(1)
+		controls=[]
 		btnWneff=QPushInfoButton()
+		controls.append(btnWneff)
 		btnWneff.setText(i18n.get("EFFBTN"))
 		btnWneff.setDescription(i18n.get("EFFDSC"))
 		btnWneff.loadImg("preferences-system-windows")
-		self.tblGrid.setCellWidget(0,0,btnWneff)
 		btnWneff.clicked.connect(self._launch)
 		btnDseff=QPushInfoButton()
+		controls.append(btnDseff)
 		btnDseff.setText(i18n.get("DESBTN"))
 		btnDseff.setDescription(i18n.get("DESDSC"))
 		btnDseff.loadImg("preferences-plugin")
-		self.tblGrid.setCellWidget(0,1,btnDseff)
 		btnDseff.clicked.connect(self._launch)
+		for btn in controls:
+			self.lstApps.addItem("")
+			itm=self.lstApps.item(self.lstApps.count()-1)
+			itm.setSizeHint(QSize(128,150))
+			self.lstApps.setItemWidget(itm,btn)
 	#def _renderGui
 
 	def _launch(self,*args):

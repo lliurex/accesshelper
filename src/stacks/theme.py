@@ -1,10 +1,10 @@
 #!/usr/bin/python3
 from llxaccessibility import llxaccessibility
 import os
-from PySide6.QtWidgets import QApplication,QLabel,QGridLayout,QCheckBox,QSizePolicy,QRadioButton,QHeaderView,QTableWidgetItem,QAbstractScrollArea,QTableWidget
+from PySide6.QtWidgets import QApplication,QGridLayout,QListWidget,QListWidgetItem,QLabel
 from PySide6 import QtGui
-from PySide6.QtCore import Qt
-from QtExtraWidgets import QStackedWindowItem, QTableTouchWidget, QPushInfoButton
+from PySide6.QtCore import Qt,QSize
+from QtExtraWidgets import QStackedWindowItem, QPushInfoButton
 import subprocess
 import locale
 import gettext
@@ -47,50 +47,44 @@ class theme(QStackedWindowItem):
 	#def __init__
 
 	def __initScreen__(self):
-		self.box=QGridLayout()
-		self.setLayout(self.box)
-		self.tblGrid=QTableTouchWidget()
-		self.tblGrid.setColumnCount(3)
-#		self.tblGrid.setShowGrid(False)
-		self.tblGrid.verticalHeader().hide()
-		self.tblGrid.horizontalHeader().hide()
-		self.tblGrid.setSelectionBehavior(QTableWidget.SelectRows)
-		self.tblGrid.setSelectionMode(QTableWidget.SingleSelection)
-		self.tblGrid.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-		self.tblGrid.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
-		self.box.addWidget(self.tblGrid)
+		lay=QGridLayout()
+		self.lstApps=QListWidget()
+		lay.addWidget(self.lstApps)
+		self.setLayout(lay)
 		self._renderGui()
 	#def __initScreen__
 
 	def _renderGui(self):
-		self.tblGrid.setRowCount(0)
-		self.tblGrid.setRowCount(2)
+		controls=[]
 		btnLookF=QPushInfoButton()
+		controls.append(btnLookF)
 		btnLookF.setText(i18n.get("LOOKFTXT"))
 		btnLookF.setDescription(i18n.get("LOOKF"))
 		btnLookF.loadImg("preferences-desktop-theme")
-		self.tblGrid.setCellWidget(0,0,btnLookF)
 		btnLookF.clicked.connect(self._launch)
 		btnColor=QPushInfoButton()
+		controls.append(btnColor)
 		btnColor.setText(i18n.get("COLORTXT"))
 		btnColor.setDescription(i18n.get("COLOR"))
 		btnColor.loadImg("preferences-desktop-color")
-		self.tblGrid.setCellWidget(0,1,btnColor)
 		btnColor.clicked.connect(self._launch)
 		btnFonts=QPushInfoButton()
+		controls.append(btnFonts)
 		btnFonts.setText(i18n.get("FONTSTXT"))
 		btnFonts.setDescription(i18n.get("FONTS"))
 		btnFonts.loadImg("preferences-desktop-font")
-		self.tblGrid.setCellWidget(0,2,btnFonts)
 		btnFonts.clicked.connect(self._launch)
 		btnMouse=QPushInfoButton()
+		controls.append(btnMouse)
 		btnMouse.setText(i18n.get("MOUSETXT"))
 		btnMouse.setDescription(i18n.get("MOUSE"))
 		btnMouse.loadImg("preferences-desktop-mouse")
-		self.tblGrid.setCellWidget(1,0,btnMouse)
 		btnMouse.clicked.connect(self._launch)
-		self.tblGrid.verticalHeader().setSectionResizeMode(self.tblGrid.rowCount()-1,QHeaderView.ResizeToContents)
-		self.tblGrid.horizontalHeader().setSectionResizeMode(0,QHeaderView.ResizeToContents)
+		for btn in controls:
+			self.lstApps.addItem("")
+			itm=self.lstApps.item(self.lstApps.count()-1)
+			itm.setSizeHint(QSize(128,150))
+			self.lstApps.setItemWidget(itm,btn)
 	#def _renderGui
 
 	def _launch(self,*args):

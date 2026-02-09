@@ -2,10 +2,10 @@
 from llxaccessibility import llxaccessibility
 import os,shutil
 import json
-from PySide6.QtWidgets import QApplication,QLabel,QGridLayout,QCheckBox,QSizePolicy,QRadioButton,QHeaderView,QTableWidgetItem,QAbstractScrollArea,QTableWidget
+from PySide6.QtWidgets import QApplication,QGridLayout,QListWidget,QListWidgetItem,QLabel
 from PySide6 import QtGui
-from PySide6.QtCore import Qt,QThread,Signal
-from QtExtraWidgets import QStackedWindowItem, QTableTouchWidget, QPushInfoButton
+from PySide6.QtCore import Qt,QThread,Signal,QSize
+from QtExtraWidgets import QStackedWindowItem, QPushInfoButton
 import subprocess
 from rebost import store
 import gettext
@@ -50,6 +50,7 @@ class thLauncher(QThread):
 		self.parms=[]
 		if " " in cmd:
 			procCmd.extend(cmd[0].split(" ")[1:])
+			F
 			procCmd.insert(0,cmd[0].split(" ")[0])
 		else:
 			if isinstance(cmd,str):
@@ -147,8 +148,7 @@ class getAppsInfo(QThread):
 			if len(app)>0:
 				appInfo=json.loads(self.rebost.showApp(app))
 				if len(appInfo)>0:
-					jInfo=json.loads(appInfo[0])
-					self.icons.update({btn:jInfo.get("icon","default")})
+					self.icons.update({btn:appInfo[0].get("icon","default")})
 		self.finished.emit(self.icons)
 #class getAppInfo
 
@@ -174,23 +174,14 @@ class accessibility(QStackedWindowItem):
 	#def __init__
 
 	def __initScreen__(self):
-		self.box=QGridLayout()
-		self.setLayout(self.box)
-		self.tblGrid=QTableTouchWidget()
-		self.tblGrid.setColumnCount(3)
-		self.tblGrid.verticalHeader().hide()
-		self.tblGrid.horizontalHeader().hide()
-		self.tblGrid.setSelectionBehavior(QTableWidget.SelectRows)
-		self.tblGrid.setSelectionMode(QTableWidget.SingleSelection)
-		self.tblGrid.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-		self.tblGrid.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
-		self.box.addWidget(self.tblGrid)
+		lay=QGridLayout()
+		self.lstApps=QListWidget()
+		lay.addWidget(self.lstApps)
+		self.setLayout(lay)
 		self._renderGui()
 	#def __initScreen__
 
 	def _renderGui(self):
-		self.tblGrid.setRowCount(0)
-		self.tblGrid.setRowCount(3)
 		controls=[]
 		btnAcce=QPushInfoButton()
 		controls.append(btnAcce)
@@ -198,11 +189,13 @@ class accessibility(QStackedWindowItem):
 		btnAcce.setDescription(i18n.get("ACCEDSC"))
 		btnAcce.loadImg("preferences-desktop-accessibility")
 		btnAcce.clicked.connect(self._launch)
+		#self.box.addWidget(btnAcce,0,0,1,1)
 		btnOrca=QPushInfoButton()
 		controls.append(btnOrca)
 		btnOrca.setText(i18n.get("ORCA"))
 		btnOrca.setDescription(i18n.get("ORCADSC"))
 		btnOrca.clicked.connect(self._launch)
+		#self.box.addWidget(btnOrca,0,1,1,1)
 		btnLtts=QPushInfoButton()
 		controls.append(btnLtts)
 		btnLtts.setText(i18n.get("LTTS"))
@@ -210,6 +203,7 @@ class accessibility(QStackedWindowItem):
 		fname=os.path.join(os.path.dirname(os.path.realpath(__file__)),"..","rsrc","ttsmanager.png")
 		btnLtts.loadImg(fname)
 		btnLtts.clicked.connect(self._launch)
+		#self.box.addWidget(btnLtts,0,2,1,1)
 		btnDock=QPushInfoButton()
 		controls.append(btnDock)
 		btnDock.setText(i18n.get("DOCK"))
@@ -217,34 +211,32 @@ class accessibility(QStackedWindowItem):
 		dockIcn=os.path.join(os.path.dirname(os.path.realpath(__file__)),"..","dock","accessdock.png")
 		btnDock.loadImg(dockIcn)
 		btnDock.clicked.connect(self._launch)
+		#self.box.addWidget(btnDock,1,0,1,1)
 		btnJoys=QPushInfoButton()
 		controls.append(btnJoys)
 		btnJoys.setText(i18n.get("ANTI"))
 		btnJoys.setDescription(i18n.get("ANTIDSC"))
 		btnJoys.clicked.connect(self._launch)
+		#self.box.addWidget(btnJoys,1,1,1,1)
 		btnEvia=QPushInfoButton()
 		controls.append(btnEvia)
 		btnEvia.setText(i18n.get("EVIA"))
 		btnEvia.setDescription(i18n.get("EVIADSC"))
 		btnEvia.clicked.connect(self._launch)
-		btnBrows=QPushInfoButton()
-		controls.append(btnBrows)
-		btnBrows.setText(i18n.get("BROWS"))
-		btnBrows.setDescription(i18n.get("BROWSDSC"))
+		#self.box.addWidget(btnEvia,1,2,1,1)
+		btnBrow=QPushInfoButton()
+		controls.append(btnBrow)
+		btnBrow.setText(i18n.get("BROWS"))
+		btnBrow.setDescription(i18n.get("BROWSDSC"))
 		fname=os.path.join(os.path.dirname(os.path.realpath(__file__)),"..","rsrc","browsermanager.png")
-		btnBrows.loadImg(fname)
-		btnBrows.clicked.connect(self._launch)
-		row,col=(0,0)
+		btnBrow.loadImg(fname)
+		btnBrow.clicked.connect(self._launch)
+		#self.box.addWidget(btnBrow,2,0,1,1)
 		for btn in controls:
-			if row==self.tblGrid.rowCount():
-				self.tblGrid.setRowCount(row+1)
-			self.tblGrid.setCellWidget(row,col,btn)
-			col+=1
-			if col==3:
-				col=0
-				row+=1
-		self.tblGrid.verticalHeader().setSectionResizeMode(self.tblGrid.rowCount()-1,QHeaderView.ResizeToContents)
-		self.tblGrid.horizontalHeader().setSectionResizeMode(0,QHeaderView.ResizeToContents)
+			self.lstApps.addItem("")
+			itm=self.lstApps.item(self.lstApps.count()-1)
+			itm.setSizeHint(QSize(128,150))
+			self.lstApps.setItemWidget(itm,btn)
 
 		self.getInfoBtns=getAppsInfo([btnOrca,btnEvia,btnJoys])
 		self.getInfoBtns.finished.connect(self._updateBtns)
@@ -256,7 +248,6 @@ class accessibility(QStackedWindowItem):
 		for btn,icn in icons.items():
 			size=btn.size()
 			btn.loadImg(icn)
-			btn.setMinimumSize(size)
 	#def _updateBtns
 
 	def _launch(self,*args):

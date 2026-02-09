@@ -16,8 +16,8 @@ i18n={
 	"ACCEDSC":_("Plasma Accessibility module"),
 	"ANTI":_("Joystick as mouse"),
 	"ANTIDSC":_("Configure a gamepad/joystick as mouse"),
-	"BROWS":_("Browsers accessibility"),
-	"BROWSDSC":_("Selection of addons and configurations for accessible browsing"),
+	"BROW":_("Browsers accessibility"),
+	"BROWDSC":_("Selection of addons and configurations for accessible browsing"),
 	"CONFIG":_("Accessibility"),
 	"DOCK":_("Accessibility Dock"),
 	"DOCKDSC":_("Dock with customizable fast actions"),
@@ -69,14 +69,14 @@ class thLauncher(QThread):
 				cmd.append("-s")
 		else:
 			cmd=["/usr/bin/lliurex-store","appsedu://{}".format(app)]
-			appraw=json.loads(self.rebost.matchApp(app))
+			appraw=json.loads(self.rebost.showApp(app))
 			bundle=""
 			if len(appraw)>0:
-				app=json.loads(appraw[0])
+				app=appraw[0]
 				for bun in app.get("bundle",{}).keys():
-					if bun.lower()=="zomando":
+					if bun.lower()=="unknown":
 						continue
-					if self.rebost.getAppStatus(app.get("name"),bun)=="0":
+					if app.get("status",{}).get(bun,"1")=="0":
 						bundle=bun
 						break
 				if bundle=="package":
@@ -148,7 +148,12 @@ class getAppsInfo(QThread):
 			if len(app)>0:
 				appInfo=json.loads(self.rebost.showApp(app))
 				if len(appInfo)>0:
-					self.icons.update({btn:appInfo[0].get("icon","default")})
+					icn=appInfo[0].get("icon","default")
+					icnName=os.path.basename(icn)
+					cacheIcn=os.path.join("/home",os.getlogin(),".cache","rebost","imgs",icnName)
+					if os.path.exists(cacheIcn):
+						icn=cacheIcn
+					self.icons.update({btn:icn})
 		self.finished.emit(self.icons)
 #class getAppInfo
 
@@ -181,67 +186,28 @@ class accessibility(QStackedWindowItem):
 		self._renderGui()
 	#def __initScreen__
 
-	def _renderGui(self):
-		controls=[]
-		btnAcce=QPushInfoButton()
-		controls.append(btnAcce)
-		btnAcce.setText(i18n.get("ACCE"))
-		btnAcce.setDescription(i18n.get("ACCEDSC"))
-		btnAcce.loadImg("preferences-desktop-accessibility")
-		btnAcce.clicked.connect(self._launch)
-		#self.box.addWidget(btnAcce,0,0,1,1)
-		btnOrca=QPushInfoButton()
-		controls.append(btnOrca)
-		btnOrca.setText(i18n.get("ORCA"))
-		btnOrca.setDescription(i18n.get("ORCADSC"))
-		btnOrca.clicked.connect(self._launch)
-		#self.box.addWidget(btnOrca,0,1,1,1)
-		btnLtts=QPushInfoButton()
-		controls.append(btnLtts)
-		btnLtts.setText(i18n.get("LTTS"))
-		btnLtts.setDescription(i18n.get("LTTSDSC"))
-		fname=os.path.join(os.path.dirname(os.path.realpath(__file__)),"..","rsrc","ttsmanager.png")
-		btnLtts.loadImg(fname)
-		btnLtts.clicked.connect(self._launch)
-		#self.box.addWidget(btnLtts,0,2,1,1)
-		btnDock=QPushInfoButton()
-		controls.append(btnDock)
-		btnDock.setText(i18n.get("DOCK"))
-		btnDock.setDescription(i18n.get("DOCKDSC"))
-		dockIcn=os.path.join(os.path.dirname(os.path.realpath(__file__)),"..","dock","accessdock.png")
-		btnDock.loadImg(dockIcn)
-		btnDock.clicked.connect(self._launch)
-		#self.box.addWidget(btnDock,1,0,1,1)
-		btnJoys=QPushInfoButton()
-		controls.append(btnJoys)
-		btnJoys.setText(i18n.get("ANTI"))
-		btnJoys.setDescription(i18n.get("ANTIDSC"))
-		btnJoys.clicked.connect(self._launch)
-		#self.box.addWidget(btnJoys,1,1,1,1)
-		btnEvia=QPushInfoButton()
-		controls.append(btnEvia)
-		btnEvia.setText(i18n.get("EVIA"))
-		btnEvia.setDescription(i18n.get("EVIADSC"))
-		btnEvia.clicked.connect(self._launch)
-		#self.box.addWidget(btnEvia,1,2,1,1)
-		btnBrow=QPushInfoButton()
-		controls.append(btnBrow)
-		btnBrow.setText(i18n.get("BROWS"))
-		btnBrow.setDescription(i18n.get("BROWSDSC"))
-		fname=os.path.join(os.path.dirname(os.path.realpath(__file__)),"..","rsrc","browsermanager.png")
-		btnBrow.loadImg(fname)
-		btnBrow.clicked.connect(self._launch)
-		#self.box.addWidget(btnBrow,2,0,1,1)
-		for btn in controls:
-			self.lstApps.addItem("")
-			itm=self.lstApps.item(self.lstApps.count()-1)
-			itm.setSizeHint(QSize(128,150))
-			self.lstApps.setItemWidget(itm,btn)
+	def _endCmd(self,*args):
+		for i in range(0,self.lstApps.count()):
+			itm=self.lstApps.item(i)
+			wdg=self.lstApps.itemWidget(itm)
+			wdg.setEnabled(True)
+	#def _endCmd
 
-		self.getInfoBtns=getAppsInfo([btnOrca,btnEvia,btnJoys])
-		self.getInfoBtns.finished.connect(self._updateBtns)
-		self.getInfoBtns.start()
-	#def _renderGui
+	def _launch(self,*args):
+		args[0].setEnabled(False)
+		self.launch.setParms(args[0].text())
+		self.launch.start()
+	#def _launch
+
+	def _renderBtn(self,i18Text,i18Desc,img=""):
+		btn=QPushInfoButton()
+		btn.setText(i18n.get(i18Text))
+		btn.setDescription(i18n.get(i18Desc))
+		if img!="":
+			btn.loadImg(img)
+		btn.clicked.connect(self._launch)
+		return(btn)
+	#def _renderBtn
 
 	def _updateBtns(self,*args,**kwargs):
 		icons=args[0]
@@ -250,21 +216,35 @@ class accessibility(QStackedWindowItem):
 			btn.loadImg(icn)
 	#def _updateBtns
 
-	def _launch(self,*args):
-		args[0].setEnabled(False)
-		self.launch.setParms(args[0].text())
-		self.launch.start()
-	#def _launch
-
-	def _endCmd(self,*args):
-		for i in range(0,self.tblGrid.rowCount()):
-			for j in range(0,self.tblGrid.columnCount()):
-				wdg=self.tblGrid.cellWidget(i,j)
-				if wdg!=None:
-					if wdg.isEnabled()==False:
-						wdg.setEnabled(True)
-		
-	#def _endCmd
+	def _renderGui(self):
+		controls=[]
+		btnAcce=self._renderBtn("ACCE","ACCEDSC","preferences-desktop-accessibility")
+		controls.append(btnAcce)
+		#self.box.addWidget(btnAcce,0,0,1,1)
+		btnOrca=self._renderBtn("ORCA","ORCADSC","")
+		controls.append(btnOrca)
+		fname=os.path.join(os.path.dirname(os.path.realpath(__file__)),"..","rsrc","ttsmanager.png")
+		btnLtts=self._renderBtn("LTTS","LTTSDSC",fname)
+		controls.append(btnLtts)
+		dockIcn=os.path.join(os.path.dirname(os.path.realpath(__file__)),"..","dock","accessdock.png")
+		btnDock=self._renderBtn("DOCK","DOCKDSC",fname)
+		controls.append(btnDock)
+		btnJoys=self._renderBtn("ANTI","ANTIDSC","")
+		controls.append(btnJoys)
+		btnEvia=self._renderBtn("EVIA","EVIADSC","")
+		controls.append(btnEvia)
+		fname=os.path.join(os.path.dirname(os.path.realpath(__file__)),"..","rsrc","browsermanager.png")
+		btnBrow=self._renderBtn("BROW","BROWDSC",fname)
+		controls.append(btnBrow)
+		for btn in controls:
+			self.lstApps.addItem("")
+			itm=self.lstApps.item(self.lstApps.count()-1)
+			itm.setSizeHint(QSize(228,150))
+			self.lstApps.setItemWidget(itm,btn)
+		self.getInfoBtns=getAppsInfo([btnOrca,btnEvia,btnJoys])
+		self.getInfoBtns.finished.connect(self._updateBtns)
+		self.getInfoBtns.start()
+	#def _renderGui
 
 	def updateScreen(self):
 		pass

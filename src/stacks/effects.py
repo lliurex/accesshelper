@@ -12,10 +12,10 @@ _ = gettext.gettext
 
 i18n={
 	"CONFIG":_("Effects"),
-	"DESBTN":_("Desktop plugins"),
-	"DESDSC":_("Extra functionality for the desktop"),
-	"EFFBTN":_("Windows effects"),
-	"EFFDSC":_("Graphical effects for windows"),
+	"DSCR":_("Desktop plugins"),
+	"DSCRDSC":_("Extra functionality for the desktop"),
+	"NEFF":_("Windows effects"),
+	"NEFFDSC":_("Graphical effects for windows"),
 	"MENU":_("Visual Effects"),
 	"DESCRIPTION":_("Aids and visual effects"),
 	"TOOLTIP":_("Aids and visual effects for improve system usability"),
@@ -50,39 +50,41 @@ class effects(QStackedWindowItem):
 		self._renderGui()
 	#def __initScreen__
 
+	def _launch(self,*args):
+		args[0].setEnabled(False)
+		QApplication.processEvents()
+		mod=""
+		if args[0].text()==i18n.get("NEFF"):
+			mod="kcm_kwin_effects"
+		elif args[0].text()==i18n.get("DSCR"):
+			mod="kcm_kwin_scripts"
+		if len(mod)>0:
+			self.accesshelper.launchKcmModule(mod)
+		args[0].setEnabled(True)
+	#def _launch
+
+	def _renderBtn(self,i18Text,i18Desc,img=""):
+		btn=QPushInfoButton()
+		btn.setText(i18n.get(i18Text))
+		btn.setDescription(i18n.get(i18Desc))
+		if img!="":
+			btn.loadImg(img)
+		btn.clicked.connect(self._launch)
+		return(btn)
+	#def _renderBtn
+
 	def _renderGui(self):
 		controls=[]
-		btnWneff=QPushInfoButton()
-		controls.append(btnWneff)
-		btnWneff.setText(i18n.get("EFFBTN"))
-		btnWneff.setDescription(i18n.get("EFFDSC"))
-		btnWneff.loadImg("preferences-system-windows")
-		btnWneff.clicked.connect(self._launch)
-		btnDseff=QPushInfoButton()
-		controls.append(btnDseff)
-		btnDseff.setText(i18n.get("DESBTN"))
-		btnDseff.setDescription(i18n.get("DESDSC"))
-		btnDseff.loadImg("preferences-plugin")
-		btnDseff.clicked.connect(self._launch)
+		btnWnef=self._renderBtn("NEFF","NEFFDSC","preferences-system-windows")
+		controls.append(btnWnef)
+		btnDsef=self._renderBtn("DSCR","DSCRDSC","preferences-plugin")
+		controls.append(btnDsef)
 		for btn in controls:
 			self.lstApps.addItem("")
 			itm=self.lstApps.item(self.lstApps.count()-1)
 			itm.setSizeHint(QSize(128,150))
 			self.lstApps.setItemWidget(itm,btn)
 	#def _renderGui
-
-	def _launch(self,*args):
-		args[0].setEnabled(False)
-		QApplication.processEvents()
-		mod=""
-		if args[0].text()==i18n.get("EFFBTN"):
-			mod="kcm_kwin_effects"
-		elif args[0].text()==i18n.get("DESBTN"):
-			mod="kcm_kwin_scripts"
-		if len(mod)>0:
-			self.accesshelper.launchKcmModule(mod)
-		args[0].setEnabled(True)
-	#def _launch
 
 	def updateScreen(self):
 		pass

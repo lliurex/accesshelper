@@ -11,17 +11,17 @@ import gettext
 _ = gettext.gettext
 
 i18n={
-	"COLOR":_("Set global color scheme"),
-	"COLORTXT":_("Color scheme"),
+	"COLO":_("Color scheme"),
+	"COLODSC":_("Set global color scheme"),
 	"CONFIG":_("Appearance"),
 	"DESCRIPTION":_("Look and feel options"),
-	"FONTS":_("Configure system fonts"),
-	"FONTSTXT":_("Fonts"),
-	"LOOKF":_("Set global theme"),
-	"LOOKFTXT":_("Theme"),
+	"FONT":_("Fonts"),
+	"FONTDSC":_("Configure system fonts"),
+	"LOOK":_("Theme"),
+	"LOOKDSC":_("Set global theme"),
 	"MENU":_("Appearance"),
-	"MOUSE":_("Set cursor theme and size"),
-	"MOUSETXT":_("Mouse"),
+	"MICE":_("Mouse"),
+	"MICEDSC":_("Set cursor theme and size"),
 	"TOOLTIP":_("Appearance customizing"),
 	}
 
@@ -54,32 +54,26 @@ class theme(QStackedWindowItem):
 		self._renderGui()
 	#def __initScreen__
 
+	def _renderBtn(self,i18Text,i18Desc,img=""):
+		btn=QPushInfoButton()
+		btn.setText(i18n.get(i18Text))
+		btn.setDescription(i18n.get(i18Desc))
+		if img!="":
+			btn.loadImg(img)
+		btn.clicked.connect(self._launch)
+		return(btn)
+	#def _renderBtn
+
 	def _renderGui(self):
 		controls=[]
-		btnLookF=QPushInfoButton()
-		controls.append(btnLookF)
-		btnLookF.setText(i18n.get("LOOKFTXT"))
-		btnLookF.setDescription(i18n.get("LOOKF"))
-		btnLookF.loadImg("preferences-desktop-theme")
-		btnLookF.clicked.connect(self._launch)
-		btnColor=QPushInfoButton()
-		controls.append(btnColor)
-		btnColor.setText(i18n.get("COLORTXT"))
-		btnColor.setDescription(i18n.get("COLOR"))
-		btnColor.loadImg("preferences-desktop-color")
-		btnColor.clicked.connect(self._launch)
-		btnFonts=QPushInfoButton()
-		controls.append(btnFonts)
-		btnFonts.setText(i18n.get("FONTSTXT"))
-		btnFonts.setDescription(i18n.get("FONTS"))
-		btnFonts.loadImg("preferences-desktop-font")
-		btnFonts.clicked.connect(self._launch)
-		btnMouse=QPushInfoButton()
-		controls.append(btnMouse)
-		btnMouse.setText(i18n.get("MOUSETXT"))
-		btnMouse.setDescription(i18n.get("MOUSE"))
-		btnMouse.loadImg("preferences-desktop-mouse")
-		btnMouse.clicked.connect(self._launch)
+		btnLook=self._renderBtn("LOOK","LOOKDSC","preferences-desktop-theme")
+		controls.append(btnLook)
+		btnColr=self._renderBtn("COLO","COLODSC","preferences-desktop-color")
+		controls.append(btnColr)
+		btnFont=self._renderBtn("FONT","FONTDSC","preferences-desktop-font")
+		controls.append(btnFont)
+		btnMice=self._renderBtn("MICE","MICEDSC","preferences-desktop-mouse")
+		controls.append(btnMice)
 		for btn in controls:
 			self.lstApps.addItem("")
 			itm=self.lstApps.item(self.lstApps.count()-1)

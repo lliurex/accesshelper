@@ -2,9 +2,9 @@
 from llxaccessibility import llxaccessibility
 import os,json
 import subprocess
-from PySide6.QtWidgets import QApplication,QLabel,QGridLayout,QCheckBox,QHeaderView,QTableWidgetItem,QAbstractScrollArea,QComboBox,QPushButton,QFileDialog,QInputDialog,QTableWidget
-from PySide6 import QtGui
-from PySide6.QtCore import Qt
+from PySide2.QtWidgets import QApplication,QLabel,QGridLayout,QCheckBox,QHeaderView,QTableWidgetItem,QAbstractScrollArea,QComboBox,QPushButton,QFileDialog,QInputDialog,QTableWidget
+from PySide2 import QtGui
+from PySide2.QtCore import Qt
 from QtExtraWidgets import QStackedWindowItem, QTableTouchWidget, QPushInfoButton
 import locale
 import gettext
@@ -48,6 +48,8 @@ class settings(QStackedWindowItem):
 		self.box=QGridLayout()
 		self.setLayout(self.box)
 		self.tblGrid=QTableTouchWidget()
+		self.tblGrid.keyPressEvent2=self.tblGrid.keyPressEvent
+		self.tblGrid.keyPressEvent=self.fakeKey
 		self.tblGrid.setShowGrid(False)
 		self.tblGrid.setStyleSheet('QTableView{padding:5px} QTableView::item {border-bottom: 1px solid #d6d9dc;margin-bottom:5px} #btn{margin-left:10px;margin-right:10px}')
 		self.tblGrid.setColumnCount(2)
@@ -89,6 +91,21 @@ class settings(QStackedWindowItem):
 		self.btnLoad.clicked.connect(self._loadProfile)
 		self.tblGrid.setCellWidget(7,1,self.btnLoad)
 	#def __initScreen__
+
+	def fakeKey(self,*args):
+		ev=args[0]
+		if ev.key()==Qt.Key_Left:
+			self.parent.lstNav.setFocus()
+		else:
+			self.tblGrid.keyPressEvent2(*args)
+			ev.ignore()
+		return True
+	#def fakeKey
+
+	def focusInEvent(self,*args):
+		self.tblGrid.setFocus()
+	#def focusInEvent
+
 
 	def updateScreen(self):
 		config=self.readConfig()

@@ -2,9 +2,9 @@
 from llxaccessibility import llxaccessibility
 import os,shutil
 import json
-from PySide6.QtWidgets import QApplication,QGridLayout,QListWidget,QListWidgetItem,QLabel
-from PySide6 import QtGui
-from PySide6.QtCore import Qt,QThread,Signal,QSize
+from PySide2.QtWidgets import QApplication,QGridLayout,QListWidget,QListWidgetItem,QLabel
+from PySide2 import QtGui
+from PySide2.QtCore import Qt,QThread,Signal,QSize
 from QtExtraWidgets import QStackedWindowItem, QPushInfoButton
 import subprocess
 from rebost import store
@@ -158,6 +158,7 @@ class getAppsInfo(QThread):
 #class getAppInfo
 
 class accessibility(QStackedWindowItem):
+	back=Signal()
 	def __init_stack__(self):
 		self.dbg=False
 		self._debug("access Load")
@@ -181,10 +182,26 @@ class accessibility(QStackedWindowItem):
 	def __initScreen__(self):
 		lay=QGridLayout()
 		self.lstApps=QListWidget()
+		self.lstApps.keyPressEvent2=self.lstApps.keyPressEvent
+		self.lstApps.keyPressEvent=self.fakeKey
 		lay.addWidget(self.lstApps)
 		self.setLayout(lay)
 		self._renderGui()
 	#def __initScreen__
+
+	def fakeKey(self,*args):
+		ev=args[0]
+		if ev.key()==Qt.Key_Left:
+			self.parent.lstNav.setFocus()
+		else:
+			self.lstApps.keyPressEvent2(*args)
+			ev.ignore()
+		return True
+	#def fakeKey
+
+	def focusInEvent(self,*args):
+		self.lstApps.setFocus()
+	#def focusInEvent
 
 	def _endCmd(self,*args):
 		for i in range(0,self.lstApps.count()):

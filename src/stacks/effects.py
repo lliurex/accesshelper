@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 from llxaccessibility import llxaccessibility
 import os
-from PySide6.QtWidgets import QApplication,QGridLayout,QListWidget,QListWidgetItem,QLabel
-from PySide6 import QtGui
-from PySide6.QtCore import Qt,QSize
+from PySide2.QtWidgets import QApplication,QGridLayout,QListWidget,QListWidgetItem,QLabel
+from PySide2 import QtGui
+from PySide2.QtCore import Qt,QSize
 from QtExtraWidgets import QStackedWindowItem, QPushInfoButton
 import subprocess
 import locale
@@ -45,6 +45,8 @@ class effects(QStackedWindowItem):
 	def __initScreen__(self):
 		lay=QGridLayout()
 		self.lstApps=QListWidget()
+		self.lstApps.keyPressEvent2=self.lstApps.keyPressEvent
+		self.lstApps.keyPressEvent=self.fakeKey
 		lay.addWidget(self.lstApps)
 		self.setLayout(lay)
 		self._renderGui()
@@ -62,6 +64,21 @@ class effects(QStackedWindowItem):
 			self.accesshelper.launchKcmModule(mod)
 		args[0].setEnabled(True)
 	#def _launch
+
+	def fakeKey(self,*args):
+		ev=args[0]
+		if ev.key()==Qt.Key_Left:
+			self.parent.lstNav.setFocus()
+		else:
+			self.lstApps.keyPressEvent2(*args)
+			ev.ignore()
+		return True
+	#def fakeKey
+
+	def focusInEvent(self,*args):
+		self.lstApps.setFocus()
+	#def focusInEvent
+
 
 	def _renderBtn(self,i18Text,i18Desc,img=""):
 		btn=QPushInfoButton()

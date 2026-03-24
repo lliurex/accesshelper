@@ -1,0 +1,120 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-12-23 07:53+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: entrada estàndard:3
+msgid ""
+"Best results if voice matches \n"
+"the language of the document to process"
+msgstr ""
+
+#: entrada estàndard:7
+msgid "Voice:"
+msgstr ""
+
+#: entrada estàndard:10
+msgid "Managed by system"
+msgstr ""
+
+#: entrada estàndard:13
+msgid "Spanish"
+msgstr ""
+
+#: entrada estàndard:16
+msgid "Valencian"
+msgstr ""
+
+#: entrada estàndard:19
+msgid "Stretch:"
+msgstr ""
+
+#: entrada estàndard:22
+msgid "Pitch"
+msgstr ""
+
+#: entrada estàndard:25
+msgid "Rate:"
+msgstr ""
+
+#: entrada estàndard:28
+msgid "TTS engine"
+msgstr ""
+
+#: entrada estàndard:31
+msgid "Use ORCA"
+msgstr ""
+
+#: entrada estàndard:34
+msgid "Use VLC"
+msgstr ""
+
+#: entrada estàndard:37
+msgid "Use internal synth"
+msgstr ""
+
+#: entrada estàndard:40
+msgid "OCR Settings"
+msgstr ""
+
+#: entrada estàndard:43
+msgid "Auto spellcheck correction (recomended)"
+msgstr ""
+
+#: entrada estàndard:46
+msgid "Select region for process"
+msgstr ""
+
+#: entrada estàndard:49
+msgid ""
+"Filter for image processing. \n"
+"Often grayscale has better results"
+msgstr ""
+
+#: entrada estàndard:53
+msgid "Grayscale (default)"
+msgstr ""
+
+#: entrada estàndard:56
+msgid "Sobel"
+msgstr ""
+
+#: entrada estàndard:59
+msgid "Morph"
+msgstr ""
+
+#: entrada estàndard:62
+msgid "Smooth"
+msgstr ""
+
+#: entrada estàndard:65
+msgid "Gaussian"
+msgstr ""
+
+#: entrada estàndard:68
+msgid "Read content from Clipboard"
+msgstr ""
+
+#: entrada estàndard:71
+msgid ""
+"If this options is enabled the content will be readed \n"
+"from clipboard (text or images)."
+msgstr ""
+
+#: entrada estàndard:75
+msgid "** Changes apply only after disabling and re-enabling the script **"
+msgstr ""

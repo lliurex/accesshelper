@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 import os,sys,subprocess,json
-from PySide6.QtWidgets import QApplication,QGridLayout,QWidget,QPushButton,QHeaderView,QMenu,QToolTip,QLabel,QTableWidget,QToolBar
-from PySide6.QtCore import Qt,QSignalMapper,QSize,QThread,QPoint,QEvent,Signal,QObject,QRect
-from PySide6.QtGui import QIcon,QPixmap,QCursor,QColor,QPalette,QGuiApplication,QFont
+from PySide2.QtWidgets import QApplication,QGridLayout,QWidget,QPushButton,QHeaderView,QMenu,QToolTip,QLabel,QTableWidget,QToolBar
+from PySide2.QtCore import Qt,QSignalMapper,QSize,QThread,QPoint,QEvent,Signal,QObject,QRect
+from PySide2.QtGui import QIcon,QPixmap,QCursor,QColor,QPalette,QGuiApplication,QFont
 import dbus
 import dbus.service
 import dbus.mainloop.glib

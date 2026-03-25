@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 import dbus,dbus.exceptions
 import os,sys,shutil
-from PySide6.QtWidgets import QApplication,QGridLayout,QWidget,QPushButton,QHeaderView,QLabel,QSpinBox,QTableWidgetItem,QAbstractItemView,QCheckBox,QFrame,QHBoxLayout,QMessageBox
-from PySide6.QtCore import Qt,Signal,QSize,QThread,QPoint,QObject
-from PySide6.QtGui import QIcon,QPixmap,QCursor,QColor,QDrag,QGuiApplication
+from PySide2.QtWidgets import QApplication,QGridLayout,QWidget,QPushButton,QHeaderView,QLabel,QSpinBox,QTableWidgetItem,QAbstractItemView,QCheckBox,QFrame,QHBoxLayout,QMessageBox
+from PySide2.QtCore import Qt,Signal,QSize,QThread,QPoint,QObject
+from PySide2.QtGui import QIcon,QPixmap,QCursor,QColor,QDrag,QGuiApplication
 from QtExtraWidgets import QTableTouchWidget,QHotkeyButton
 import lib.libdock as libdock
 import lib.launchers as launchers

@@ -249,7 +249,7 @@ class portrait(QStackedWindowItem):
 		btnOk.clicked.connect(self._accepted)
 		box.addWidget(btnOk,6,0,1,1,Qt.AlignRight)
 		btnKo=QPushButton(i18n["CANCEL"])
-		btnKo.clicked.connect(self.close)
+		btnKo.clicked.connect(self.parent.close)
 		box.addWidget(btnKo,6,1,1,1,Qt.AlignRight)
 		box.setRowStretch(0,1)
 		box.setRowStretch(2,1)

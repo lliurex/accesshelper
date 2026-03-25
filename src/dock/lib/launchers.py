@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 import os,sys,shutil
 import subprocess
-from PySide6.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QLineEdit,QHBoxLayout,QGridLayout,QComboBox,QFileDialog,QListWidget
-from PySide6 import QtGui
-from PySide6.QtCore import Qt,Signal,QSize
+from PySide2.QtWidgets import QApplication, QLabel, QWidget, QPushButton,QLineEdit,QHBoxLayout,QGridLayout,QComboBox,QFileDialog,QListWidget
+from PySide2 import QtGui
+from PySide2.QtCore import Qt,Signal,QSize
 from QtExtraWidgets import QSearchBox,QStackedWindow,QStackedWindowItem,QHotkeyButton
 from app2menu import App2Menu
 from llxaccessibility import llxaccessibility

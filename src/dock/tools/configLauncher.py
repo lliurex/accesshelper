@@ -2,10 +2,10 @@
 
 import os,subprocess
 import sys
-from PySide2.QtUiTools import QUiLoader
-from PySide2.QtWidgets import QApplication,QWidget,QVBoxLayout,QHBoxLayout,QPushButton,QGridLayout,QTableWidget,QScrollArea,QLabel,QGroupBox,QRadioButton
-from PySide2.QtCore import QFile, QIODevice
-from PySide2.QtGui import QColor
+from PySide6.QtUiTools import QUiLoader
+from PySide6.QtWidgets import QApplication,QWidget,QVBoxLayout,QHBoxLayout,QPushButton,QGridLayout,QTableWidget,QScrollArea,QLabel,QGroupBox,QRadioButton
+from PySide6.QtCore import QFile, QIODevice
+from PySide6.QtGui import QColor
 from QtExtraWidgets import QKdeConfigWidget
 
 def save(window,app):
@@ -23,7 +23,7 @@ if __name__ == "__main__":
 	btnOk=QPushButton("Ok")
 	btnOk.clicked.connect(lambda x:save(window,app))
 	btnKo=QPushButton("Cancel")
-	btnKo.clicked.connect(app.exit)
+	btnKo.clicked.connect(app.quit)
 	btnOk.setFixedSize(btnKo.sizeHint().width(),btnOk.sizeHint().height())
 	btnKo.setFixedSize(btnKo.sizeHint().width(),btnOk.sizeHint().height())
 	hlay.addWidget(btnOk)
@@ -34,4 +34,4 @@ if __name__ == "__main__":
 	else:
 		layout.addWidget(btnBox)
 	window.show()
-	sys.exit(app.exec_())
+	sys.exit(app.exec())

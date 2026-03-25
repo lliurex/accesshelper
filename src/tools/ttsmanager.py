@@ -112,7 +112,7 @@ class ttshelper(QWidget):
 		self.wdgConfig=self._loadConfigScreenFromScript()
 		box.addWidget(self.wdgConfig,1,0,1,2)
 		frm=QFrame()
-		frm.setFrameShape(frm.HLine)
+		frm.setFrameShape(QFrame.HLine)
 		box.addWidget(frm,4,0,1,2)
 		lblFiles=QLabel(i18n.get("FILES"))
 		box.addWidget(lblFiles,5,0,1,1,Qt.AlignLeft)
@@ -162,7 +162,7 @@ class ttshelper(QWidget):
 
 	def _populateFileList(self):
 		sigmap_run=QSignalMapper(self)
-		sigmap_run.mapped[QString].connect(self._processTtsFile)
+		sigmap_run.mappedString[QString].connect(self._processTtsFile)
 		iconSize=QSize(64,64)
 		btnSize=QSize(128,72)
 		icons={"mp3":QtGui.QIcon.fromTheme("media-playback-start"),"txt":QtGui.QIcon.fromTheme("document-open"),"sav":QtGui.QIcon.fromTheme("document-save")}

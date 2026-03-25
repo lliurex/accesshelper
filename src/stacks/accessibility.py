@@ -2,13 +2,12 @@
 from llxaccessibility import llxaccessibility
 import os,shutil
 import json
-from PySide2.QtWidgets import QApplication,QLabel,QGridLayout,QCheckBox,QSizePolicy,QRadioButton,QHeaderView,QTableWidgetItem,QAbstractScrollArea,QTableWidget
+from PySide2.QtWidgets import QApplication,QGridLayout,QListWidget,QListWidgetItem,QLabel
 from PySide2 import QtGui
-from PySide2.QtCore import Qt,QThread,Signal
-from QtExtraWidgets import QStackedWindowItem, QTableTouchWidget, QPushInfoButton
+from PySide2.QtCore import Qt,QThread,Signal,QSize
+from QtExtraWidgets import QStackedWindowItem, QPushInfoButton
 import subprocess
 from rebost import store
-import locale
 import gettext
 _ = gettext.gettext
 
@@ -17,6 +16,8 @@ i18n={
 	"ACCEDSC":_("Plasma Accessibility module"),
 	"ANTI":_("Joystick as mouse"),
 	"ANTIDSC":_("Configure a gamepad/joystick as mouse"),
+	"BROW":_("Browsers accessibility"),
+	"BROWDSC":_("Selection of addons and configurations for accessible browsing"),
 	"CONFIG":_("Accessibility"),
 	"DOCK":_("Accessibility Dock"),
 	"DOCKDSC":_("Dock with customizable fast actions"),
@@ -36,13 +37,20 @@ class thLauncher(QThread):
 	def __init__(self,parent=None,*args,**kwargs):
 		super().__init__()
 		self.accesshelper=llxaccessibility.client()
+		self.rebost=store.client()
+		self.cmd=""
 
 	def setParms(self,*args):
+		self.cmd=args[0]
+	#def setParms
+
+	def _getCmdArray(self,*args):
 		cmd=args[0]
 		procCmd=[]
 		self.parms=[]
 		if " " in cmd:
 			procCmd.extend(cmd[0].split(" ")[1:])
+			F
 			procCmd.insert(0,cmd[0].split(" ")[0])
 		else:
 			if isinstance(cmd,str):
@@ -50,141 +58,8 @@ class thLauncher(QThread):
 			else:
 				procCmd=cmd
 		self.cmd=procCmd[0]
-		self.parms.extend(cmd[1:])
+		self.cmd.extend(cmd[1:])
 	#def setParms
-
-	def run(self):
-		cmd=[self.cmd]
-		cmd.extend(self.parms)
-		if "kcm" in cmd[0]:
-			proc=self.accesshelper.launchKcmModule(self.cmd)
-		else:
-			proc=self.accesshelper.launchCmd(cmd)
-		self.finished.emit(proc)
-	#def run
-#class thLauncher
-
-class accessibility(QStackedWindowItem):
-	def __init_stack__(self):
-		self.dbg=False
-		self._debug("access Load")
-		self.setProps(shortDesc=i18n.get("MENU"),
-			description=i18n.get('DESCRIPTION'),
-			longDesc=i18n.get('DESCRIPTION'),
-			icon="preferences-desktop-accessibility",
-			tooltip=i18n.get("TOOLTIP"),
-			index=3,
-			visible=True)
-		self.enabled=True
-		self.changed=[]
-		self.level='user'
-		self.plasmaConfig={}
-		self.hideControlButtons()
-		self.locale=locale.getdefaultlocale()[0][0:2]
-		self.rebost=store.client()
-		self.launch=thLauncher()
-		self.launch.finished.connect(self._endCmd)
-	#def __init__
-
-	def __initScreen__(self):
-		self.box=QGridLayout()
-		self.setLayout(self.box)
-		self.tblGrid=QTableTouchWidget()
-		self.tblGrid.setColumnCount(3)
-#		self.tblGrid.setShowGrid(False)
-		self.tblGrid.verticalHeader().hide()
-		self.tblGrid.horizontalHeader().hide()
-		self.tblGrid.setSelectionBehavior(QTableWidget.SelectRows)
-		self.tblGrid.setSelectionMode(QTableWidget.SingleSelection)
-		self.tblGrid.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
-		self.tblGrid.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-		self.tblGrid.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
-		self.box.addWidget(self.tblGrid)
-		self._renderGui()
-	#def __initScreen__
-
-	def _renderGui(self):
-		self.tblGrid.setRowCount(0)
-		self.tblGrid.setRowCount(2)
-		btnAcce=QPushInfoButton()
-		btnAcce.setText(i18n.get("ACCE"))
-		btnAcce.setDescription(i18n.get("ACCEDSC"))
-		btnAcce.loadImg("preferences-desktop-accessibility")
-		self.tblGrid.setCellWidget(0,0,btnAcce)
-		#self.tblGrid.verticalHeader().setSectionResizeMode(0,QHeaderView.ResizeToContents)
-		btnAcce.clicked.connect(self._launch)
-		btnOrca=QPushInfoButton()
-		icons={}
-		for app in ["orca","eviacam","antimicrox"]:
-			appInfo=json.loads(self.rebost.showApp(app))
-			if len(appInfo)>0:
-				jInfo=json.loads(appInfo[0])
-				icons.update({app:jInfo.get("icon","default")})
-		btnOrca.setText(i18n.get("ORCA"))
-		btnOrca.setDescription(i18n.get("ORCADSC"))
-		btnOrca.loadImg(icons["orca"])
-		self.tblGrid.setCellWidget(0,1,btnOrca)
-		#self.tblGrid.verticalHeader().setSectionResizeMode(1,QHeaderView.ResizeToContents)
-		btnOrca.clicked.connect(self._launch)
-		btnLtts=QPushInfoButton()
-		btnLtts.setText(i18n.get("LTTS"))
-		btnLtts.setDescription(i18n.get("LTTSDSC"))
-		fname=os.path.join(os.path.dirname(os.path.realpath(__file__)),"..","rsrc","ttsmanager.png")
-		btnLtts.loadImg(fname)
-		self.tblGrid.setCellWidget(0,2,btnLtts)
-		btnLtts.clicked.connect(self._launch)
-		btnDock=QPushInfoButton()
-		btnDock.setText(i18n.get("DOCK"))
-		btnDock.setDescription(i18n.get("DOCKDSC"))
-		btnDock.loadImg("accesswizard")
-		self.tblGrid.setCellWidget(1,0,btnDock)
-		btnDock.clicked.connect(self._launch)
-		btnJoys=QPushInfoButton()
-		btnJoys.setText(i18n.get("ANTI"))
-		btnJoys.setDescription(i18n.get("ANTIDSC"))
-		btnJoys.loadImg(icons["antimicrox"])
-		self.tblGrid.setCellWidget(1,1,btnJoys)
-		btnJoys.clicked.connect(self._launch)
-		btnEvia=QPushInfoButton()
-		btnEvia.setText(i18n.get("EVIA"))
-		btnEvia.setDescription(i18n.get("EVIADSC"))
-		btnEvia.loadImg(icons["eviacam"])
-		self.tblGrid.setCellWidget(1,2,btnEvia)
-		btnEvia.clicked.connect(self._launch)
-		self.tblGrid.horizontalHeader().setSectionResizeMode(1,QHeaderView.ResizeToContents)
-
-	def _launch(self,*args):
-		args[0].setEnabled(False)
-		if args[0].text()==i18n.get("ACCE"):
-			mod="kcm_access"
-			self.launch.setParms(mod)
-			self.launch.start()
-		else:
-			if args[0].text()==i18n.get("ORCA"):
-				cmd=self._getAppCmd("orca")
-			elif args[0].text()==i18n.get("LTTS"):
-				cmd=os.path.join(os.path.dirname(__file__),"..","tools","ttsmanager.py")
-			elif args[0].text()==i18n.get("DOCK"):
-				cmd=os.path.join(os.path.dirname(__file__),"..","dock","accessdock-config.py")
-			elif args[0].text()==i18n.get("ANTI"):
-				cmd=self._getAppCmd("antimicrox")
-			elif args[0].text()==i18n.get("EVIA"):
-				cmd=self._getAppCmd("eviacam")
-			self.launch.setParms(cmd)
-			self.launch.start()
-	#def _launch
-
-	def _endCmd(self,*args):
-		for i in range(0,self.tblGrid.rowCount()):
-			for j in range(0,self.tblGrid.columnCount()):
-				wdg=self.tblGrid.cellWidget(i,j)
-				if wdg.isEnabled()==False:
-					wdg.setEnabled(True)
-		
-		print("++++++")
-		print(args)
-		print("++++++")
-	#def _endCmd
 
 	def _getAppCmd(self,app):
 		cmdPath=self._getPathForCmd(app)
@@ -194,14 +69,14 @@ class accessibility(QStackedWindowItem):
 				cmd.append("-s")
 		else:
 			cmd=["/usr/bin/lliurex-store","appsedu://{}".format(app)]
-			appraw=json.loads(self.rebost.matchApp(app))
+			appraw=json.loads(self.rebost.showApp(app))
 			bundle=""
 			if len(appraw)>0:
-				app=json.loads(appraw[0])
+				app=appraw[0]
 				for bun in app.get("bundle",{}).keys():
-					if bun.lower()=="zomando":
+					if bun.lower()=="unknown":
 						continue
-					if self.rebost.getAppStatus(app.get("name"),bun)=="0":
+					if app.get("status",{}).get(bun,"1")=="0":
 						bundle=bun
 						break
 				if bundle=="package":
@@ -223,6 +98,170 @@ class accessibility(QStackedWindowItem):
 		if cmdPath==None:
 			cmdPath=""
 		return(cmdPath)
+
+	def run(self):
+		if self.cmd==i18n.get("ACCE"):
+			mod="kcm_access"
+			self.cmd="kcm_access"
+		else:
+			if self.cmd==i18n.get("ORCA"):
+				self.cmd=self._getAppCmd("orca")
+			elif self.cmd==i18n.get("LTTS"):
+				self.cmd=os.path.join(os.path.dirname(__file__),"..","tools","ttsmanager.py")
+			elif self.cmd==i18n.get("DOCK"):
+				self.cmd=os.path.join(os.path.dirname(__file__),"..","dock","accessdock-config.py")
+			elif self.cmd==i18n.get("ANTI"):
+				self.cmd=self._getAppCmd("antimicrox")
+			elif self.cmd==i18n.get("EVIA"):
+				self.cmd=self._getAppCmd("eviacam")
+			elif self.cmd==i18n.get("BROWS"):
+				self.cmd=os.path.join(os.path.dirname(__file__),"..","tools","browsermanager.py")
+		print("{} -> {}".format(self.cmd,self.cmd))
+		if "kcm" in self.cmd:
+			proc=self.accesshelper.launchKcmModule(self.cmd)
+		else:
+			proc=self.accesshelper.launchCmd(self.cmd)
+		self.finished.emit(proc)
+	#def run
+#class thLauncher
+
+class getAppsInfo(QThread):
+	finished=Signal("PyObject")
+	def __init__(self,*args,**kwargs):
+		super().__init__()
+		self.icons={}
+		if len(args)>0:
+			if isinstance(args[0],list):
+				for btn in args[0]:
+					self.icons[btn]=""
+		self.rebost=store.client()
+
+	def run(self):
+		for btn in self.icons.keys():
+			app=""
+			if btn.text()==i18n.get("ORCA"):
+				app="orca"	
+			elif btn.text()==i18n.get("EVIA"):
+				app="eviacam"
+			elif btn.text()==i18n.get("ANTI"):
+				app="antimicrox"
+			if len(app)>0:
+				appInfo=json.loads(self.rebost.showApp(app))
+				if len(appInfo)>0:
+					icn=appInfo[0].get("icon","default")
+					icnName=os.path.basename(icn)
+					cacheIcn=os.path.join("/home",os.getlogin(),".cache","rebost","imgs",icnName)
+					if os.path.exists(cacheIcn):
+						icn=cacheIcn
+					self.icons.update({btn:icn})
+		self.finished.emit(self.icons)
+#class getAppInfo
+
+class accessibility(QStackedWindowItem):
+	back=Signal()
+	def __init_stack__(self):
+		self.dbg=False
+		self._debug("access Load")
+		self.setProps(shortDesc=i18n.get("MENU"),
+			description=i18n.get('DESCRIPTION'),
+			longDesc=i18n.get('DESCRIPTION'),
+			icon="preferences-desktop-accessibility",
+			tooltip=i18n.get("TOOLTIP"),
+			index=1,
+			visible=True)
+		self.enabled=True
+		self.changed=[]
+		self.level='user'
+		self.rebost=store.client()
+		self.plasmaConfig={}
+		self.hideControlButtons()
+		self.launch=thLauncher()
+		self.launch.finished.connect(self._endCmd)
+	#def __init__
+
+	def __initScreen__(self):
+		lay=QGridLayout()
+		self.lstApps=QListWidget()
+		self.lstApps.keyPressEvent2=self.lstApps.keyPressEvent
+		self.lstApps.keyPressEvent=self.fakeKey
+		lay.addWidget(self.lstApps)
+		self.setLayout(lay)
+		self._renderGui()
+	#def __initScreen__
+
+	def fakeKey(self,*args):
+		ev=args[0]
+		if ev.key()==Qt.Key_Left:
+			self.parent.lstNav.setFocus()
+		else:
+			self.lstApps.keyPressEvent2(*args)
+			ev.ignore()
+		return True
+	#def fakeKey
+
+	def focusInEvent(self,*args):
+		self.lstApps.setFocus()
+	#def focusInEvent
+
+	def _endCmd(self,*args):
+		for i in range(0,self.lstApps.count()):
+			itm=self.lstApps.item(i)
+			wdg=self.lstApps.itemWidget(itm)
+			wdg.setEnabled(True)
+	#def _endCmd
+
+	def _launch(self,*args):
+		args[0].setEnabled(False)
+		self.launch.setParms(args[0].text())
+		self.launch.start()
+	#def _launch
+
+	def _renderBtn(self,i18Text,i18Desc,img=""):
+		btn=QPushInfoButton()
+		btn.setText(i18n.get(i18Text))
+		btn.setDescription(i18n.get(i18Desc))
+		if img!="":
+			btn.loadImg(img)
+		btn.clicked.connect(self._launch)
+		return(btn)
+	#def _renderBtn
+
+	def _updateBtns(self,*args,**kwargs):
+		icons=args[0]
+		for btn,icn in icons.items():
+			size=btn.size()
+			btn.loadImg(icn)
+	#def _updateBtns
+
+	def _renderGui(self):
+		controls=[]
+		btnAcce=self._renderBtn("ACCE","ACCEDSC","preferences-desktop-accessibility")
+		controls.append(btnAcce)
+		#self.box.addWidget(btnAcce,0,0,1,1)
+		btnOrca=self._renderBtn("ORCA","ORCADSC","")
+		controls.append(btnOrca)
+		fname=os.path.join(os.path.dirname(os.path.realpath(__file__)),"..","rsrc","ttsmanager.png")
+		btnLtts=self._renderBtn("LTTS","LTTSDSC",fname)
+		controls.append(btnLtts)
+		dockIcn=os.path.join(os.path.dirname(os.path.realpath(__file__)),"..","dock","accessdock.png")
+		btnDock=self._renderBtn("DOCK","DOCKDSC",fname)
+		controls.append(btnDock)
+		btnJoys=self._renderBtn("ANTI","ANTIDSC","")
+		controls.append(btnJoys)
+		btnEvia=self._renderBtn("EVIA","EVIADSC","")
+		controls.append(btnEvia)
+		fname=os.path.join(os.path.dirname(os.path.realpath(__file__)),"..","rsrc","browsermanager.png")
+		btnBrow=self._renderBtn("BROW","BROWDSC",fname)
+		controls.append(btnBrow)
+		for btn in controls:
+			self.lstApps.addItem("")
+			itm=self.lstApps.item(self.lstApps.count()-1)
+			itm.setSizeHint(QSize(228,150))
+			self.lstApps.setItemWidget(itm,btn)
+		self.getInfoBtns=getAppsInfo([btnOrca,btnEvia,btnJoys])
+		self.getInfoBtns.finished.connect(self._updateBtns)
+		self.getInfoBtns.start()
+	#def _renderGui
 
 	def updateScreen(self):
 		pass

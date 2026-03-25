@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 import dbus,dbus.exceptions
 import os,sys,shutil
-from PySide2.QtWidgets import QApplication,QGridLayout,QWidget,QPushButton,QHeaderView,QLabel,QSpinBox,QTableWidgetItem,QAbstractItemView,QCheckBox,QFrame,QHBoxLayout,QMessageBox
-from PySide2.QtCore import Qt,Signal,QSize,QThread,QPoint,QObject
-from PySide2.QtGui import QIcon,QPixmap,QCursor,QColor,QDrag,QGuiApplication
+from PySide6.QtWidgets import QApplication,QGridLayout,QWidget,QPushButton,QHeaderView,QLabel,QSpinBox,QTableWidgetItem,QAbstractItemView,QCheckBox,QFrame,QHBoxLayout,QMessageBox
+from PySide6.QtCore import Qt,Signal,QSize,QThread,QPoint,QObject
+from PySide6.QtGui import QIcon,QPixmap,QCursor,QColor,QDrag,QGuiApplication
 from QtExtraWidgets import QTableTouchWidget,QHotkeyButton
 import lib.libdock as libdock
 import lib.launchers as launchers
@@ -207,7 +207,7 @@ class accessconf(QWidget):
 	def _renderDockConfig(self):
 		layout=self.layout()
 		frm=QFrame()
-		frm.setFrameShape(frm.Box)
+		frm.setFrameShape(QFrame.Box)
 		frm.setLayout(QGridLayout())
 		layout.addWidget(frm,0,0,1,2)
 		layout=frm.layout()
@@ -223,8 +223,8 @@ class accessconf(QWidget):
 		self.list.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
 		self.list.horizontalHeader().hide()
 		self.list.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-		self.list.setSelectionBehavior(self.list.SelectRows)
-		self.list.setSelectionMode(self.list.SingleSelection)
+		#self.list.setSelectionBehavior(self.list.SelectRows)
+		#self.list.setSelectionMode(self.list.SingleSelection)
 		self.list.itemChanged.connect(self._change)
 		self.btnIup=QPushButton()
 		self.btnIup.setAccessibleName(i18n["UP"])
@@ -262,7 +262,7 @@ class accessconf(QWidget):
 		row=layout.rowCount()
 		frm=QFrame()
 		frm.setLayout(QGridLayout())
-		frm.setFrameShape(frm.HLine)
+		frm.setFrameShape(QFrame.HLine)
 		layout.addWidget(frm,row,0,1,2)
 		self.chkStart=QCheckBox(i18n["STRT"])
 		self.chkStart.setChecked(self._chkStartStatus())
@@ -413,7 +413,7 @@ class accessconf(QWidget):
 		dlg.addButton(QMessageBox.Ok)
 		dlg.addButton(QMessageBox.Cancel)
 		dlg.setText(i18n.get("DEF"))
-		if dlg.exec_()==QMessageBox.Ok:
+		if dlg.exec()==QMessageBox.Ok:
 			self.list.clear()
 			self.libdock.initLaunchers()
 			self.updateScreen()
@@ -480,4 +480,4 @@ icon=QIcon(":/icons/accessdock.png")
 dock.setWindowIcon(icon)
 QGuiApplication.setDesktopFileName("accessdock")
 dock.show()
-app.exec_()
+app.exec()

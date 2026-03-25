@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 import os,sys,subprocess,json
-from PySide2.QtWidgets import QApplication,QGridLayout,QWidget,QPushButton,QHeaderView,QMenu,QAction,QToolTip,QLabel,QDesktopWidget
-from PySide2.QtCore import Qt,QSignalMapper,QSize,QThread,QPoint,QEvent,Signal,QObject,QRect
-from PySide2.QtGui import QIcon,QPixmap,QCursor,QColor,QPalette,QGuiApplication
+from PySide6.QtWidgets import QApplication,QGridLayout,QWidget,QPushButton,QHeaderView,QMenu,QToolTip,QLabel,QTableWidget,QToolBar
+from PySide6.QtCore import Qt,QSignalMapper,QSize,QThread,QPoint,QEvent,Signal,QObject,QRect
+from PySide6.QtGui import QIcon,QPixmap,QCursor,QColor,QPalette,QGuiApplication,QFont
 import dbus
 import dbus.service
 import dbus.mainloop.glib
@@ -93,13 +93,13 @@ class QToolTipDock(QLabel):
 	"""
 	def __init__(self,text="",bigTip=False,parent=None):
 		super().__init__()
-		self.setWindowFlags(Qt.X11BypassWindowManagerHint|Qt.BypassWindowManagerHint|Qt.FramelessWindowHint|Qt.WindowTransparentForInput|Qt.NoDropShadowWindowHint|Qt.WindowStaysOnTopHint)
+		self.setWindowFlags(Qt.X11BypassWindowManagerHint|Qt.BypassWindowManagerHint|Qt.WindowTransparentForInput|Qt.NoDropShadowWindowHint|Qt.WindowStaysOnTopHint|Qt.ToolTip)
 		self.setText(text)
 		self.setAccessibleName(text)
 		self.setAccessibleDescription("")
 		self.setAlignment(Qt.AlignCenter)
 		f=self.font()
-		f.setWeight(f.Bold)
+		f.setWeight(QFont.Bold)
 		f.setPointSize(f.pointSize()+2)
 		self.setFont(f)
 		scr=QApplication.screens()[0]
@@ -357,8 +357,13 @@ class QPushButtonDock(QPushButton):
 		if ev.type()==QEvent.Type.Resize and self.popupShow==True:
 			self.popupShow=False
 		if self.popupShow==False and (ev.type()==QEvent.Type.Enter or ev.type()==QEvent.Type.FocusIn):
-			if self.hasFocus()==False:
-				self.setFocus()
+			if ev.type()==QEvent.Type.FocusIn:
+				if ev.reason()==Qt.FocusReason.OtherFocusReason:
+			#		self.move(self.mapToGlobal(QPoint(0,self.y()+self.height())))
+					pass
+				else:
+					if self.hasFocus()==False:
+						self.setFocus()
 			size=self.size()
 			origSize=72
 			newsize=QSize(size.width(),origSize*1.5)
@@ -374,7 +379,6 @@ class QPushButtonDock(QPushButton):
 			newsize=QSize(size.width(),self.initialSize.height()/1.1)
 			self.setFixedSize(newsize)
 			self.setIconSize(newsize)
-		#ev.ignore()
 		return(False)
 	#def eventFilter
 #class QPushButtonDock
@@ -397,10 +401,10 @@ class accessdock(QWidget):
 
 		self.setWindowIcon(QIcon.fromTheme("accessibledock"))
 		QGuiApplication.setDesktopFileName("accessibledock")
-		self.setWindowFlags(Qt.NoDropShadowWindowHint|Qt.WindowStaysOnTopHint|Qt.Tool)
+		#self.setWindowFlag(Qt.Window)
 		#This hides decoration and bypass window 
 		#also skips app registering in at-spi so is unexistent for ORCA 
-		#self.setWindowFlags(Qt.BypassWindowManagerHint)
+		self.setWindowFlags(Qt.NoDropShadowWindowHint|Qt.WindowStaysOnTopHint|Qt.Tool)
 		#self.setStyleSheet("margin:0px")
 		layout=QGridLayout()
 		layout.setContentsMargins(2,2,2,2)
@@ -480,8 +484,8 @@ class accessdock(QWidget):
 	#def mousePressEvent
 
 	def mouseMoveEvent(self, ev):
-		x = ev.globalX()-(self.width()/2)
-		y = ev.globalY()
+		x = ev.globalPosition().x()-(self.width()/2)
+		y = ev.globalPosition().y()
 		self.move(x, y)
 	#def mouseMoveEvent
 
@@ -503,9 +507,13 @@ class accessdock(QWidget):
 		w=0
 		if oldcount>0:
 			w=self.width()/oldcount
+			for idx in range(0,oldcount):
+				btn=self.grid.cellWidget(0,idx)
+				btn.lbl.deleteLater()
+				btn.deleteLater()
+
 		self.grid.clear()
 		self.grid.setColumnCount(0)
-		self.btnMnu={}
 		launchers=self.libdock.getLaunchers()
 		bigTip=False
 		if self.libdock.readKValue("kwinrc","accessibledock","tooltipbig")=="true":
@@ -524,11 +532,11 @@ class accessdock(QWidget):
 			if self.grid.columnCount()>1:
 				#self.grid.setTabOrder(self.grid.cellWidget(0,self.grid.columnCount()-1),btn)
 				btn.setFocusPolicy(Qt.StrongFocus)
-		hh=self.grid.horizontalHeader()
-		hh.setSectionResizeMode(hh.ResizeToContents)
+		self.grid.resizeRowToContents(0)
+		self.grid.resizeColumnToContents(0)
 		vh=self.grid.verticalHeader()
-		vh.setSectionResizeMode(vh.ResizeToContents)
-		if oldcount>0:
+		#vh.setSectionResizeMode(vh.ResizeToContents)
+		if oldcount!=self.grid.columnCount():
 			self._resize()
 	#def updateScreen
 
@@ -549,7 +557,7 @@ class accessdock(QWidget):
 	#def _resize
 
 	def _toggle(self,*args,**kwargs):
-		self._debug("Toggle visibility from {0} to {1}".format(not(self.isVisible()),self.isVisible()))
+		self._debug("Toggle visibility to {0} from {1}".format(not(self.isVisible()),self.isVisible()))
 		self.setVisible(not(self.isVisible()))
 		if self.isVisible()==True:
 			self.updateScreen()
@@ -592,4 +600,4 @@ if __name__=="__main__":
 	objbus.connect_to_signal("isDockVisibleSignal",dock._isVisible,dbus_interface="net.lliurex.accessibility.Dock")
 	dclient=dbusMethods(bus,dock)
 	dock.show()
-	app.exec_()
+	app.exec()

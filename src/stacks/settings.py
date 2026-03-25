@@ -18,6 +18,7 @@ i18n={
 	"GRUB":_("Beep when computer starts"),
 	"LOAD":_("Load profile"),
 	"MENU":_("Other Settings"),
+	"MONO":_("Mono audio"),
 	"PROFILE":_("Start session with profile"),
 	"PROFNME":_("Save as..."),
 	"PROFDSC":_("Accesswizard profile"),
@@ -47,8 +48,12 @@ class settings(QStackedWindowItem):
 		self.box=QGridLayout()
 		self.setLayout(self.box)
 		self.tblGrid=QTableTouchWidget()
+		self.tblGrid.keyPressEvent2=self.tblGrid.keyPressEvent
+		self.tblGrid.keyPressEvent=self.fakeKey
+		self.tblGrid.setShowGrid(False)
+		self.tblGrid.setStyleSheet('QTableView{padding:5px} QTableView::item {border-bottom: 1px solid #d6d9dc;margin-bottom:5px} #btn{margin-left:10px;margin-right:10px}')
 		self.tblGrid.setColumnCount(2)
-		self.tblGrid.setRowCount(4)
+		self.tblGrid.setRowCount(9)
 		self.tblGrid.verticalHeader().hide()
 		self.tblGrid.horizontalHeader().hide()
 		self.tblGrid.setSelectionBehavior(QTableWidget.SelectRows)
@@ -56,30 +61,51 @@ class settings(QStackedWindowItem):
 		self.tblGrid.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
 		self.tblGrid.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 		self.tblGrid.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+		font=self.tblGrid.font()
+		self.tblGrid.verticalHeader().setMinimumSectionSize(font.weight()/10)
 		self.box.addWidget(self.tblGrid)
 		self.btnAccept.clicked.connect(self.writeConfig)
 		self.chkBeGr=QCheckBox(i18n["GRUB"])
 		self.tblGrid.setCellWidget(0,0,self.chkBeGr)
 		self.chkBeSd=QCheckBox(i18n["SDDM_BEEP"])
-		self.tblGrid.setCellWidget(0,1,self.chkBeSd)
-		self.chkOrSd=QCheckBox(i18n["SDDM_ORCA"])
-		self.tblGrid.setCellWidget(1,0,self.chkOrSd)
-		self.chkAuDo=QCheckBox(i18n["DOCK"])
-		self.tblGrid.setCellWidget(2,0,self.chkAuDo)
+		self.tblGrid.setCellWidget(1,0,self.chkBeSd)
 		self.chkBeSe=QCheckBox(i18n["SESSION_BEEP"])
-		self.tblGrid.setCellWidget(2,1,self.chkBeSe)
+		self.tblGrid.setCellWidget(2,0,self.chkBeSe)
+		self.chkOrSd=QCheckBox(i18n["SDDM_ORCA"])
+		self.tblGrid.setCellWidget(3,0,self.chkOrSd)
+		self.chkMono=QCheckBox(i18n["MONO"])
+		self.tblGrid.setCellWidget(4,0,self.chkMono)
 		self.chkProf=QCheckBox(i18n["PROFILE"])
-		self.tblGrid.setCellWidget(3,0,self.chkProf)
+		self.tblGrid.setCellWidget(5,0,self.chkProf)
 		self.cmbProf=QComboBox()
 		self.chkProf.clicked.connect(lambda: self.cmbProf.setEnabled(self.chkProf.isChecked()))
-		self.tblGrid.setCellWidget(3,1,self.cmbProf)
+		self.tblGrid.setCellWidget(5,1,self.cmbProf)
+		self.chkAuDo=QCheckBox(i18n["DOCK"])
+		self.tblGrid.setCellWidget(6,0,self.chkAuDo)
 		self.btnSave=QPushButton(i18n["SAVE"])
 		self.btnSave.clicked.connect(self._saveProfile)
-		self.tblGrid.setCellWidget(4,0,self.btnSave)
+		self.btnSave.setObjectName("btn")
+		self.tblGrid.setCellWidget(7,0,self.btnSave)
 		self.btnLoad=QPushButton(i18n["LOAD"])
+		self.btnLoad.setObjectName("btn")
 		self.btnLoad.clicked.connect(self._loadProfile)
-		self.tblGrid.setCellWidget(4,1,self.btnLoad)
+		self.tblGrid.setCellWidget(7,1,self.btnLoad)
 	#def __initScreen__
+
+	def fakeKey(self,*args):
+		ev=args[0]
+		if ev.key()==Qt.Key_Left:
+			self.parent.lstNav.setFocus()
+		else:
+			self.tblGrid.keyPressEvent2(*args)
+			ev.ignore()
+		return True
+	#def fakeKey
+
+	def focusInEvent(self,*args):
+		self.tblGrid.setFocus()
+	#def focusInEvent
+
 
 	def updateScreen(self):
 		config=self.readConfig()
@@ -91,6 +117,7 @@ class settings(QStackedWindowItem):
 		self.chkProf.setChecked(config.get("prfl",False))
 		self.cmbProf.clear()
 		self.cmbProf.setEnabled(self.chkProf.isChecked())
+		self.chkMono.setChecked(config.get("mono",False))
 		profiles=self._getProfiles()
 		for p in profiles:
 			self.cmbProf.addItem(p)
@@ -122,6 +149,7 @@ class settings(QStackedWindowItem):
 		config["orsd"]=self.accesshelper.readKFile("kaccessrc","LliurexAccessibility","orcaOnSddm")
 		config["bese"]=self.accesshelper.readKFile("kaccessrc","LliurexAccessibility","beepOnSession")
 		config["audo"]=self.accesshelper.readKFile("kaccessrc","LliurexAccessibility","autostartDock")
+		config["mono"]=self.accesshelper.readKFile("kaccessrc","LliurexAccessibility","mono")
 		config["prfl"]=False
 		config["prin"]=self.accesshelper.readKFile("kaccessrc","LliurexAccessibility","profileOnInit")
 		if len(config["prin"])>0:
@@ -142,6 +170,7 @@ class settings(QStackedWindowItem):
 		config["orsd"]=self.chkOrSd.isChecked()
 		config["audo"]=self.chkAuDo.isChecked()
 		config["prfl"]=self.chkProf.isChecked()
+		config["mono"]=self.chkMono.isChecked()
 		config["prin"]=""
 		if config["prfl"]==True:
 			config["prin"]=self.cmbProf.currentText()
@@ -152,6 +181,7 @@ class settings(QStackedWindowItem):
 		sw_grub=str(self.chkBeGr.isChecked())
 		sw_sddm=str(self.chkBeSd.isChecked())
 		sw_orca=str(self.chkOrSd.isChecked())
+		sw_mono=str(self.chkMono.isChecked())
 		config=self.readConfig()
 		if sw_grub==str(config["begr"]):
 			sw_grub=""
@@ -159,6 +189,8 @@ class settings(QStackedWindowItem):
 			sw_sddm=""
 		if sw_orca==str(config["orsd"]):
 			sw_orca=""
+		if sw_mono==str(config["mono"]):
+			sw_mono=""
 		config.update(self.readScreen())
 		self.accesshelper.writeKFile("kaccessrc","LliurexAccessibility","beepOnSession",config["bese"])
 		self.accesshelper.writeKFile("kaccessrc","LliurexAccessibility","autostartDock",config["audo"])
@@ -166,6 +198,7 @@ class settings(QStackedWindowItem):
 		self.accesshelper.writeKFile("kaccessrc","LliurexAccessibility","beepOnSddm",config["besd"])
 		self.accesshelper.writeKFile("kaccessrc","LliurexAccessibility","orcaOnSddm",config["orsd"])
 		self.accesshelper.writeKFile("kaccessrc","LliurexAccessibility","beepOnGrub",config["begr"])
+		self.accesshelper.writeKFile("kaccessrc","LliurexAccessibility","mono",config["mono"])
 		#REM
 		self.accesshelper.setSessionSound(config["bese"])
 		self.accesshelper.setDockEnabled(config["audo"])
@@ -174,6 +207,9 @@ class settings(QStackedWindowItem):
 		if len(sw_grub+sw_sddm+sw_orca)>0:
 			cmd=["pkexec","/usr/share/accesswizard/tools/enableOptions.sh",sw_grub,sw_sddm,sw_orca]
 			subprocess.run(cmd)
+		if len(sw_mono)>0:
+			self.accesshelper.setMonoAudio(config["mono"])
+				
 		self.btnAccept.setEnabled(False)
 		self.btnCancel.setEnabled(False)
 	#def writeConfig

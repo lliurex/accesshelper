@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 from llxaccessibility import llxaccessibility
 import os
-from PySide2.QtWidgets import QApplication,QLabel,QGridLayout,QCheckBox,QSizePolicy,QRadioButton,QHeaderView,QTableWidgetItem
-from PySide2 import QtGui
-from PySide2.QtCore import Qt
+from PySide6.QtWidgets import QApplication,QLabel,QGridLayout,QCheckBox,QSizePolicy,QRadioButton,QHeaderView,QTableWidgetItem
+from PySide6 import QtGui
+from PySide6.QtCore import Qt
 from QtExtraWidgets import QStackedWindowItem, QTableTouchWidget, QPushInfoButton
 import subprocess
 import locale
@@ -57,9 +57,9 @@ class effects(QStackedWindowItem):
 
 	def _launch(self,*args):
 		if args[0].text()==_("Window Effects"):
-			cmd=["kcmshell5","kcm_kwin_effects"]
+			cmd=["kcmshell6","kcm_kwin_effects"]
 		elif args[0].text()==_("Desktop Effects"):
-			cmd=["kcmshell5","kcm_kwin_scripts"]
+			cmd=["kcmshell6","kcm_kwin_scripts"]
 		subprocess.run(cmd)
 	#def _launch
 

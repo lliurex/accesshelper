@@ -116,7 +116,6 @@ class thLauncher(QThread):
 				self.cmd=self._getAppCmd("eviacam")
 			elif self.cmd==i18n.get("BROWS"):
 				self.cmd=os.path.join(os.path.dirname(__file__),"..","tools","browsermanager.py")
-		print("{} -> {}".format(self.cmd,self.cmd))
 		if "kcm" in self.cmd:
 			proc=self.accesshelper.launchKcmModule(self.cmd)
 		else:
@@ -250,9 +249,6 @@ class accessibility(QStackedWindowItem):
 		controls.append(btnJoys)
 		btnEvia=self._renderBtn("EVIA","EVIADSC","")
 		controls.append(btnEvia)
-		fname=os.path.join(os.path.dirname(os.path.realpath(__file__)),"..","rsrc","browsermanager.png")
-		btnBrow=self._renderBtn("BROW","BROWDSC",fname)
-		controls.append(btnBrow)
 		for btn in controls:
 			self.lstApps.addItem("")
 			itm=self.lstApps.item(self.lstApps.count()-1)

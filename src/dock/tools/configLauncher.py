@@ -2,10 +2,10 @@
 
 import os,subprocess
 import sys
-from PySide6.QtUiTools import QUiLoader
-from PySide6.QtWidgets import QApplication,QWidget,QVBoxLayout,QHBoxLayout,QPushButton,QGridLayout,QTableWidget,QScrollArea,QLabel,QGroupBox,QRadioButton
-from PySide6.QtCore import QFile, QIODevice
-from PySide6.QtGui import QColor
+from PySide2.QtUiTools import QUiLoader
+from PySide2.QtWidgets import QApplication,QWidget,QVBoxLayout,QHBoxLayout,QPushButton,QGridLayout,QTableWidget,QScrollArea,QLabel,QGroupBox,QRadioButton
+from PySide2.QtCore import QFile, QIODevice
+from PySide2.QtGui import QColor
 from QtExtraWidgets import QKdeConfigWidget
 
 def save(window,app):

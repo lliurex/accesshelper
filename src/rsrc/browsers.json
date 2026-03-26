@@ -1,0 +1,57 @@
+{
+"firefox":
+[
+	{
+	"name":"DyslexiaAway",
+	"desc":"A simple browser extension that applies a dyslexic-friendly font",
+	"icon":"https://addons.mozilla.org/user-media/addon_icons/2956/2956017-64.png?modified=6e2b995c",
+	"url":"https://addons.mozilla.org/es-ES/firefox/addon/dyslexiaaway"
+	},
+	{
+	"name":"Web accessibiliy enhanacer",
+	"desc":"Enhance web accessibility with text resizing and high contrast mode",
+	"icon":"https://addons.mozilla.org/static-server/img/addon-icons/default-64.png",
+	"url":"https://addons.mozilla.org/es-ES/firefox/addon/web-accessibility-enhancer"
+	},
+	{
+	"name":"Scholar Accessibility Aid",
+	"desc":"Dyslexia-friendly font, instant word definitions with pronunciation, and text-to-speech functionality",
+	"icon":"https://addons.mozilla.org/static-server/img/addon-icons/default-64.png",
+	"url":"https://addons.mozilla.org/es-ES/firefox/addon/scholar-accessibility-aid"
+	},
+	{
+	"name":"Dark Reader Accessibility",
+	"desc":"Options for users with visual impairments to customize the dark mode experience to better suit their needs",
+	"icon":"https://addons.mozilla.org/static-server/img/addon-icons/default-64.png",
+	"url":"https://addons.mozilla.org/es-ES/firefox/addon/dark-reader-accessibility"
+	},
+	{
+	"name":"Crossref DOI Accessibility Tool",
+	"desc":"Enhances Crossref DOI links for better accessibility with screen readers, providing meaningful link text without altering the visual experience for sighted users",
+	"icon":"https://addons.mozilla.org/user-media/addon_icons/2876/2876357-64.png?modified=dc1d91da",
+	"url":"https://addons.mozilla.org/es-ES/firefox/addon/crossref-doi-a11y-tool"
+	},
+	{
+	"name":"taba11y – Tab order accessibility tester",
+	"desc":"Calculates the tab order of all elements and displays it visually, either by drawing a path or by highlighting the elements",
+	"icon":"https://addons.mozilla.org/user-media/addon_icons/2896/2896848-64.png?modified=dd9ca86d",
+	"url":"https://addons.mozilla.org/es-ES/firefox/addon/taba11y"
+	},
+	{
+	"name":"Accessibility Helper ",
+	"desc":"Provides color blindnEnhanced Web Accessibility for Everyoneess correction, text resizing, high contrast mode, and text-to-speech features",
+	"icon":"https://addons.mozilla.org/user-media/addon_icons/2902/2902414-64.png?modified=6fc56b6f",
+	"url":"https://addons.mozilla.org/es-ES/firefox/addon/accessibility-helper"
+	}
+
+],
+"chromium":
+[
+	{
+	"name":"Dyslens",
+	"desc":"Dyslens is a open source chrome extension, built and designed to make web more accessible",
+	"icon":"https://lh3.googleusercontent.com/V26JoYtb_3m76Hl7jtpa_xYVX0EHzZ_je0EyhhNDuRRmNMIqa-pLQ9xEncXa13zr2DgQdTq40gGsxGS3qntpOOQE=s60",
+	"url":"https://chromewebstore.google.com/detail/dyslens/mpbkfbafkpkbpmgdcgkmonpfnodgfepo"
+	}
+]
+}

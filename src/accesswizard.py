@@ -16,9 +16,9 @@ MSG_OPTIONS=_("Navigate through options with \"Tab\" or arrows.")
 app=QApplication(["Access Wizard"])
 config=QStackedWindow()
 accClient=llxaccessibility.client()
-accClient.say(MSG_DISCLAIMER)
-accClient.say(MSG_DISCLAIMER_TEXT)
-accClient.say(MSG_OPTIONS)
+#accClient.say(MSG_DISCLAIMER)
+#accClient.say(MSG_DISCLAIMER_TEXT)
+#accClient.say(MSG_OPTIONS)
 if os.path.islink(__file__)==True:
 	abspath=os.path.join(os.path.dirname(__file__),os.path.dirname(os.readlink(__file__)))
 else:
@@ -48,5 +48,6 @@ size=font.pointSize()
 #minimum font size
 if size<16:
 	font.setPointSize(font.pointSize()+4)
+	config.setFont(font)
 config.toggleAutoNavigation()
 app.exec_()

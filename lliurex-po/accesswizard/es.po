@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-20 09:10+0100\n"
-"PO-Revision-Date: 2024-12-20 09:11+0100\n"
+"POT-Creation-Date: 2026-03-26 13:42+0100\n"
+"PO-Revision-Date: 2026-03-26 13:45+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es\n"
@@ -18,65 +18,100 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.0.1\n"
 
-#: ../src/stacks/accessibility.py:16
+#: ../src/accesswizard.py:13
+msgid "Wizard of LliureX for configuring accessibility tools"
+msgstr "Asistente de LliureX para configurar las herramientas de accesibilidad"
+
+#: ../src/accesswizard.py:14
+msgid "Press \"Escape\" to stop reading. \"F5\" for read it from beginning"
+msgstr "Pulsa \"Escape\" para parar de leer. \"F5\" para volver a leer"
+
+#: ../src/accesswizard.py:15
+msgid "Navigate through options with \"Tab\" or arrows."
+msgstr "Para navegar usar \"Tabulador\" o las flechas del teclado"
+
+#: ../src/stacks/accessibility.py:15
 msgid "System Accessibility"
 msgstr "Accesibilidad del sistema"
 
-#: ../src/stacks/accessibility.py:17
+#: ../src/stacks/accessibility.py:16
 msgid "Plasma Accessibility module"
 msgstr "Módulo de accesibilidad de Plasma"
 
-#: ../src/stacks/accessibility.py:18
+#: ../src/stacks/accessibility.py:17
 msgid "Joystick as mouse"
 msgstr "Usar joystick como ratón"
 
-#: ../src/stacks/accessibility.py:19
+#: ../src/stacks/accessibility.py:18
 msgid "Configure a gamepad/joystick as mouse"
 msgstr "Configura un gamepd o joystick para su uso como ratón"
 
-#: ../src/stacks/accessibility.py:20 ../src/stacks/accessibility.py:27
+#: ../src/stacks/accessibility.py:19
+msgid "Browsers accessibility"
+msgstr "Accesibilidad de los navegadores"
+
+#: ../src/stacks/accessibility.py:20
+msgid "Selection of addons and configurations for accessible browsing"
+msgstr ""
+"Selección de extensiones y configuraciones para mejorar la accesibilidad de "
+"los navegadores"
+
+#: ../src/stacks/accessibility.py:21 ../src/stacks/accessibility.py:28
 msgid "Accessibility"
 msgstr "Accesibilidad"
 
-#: ../src/stacks/accessibility.py:21
+#: ../src/stacks/accessibility.py:22
 msgid "Accessibility Dock"
 msgstr "Barra de accesibilidad"
 
-#: ../src/stacks/accessibility.py:22
+#: ../src/stacks/accessibility.py:23
 msgid "Dock with customizable fast actions"
 msgstr "Barra configurable de acciones rápidas"
 
-#: ../src/stacks/accessibility.py:23
+#: ../src/stacks/accessibility.py:24
 msgid "Webcam as mouse"
 msgstr "Usar webcam como ratón"
 
-#: ../src/stacks/accessibility.py:24
+#: ../src/stacks/accessibility.py:25
 msgid "Webcam based mouse control"
 msgstr "Controla el ratón usando captura de movimientos desde la webcam"
 
-#: ../src/stacks/accessibility.py:25
+#: ../src/stacks/accessibility.py:26
 msgid "LliureX TTS"
 msgstr "Lliurex TTS"
 
-#: ../src/stacks/accessibility.py:26
+#: ../src/stacks/accessibility.py:27
 msgid "Configure Lliurex TTS addon"
 msgstr "Ajustes de la extensión TTS de LliureX"
 
-#: ../src/stacks/accessibility.py:28
+#: ../src/stacks/accessibility.py:29
 msgid "Orca"
 msgstr "ORCA"
 
-#: ../src/stacks/accessibility.py:29
+#: ../src/stacks/accessibility.py:30
 msgid "Open Orca configuration tool"
 msgstr "Abrir herramienta de configuración de ORCA"
 
-#: ../src/stacks/accessibility.py:30
+#: ../src/stacks/accessibility.py:31
 msgid "Accesibility options"
 msgstr "Opciones de accesibilidad"
 
-#: ../src/stacks/accessibility.py:31
+#: ../src/stacks/accessibility.py:32
 msgid "Settings which do the system more accessible"
 msgstr "Ajustes para hacer el sistema más accesible"
+
+#: ../src/stacks/browsers.py:16 ../src/stacks/browsers.py:17
+msgid "Browser addons"
+msgstr "Extensions de navegador"
+
+#: ../src/stacks/browsers.py:18
+msgid "Accesible browsing"
+msgstr "Navegación accesible"
+
+#: ../src/stacks/browsers.py:19
+msgid "Settings and addons for improved browser accessibility"
+msgstr ""
+"Colección de heraamientas para mejorar la accesibilidad de los navegadores"
 
 #: ../src/stacks/effects.py:14
 msgid "Effects"
@@ -139,44 +174,48 @@ msgid "Other Settings"
 msgstr "Otros ajustes"
 
 #: ../src/stacks/settings.py:21
+msgid "Mono audio"
+msgstr "Sonido mono"
+
+#: ../src/stacks/settings.py:22
 msgid "Start session with profile"
 msgstr "Cargar perfil al arrancar"
 
-#: ../src/stacks/settings.py:22
+#: ../src/stacks/settings.py:23
 msgid "Save as..."
 msgstr "Guardar como..."
 
-#: ../src/stacks/settings.py:23
+#: ../src/stacks/settings.py:24
 msgid "Accesswizard profile"
 msgstr "Perfil de accesswizard"
 
-#: ../src/stacks/settings.py:24
+#: ../src/stacks/settings.py:25
 msgid "Save current profile"
 msgstr "Guardar perfil actual"
 
-#: ../src/stacks/settings.py:25
+#: ../src/stacks/settings.py:26
 msgid "Enable ORCA in login screen"
 msgstr "Activar ORCA en la pantalla de acceso"
 
-#: ../src/stacks/settings.py:26
+#: ../src/stacks/settings.py:27
 msgid "Beep when login screen loads"
 msgstr "Pita cuando arranca el ordenador"
 
-#: ../src/stacks/settings.py:27
+#: ../src/stacks/settings.py:28
 msgid "Beep on session start"
 msgstr "Emite un sonido al inciar sesión"
 
-#: ../src/stacks/settings.py:28
+#: ../src/stacks/settings.py:29
 msgid "Advanced settings"
 msgstr "Configuración avanzada"
 
-#: ../src/stacks/theme.py:14
-msgid "Set global color scheme"
-msgstr "Esquema de color global"
-
-#: ../src/stacks/theme.py:15
+#: ../src/stacks/theme.py:14 ../src/stacks/theme.py:105
 msgid "Color scheme"
 msgstr "Esquema de color"
+
+#: ../src/stacks/theme.py:15
+msgid "Set global color scheme"
+msgstr "Esquema de color global"
 
 #: ../src/stacks/theme.py:16 ../src/stacks/theme.py:22
 msgid "Appearance"
@@ -186,37 +225,33 @@ msgstr "Apariencia"
 msgid "Look and feel options"
 msgstr "Opciones de apariencia"
 
-#: ../src/stacks/theme.py:18
-msgid "Configure system fonts"
-msgstr "Configura las fuentes del sistema"
-
-#: ../src/stacks/theme.py:19 ../src/stacks/theme.py:100
+#: ../src/stacks/theme.py:18 ../src/stacks/theme.py:107
 msgid "Fonts"
 msgstr "Fuentes"
 
-#: ../src/stacks/theme.py:20
-msgid "Set global theme"
-msgstr "Establece un tema global"
+#: ../src/stacks/theme.py:19
+msgid "Configure system fonts"
+msgstr "Configura las fuentes del sistema"
 
-#: ../src/stacks/theme.py:21 ../src/stacks/theme.py:96
+#: ../src/stacks/theme.py:20 ../src/stacks/theme.py:103
 msgid "Theme"
 msgstr "Tema"
 
-#: ../src/stacks/theme.py:23
-msgid "Set cursor theme and size"
-msgstr "Ajustar tamaño y tema del cursor"
+#: ../src/stacks/theme.py:21
+msgid "Set global theme"
+msgstr "Establece un tema global"
 
-#: ../src/stacks/theme.py:24 ../src/stacks/theme.py:102
+#: ../src/stacks/theme.py:23 ../src/stacks/theme.py:109
 msgid "Mouse"
 msgstr "Ratón"
+
+#: ../src/stacks/theme.py:24
+msgid "Set cursor theme and size"
+msgstr "Ajustar tamaño y tema del cursor"
 
 #: ../src/stacks/theme.py:25
 msgid "Appearance customizing"
 msgstr "Personalizar apariencia"
-
-#: ../src/stacks/theme.py:98
-msgid "Color Scheme"
-msgstr "Esquema de color"
 
 #: ../src/tools/ttsmanager.py:19
 msgid "Screen reader"
@@ -388,13 +423,14 @@ msgstr "Configurar"
 msgid "Toggle visibility"
 msgstr "Alternar visibilidad"
 
-#: ../kwin/scripts/kwin-ocrwindow/contents/ui/tts.py:115
-msgid "TTS finished. Listen?"
-msgstr "Lectura de imagen preparada. ¿Escuchar?"
+#~ msgid "Color Scheme"
+#~ msgstr "Esquema de color"
 
-#: ../kwin/scripts/kwin-ocrwindow/contents/ui/tts.py:116
-msgid "Image was processesed"
-msgstr "La imagen se ha procesado"
+#~ msgid "TTS finished. Listen?"
+#~ msgstr "Lectura de imagen preparada. ¿Escuchar?"
+
+#~ msgid "Image was processesed"
+#~ msgstr "La imagen se ha procesado"
 
 #~ msgid "Window Effects"
 #~ msgstr "Efectos de ventana"

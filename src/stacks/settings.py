@@ -38,7 +38,7 @@ class settings(QStackedWindowItem):
 		    longDesc=i18n.get('DESCRIPTION'),
 			icon="preferences-other",
 			tooltip=i18n.get("TOOLTIP"),
-			index=4,
+			index=5,
 			visible=True)
 		self.enabled=True
 		self.accesshelper=llxaccessibility.client()

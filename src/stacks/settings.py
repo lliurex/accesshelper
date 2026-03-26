@@ -2,9 +2,9 @@
 from llxaccessibility import llxaccessibility
 import os,json
 import subprocess
-from PySide2.QtWidgets import QApplication,QLabel,QGridLayout,QCheckBox,QHeaderView,QTableWidgetItem,QAbstractScrollArea,QComboBox,QPushButton,QFileDialog,QInputDialog,QTableWidget
+from PySide2.QtWidgets import QApplication,QLabel,QGridLayout,QCheckBox,QComboBox,QPushButton,QFileDialog,QInputDialog,QListWidget,QHBoxLayout,QWidget
 from PySide2 import QtGui
-from PySide2.QtCore import Qt
+from PySide2.QtCore import Qt,QSize
 from QtExtraWidgets import QStackedWindowItem, QTableTouchWidget, QPushInfoButton
 import locale
 import gettext
@@ -45,51 +45,71 @@ class settings(QStackedWindowItem):
 	#def __init__
 
 	def __initScreen__(self):
-		self.box=QGridLayout()
-		self.setLayout(self.box)
-		self.tblGrid=QTableTouchWidget()
-		self.tblGrid.keyPressEvent2=self.tblGrid.keyPressEvent
-		self.tblGrid.keyPressEvent=self.fakeKey
-		self.tblGrid.setShowGrid(False)
-		self.tblGrid.setStyleSheet('QTableView{padding:5px} QTableView::item {border-bottom: 1px solid #d6d9dc;margin-bottom:5px} #btn{margin-left:10px;margin-right:10px}')
-		self.tblGrid.setColumnCount(2)
-		self.tblGrid.setRowCount(9)
-		self.tblGrid.verticalHeader().hide()
-		self.tblGrid.horizontalHeader().hide()
-		self.tblGrid.setSelectionBehavior(QTableWidget.SelectRows)
-		self.tblGrid.setSelectionMode(QTableWidget.SingleSelection)
-		self.tblGrid.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
-		self.tblGrid.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-		self.tblGrid.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
-		font=self.tblGrid.font()
-		self.tblGrid.verticalHeader().setMinimumSectionSize(font.weight()/10)
-		self.box.addWidget(self.tblGrid)
+		box=QGridLayout(self)
+		self.lstOptions=QListWidget()
+		self.lstOptions.keyPressEvent2=self.lstOptions.keyPressEvent
+		self.lstOptions.keyPressEvent=self.fakeKey
+		box.addWidget(self.lstOptions)
 		self.btnAccept.clicked.connect(self.writeConfig)
 		self.chkBeGr=QCheckBox(i18n["GRUB"])
-		self.tblGrid.setCellWidget(0,0,self.chkBeGr)
+		self.lstOptions.addItem("")
+		rHeight=self.chkBeGr.sizeHint().height()*2
+		item=self.lstOptions.item(self.lstOptions.count()-1)
+		item.setSizeHint(QSize(0,rHeight))
+		self.lstOptions.setItemWidget(item,self.chkBeGr)
 		self.chkBeSd=QCheckBox(i18n["SDDM_BEEP"])
-		self.tblGrid.setCellWidget(1,0,self.chkBeSd)
+		self.lstOptions.addItem("")
+		item=self.lstOptions.item(self.lstOptions.count()-1)
+		item.setSizeHint(QSize(0,rHeight))
+		self.lstOptions.setItemWidget(item,self.chkBeSd)
 		self.chkBeSe=QCheckBox(i18n["SESSION_BEEP"])
-		self.tblGrid.setCellWidget(2,0,self.chkBeSe)
+		self.lstOptions.addItem("")
+		item=self.lstOptions.item(self.lstOptions.count()-1)
+		item.setSizeHint(QSize(0,rHeight))
+		self.lstOptions.setItemWidget(item,self.chkBeSe)
 		self.chkOrSd=QCheckBox(i18n["SDDM_ORCA"])
-		self.tblGrid.setCellWidget(3,0,self.chkOrSd)
+		self.lstOptions.addItem("")
+		item=self.lstOptions.item(self.lstOptions.count()-1)
+		item.setSizeHint(QSize(0,rHeight))
+		self.lstOptions.setItemWidget(item,self.chkOrSd)
 		self.chkMono=QCheckBox(i18n["MONO"])
-		self.tblGrid.setCellWidget(4,0,self.chkMono)
+		self.lstOptions.addItem("")
+		item=self.lstOptions.item(self.lstOptions.count()-1)
+		item.setSizeHint(QSize(0,rHeight))
+		self.lstOptions.setItemWidget(item,self.chkMono)
+		#Profile widget
+		wdg=QWidget()
+		hlay=QHBoxLayout(wdg)
 		self.chkProf=QCheckBox(i18n["PROFILE"])
-		self.tblGrid.setCellWidget(5,0,self.chkProf)
-		self.cmbProf=QComboBox()
 		self.chkProf.clicked.connect(lambda: self.cmbProf.setEnabled(self.chkProf.isChecked()))
-		self.tblGrid.setCellWidget(5,1,self.cmbProf)
+		hlay.addWidget(self.chkProf,Qt.Alignment(0))
+		hlay.addSpacing(6)
+		self.cmbProf=QComboBox()
+		hlay.addWidget(self.cmbProf,Qt.Alignment(1),Qt.AlignLeft)
+		self.lstOptions.addItem("")
+		item=self.lstOptions.item(self.lstOptions.count()-1)
+		item.setSizeHint(QSize(0,rHeight))
+		self.lstOptions.setItemWidget(item,wdg)
 		self.chkAuDo=QCheckBox(i18n["DOCK"])
-		self.tblGrid.setCellWidget(6,0,self.chkAuDo)
+		self.lstOptions.addItem("")
+		item=self.lstOptions.item(self.lstOptions.count()-1)
+		self.lstOptions.setItemWidget(item,self.chkAuDo)
+		#Buttons widget
+		wdg=QWidget()
+		hlay2=QHBoxLayout(wdg)
 		self.btnSave=QPushButton(i18n["SAVE"])
 		self.btnSave.clicked.connect(self._saveProfile)
 		self.btnSave.setObjectName("btn")
-		self.tblGrid.setCellWidget(7,0,self.btnSave)
+		hlay2.addWidget(self.btnSave,Qt.AlignCenter)
+		hlay2.addSpacing(self.btnSave.sizeHint().width()*2)
 		self.btnLoad=QPushButton(i18n["LOAD"])
 		self.btnLoad.setObjectName("btn")
 		self.btnLoad.clicked.connect(self._loadProfile)
-		self.tblGrid.setCellWidget(7,1,self.btnLoad)
+		hlay2.addWidget(self.btnLoad,Qt.AlignCenter)
+		self.lstOptions.addItem("")
+		item=self.lstOptions.item(self.lstOptions.count()-1)
+		item.setSizeHint(QSize(0,rHeight))
+		self.lstOptions.setItemWidget(item,wdg)
 	#def __initScreen__
 
 	def fakeKey(self,*args):
@@ -97,13 +117,13 @@ class settings(QStackedWindowItem):
 		if ev.key()==Qt.Key_Left:
 			self.parent.lstNav.setFocus()
 		else:
-			self.tblGrid.keyPressEvent2(*args)
+			self.lstOptions.keyPressEvent2(*args)
 			ev.ignore()
 		return True
 	#def fakeKey
 
 	def focusInEvent(self,*args):
-		self.tblGrid.setFocus()
+		self.lstOptions.setFocus()
 	#def focusInEvent
 
 

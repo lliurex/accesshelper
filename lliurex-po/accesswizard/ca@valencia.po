@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-26 13:42+0100\n"
-"PO-Revision-Date: 2026-03-26 13:49+0100\n"
+"POT-Creation-Date: 2026-03-27 12:26+0100\n"
+"PO-Revision-Date: 2026-03-27 12:28+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ca\n"
@@ -30,7 +30,7 @@ msgstr ""
 
 #: ../src/accesswizard.py:15
 msgid "Navigate through options with \"Tab\" or arrows."
-msgstr "Navegar per les opciones mitjançant \"Tab\" o les fletxes del teclat"
+msgstr "Navegar per les opciones mitjançant \"Tab\" o les fletxes del teclat."
 
 #: ../src/stacks/accessibility.py:15
 msgid "System Accessibility"
@@ -353,57 +353,61 @@ msgstr "Avìs del Orca"
 msgid "Due a system error Plasma has been restarted"
 msgstr "A causa d'un error del sistema Plasma s'ha reiniciat"
 
-#: ../src/dock/accessdock-config.py:16
+#: ../src/dock/accessdock-config.py:17
 msgid "Add"
 msgstr "Afegir"
 
-#: ../src/dock/accessdock-config.py:17
+#: ../src/dock/accessdock-config.py:18
 msgid "Default apps"
 msgstr "Per defecte"
 
-#: ../src/dock/accessdock-config.py:18
+#: ../src/dock/accessdock-config.py:19
 msgid "Rearrange or modify buttons for the dock"
 msgstr "Reorganitzar o modificar les accions de la barra"
 
-#: ../src/dock/accessdock-config.py:19
+#: ../src/dock/accessdock-config.py:20
 msgid "This will delete all contents"
 msgstr "S'esborrarà tota la configuració"
 
-#: ../src/dock/accessdock-config.py:20
+#: ../src/dock/accessdock-config.py:21
 msgid "Delete"
 msgstr "Eliminar"
 
-#: ../src/dock/accessdock-config.py:21
+#: ../src/dock/accessdock-config.py:22
 msgid "Down"
 msgstr "Baixar"
 
-#: ../src/dock/accessdock-config.py:22
+#: ../src/dock/accessdock-config.py:23
 msgid "Edit"
 msgstr "Editar"
 
-#: ../src/dock/accessdock-config.py:23
+#: ../src/dock/accessdock-config.py:24
 msgid "Keyboard shortcut"
 msgstr "Drecera de teclat"
 
-#: ../src/dock/accessdock-config.py:24
+#: ../src/dock/accessdock-config.py:25
 msgid "Push to assign"
 msgstr "Premer per assignar"
 
-#: ../src/dock/accessdock-config.py:25
+#: ../src/dock/accessdock-config.py:26
+msgid "already assigned"
+msgstr "ja es troba assignada"
+
+#: ../src/dock/accessdock-config.py:27
 msgid "Items per row"
 msgstr "Elemets per línia"
 
-#: ../src/dock/accessdock-config.py:26
+#: ../src/dock/accessdock-config.py:28
 msgid "Launch at session start"
 msgstr "Carregar amb l'inici de sessió"
 
-#: ../src/dock/accessdock-config.py:27
+#: ../src/dock/accessdock-config.py:29
 msgid "Displays launcher name at fullscreen on mouse over"
 msgstr ""
 "Mostra el nom del llançador a pantalla completa al posicionar el punter "
 "damunt"
 
-#: ../src/dock/accessdock-config.py:28
+#: ../src/dock/accessdock-config.py:30
 msgid "Up"
 msgstr "Pujar"
 

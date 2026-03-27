@@ -243,7 +243,6 @@ class QPushButtonDock(QPushButton):
 	#def _renderBtn
 
 	def _beginLaunch(self,*args):
-		self._toggle()
 		cmd=self.data.get("Exec","")
 		if len(cmd)>0:
 			self.setEnabled(False)
@@ -254,7 +253,7 @@ class QPushButtonDock(QPushButton):
 	#def _beginLaunch
 
 	def _endLaunch(self,*args):
-		self._toggle()
+		#self._toggle()
 		if self.isEnabled()==False:
 			self.setEnabled(True)
 		else:

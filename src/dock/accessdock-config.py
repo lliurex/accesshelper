@@ -1,9 +1,10 @@
 #!/usr/bin/python3
-import dbus,dbus.exceptions
-import os,sys,shutil
-from PySide6.QtWidgets import QApplication,QGridLayout,QWidget,QPushButton,QHeaderView,QLabel,QSpinBox,QTableWidgetItem,QAbstractItemView,QCheckBox,QFrame,QHBoxLayout,QMessageBox
-from PySide6.QtCore import Qt,Signal,QSize,QThread,QPoint,QObject
-from PySide6.QtGui import QIcon,QPixmap,QCursor,QColor,QDrag,QGuiApplication
+import dbus
+import os,sys,shutil,time
+import notify2
+from PySide6.QtWidgets import QApplication,QGridLayout,QWidget,QPushButton,QHeaderView,QLabel,QSpinBox,QTableWidgetItem,QAbstractItemView,QCheckBox,QFrame,QHBoxLayout,QVBoxLayout,QMessageBox
+from PySide6.QtCore import Qt,Signal,QSize,QObject
+from PySide6.QtGui import QIcon,QCursor,QGuiApplication
 from QtExtraWidgets import QTableTouchWidget,QHotkeyButton
 import lib.libdock as libdock
 import lib.launchers as launchers
@@ -22,6 +23,7 @@ i18n={"ADD":_("Add"),
 	"EDI":_("Edit"),
 	"HKEY":_("Keyboard shortcut"),
 	"HKEYBTN":_("Push to assign"),
+	"HKEYERR":_("already assigned"),
 	"MAX":_("Items per row"),
 	"STRT":_("Launch at session start"),
 	"TOOLTIPBIG":_("Displays launcher name at fullscreen on mouse over"),
@@ -41,6 +43,7 @@ class dock(accessdock.accessdock):
 		self.realTable=None
 		self._fakeDock()
 		self.fakeTable=QTableTouchWidget()
+		self.fakeTable.setEditTriggers(QAbstractItemView.NoEditTriggers) 
 		self.fakeTable.verticalHeader().hide()
 		self.fakeTable.setDragEnabled(True)
 		self.fakeTable.setAcceptDrops(True)
@@ -200,81 +203,76 @@ class accessconf(QWidget):
 	def _initScreen(self):
 		layout=QGridLayout()
 		self.setLayout(layout)
-		self._renderDockConfig()
-		self._renderOptions()
+		self._renderGui()
 	#def _initScreen
 
-	def _renderDockConfig(self):
-		layout=self.layout()
-		frm=QFrame()
-		frm.setFrameShape(QFrame.Box)
-		frm.setLayout(QGridLayout())
-		layout.addWidget(frm,0,0,1,2)
-		layout=frm.layout()
-		self.dock=dock()
-		self.dock.signals.changed.connect(self._saveChanges)
-		self.dock.signals.itemSelectionChanged.connect(self._syncListIdx)
-		lbl=QLabel(i18n.get("MAX"))
-		lbl.setVisible(False)
-		self.max=QSpinBox()
-		self.max.setVisible(False)
-		self.list=QTableTouchWidget(0,1)
-		self.list.itemSelectionChanged.connect(self._syncDockIdx)
-		self.list.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
-		self.list.horizontalHeader().hide()
-		self.list.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+	def _defLaunchersList(self):
+		wdg=QTableTouchWidget(0,1)
+		wdg.setEditTriggers(QAbstractItemView.NoEditTriggers) 
+		wdg.itemSelectionChanged.connect(self._syncDockIdx)
+		wdg.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+		wdg.horizontalHeader().hide()
+		wdg.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 		#self.list.setSelectionBehavior(self.list.SelectRows)
 		#self.list.setSelectionMode(self.list.SingleSelection)
-		self.list.itemChanged.connect(self._change)
+		wdg.itemChanged.connect(self._change)
+		return(wdg)
+	#def _defLaunchersList
+
+	def _defScrlList(self):
+		wdg=QWidget()
+		lay=QVBoxLayout(wdg)
 		self.btnIup=QPushButton()
 		self.btnIup.setAccessibleName(i18n["UP"])
 		self.btnIup.setIcon(QIcon.fromTheme("arrow-up"))
 		self.btnIup.setEnabled(False)
 		self.btnIup.clicked.connect(self._itemUp)
+		lay.addWidget(self.btnIup,Qt.AlignTop)
 		self.btnIdo=QPushButton()
 		self.btnIdo.setAccessibleName(i18n["UP"])
 		self.btnIdo.setIcon(QIcon.fromTheme("arrow-down"))
 		self.btnIdo.setEnabled(False)
 		self.btnIdo.clicked.connect(self._itemDown)
-		self.btnDef=QPushButton(i18n.get("BTNDEF"))
-		self.btnDef.clicked.connect(self._defAction)
-		self.btnAdd=QPushButton(i18n.get("ADD"))
-		self.btnAdd.clicked.connect(self._addAction)
+		lay.addWidget(self.btnIdo,Qt.AlignBottom)
+		return(wdg)
+	#def _defScrlList
+
+	def _defButtonsEdit(self):
+		wdg=QWidget()
+		lay=QVBoxLayout(wdg)
+		btnDef=QPushButton(i18n.get("BTNDEF"))
+		btnDef.clicked.connect(self._defAction)
+		lay.addWidget(btnDef)
+		btnAdd=QPushButton(i18n.get("ADD"))
+		btnAdd.clicked.connect(self._addAction)
+		lay.addWidget(btnAdd)
 		self.btnDel=QPushButton(i18n.get("DEL"))
 		self.btnDel.clicked.connect(self._delAction)
 		self.btnDel.setEnabled(False)
+		lay.addWidget(self.btnDel)
 		self.btnEdi=QPushButton(i18n.get("EDI"))
 		self.btnEdi.clicked.connect(self._ediAction)
 		self.btnEdi.setEnabled(False)
-		layout.addWidget(QLabel(i18n["DCK"]),0,0,1,4)
-		layout.addWidget(self.dock,1,0,1,4)
-		layout.addWidget(self.list,2,0,4,2)
-		layout.addWidget(self.btnIup,2,2,2,1,Qt.AlignTop|Qt.AlignLeft)
-		layout.addWidget(self.btnIdo,4,2,1,1,Qt.AlignBottom|Qt.AlignLeft)
-		layout.addWidget(self.btnDef,2,3,1,1,Qt.AlignTop)
-		layout.addWidget(self.btnAdd,3,3,1,1,Qt.AlignTop)
-		layout.addWidget(self.btnEdi,4,3,1,1,Qt.AlignTop)
-		layout.addWidget(self.btnDel,5,3,1,1,Qt.AlignTop)
-	#def _renderDockConfig
+		lay.addWidget(self.btnEdi)
+		return(wdg)
+	#def _defButtonsEdit
 
-	def _renderOptions(self):
-		layout=self.layout()
-		row=layout.rowCount()
+	def _defOptions(self):
 		frm=QFrame()
-		frm.setLayout(QGridLayout())
 		frm.setFrameShape(QFrame.HLine)
-		layout.addWidget(frm,row,0,1,2)
+		frm.setLayout(QGridLayout())
+		tlayout=frm.layout()
 		self.chkStart=QCheckBox(i18n["STRT"])
 		self.chkStart.setChecked(self._chkStartStatus())
 		self.chkStart.stateChanged.connect(self._toggleStart)
-		layout.addWidget(self.chkStart,row+1,0,1,2)
+		tlayout.addWidget(self.chkStart,0,0,1,2)
 		self.chkToolT=QCheckBox(i18n["TOOLTIPBIG"])
 		self.chkToolT.stateChanged.connect(self._toggleToolT)
-		layout.addWidget(self.chkToolT,row+2,0,1,1)
+		tlayout.addWidget(self.chkToolT,1,0,1,1)
 		wdg=QWidget()
 		hlay=QHBoxLayout()
 		wdg.setLayout(hlay)
-		hlay.addWidget(QLabel(i18n["HKEY"]))
+		hlay.addWidget(QLabel(i18n["HKEY"]),Qt.AlignLeft)
 		btnHkeyText=self.libdock.getShortcut()
 		if len(btnHkeyText.strip())>0:
 			btnHkeyText=btnHkeyText.split(",")[0]
@@ -282,9 +280,36 @@ class accessconf(QWidget):
 		else:
 			self.btnHkey=QHotkeyButton(i18n["HKEYBTN"])
 		self.btnHkey.hotkeyAssigned.connect(self._assignHotkey)
-		hlay.addWidget(self.btnHkey)
-		layout.addWidget(wdg,row+3,0)
-	#def _renderOptions
+		hlay.addWidget(self.btnHkey,Qt.AlignLeft)
+		tlayout.addWidget(wdg,2,0,1,1,Qt.AlignLeft)
+		return(frm)
+	#def _defOptions
+
+	def _renderGui(self):
+		layout=self.layout()
+		frm=QFrame()
+		frm.setFrameShape(QFrame.Box)
+		frm.setLayout(QGridLayout())
+		layout.addWidget(frm,0,0,1,2)
+		tlayout=frm.layout()
+		self.dock=dock()
+		self.dock.signals.changed.connect(self._saveChanges)
+		self.dock.signals.itemSelectionChanged.connect(self._syncListIdx)
+		lbl=QLabel(i18n.get("MAX"))
+		lbl.setVisible(False)
+		self.max=QSpinBox()
+		self.max.setVisible(False)
+		self.list=self._defLaunchersList()
+		scrList=self._defScrlList()
+		btnsEdit=self._defButtonsEdit()
+		tlayout.addWidget(QLabel(i18n["DCK"]),0,0,1,3)
+		tlayout.addWidget(self.dock,1,0,1,3)
+		tlayout.addWidget(self.list,2,0,1,1)
+		tlayout.addWidget(scrList,2,1,1,1)
+		tlayout.addWidget(btnsEdit,2,2,1,1)
+		options=self._defOptions()
+		layout.addWidget(options,1,0,1,1)
+	#def _renderGui
 
 	def _change(self,*args):
 		if args[0].isSelected():
@@ -308,10 +333,21 @@ class accessconf(QWidget):
 				f.writelines(nfcontents)
 	#def _change
 
-	def _assignHotkey(self):
-		hkey=self.btnHkey.text()
+	def _assignHotkey(self,hkAction):
+		hkey=hkAction.get("hotkey","")
 		hkey=hkey.replace("Any","Space")
-		self.libdock.setShortcut(hkey)
+		haction=hkAction.get("action","")
+		reserved=["ctrl+x","ctrl+z","ctrl+c","ctrl+p","ctrl+b","ctrl+a","ctrl+e","ctrl+u","ctrl+y","ctrl+d","ctrl+v","return"]
+		if haction!="" or hkey.lower() in reserved:
+			notify2.init("AccessDock")
+			notification=notify2.Notification("{}".format(hkey),i18n["HKEYERR"].capitalize())
+			notification.show()
+			self.btnHkey.revertHotkey()
+		else:
+			self.libdock.setShortcut(hkey)
+			self.btnHkey.seq=[]
+		self.list.setFocus()
+		time.sleep(0.1)
 	#def _assignHotkey
 
 	def updateScreen(self):
@@ -322,7 +358,11 @@ class accessconf(QWidget):
 		launchers=self.libdock.getLaunchers()
 		for launcher in launchers:
 			item=QTableWidgetItem()
-			item.setText(launcher[1].get("Name",launcher[0]))
+			name=launcher[1].get("Name",launcher[0])
+			desc=launcher[1].get("Comment","")
+			if len(desc)>0:
+				item.setToolTip(desc)
+			item.setText(name)
 			self.list.setRowCount(self.list.rowCount()+1)
 			self.list.setItem(self.list.rowCount()-1,self.list.columnCount()-1,item)
 		self.chkStart.setChecked(self._chkStartStatus())
@@ -478,6 +518,8 @@ dock=accessconf()
 
 icon=QIcon(":/icons/accessdock.png")
 dock.setWindowIcon(icon)
+dock.setMinimumWidth(1000)
+dock.setMinimumHeight(600)
 QGuiApplication.setDesktopFileName("accessdock")
 dock.show()
-app.exec()
+app.exec_()

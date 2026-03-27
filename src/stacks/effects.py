@@ -45,6 +45,8 @@ class effects(QStackedWindowItem):
 	def __initScreen__(self):
 		lay=QGridLayout()
 		self.lstApps=QListWidget()
+		self.lstApps.keyPressEvent2=self.lstApps.keyPressEvent
+		self.lstApps.keyPressEvent=self.fakeKey
 		lay.addWidget(self.lstApps)
 		self.setLayout(lay)
 		self._renderGui()
@@ -62,6 +64,21 @@ class effects(QStackedWindowItem):
 			self.accesshelper.launchKcmModule(mod)
 		args[0].setEnabled(True)
 	#def _launch
+
+	def fakeKey(self,*args):
+		ev=args[0]
+		if ev.key()==Qt.Key_Left:
+			self.parent.lstNav.setFocus()
+		else:
+			self.lstApps.keyPressEvent2(*args)
+			ev.ignore()
+		return True
+	#def fakeKey
+
+	def focusInEvent(self,*args):
+		self.lstApps.setFocus()
+	#def focusInEvent
+
 
 	def _renderBtn(self,i18Text,i18Desc,img=""):
 		btn=QPushInfoButton()

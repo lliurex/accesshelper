@@ -1,7 +1,11 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Window OCR
-Comment=
+Name[es]=OCR a ventana
+Name[ca]=OCR a finestra
+Comment=Reads active window contents with ocr
+Comment[es]=Lee el contenido de la ventana activa a través de OCR
+Comment[ca]=Llig el contingut de la finestra activa mitjançant OCR
 Icon=preferences-system-windows-effect-dialog-parent
 Path=/usr/share/kwin/scripts/ocrwindow/metadata.json
 Exec=/usr/share/accesswizard/dock/tools/loadScript.sh /usr/share/kwin/scripts/ocrwindow/metadata.json add

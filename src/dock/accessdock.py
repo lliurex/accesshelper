@@ -243,7 +243,6 @@ class QPushButtonDock(QPushButton):
 	#def _renderBtn
 
 	def _beginLaunch(self,*args):
-		self._toggle()
 		cmd=self.data.get("Exec","")
 		if len(cmd)>0:
 			self.setEnabled(False)
@@ -254,7 +253,7 @@ class QPushButtonDock(QPushButton):
 	#def _beginLaunch
 
 	def _endLaunch(self,*args):
-		self._toggle()
+		#self._toggle()
 		if self.isEnabled()==False:
 			self.setEnabled(True)
 		else:
@@ -600,4 +599,4 @@ if __name__=="__main__":
 	objbus.connect_to_signal("isDockVisibleSignal",dock._isVisible,dbus_interface="net.lliurex.accessibility.Dock")
 	dclient=dbusMethods(bus,dock)
 	dock.show()
-	app.exec()
+	app.exec_()

@@ -1,6 +1,7 @@
 #!/usr/bin/python3
-import dbus,dbus.exceptions
-import os,sys,shutil
+import dbus
+import os,sys,shutil,time
+import notify2
 from PySide2.QtWidgets import QApplication,QGridLayout,QWidget,QPushButton,QHeaderView,QLabel,QSpinBox,QTableWidgetItem,QAbstractItemView,QCheckBox,QFrame,QHBoxLayout,QVBoxLayout,QMessageBox
 from PySide2.QtCore import Qt,Signal,QSize,QObject
 from PySide2.QtGui import QIcon,QCursor,QGuiApplication
@@ -22,6 +23,7 @@ i18n={"ADD":_("Add"),
 	"EDI":_("Edit"),
 	"HKEY":_("Keyboard shortcut"),
 	"HKEYBTN":_("Push to assign"),
+	"HKEYERR":_("already assigned"),
 	"MAX":_("Items per row"),
 	"STRT":_("Launch at session start"),
 	"TOOLTIPBIG":_("Displays launcher name at fullscreen on mouse over"),
@@ -41,6 +43,7 @@ class dock(accessdock.accessdock):
 		self.realTable=None
 		self._fakeDock()
 		self.fakeTable=QTableTouchWidget()
+		self.fakeTable.setEditTriggers(QAbstractItemView.NoEditTriggers) 
 		self.fakeTable.verticalHeader().hide()
 		self.fakeTable.setDragEnabled(True)
 		self.fakeTable.setAcceptDrops(True)
@@ -205,6 +208,7 @@ class accessconf(QWidget):
 
 	def _defLaunchersList(self):
 		wdg=QTableTouchWidget(0,1)
+		wdg.setEditTriggers(QAbstractItemView.NoEditTriggers) 
 		wdg.itemSelectionChanged.connect(self._syncDockIdx)
 		wdg.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
 		wdg.horizontalHeader().hide()
@@ -329,10 +333,21 @@ class accessconf(QWidget):
 				f.writelines(nfcontents)
 	#def _change
 
-	def _assignHotkey(self):
-		hkey=self.btnHkey.text()
+	def _assignHotkey(self,hkAction):
+		hkey=hkAction.get("hotkey","")
 		hkey=hkey.replace("Any","Space")
-		self.libdock.setShortcut(hkey)
+		haction=hkAction.get("action","")
+		reserved=["ctrl+x","ctrl+z","ctrl+c","ctrl+p","ctrl+b","ctrl+a","ctrl+e","ctrl+u","ctrl+y","ctrl+d","ctrl+v","return"]
+		if haction!="" or hkey.lower() in reserved:
+			notify2.init("AccessDock")
+			notification=notify2.Notification("{}".format(hkey),i18n["HKEYERR"].capitalize())
+			notification.show()
+			self.btnHkey.revertHotkey()
+		else:
+			self.libdock.setShortcut(hkey)
+			self.btnHkey.seq=[]
+		self.list.setFocus()
+		time.sleep(0.1)
 	#def _assignHotkey
 
 	def updateScreen(self):

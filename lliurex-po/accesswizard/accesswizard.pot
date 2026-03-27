@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-26 13:42+0100\n"
+"POT-Creation-Date: 2026-03-27 12:26+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -349,55 +349,59 @@ msgstr ""
 msgid "Due a system error Plasma has been restarted"
 msgstr ""
 
-#: ../src/dock/accessdock-config.py:16
+#: ../src/dock/accessdock-config.py:17
 msgid "Add"
 msgstr ""
 
-#: ../src/dock/accessdock-config.py:17
+#: ../src/dock/accessdock-config.py:18
 msgid "Default apps"
 msgstr ""
 
-#: ../src/dock/accessdock-config.py:18
+#: ../src/dock/accessdock-config.py:19
 msgid "Rearrange or modify buttons for the dock"
 msgstr ""
 
-#: ../src/dock/accessdock-config.py:19
+#: ../src/dock/accessdock-config.py:20
 msgid "This will delete all contents"
 msgstr ""
 
-#: ../src/dock/accessdock-config.py:20
+#: ../src/dock/accessdock-config.py:21
 msgid "Delete"
 msgstr ""
 
-#: ../src/dock/accessdock-config.py:21
+#: ../src/dock/accessdock-config.py:22
 msgid "Down"
 msgstr ""
 
-#: ../src/dock/accessdock-config.py:22
+#: ../src/dock/accessdock-config.py:23
 msgid "Edit"
 msgstr ""
 
-#: ../src/dock/accessdock-config.py:23
+#: ../src/dock/accessdock-config.py:24
 msgid "Keyboard shortcut"
 msgstr ""
 
-#: ../src/dock/accessdock-config.py:24
+#: ../src/dock/accessdock-config.py:25
 msgid "Push to assign"
 msgstr ""
 
-#: ../src/dock/accessdock-config.py:25
-msgid "Items per row"
-msgstr ""
-
 #: ../src/dock/accessdock-config.py:26
-msgid "Launch at session start"
+msgid "already assigned"
 msgstr ""
 
 #: ../src/dock/accessdock-config.py:27
-msgid "Displays launcher name at fullscreen on mouse over"
+msgid "Items per row"
 msgstr ""
 
 #: ../src/dock/accessdock-config.py:28
+msgid "Launch at session start"
+msgstr ""
+
+#: ../src/dock/accessdock-config.py:29
+msgid "Displays launcher name at fullscreen on mouse over"
+msgstr ""
+
+#: ../src/dock/accessdock-config.py:30
 msgid "Up"
 msgstr ""
 

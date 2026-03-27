@@ -116,7 +116,6 @@ class thLauncher(QThread):
 				self.cmd=self._getAppCmd("eviacam")
 			elif self.cmd==i18n.get("BROWS"):
 				self.cmd=os.path.join(os.path.dirname(__file__),"..","tools","browsermanager.py")
-		print("{} -> {}".format(self.cmd,self.cmd))
 		if "kcm" in self.cmd:
 			proc=self.accesshelper.launchKcmModule(self.cmd)
 		else:
@@ -158,6 +157,7 @@ class getAppsInfo(QThread):
 #class getAppInfo
 
 class accessibility(QStackedWindowItem):
+	back=Signal()
 	def __init_stack__(self):
 		self.dbg=False
 		self._debug("access Load")
@@ -181,10 +181,26 @@ class accessibility(QStackedWindowItem):
 	def __initScreen__(self):
 		lay=QGridLayout()
 		self.lstApps=QListWidget()
+		self.lstApps.keyPressEvent2=self.lstApps.keyPressEvent
+		self.lstApps.keyPressEvent=self.fakeKey
 		lay.addWidget(self.lstApps)
 		self.setLayout(lay)
 		self._renderGui()
 	#def __initScreen__
+
+	def fakeKey(self,*args):
+		ev=args[0]
+		if ev.key()==Qt.Key_Left:
+			self.parent.lstNav.setFocus()
+		else:
+			self.lstApps.keyPressEvent2(*args)
+			ev.ignore()
+		return True
+	#def fakeKey
+
+	def focusInEvent(self,*args):
+		self.lstApps.setFocus()
+	#def focusInEvent
 
 	def _endCmd(self,*args):
 		for i in range(0,self.lstApps.count()):
@@ -223,19 +239,16 @@ class accessibility(QStackedWindowItem):
 		#self.box.addWidget(btnAcce,0,0,1,1)
 		btnOrca=self._renderBtn("ORCA","ORCADSC","")
 		controls.append(btnOrca)
-		fname=os.path.join(os.path.dirname(os.path.realpath(__file__)),"..","rsrc","ttsmanager.png")
-		btnLtts=self._renderBtn("LTTS","LTTSDSC",fname)
+		icnTts=os.path.join(os.path.dirname(os.path.realpath(__file__)),"..","rsrc","ttsmanager.png")
+		btnLtts=self._renderBtn("LTTS","LTTSDSC",icnTts)
 		controls.append(btnLtts)
-		dockIcn=os.path.join(os.path.dirname(os.path.realpath(__file__)),"..","dock","accessdock.png")
-		btnDock=self._renderBtn("DOCK","DOCKDSC",fname)
+		icnDock=os.path.join(os.path.dirname(os.path.realpath(__file__)),"..","dock","accessdock.png")
+		btnDock=self._renderBtn("DOCK","DOCKDSC",icnDock)
 		controls.append(btnDock)
 		btnJoys=self._renderBtn("ANTI","ANTIDSC","")
 		controls.append(btnJoys)
 		btnEvia=self._renderBtn("EVIA","EVIADSC","")
 		controls.append(btnEvia)
-		fname=os.path.join(os.path.dirname(os.path.realpath(__file__)),"..","rsrc","browsermanager.png")
-		btnBrow=self._renderBtn("BROW","BROWDSC",fname)
-		controls.append(btnBrow)
 		for btn in controls:
 			self.lstApps.addItem("")
 			itm=self.lstApps.item(self.lstApps.count()-1)

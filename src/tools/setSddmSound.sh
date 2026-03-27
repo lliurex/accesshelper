@@ -1,5 +1,4 @@
-w
-!/bin/bash
+#!/bin/bash
 DBG=1
 LOG=/tmp/playSound-$(date +%Y%m%d_%H%M).log
 function debug()

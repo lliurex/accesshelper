@@ -522,4 +522,4 @@ if __name__=="__main__":
 		if os.path.exists(dpath):
 			mw.setParms(os.path.basename(dpath))
 	mw.show()
-	app.exec_()
+	app.exec()

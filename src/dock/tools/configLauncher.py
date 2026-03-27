@@ -34,4 +34,4 @@ if __name__ == "__main__":
 	else:
 		layout.addWidget(btnBox)
 	window.show()
-	sys.exit(app.exec_())
+	sys.exit(app.exec())

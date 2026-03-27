@@ -49,7 +49,7 @@ class settings(QStackedWindowItem):
 		self.lstOptions=QListWidget()
 		self.lstOptions.keyPressEvent2=self.lstOptions.keyPressEvent
 		self.lstOptions.keyPressEvent=self.fakeKey
-		box.addWidget(self.lstOptions)
+		box.addWidget(self.lstOptions,0,0,1,1)
 		self.btnAccept.clicked.connect(self.writeConfig)
 		self.chkBeGr=QCheckBox(i18n["GRUB"])
 		self.lstOptions.addItem("")
@@ -107,9 +107,10 @@ class settings(QStackedWindowItem):
 		self.btnLoad.clicked.connect(self._loadProfile)
 		hlay2.addWidget(self.btnLoad,Qt.AlignCenter)
 		self.lstOptions.addItem("")
-		item=self.lstOptions.item(self.lstOptions.count()-1)
-		item.setSizeHint(QSize(0,rHeight))
-		self.lstOptions.setItemWidget(item,wdg)
+		box.addWidget(wdg,1,0,1,1,Qt.AlignBottom)
+		#item=self.lstOptions.item(self.lstOptions.count()-1)
+		#item.setSizeHint(QSize(0,rHeight))
+		#self.lstOptions.setItemWidget(item,wdg)
 	#def __initScreen__
 
 	def fakeKey(self,*args):

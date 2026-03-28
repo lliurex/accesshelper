@@ -599,4 +599,4 @@ if __name__=="__main__":
 	objbus.connect_to_signal("isDockVisibleSignal",dock._isVisible,dbus_interface="net.lliurex.accessibility.Dock")
 	dclient=dbusMethods(bus,dock)
 	dock.show()
-	app.exec_()
+	app.exec()

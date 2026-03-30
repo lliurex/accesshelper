@@ -363,21 +363,21 @@ class QPushButtonDock(QPushButton):
 				else:
 					if self.hasFocus()==False:
 						self.setFocus()
-			size=self.size()
-			origSize=72
-			newsize=QSize(size.width(),origSize*1.5)
-			self.setIconSize(newsize)
-			self.setFixedSize(newsize)
-			self.lbl.toggle(self.mapToGlobal(QPoint(0,self.y()+self.height())))
+			#size=self.size()
+			#origSize=72
+			#newsize=QSize(size.width(),origSize*1.5)
+			#self.setIconSize(newsize)
+			#self.setFixedSize(newsize)
+			#self.lbl.toggle(self.mapToGlobal(QPoint(0,self.y()+self.height()/2)))
 			self.focusIn.emit(self)
 		elif self.popupShow==True or (ev.type()==QEvent.Type.Leave or ev.type()==QEvent.Type.FocusOut):
-			size=self.size()
+			#size=self.size()
 			if self.lbl.isVisible():
 				self.lbl.setVisible(False)
 		#		self.lbl.toggle(self.mapToGlobal(QPoint(self.x(),self.y())))
-			newsize=QSize(size.width(),self.initialSize.height()/1.1)
-			self.setFixedSize(newsize)
-			self.setIconSize(newsize)
+			#newsize=QSize(size.width(),self.initialSize.height()/1.1)
+			#selfI.setFixedSize(newsize)
+			#self.setIconSize(newsize)
 		return(False)
 	#def eventFilter
 #class QPushButtonDock
@@ -404,14 +404,15 @@ class accessdock(QWidget):
 		#This hides decoration and bypass window 
 		#also skips app registering in at-spi so is unexistent for ORCA 
 		#self.setWindowFlags(Qt.X11BypassWindowManagerHint|Qt.NoDropShadowWindowHint|Qt.WindowStaysOnTopHint|Qt.ToolTip)
-		self.setWindowFlag(Qt.WindowType.ToolTip,True)
+		#self.setWindowFlags(Qt.FramelessWindowHint|Qt.ToolTip|Qt.X11BypassWindowManagerHint)
+		self.setWindowFlags(Qt.WindowStaysOnTopHint | Qt.Tool)
+		# Enable translucent background for transparency
 		#self.setWindowFlag(Qt.WindowType.Dialog,True)
 		#self.setWindowFlag(Qt.WindowType.BypassWindowManagerHint,True)
 		#self.setWindowFlag(Qt.WindowType.WindowStaysOnTopHint,True)
-		#self.setAttribute(Qt.WidgetAttribute.WA_NoSystemBackground)
 		#self.setStyleSheet("margin:0px")
 		layout=QGridLayout()
-		layout.setContentsMargins(2,2,2,2)
+		layout.setContentsMargins(13,13,13,13)
 		self.setLayout(layout)
 		self.grid=QTableTouchWidget(1,0)
 		self.grid.setObjectName("Table")
@@ -425,6 +426,12 @@ class accessdock(QWidget):
 		#redirect event easy way
 		self.grid.mouseMoveEvent=self.mouseMoveEvent
 		layout.addWidget(self.grid,0,0)
+		self.lblDesc=QLabel("")
+		font=self.lblDesc.font()
+		font.setBold(True)
+		font.setPointSize(font.pointSize()+1)
+		self.lblDesc.setFont(font)
+		layout.addWidget(self.lblDesc,1,0,Qt.AlignCenter|Qt.AlignCenter)
 		self.threadLaunchers=[]
 		self.updateScreen()
 		#self.setStyleSheet('QPushButton{border:3px solid rgba(%s);}'%color)
@@ -440,12 +447,12 @@ class accessdock(QWidget):
 	#def _debug
 
 	def closeEvent(self,*args):
-		print(args)
 		if args[0].spontaneous():
 			args[0].accept()
 		else:
+			#self._toggle()
 			args[0].ignore()
-			self._toggle()
+		#return(True)
 	#def closeEvent
 
 	def hideEvent(self,*args):
@@ -503,11 +510,17 @@ class accessdock(QWidget):
 
 	def leaveEvent(self,*args):
 		#steal focus so buttons get resized
+		self.lblDesc.setText("")
 		self.setFocus()
 	#def leaveEvent
 
+	def _showTooltip(self,*args):
+		self.lblDesc.setText(args[0].lbl.text())
+	#def _showTooltip
+
 	def updateScreen(self):
 		self._setColorForBorder()
+		self.lblDesc.setText("")
 		oldcount=self.grid.columnCount()
 		w=0
 		if oldcount>0:
@@ -531,7 +544,8 @@ class accessdock(QWidget):
 			btn.configureMain.connect(self._launchDockConfig)
 			btn.configure.connect(self._toggle)
 			btn.configureLauncher.connect(self._toggle)
-			btn.toggle.connect(self._toggle)
+			#btn.toggle.connect(self._toggle)
+			btn.focusIn.connect(self._showTooltip)
 			self.grid.setColumnCount(self.grid.columnCount()+1)
 			self.grid.setCellWidget(0,self.grid.columnCount()-1,btn)
 			if self.grid.columnCount()>1:
@@ -552,12 +566,13 @@ class accessdock(QWidget):
 	
 	def _resize(self):
 		colWidth=self.grid.horizontalHeader().sectionSize(0)
-		width=(self.grid.columnCount()*colWidth)+(colWidth/3)
+		width=(self.grid.columnCount()*colWidth)
 		rowHeight=self.grid.verticalHeader().sectionSize(0)
 		height=(self.grid.rowCount()*rowHeight)
-		self.grid.resize(QSize(width,height))
-		width+=colWidth/30
+		self.grid.setFixedSize(QSize(width,height))
+		width+=colWidth/3
 		height+=rowHeight/3
+		height+=self.lblDesc.sizeHint().height()
 		self.setFixedSize(width,height)
 	#def _resize
 

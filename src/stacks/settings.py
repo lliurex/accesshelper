@@ -49,30 +49,36 @@ class settings(QStackedWindowItem):
 		self.lstOptions=QListWidget()
 		self.lstOptions.keyPressEvent2=self.lstOptions.keyPressEvent
 		self.lstOptions.keyPressEvent=self.fakeKey
+		self.lstOptions.itemClicked.connect(self._chkRowItem)
 		box.addWidget(self.lstOptions,0,0,1,1)
 		self.btnAccept.clicked.connect(self.writeConfig)
 		self.chkBeGr=QCheckBox(i18n["GRUB"])
+		self.chkBeGr.checkStateChanged.connect(self._enableAccept)
 		self.lstOptions.addItem("")
 		rHeight=self.chkBeGr.sizeHint().height()*2
 		item=self.lstOptions.item(self.lstOptions.count()-1)
 		item.setSizeHint(QSize(0,rHeight))
 		self.lstOptions.setItemWidget(item,self.chkBeGr)
 		self.chkBeSd=QCheckBox(i18n["SDDM_BEEP"])
+		self.chkBeSd.checkStateChanged.connect(self._enableAccept)
 		self.lstOptions.addItem("")
 		item=self.lstOptions.item(self.lstOptions.count()-1)
 		item.setSizeHint(QSize(0,rHeight))
 		self.lstOptions.setItemWidget(item,self.chkBeSd)
 		self.chkBeSe=QCheckBox(i18n["SESSION_BEEP"])
+		self.chkBeSe.checkStateChanged.connect(self._enableAccept)
 		self.lstOptions.addItem("")
 		item=self.lstOptions.item(self.lstOptions.count()-1)
 		item.setSizeHint(QSize(0,rHeight))
 		self.lstOptions.setItemWidget(item,self.chkBeSe)
 		self.chkOrSd=QCheckBox(i18n["SDDM_ORCA"])
+		self.chkOrSd.checkStateChanged.connect(self._enableAccept)
 		self.lstOptions.addItem("")
 		item=self.lstOptions.item(self.lstOptions.count()-1)
 		item.setSizeHint(QSize(0,rHeight))
 		self.lstOptions.setItemWidget(item,self.chkOrSd)
 		self.chkMono=QCheckBox(i18n["MONO"])
+		self.chkMono.checkStateChanged.connect(self._enableAccept)
 		self.lstOptions.addItem("")
 		item=self.lstOptions.item(self.lstOptions.count()-1)
 		item.setSizeHint(QSize(0,rHeight))
@@ -81,6 +87,7 @@ class settings(QStackedWindowItem):
 		wdg=QWidget()
 		hlay=QHBoxLayout(wdg)
 		self.chkProf=QCheckBox(i18n["PROFILE"])
+		self.chkProf.checkStateChanged.connect(self._enableAccept)
 		self.chkProf.clicked.connect(lambda: self.cmbProf.setEnabled(self.chkProf.isChecked()))
 		hlay.addWidget(self.chkProf,Qt.Alignment(0))
 		hlay.addSpacing(6)
@@ -91,6 +98,7 @@ class settings(QStackedWindowItem):
 		item.setSizeHint(QSize(0,rHeight))
 		self.lstOptions.setItemWidget(item,wdg)
 		self.chkAuDo=QCheckBox(i18n["DOCK"])
+		self.chkAuDo.checkStateChanged.connect(self._enableAccept)
 		self.lstOptions.addItem("")
 		item=self.lstOptions.item(self.lstOptions.count()-1)
 		self.lstOptions.setItemWidget(item,self.chkAuDo)
@@ -113,6 +121,22 @@ class settings(QStackedWindowItem):
 		#self.lstOptions.setItemWidget(item,wdg)
 	#def __initScreen__
 
+	def _enableAccept(self):
+		self.btnAccept.setEnabled(True)
+		self.btnCancel.setEnabled(True)
+	#def _enableAccept
+
+	def _chkRowItem(self,*args):
+		wdg=self.lstOptions.itemWidget(args[0])
+		if isinstance(wdg,QWidget):
+			for chld in wdg.children():
+				if isinstance(chld,QCheckBox):
+						wdg=chld
+						break
+		if isinstance(wdg,QCheckBox):
+			wdg.setChecked(not(wdg.isChecked()))
+	#def _chkRowItem
+
 	def fakeKey(self,*args):
 		ev=args[0]
 		if ev.key()==Qt.Key_Left:
@@ -126,7 +150,6 @@ class settings(QStackedWindowItem):
 	def focusInEvent(self,*args):
 		self.lstOptions.setFocus()
 	#def focusInEvent
-
 
 	def updateScreen(self):
 		config=self.readConfig()

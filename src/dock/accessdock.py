@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 import os,sys,subprocess,json
-from PySide6.QtWidgets import QApplication,QGridLayout,QWidget,QPushButton,QHeaderView,QMenu,QToolTip,QLabel,QTableWidget,QToolBar
+from PySide6.QtWidgets import QApplication,QGridLayout,QWidget,QPushButton,QHeaderView,QMenu,QToolTip,QLabel,QTableWidget,QToolBar,QDialog
 from PySide6.QtCore import Qt,QSignalMapper,QSize,QThread,QPoint,QEvent,Signal,QObject,QRect
 from PySide6.QtGui import QIcon,QPixmap,QCursor,QColor,QPalette,QGuiApplication,QFont
 import dbus
@@ -93,7 +93,7 @@ class QToolTipDock(QLabel):
 	"""
 	def __init__(self,text="",bigTip=False,parent=None):
 		super().__init__()
-		self.setWindowFlags(Qt.X11BypassWindowManagerHint|Qt.BypassWindowManagerHint|Qt.WindowTransparentForInput|Qt.NoDropShadowWindowHint|Qt.WindowStaysOnTopHint|Qt.ToolTip)
+		self.setWindowFlags(Qt.FramelessWindowHint|Qt.ToolTip|Qt.WindowTransparentForInput)
 		self.setText(text)
 		self.setAccessibleName(text)
 		self.setAccessibleDescription("")
@@ -403,7 +403,12 @@ class accessdock(QWidget):
 		#self.setWindowFlag(Qt.Window)
 		#This hides decoration and bypass window 
 		#also skips app registering in at-spi so is unexistent for ORCA 
-		self.setWindowFlags(Qt.NoDropShadowWindowHint|Qt.WindowStaysOnTopHint|Qt.Tool)
+		#self.setWindowFlags(Qt.X11BypassWindowManagerHint|Qt.NoDropShadowWindowHint|Qt.WindowStaysOnTopHint|Qt.ToolTip)
+		self.setWindowFlag(Qt.WindowType.ToolTip,True)
+		#self.setWindowFlag(Qt.WindowType.Dialog,True)
+		#self.setWindowFlag(Qt.WindowType.BypassWindowManagerHint,True)
+		#self.setWindowFlag(Qt.WindowType.WindowStaysOnTopHint,True)
+		#self.setAttribute(Qt.WidgetAttribute.WA_NoSystemBackground)
 		#self.setStyleSheet("margin:0px")
 		layout=QGridLayout()
 		layout.setContentsMargins(2,2,2,2)
@@ -435,6 +440,7 @@ class accessdock(QWidget):
 	#def _debug
 
 	def closeEvent(self,*args):
+		print(args)
 		if args[0].spontaneous():
 			args[0].accept()
 		else:

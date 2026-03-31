@@ -125,7 +125,7 @@ def getA11yScreenReaderEnabled():
 #def getConfigScreenReaderEnabled
 
 def getConfigScreenReaderEnabled():
-	cmd=["/usr/bin/kreadconfig5","--file","kaccessrc","--group","ScreenReader","--key","Enabled"]
+	cmd=["/usr/bin/kreadconfig6","--file","kaccessrc","--group","ScreenReader","--key","Enabled"]
 	out=subprocess.check_output(cmd,universal_newlines=True,encoding="utf8")
 	return(bool(out.capitalize()))
 #def getConfigScreenReaderEnabled

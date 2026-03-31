@@ -283,7 +283,7 @@ class ttshelper(QWidget):
 		#Data is provided from kwin-script ocrwindow
 		data={}
 		for field in ["voice","rate","pitch","synth","stretch","orca","vlc"]:
-			cmd=["kreadconfig5","--file","kwinrc","--group","Script-ocrwindow","--key",field.capitalize()]
+			cmd=["kreadconfig6","--file","kwinrc","--group","Script-ocrwindow","--key",field.capitalize()]
 			out=subprocess.check_output(cmd,universal_newlines=True,encoding="utf8")
 			data[field]=out.strip()
 		return(data)

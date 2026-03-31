@@ -30,7 +30,7 @@ do
 	[[ $UNLOAD == "true" ]] && LOADED=1
 done
 [[ ${LOADED} -ne 0 ]] && ENABLED="false" || ENABLED="true"
-OUT=$(kwriteconfig5 --file kwinrc --group Plugins --key ${ID}Enabled $ENABLED)
+OUT=$(kwriteconfig6 --file kwinrc --group Plugins --key ${ID}Enabled $ENABLED)
 qdbus org.kde.KWin /Scripting org.kde.kwin.Scripting.start
 echo $ID
 	if [[ $ID == "ocrwindow" ]]

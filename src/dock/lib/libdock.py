@@ -61,7 +61,7 @@ class libdock():
 	#def initLaunchers
 
 	def getShortcut(self):
-		cmd=["kreadconfig5","--file","kglobalshortcutsrc","--group","net.lliurex.accessibledock.desktop","--key","_launch"]
+		cmd=["kreadconfig6","--file","kglobalshortcutsrc","--group","net.lliurex.accessibledock.desktop","--key","_launch"]
 		out=subprocess.check_output(cmd,encoding="utf8",universal_newlines=True)
 		return(out.strip())
 	#def getShortcut
@@ -69,7 +69,7 @@ class libdock():
 	def setShortcut(self,hkey):
 		appname="accessibledock"
 		cmdargs="{0},{0},{1}.desktop".format(hkey,appname)
-		cmd=["kwriteconfig5","--file","kglobalshortcutsrc","--group","net.lliurex.accessibledock.desktop","--key","_launch",cmdargs]
+		cmd=["kwriteconfig6","--file","kglobalshortcutsrc","--group","net.lliurex.accessibledock.desktop","--key","_launch",cmdargs]
 		try:
 			subprocess.check_call(cmd)
 		except Exception as e:
@@ -77,7 +77,7 @@ class libdock():
 			print(e)
 		else:
 			try:
-				cmd=["kwriteconfig5","--file","kglobalshortcutsrc","--group","net.lliurex.accessibledock.desktop","--key","_k_friendly_name",appname]
+				cmd=["kwriteconfig6","--file","kglobalshortcutsrc","--group","net.lliurex.accessibledock.desktop","--key","_k_friendly_name",appname]
 				subprocess.run(cmd)
 			except Exception as e:
 				print(e)

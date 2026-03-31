@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-27 12:26+0100\n"
-"PO-Revision-Date: 2026-03-27 12:27+0100\n"
+"POT-Creation-Date: 2026-03-28 00:21+0100\n"
+"PO-Revision-Date: 2026-03-28 00:30+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es\n"
@@ -16,19 +16,20 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.4.2\n"
 
 #: ../src/accesswizard.py:13
 msgid "Wizard of LliureX for configuring accessibility tools"
-msgstr "Asistente de LliureX para configurar las herramientas de accesibilidad"
+msgstr "Asistente de LliureX para las herramientas de accesibilidad"
 
 #: ../src/accesswizard.py:14
 msgid "Press \"Escape\" to stop reading. \"F5\" for read it from beginning"
-msgstr "Pulsa \"Escape\" para parar de leer. \"F5\" para volver a leer"
+msgstr ""
+"Pulsar \"Escape\" para dejar de leer. \"F5\" para leer desde el principio"
 
 #: ../src/accesswizard.py:15
 msgid "Navigate through options with \"Tab\" or arrows."
-msgstr "Para navegar usar \"Tabulador\" o las flechas del teclado"
+msgstr "Usar \"tabulador\" o \"flechas\" para desplazarse por las opciones"
 
 #: ../src/stacks/accessibility.py:15
 msgid "System Accessibility"
@@ -48,13 +49,11 @@ msgstr "Configura un gamepd o joystick para su uso como ratón"
 
 #: ../src/stacks/accessibility.py:19
 msgid "Browsers accessibility"
-msgstr "Accesibilidad de los navegadores"
+msgstr "Navegación accesible"
 
 #: ../src/stacks/accessibility.py:20
 msgid "Selection of addons and configurations for accessible browsing"
-msgstr ""
-"Selección de extensiones y configuraciones para mejorar la accesibilidad de "
-"los navegadores"
+msgstr "Selección de extensiones para navegar de forma más accesible"
 
 #: ../src/stacks/accessibility.py:21 ../src/stacks/accessibility.py:28
 msgid "Accessibility"
@@ -102,7 +101,7 @@ msgstr "Ajustes para hacer el sistema más accesible"
 
 #: ../src/stacks/browsers.py:16 ../src/stacks/browsers.py:17
 msgid "Browser addons"
-msgstr "Extensions de navegador"
+msgstr "Extensiones del navegador"
 
 #: ../src/stacks/browsers.py:18
 msgid "Accesible browsing"
@@ -110,8 +109,7 @@ msgstr "Navegación accesible"
 
 #: ../src/stacks/browsers.py:19
 msgid "Settings and addons for improved browser accessibility"
-msgstr ""
-"Colección de heraamientas para mejorar la accesibilidad de los navegadores"
+msgstr "Colección de heraamientas para mejorar la accesibilidad de los navegadores"
 
 #: ../src/stacks/effects.py:14
 msgid "Effects"
@@ -143,7 +141,7 @@ msgstr "Ayudas y efectos visuales"
 
 #: ../src/stacks/effects.py:21
 msgid "Aids and visual effects for improve system usability"
-msgstr "Colección de heraamientas para mejorar la usabilidad del sistema"
+msgstr "Colección de herramientas para mejorar la usabilidad del sistema"
 
 #: ../src/stacks/settings.py:14
 msgid "Settings"

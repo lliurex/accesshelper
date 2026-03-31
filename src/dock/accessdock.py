@@ -486,8 +486,11 @@ class accessdock(QWidget):
 
 	def mouseMoveEvent(self, ev):
 		x = ev.globalPosition().x()-(self.width()/2)
+		if ( x<0) or (y<0):
+			return
 		y = ev.globalPosition().y()
-		self.move(x, y)
+		coords=self.mapToGlobal(QPoint(x,y))
+		self.move(x,y)
 	#def mouseMoveEvent
 
 	def mouseReleaseEvent(self,*args):

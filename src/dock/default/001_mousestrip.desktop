@@ -8,5 +8,5 @@ Comment[es]=Muestra una guía bajo el puntero
 Comment[ca]=Mostra una guía sota el punter
 Icon=preferences-system-windows
 Path=/usr/share/kwin/scripts/mousestrip/metadata.json
-Exec=/home/lliurex/git/accesshelper/src/dock/tools/loadScript.sh /usr/share/kwin/scripts/mousestrip/metadata.json add
+Exec=/usr/share/accesswizard/dock/tools/loadScript.sh /usr/share/kwin/scripts/mousestrip/metadata.json add
 Fname=/usr/share/accesswizard/dock/default/001_mousestrip.desktop

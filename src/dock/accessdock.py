@@ -6,7 +6,7 @@ from PySide2.QtGui import QIcon,QPixmap,QCursor,QColor,QPalette,QGuiApplication,
 import dbus
 import dbus.service
 import dbus.mainloop.glib
-from QtExtraWidgets import QTableTouchWidget,QScrollLabel
+from QtExtraWidgets import QTableTouchWidget,QScrollLabel,QFlowTouchWidget
 import subprocess
 import lib.libdock as libdock
 import gettext
@@ -19,6 +19,8 @@ i18n={"CONFBTN":_("Configure launcher"),
 	"CONFIGURE":_("Configure"),
 	"TOGGLE":_("Toggle visibility")
 	}
+MARGIN=6
+BTN_SIZE=64
 
 class dbusMethods(dbus.service.Object):
 	"""DBus service that fires \"toggleVisible\" signal on demand"""
@@ -93,7 +95,7 @@ class QToolTipDock(QLabel):
 	"""
 	def __init__(self,text="",bigTip=False,parent=None):
 		super().__init__()
-		self.setWindowFlags(Qt.X11BypassWindowManagerHint|Qt.BypassWindowManagerHint|Qt.WindowTransparentForInput|Qt.NoDropShadowWindowHint|Qt.WindowStaysOnTopHint|Qt.ToolTip)
+		self.setWindowFlags(Qt.FramelessWindowHint|Qt.ToolTip|Qt.WindowTransparentForInput)
 		self.setText(text)
 		self.setAccessibleName(text)
 		self.setAccessibleDescription("")
@@ -212,7 +214,7 @@ class QPushButtonDock(QPushButton):
 		self.setProperty("fpath",self.data.get("fpath",""))
 		self.installEventFilter(self)
 		self.setContextMenuPolicy(Qt.CustomContextMenu)
-		self.initialSize=QSize(72,72)
+		self.initialSize=QSize(BTN_SIZE,BTN_SIZE)
 		self.mnu=self._addContextMenu()
 		self.customContextMenuRequested.connect(self._popup)
 		self.lbl=QToolTipDock(self.data.get("Name"),bigTip)
@@ -363,21 +365,13 @@ class QPushButtonDock(QPushButton):
 				else:
 					if self.hasFocus()==False:
 						self.setFocus()
-			size=self.size()
-			origSize=72
-			newsize=QSize(size.width(),origSize*1.5)
-			self.setIconSize(newsize)
-			self.setFixedSize(newsize)
-			self.lbl.toggle(self.mapToGlobal(QPoint(0,self.y()+self.height())))
-			self.focusIn.emit(self)
-		elif self.popupShow==True or (ev.type()==QEvent.Type.Leave or ev.type()==QEvent.Type.FocusOut):
-			size=self.size()
-			if self.lbl.isVisible():
-				self.lbl.setVisible(False)
-		#		self.lbl.toggle(self.mapToGlobal(QPoint(self.x(),self.y())))
-			newsize=QSize(size.width(),self.initialSize.height()/1.1)
-			self.setFixedSize(newsize)
-			self.setIconSize(newsize)
+				self.focusIn.emit(self)
+			#size=self.size()
+			#origSize=72
+			#newsize=QSize(size.width(),origSize*1.5)
+			#self.setIconSize(newsize)
+			#self.setFixedSize(newsize)
+			#self.lbl.toggle(self.mapToGlobal(QPoint(0,self.y()+self.height()/2)))
 		return(False)
 	#def eventFilter
 #class QPushButtonDock
@@ -403,27 +397,33 @@ class accessdock(QWidget):
 		#self.setWindowFlag(Qt.Window)
 		#This hides decoration and bypass window 
 		#also skips app registering in at-spi so is unexistent for ORCA 
-		self.setWindowFlags(Qt.NoDropShadowWindowHint|Qt.WindowStaysOnTopHint|Qt.Tool)
+		self.setWindowFlags(Qt.WindowStaysOnTopHint | Qt.Tool)
+		#self.setWindowFlags(Qt.FramelessWindowHint|Qt.ToolTip|Qt.X11BypassWindowManagerHint)
+		#self.setWindowFlags(Qt.WindowStaysOnTopHint | Qt.Tool)
+		# Enable translucent background for transparency
+		#self.setWindowFlag(Qt.WindowType.Dialog,True)
+		#self.setWindowFlag(Qt.WindowType.BypassWindowManagerHint,True)
+		#self.setWindowFlag(Qt.WindowType.WindowStaysOnTopHint,True)
 		#self.setStyleSheet("margin:0px")
 		layout=QGridLayout()
-		layout.setContentsMargins(2,2,2,2)
 		self.setLayout(layout)
 		self.grid=QTableTouchWidget(1,0)
-		self.grid.setObjectName("Table")
-		self.grid.setShowGrid(False)
-		self.grid.verticalHeader().hide()
-		self.grid.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
-		self.grid.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-		self.grid.horizontalHeader().hide()
-		self.grid.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
-		self.grid.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+		self.flow=QFlowTouchWidget()
+		self.flow.setObjectName("Table")
 		#redirect event easy way
-		self.grid.mouseMoveEvent=self.mouseMoveEvent
 		layout.addWidget(self.grid,0,0)
+		self.grid.setVisible(False)
+		layout.addWidget(self.flow,0,0)
+		self.lblDesc=QLabel("")
+		font=self.lblDesc.font()
+		font.setBold(True)
+		font.setPointSize(font.pointSize()+1)
+		self.lblDesc.setFont(font)
+		layout.addWidget(self.lblDesc,1,0,Qt.AlignCenter|Qt.AlignBottom)
 		self.threadLaunchers=[]
 		self.updateScreen()
-		#self.setStyleSheet('QPushButton{border:3px solid rgba(%s);}'%color)
 		self._resize()
+		self.setStyleSheet('#Table{padding:%spx;padding-left:%spx;padding-right:0px;padding-bottom:0px;background-color:rgba(255,255,255,0)}'%(MARGIN,MARGIN*2))
 		coords=self.libdock.readKValue("kwinrc","accessibledock","coords").split(",")
 		if len(coords)>1:
 			self.move(int(coords[0]),int(coords[1]))
@@ -438,8 +438,9 @@ class accessdock(QWidget):
 		if args[0].spontaneous():
 			args[0].accept()
 		else:
+			#self._toggle()
 			args[0].ignore()
-			self._toggle()
+		#return(True)
 	#def closeEvent
 
 	def hideEvent(self,*args):
@@ -458,7 +459,8 @@ class accessdock(QWidget):
 			(r,g,b,a)=(a-r,a-g,a-b,a)
 		#Dark is the new bright in the world of nonsense
 		color="{},{},{},{}".format(255*r,255*g,255*b,a)
-		self.setStyleSheet('#Table{border:3px solid rgba(%s);}'%color)
+		return(color)
+		#self.setStyleSheet('#Table{border:3px solid rgba(%s);} #Table::item{padding:5px;}'%color)
 	#def _setColorForBorder
 
 	def _launchDockConfig(self,*args,**kwargs):
@@ -483,8 +485,8 @@ class accessdock(QWidget):
 	#def mousePressEvent
 
 	def mouseMoveEvent(self, ev):
-		x = ev.globalPosition().x()-(self.width()/2)
-		y = ev.globalPosition().y()
+		x = ev.globalX()-(self.width()/2)
+		y = ev.globalY()
 		self.move(x, y)
 	#def mouseMoveEvent
 
@@ -497,22 +499,22 @@ class accessdock(QWidget):
 
 	def leaveEvent(self,*args):
 		#steal focus so buttons get resized
+		self.lblDesc.setText("")
 		self.setFocus()
 	#def leaveEvent
 
-	def updateScreen(self):
-		self._setColorForBorder()
-		oldcount=self.grid.columnCount()
-		w=0
-		if oldcount>0:
-			w=self.width()/oldcount
-			for idx in range(0,oldcount):
-				btn=self.grid.cellWidget(0,idx)
-				btn.lbl.deleteLater()
-				btn.deleteLater()
+	def _showTooltip(self,*args):
+		self.lblDesc.setText(args[0].lbl.text())
+	#def _showTooltip
 
+	def updateScreen(self):
+		color=self._setColorForBorder()
+		self.lblDesc.setText("")
+
+		self.flow.clean()
 		self.grid.clear()
 		self.grid.setColumnCount(0)
+		
 		launchers=self.libdock.getLaunchers()
 		bigTip=False
 		if self.libdock.readKValue("kwinrc","accessibledock","tooltipbig")=="true":
@@ -525,18 +527,13 @@ class accessdock(QWidget):
 			btn.configureMain.connect(self._launchDockConfig)
 			btn.configure.connect(self._toggle)
 			btn.configureLauncher.connect(self._toggle)
-			btn.toggle.connect(self._toggle)
-			self.grid.setColumnCount(self.grid.columnCount()+1)
-			self.grid.setCellWidget(0,self.grid.columnCount()-1,btn)
-			if self.grid.columnCount()>1:
-				#self.grid.setTabOrder(self.grid.cellWidget(0,self.grid.columnCount()-1),btn)
-				btn.setFocusPolicy(Qt.StrongFocus)
-		self.grid.resizeRowToContents(0)
-		self.grid.resizeColumnToContents(0)
-		vh=self.grid.verticalHeader()
+			#btn.toggle.connect(self._toggle)
+			btn.focusIn.connect(self._showTooltip)
+			btn.setFocusPolicy(Qt.StrongFocus)
+			btn.setStyleSheet("border: 3px solid rgba(%s);"%(color))
+			self.flow.addWidget(btn)
 		#vh.setSectionResizeMode(vh.ResizeToContents)
-		if oldcount!=self.grid.columnCount():
-			self._resize()
+		#if oldcount!=self.grid.columnCount():
 	#def updateScreen
 
 	def showEvent(self,*args):
@@ -545,14 +542,14 @@ class accessdock(QWidget):
 	#def showEvent
 	
 	def _resize(self):
-		colWidth=self.grid.horizontalHeader().sectionSize(0)
-		width=(self.grid.columnCount()*colWidth)+(colWidth/3)
-		rowHeight=self.grid.verticalHeader().sectionSize(0)
-		height=(self.grid.rowCount()*rowHeight)
-		self.grid.resize(QSize(width,height))
-		width+=colWidth/30
-		height+=rowHeight/3
-		self.setFixedSize(width,height)
+		itemW=max(self.flow.itemAt(0).sizeHint().width(),BTN_SIZE+MARGIN)
+		itemH=max(self.flow.itemAt(0).sizeHint().height(),BTN_SIZE+MARGIN)
+		maxW=itemW*(self.flow.count()+1)
+		h=itemH+self.lblDesc.sizeHint().height()
+		if self.flow.count()>0:
+			maxH=itemH*self.flow.count()+self.lblDesc.sizeHint().height()+MARGIN*6
+			self.setMaximumSize(maxW+MARGIN*3,maxH*3)
+		self.resize(maxW,h)
 	#def _resize
 
 	def _toggle(self,*args,**kwargs):

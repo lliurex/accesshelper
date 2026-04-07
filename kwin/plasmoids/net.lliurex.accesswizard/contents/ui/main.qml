@@ -5,8 +5,8 @@ import QtQuick.Layouts 1.15
 import org.kde.plasma.plasmoid 2.0
 import org.kde.kirigami 2.20 as Kirigami
 import org.kde.plasma.components 3.0 as PlasmaComponents
-import org.kde.plasma.core as PlasmaCore
-import org.kde.plasma.plasma5support 2.0 as PlasmaSupport
+import org.kde.plasma.core 2.1 as PlasmaCore
+import org.kde.plasma.plasma5support as PlasmaSupport
 import org.kde.plasma.extras 2.0 as PlasmaExtras
 //import net.lliurex.accesswizard 1.0
 
@@ -30,7 +30,7 @@ PlasmoidItem {
 		id: launchers
 		engine: "executable"
 		connectedSources: []
-		onNewData:  {
+		onNewData: function(source,data) {
 			var exitCode = data["exit code"];
 			var exitStatus = data["exit status"];
 			var stdout = data["stdout"];
@@ -43,7 +43,7 @@ PlasmoidItem {
 				reload();
 			}
 			exited(exitCode, exitStatus, stdout, stderr);
-			disconnectSource(sourceName); // cmd finished
+			disconnectSource(source); // cmd finished
 		} //OnNewData
 
 		function processData(stdout) {
@@ -71,15 +71,19 @@ PlasmoidItem {
 
 		function sanitizeOutput(stdout) {
 			//1st " as character sequence
-			stdout=stdout.replace(/\"/g,'###%%%');
+			//stdout=stdout.replace(/\"/g,'###%%%');
 			//2nd keys must be between "
 			stdout=stdout.replace(/, \'/g,', "');
 			stdout=stdout.replace(/\':/g,'":');
 			stdout=stdout.replace(/{\'/g,'{"');
+			stdout=stdout.replace(/\'}/g,'"}');
+			stdout=stdout.replace(/: \'/g,': "');
+			stdout=stdout.replace(/\',/g,'",');
+			stdout=stdout.replace(/\'\'/g,'"');
 			//3rd remove sequence (could be done at 1st)
-			stdout=stdout.replace(/###%%%/g,'');
+			//stdout=stdout.replace(/###%%%/g,'');
 			//4th all apostrophes to "
-			stdout=stdout.replace(/\'/g,'"');
+			stdout=stdout.replace(/\'/g,'%%%%%%');
 			//5th bool values
 			stdout=stdout.replace(/False/g,'\"False\"');
 			stdout=stdout.replace(/True/g,'\"True\"');

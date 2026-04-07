@@ -95,7 +95,7 @@ class QToolTipDock(QLabel):
 	"""
 	def __init__(self,text="",bigTip=False,parent=None):
 		super().__init__()
-		self.setWindowFlags(Qt.FramelessWindowHint|Qt.ToolTip|Qt.WindowTransparentForInput)
+		#self.setWindowFlags(Qt.FramelessWindowHint|Qt.ToolTip|Qt.WindowTransparentForInput)
 		self.setText(text)
 		self.setAccessibleName(text)
 		self.setAccessibleDescription("")
@@ -237,6 +237,8 @@ class QPushButtonDock(QPushButton):
 			pxm=QPixmap(iconName)
 			icn=QIcon(pxm)
 		else:
+			if "." in iconName and "/" in iconName:
+				iconName="".join(os.path.basename(iconName).split(".")[0:-1])
 			icn=QIcon.fromTheme(iconName)
 		self.setAccessibleName(self.data["Name"])
 		self.setIcon(icn)
@@ -397,12 +399,12 @@ class accessdock(QWidget):
 		#self.setWindowFlag(Qt.Window)
 		#This hides decoration and bypass window 
 		#also skips app registering in at-spi so is unexistent for ORCA 
-		self.setWindowFlags(Qt.WindowStaysOnTopHint | Qt.Tool)
+		#self.setWindowFlags(Qt.Tool|Qt.FramelessWindowHint|Qt.WindowStaysOnTopHint)
 		#self.setWindowFlags(Qt.FramelessWindowHint|Qt.ToolTip|Qt.X11BypassWindowManagerHint)
 		#self.setWindowFlags(Qt.WindowStaysOnTopHint | Qt.Tool)
 		# Enable translucent background for transparency
 		#self.setWindowFlag(Qt.WindowType.Dialog,True)
-		#self.setWindowFlag(Qt.WindowType.BypassWindowManagerHint,True)
+		self.setWindowFlag(Qt.WindowType.BypassWindowManagerHint,True)
 		#self.setWindowFlag(Qt.WindowType.WindowStaysOnTopHint,True)
 		#self.setStyleSheet("margin:0px")
 		layout=QGridLayout()

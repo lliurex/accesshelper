@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 import os,sys,subprocess,json
-from PySide6.QtWidgets import QApplication,QGridLayout,QWidget,QPushButton,QHeaderView,QMenu,QToolTip,QLabel,QTableWidget,QToolBar,QDialog
+from PySide6.QtWidgets import QApplication,QGridLayout,QWidget,QPushButton,QHeaderView,QMenu,QToolTip,QLabel,QTableWidget,QToolBar
 from PySide6.QtCore import Qt,QSignalMapper,QSize,QThread,QPoint,QEvent,Signal,QObject,QRect
 from PySide6.QtGui import QIcon,QPixmap,QCursor,QColor,QPalette,QGuiApplication,QFont
 import dbus
@@ -485,12 +485,9 @@ class accessdock(QWidget):
 	#def mousePressEvent
 
 	def mouseMoveEvent(self, ev):
-		x = ev.globalPosition().x()-(self.width()/2)
-		if ( x<0) or (y<0):
-			return
-		y = ev.globalPosition().y()
-		coords=self.mapToGlobal(QPoint(x,y))
-		self.move(x,y)
+		x = ev.globalX()-(self.width()/2)
+		y = ev.globalY()
+		self.move(x, y)
 	#def mouseMoveEvent
 
 	def mouseReleaseEvent(self,*args):

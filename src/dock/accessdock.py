@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 import os,sys,subprocess,json
-from PySide6.QtWidgets import QApplication,QGridLayout,QWidget,QPushButton,QHeaderView,QMenu,QToolTip,QLabel,QTableWidget,QToolBar,QDialog
+from PySide6.QtWidgets import QApplication,QGridLayout,QWidget,QPushButton,QHeaderView,QMenu,QToolTip,QLabel,QTableWidget,QToolBar
 from PySide6.QtCore import Qt,QSignalMapper,QSize,QThread,QPoint,QEvent,Signal,QObject,QRect
 from PySide6.QtGui import QIcon,QPixmap,QCursor,QColor,QPalette,QGuiApplication,QFont
 import dbus
@@ -407,12 +407,9 @@ class accessdock(QWidget):
 		#self.setStyleSheet("margin:0px")
 		layout=QGridLayout()
 		self.setLayout(layout)
-		self.grid=QTableTouchWidget(1,0)
 		self.flow=QFlowTouchWidget()
 		self.flow.setObjectName("Table")
 		#redirect event easy way
-		layout.addWidget(self.grid,0,0)
-		self.grid.setVisible(False)
 		layout.addWidget(self.flow,0,0)
 		self.lblDesc=QLabel("")
 		font=self.lblDesc.font()
@@ -485,8 +482,8 @@ class accessdock(QWidget):
 	#def mousePressEvent
 
 	def mouseMoveEvent(self, ev):
-		x = ev.globalPosition().x()-(self.width()/2)
-		y = ev.globalPosition().y()
+		x = ev.globalX()-(self.width()/2)
+		y = ev.globalY()
 		self.move(x, y)
 	#def mouseMoveEvent
 
@@ -512,8 +509,6 @@ class accessdock(QWidget):
 		self.lblDesc.setText("")
 
 		self.flow.clean()
-		self.grid.clear()
-		self.grid.setColumnCount(0)
 		
 		launchers=self.libdock.getLaunchers()
 		bigTip=False
@@ -533,7 +528,6 @@ class accessdock(QWidget):
 			btn.setStyleSheet("border: 3px solid rgba(%s);"%(color))
 			self.flow.addWidget(btn)
 		#vh.setSectionResizeMode(vh.ResizeToContents)
-		#if oldcount!=self.grid.columnCount():
 	#def updateScreen
 
 	def showEvent(self,*args):

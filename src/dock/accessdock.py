@@ -407,12 +407,9 @@ class accessdock(QWidget):
 		#self.setStyleSheet("margin:0px")
 		layout=QGridLayout()
 		self.setLayout(layout)
-		self.grid=QTableTouchWidget(1,0)
 		self.flow=QFlowTouchWidget()
 		self.flow.setObjectName("Table")
 		#redirect event easy way
-		layout.addWidget(self.grid,0,0)
-		self.grid.setVisible(False)
 		layout.addWidget(self.flow,0,0)
 		self.lblDesc=QLabel("")
 		font=self.lblDesc.font()
@@ -512,8 +509,6 @@ class accessdock(QWidget):
 		self.lblDesc.setText("")
 
 		self.flow.clean()
-		self.grid.clear()
-		self.grid.setColumnCount(0)
 		
 		launchers=self.libdock.getLaunchers()
 		bigTip=False
@@ -533,7 +528,6 @@ class accessdock(QWidget):
 			btn.setStyleSheet("border: 3px solid rgba(%s);"%(color))
 			self.flow.addWidget(btn)
 		#vh.setSectionResizeMode(vh.ResizeToContents)
-		#if oldcount!=self.grid.columnCount():
 	#def updateScreen
 
 	def showEvent(self,*args):

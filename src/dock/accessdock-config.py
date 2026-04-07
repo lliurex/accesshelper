@@ -2,7 +2,7 @@
 import dbus
 import os,sys,shutil,time
 import notify2
-from PySide6.QtWidgets import QApplication,QGridLayout,QWidget,QPushButton,QHeaderView,QLabel,QSpinBox,QTableWidgetItem,QAbstractItemView,QCheckBox,QFrame,QHBoxLayout,QVBoxLayout,QMessageBox
+from PySide6.QtWidgets import QApplication,QGridLayout,QWidget,QPushButton,QHeaderView,QLabel,QSpinBox,QWidgetItem,QTableWidgetItem,QAbstractItemView,QCheckBox,QFrame,QHBoxLayout,QVBoxLayout,QMessageBox
 from PySide6.QtCore import Qt,Signal,QSize,QObject
 from PySide6.QtGui import QIcon,QCursor,QGuiApplication
 from QtExtraWidgets import QTableTouchWidget,QHotkeyButton
@@ -150,23 +150,24 @@ class dock(accessdock.accessdock):
 		self.fakeTable.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
 		self.fakeTable.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
 		self.fakeTable.setRowCount(0)
-		self.fakeTable.setRowCount(self.realTable.rowCount())
+		self.fakeTable.setRowCount(1)
 		self.fakeTable.setColumnCount(0)
-		self.fakeTable.setColumnCount(self.realTable.columnCount())
-		for i in range(0,self.realTable.rowCount()):
-			for j in range(0,self.realTable.columnCount()):
-				wdg=self.realTable.cellWidget(i,j)
-				if isinstance(wdg,QPushButton):
-					icon=wdg.icon()
-					item=QTableWidgetItem()
-					item.setIcon(icon)
-					#item.setData(Qt.UserRole,wdg.property("file"))
-					item.setData(Qt.UserRole,wdg.property("fpath"))
-					self.fakeTable.setItem(i,j,item)
-					idx=j+(i*self.fakeTable.columnCount())
-					#self.data[idx]=wdg.property("file")
-					self.data[idx]=wdg.property("fpath")
-					self._debug("Item for {} {}".format(i,j))
+		self.fakeTable.setColumnCount(self.realTable.count())
+		for i in range(0,self.realTable.count()):
+			item=self.realTable.itemAt(i)
+			wdg=None
+			if isinstance(item,QWidgetItem):
+				wdg=item.widget()
+			if isinstance(wdg,accessdock.QPushButtonDock):
+				icon=wdg.icon()
+				item=QTableWidgetItem()
+				item.setIcon(icon)
+				#item.setData(Qt.UserRole,wdg.property("file"))
+				item.setData(Qt.UserRole,wdg.property("fpath"))
+				self.fakeTable.setItem(0,i,item)
+				#self.data[idx]=wdg.property("file")
+				self.data[i]=wdg.property("fpath")
+				self._debug("Item for {}".format(i))
 	#def _cloneDock
 
 	def getLaunchers(self):

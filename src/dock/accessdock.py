@@ -399,7 +399,7 @@ class accessdock(QWidget):
 		#self.setWindowFlag(Qt.Window)
 		#This hides decoration and bypass window 
 		#also skips app registering in at-spi so is unexistent for ORCA 
-		#self.setWindowFlags(Qt.Tool|Qt.FramelessWindowHint|Qt.WindowStaysOnTopHint)
+		self.setWindowFlags(Qt.Tool|Qt.WindowStaysOnTopHint)
 		#self.setWindowFlags(Qt.FramelessWindowHint|Qt.ToolTip|Qt.X11BypassWindowManagerHint)
 		#self.setWindowFlags(Qt.WindowStaysOnTopHint | Qt.Tool)
 		# Enable translucent background for transparency

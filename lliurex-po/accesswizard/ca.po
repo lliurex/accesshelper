@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-28 00:21+0100\n"
-"PO-Revision-Date: 2026-03-28 00:30+0100\n"
+"POT-Creation-Date: 2026-04-08 12:01+0200\n"
+"PO-Revision-Date: 2026-04-08 12:05+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ca\n"
@@ -30,7 +30,7 @@ msgstr ""
 
 #: ../src/accesswizard.py:15
 msgid "Navigate through options with \"Tab\" or arrows."
-msgstr "Usar \"Tab\" o \"fletxes\" per a explorar les opcions"
+msgstr "Usar \"Tab\" o \"fletxes\" per a explorar les opcions."
 
 #: ../src/stacks/accessibility.py:15
 msgid "System Accessibility"

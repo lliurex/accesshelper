@@ -3,6 +3,7 @@
 #Licensed under GPL-3 license
 #https://www.gnu.org/licenses/gpl-3.0.en.html
 
+ALWAYS_ON="ocrwindow" #Whitespace separated scripts
 METADATA=$1
 TYPE=$(grep X-Plasma-API $METADATA)
 TYPE=${TYPE/*: /}
@@ -29,13 +30,19 @@ do
 	fi
 	[[ $UNLOAD == "true" ]] && LOADED=1
 done
+echo "Selected script $ID"
+[[ $(echo $ALWAYS_ON | grep ${ID,,}) ]] && LOADED=0
 [[ ${LOADED} -ne 0 ]] && ENABLED="false" || ENABLED="true"
+echo "Script data: {LOADED} $LOADED {UNLOADED} $UNLOAD {ENABLED} $ENABLED"
 OUT=$(kwriteconfig6 --file kwinrc --group Plugins --key ${ID}Enabled $ENABLED)
+#Ensure script engine is on
 qdbus org.kde.KWin /Scripting org.kde.kwin.Scripting.start
-echo $ID
-	if [[ $ID == "ocrwindow" ]]
-	then
+case $ID in
+	"ocrwindow")
 		qdbus org.kde.kglobalaccel /component/kwin org.kde.kglobalaccel.Component.invokeShortcut "Toggle Window OCR"
-	fi
+		;;
+	*)
+		;;
+esac
 #qdbus org.kde.KWin /KWin org.kde.KWin.reconfigure
 exit 0

@@ -49,22 +49,29 @@ class playFile(QThread):
 	def __init__(self,ttsFile,parent=None):
 		QThread.__init__(self, parent)
 		self.player=QtMultimedia.QMediaPlayer()
-		content=QtMultimedia.QMediaContent(QUrl.fromLocalFile(ttsFile))
-		self.player.setMedia(content)
+		self.output=QtMultimedia.QAudioOutput()
+		self.player.setAudioOutput(self.output)
+		#content=QtMultimedia.QMediaContent(QUrl.fromLocalFile(ttsFile))
+		#self.player.setMedia(content)
+		self.player.setSource(QUrl.fromLocalFile(ttsFile))
 		self.signal = playSignal()
 		self.start = True
+		self.ready=False
 	#def __init__
 
 	def run(self):
 		self.player.play()
-		self.player.stateChanged.connect(self.stopPlay)
+		self.player.playbackStateChanged.connect(self.stopPlay)
 	#def run
 
 	def stopPlay(self):
-		if self.start==True:
+		if self.ready==True:
 			self.player.stop()
 			self.signal.sig.emit('OK')
-		self.start = False
+			self.ready=False
+		if self.start==True:
+			self.ready=True
+			self.start = False
 	#def stopPlay
 #class playFile
 
@@ -314,4 +321,4 @@ if __name__=="__main__":
 	config.setMinimumHeight(config.sizeHint().height()*1.2)
 	config.setMinimumWidth(config.sizeHint().width()*1.2)
 	#config.updateScreen()
-	app.exec_()
+	app.exec()

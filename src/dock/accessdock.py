@@ -399,12 +399,12 @@ class accessdock(QWidget):
 		#self.setWindowFlag(Qt.Window)
 		#This hides decoration and bypass window 
 		#also skips app registering in at-spi so is unexistent for ORCA 
-		#self.setWindowFlags(Qt.Tool|Qt.FramelessWindowHint|Qt.WindowStaysOnTopHint)
+		self.setWindowFlags(Qt.Tool|Qt.WindowStaysOnTopHint)
 		#self.setWindowFlags(Qt.FramelessWindowHint|Qt.ToolTip|Qt.X11BypassWindowManagerHint)
 		#self.setWindowFlags(Qt.WindowStaysOnTopHint | Qt.Tool)
 		# Enable translucent background for transparency
 		#self.setWindowFlag(Qt.WindowType.Dialog,True)
-		self.setWindowFlag(Qt.WindowType.BypassWindowManagerHint,True)
+		#self.setWindowFlag(Qt.WindowType.BypassWindowManagerHint,True)
 		#self.setWindowFlag(Qt.WindowType.WindowStaysOnTopHint,True)
 		#self.setStyleSheet("margin:0px")
 		layout=QGridLayout()
@@ -484,8 +484,8 @@ class accessdock(QWidget):
 	#def mousePressEvent
 
 	def mouseMoveEvent(self, ev):
-		x = ev.globalX()-(self.width()/2)
-		y = ev.globalY()
+		x = ev.globalPosition().x()-(self.width()/2)
+		y = ev.globalPosition().y()
 		self.move(x, y)
 	#def mouseMoveEvent
 

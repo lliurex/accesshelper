@@ -484,8 +484,8 @@ class accessdock(QWidget):
 	#def mousePressEvent
 
 	def mouseMoveEvent(self, ev):
-		x = ev.globalX()-(self.width()/2)
-		y = ev.globalY()
+		x = ev.globalPosition().x()-(self.width()/2)
+		y = ev.globalPosition().y()
 		self.move(x, y)
 	#def mouseMoveEvent
 

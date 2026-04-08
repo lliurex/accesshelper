@@ -51,6 +51,7 @@ function readMetadata
 	ENAME=${ENAME//\"/}
 	ENAME=${ENAME/,/}
 	[ ${#ID} -eq 0 ] && ID=${ENAME,,}
+	[ ${#ID} -eq 0 ] && ID=${METADATA,,}
 
 	CHK_MAGNIFIERS=$(grep \"exclusiveGroup\" $METADATA)
 	[ ${#CHK_MAGNIFIERS} -ne 0 ] && ENAME="view_zoom_in"

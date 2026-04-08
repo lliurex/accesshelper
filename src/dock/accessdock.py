@@ -361,13 +361,9 @@ class QPushButtonDock(QPushButton):
 			self.popupShow=False
 		if self.popupShow==False and (ev.type()==QEvent.Type.Enter or ev.type()==QEvent.Type.FocusIn):
 			if ev.type()==QEvent.Type.FocusIn:
-				if ev.reason()==Qt.FocusReason.OtherFocusReason:
-			#		self.move(self.mapToGlobal(QPoint(0,self.y()+self.height())))
-					pass
-				else:
-					if self.hasFocus()==False:
-						self.setFocus()
-				self.focusIn.emit(self)
+				if ev.reason()!=Qt.FocusReason.OtherFocusReason and self.hasFocus()==False:
+					self.setFocus()
+			self.focusIn.emit(self)
 			#size=self.size()
 			#origSize=72
 			#newsize=QSize(size.width(),origSize*1.5)

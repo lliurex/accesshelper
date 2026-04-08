@@ -404,7 +404,7 @@ class accessdock(QWidget):
 		#self.setWindowFlags(Qt.WindowStaysOnTopHint | Qt.Tool)
 		# Enable translucent background for transparency
 		#self.setWindowFlag(Qt.WindowType.Dialog,True)
-		self.setWindowFlag(Qt.WindowType.BypassWindowManagerHint,True)
+		#self.setWindowFlag(Qt.WindowType.BypassWindowManagerHint,True)
 		#self.setWindowFlag(Qt.WindowType.WindowStaysOnTopHint,True)
 		#self.setStyleSheet("margin:0px")
 		layout=QGridLayout()

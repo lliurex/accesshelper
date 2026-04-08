@@ -76,86 +76,6 @@ class threadLauncher(QThread):
 		return(True)
 	#def run
 #class threadLauncher
-
-class QToolTipDock(QLabel):
-	"""Custom tooltip for dock buttons
-
-		Parameters
-		----------
-			text: str
-				tooltip text
-
-		Methods
-		-------
-			toggle: Calling this shows/hide the tooltip
-
-			Parameters
-			----------
-				coords: QPoint whith x/y coordenates
-	"""
-	def __init__(self,text="",bigTip=False,parent=None):
-		super().__init__()
-		#self.setWindowFlags(Qt.FramelessWindowHint|Qt.ToolTip|Qt.WindowTransparentForInput)
-		self.setText(text)
-		self.setAccessibleName(text)
-		self.setAccessibleDescription("")
-		self.setAlignment(Qt.AlignCenter)
-		f=self.font()
-		f.setWeight(QFont.Bold)
-		f.setPointSize(f.pointSize()+2)
-		self.setFont(f)
-		scr=QApplication.screens()[0]
-		newSize=scr.size().width()/(len(self.text()))
-		f.setPointSize(newSize-10)
-		self.fontFull=f
-		self.bigTip=bigTip
-		self.setStyleSheet("border: 1px solid black;")
-	#def __init__
-
-	def _getCoordsForFull(self,oldCoords):
-		scr=QApplication.screens()[0]
-		h=scr.size().height()
-		portion=int(h/6)-1
-		zone=int(oldCoords.y()/portion)
-		if self.bigTip==True:
-			f=self.font()
-			newSize=portion-10
-			f.setPointSize(newSize)
-			self.setFont(f)
-			zoneInc=2
-			zoneBorder=3
-		else:
-			zoneInc=1
-			zoneBorder=5
-		coordX=int(scr.size().width()/2)-int(len(self.text())*self.font().pointSize()/2)
-		if zone<zoneBorder:
-			coordY=portion*(zone+zoneInc)
-		else:
-			coordY=portion*(zone-zoneInc)
-		return(QPoint(coordX,coordY))
-	#def _getCoordsForFull
-
-	def toggle(self,coords):
-		if self.isVisible()==False:
-			if self.bigTip==True:
-				self.setFont(self.fontFull)
-				coords=self._getCoordsForFull(coords)
-			#else:
-			#	coords=self.cursor().pos()
-			self.setMinimumWidth(len(self.text())*self.font().pointSize())
-			(x,y)=(coords.x(),coords.y())
-			scr=QApplication.screens()[0]
-			if coords.x()+(len(self.text())*self.font().pointSize())>scr.size().width():
-				w=scr.size().width()
-				x=w-(len(self.text())*self.font().pointSize())
-			if (coords.y()+self.height())>scr.size().height():
-				h=scr.size().height()
-				y=h-self.height()
-			self.move(x,y)
-			self.setVisible(True)
-	#def toggle
-
-#class QToolTipDock
 	
 class QPushButtonDock(QPushButton):
 	"""A dock button
@@ -217,12 +137,9 @@ class QPushButtonDock(QPushButton):
 		self.initialSize=QSize(BTN_SIZE,BTN_SIZE)
 		self.mnu=self._addContextMenu()
 		self.customContextMenuRequested.connect(self._popup)
-		self.lbl=QToolTipDock(self.data.get("Name"),bigTip)
-		self.lbl.setAccessibleName(self.data.get("Name"))
-		self.lbl.setVisible(False)
-		#layout.addWidget(self.lbl,0,0)
 		self.threadLaunchers=[]
 		self.popupShow=False
+		self.desc=""
 		self._renderBtn()
 		self.clicked.connect(self._beginLaunch)
 	#def __init__(self,text="",parent=None):
@@ -241,6 +158,10 @@ class QPushButtonDock(QPushButton):
 				iconName="".join(os.path.basename(iconName).split(".")[0:-1])
 			icn=QIcon.fromTheme(iconName)
 		self.setAccessibleName(self.data["Name"])
+		if self.data.get("Comment","")!="":
+			self.desc=self.data["Comment"]
+		else:
+			self.desc=self.data["Name"]
 		self.setIcon(icn)
 		self.setIconSize(QSize(64,64))
 		self.setFixedSize(QSize(72,72))
@@ -361,19 +282,14 @@ class QPushButtonDock(QPushButton):
 			self.popupShow=False
 		if self.popupShow==False and (ev.type()==QEvent.Type.Enter or ev.type()==QEvent.Type.FocusIn):
 			if ev.type()==QEvent.Type.FocusIn:
-				if ev.reason()==Qt.FocusReason.OtherFocusReason:
-			#		self.move(self.mapToGlobal(QPoint(0,self.y()+self.height())))
-					pass
-				else:
-					if self.hasFocus()==False:
-						self.setFocus()
-				self.focusIn.emit(self)
+				if ev.reason()!=Qt.FocusReason.OtherFocusReason and self.hasFocus()==False:
+					self.setFocus()
+			self.focusIn.emit(self)
 			#size=self.size()
 			#origSize=72
 			#newsize=QSize(size.width(),origSize*1.5)
 			#self.setIconSize(newsize)
 			#self.setFixedSize(newsize)
-			#self.lbl.toggle(self.mapToGlobal(QPoint(0,self.y()+self.height()/2)))
 		return(False)
 	#def eventFilter
 #class QPushButtonDock
@@ -503,7 +419,7 @@ class accessdock(QWidget):
 	#def leaveEvent
 
 	def _showTooltip(self,*args):
-		self.lblDesc.setText(args[0].lbl.text())
+		self.lblDesc.setText(args[0].desc)
 	#def _showTooltip
 
 	def updateScreen(self):

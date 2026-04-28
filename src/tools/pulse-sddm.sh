@@ -13,6 +13,5 @@ then
 	/usr/bin/dbus-launch /usr/libexec/at-spi2-registryd & >> $LOG 
 	/usr/bin/dbus-launch /usr/libexec/at-spi-bus-launcher --a11y=1 --screen-reader=1 & >> $LOG
 fi
-pulseaudio -k || true
-dbus-launch pulseaudio --daemonize=no
+dbus-launch wireplumber & || true
 exit 0

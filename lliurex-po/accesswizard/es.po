@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-28 00:21+0100\n"
-"PO-Revision-Date: 2026-03-28 00:30+0100\n"
+"POT-Creation-Date: 2026-04-29 10:24+0200\n"
+"PO-Revision-Date: 2026-04-29 10:28+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #: ../src/accesswizard.py:13
 msgid "Wizard of LliureX for configuring accessibility tools"
@@ -29,7 +29,7 @@ msgstr ""
 
 #: ../src/accesswizard.py:15
 msgid "Navigate through options with \"Tab\" or arrows."
-msgstr "Usar \"tabulador\" o \"flechas\" para desplazarse por las opciones"
+msgstr "Usar \"tabulador\" o \"flechas\" para desplazarse por las opciones."
 
 #: ../src/stacks/accessibility.py:15
 msgid "System Accessibility"
@@ -109,7 +109,8 @@ msgstr "Navegación accesible"
 
 #: ../src/stacks/browsers.py:19
 msgid "Settings and addons for improved browser accessibility"
-msgstr "Colección de heraamientas para mejorar la accesibilidad de los navegadores"
+msgstr ""
+"Colección de heraamientas para mejorar la accesibilidad de los navegadores"
 
 #: ../src/stacks/effects.py:14
 msgid "Effects"
@@ -380,32 +381,48 @@ msgid "Edit"
 msgstr "Editar"
 
 #: ../src/dock/accessdock-config.py:24
+msgid ""
+"This is the accessibility dock configuration.<br>From here the icons could "
+"be re-arranged, actions added or removed,,,"
+msgstr ""
+"Bienvenido a la configuración de la barra de accesibilidad.<br>Los iconos "
+"puedes reorganizarse, se pueden añadir o eliminar acciones..."
+
+#: ../src/dock/accessdock-config.py:25
+msgid ""
+"Drag and drop with the mouse or use the list below and the respective up/"
+"down buttons"
+msgstr ""
+"Arrastrar y soltar con el ratón o usando los botons correspondientes de la "
+"lista inferior"
+
+#: ../src/dock/accessdock-config.py:26
 msgid "Keyboard shortcut"
 msgstr "Atajo de teclado"
 
-#: ../src/dock/accessdock-config.py:25
+#: ../src/dock/accessdock-config.py:27
 msgid "Push to assign"
 msgstr "Pulsar para asignar"
 
-#: ../src/dock/accessdock-config.py:26
+#: ../src/dock/accessdock-config.py:28
 msgid "already assigned"
 msgstr "ya está asignada"
 
-#: ../src/dock/accessdock-config.py:27
+#: ../src/dock/accessdock-config.py:29
 msgid "Items per row"
 msgstr "Botones por línea"
 
-#: ../src/dock/accessdock-config.py:28
+#: ../src/dock/accessdock-config.py:30
 msgid "Launch at session start"
 msgstr "Cargar al inicio de sesión"
 
-#: ../src/dock/accessdock-config.py:29
+#: ../src/dock/accessdock-config.py:31
 msgid "Displays launcher name at fullscreen on mouse over"
 msgstr ""
 "Muestra el nombre del lanzador a pantalla completa al posicionar el puntero "
 "encima"
 
-#: ../src/dock/accessdock-config.py:30
+#: ../src/dock/accessdock-config.py:32
 msgid "Up"
 msgstr "Subir"
 

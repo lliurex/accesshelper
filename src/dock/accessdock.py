@@ -334,6 +334,7 @@ class QPushButtonDock(QPushButton):
 			if len(path)==0:
 				act=self.mnu.defaultAction()
 				act.setEnabled(False)
+			self.popupShow=False
 	#def _popup
 
 	def _addContextMenu(self):

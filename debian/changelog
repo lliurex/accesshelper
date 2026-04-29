@@ -1,3 +1,19 @@
+accesswizard (0.1.4) jammy; urgency=medium
+
+  * Change layout from table to list
+  * Increase font size
+  * Add browser extensions (WIP)
+  * AccessDock:
+  *  Change user's path from local to config
+  *  Add icons for default actions
+  *  Fix kwin effect autodetect
+  *  Improve hide/show mechanism
+  * TTSManager:
+  *  Fix player
+  *  Try to compatibilize values with orca config
+
+ -- Juanma1980 <juanma1980@gmail.com>  Wed, 29 Apr 2026 11:08:23 +0200
+
 accesswizard (0.1.3.9-0llxdev) jammy; urgency=medium
 
   * Improve external commands management

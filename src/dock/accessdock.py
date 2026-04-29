@@ -409,7 +409,6 @@ class accessdock(QWidget):
 		self.setLayout(layout)
 		self.flow=QFlowTouchWidget()
 		self.flow.setObjectName("Table")
-		#redirect event easy way
 		layout.addWidget(self.flow,0,0)
 		self.lblDesc=QLabel("")
 		font=self.lblDesc.font()
@@ -572,7 +571,7 @@ if __name__=="__main__":
 	try:
 		objbus=bus.get_object("net.lliurex.accessibility.Dock","/net/lliurex/accessibility/Dock")
 		objint=dbus.Interface(bus,"net.lliurex.accessibility.Dock")
-		objbus.isDockVisible()
+		objbus.isVisible()
 		print("Already launched!")
 	#	sys.exit(2)
 	except Exception as e:

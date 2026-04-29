@@ -4,5 +4,5 @@ Name=Invert
 Comment=
 Icon=/usr/share/accesswizard/dock/icons/invert.png
 Path=/usr/share/kwin/builtin-effects/kwin4_effect_invert/metadata.json
-Exec=/usr/share/accesshelper/dock/tools/loadEffect.sh /usr/share/kwin/builtin-effects/kwin4_effect_invert/metadata.json add
+Exec=/usr/share/accesswizard/dock/tools/loadEffect.sh /usr/share/kwin/builtin-effects/kwin4_effect_invert/metadata.json add
 Fname=/usr/share/accesswizard/dock/default/004_invert.desktop

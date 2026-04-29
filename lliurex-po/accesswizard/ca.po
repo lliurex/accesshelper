@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-28 00:21+0100\n"
-"PO-Revision-Date: 2026-03-28 00:30+0100\n"
+"POT-Creation-Date: 2026-04-29 10:24+0200\n"
+"PO-Revision-Date: 2026-04-29 10:26+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ca\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #: ../src/accesswizard.py:13
 msgid "Wizard of LliureX for configuring accessibility tools"
@@ -30,7 +30,7 @@ msgstr ""
 
 #: ../src/accesswizard.py:15
 msgid "Navigate through options with \"Tab\" or arrows."
-msgstr "Usar \"Tab\" o \"fletxes\" per a explorar les opcions"
+msgstr "Usar \"Tab\" o \"fletxes\" per a explorar les opcions."
 
 #: ../src/stacks/accessibility.py:15
 msgid "System Accessibility"
@@ -381,32 +381,48 @@ msgid "Edit"
 msgstr "Editar"
 
 #: ../src/dock/accessdock-config.py:24
+msgid ""
+"This is the accessibility dock configuration.<br>From here the icons could "
+"be re-arranged, actions added or removed,,,"
+msgstr ""
+"Benvingut a la configuració de la barra d'accessibilitat.<br>Aci les icones "
+"poden ser reorganitzades, es poden afegir o eliminar accions..."
+
+#: ../src/dock/accessdock-config.py:25
+msgid ""
+"Drag and drop with the mouse or use the list below and the respective up/"
+"down buttons"
+msgstr ""
+"Arrossegar i soltar amb el ratolí o utilitzar els botons corresponents de la "
+"lista"
+
+#: ../src/dock/accessdock-config.py:26
 msgid "Keyboard shortcut"
 msgstr "Drecera de teclat"
 
-#: ../src/dock/accessdock-config.py:25
+#: ../src/dock/accessdock-config.py:27
 msgid "Push to assign"
 msgstr "Premer per assignar"
 
-#: ../src/dock/accessdock-config.py:26
+#: ../src/dock/accessdock-config.py:28
 msgid "already assigned"
 msgstr "ja es troba assignada"
 
-#: ../src/dock/accessdock-config.py:27
+#: ../src/dock/accessdock-config.py:29
 msgid "Items per row"
 msgstr "Elemets per línia"
 
-#: ../src/dock/accessdock-config.py:28
+#: ../src/dock/accessdock-config.py:30
 msgid "Launch at session start"
 msgstr "Carregar amb l'inici de sessió"
 
-#: ../src/dock/accessdock-config.py:29
+#: ../src/dock/accessdock-config.py:31
 msgid "Displays launcher name at fullscreen on mouse over"
 msgstr ""
 "Mostra el nom del llançador a pantalla completa al posicionar el punter "
 "damunt"
 
-#: ../src/dock/accessdock-config.py:30
+#: ../src/dock/accessdock-config.py:32
 msgid "Up"
 msgstr "Pujar"
 

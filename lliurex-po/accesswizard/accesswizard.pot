@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-28 00:21+0100\n"
+"POT-Creation-Date: 2026-04-29 10:24+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -378,30 +378,42 @@ msgid "Edit"
 msgstr ""
 
 #: ../src/dock/accessdock-config.py:24
-msgid "Keyboard shortcut"
+msgid ""
+"This is the accessibility dock configuration.<br>From here the icons could "
+"be re-arranged, actions added or removed,,,"
 msgstr ""
 
 #: ../src/dock/accessdock-config.py:25
-msgid "Push to assign"
+msgid ""
+"Drag and drop with the mouse or use the list below and the respective up/"
+"down buttons"
 msgstr ""
 
 #: ../src/dock/accessdock-config.py:26
-msgid "already assigned"
+msgid "Keyboard shortcut"
 msgstr ""
 
 #: ../src/dock/accessdock-config.py:27
-msgid "Items per row"
+msgid "Push to assign"
 msgstr ""
 
 #: ../src/dock/accessdock-config.py:28
-msgid "Launch at session start"
+msgid "already assigned"
 msgstr ""
 
 #: ../src/dock/accessdock-config.py:29
-msgid "Displays launcher name at fullscreen on mouse over"
+msgid "Items per row"
 msgstr ""
 
 #: ../src/dock/accessdock-config.py:30
+msgid "Launch at session start"
+msgstr ""
+
+#: ../src/dock/accessdock-config.py:31
+msgid "Displays launcher name at fullscreen on mouse over"
+msgstr ""
+
+#: ../src/dock/accessdock-config.py:32
 msgid "Up"
 msgstr ""
 

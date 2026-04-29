@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-27 12:26+0100\n"
-"PO-Revision-Date: 2026-03-27 12:28+0100\n"
+"POT-Creation-Date: 2026-04-29 10:24+0200\n"
+"PO-Revision-Date: 2026-04-29 10:26+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ca\n"
@@ -20,17 +20,17 @@ msgstr ""
 
 #: ../src/accesswizard.py:13
 msgid "Wizard of LliureX for configuring accessibility tools"
-msgstr "Assitent del LliureX per a configurar les eines d'accessibilitat"
+msgstr "Assistent del LliureX per a configurar les eines d'accessibilitat"
 
 #: ../src/accesswizard.py:14
 msgid "Press \"Escape\" to stop reading. \"F5\" for read it from beginning"
 msgstr ""
-"Premdre \"Escape\" per a deixar de llegir. \"F5\" per a tornar a llegir "
-"desde el principi"
+"Premer \"Escape\" per aturar la lectura. \"F5\" per a llegir desde el "
+"principi"
 
 #: ../src/accesswizard.py:15
 msgid "Navigate through options with \"Tab\" or arrows."
-msgstr "Navegar per les opciones mitjançant \"Tab\" o les fletxes del teclat."
+msgstr "Usar \"Tab\" o \"fletxes\" per a explorar les opcions."
 
 #: ../src/stacks/accessibility.py:15
 msgid "System Accessibility"
@@ -50,12 +50,11 @@ msgstr "Configura un gamepad/joystick com a ratolí"
 
 #: ../src/stacks/accessibility.py:19
 msgid "Browsers accessibility"
-msgstr "Accessibilitat dels fullejadors"
+msgstr "Navegació accessible"
 
 #: ../src/stacks/accessibility.py:20
 msgid "Selection of addons and configurations for accessible browsing"
-msgstr ""
-"Selecció d'extensions i configuracions per a l'accessibilitat al fullejar"
+msgstr "Selecció d'extensions per a una naveacio mès accessible"
 
 #: ../src/stacks/accessibility.py:21 ../src/stacks/accessibility.py:28
 msgid "Accessibility"
@@ -107,11 +106,11 @@ msgstr "Extensions del fullejador"
 
 #: ../src/stacks/browsers.py:18
 msgid "Accesible browsing"
-msgstr "Navegació accesible"
+msgstr "Navigació accessible"
 
 #: ../src/stacks/browsers.py:19
 msgid "Settings and addons for improved browser accessibility"
-msgstr "Extensions per a millorar l'accessibilitat dels fullejadors"
+msgstr "Diverses eines per a fer més accesible la navegació"
 
 #: ../src/stacks/effects.py:14
 msgid "Effects"
@@ -175,7 +174,7 @@ msgstr "Altres ajustos"
 
 #: ../src/stacks/settings.py:21
 msgid "Mono audio"
-msgstr "Audio mono"
+msgstr "Audio Mono"
 
 #: ../src/stacks/settings.py:22
 msgid "Start session with profile"
@@ -382,32 +381,48 @@ msgid "Edit"
 msgstr "Editar"
 
 #: ../src/dock/accessdock-config.py:24
+msgid ""
+"This is the accessibility dock configuration.<br>From here the icons could "
+"be re-arranged, actions added or removed,,,"
+msgstr ""
+"Benvingut a la configuració de la barra d'accessibilitat.<br>Aci les icones "
+"poden ser reorganitzades, es poden afegir o eliminar accions..."
+
+#: ../src/dock/accessdock-config.py:25
+msgid ""
+"Drag and drop with the mouse or use the list below and the respective up/"
+"down buttons"
+msgstr ""
+"Arrossegar i soltar amb el ratolí o utilitzar els botons corresponents de la "
+"lista"
+
+#: ../src/dock/accessdock-config.py:26
 msgid "Keyboard shortcut"
 msgstr "Drecera de teclat"
 
-#: ../src/dock/accessdock-config.py:25
+#: ../src/dock/accessdock-config.py:27
 msgid "Push to assign"
 msgstr "Premer per assignar"
 
-#: ../src/dock/accessdock-config.py:26
+#: ../src/dock/accessdock-config.py:28
 msgid "already assigned"
 msgstr "ja es troba assignada"
 
-#: ../src/dock/accessdock-config.py:27
+#: ../src/dock/accessdock-config.py:29
 msgid "Items per row"
 msgstr "Elemets per línia"
 
-#: ../src/dock/accessdock-config.py:28
+#: ../src/dock/accessdock-config.py:30
 msgid "Launch at session start"
 msgstr "Carregar amb l'inici de sessió"
 
-#: ../src/dock/accessdock-config.py:29
+#: ../src/dock/accessdock-config.py:31
 msgid "Displays launcher name at fullscreen on mouse over"
 msgstr ""
 "Mostra el nom del llançador a pantalla completa al posicionar el punter "
 "damunt"
 
-#: ../src/dock/accessdock-config.py:30
+#: ../src/dock/accessdock-config.py:32
 msgid "Up"
 msgstr "Pujar"
 

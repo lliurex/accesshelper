@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-28 00:21+0100\n"
+"POT-Creation-Date: 2026-04-29 10:24+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,27 +17,27 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../kwin/plasmoids/net.lliurex.accesswizard/contents/ui/main.qml:22
+#: ../kwin/plasmoids/net.lliurex.accesswizard/contents/ui/main.qml:20
 #, kde-format
 msgid "Accessibility Helper"
 msgstr ""
 
-#: ../kwin/plasmoids/net.lliurex.accesswizard/contents/ui/main.qml:23
+#: ../kwin/plasmoids/net.lliurex.accesswizard/contents/ui/main.qml:21
 #, kde-format
 msgid "Quick launcher for accessibility"
 msgstr ""
 
-#: ../kwin/plasmoids/net.lliurex.accesswizard/contents/ui/main.qml:67
+#: ../kwin/plasmoids/net.lliurex.accesswizard/contents/ui/main.qml:69
 #, kde-format
 msgid "Toggle dock"
 msgstr ""
 
-#: ../kwin/plasmoids/net.lliurex.accesswizard/contents/ui/main.qml:144
+#: ../kwin/plasmoids/net.lliurex.accesswizard/contents/ui/main.qml:142
 #, kde-format
 msgid "Configure Dock"
 msgstr ""
 
-#: ../kwin/plasmoids/net.lliurex.accesswizard/contents/ui/main.qml:149
+#: ../kwin/plasmoids/net.lliurex.accesswizard/contents/ui/main.qml:143
 #, kde-format
 msgid "Access Wizard"
 msgstr ""

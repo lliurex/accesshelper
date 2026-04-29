@@ -9,4 +9,5 @@ Comment[ca]=Llig el contingut de la finestra activa mitjançant OCR
 Icon=preferences-system-windows-effect-dialog-parent
 Path=/usr/share/kwin/scripts/ocrwindow/metadata.json
 Exec=/usr/share/accesswizard/dock/tools/loadScript.sh /usr/share/kwin/scripts/ocrwindow/metadata.json add
+NoDisplay=true
 Fname=/usr/share/accesswizard/dock/default/003_ocrwindow.desktop

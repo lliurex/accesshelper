@@ -1,3 +1,19 @@
+accesswizard (0.1.5) noble; urgency=medium
+
+  * Change layout from table to list
+  * Increase font size
+  * Add browser extensions (WIP)
+  * AccessDock:
+  *  Change user's path from local to config
+  *  Add icons for default actions
+  *  Fix kwin effect autodetect
+  *  Improve hide/show mechanism
+  * TTSManager:
+  *  Fix player
+  *  Try to compatibilize values with orca config
+
+ -- Juanma1980 <juanma1980@gmail.com>  Tue, 12 May 2026 10:34:15 +0200
+
 accesswizard (0.1.4-0lliurex25) noble; urgency=medium
 
   * Noble release

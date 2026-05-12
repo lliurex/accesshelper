@@ -21,6 +21,8 @@ i18n={"ADD":_("Add"),
 	"DEL":_("Delete"),
 	"DOWN":_("Down"),
 	"EDI":_("Edit"),
+	"HELP":_("This is the accessibility dock configuration.<br>From here the icons could be re-arranged, actions added or removed,,,"),
+	"HELP2":_("Drag and drop with the mouse or use the list below and the respective up/down buttons"),
 	"HKEY":_("Keyboard shortcut"),
 	"HKEYBTN":_("Push to assign"),
 	"HKEYERR":_("already assigned"),
@@ -268,6 +270,7 @@ class accessconf(QWidget):
 		self.chkStart.stateChanged.connect(self._toggleStart)
 		tlayout.addWidget(self.chkStart,0,0,1,2)
 		self.chkToolT=QCheckBox(i18n["TOOLTIPBIG"])
+		self.chkToolT.hide()
 		self.chkToolT.stateChanged.connect(self._toggleToolT)
 		tlayout.addWidget(self.chkToolT,1,0,1,1)
 		wdg=QWidget()
@@ -303,11 +306,14 @@ class accessconf(QWidget):
 		self.list=self._defLaunchersList()
 		scrList=self._defScrlList()
 		btnsEdit=self._defButtonsEdit()
-		tlayout.addWidget(QLabel(i18n["DCK"]),0,0,1,3)
-		tlayout.addWidget(self.dock,1,0,1,3)
-		tlayout.addWidget(self.list,2,0,1,1)
-		tlayout.addWidget(scrList,2,1,1,1)
-		tlayout.addWidget(btnsEdit,2,2,1,1)
+		tlayout.addWidget(QLabel(i18n["DCK"]),0,0,1,1)
+		tlayout.addWidget(self.dock,1,0,1,1)
+		lbl=QLabel("<strong>{}</strong><p>{}</p>".format(i18n["HELP"],i18n["HELP2"]))
+		lbl.setWordWrap(True)
+		tlayout.addWidget(lbl,1,1,1,3,Qt.AlignTop)
+		tlayout.addWidget(self.list,2,0,1,2)
+		tlayout.addWidget(scrList,2,2,1,1,Qt.Alignment(1))
+		tlayout.addWidget(btnsEdit,2,3,1,1,Qt.Alignment(0))
 		options=self._defOptions()
 		layout.addWidget(options,1,0,1,1)
 	#def _renderGui

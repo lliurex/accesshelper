@@ -5,7 +5,7 @@ import notify2
 from PySide6.QtWidgets import QApplication,QGridLayout,QWidget,QPushButton,QHeaderView,QLabel,QSpinBox,QWidgetItem,QTableWidgetItem,QAbstractItemView,QCheckBox,QFrame,QHBoxLayout,QVBoxLayout,QMessageBox
 from PySide6.QtCore import Qt,Signal,QSize,QObject
 from PySide6.QtGui import QIcon,QCursor,QGuiApplication
-from QtExtraWidgets import QTableTouchWidget,QHotkeyButton
+from QtExtraWidgets import QTableTouchWidget,QHotkeyButton,QFlowTouchWidget
 import lib.libdock as libdock
 import lib.launchers as launchers
 import accessdock
@@ -43,7 +43,6 @@ class dock(accessdock.accessdock):
 		self.dbg=True
 		self.signals=dockSignals()
 		self.realTable=None
-		self._fakeDock()
 		self.fakeTable=QTableTouchWidget()
 		self.fakeTable.setEditTriggers(QAbstractItemView.NoEditTriggers) 
 		self.fakeTable.verticalHeader().hide()
@@ -57,7 +56,8 @@ class dock(accessdock.accessdock):
 		self.fakeTable.itemSelectionChanged.connect(self._itemSelectionChanged)
 		self.fakeTable.dropEvent=self._drop
 		self.data={}
-		self.layout().addWidget(self.fakeTable,0,0,1,1)
+		self.layout().addWidget(self.fakeTable)
+		self._fakeDock()
 		self._cloneDock()
 	#def __init__
 
@@ -143,7 +143,13 @@ class dock(accessdock.accessdock):
 	#def _rearrangeDock
 
 	def _fakeDock(self):
-		self.realTable=self.layout().itemAt(0).widget()
+		for idx in range(0,self.layout().count()):
+			wdg=self.layout().itemAt(idx).widget()
+			for w in wdg.children():
+				if isinstance(w,QFlowTouchWidget):
+					self.realTable=w
+		#self.realTable=self.layout().itemAt(0).widget()
+		print(self.realTable)
 		self.realTable.setVisible(False)
 	#def _fakeDock
 

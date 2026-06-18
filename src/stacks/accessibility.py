@@ -210,8 +210,13 @@ class accessibility(QStackedWindowItem):
 	#def _endCmd
 
 	def _launch(self,*args):
-		args[0].setEnabled(False)
-		self.launch.setParms(args[0].text())
+		if len(args)==0:
+			itm=self.lstApps.currentItem()
+			wdg=self.lstApps.itemWidget(itm)
+		else:
+			wdg=args[0]
+		wdg.setEnabled(False)
+		self.launch.setParms(wdg.text())
 		self.launch.start()
 	#def _launch
 

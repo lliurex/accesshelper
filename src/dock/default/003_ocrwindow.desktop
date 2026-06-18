@@ -10,3 +10,4 @@ Icon=/usr/share/accesswizard/dock/icons/windowocr.png
 Path=/usr/share/kwin/scripts/ocrwindow/metadata.json
 Exec=/usr/share/accesswizard/dock/tools/loadScript.sh /usr/share/kwin/scripts/ocrwindow/metadata.json add
 Fname=/usr/share/accesswizard/dock/default/003_ocrwindow.desktop
+Type=Hidden

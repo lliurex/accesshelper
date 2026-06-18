@@ -1,6 +1,6 @@
 #!/usr/bin/python3
-import os,sys,subprocess,json
-from PySide6.QtWidgets import QApplication,QGridLayout,QWidget,QPushButton,QHeaderView,QMenu,QToolTip,QLabel,QTableWidget,QToolBar
+import os,sys,subprocess,json,time
+from PySide6.QtWidgets import QApplication,QGridLayout,QWidget,QPushButton,QHeaderView,QMenu,QToolTip,QLabel,QTableWidget,QToolBar,QMainWindow
 from PySide6.QtCore import Qt,QSignalMapper,QSize,QThread,QPoint,QEvent,Signal,QObject,QRect
 from PySide6.QtGui import QIcon,QPixmap,QCursor,QColor,QPalette,QGuiApplication,QFont
 import dbus
@@ -63,12 +63,15 @@ class threadLauncher(QThread):
 		Parameters:
 			cmd: str
 				Command to launch"""
-	def __init__(self,cmd,parent=None):
+	def __init__(self,cmd,timewait=0,parent=None):
 		super().__init__()
 		self.cmd=cmd
+		self.parent=parent
 	#def __init__
 
 	def run(self):
+		if self.parent!=None:
+			parent.hide()
 		try:
 			subprocess.run(self.cmd.split())
 		except Exception as e:
@@ -246,16 +249,23 @@ class QPushButtonDock(QPushButton):
 
 	def _beginLaunch(self,*args):
 		cmd=self.data.get("Exec","")
+		hide=self.data.get("Type","")
 		if len(cmd)>0:
+			if hide=="Hidden":
+				self._toggle()
+				self.hide()
 			self.setEnabled(False)
 			l=threadLauncher(cmd)
-			l.start()
 			l.finished.connect(self._endLaunch)
 			self.threadLaunchers.append(l)
+			l.start()
 	#def _beginLaunch
 
 	def _endLaunch(self,*args):
 		#self._toggle()
+		if self.isVisible()==False:
+			self.show()
+			self._toggle()
 		if self.isEnabled()==False:
 			self.setEnabled(True)
 		else:
@@ -377,7 +387,7 @@ class QPushButtonDock(QPushButton):
 	#def eventFilter
 #class QPushButtonDock
 
-class accessdock(QWidget):
+class accessdock(QMainWindow):
 	"""Accessible dock main class.
 		Draws the dock in screen at position x,y (borrowed from kwinrc)
 
@@ -399,6 +409,7 @@ class accessdock(QWidget):
 		#This hides decoration and bypass window 
 		#also skips app registering in at-spi so is unexistent for ORCA 
 		self.setWindowFlags(Qt.WindowStaysOnTopHint | Qt.Tool)
+		self.setAttribute(Qt.WA_ShowWithoutActivating)
 		#self.setWindowFlags(Qt.FramelessWindowHint|Qt.ToolTip|Qt.X11BypassWindowManagerHint)
 		#self.setWindowFlags(Qt.WindowStaysOnTopHint | Qt.Tool)
 		# Enable translucent background for transparency
@@ -406,7 +417,9 @@ class accessdock(QWidget):
 		#self.setWindowFlag(Qt.WindowType.BypassWindowManagerHint,True)
 		#self.setWindowFlag(Qt.WindowType.WindowStaysOnTopHint,True)
 		#self.setStyleSheet("margin:0px")
-		layout=QGridLayout()
+		wdg=QWidget()
+		layout=QGridLayout(wdg)
+		self.setCentralWidget(wdg)
 		self.setLayout(layout)
 		self.flow=QFlowTouchWidget()
 		self.flow.setObjectName("Table")
@@ -522,7 +535,7 @@ class accessdock(QWidget):
 			btn.configureMain.connect(self._launchDockConfig)
 			btn.configure.connect(self._toggle)
 			btn.configureLauncher.connect(self._toggle)
-			#btn.toggle.connect(self._toggle)
+			btn.toggle.connect(self._toggle)
 			btn.focusIn.connect(self._showTooltip)
 			btn.setFocusPolicy(Qt.StrongFocus)
 			btn.setStyleSheet("border: 3px solid rgba(%s);"%(color))
@@ -574,7 +587,7 @@ if __name__=="__main__":
 		objint=dbus.Interface(bus,"net.lliurex.accessibility.Dock")
 		objbus.isVisible()
 		print("Already launched!")
-	#	sys.exit(2)
+		sys.exit(2)
 	except Exception as e:
 		print(e)
 		pass

@@ -9,15 +9,12 @@ from PySide2.QtCore import Qt,QSignalMapper,QSize,QThread,QObject,Signal,QUrl,QF
 from PySide2.QtUiTools import QUiLoader
 from QtExtraWidgets import QTableTouchWidget,QKdeConfigWidget
 import gettext
-gettext.textdomain("accesswizard")
-_ = gettext.gettext
 import subprocess
 from llxaccessibility import llxaccessibility
 QString=type("")
 
-i18n={
-	"CONFIG":_("Screen reader"),
-	"DESCRIPTION":_("TTS settings"),
+i18n={"SCRCONFIG":_("Screen reader"),
+	"SCRDESCRIPTION":_("TTS settings"),
 	"ENGLISH":_("English"),
 	"EXPORT":_("Files exported to"),
 	"FILE":_("File"),
@@ -39,7 +36,7 @@ i18n={
 	"TTSVLC":_("Use VLC player"),
 	"VALCAT":_("Valencian-Catalan"),
 	"VOICE":_("Voice")
-	}
+
 
 class playSignal(QObject):
 	sig = Signal(str)
@@ -74,9 +71,6 @@ class ttshelper(QWidget):
 		QWidget.__init__(self)
 		self._debug("tts Load")
 		self.accesshelper=llxaccessibility.client()
-		self.menu_description=i18n.get('MENUDESCRIPTION')
-		self.description=i18n.get('DESCRIPTION')
-		self.tooltip=i18n.get('TOOLTIP')
 		self.mp3BtnDict={}
 		self.playing=[]
 		self.voiceMap={}
@@ -107,7 +101,7 @@ class ttshelper(QWidget):
 		wdg.setLayout(box)
 		scr=QScrollArea()
 		self.box.addWidget(scr,0,0,1,2)
-		lbl=QLabel(i18n.get("CONFIG"))
+		lbl=QLabel(i18n.get("SCRCONFIG"))
 		box.addWidget(lbl,0,0,1,1)
 		self.wdgConfig=self._loadConfigScreenFromScript()
 		box.addWidget(self.wdgConfig,1,0,1,2)

@@ -34,9 +34,9 @@ class QConfigPane(QWidget):
 			f.setPointSize(18)
 		btn.setFont(f)
 		for appName,data in app.items():
-			btn.setText(i18n.get(appName))
-			btn.setDescription(i18n.get(data[0]))
-			if data[1]=="":
+			btn.setText(i18n.get(appName,appName))
+			btn.setDescription(i18n.get(data[1],data[1]))
+			if data[2]=="":
 				appId=None
 				appDesc=list(app.keys())[0]
 				if appDesc=="ORCA":
@@ -49,10 +49,9 @@ class QConfigPane(QWidget):
 					appId="deskreen"
 				if appId!=None:
 					app=json.loads(self.rebost.showApp(appId))
-					data[1]=app[0].get("icon")
-			print(appName)
-			btn.clicked.connect(lambda x:self._launch(appName))
-			btn.loadImgSync(data[1])
+					data[2]=app[0].get("icon")
+			btn.clicked.connect(lambda x:self._launch(data[0]))
+			btn.loadImgSync(data[2])
 		return(btn)
 	#def _renderBtn
 
@@ -62,6 +61,7 @@ class QConfigPane(QWidget):
 		wdg.horizontalHeader().hide()
 		wdg.verticalHeader().hide()
 		rsrcDir=os.path.join(os.path.dirname(os.path.realpath(__file__)),"..","rsrc")
+		btn=None
 		for app in apps:
 			wdg.setRowCount(wdg.rowCount()+1)
 			btn=self._renderBtn(app)
@@ -70,7 +70,8 @@ class QConfigPane(QWidget):
 			wdg.setCellWidget(wdg.rowCount()-1,0,btn)
 			wdg.setRowHeight(wdg.rowCount()-1,btn.height()+20)
 			btn.show()
-		wdg.setColumnWidth(0,btn.width())
+		if btn!=None:
+			wdg.setColumnWidth(0,btn.width())
 		lay.addWidget(wdg,0,0,1,1)
 	#def _renderGui
 

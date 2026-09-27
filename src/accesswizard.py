@@ -13,7 +13,7 @@ if os.path.islink(__file__)==True:
 	abspath=os.path.join(os.path.dirname(__file__),os.path.dirname(os.readlink(__file__)))
 else:
 	abspath=os.path.dirname(__file__)
-config.addStacksFromFolder(os.path.join(abspath,"bstacks"))
+config.addStacksFromFolder(os.path.join(abspath,"stacksWizard"))
 config.setBanner(os.path.join(os.path.dirname(__file__),"rsrc","accesswizard_banner.png"))
 config.setWiki("https://wiki.edu.gva.es/lliurex/tiki-index.php?page=accesswizard")
 config.setIcon("accesswizard")

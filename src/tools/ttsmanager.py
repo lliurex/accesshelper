@@ -12,6 +12,9 @@ import gettext
 import subprocess
 from llxaccessibility import llxaccessibility
 QString=type("")
+import gettext
+gettext.textdomain('accesswizard')
+_ = gettext.gettext
 
 i18n={"SCRCONFIG":_("Screen reader"),
 	"SCRDESCRIPTION":_("TTS settings"),
@@ -36,6 +39,7 @@ i18n={"SCRCONFIG":_("Screen reader"),
 	"TTSVLC":_("Use VLC player"),
 	"VALCAT":_("Valencian-Catalan"),
 	"VOICE":_("Voice")
+	}
 
 
 class playSignal(QObject):
@@ -82,15 +86,16 @@ class ttshelper(QWidget):
 	#def _debug
 
 	def _loadConfigScreenFromScript(self):
+		wdg=QWidget()
 		candidateFiles=[os.path.join(os.environ.get("HOME",""),".local","share","kwin","scripts","ocrwindow","contents","ui","config.ui"),"/usr/share/kwin/scripts/ocrwindow/contents/ui/config.ui"]
 		uiFile=""
 		for candidate in candidateFiles:
 			if os.path.exists(candidate):
 				uiFile=candidate
 				break
-		if len(uiFile)==0:
-			return
-		return(QKdeConfigWidget.QKdeConfigWidget(uiFile))
+		if len(uiFile)!=0:
+			wdg=QKdeConfigWidget.QKdeConfigWidget(uiFile)
+		return(wdg)
 	#def _loadConfigScreenFromScript(self):
 
 	def __initScreen__(self):

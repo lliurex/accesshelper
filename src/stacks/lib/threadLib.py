@@ -32,32 +32,35 @@ class thLauncher(QThread):
 	#def setParms
 
 	def _getAppCmd(self,app):
-		cmdPath=self._getPathForCmd(app)
-		if len(cmdPath)>0:
-			cmd=[cmdPath]
-			if cmdPath.endswith("/orca"):
-				cmd.append("-s")
+		if " " in app and "https://" in app:
+			cmd=app.split()
 		else:
-			cmd=["/usr/bin/lliurex-store","appsedu://{}".format(app)]
-			appraw=json.loads(self.rebost.showApp(app))
-			bundle=""
-			if len(appraw)>0:
-				app=appraw[0]
-				for bun in app.get("bundle",{}).keys():
-					if bun.lower()=="unknown":
-						continue
-					if app.get("status",{}).get(bun,"1")=="0":
-						bundle=bun
-						break
-				if bundle=="package":
-					cmd=["gtk-launch",app.get("id",'')]
-				elif bundle=="flatpak":
-					cmd=["flatpak","run",app.get("bundle",{}).get("flatpak","")]
-				elif bundle=="snap":
-					cmd=["snap","run",app.get("bundle",{}).get("snap","")]
-				elif bundle=="appimage":
-					cmd=["gtk-launch","{}-appimage".format(app.get("pkgname",''))]
-				#proc=subprocess.run(cmd)
+			cmdPath=self._getPathForCmd(app)
+			if len(cmdPath)>0:
+				cmd=[cmdPath]
+				if cmdPath.endswith("/orca"):
+					cmd.append("-s")
+			else:
+				cmd=["/usr/bin/lliurex-store","appsedu://{}".format(app)]
+				appraw=json.loads(self.rebost.showApp(app))
+				bundle=""
+				if len(appraw)>0:
+					app=appraw[0]
+					for bun in app.get("bundle",{}).keys():
+						if bun.lower()=="unknown":
+							continue
+						if app.get("status",{}).get(bun,"1")=="0":
+							bundle=bun
+							break
+					if bundle=="package":
+						cmd=["gtk-launch",app.get("id",'')]
+					elif bundle=="flatpak":
+						cmd=["flatpak","run",app.get("bundle",{}).get("flatpak","")]
+					elif bundle=="snap":
+						cmd=["snap","run",app.get("bundle",{}).get("snap","")]
+					elif bundle=="appimage":
+						cmd=["gtk-launch","{}-appimage".format(app.get("pkgname",''))]
+					#proc=subprocess.run(cmd)
 		return(cmd)
 	#def _getAppCmd
 
@@ -88,7 +91,8 @@ class thLauncher(QThread):
 				self.cmd=self._getAppCmd("deskreen")
 			elif self.cmd=="BROWS":
 				self.cmd=os.path.join(os.path.dirname(__file__),"..","..","tools","browsermanager.py")
-		print(self.cmd)
+			else:
+				self.cmd=self._getAppCmd(self.cmd)
 		if "kcm" in self.cmd:
 			proc=self.accesshelper.launchKcmModule(self.cmd)
 		else:

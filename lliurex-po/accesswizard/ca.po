@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-29 10:24+0200\n"
-"PO-Revision-Date: 2026-04-29 10:26+0200\n"
+"POT-Creation-Date: 2026-09-27 13:27+0200\n"
+"PO-Revision-Date: 2026-09-27 13:28+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ca\n"
@@ -18,87 +18,19 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.0.1\n"
 
-#: ../src/accesswizard.py:13
+#: ../src/accesshelper.py:13
 msgid "Wizard of LliureX for configuring accessibility tools"
 msgstr "Assistent del LliureX per a configurar les eines d'accessibilitat"
 
-#: ../src/accesswizard.py:14
+#: ../src/accesshelper.py:14
 msgid "Press \"Escape\" to stop reading. \"F5\" for read it from beginning"
 msgstr ""
 "Premer \"Escape\" per aturar la lectura. \"F5\" per a llegir desde el "
 "principi"
 
-#: ../src/accesswizard.py:15
+#: ../src/accesshelper.py:15
 msgid "Navigate through options with \"Tab\" or arrows."
 msgstr "Usar \"Tab\" o \"fletxes\" per a explorar les opcions."
-
-#: ../src/stacks/accessibility.py:15
-msgid "System Accessibility"
-msgstr "Accessibilitat del sistema"
-
-#: ../src/stacks/accessibility.py:16
-msgid "Plasma Accessibility module"
-msgstr "Mòdul d'accessibilitat del Plasma"
-
-#: ../src/stacks/accessibility.py:17
-msgid "Joystick as mouse"
-msgstr "Joystick com ratolí"
-
-#: ../src/stacks/accessibility.py:18
-msgid "Configure a gamepad/joystick as mouse"
-msgstr "Configura un gamepad/joystick com a ratolí"
-
-#: ../src/stacks/accessibility.py:19
-msgid "Browsers accessibility"
-msgstr "Navegació accessible"
-
-#: ../src/stacks/accessibility.py:20
-msgid "Selection of addons and configurations for accessible browsing"
-msgstr "Selecció d'extensions per a una naveacio mès accessible"
-
-#: ../src/stacks/accessibility.py:21 ../src/stacks/accessibility.py:28
-msgid "Accessibility"
-msgstr "Accessibilitat"
-
-#: ../src/stacks/accessibility.py:22
-msgid "Accessibility Dock"
-msgstr "Barra d'accesibilitat"
-
-#: ../src/stacks/accessibility.py:23
-msgid "Dock with customizable fast actions"
-msgstr "Barra personalitzable d'accions ràpides"
-
-#: ../src/stacks/accessibility.py:24
-msgid "Webcam as mouse"
-msgstr "Càmera web com ratolí"
-
-#: ../src/stacks/accessibility.py:25
-msgid "Webcam based mouse control"
-msgstr "Controla el ratolí mitjançat moviments capturats per una càmera web"
-
-#: ../src/stacks/accessibility.py:26
-msgid "LliureX TTS"
-msgstr "LliureX TTS"
-
-#: ../src/stacks/accessibility.py:27
-msgid "Configure Lliurex TTS addon"
-msgstr "Configurar extensió TTS del LliureX"
-
-#: ../src/stacks/accessibility.py:29
-msgid "Orca"
-msgstr "ORCA"
-
-#: ../src/stacks/accessibility.py:30
-msgid "Open Orca configuration tool"
-msgstr "Obrir la ferramenta de configuració de ORCA"
-
-#: ../src/stacks/accessibility.py:31
-msgid "Accesibility options"
-msgstr "Opcions d'accessibilitat"
-
-#: ../src/stacks/accessibility.py:32
-msgid "Settings which do the system more accessible"
-msgstr "Ajustos per a fer més accessible el sistema"
 
 #: ../src/stacks/browsers.py:16 ../src/stacks/browsers.py:17
 msgid "Browser addons"
@@ -111,38 +43,6 @@ msgstr "Navigació accessible"
 #: ../src/stacks/browsers.py:19
 msgid "Settings and addons for improved browser accessibility"
 msgstr "Diverses eines per a fer més accesible la navegació"
-
-#: ../src/stacks/effects.py:14
-msgid "Effects"
-msgstr "Efectes"
-
-#: ../src/stacks/effects.py:15
-msgid "Desktop plugins"
-msgstr "Plugins de l'escriptori"
-
-#: ../src/stacks/effects.py:16
-msgid "Extra functionality for the desktop"
-msgstr "Funcionalitat extra per a l'escriptori"
-
-#: ../src/stacks/effects.py:17
-msgid "Windows effects"
-msgstr "Efectes de finestres"
-
-#: ../src/stacks/effects.py:18
-msgid "Graphical effects for windows"
-msgstr "Efectes per a manipular l'apariencia de les finestres"
-
-#: ../src/stacks/effects.py:19
-msgid "Visual Effects"
-msgstr "Efectes visuals"
-
-#: ../src/stacks/effects.py:20
-msgid "Aids and visual effects"
-msgstr "Ajudas i efectes visuals"
-
-#: ../src/stacks/effects.py:21
-msgid "Aids and visual effects for improve system usability"
-msgstr "Diverses ferramentes per a millorar la usabilitat del sistema"
 
 #: ../src/stacks/settings.py:14
 msgid "Settings"
@@ -208,50 +108,6 @@ msgstr "Emet un só al inciar la sessió"
 msgid "Advanced settings"
 msgstr "Configuració avançada"
 
-#: ../src/stacks/theme.py:14 ../src/stacks/theme.py:105
-msgid "Color scheme"
-msgstr "Esquema de colors"
-
-#: ../src/stacks/theme.py:15
-msgid "Set global color scheme"
-msgstr "Esquema de colors global"
-
-#: ../src/stacks/theme.py:16 ../src/stacks/theme.py:22
-msgid "Appearance"
-msgstr "Apariencia"
-
-#: ../src/stacks/theme.py:17
-msgid "Look and feel options"
-msgstr "Opcions d'apariencia"
-
-#: ../src/stacks/theme.py:18 ../src/stacks/theme.py:107
-msgid "Fonts"
-msgstr "Fonts"
-
-#: ../src/stacks/theme.py:19
-msgid "Configure system fonts"
-msgstr "Estableix les fonts del sistema"
-
-#: ../src/stacks/theme.py:20 ../src/stacks/theme.py:103
-msgid "Theme"
-msgstr "Tema"
-
-#: ../src/stacks/theme.py:21
-msgid "Set global theme"
-msgstr "Tema global de l'escriptori"
-
-#: ../src/stacks/theme.py:23 ../src/stacks/theme.py:109
-msgid "Mouse"
-msgstr "Ratolí"
-
-#: ../src/stacks/theme.py:24
-msgid "Set cursor theme and size"
-msgstr "Ajustar tamany i apariencia del cursor"
-
-#: ../src/stacks/theme.py:25
-msgid "Appearance customizing"
-msgstr "Personalitzar apariencia"
-
 #: ../src/tools/ttsmanager.py:19
 msgid "Screen reader"
 msgstr "Lector de pantalla"
@@ -276,7 +132,7 @@ msgstr "Fitxer"
 msgid "Recorded file list"
 msgstr "Fitxers disponibles"
 
-#: ../src/tools/ttsmanager.py:25
+#: ../src/tools/ttsmanager.py:25 ../src/dock/lib/launchers.py:15
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -442,6 +298,216 @@ msgstr "Configuració"
 msgid "Toggle visibility"
 msgstr "Alterna visibilitat"
 
+#: ../src/dock/lib/effects.py:14 ../src/dock/lib/kcms.py:14
+msgid "Effects"
+msgstr "Efectes"
+
+#: ../src/dock/lib/effects.py:15 ../src/dock/lib/kcms.py:15
+msgid "Visual Effects"
+msgstr "Efectes visuals"
+
+#: ../src/dock/lib/effects.py:16 ../src/dock/lib/kcms.py:16
+msgid "Aids and visual effects"
+msgstr "Ajudas i efectes visuals"
+
+#: ../src/dock/lib/effects.py:17 ../src/dock/lib/kcms.py:17
+msgid "Aids and visual effects for improve system usability"
+msgstr "Diverses ferramentes per a millorar la usabilitat del sistema"
+
+#: ../src/dock/lib/effects.py:59 ../src/dock/lib/kcms.py:59
+msgid "Window Effects"
+msgstr "Efectes de finestra"
+
+#: ../src/dock/lib/effects.py:61 ../src/dock/lib/kcms.py:61
+msgid "Desktop Effects"
+msgstr "Efectes de l'escriptori"
+
+#: ../src/dock/lib/launchers.py:14
+msgid "Assign"
+msgstr "Assigna"
+
+#: ../src/dock/lib/launchers.py:16 ../src/dock/lib/launchers.py:244
+msgid "Description"
+msgstr "Descripció"
+
+#: ../src/dock/lib/launchers.py:17
+msgid "Toggle effect"
+msgstr "Activar efecte"
+
+#: ../src/dock/lib/launchers.py:18
+msgid "Application"
+msgstr "Aplicació"
+
+#: ../src/dock/lib/launchers.py:19
+msgid "Press button to assign one action"
+msgstr "Premer un botó per assignaruna acció"
+
+#: ../src/dock/lib/launchers.py:20
+msgid "Executable path"
+msgstr "Ruta al programa"
+
+#: ../src/dock/lib/launchers.py:21
+msgid "Insert the executable path"
+msgstr "Inserir la ruta a l'aplicació"
+
+#: ../src/dock/lib/launchers.py:22
+msgid "Shortcut"
+msgstr ""
+"Drecera\n"
+" de teclat"
+
+#: ../src/dock/lib/launchers.py:23
+msgid "Press a key"
+msgstr "Premer una tecla"
+
+#: ../src/dock/lib/launchers.py:24
+msgid "Icon: "
+msgstr "Icona: "
+
+#: ../src/dock/lib/launchers.py:25
+msgid "Push to change icon"
+msgstr "Premer per a canviar icona"
+
+#: ../src/dock/lib/launchers.py:26
+msgid "Module"
+msgstr "Mòdul"
+
+#: ../src/dock/lib/launchers.py:27
+msgid "Name: "
+msgstr "Nom: "
+
+#: ../src/dock/lib/launchers.py:28
+msgid "Unassigned action"
+msgstr "Acció sense assignar"
+
+#: ../src/dock/lib/launchers.py:29
+msgid "Insert desktop name"
+msgstr "Inserir nom de l'aplicació"
+
+#: ../src/dock/lib/launchers.py:30
+msgid "Insert the url for the site"
+msgstr "Inserir url del lloc"
+
+#: ../src/dock/lib/launchers.py:31
+msgid "https://example.com"
+msgstr "https://example.com"
+
+#: ../src/dock/lib/launchers.py:32 ../src/dock/lib/launchers.py:358
+msgid "From here you can add a custom launcher"
+msgstr "Des d'aci es poden assignar dreceres per a les diferents accions"
+
+#: ../src/dock/lib/launchers.py:242
+msgid "Description (optional): "
+msgstr "Descripció (opcional): "
+
+#: ../src/dock/lib/launchers.py:245
+msgid "Insert a description for the app"
+msgstr "Inserir la descripció de l'aplicació"
+
+#: ../src/dock/lib/launchers.py:322
+msgid "images(*.png *.xpm *jpg)"
+msgstr "imatges (*.png *.xpm *jpg)"
+
+#: ../src/dock/lib/launchers.py:324
+msgid "All files(*.*)"
+msgstr "Tots (*.*)"
+
+#~ msgid "System Accessibility"
+#~ msgstr "Accessibilitat del sistema"
+
+#~ msgid "Plasma Accessibility module"
+#~ msgstr "Mòdul d'accessibilitat del Plasma"
+
+#~ msgid "Joystick as mouse"
+#~ msgstr "Joystick com ratolí"
+
+#~ msgid "Configure a gamepad/joystick as mouse"
+#~ msgstr "Configura un gamepad/joystick com a ratolí"
+
+#~ msgid "Browsers accessibility"
+#~ msgstr "Navegació accessible"
+
+#~ msgid "Selection of addons and configurations for accessible browsing"
+#~ msgstr "Selecció d'extensions per a una naveacio mès accessible"
+
+#~ msgid "Accessibility"
+#~ msgstr "Accessibilitat"
+
+#~ msgid "Accessibility Dock"
+#~ msgstr "Barra d'accesibilitat"
+
+#~ msgid "Dock with customizable fast actions"
+#~ msgstr "Barra personalitzable d'accions ràpides"
+
+#~ msgid "Webcam as mouse"
+#~ msgstr "Càmera web com ratolí"
+
+#~ msgid "Webcam based mouse control"
+#~ msgstr "Controla el ratolí mitjançat moviments capturats per una càmera web"
+
+#~ msgid "LliureX TTS"
+#~ msgstr "LliureX TTS"
+
+#~ msgid "Configure Lliurex TTS addon"
+#~ msgstr "Configurar extensió TTS del LliureX"
+
+#~ msgid "Orca"
+#~ msgstr "ORCA"
+
+#~ msgid "Open Orca configuration tool"
+#~ msgstr "Obrir la ferramenta de configuració de ORCA"
+
+#~ msgid "Accesibility options"
+#~ msgstr "Opcions d'accessibilitat"
+
+#~ msgid "Settings which do the system more accessible"
+#~ msgstr "Ajustos per a fer més accessible el sistema"
+
+#~ msgid "Desktop plugins"
+#~ msgstr "Plugins de l'escriptori"
+
+#~ msgid "Extra functionality for the desktop"
+#~ msgstr "Funcionalitat extra per a l'escriptori"
+
+#~ msgid "Windows effects"
+#~ msgstr "Efectes de finestres"
+
+#~ msgid "Graphical effects for windows"
+#~ msgstr "Efectes per a manipular l'apariencia de les finestres"
+
+#~ msgid "Color scheme"
+#~ msgstr "Esquema de colors"
+
+#~ msgid "Set global color scheme"
+#~ msgstr "Esquema de colors global"
+
+#~ msgid "Appearance"
+#~ msgstr "Apariencia"
+
+#~ msgid "Look and feel options"
+#~ msgstr "Opcions d'apariencia"
+
+#~ msgid "Fonts"
+#~ msgstr "Fonts"
+
+#~ msgid "Configure system fonts"
+#~ msgstr "Estableix les fonts del sistema"
+
+#~ msgid "Theme"
+#~ msgstr "Tema"
+
+#~ msgid "Set global theme"
+#~ msgstr "Tema global de l'escriptori"
+
+#~ msgid "Mouse"
+#~ msgstr "Ratolí"
+
+#~ msgid "Set cursor theme and size"
+#~ msgstr "Ajustar tamany i apariencia del cursor"
+
+#~ msgid "Appearance customizing"
+#~ msgstr "Personalitzar apariencia"
+
 #~ msgid "Color Scheme"
 #~ msgstr "Esquema de colors"
 
@@ -450,80 +516,6 @@ msgstr "Alterna visibilitat"
 
 #~ msgid "Image was processesed"
 #~ msgstr "S'ha processat la imatge"
-
-#~ msgid "Window Effects"
-#~ msgstr "Efectes de finestra"
-
-#~ msgid "Desktop Effects"
-#~ msgstr "Efectes de l'escriptori"
-
-#~ msgid "Assign"
-#~ msgstr "Assigna"
-
-#~ msgid "Description"
-#~ msgstr "Descripció"
-
-#~ msgid "Toggle effect"
-#~ msgstr "Activar efecte"
-
-#~ msgid "Application"
-#~ msgstr "Aplicació"
-
-#~ msgid "Press button to assign one action"
-#~ msgstr "Premer un botó per assignaruna acció"
-
-#~ msgid "Executable path"
-#~ msgstr "Ruta al programa"
-
-#~ msgid "Insert the executable path"
-#~ msgstr "Inserir la ruta a l'aplicació"
-
-#~ msgid "Shortcut"
-#~ msgstr ""
-#~ "Drecera\n"
-#~ " de teclat"
-
-#~ msgid "Press a key"
-#~ msgstr "Premer una tecla"
-
-#~ msgid "Icon: "
-#~ msgstr "Icona: "
-
-#~ msgid "Push to change icon"
-#~ msgstr "Premer per a canviar icona"
-
-#~ msgid "Module"
-#~ msgstr "Mòdul"
-
-#~ msgid "Name: "
-#~ msgstr "Nom: "
-
-#~ msgid "Unassigned action"
-#~ msgstr "Acció sense assignar"
-
-#~ msgid "Insert desktop name"
-#~ msgstr "Inserir nom de l'aplicació"
-
-#~ msgid "Insert the url for the site"
-#~ msgstr "Inserir url del lloc"
-
-#~ msgid "https://example.com"
-#~ msgstr "https://example.com"
-
-#~ msgid "Description (optional): "
-#~ msgstr "Descripció (opcional): "
-
-#~ msgid "Insert a description for the app"
-#~ msgstr "Inserir la descripció de l'aplicació"
-
-#~ msgid "images(*.png *.xpm *jpg)"
-#~ msgstr "imatges (*.png *.xpm *jpg)"
-
-#~ msgid "All files(*.*)"
-#~ msgstr "Tots (*.*)"
-
-#~ msgid "From here you can add a custom launcher"
-#~ msgstr "Des d'aci es poden assignar dreceres per a les diferents accions"
 
 #~ msgid "Beep when sddm launches"
 #~ msgstr "Emet un só al arrancar SDDM"

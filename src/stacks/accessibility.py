@@ -26,12 +26,13 @@ class accessibility(QStackedWindowItem):
 	def __initScreen__(self):
 		lay=QGridLayout(self)
 		rsrcDir=os.path.join(os.path.dirname(os.path.realpath(__file__)),"..","rsrc")
-		apps=[{"ACCE":["ACCEDSC","preferences-desktop-accessibility"]},
-			{"ORCA":["ORCADSC",""]},
-			{"LTTS":["LTTSDSC",os.path.join(rsrcDir,"ttsmanager.png")]},
-			{"DOCK": ["DOCKDSC",os.path.join(rsrcDir,"accessdock.png")]},
-			{"ANTI": ["ANTIDSC",""]},
-			{"EVIA": ["EVIADSC",""]}
+		apps=[{"ACCE":["ACCE","ACCEDSC","preferences-desktop-accessibility"]},
+			{"ORCA":["ORCA","ORCADSC",""]},
+			{"DESK":["DESK","DESKDSC",""]},
+			{"LTTS":["LTTS","LTTSDSC",os.path.join(rsrcDir,"ttsmanager.png")]},
+			{"DOCK": ["DOCK","DOCKDSC",os.path.join(rsrcDir,"..","dock","accessdock.png")]},
+			{"ANTI": ["ANTI","ANTIDSC",""]},
+			{"EVIA": ["EVIA","EVIADSC",""]}
 			]
 		wdg=QConfigPane(apps)
 		lay.addWidget(wdg,0,0,1,1)

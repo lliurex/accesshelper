@@ -24,10 +24,10 @@ class theme(QStackedWindowItem):
 
 	def __initScreen__(self):
 		lay=QGridLayout(self)
-		apps=[{"kcm_desktoptheme":["THEME_LOOKDSC","preferences-desktop-theme"]},
-			{"kcm_colors":["THEME_COLODSC","preferences-desktop-color"]},
-			{"kcm_fonts":["THEME_FONTDSC","preferences-desktop-font"]},
-			{"kcm_cursortheme":["THEME_MICEDSC","preferences-desktop-mouse"]}
+		apps=[{"THEME_LOOK":["kcm_desktoptheme","THEME_LOOKDSC","preferences-desktop-theme"]},
+			{"THEME_COLO":["kcm_colors","THEME_COLODSC","preferences-desktop-color"]},
+			{"THEME_FONT":["kcm_fonts","THEME_FONTDSC","preferences-desktop-font"]},
+			{"THEME_MICE":["kcm_cursortheme","THEME_MICEDSC","preferences-desktop-mouse"]}
 			]
 		wdg=QConfigPane(apps)
 		lay.addWidget(wdg,0,0,1,1)

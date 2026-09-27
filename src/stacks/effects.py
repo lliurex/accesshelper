@@ -40,8 +40,8 @@ class effects(QStackedWindowItem):
 
 	def __initScreen__(self):
 		lay=QGridLayout(self)
-		apps=[{"kcm_kwin_effects":["NEFFDSC","preferences-system-windows"]},
-			{"kcm_kwin_scripts":["DSCRDSC","preferences-plugin"]}
+		apps=[{"NEFF":["kcm_kwin_effects","NEFFDSC","preferences-system-windows"]},
+			{"DSCR":["kcm_kwin_scripts","DSCRDSC","preferences-plugin"]}
 			]
 		wdg=QConfigPane(apps)
 		lay.addWidget(wdg,0,0,1,1)

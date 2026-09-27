@@ -21,9 +21,9 @@ if os.path.islink(__file__)==True:
 else:
 	abspath=os.path.dirname(__file__)
 config.addStacksFromFolder(os.path.join(abspath,"stacks"))
-config.setBanner(os.path.join(os.path.dirname(__file__),"rsrc","accesswizard_banner.png"))
+config.setBanner(os.path.join(abspath,"rsrc","accesswizard_banner.png"))
 config.setWiki("https://wiki.edu.gva.es/lliurex/tiki-index.php?page=accesswizard")
-config.setIcon("accesswizard")
+config.setIcon("accesshelper")
 config.show()
 (w,h) = app.primaryScreen().size().toTuple()
 config.setMinimumHeight(int(h*0.6))

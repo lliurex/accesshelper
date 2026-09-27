@@ -1,0 +1,8 @@
+src/accesshelper.py /usr/share/accesswizard/
+src/stacks /usr/share/accesswizard/
+src/dbus /usr/share/accesswizard/
+src/dock /usr/share/accesswizard/
+src/rsrc /usr/share/accesswizard/
+src/tools /usr/share/accesswizard/
+X/* /etc/X11/Xsession.d
+X/* /etc/xdg/Xwayland-session.d/

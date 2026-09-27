@@ -17,6 +17,8 @@ i18n={
 	"EFFECT_MENU":_("Visual Effects"),
 	"EFFECT_DESCRIPTION":_("Aids and visual effects"),
 	"EFFECT_TOOLTIP":_("Aids and visual effects for improve system usability"),
+	"DESK":_("Deskreen"),
+	"DESKDSC":_("Deskreen application for remote screen viewing"),
 	"DSCR":_("Desktop plugins"),
 	"DSCRDSC":_("Extra functionality for the desktop"),
 	"NEFF":_("Windows effects"),

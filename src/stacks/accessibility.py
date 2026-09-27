@@ -28,6 +28,7 @@ class accessibility(QStackedWindowItem):
 		rsrcDir=os.path.join(os.path.dirname(os.path.realpath(__file__)),"..","rsrc")
 		apps=[{"ACCE":["ACCEDSC","preferences-desktop-accessibility"]},
 			{"ORCA":["ORCADSC",""]},
+			{"DESK":["DESKDSC",""]},
 			{"LTTS":["LTTSDSC",os.path.join(rsrcDir,"ttsmanager.png")]},
 			{"DOCK": ["DOCKDSC",os.path.join(rsrcDir,"..","dock","accessdock.png")]},
 			{"ANTI": ["ANTIDSC",""]},

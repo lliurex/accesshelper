@@ -84,6 +84,8 @@ class thLauncher(QThread):
 				self.cmd=self._getAppCmd("antimicrox")
 			elif self.cmd=="EVIA":
 				self.cmd=self._getAppCmd("eviacam")
+			elif self.cmd=="DESK":
+				self.cmd=self._getAppCmd("deskreen")
 			elif self.cmd=="BROWS":
 				self.cmd=os.path.join(os.path.dirname(__file__),"..","..","tools","browsermanager.py")
 		print(self.cmd)

@@ -12,9 +12,9 @@ class QConfigPane(QWidget):
 	def __init__(self,apps,parent=None):
 		super().__init__(parent)
 		self.accesshelper=llxaccessibility.client()
-		self._renderGui(apps)
 		self.rebost=store.client()
 		self.thLauncher=thLauncher(self.rebost)
+		self._renderGui(apps)
 	#def __init__
 
 	def _launch(self,*args):
@@ -38,15 +38,19 @@ class QConfigPane(QWidget):
 			btn.setDescription(i18n.get(data[0]))
 			if data[1]=="":
 				appId=None
-				if app=="ORCA":
+				appDesc=list(app.keys())[0]
+				if appDesc=="ORCA":
 					appId="orca"
-				elif app=="EVIA":
+				elif appDesc=="EVIA":
 					appId="eviacam"
-				elif app=="ANTI":
+				elif appDesc=="ANTI":
 					appId="antimicrox"
+				elif appDesc=="DESK":
+					appId="deskreen"
 				if appId!=None:
 					app=json.loads(self.rebost.showApp(appId))
 					data[1]=app[0].get("icon")
+			print(appName)
 			btn.clicked.connect(lambda x:self._launch(appName))
 			btn.loadImgSync(data[1])
 		return(btn)

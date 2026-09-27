@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
-<id>net.lliurex.accesswizard</id>
+<id>net.lliurex.accesshelper</id>
 <metadata_license>CC0-1.0</metadata_license>
-<name>Access Wizard</name>
-<name xml:lang="ca_ES.UTF-8@valencia">AccessWizard</name>
-<name xml:lang="ca_ES@valencia">AccessWizard</name>
-<name xml:lang="ca">AccessWizard</name>
-<name xml:lang="es">AccessWizard</name>
+<name>Access Helper</name>
+<name xml:lang="ca_ES.UTF-8@valencia">Access Helper</name>
+<name xml:lang="ca_ES@valencia">Access Helper</name>
+<name xml:lang="ca">Access Helper</name>
+<name xml:lang="es">Access Helper</name>
 <summary>Manage accessibility options</summary>
 <summary xml:lang="es">Gestiona las opciones de accesibilidad</summary>
 <summary xml:lang="ca_ES@valencia">Gestiona les opciones d'accessibilitat</summary>
@@ -25,8 +25,8 @@
 <category>X-Lliurex</category>
 <category>X-Utilities</category>
 </categories>
-<icon type="stock">accesswizard</icon>
-<provides><binary>accesswizard</binary></provides>
+<icon type="stock">accesshelper</icon>
+<provides><binary>accesshelper</binary></provides>
 <keywords>
 <keyword>editor</keyword>
 <keyword>desktop</keyword>

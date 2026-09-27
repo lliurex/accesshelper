@@ -35,7 +35,7 @@ class dockConfig(QStackedWindowItem):
 	#def _defScreenControlButtons
 
 	def _launchConfig(self):
-		self.exe.setCmd("/home/lliurex/git/accesshelper/src/dock/accessdock-config.py")
+		self.exe.setCmd("/usr/share/accesswizard/dock/accessdock-config.py")
 		self.exe.start()
 
 	def __initScreen__(self,*args):

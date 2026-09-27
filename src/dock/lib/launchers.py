@@ -28,15 +28,16 @@ i18n={"ADD":_("Assign"),
 	"NAME_PLACEHOLDER":_("Unassigned action"),
 	"NAME_TOOLTIP":_("Insert desktop name"),
 	"URLTOOLTIP":_("Insert the url for the site"),
-	"URLHOLDER":_("https://example.com")
+	"URLHOLDER":_("https://example.com"),
+	"TOOLTIP":_("From here you can add a custom launcher")
 }
 
 class actionSelector(QStackedWindowItem):
 	def __init_stack__(self,mode=""):
-		self.setProps(shortDesc=i18n.get("MENU"),
-			longDesc=i18n.get("DESC"),
+		self.setProps(shortDesc=i18n.get("MENU",""),
+			longDesc=i18n.get("DESC",""),
 			icon="application-x-desktop",
-			tooltip=i18n.get("TOOLTIP"),
+			tooltip=i18n.get("EXECUTABLE_TOOLTIP"),
 			index=1,
 			visible=True)
 		self.hideControlButtons()
@@ -190,12 +191,14 @@ class actionSelector(QStackedWindowItem):
 class portrait(QStackedWindowItem):
 	accepted=Signal("PyObject")
 	def __init_stack__(self):
-		self.setProps(shortDesc=i18n.get("MENU"),
-			longDesc=i18n.get("DESC"),
+		self.setProps(shortDesc=i18n.get("MENU",""),
+			description=i18n.get('DESC',""),
+			longDesc=i18n.get('DESC',""),
 			icon="application-x-desktop",
 			tooltip=i18n.get("TOOLTIP"),
 			index=2,
 			visible=True)
+
 		self.appIcon="shell"
 		self.fName=""
 		self.path=""

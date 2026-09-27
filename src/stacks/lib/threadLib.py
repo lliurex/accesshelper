@@ -1,6 +1,6 @@
 from llxaccessibility import llxaccessibility
 from PySide2.QtCore import Qt,QThread,Signal,QSize
-import os
+import os,shutil,json
 
 class thLauncher(QThread):
 	finished=Signal("PyObject")

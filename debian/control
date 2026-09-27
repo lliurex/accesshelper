@@ -9,6 +9,13 @@ Homepage: https://github.com/lliurex/accesshelper
 
 Package: accesswizard
 Architecture: all
+Depends: accesshelper
+Description: Wizard for accessibility settings
+ AccessWizard is a simple way of set initial
+ settings of accessibility options
+
+Package: accesshelper
+Architecture: all
 Depends: python3-qtextrawidgets (>= 0.6.8),
 	python3-pyside2.qtmultimedia,
 	python3-pyside2.qtgui,
@@ -55,7 +62,7 @@ Description: Systemd and sddm scripts
 
 Package: accesswizard-kwin-ocrwindow
 Architecture: all
-Depends: accesswizard, kwin-addons
+Depends: accesshelper, kwin-addons
 Breaks: kwin-ocrwindow
 Conflicts: kwin-ocrwindow
 Replaces: kwin-ocrwindow
@@ -68,6 +75,6 @@ Architecture: all
 Breaks: plasma-accesswizard
 Conflicts: plasma-accesswizard
 Replaces: plasma-accesswizard
-Depends: accesswizard, kwin-addons
+Depends: accesshelper, kwin-addons
 Description: Plasmoid for accesswizard
  Gives quick access to accessdock launchers

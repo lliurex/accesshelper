@@ -29,7 +29,7 @@ class accessibility(QStackedWindowItem):
 		apps=[{"ACCE":["ACCEDSC","preferences-desktop-accessibility"]},
 			{"ORCA":["ORCADSC",""]},
 			{"LTTS":["LTTSDSC",os.path.join(rsrcDir,"ttsmanager.png")]},
-			{"DOCK": ["DOCKDSC",os.path.join(rsrcDir,"accessdock.png")]},
+			{"DOCK": ["DOCKDSC",os.path.join(rsrcDir,"..","dock","accessdock.png")]},
 			{"ANTI": ["ANTIDSC",""]},
 			{"EVIA": ["EVIADSC",""]}
 			]

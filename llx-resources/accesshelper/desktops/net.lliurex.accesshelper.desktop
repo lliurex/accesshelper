@@ -1,0 +1,18 @@
+[Desktop Entry]
+Name=Access Helper
+Name[ca_ES.UTF-8@valencia]=Ajudant d'accesibilitat
+Name[ca_ES@valencia]=Ajudant d'accesibilitat
+Name[ca]=Ajudant d'accesibilitat
+Name[es]=Ajudant de accesibilidad
+GenericName=Access helper
+Comment=Manage available accessibility options
+Comment[es]=Gestiona las opciones de accesibilidad
+Comment[ca_ES@valencia]=Gestiona les opciones d'accessibilitat
+Comment[ca_ES.UTF-8@valencia]=Gestiona les opciones d'accessibilitat
+Comment[ca]=Gestiona les opciones d'accessibilitat
+Exec=/usr/share/accesswizard/accesshelper.py
+Terminal=false
+Type=Application
+Icon=accesshelper
+Categories=Accessibility;X-Lliurex;
+TryExec=/usr/share/accesswizard/accesshelper.py

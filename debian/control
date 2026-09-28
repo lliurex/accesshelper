@@ -43,6 +43,7 @@ Depends: python3-qtextrawidgets (>= 0.6.8),
 	kwin-script-mousestrip,
 	kwin-script-rgbfilter,
 	kwin-effect-colorcorrection,
+	kwin-grayscale-effect,
 	python3-imutils
 Description: Set accessibility settings
  AccessHelper it's a common place for the

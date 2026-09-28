@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-27 13:27+0200\n"
-"PO-Revision-Date: 2026-09-27 13:27+0200\n"
+"POT-Creation-Date: 2026-09-28 11:18+0200\n"
+"PO-Revision-Date: 2026-09-28 11:19+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es\n"
@@ -31,18 +31,174 @@ msgstr ""
 msgid "Navigate through options with \"Tab\" or arrows."
 msgstr "Usar \"tabulador\" o \"flechas\" para desplazarse por las opciones."
 
-#: ../src/stacks/browsers.py:16 ../src/stacks/browsers.py:17
+#: ../src/stacks/extras/i18n.py:6
+msgid "System Accessibility"
+msgstr "Accesibilidad del sistema"
+
+#: ../src/stacks/extras/i18n.py:7
+msgid "Plasma Accessibility module"
+msgstr "Módulo de accesibilidad de Plasma"
+
+#: ../src/stacks/extras/i18n.py:8
+msgid "Joystick as mouse"
+msgstr "Usar joystick como ratón"
+
+#: ../src/stacks/extras/i18n.py:9
+msgid "Configure a gamepad/joystick as mouse"
+msgstr "Configura un gamepd o joystick para su uso como ratón"
+
+#: ../src/stacks/extras/i18n.py:10
+msgid "Browsers accessibility"
+msgstr "Navegación accesible"
+
+#: ../src/stacks/extras/i18n.py:11
+msgid "Selection of addons and configurations for accessible browsing"
+msgstr "Selección de extensiones para navegar de forma más accesible"
+
+#: ../src/stacks/extras/i18n.py:12 ../src/stacks/extras/i18n.py:13
 msgid "Browser addons"
 msgstr "Extensiones del navegador"
 
-#: ../src/stacks/browsers.py:18
+#: ../src/stacks/extras/i18n.py:14
 msgid "Accesible browsing"
 msgstr "Navegación accesible"
 
-#: ../src/stacks/browsers.py:19
+#: ../src/stacks/extras/i18n.py:15
 msgid "Settings and addons for improved browser accessibility"
 msgstr ""
 "Colección de heraamientas para mejorar la accesibilidad de los navegadores"
+
+#: ../src/stacks/extras/i18n.py:16 ../src/stacks/extras/i18n.py:18
+msgid "Accessibility"
+msgstr "Accesibilidad"
+
+#: ../src/stacks/extras/i18n.py:17
+msgid "Accesibility options"
+msgstr "Opciones de accesibilidad"
+
+#: ../src/stacks/extras/i18n.py:19
+msgid "Settings which do the system more accessible"
+msgstr "Ajustes para hacer el sistema más accesible"
+
+#: ../src/stacks/extras/i18n.py:20 ../src/dock/lib/effects.py:14
+#: ../src/dock/lib/kcms.py:14
+msgid "Effects"
+msgstr "Efectos"
+
+#: ../src/stacks/extras/i18n.py:21 ../src/dock/lib/effects.py:15
+#: ../src/dock/lib/kcms.py:15
+msgid "Visual Effects"
+msgstr "Efectos visuales"
+
+#: ../src/stacks/extras/i18n.py:22 ../src/dock/lib/effects.py:16
+#: ../src/dock/lib/kcms.py:16
+msgid "Aids and visual effects"
+msgstr "Ayudas y efectos visuales"
+
+#: ../src/stacks/extras/i18n.py:23 ../src/dock/lib/effects.py:17
+#: ../src/dock/lib/kcms.py:17
+msgid "Aids and visual effects for improve system usability"
+msgstr "Colección de herramientas para mejorar la usabilidad del sistema"
+
+#: ../src/stacks/extras/i18n.py:24
+msgid "Deskreen"
+msgstr "Deskreen"
+
+#: ../src/stacks/extras/i18n.py:25
+msgid "Deskreen application for remote screen viewing"
+msgstr "Aplicación para visionar pantallas remotas"
+
+#: ../src/stacks/extras/i18n.py:26
+msgid "Desktop plugins"
+msgstr "Plugins de escritorio"
+
+#: ../src/stacks/extras/i18n.py:27
+msgid "Extra functionality for the desktop"
+msgstr "Funcionalidad extra para el escritorio"
+
+#: ../src/stacks/extras/i18n.py:28
+msgid "Windows effects"
+msgstr "Efectos de ventanas"
+
+#: ../src/stacks/extras/i18n.py:29
+msgid "Graphical effects for windows"
+msgstr "Efectos para manipular la apariencia de las ventanas"
+
+#: ../src/stacks/extras/i18n.py:30
+msgid "Accessibility Dock"
+msgstr "Barra de accesibilidad"
+
+#: ../src/stacks/extras/i18n.py:31
+msgid "Dock with customizable fast actions"
+msgstr "Barra configurable de acciones rápidas"
+
+#: ../src/stacks/extras/i18n.py:32
+msgid "Webcam as mouse"
+msgstr "Usar webcam como ratón"
+
+#: ../src/stacks/extras/i18n.py:33
+msgid "Webcam based mouse control"
+msgstr "Controla el ratón usando captura de movimientos desde la webcam"
+
+#: ../src/stacks/extras/i18n.py:34
+msgid "LliureX TTS"
+msgstr "Lliurex TTS"
+
+#: ../src/stacks/extras/i18n.py:35
+msgid "Configure Lliurex TTS addon"
+msgstr "Ajustes de la extensión TTS de LliureX"
+
+#: ../src/stacks/extras/i18n.py:36
+msgid "Orca"
+msgstr "ORCA"
+
+#: ../src/stacks/extras/i18n.py:37
+msgid "Open Orca configuration tool"
+msgstr "Abrir herramienta de configuración de ORCA"
+
+#: ../src/stacks/extras/i18n.py:38
+msgid "Color scheme"
+msgstr "Esquema de color"
+
+#: ../src/stacks/extras/i18n.py:39
+msgid "Set global color scheme"
+msgstr "Esquema de color global"
+
+#: ../src/stacks/extras/i18n.py:40 ../src/stacks/extras/i18n.py:46
+msgid "Appearance"
+msgstr "Apariencia"
+
+#: ../src/stacks/extras/i18n.py:41
+msgid "Look and feel options"
+msgstr "Opciones de apariencia"
+
+#: ../src/stacks/extras/i18n.py:42
+msgid "Fonts"
+msgstr "Fuentes"
+
+#: ../src/stacks/extras/i18n.py:43
+msgid "Configure system fonts"
+msgstr "Configura las fuentes del sistema"
+
+#: ../src/stacks/extras/i18n.py:44
+msgid "Theme"
+msgstr "Tema"
+
+#: ../src/stacks/extras/i18n.py:45
+msgid "Set global theme"
+msgstr "Establece un tema global"
+
+#: ../src/stacks/extras/i18n.py:47
+msgid "Mouse"
+msgstr "Ratón"
+
+#: ../src/stacks/extras/i18n.py:48
+msgid "Set cursor theme and size"
+msgstr "Ajustar tamaño y tema del cursor"
+
+#: ../src/stacks/extras/i18n.py:49
+msgid "Appearance customizing"
+msgstr "Personalizar apariencia"
 
 #: ../src/stacks/settings.py:14
 msgid "Settings"
@@ -298,22 +454,6 @@ msgstr "Configurar"
 msgid "Toggle visibility"
 msgstr "Alternar visibilidad"
 
-#: ../src/dock/lib/effects.py:14 ../src/dock/lib/kcms.py:14
-msgid "Effects"
-msgstr "Efectos"
-
-#: ../src/dock/lib/effects.py:15 ../src/dock/lib/kcms.py:15
-msgid "Visual Effects"
-msgstr "Efectos visuales"
-
-#: ../src/dock/lib/effects.py:16 ../src/dock/lib/kcms.py:16
-msgid "Aids and visual effects"
-msgstr "Ayudas y efectos visuales"
-
-#: ../src/dock/lib/effects.py:17 ../src/dock/lib/kcms.py:17
-msgid "Aids and visual effects for improve system usability"
-msgstr "Colección de herramientas para mejorar la usabilidad del sistema"
-
 #: ../src/dock/lib/effects.py:59 ../src/dock/lib/kcms.py:59
 msgid "Window Effects"
 msgstr "Efectos de ventana"
@@ -409,102 +549,6 @@ msgstr "imágenes (*.png *.xpm *jpg)"
 #: ../src/dock/lib/launchers.py:324
 msgid "All files(*.*)"
 msgstr "Todos (*.*)"
-
-#~ msgid "System Accessibility"
-#~ msgstr "Accesibilidad del sistema"
-
-#~ msgid "Plasma Accessibility module"
-#~ msgstr "Módulo de accesibilidad de Plasma"
-
-#~ msgid "Joystick as mouse"
-#~ msgstr "Usar joystick como ratón"
-
-#~ msgid "Configure a gamepad/joystick as mouse"
-#~ msgstr "Configura un gamepd o joystick para su uso como ratón"
-
-#~ msgid "Browsers accessibility"
-#~ msgstr "Navegación accesible"
-
-#~ msgid "Selection of addons and configurations for accessible browsing"
-#~ msgstr "Selección de extensiones para navegar de forma más accesible"
-
-#~ msgid "Accessibility"
-#~ msgstr "Accesibilidad"
-
-#~ msgid "Accessibility Dock"
-#~ msgstr "Barra de accesibilidad"
-
-#~ msgid "Dock with customizable fast actions"
-#~ msgstr "Barra configurable de acciones rápidas"
-
-#~ msgid "Webcam as mouse"
-#~ msgstr "Usar webcam como ratón"
-
-#~ msgid "Webcam based mouse control"
-#~ msgstr "Controla el ratón usando captura de movimientos desde la webcam"
-
-#~ msgid "LliureX TTS"
-#~ msgstr "Lliurex TTS"
-
-#~ msgid "Configure Lliurex TTS addon"
-#~ msgstr "Ajustes de la extensión TTS de LliureX"
-
-#~ msgid "Orca"
-#~ msgstr "ORCA"
-
-#~ msgid "Open Orca configuration tool"
-#~ msgstr "Abrir herramienta de configuración de ORCA"
-
-#~ msgid "Accesibility options"
-#~ msgstr "Opciones de accesibilidad"
-
-#~ msgid "Settings which do the system more accessible"
-#~ msgstr "Ajustes para hacer el sistema más accesible"
-
-#~ msgid "Desktop plugins"
-#~ msgstr "Plugins de escritorio"
-
-#~ msgid "Extra functionality for the desktop"
-#~ msgstr "Funcionalidad extra para el escritorio"
-
-#~ msgid "Windows effects"
-#~ msgstr "Efectos de ventanas"
-
-#~ msgid "Graphical effects for windows"
-#~ msgstr "Efectos para manipular la apariencia de las ventanas"
-
-#~ msgid "Color scheme"
-#~ msgstr "Esquema de color"
-
-#~ msgid "Set global color scheme"
-#~ msgstr "Esquema de color global"
-
-#~ msgid "Appearance"
-#~ msgstr "Apariencia"
-
-#~ msgid "Look and feel options"
-#~ msgstr "Opciones de apariencia"
-
-#~ msgid "Fonts"
-#~ msgstr "Fuentes"
-
-#~ msgid "Configure system fonts"
-#~ msgstr "Configura las fuentes del sistema"
-
-#~ msgid "Theme"
-#~ msgstr "Tema"
-
-#~ msgid "Set global theme"
-#~ msgstr "Establece un tema global"
-
-#~ msgid "Mouse"
-#~ msgstr "Ratón"
-
-#~ msgid "Set cursor theme and size"
-#~ msgstr "Ajustar tamaño y tema del cursor"
-
-#~ msgid "Appearance customizing"
-#~ msgstr "Personalizar apariencia"
 
 #~ msgid "Color Scheme"
 #~ msgstr "Esquema de color"
@@ -614,9 +658,6 @@ msgstr "Todos (*.*)"
 
 #~ msgid "Launch accesshelper"
 #~ msgstr "Ejecuta accesshelper"
-
-#~ msgid "Read screen"
-#~ msgstr "Leer"
 
 #~ msgid "Read text or image from clipboard"
 #~ msgstr "Lee un texto o una imagen (ocr) desde el portapapeles"

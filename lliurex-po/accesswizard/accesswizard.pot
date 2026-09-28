@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-27 13:27+0200\n"
+"POT-Creation-Date: 2026-09-28 11:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -29,16 +29,172 @@ msgstr ""
 msgid "Navigate through options with \"Tab\" or arrows."
 msgstr ""
 
-#: ../src/stacks/browsers.py:16 ../src/stacks/browsers.py:17
+#: ../src/stacks/extras/i18n.py:6
+msgid "System Accessibility"
+msgstr ""
+
+#: ../src/stacks/extras/i18n.py:7
+msgid "Plasma Accessibility module"
+msgstr ""
+
+#: ../src/stacks/extras/i18n.py:8
+msgid "Joystick as mouse"
+msgstr ""
+
+#: ../src/stacks/extras/i18n.py:9
+msgid "Configure a gamepad/joystick as mouse"
+msgstr ""
+
+#: ../src/stacks/extras/i18n.py:10
+msgid "Browsers accessibility"
+msgstr ""
+
+#: ../src/stacks/extras/i18n.py:11
+msgid "Selection of addons and configurations for accessible browsing"
+msgstr ""
+
+#: ../src/stacks/extras/i18n.py:12 ../src/stacks/extras/i18n.py:13
 msgid "Browser addons"
 msgstr ""
 
-#: ../src/stacks/browsers.py:18
+#: ../src/stacks/extras/i18n.py:14
 msgid "Accesible browsing"
 msgstr ""
 
-#: ../src/stacks/browsers.py:19
+#: ../src/stacks/extras/i18n.py:15
 msgid "Settings and addons for improved browser accessibility"
+msgstr ""
+
+#: ../src/stacks/extras/i18n.py:16 ../src/stacks/extras/i18n.py:18
+msgid "Accessibility"
+msgstr ""
+
+#: ../src/stacks/extras/i18n.py:17
+msgid "Accesibility options"
+msgstr ""
+
+#: ../src/stacks/extras/i18n.py:19
+msgid "Settings which do the system more accessible"
+msgstr ""
+
+#: ../src/stacks/extras/i18n.py:20 ../src/dock/lib/effects.py:14
+#: ../src/dock/lib/kcms.py:14
+msgid "Effects"
+msgstr ""
+
+#: ../src/stacks/extras/i18n.py:21 ../src/dock/lib/effects.py:15
+#: ../src/dock/lib/kcms.py:15
+msgid "Visual Effects"
+msgstr ""
+
+#: ../src/stacks/extras/i18n.py:22 ../src/dock/lib/effects.py:16
+#: ../src/dock/lib/kcms.py:16
+msgid "Aids and visual effects"
+msgstr ""
+
+#: ../src/stacks/extras/i18n.py:23 ../src/dock/lib/effects.py:17
+#: ../src/dock/lib/kcms.py:17
+msgid "Aids and visual effects for improve system usability"
+msgstr ""
+
+#: ../src/stacks/extras/i18n.py:24
+msgid "Deskreen"
+msgstr ""
+
+#: ../src/stacks/extras/i18n.py:25
+msgid "Deskreen application for remote screen viewing"
+msgstr ""
+
+#: ../src/stacks/extras/i18n.py:26
+msgid "Desktop plugins"
+msgstr ""
+
+#: ../src/stacks/extras/i18n.py:27
+msgid "Extra functionality for the desktop"
+msgstr ""
+
+#: ../src/stacks/extras/i18n.py:28
+msgid "Windows effects"
+msgstr ""
+
+#: ../src/stacks/extras/i18n.py:29
+msgid "Graphical effects for windows"
+msgstr ""
+
+#: ../src/stacks/extras/i18n.py:30
+msgid "Accessibility Dock"
+msgstr ""
+
+#: ../src/stacks/extras/i18n.py:31
+msgid "Dock with customizable fast actions"
+msgstr ""
+
+#: ../src/stacks/extras/i18n.py:32
+msgid "Webcam as mouse"
+msgstr ""
+
+#: ../src/stacks/extras/i18n.py:33
+msgid "Webcam based mouse control"
+msgstr ""
+
+#: ../src/stacks/extras/i18n.py:34
+msgid "LliureX TTS"
+msgstr ""
+
+#: ../src/stacks/extras/i18n.py:35
+msgid "Configure Lliurex TTS addon"
+msgstr ""
+
+#: ../src/stacks/extras/i18n.py:36
+msgid "Orca"
+msgstr ""
+
+#: ../src/stacks/extras/i18n.py:37
+msgid "Open Orca configuration tool"
+msgstr ""
+
+#: ../src/stacks/extras/i18n.py:38
+msgid "Color scheme"
+msgstr ""
+
+#: ../src/stacks/extras/i18n.py:39
+msgid "Set global color scheme"
+msgstr ""
+
+#: ../src/stacks/extras/i18n.py:40 ../src/stacks/extras/i18n.py:46
+msgid "Appearance"
+msgstr ""
+
+#: ../src/stacks/extras/i18n.py:41
+msgid "Look and feel options"
+msgstr ""
+
+#: ../src/stacks/extras/i18n.py:42
+msgid "Fonts"
+msgstr ""
+
+#: ../src/stacks/extras/i18n.py:43
+msgid "Configure system fonts"
+msgstr ""
+
+#: ../src/stacks/extras/i18n.py:44
+msgid "Theme"
+msgstr ""
+
+#: ../src/stacks/extras/i18n.py:45
+msgid "Set global theme"
+msgstr ""
+
+#: ../src/stacks/extras/i18n.py:47
+msgid "Mouse"
+msgstr ""
+
+#: ../src/stacks/extras/i18n.py:48
+msgid "Set cursor theme and size"
+msgstr ""
+
+#: ../src/stacks/extras/i18n.py:49
+msgid "Appearance customizing"
 msgstr ""
 
 #: ../src/stacks/settings.py:14
@@ -287,22 +443,6 @@ msgstr ""
 
 #: ../src/dock/accessdock.py:20
 msgid "Toggle visibility"
-msgstr ""
-
-#: ../src/dock/lib/effects.py:14 ../src/dock/lib/kcms.py:14
-msgid "Effects"
-msgstr ""
-
-#: ../src/dock/lib/effects.py:15 ../src/dock/lib/kcms.py:15
-msgid "Visual Effects"
-msgstr ""
-
-#: ../src/dock/lib/effects.py:16 ../src/dock/lib/kcms.py:16
-msgid "Aids and visual effects"
-msgstr ""
-
-#: ../src/dock/lib/effects.py:17 ../src/dock/lib/kcms.py:17
-msgid "Aids and visual effects for improve system usability"
 msgstr ""
 
 #: ../src/dock/lib/effects.py:59 ../src/dock/lib/kcms.py:59

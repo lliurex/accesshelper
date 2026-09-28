@@ -21,9 +21,8 @@ Conflicts: accesswizard (<=0.1.4)
 Depends: python3-qtextrawidgets (>= 0.6.8),
 	python3-pyside2.qtmultimedia,
 	python3-pyside2.qtgui,
-	python3-hunspell,
 	xpanimated-yb-cursor-theme,
-	python3-app2menu (>= 1.4),
+	python3-app2menu (>= 1.4.1),
 	onboard,
 	python3-opencv,
 	python3-tesserocr,
@@ -46,7 +45,8 @@ Depends: python3-qtextrawidgets (>= 0.6.8),
 	kwin-script-rgbfilter,
 	kwin-effect-colorcorrection,
 	kwin-grayscale-effect,
-	python3-imutils
+	python3-imutils,
+	python3-hunspell
 Description: Set accessibility settings
  AccessHelper it's a common place for the
  available accessibility options 

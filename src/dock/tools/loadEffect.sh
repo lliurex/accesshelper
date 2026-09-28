@@ -5,7 +5,6 @@
 
 function toggle
 {
-	echo "Toggle $ID"
 	qdbus org.kde.KWin /Effects org.kde.kwin.Effects.toggleEffect $ID
 }
 
@@ -26,25 +25,19 @@ function unload
 
 function launchEffect
 {
-	echo "Launching $ENAME"
-	echo "qdbus org.kde.kglobalaccel /component/kwin org.kde.kglobalaccel.Component.invokeShortcut $ENAME"
 	qdbus org.kde.kglobalaccel /component/kwin org.kde.kglobalaccel.Component.invokeShortcut "${ENAME}"
 }
 
 function enable
 {
-	echo "toogleEnable $ID"
 	if [[ $(qdbus org.kde.KWin /Effects org.kde.kwin.Effects.isEffectLoaded $ID) == "false" ]]
 	then
-		echo "Enabling"
 		load
 		[[ $(qdbus org.kde.KWin /Effects org.kde.kwin.Effects.loadedEffects | grep $ID) ]] || toggle
 		[[ $(qdbus org.kde.KWin /Effects org.kde.kwin.Effects.activeEffects | grep $ID) ]] || launchEffect
 	else
-		echo "Unloading"
 		unload
 	fi
-	echo "done"
 }
 
 function readMetadata
@@ -57,8 +50,24 @@ function readMetadata
 	ENAME=${ENAME/*: /}
 	ENAME=${ENAME//\"/}
 	ENAME=${ENAME/,/}
+	[ ${#ID} -eq 0 ] && ID=${ENAME,,}
+	[ ${#ID} -eq 0 ] && ID=${METADATA,,}
+
 	CHK_MAGNIFIERS=$(grep \"exclusiveGroup\" $METADATA)
 	[ ${#CHK_MAGNIFIERS} -ne 0 ] && ENAME="view_zoom_in"
+}
+
+function getData
+{
+	grep \"Id\" $METADATA >/dev/null 2>&1
+	if [ $? -eq 0 ]
+	then
+		readMetadata
+	else
+		ID=$(qdbus org.kde.KWin /Effects org.kde.kwin.Effects.listOfEffects | grep $METADATA | tail -n1) 
+		ENAME=$ID
+	fi
+		
 }
 
 function readDir
@@ -68,6 +77,6 @@ function readDir
 }
 
 METADATA=$1
-[ -d $1 ] && readDir || readMetadata 
+[ -d $1 ] && readDir || getData 
 [[ $(qdbus org.kde.KWin /Effects org.kde.kwin.Effects.activeEffects | grep $ID) ]] && toggle || enable
 exit 0

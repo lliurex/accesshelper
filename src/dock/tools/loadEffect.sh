@@ -57,6 +57,19 @@ function readMetadata
 	[ ${#CHK_MAGNIFIERS} -ne 0 ] && ENAME="view_zoom_in"
 }
 
+function getData
+{
+	grep \"Id\" $METADATA >/dev/null 2>&1
+	if [ $? -eq 0 ]
+	then
+		readMetadata
+	else
+		ID=$(qdbus org.kde.KWin /Effects org.kde.kwin.Effects.listOfEffects | grep $METADATA | tail -n1) 
+		ENAME=$ID
+	fi
+		
+}
+
 function readDir
 {
 	ID=$(basename $METADATA)
@@ -64,6 +77,6 @@ function readDir
 }
 
 METADATA=$1
-[ -d $1 ] && readDir || readMetadata 
+[ -d $1 ] && readDir || getData 
 [[ $(qdbus org.kde.KWin /Effects org.kde.kwin.Effects.activeEffects | grep $ID) ]] && toggle || enable
 exit 0

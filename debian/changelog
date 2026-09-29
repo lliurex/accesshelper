@@ -1,8 +1,8 @@
-accesswizard (0.9.3.2) jammy; urgency=medium
+accesswizard (0.9.3.3) jammy; urgency=medium
 
   * Full rewrite
   * WIP on accesswizard as simple wizard
-  * Restore acccesshelper functionlaty
+  * Restore acccesshelper functionality
   * Bugfixes (many)
 
  -- Juanma1980 <juanma1980@gmail.com>  Sun, 27 Sep 2026 13:06:49 +0200

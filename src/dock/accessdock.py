@@ -520,9 +520,7 @@ class accessdock(QMainWindow):
 	def updateScreen(self):
 		color=self._setColorForBorder()
 		self.lblDesc.setText("")
-
 		self.flow.clean()
-		
 		launchers=self.libdock.getLaunchers()
 		bigTip=False
 		if self.libdock.readKValue("kwinrc","accessibledock","tooltipbig")=="true":

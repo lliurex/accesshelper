@@ -1,3 +1,9 @@
+accesswizard (0.9.3) noble; urgency=medium
+
+  * Ported from Lliurex 23 jammy
+
+ -- Juanma1980 <juanma1980@gmail.com>  Wed, 30 Sep 2026 07:24:03 +0200
+
 accesswizard (0.1.5) noble; urgency=medium
 
   * Change layout from table to list

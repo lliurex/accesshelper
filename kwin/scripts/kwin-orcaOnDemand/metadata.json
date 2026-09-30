@@ -1,0 +1,26 @@
+{
+    "KPackageStructure": "KWin/Script",
+    "KPlugin": {
+        "Authors": [
+            {
+                "Email": "juanma1980@gmail.com",
+                "Name": "Juanma1980"
+            }
+        ],
+        "Description": "Loads predefined Orca types for selected window types",
+        "Description[es]": "Carga perfiles predeterminados de Orca para los tipos de ventana indicados",
+        "Description[ca]": "Carrega perfils d'Orca predetertminats per als tipus de finestra indicats",
+        "Icon": "preferences-system-windows-effect-dialog-parent",
+        "Id": "orcaondemand",
+        "License": "GPL",
+        "Name": "Orca on demand",
+        "Name[es]": "Orca a la carta",
+        "Name[ca]": "OCR a la carta",
+        "Version": "0.1.0"
+    },
+    "X-KWin-Exclude-Listing": "true",
+    "X-Plasma-API": "declarativescript",
+    "X-KDE-ConfigModule": "kwin/effects/configs/kcm_kwin4_genericscripted",
+	"X-KWin-Config-TranslationDomain": "orcaondemand",
+    "X-Plasma-MainScript": "ui/main.qml"
+}

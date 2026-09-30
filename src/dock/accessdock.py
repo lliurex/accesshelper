@@ -520,9 +520,7 @@ class accessdock(QMainWindow):
 	def updateScreen(self):
 		color=self._setColorForBorder()
 		self.lblDesc.setText("")
-
 		self.flow.clean()
-		
 		launchers=self.libdock.getLaunchers()
 		bigTip=False
 		if self.libdock.readKValue("kwinrc","accessibledock","tooltipbig")=="true":
@@ -603,4 +601,4 @@ if __name__=="__main__":
 	objbus.connect_to_signal("isDockVisibleSignal",dock._isVisible,dbus_interface="net.lliurex.accessibility.Dock")
 	dclient=dbusMethods(bus,dock)
 	dock.show()
-	app.exec()
+	app.exec_()

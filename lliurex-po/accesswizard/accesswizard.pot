@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-29 10:24+0200\n"
+"POT-Creation-Date: 2026-09-27 13:27+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,84 +17,16 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../src/accesswizard.py:13
+#: ../src/accesshelper.py:13
 msgid "Wizard of LliureX for configuring accessibility tools"
 msgstr ""
 
-#: ../src/accesswizard.py:14
+#: ../src/accesshelper.py:14
 msgid "Press \"Escape\" to stop reading. \"F5\" for read it from beginning"
 msgstr ""
 
-#: ../src/accesswizard.py:15
+#: ../src/accesshelper.py:15
 msgid "Navigate through options with \"Tab\" or arrows."
-msgstr ""
-
-#: ../src/stacks/accessibility.py:15
-msgid "System Accessibility"
-msgstr ""
-
-#: ../src/stacks/accessibility.py:16
-msgid "Plasma Accessibility module"
-msgstr ""
-
-#: ../src/stacks/accessibility.py:17
-msgid "Joystick as mouse"
-msgstr ""
-
-#: ../src/stacks/accessibility.py:18
-msgid "Configure a gamepad/joystick as mouse"
-msgstr ""
-
-#: ../src/stacks/accessibility.py:19
-msgid "Browsers accessibility"
-msgstr ""
-
-#: ../src/stacks/accessibility.py:20
-msgid "Selection of addons and configurations for accessible browsing"
-msgstr ""
-
-#: ../src/stacks/accessibility.py:21 ../src/stacks/accessibility.py:28
-msgid "Accessibility"
-msgstr ""
-
-#: ../src/stacks/accessibility.py:22
-msgid "Accessibility Dock"
-msgstr ""
-
-#: ../src/stacks/accessibility.py:23
-msgid "Dock with customizable fast actions"
-msgstr ""
-
-#: ../src/stacks/accessibility.py:24
-msgid "Webcam as mouse"
-msgstr ""
-
-#: ../src/stacks/accessibility.py:25
-msgid "Webcam based mouse control"
-msgstr ""
-
-#: ../src/stacks/accessibility.py:26
-msgid "LliureX TTS"
-msgstr ""
-
-#: ../src/stacks/accessibility.py:27
-msgid "Configure Lliurex TTS addon"
-msgstr ""
-
-#: ../src/stacks/accessibility.py:29
-msgid "Orca"
-msgstr ""
-
-#: ../src/stacks/accessibility.py:30
-msgid "Open Orca configuration tool"
-msgstr ""
-
-#: ../src/stacks/accessibility.py:31
-msgid "Accesibility options"
-msgstr ""
-
-#: ../src/stacks/accessibility.py:32
-msgid "Settings which do the system more accessible"
 msgstr ""
 
 #: ../src/stacks/browsers.py:16 ../src/stacks/browsers.py:17
@@ -107,38 +39,6 @@ msgstr ""
 
 #: ../src/stacks/browsers.py:19
 msgid "Settings and addons for improved browser accessibility"
-msgstr ""
-
-#: ../src/stacks/effects.py:14
-msgid "Effects"
-msgstr ""
-
-#: ../src/stacks/effects.py:15
-msgid "Desktop plugins"
-msgstr ""
-
-#: ../src/stacks/effects.py:16
-msgid "Extra functionality for the desktop"
-msgstr ""
-
-#: ../src/stacks/effects.py:17
-msgid "Windows effects"
-msgstr ""
-
-#: ../src/stacks/effects.py:18
-msgid "Graphical effects for windows"
-msgstr ""
-
-#: ../src/stacks/effects.py:19
-msgid "Visual Effects"
-msgstr ""
-
-#: ../src/stacks/effects.py:20
-msgid "Aids and visual effects"
-msgstr ""
-
-#: ../src/stacks/effects.py:21
-msgid "Aids and visual effects for improve system usability"
 msgstr ""
 
 #: ../src/stacks/settings.py:14
@@ -205,50 +105,6 @@ msgstr ""
 msgid "Advanced settings"
 msgstr ""
 
-#: ../src/stacks/theme.py:14 ../src/stacks/theme.py:105
-msgid "Color scheme"
-msgstr ""
-
-#: ../src/stacks/theme.py:15
-msgid "Set global color scheme"
-msgstr ""
-
-#: ../src/stacks/theme.py:16 ../src/stacks/theme.py:22
-msgid "Appearance"
-msgstr ""
-
-#: ../src/stacks/theme.py:17
-msgid "Look and feel options"
-msgstr ""
-
-#: ../src/stacks/theme.py:18 ../src/stacks/theme.py:107
-msgid "Fonts"
-msgstr ""
-
-#: ../src/stacks/theme.py:19
-msgid "Configure system fonts"
-msgstr ""
-
-#: ../src/stacks/theme.py:20 ../src/stacks/theme.py:103
-msgid "Theme"
-msgstr ""
-
-#: ../src/stacks/theme.py:21
-msgid "Set global theme"
-msgstr ""
-
-#: ../src/stacks/theme.py:23 ../src/stacks/theme.py:109
-msgid "Mouse"
-msgstr ""
-
-#: ../src/stacks/theme.py:24
-msgid "Set cursor theme and size"
-msgstr ""
-
-#: ../src/stacks/theme.py:25
-msgid "Appearance customizing"
-msgstr ""
-
 #: ../src/tools/ttsmanager.py:19
 msgid "Screen reader"
 msgstr ""
@@ -273,7 +129,7 @@ msgstr ""
 msgid "Recorded file list"
 msgstr ""
 
-#: ../src/tools/ttsmanager.py:25
+#: ../src/tools/ttsmanager.py:25 ../src/dock/lib/launchers.py:15
 msgid "Cancel"
 msgstr ""
 
@@ -431,4 +287,116 @@ msgstr ""
 
 #: ../src/dock/accessdock.py:20
 msgid "Toggle visibility"
+msgstr ""
+
+#: ../src/dock/lib/effects.py:14 ../src/dock/lib/kcms.py:14
+msgid "Effects"
+msgstr ""
+
+#: ../src/dock/lib/effects.py:15 ../src/dock/lib/kcms.py:15
+msgid "Visual Effects"
+msgstr ""
+
+#: ../src/dock/lib/effects.py:16 ../src/dock/lib/kcms.py:16
+msgid "Aids and visual effects"
+msgstr ""
+
+#: ../src/dock/lib/effects.py:17 ../src/dock/lib/kcms.py:17
+msgid "Aids and visual effects for improve system usability"
+msgstr ""
+
+#: ../src/dock/lib/effects.py:59 ../src/dock/lib/kcms.py:59
+msgid "Window Effects"
+msgstr ""
+
+#: ../src/dock/lib/effects.py:61 ../src/dock/lib/kcms.py:61
+msgid "Desktop Effects"
+msgstr ""
+
+#: ../src/dock/lib/launchers.py:14
+msgid "Assign"
+msgstr ""
+
+#: ../src/dock/lib/launchers.py:16 ../src/dock/lib/launchers.py:244
+msgid "Description"
+msgstr ""
+
+#: ../src/dock/lib/launchers.py:17
+msgid "Toggle effect"
+msgstr ""
+
+#: ../src/dock/lib/launchers.py:18
+msgid "Application"
+msgstr ""
+
+#: ../src/dock/lib/launchers.py:19
+msgid "Press button to assign one action"
+msgstr ""
+
+#: ../src/dock/lib/launchers.py:20
+msgid "Executable path"
+msgstr ""
+
+#: ../src/dock/lib/launchers.py:21
+msgid "Insert the executable path"
+msgstr ""
+
+#: ../src/dock/lib/launchers.py:22
+msgid "Shortcut"
+msgstr ""
+
+#: ../src/dock/lib/launchers.py:23
+msgid "Press a key"
+msgstr ""
+
+#: ../src/dock/lib/launchers.py:24
+msgid "Icon: "
+msgstr ""
+
+#: ../src/dock/lib/launchers.py:25
+msgid "Push to change icon"
+msgstr ""
+
+#: ../src/dock/lib/launchers.py:26
+msgid "Module"
+msgstr ""
+
+#: ../src/dock/lib/launchers.py:27
+msgid "Name: "
+msgstr ""
+
+#: ../src/dock/lib/launchers.py:28
+msgid "Unassigned action"
+msgstr ""
+
+#: ../src/dock/lib/launchers.py:29
+msgid "Insert desktop name"
+msgstr ""
+
+#: ../src/dock/lib/launchers.py:30
+msgid "Insert the url for the site"
+msgstr ""
+
+#: ../src/dock/lib/launchers.py:31
+msgid "https://example.com"
+msgstr ""
+
+#: ../src/dock/lib/launchers.py:32 ../src/dock/lib/launchers.py:358
+msgid "From here you can add a custom launcher"
+msgstr ""
+
+#: ../src/dock/lib/launchers.py:242
+msgid "Description (optional): "
+msgstr ""
+
+#: ../src/dock/lib/launchers.py:245
+msgid "Insert a description for the app"
+msgstr ""
+
+#: ../src/dock/lib/launchers.py:322
+msgid "images(*.png *.xpm *jpg)"
+msgstr ""
+
+#: ../src/dock/lib/launchers.py:324
+msgid "All files(*.*)"
 msgstr ""

@@ -2,9 +2,9 @@
 from llxaccessibility import llxaccessibility
 import os,json
 import subprocess
-from PySide6.QtWidgets import QApplication,QLabel,QGridLayout,QCheckBox,QComboBox,QPushButton,QFileDialog,QInputDialog,QListWidget,QHBoxLayout,QWidget
-from PySide6 import QtGui
-from PySide6.QtCore import Qt,QSize
+from PySide2.QtWidgets import QApplication,QLabel,QGridLayout,QCheckBox,QComboBox,QPushButton,QFileDialog,QInputDialog,QListWidget,QHBoxLayout,QWidget
+from PySide2 import QtGui
+from PySide2.QtCore import Qt,QSize
 from QtExtraWidgets import QStackedWindowItem, QTableTouchWidget, QPushInfoButton
 import locale
 import gettext
@@ -53,32 +53,32 @@ class settings(QStackedWindowItem):
 		box.addWidget(self.lstOptions,0,0,1,1)
 		self.btnAccept.clicked.connect(self.writeConfig)
 		self.chkBeGr=QCheckBox(i18n["GRUB"])
-		self.chkBeGr.checkStateChanged.connect(self._enableAccept)
+		self.chkBeGr.stateChanged.connect(self._enableAccept)
 		self.lstOptions.addItem("")
 		rHeight=self.chkBeGr.sizeHint().height()*2
 		item=self.lstOptions.item(self.lstOptions.count()-1)
 		item.setSizeHint(QSize(0,rHeight))
 		self.lstOptions.setItemWidget(item,self.chkBeGr)
 		self.chkBeSd=QCheckBox(i18n["SDDM_BEEP"])
-		self.chkBeSd.checkStateChanged.connect(self._enableAccept)
+		self.chkBeSd.stateChanged.connect(self._enableAccept)
 		self.lstOptions.addItem("")
 		item=self.lstOptions.item(self.lstOptions.count()-1)
 		item.setSizeHint(QSize(0,rHeight))
 		self.lstOptions.setItemWidget(item,self.chkBeSd)
 		self.chkBeSe=QCheckBox(i18n["SESSION_BEEP"])
-		self.chkBeSe.checkStateChanged.connect(self._enableAccept)
+		self.chkBeSe.stateChanged.connect(self._enableAccept)
 		self.lstOptions.addItem("")
 		item=self.lstOptions.item(self.lstOptions.count()-1)
 		item.setSizeHint(QSize(0,rHeight))
 		self.lstOptions.setItemWidget(item,self.chkBeSe)
 		self.chkOrSd=QCheckBox(i18n["SDDM_ORCA"])
-		self.chkOrSd.checkStateChanged.connect(self._enableAccept)
+		self.chkOrSd.stateChanged.connect(self._enableAccept)
 		self.lstOptions.addItem("")
 		item=self.lstOptions.item(self.lstOptions.count()-1)
 		item.setSizeHint(QSize(0,rHeight))
 		self.lstOptions.setItemWidget(item,self.chkOrSd)
 		self.chkMono=QCheckBox(i18n["MONO"])
-		self.chkMono.checkStateChanged.connect(self._enableAccept)
+		self.chkMono.stateChanged.connect(self._enableAccept)
 		self.lstOptions.addItem("")
 		item=self.lstOptions.item(self.lstOptions.count()-1)
 		item.setSizeHint(QSize(0,rHeight))
@@ -87,7 +87,7 @@ class settings(QStackedWindowItem):
 		wdg=QWidget()
 		hlay=QHBoxLayout(wdg)
 		self.chkProf=QCheckBox(i18n["PROFILE"])
-		self.chkProf.checkStateChanged.connect(self._enableAccept)
+		self.chkProf.stateChanged.connect(self._enableAccept)
 		self.chkProf.clicked.connect(lambda: self.cmbProf.setEnabled(self.chkProf.isChecked()))
 		hlay.addWidget(self.chkProf,Qt.Alignment(0))
 		hlay.addSpacing(6)
@@ -98,7 +98,7 @@ class settings(QStackedWindowItem):
 		item.setSizeHint(QSize(0,rHeight))
 		self.lstOptions.setItemWidget(item,wdg)
 		self.chkAuDo=QCheckBox(i18n["DOCK"])
-		self.chkAuDo.checkStateChanged.connect(self._enableAccept)
+		self.chkAuDo.stateChanged.connect(self._enableAccept)
 		self.lstOptions.addItem("")
 		item=self.lstOptions.item(self.lstOptions.count()-1)
 		self.lstOptions.setItemWidget(item,self.chkAuDo)
@@ -114,7 +114,6 @@ class settings(QStackedWindowItem):
 		self.btnLoad.setObjectName("btn")
 		self.btnLoad.clicked.connect(self._loadProfile)
 		hlay2.addWidget(self.btnLoad,Qt.AlignCenter)
-		self.lstOptions.addItem("")
 		box.addWidget(wdg,1,0,1,1,Qt.AlignBottom)
 		#item=self.lstOptions.item(self.lstOptions.count()-1)
 		#item.setSizeHint(QSize(0,rHeight))

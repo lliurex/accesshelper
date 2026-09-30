@@ -1,8 +1,8 @@
 import os,json
 from llxaccessibility import llxaccessibility
-from PySide2.QtWidgets import QWidget,QGridLayout,QListWidget,QListWidgetItem,QLabel
-from PySide2 import QtGui
-from PySide2.QtCore import Qt,QSize
+from PySide6.QtWidgets import QWidget,QGridLayout,QListWidget,QListWidgetItem,QLabel
+from PySide6 import QtGui
+from PySide6.QtCore import Qt,QSize
 from QtExtraWidgets import QStackedWindowItem, QPushInfoButton,QTableTouchWidget
 from lib.threadLib import thLauncher
 from rebost import store

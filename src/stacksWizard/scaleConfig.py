@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 from llxaccessibility import llxaccessibility
-from PySide2.QtWidgets import QWidget,QGridLayout,QScrollArea,QSpinBox,QLabel,QPushButton
-from PySide2.QtCore import Qt
+from PySide6.QtWidgets import QWidget,QGridLayout,QScrollArea,QSpinBox,QLabel,QPushButton
+from PySide6.QtCore import Qt
 from QtExtraWidgets import QStackedWindowItem,QScrollLabel
 from extras.i18n import *
 from wdg.btnBar import btnBar

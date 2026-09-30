@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 import os,subprocess
-from PySide2.QtCore import QThread,Signal
+from PySide6.QtCore import QThread,Signal
 
 class thWorker(QThread):
 	def __init__(self,proc,parent=None):

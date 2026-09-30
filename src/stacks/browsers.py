@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 from app2menu import App2Menu
 import os,json
-from PySide2.QtWidgets import QGridLayout,QComboBox,QLabel
-from PySide2 import QtGui
-from PySide2.QtCore import Qt,QSize
+from PySide6.QtWidgets import QGridLayout,QComboBox,QLabel
+from PySide6 import QtGui
+from PySide6.QtCore import Qt,QSize
 from QtExtraWidgets import QStackedWindowItem
 from wdg.configPane import QConfigPane
 from extras.i18n import *

@@ -2,9 +2,9 @@
 from llxaccessibility import llxaccessibility
 import os,json
 import subprocess
-from PySide2.QtWidgets import QApplication,QLabel,QGridLayout,QCheckBox,QComboBox,QPushButton,QFileDialog,QInputDialog,QListWidget,QHBoxLayout,QWidget
-from PySide2 import QtGui
-from PySide2.QtCore import Qt,QSize
+from PySide6.QtWidgets import QApplication,QLabel,QGridLayout,QCheckBox,QComboBox,QPushButton,QFileDialog,QInputDialog,QListWidget,QHBoxLayout,QWidget
+from PySide6 import QtGui
+from PySide6.QtCore import Qt,QSize
 from QtExtraWidgets import QStackedWindowItem, QTableTouchWidget, QPushInfoButton
 import locale
 import gettext

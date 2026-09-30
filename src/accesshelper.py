@@ -2,8 +2,8 @@
 import sys
 import os
 import subprocess
-from PySide2.QtWidgets import QApplication,QLabel,QVBoxLayout
-from PySide2.QtCore import Qt
+from PySide6.QtWidgets import QApplication,QLabel,QVBoxLayout
+from PySide6.QtCore import Qt
 from QtExtraWidgets import QStackedWindow,QTableTouchWidget
 from llxaccessibility import llxaccessibility
 import gettext
@@ -34,4 +34,4 @@ size=font.pointSize()
 if size<16:
 	font.setPointSize(font.pointSize()+4)
 	config.setFont(font)
-app.exec_()
+app.exec()

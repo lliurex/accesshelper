@@ -2,7 +2,7 @@
 import sys
 import os
 import subprocess
-from PySide2.QtWidgets import QApplication,QLabel,QVBoxLayout
+from PySide6.QtWidgets import QApplication,QLabel,QVBoxLayout
 from QtExtraWidgets import QStackedWindow,QTableTouchWidget
 from llxaccessibility import llxaccessibility
 

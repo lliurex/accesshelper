@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 import dbus
 import accessdock
-from PySide2.QtWidgets import QAbstractItemView,QHeaderView,QGridLayout,QWidget,QTableWidgetItem,QWidgetItem
-from PySide2.QtCore import Qt,Signal,QSize,QObject
-from PySide2.QtGui import QIcon,QCursor
+from PySide6.QtWidgets import QAbstractItemView,QHeaderView,QGridLayout,QWidget,QTableWidgetItem,QWidgetItem
+from PySide6.QtCore import Qt,Signal,QSize,QObject
+from PySide6.QtGui import QIcon,QCursor
 from QtExtraWidgets import QTableTouchWidget,QHotkeyButton,QFlowTouchWidget
 
 class dockSignals(QObject):

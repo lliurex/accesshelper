@@ -1,5 +1,5 @@
 from llxaccessibility import llxaccessibility
-from PySide2.QtCore import Qt,QThread,Signal,QSize
+from PySide6.QtCore import Qt,QThread,Signal,QSize
 import os,shutil,json
 
 class thLauncher(QThread):

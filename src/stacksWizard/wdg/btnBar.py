@@ -1,6 +1,6 @@
 #!/usr/bin/python3
-from PySide2.QtWidgets import QGridLayout,QPushButton,QWidget
-from PySide2.QtCore import Qt
+from PySide6.QtWidgets import QGridLayout,QPushButton,QWidget
+from PySide6.QtCore import Qt
 from extras.i18n import *
 
 class btnBar(QWidget):

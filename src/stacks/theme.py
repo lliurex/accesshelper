@@ -1,7 +1,7 @@
 #!/usr/bin/python3
-from PySide2.QtWidgets import QGridLayout
-from PySide2 import QtGui
-from PySide2.QtCore import Qt
+from PySide6.QtWidgets import QGridLayout
+from PySide6 import QtGui
+from PySide6.QtCore import Qt
 from QtExtraWidgets import QStackedWindowItem
 from wdg.configPane import QConfigPane
 from extras.i18n import *

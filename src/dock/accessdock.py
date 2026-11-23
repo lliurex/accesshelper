@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 import os,sys,subprocess,json,time
-from PySide2.QtWidgets import QApplication,QGridLayout,QWidget,QPushButton,QMenu,QLabel,QMainWindow
+from PySide2.QtWidgets import QApplication,QGridLayout,QWidget,QPushButton,QMenu,QLabel,QMainWindow,QDockWidget
 from PySide2.QtCore import Qt,QSize,QThread,QPoint,QEvent,Signal,QObject
 from PySide2.QtGui import QIcon,QPixmap,QPalette,QGuiApplication,QFont
 import dbus
@@ -400,7 +400,6 @@ class accessdock(QMainWindow):
 		super().__init__()
 		self.dbg=True
 		self.libdock=libdock.libdock()
-
 		self.setWindowIcon(QIcon.fromTheme("accessibledock"))
 		QGuiApplication.setDesktopFileName("accessibledock")
 		#self.setWindowFlag(Qt.Window)
@@ -414,24 +413,29 @@ class accessdock(QMainWindow):
 		#self.setWindowFlag(Qt.WindowType.Dialog,True)
 		#self.setWindowFlag(Qt.WindowType.BypassWindowManagerHint,True)
 		#self.setWindowFlag(Qt.WindowType.WindowStaysOnTopHint,True)
-		#self.setStyleSheet("margin:0px")
+		self.setStyleSheet("margin:0px")
 		wdg=QWidget()
-		layout=QGridLayout(wdg)
+		wdg.setMouseTracking(True)
+		lay=QGridLayout(wdg)
+		lay.setSpacing(0)
+		lay.setContentsMargins(0,0,0,0)
 		self.setCentralWidget(wdg)
-		self.setLayout(layout)
 		self.flow=QFlowTouchWidget()
 		self.flow.setObjectName("Table")
-		layout.addWidget(self.flow,0,0)
+		#self.setStyleSheet('#Table{padding:%spx;padding-left:%spx;padding-right:0px;padding-bottom:0px;background-color:rgba(255,255,255,0)}'%(MARGIN/MARGIN,MARGIN*2))
+		lay.addWidget(self.flow,0,0)
 		self.lblDesc=QLabel("")
 		font=self.lblDesc.font()
 		font.setBold(True)
 		font.setPointSize(font.pointSize()+1)
 		self.lblDesc.setFont(font)
-		layout.addWidget(self.lblDesc,1,0,Qt.AlignCenter|Qt.AlignBottom)
+		#dck=QDockWidget()
+		#dck.setWidget(self.lblDesc)
+		#self.addDockWidget(Qt.BottomDockWidgetArea,dck)
+		lay.addWidget(self.lblDesc,1,0,Qt.AlignCenter|Qt.AlignBottom)
 		self.threadLaunchers=[]
 		self.updateScreen()
 		self._resize()
-		self.setStyleSheet('#Table{padding:%spx;padding-left:%spx;padding-right:0px;padding-bottom:0px;background-color:rgba(255,255,255,0)}'%(MARGIN,MARGIN*2))
 		coords=self.libdock.readKValue("kwinrc","accessibledock","coords").split(",")
 		if len(coords)>1:
 			self.move(int(coords[0]),int(coords[1]))
@@ -450,6 +454,11 @@ class accessdock(QMainWindow):
 			args[0].ignore()
 		#return(True)
 	#def closeEvent
+
+	def enterEvent(self,*args):
+		self.activateWindow()
+		args[0].ignore()
+	#def hideEvent
 
 	def hideEvent(self,*args):
 		args[0].ignore()
@@ -478,7 +487,7 @@ class accessdock(QMainWindow):
 			l=threadLauncher(cmd)
 			self.threadLaunchers.append(l)
 			l.start()
-			l.finished.connect(self._endLaunch)
+			l.finished.connect(lambda: self._endLaunch(True))
 		except:
 			print("Error launching config")
 	#def _launchDockConfig
@@ -486,6 +495,9 @@ class accessdock(QMainWindow):
 	def _endLaunch(self,*args):
 		self._debug("Process end detected")
 		self._toggle()
+		if len(args)>0:
+			if args[0]==True:
+				self._resize()
 	#def _endLaunch
 
 	def mousePressEvent(self, ev):
@@ -545,14 +557,13 @@ class accessdock(QMainWindow):
 	#def showEvent
 	
 	def _resize(self):
-		itemW=max(self.flow.itemAt(0).sizeHint().width(),BTN_SIZE+MARGIN)
-		itemH=max(self.flow.itemAt(0).sizeHint().height(),BTN_SIZE+MARGIN)
-		maxW=itemW*(self.flow.count()+1)
-		h=itemH+self.lblDesc.sizeHint().height()
+		itemW=max(self.flow.itemAt(0).sizeHint().width(),BTN_SIZE+MARGIN*2)
+		itemH=min(self.flow.itemAt(0).sizeHint().height(),BTN_SIZE+MARGIN)+self.lblDesc.sizeHint().height()
+		maxW=itemW*(self.flow.count())
 		if self.flow.count()>0:
-			maxH=itemH*self.flow.count()+self.lblDesc.sizeHint().height()+MARGIN*6
-			self.setMaximumSize(maxW+MARGIN*3,maxH*3)
-		self.resize(maxW,h)
+			self.setMaximumWidth(maxW+MARGIN*3)
+			self.setMaximumHeight(maxW+MARGIN*3)
+		self.resize(maxW+MARGIN*3,itemH)
 	#def _resize
 
 	def _toggle(self,*args,**kwargs):
@@ -569,7 +580,6 @@ class accessdock(QMainWindow):
 #class accessdock
 		
 if __name__=="__main__":
-	print("main "+str(int(time.time())))
 	app=QApplication(["AccessDock"])
 	dock=accessdock()
 	#Check if is already running

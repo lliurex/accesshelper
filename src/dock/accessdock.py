@@ -1,16 +1,14 @@
 #!/usr/bin/python3
 import os,sys,subprocess,json,time
-from PySide2.QtWidgets import QApplication,QGridLayout,QWidget,QPushButton,QHeaderView,QMenu,QToolTip,QLabel,QTableWidget,QToolBar,QMainWindow
-from PySide2.QtCore import Qt,QSignalMapper,QSize,QThread,QPoint,QEvent,Signal,QObject,QRect
-from PySide2.QtGui import QIcon,QPixmap,QCursor,QColor,QPalette,QGuiApplication,QFont
+from PySide2.QtWidgets import QApplication,QGridLayout,QWidget,QPushButton,QMenu,QLabel,QMainWindow
+from PySide2.QtCore import Qt,QSize,QThread,QPoint,QEvent,Signal,QObject
+from PySide2.QtGui import QIcon,QPixmap,QPalette,QGuiApplication,QFont
 import dbus
 import dbus.service
 import dbus.mainloop.glib
-from QtExtraWidgets import QTableTouchWidget,QScrollLabel,QFlowTouchWidget
-import subprocess
+from QtExtraWidgets import QFlowTouchWidget
 import lib.libdock as libdock
 import gettext
-import resources
 gettext.textdomain('accesswizard')
 _ = gettext.gettext
 
@@ -571,6 +569,7 @@ class accessdock(QMainWindow):
 #class accessdock
 		
 if __name__=="__main__":
+	print("main "+str(int(time.time())))
 	app=QApplication(["AccessDock"])
 	dock=accessdock()
 	#Check if is already running

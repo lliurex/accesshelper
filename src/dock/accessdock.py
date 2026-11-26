@@ -375,6 +375,8 @@ class QPushButtonDock(QPushButton):
 					if self.hasFocus()==False:
 						self.setFocus()
 				self.focusIn.emit(self)
+			else:
+				self.focusIn.emit(self)
 			#size=self.size()
 			#origSize=72
 			#newsize=QSize(size.width(),origSize*1.5)
@@ -456,6 +458,7 @@ class accessdock(QMainWindow):
 	#def closeEvent
 
 	def enterEvent(self,*args):
+		print("???")
 		self.activateWindow()
 		args[0].ignore()
 	#def hideEvent
@@ -524,6 +527,7 @@ class accessdock(QMainWindow):
 	#def leaveEvent
 
 	def _showTooltip(self,*args):
+		print("**")
 		self.lblDesc.setText(args[0].lbl.text())
 	#def _showTooltip
 
@@ -580,6 +584,8 @@ class accessdock(QMainWindow):
 #class accessdock
 		
 if __name__=="__main__":
+	#Force XWayland if needed
+	os.environ.setdefault("QT_QPA_PLATFORM", "xcb")  
 	app=QApplication(["AccessDock"])
 	dock=accessdock()
 	#Check if is already running
@@ -610,4 +616,4 @@ if __name__=="__main__":
 	objbus.connect_to_signal("isDockVisibleSignal",dock._isVisible,dbus_interface="net.lliurex.accessibility.Dock")
 	dclient=dbusMethods(bus,dock)
 	dock.show()
-	app.exec_()
+	app.exec()
